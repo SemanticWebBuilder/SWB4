@@ -30,11 +30,26 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ObjectBehavior.
+ */
 public class ObjectBehavior extends ObjectBehaviorBase {
+    
+    /**
+     * Instantiates a new object behavior.
+     * 
+     * @param base the base
+     */
     public ObjectBehavior(SemanticObject base) {
         super(base);
     }
 
+    /**
+     * Gets the parsed url.
+     * 
+     * @return the parsed url
+     */
     public String getParsedURL() {
         String ret = super.getBehaviorURL();
 
