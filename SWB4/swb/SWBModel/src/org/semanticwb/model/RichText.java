@@ -32,11 +32,24 @@ import org.semanticwb.platform.SemanticProperty;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RichText.
+ */
 public class RichText extends org.semanticwb.model.base.RichTextBase {
+    
+    /**
+     * Instantiates a new rich text.
+     * 
+     * @param base the base
+     */
     public RichText(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         if (isFilterHTMLTags()) {
@@ -46,6 +59,9 @@ public class RichText extends org.semanticwb.model.base.RichTextBase {
         super.process(request, obj, prop);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.TextArea#renderXHTML(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                               String mode, String lang) {

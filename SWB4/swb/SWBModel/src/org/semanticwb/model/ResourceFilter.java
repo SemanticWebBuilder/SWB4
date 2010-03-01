@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResourceFilter.
+ */
 public class ResourceFilter extends org.semanticwb.model.base.ResourceFilterBase {
+    
+    /**
+     * Instantiates a new resource filter.
+     * 
+     * @param base the base
+     */
     public ResourceFilter(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
