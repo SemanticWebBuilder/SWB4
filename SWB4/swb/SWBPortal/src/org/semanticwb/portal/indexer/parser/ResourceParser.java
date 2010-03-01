@@ -46,6 +46,7 @@ import org.semanticwb.portal.lib.SWBRequest;
 import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
  * Parser for {@link Searchable} resources.
  * 
@@ -53,8 +54,12 @@ import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
  */
 public class ResourceParser extends GenericParser {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ResourceParser.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#canIndex(org.semanticwb.model.Searchable)
+     */
     @Override
     public boolean canIndex(Searchable gen) {
         boolean ret = gen.isValid();
@@ -69,6 +74,12 @@ public class ResourceParser extends GenericParser {
         return ret;
     }
 
+    /**
+     * Gets the web page.
+     * 
+     * @param res the res
+     * @return the web page
+     */
     private WebPage getWebPage(Resource res) {
         WebPage ret = null;
         if (res.getResourceType() != null && res.getResourceType().getResourceMode() == ResourceType.MODE_CONTENT) {
@@ -84,6 +95,9 @@ public class ResourceParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getIndexTerms(org.semanticwb.model.Searchable)
+     */
     @Override
     public Map<String, IndexTerm> getIndexTerms(Searchable gen) {
         Map map = super.getIndexTerms(gen);
@@ -96,6 +110,9 @@ public class ResourceParser extends GenericParser {
         return map;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getIndexCategory(org.semanticwb.model.Searchable)
+     */
     @Override
     public String getIndexCategory(Searchable gen) {
         String ret = "";
@@ -106,6 +123,9 @@ public class ResourceParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getIndexData(org.semanticwb.model.Searchable)
+     */
     @Override
     public String getIndexData(Searchable gen) {
         String ret = "";
@@ -148,6 +168,9 @@ public class ResourceParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getUrl(org.semanticwb.model.Searchable)
+     */
     @Override
     public String getUrl(Searchable gen) {
         String ret = null;
@@ -158,11 +181,17 @@ public class ResourceParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
+     */
     @Override
     public String getType(Searchable gen) {
         return "Resource";
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getPath(org.semanticwb.model.Searchable, java.lang.String)
+     */
     @Override
     public String getPath(Searchable gen, String lang) {
         String ret = null;

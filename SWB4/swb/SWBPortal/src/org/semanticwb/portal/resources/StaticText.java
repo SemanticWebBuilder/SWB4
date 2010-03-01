@@ -44,6 +44,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * StaticText se encarga de desplegar y administrar un texto est�tico, este texto
  * se agrega en la administraci�n del recurso, acepta tags de html para cambiar su
@@ -57,14 +58,17 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 
 public class StaticText extends GenericAdmResource {
-    /** Obtiene la vista del recurso.
-     *
+    
+    /**
+     * Obtiene la vista del recurso.
+     * 
      * @param request El servlet container crea un objeto HttpServletRequest y
-     *                      se pasa como argumento al m�todo del servlet.
+     * se pasa como argumento al m�todo del servlet.
      * @param response El servlet container crea un objeto HttpServletResponse y
-     *                      se pasa como argumento al m�todo del servlet.
-     * @param paramsRequest Argumentos de la solicitud del recurso.
-     * @throws IOException
+     * se pasa como argumento al m�todo del servlet.
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      * @exception com.infotec.appfw.exception.AFException Si se origina cualquier error en el recurso al traer el html.
      */
     @Override
@@ -81,6 +85,14 @@ public class StaticText extends GenericAdmResource {
         out.flush();
     }
 
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the string
+     */
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
     {
         if(str==null || str.trim().length()==0)
@@ -134,6 +146,9 @@ public class StaticText extends GenericAdmResource {
         return str;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();

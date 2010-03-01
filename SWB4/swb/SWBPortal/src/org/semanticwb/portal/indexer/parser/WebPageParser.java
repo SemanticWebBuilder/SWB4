@@ -28,6 +28,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /**
  * Parser for searchable web pages.
  * 
@@ -35,8 +36,12 @@ import org.semanticwb.model.WebPage;
  */
 public class WebPageParser extends GenericParser {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WebPageParser.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#canIndex(org.semanticwb.model.Searchable)
+     */
     @Override
     public boolean canIndex(Searchable gen) {
         boolean ret = gen.isValid();
@@ -49,6 +54,9 @@ public class WebPageParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getSummary(org.semanticwb.model.Searchable, java.lang.String)
+     */
     @Override
     public String getSummary(Searchable gen, String lang) {
         String ret = null;
@@ -63,6 +71,9 @@ public class WebPageParser extends GenericParser {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
+     */
     @Override
     public String getType(Searchable gen) {
         return "WebPage";

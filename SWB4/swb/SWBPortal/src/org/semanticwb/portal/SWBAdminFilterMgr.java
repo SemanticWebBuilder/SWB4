@@ -34,28 +34,51 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAdminFilterMgr.
+ * 
  * @author javier.solis
  */
 public class SWBAdminFilterMgr
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBAdminFilterMgr.class);
 
+    /** The Constant NO_ACCESS. */
     public static final int NO_ACCESS = 0;
+    
+    /** The Constant PARCIAL_ACCESS. */
     public static final int PARCIAL_ACCESS = 1;
+    
+    /** The Constant FULL_ACCESS. */
     public static final int FULL_ACCESS = 2;
 
+    /**
+     * Instantiates a new sWB admin filter mgr.
+     */
     public SWBAdminFilterMgr()
     {
 
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         log.event("Initializing SWBAdminFilterMgr...");
     }
 
+    /**
+     * Have class action.
+     * 
+     * @param user the user
+     * @param cls the cls
+     * @param action the action
+     * @return true, if successful
+     */
     public boolean haveClassAction(User user, SemanticClass cls, String action)
     {
         boolean ret=false;
@@ -70,6 +93,13 @@ public class SWBAdminFilterMgr
         return ret;
     }
 
+    /**
+     * Have access to web page.
+     * 
+     * @param user the user
+     * @param page the page
+     * @return true, if successful
+     */
     public boolean haveAccessToWebPage(User user, WebPage page)
     {
         boolean ret=false;
@@ -84,6 +114,13 @@ public class SWBAdminFilterMgr
         return ret;
     }
 
+    /**
+     * Have access to semantic object.
+     * 
+     * @param user the user
+     * @param obj the obj
+     * @return true, if successful
+     */
     public boolean haveAccessToSemanticObject(User user, SemanticObject obj)
     {
         boolean ret=false;
@@ -98,6 +135,14 @@ public class SWBAdminFilterMgr
         return ret;
     }
 
+    /**
+     * Have access to herarquical node.
+     * 
+     * @param user the user
+     * @param modelUri the model uri
+     * @param obj the obj
+     * @return true, if successful
+     */
     public boolean haveAccessToHerarquicalNode(User user, String modelUri, HerarquicalNode obj)
     {
         boolean ret=false;

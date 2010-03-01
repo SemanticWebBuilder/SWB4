@@ -58,28 +58,56 @@ import org.semanticwb.portal.monitor.SWBMonitorData;
 import org.semanticwb.portal.monitor.SWBSummary;
 import org.semanticwb.portal.monitor.SWBThreadDumper;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Monitor.
+ * 
  * @author serch
  */
 public class Monitor implements InternalServlet
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Monitor.class);
+    
+    /** The rmbean. */
     private static RuntimeMXBean rmbean;
+    
+    /** The mmbean. */
     private static MemoryMXBean mmbean;
+    
+    /** The pools. */
     private static List<MemoryPoolMXBean> pools;
+    
+    /** The gcmbeans. */
     private static List<GarbageCollectorMXBean> gcmbeans;
 //    private static MBeanServer mbs;
-    private Vector<SWBMonitorData> buffer;
+    /** The buffer. */
+private Vector<SWBMonitorData> buffer;
+    
+    /** The timer. */
     private Timer timer;
+    
+    /** The max. */
     private int max = 2500;
 //    private int maxgc = 50;
+    
+    /** The delays. */
     private int delays = 1000;
+    
+    /** The t. */
     private TimerTask t = null;
+    
+    /** The summary. */
     private SWBSummary summary = null;
+    
+    /** The monitorbeans. */
     private SWBMonitorBeans monitorbeans = null;
+    
+    /** The secret key. */
     private SecretKey secretKey = null;
+    
+    /** The timetaken last. */
     public static long timetakenLast = 0;
 //    private Cipher cipher = null;
 //    //Java 6.0
@@ -87,6 +115,9 @@ public class Monitor implements InternalServlet
 //    private Vector<CompositeData> basureroBuff;
 //    private SWBGCDump dumper;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing InternalServlet Monitor...");
@@ -189,6 +220,9 @@ public class Monitor implements InternalServlet
 //        System.out.println("Ok.......");
     }
 
+    /**
+     * _run.
+     */
     private void _run()
     {
         if (buffer.size() == max)
@@ -211,6 +245,9 @@ public class Monitor implements InternalServlet
 //        }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
 
@@ -327,6 +364,15 @@ public class Monitor implements InternalServlet
 
     }
 
+    /**
+     * _do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param dparams the dparams
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ServletException the servlet exception
+     */
     public void _doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         PrintWriter out = response.getWriter();
@@ -433,8 +479,14 @@ public class Monitor implements InternalServlet
  
  *
  */
-    private static String INDENT = "    ";
+    /** The INDENT. */
+private static String INDENT = "    ";
 
+    /**
+     * Prints the thread info.
+     * 
+     * @param ti the ti
+     */
     private static void printThreadInfo(ThreadInfo ti)
     {
         StringBuilder sb = new StringBuilder("\"" + ti.getThreadName() + "\""
@@ -465,11 +517,23 @@ public class Monitor implements InternalServlet
         System.out.println();
     }
 
+    /**
+     * Format millis.
+     * 
+     * @param ms the ms
+     * @return the string
+     */
     private static String formatMillis(long ms)
     {
         return String.format("%.4fsec", ms / (double) 1000);
     }
 
+    /**
+     * Format bytes.
+     * 
+     * @param bytes the bytes
+     * @return the string
+     */
     private static String formatBytes(long bytes)
     {
         long kb = bytes;
@@ -480,6 +544,9 @@ public class Monitor implements InternalServlet
         return kb + "K";
     }
 
+    /**
+     * Prints the verbose gc.
+     */
     public static void printVerboseGc()
     {
 
@@ -521,6 +588,12 @@ public class Monitor implements InternalServlet
         }
     }
 
+    /**
+     * Prints the gc info.
+     * 
+     * @param gci the gci
+     * @return true, if successful
+     */
     static boolean printGCInfo(GcInfo gci)
     {
         // initialize GC MBean
@@ -586,6 +659,12 @@ public class Monitor implements InternalServlet
         return true;
     }
 
+    /**
+     * Byte array to hex string.
+     * 
+     * @param in the in
+     * @return the string
+     */
     public static String byteArrayToHexString(byte in[]) {
 
 	    byte ch = 0x00;

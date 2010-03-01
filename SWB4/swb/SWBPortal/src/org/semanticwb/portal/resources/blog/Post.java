@@ -37,23 +37,49 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Post.
+ * 
  * @author victor.lorenzana
  */
 public class Post
 {
 
+    /** The log. */
     private Logger log=SWBUtils.getLogger(Post.class);
+    
+    /** The title. */
     private String title;
+    
+    /** The description. */
     private String description;
+    
+    /** The fec_alta. */
     private Timestamp fec_alta;
+    
+    /** The post id. */
     public long postID;
+    
+    /** The blog id. */
     public long blogID;
+    
+    /** The user. */
     public String user;
+    
+    /** The email. */
     public String email;
+    
+    /** The comments. */
     private int comments = 0;
 
+    /**
+     * Instantiates a new post.
+     * 
+     * @param postID the post id
+     * @param blogID the blog id
+     * @param userRep the user rep
+     */
     public Post(long postID, long blogID, UserRepository userRep)
     {
         this.postID = postID;
@@ -118,41 +144,81 @@ public class Post
         }
     }
 
+    /**
+     * Gets the number of comments.
+     * 
+     * @return the number of comments
+     */
     public int getNumberOfComments()
     {
         return comments;
     }
 
+    /**
+     * Gets the user.
+     * 
+     * @return the user
+     */
     public String getUser()
     {
         return user;
     }
 
+    /**
+     * Gets the email.
+     * 
+     * @return the email
+     */
     public String getEmail()
     {
         return email;
     }
 
+    /**
+     * Gets the date.
+     * 
+     * @return the date
+     */
     public Timestamp getDate()
     {
         return fec_alta;
     }
 
+    /**
+     * Gets the title.
+     * 
+     * @return the title
+     */
     public String getTitle()
     {
         return title;
     }
 
+    /**
+     * Gets the description.
+     * 
+     * @return the description
+     */
     public String getDescription()
     {
         return description;
     }
 
+    /**
+     * Gets the post id.
+     * 
+     * @return the post id
+     */
     public long getPostID()
     {
         return postID;
     }
 
+    /**
+     * Gets the blog id.
+     * 
+     * @return the blog id
+     */
     public long getBlogID()
     {
         return blogID;

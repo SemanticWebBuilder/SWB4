@@ -35,20 +35,30 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SendRedirect.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SendRedirect extends GenericAdmResource
 {
+    
+    /** The encryptor. */
     private org.semanticwb.util.Encryptor encryptor = null;
     
+    /**
+     * Instantiates a new send redirect.
+     */
     public SendRedirect()
     {
         byte key[] = new java.math.BigInteger("05fe858d86df4b909a8c87cb8d9ad596", 16).toByteArray();
         encryptor = new org.semanticwb.util.Encryptor(key);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -59,6 +69,14 @@ public class SendRedirect extends GenericAdmResource
         }
     }
     
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         if(str==null || str.trim().length()==0){

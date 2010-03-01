@@ -45,6 +45,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Implementa una administración genérica de recursos bajo el API de administración de
  * recursos de Infotec WebBuilder.
  *
@@ -57,20 +58,37 @@ import org.semanticwb.model.Resource;
  */
 public class GenericAdmResource extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GenericAdmResource.class);
     
+    /** The plt. */
     static Templates plt; 
+    
+    /** The bundles. */
     static Hashtable bundles=new Hashtable();
+    
+    /** The bundle. */
     XmlBundle bundle=null;
+    
+    /** The ad res utils. */
     WBAdmResourceUtils adResUtils=new WBAdmResourceUtils();
 
+    /** The xml. */
     String xml=null;
     
-    /** Creates a new instance of GernericAdmResource */
+    /**
+     * Creates a new instance of GernericAdmResource.
+     */
     public GenericAdmResource()
     {
     }
     
+    /**
+     * Reload.
+     * 
+     * @param className the class name
+     */
     public static void reload(String className)
     {
         bundles.remove(className);
@@ -85,8 +103,10 @@ public class GenericAdmResource extends GenericResource
     }
     
     /**
-     * @param base
-     * @throws AFException
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
@@ -102,11 +122,13 @@ public class GenericAdmResource extends GenericResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Do admin.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
@@ -162,11 +184,13 @@ public class GenericAdmResource extends GenericResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException

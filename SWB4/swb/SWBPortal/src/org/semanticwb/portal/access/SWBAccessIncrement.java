@@ -39,35 +39,51 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /** objeto: incrementa los accesos de un topico y sus recursos asociados.
  * @author Javier Solis Gonzalez
  */
 public class SWBAccessIncrement implements SWBAppObject
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBAccessIncrement.class);
 
-    /** Creates a new instance of WBTopicAccessIncrement */
+    /**
+     * Creates a new instance of WBTopicAccessIncrement.
+     */
     public SWBAccessIncrement()
     {
         log.event("Initializing SWBAccessIncrement...");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#destroy()
+     */
     public void destroy()
     {
         log.info("SWBAccessIncrement End...");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#init()
+     */
     public void init()
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#refresh()
+     */
     public void refresh()
     {
     }
 
 
     /**
-     * @param str
+     * Log.
+     * 
+     * @param str the str
      */
     public synchronized void log(String str)
     {
@@ -75,7 +91,9 @@ public class SWBAccessIncrement implements SWBAppObject
     }
 
     /**
-     * @param str
+     * Log hit.
+     * 
+     * @param str the str
      */
     public synchronized void logHit(String str)
     {
@@ -83,7 +101,9 @@ public class SWBAccessIncrement implements SWBAppObject
     }
 
     /**
-     * @param str
+     * Update res.
+     * 
+     * @param str the str
      */
 
     public void updateRes(String str)
@@ -142,7 +162,9 @@ public class SWBAccessIncrement implements SWBAppObject
     }
 
     /**
-     * @param str
+     * Update res hit.
+     * 
+     * @param str the str
      */
     public void updateResHit(String str)
     {

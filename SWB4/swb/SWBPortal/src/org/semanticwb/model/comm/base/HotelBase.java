@@ -24,43 +24,94 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HotelBase.
+ */
 public class HotelBase extends org.semanticwb.model.comm.CompanySite implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable
 {
+    
+    /** The Constant swbcomm_Hotel. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Hotel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Hotel");
 
+    /**
+     * Instantiates a new hotel base.
+     * 
+     * @param base the base
+     */
     public HotelBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * List hotels.
+     * 
+     * @param model the model
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Hotel> listHotels(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Hotel>(it, true);
     }
 
+    /**
+     * List hotels.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Hotel> listHotels()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Hotel>(it, true);
     }
 
+    /**
+     * Gets the hotel.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the hotel
+     */
     public static org.semanticwb.model.comm.Hotel getHotel(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Hotel)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
+    /**
+     * Creates the hotel.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.model.comm. hotel
+     */
     public static org.semanticwb.model.comm.Hotel createHotel(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Hotel)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /**
+     * Removes the hotel.
+     * 
+     * @param id the id
+     * @param model the model
+     */
     public static void removeHotel(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
+    /**
+     * Checks for hotel.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return true, if successful
+     */
     public static boolean hasHotel(String id, org.semanticwb.model.SWBModel model)
     {
         return (getHotel(id, model)!=null);

@@ -31,24 +31,35 @@ package org.semanticwb.portal.xforms.ui.container;
 
 import org.semanticwb.xforms.lib.WBXformsContainer;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFForm.
+ * 
  * @author  jorge.jimenez
  */
 public class XFForm extends WBXformsContainer
 {
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.WBXformsContainer#show()
+     */
     @Override
     public String show(){
         return getXform();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.WBXformsContainer#add(java.lang.Object)
+     */
     @Override
     public void add(Object obj){
        super.add(obj);
     }
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strb=new StringBuffer();
@@ -56,6 +67,9 @@ public class XFForm extends WBXformsContainer
         return strb.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     public String getXmlBind() {
         return showBinds();
     }

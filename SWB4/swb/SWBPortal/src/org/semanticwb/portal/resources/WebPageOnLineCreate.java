@@ -55,16 +55,22 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+// TODO: Auto-generated Javadoc
 //import org.semanticwb.portal.resources.sem.HTMLContent;
 
 /**
- *
+ * The Class WebPageOnLineCreate.
+ * 
  * @author juan.fernandez
  */
 public class WebPageOnLineCreate extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WebPageOnLineCreate.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
@@ -118,6 +124,9 @@ public class WebPageOnLineCreate extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String name = request.getParameter("name");
@@ -207,6 +216,9 @@ public class WebPageOnLineCreate extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -284,6 +296,12 @@ public class WebPageOnLineCreate extends GenericResource {
         out.println("</div>");
     }
 
+    /**
+     * User can edit.
+     * 
+     * @param paramrequest the paramrequest
+     * @return true, if successful
+     */
     private boolean userCanEdit(SWBParamRequest paramrequest) {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", "0");

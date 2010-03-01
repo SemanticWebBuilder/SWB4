@@ -36,25 +36,51 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FieldSet.
+ * 
  * @author jorge.jimenez
  */
 public class FieldSet extends WBContainerFE {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FieldSet.class);
+    
+    /** The legend. */
     private String legend = null;
+    
+    /** The tag. */
     protected Node tag = null;
+    
+    /** The base. */
     protected Resource base = null;
+    
+    /** The form. */
     FormFE form=null;
+    
+    /** The ajsfe. */
     private ArrayList ajsfe=new ArrayList();
+    
+    /** The locale. */
     private Locale locale=null;
 
+    /**
+     * Instantiates a new field set.
+     * 
+     * @param id the id
+     */
     public FieldSet(String id) {
         this.id = id;
     }
 
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     * @param base the base
+     * @param form the form
+     */
     public FieldSet(Node tag, Resource base, FormFE form) {
         this.tag = tag;
         setAttributes();
@@ -63,19 +89,31 @@ public class FieldSet extends WBContainerFE {
         createObjs();
     }
 
+    /**
+     * Sets the legend.
+     * 
+     * @param legend the new legend
+     */
     public void setLegend(String legend) {
         this.legend = legend;
     }
 
+    /**
+     * Sets the legend.
+     * 
+     * @return the string
+     */
     public String setLegend() {
         return legend;
     }
 
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */
     @Override
     public String getHtml(){
         StringBuffer ret=new StringBuffer("");
@@ -122,25 +160,47 @@ public class FieldSet extends WBContainerFE {
         return ret.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#getJscripsFE()
+     */
     public Iterator getJscripsFE(){
         return ajsfe.iterator();
     }
 
+    /**
+     * Gets the size js fe.
+     * 
+     * @return the size js fe
+     */
     public int getSizeJsFE(){
         return ajsfe.size();
     }
 
     //Sets
+    /**
+     * Sets the locale.
+     * 
+     * @param locale the new locale
+     */
     public void setLocale(Locale locale){
         this.locale=locale;
     }
 
     //gets
-    /** agrega el action del elemento forma */
+    /**
+     * agrega el action del elemento forma.
+     * 
+     * @return the locale
+     */
     public Locale getLocale(){
         return this.locale;
     }
 
+     /**
+      * Gets the js fe.
+      * 
+      * @return the js fe
+      */
      public String getJsFE(){
         StringBuffer strb=new StringBuffer();
         Iterator ijsfeObj=ajsfe.iterator();
@@ -151,11 +211,19 @@ public class FieldSet extends WBContainerFE {
         return strb.toString();
     }
 
+     /* (non-Javadoc)
+      * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#add(java.lang.Object)
+      */
      public void add(Object obj){
        super.add(obj);
        addJSFormFE(obj);
     }
 
+     /**
+      * Adds the js form fe.
+      * 
+      * @param obj the obj
+      */
      private void addJSFormFE(Object obj){
          if(obj instanceof WBJsInputFE){
            WBJsInputFE objInJs=(WBJsInputFE)obj;
@@ -170,6 +238,9 @@ public class FieldSet extends WBContainerFE {
          }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#setAttributes()
+     */
     @Override
     public void setAttributes() {
         if (tag != null) {
@@ -200,7 +271,7 @@ public class FieldSet extends WBContainerFE {
 
     /**
      * Crea objetos html de acuerdo a tags del xml de la administraciï¿½n de los recursos
-     * Creates html objects according with the tags of xml admin resources
+     * Creates html objects according with the tags of xml admin resources.
      */
     private void createObjs() {
         if (tag != null) {
@@ -297,6 +368,12 @@ public class FieldSet extends WBContainerFE {
         }
     }
 
+    /**
+     * Find type.
+     * 
+     * @param tag the tag
+     * @return the string
+     */
     private String findType(Node tag) {
         String type = null;
         NamedNodeMap nnodemap = tag.getAttributes();
@@ -308,6 +385,13 @@ public class FieldSet extends WBContainerFE {
         return type;
     }
 
+    /**
+     * Adds the childs fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -327,6 +411,13 @@ public class FieldSet extends WBContainerFE {
         return obj;
     }
 
+    /**
+     * Adds the childs applet fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsAppletFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -345,6 +436,13 @@ public class FieldSet extends WBContainerFE {
         return obj;
     }
 
+    /**
+     * Adds the childs map fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsMapFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {

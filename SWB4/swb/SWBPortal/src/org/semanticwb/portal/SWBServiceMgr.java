@@ -56,18 +56,29 @@ import org.semanticwb.portal.indexer.SWBIndexer;
 import org.semanticwb.repository.Unstructured;
 import org.semanticwb.repository.Workspace;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBServiceMgr.
+ * 
  * @author javier.solis
  */
 public class SWBServiceMgr implements SemanticObserver {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBServiceMgr.class);
 
+    /** The lastobj. */
     private int lastobj;              //ultimo objeto modificado
+    
+    /** The lastthread. */
     private long lastthread;          //ultimo thread utilizado
+    
+    /** The lasttime. */
     private long lasttime;            //ultimo time utilizado
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.platform.SemanticObserver#notify(org.semanticwb.platform.SemanticObject, java.lang.Object, java.lang.String)
+     */
     public void notify(SemanticObject obj, Object prop, String action)
     {
         User usr = SWBContext.getSessionUser();
@@ -226,6 +237,13 @@ public class SWBServiceMgr implements SemanticObserver {
             }
         }
     }
+    
+    /**
+     * Update object.
+     * 
+     * @param obj the obj
+     * @param usr the usr
+     */
     public void updateObject(SemanticObject obj, User usr)
     {
         try
@@ -252,6 +270,12 @@ public class SWBServiceMgr implements SemanticObserver {
         }catch(Exception e){log.error(e);}
     }
 
+    /**
+     * Update traceable.
+     * 
+     * @param obj the obj
+     * @param usr the usr
+     */
     public void updateTraceable(SemanticObject obj, User usr)
     {
         //System.out.println("obj:" + obj + " " + usr.getName()+" "+usr.isRegistered());
@@ -274,6 +298,9 @@ public class SWBServiceMgr implements SemanticObserver {
         }
     }
 
+    /**
+     * Inits the.
+     */
     public void init() {
         log.event("Initializing SWBServiceMgr...");
         SWBPlatform.getSemanticMgr().registerObserver(this);

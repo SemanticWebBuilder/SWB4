@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VideosBase.
+ */
 public class VideosBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Videos. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Videos=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Videos");
 
+    /**
+     * Instantiates a new videos base.
+     */
     public VideosBase()
     {
     }
 
+    /**
+     * Instantiates a new videos base.
+     * 
+     * @param base the base
+     */
     public VideosBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Videos");
 }

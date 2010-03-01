@@ -59,18 +59,32 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBDocRep.
+ * 
  * @author jorge.jimenez
  */
 public class SWBDocRep extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
+    
+    /** The PATH. */
     String PATH = SWBPortal.getWorkPath() + "/";
+    
+    /** The WEBPATH. */
     String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/";
+    
+    /** The MODELS. */
     String MODELS = PATH + "models/";
+    
+    /** The ZIPDIRECTORY. */
     String ZIPDIRECTORY = PATH + "sitetemplates/";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("viewmodel")) {
@@ -82,6 +96,9 @@ public class SWBDocRep extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -177,6 +194,15 @@ public class SWBDocRep extends GenericResource {
         }
     }
 
+    /**
+     * Do view model.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         out.println("<div class=\"swbform\">");
@@ -193,6 +219,15 @@ public class SWBDocRep extends GenericResource {
         out.println("</div>");
     }
 
+    /**
+     * Do install model.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doInstallModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             PrintWriter out = response.getWriter();
@@ -236,9 +271,10 @@ public class SWBDocRep extends GenericResource {
     }
 
     /**
-     * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios)
-     * @param node
-     * @param smodels
+     * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios).
+     * 
+     * @param node the node
+     * @param smodels the smodels
      */
     private void iteraModels(Node node, HashMap smodels) {
         HashMap submodel = new HashMap();
@@ -264,6 +300,9 @@ public class SWBDocRep extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         if (response.getAction().equals("upload")) {

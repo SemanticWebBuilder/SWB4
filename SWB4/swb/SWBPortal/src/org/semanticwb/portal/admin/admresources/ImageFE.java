@@ -31,6 +31,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Image en una forma de html.
  * <p>
@@ -40,23 +41,55 @@ import org.w3c.dom.*;
 
 public class ImageFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ImageFE.class);
     
+    /** The accesskey. */
     protected String accesskey;
+    
+    /** The align. */
     protected String align;
+    
+    /** The alt. */
     protected String alt;
+    
+    /** The border. */
     protected int border;
+    
+    /** The isdisabled. */
     protected boolean isdisabled;
+    
+    /** The hspace. */
     protected int hspace;
+    
+    /** The src. */
     protected String src;
+    
+    /** The usemap. */
     protected String usemap;
+    
+    /** The value. */
     protected String value;
+    
+    /** The vspace. */
     protected int vspace;
+    
+    /** The width. */
     protected int width;
+    
+    /** The height. */
     protected int height;
+    
+    /** The xmltag. */
     protected String xmltag;
+    
+    /** The tag. */
     protected Node tag;
     
+    /**
+     * Instantiates a new image fe.
+     */
     public ImageFE()
     {
         accesskey = null;
@@ -75,6 +108,12 @@ public class ImageFE extends WBAdmResourceAbs
         tag = null;
     }
 
+    /**
+     * Instantiates a new image fe.
+     * 
+     * @param name the name
+     * @param src the src
+     */
     public ImageFE(String name, String src)
     {
         accesskey = null;
@@ -95,6 +134,11 @@ public class ImageFE extends WBAdmResourceAbs
         this.src = src;
     }
 
+    /**
+     * Instantiates a new image fe.
+     * 
+     * @param tag the tag
+     */
     public ImageFE(Node tag)
     {
         accesskey = null;
@@ -115,140 +159,273 @@ public class ImageFE extends WBAdmResourceAbs
         setAttributes();
     }
 
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     private void setAccessKey(String accesskey)
     {
         this.accesskey = accesskey;
     }
 
+    /**
+     * Sets the align.
+     * 
+     * @param align the new align
+     */
     public void setAlign(String align)
     {
         this.align = align;
     }
 
+    /**
+     * Sets the alt.
+     * 
+     * @param alt the new alt
+     */
     public void setAlt(String alt)
     {
         this.alt = alt;
     }
 
+    /**
+     * Sets the border.
+     * 
+     * @param border the new border
+     */
     public void setBorder(int border)
     {
         this.border = border;
     }
 
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     private void setDisabled(boolean isdisabled)
     {
         this.isdisabled = isdisabled;
     }
 
+    /**
+     * Sets the hspace.
+     * 
+     * @param hspace the new hspace
+     */
     public void setHspace(int hspace)
     {
         this.hspace = hspace;
     }
 
+    /**
+     * Sets the src.
+     * 
+     * @param src the new src
+     */
     public void setSrc(String src)
     {
         this.src = src;
     }
 
+    /**
+     * Sets the use map.
+     * 
+     * @param usemap the new use map
+     */
     public void setUseMap(String usemap)
     {
         this.usemap = usemap;
     }
 
+    /**
+     * Sets the vspace.
+     * 
+     * @param vspace the new vspace
+     */
     public void setVspace(int vspace)
     {
         this.vspace = vspace;
     }
 
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width)
     {
         this.width = width;
     }
 
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height)
     {
         this.height = height;
     }
 
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value)
     {
         this.value = value;
     }
 
+    /**
+     * Sets the xml tag.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag)
     {
         this.xmltag = xmltag;
     }
 
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     public String getAccessKey()
     {
         return accesskey;
     }
 
+    /**
+     * Gets the align.
+     * 
+     * @return the align
+     */
     public String getAlign()
     {
         return align;
     }
 
+    /**
+     * Gets the alt.
+     * 
+     * @return the alt
+     */
     public String getAlt()
     {
         return alt;
     }
 
+    /**
+     * Gets the border.
+     * 
+     * @return the border
+     */
     public int getBorder()
     {
         return border;
     }
 
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     private boolean getDisabled()
     {
         return isdisabled;
     }
 
+    /**
+     * Gets the hspace.
+     * 
+     * @param hspace the hspace
+     * @return the hspace
+     */
     public int getHspace(int hspace)
     {
         return hspace;
     }
 
+    /**
+     * Gets the src.
+     * 
+     * @return the src
+     */
     public String getSrc()
     {
         return src;
     }
 
+    /**
+     * Gets the use map.
+     * 
+     * @return the use map
+     */
     public String getUseMap()
     {
         return usemap;
     }
 
+    /**
+     * Gets the vspace.
+     * 
+     * @return the vspace
+     */
     public int getVspace()
     {
         return vspace;
     }
 
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth()
     {
         return width;
     }
 
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight()
     {
         return height;
     }
 
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue()
     {
         return value;
     }
 
+    /**
+     * Gets the xml tag.
+     * 
+     * @return the xml tag
+     */
     public String getXmlTag()
     {
         return xmltag;
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */   
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */   
     public String getHtml()
     {
         String xml="";
@@ -303,8 +480,8 @@ public class ImageFE extends WBAdmResourceAbs
 
     
     /**
-    * Set attributes to class according with the xml tag element
-    */
+     * Set attributes to class according with the xml tag element.
+     */
     public void setAttributes()
     {
         if(tag != null)

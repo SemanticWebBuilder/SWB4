@@ -38,23 +38,45 @@ import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAIPFilter2.
+ * 
  * @author juan.fernandez
  */
 public class SWBAIPFilter2 extends GenericResource {
 
     
+    /** The I_ pag e_ size. */
     private final int I_PAGE_SIZE = 10;
+    
+    /** The I_ ini t_ page. */
     private final int I_INIT_PAGE = 1;
+    
+    /** The i page. */
     private int iPage=0;
+    
+    /** The i tot page. */
     private int iTotPage=0;
+    
+    /** The i ini page. */
     private int iIniPage=0;
+    
+    /** The i fin page. */
     private int iFinPage=0;
+    
+    /** The str url. */
     private String strUrl= null; 
+    
+    /** The i array. */
     private String[] iArray = null;
+    
+    /** The str array. */
     private String[] strArray = null;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
      
@@ -111,6 +133,12 @@ public class SWBAIPFilter2 extends GenericResource {
         }
     }
     
+    /**
+     * Gets the obj id.
+     * 
+     * @param strRec the str rec
+     * @return the obj id
+     */
     private String getObjId(String strRec) 
     {
         String id="0";
@@ -120,6 +148,15 @@ public class SWBAIPFilter2 extends GenericResource {
         return id;
     }
 
+    /**
+     * Gets the str sort array.
+     * 
+     * @param idtm the idtm
+     * @param strArray the str array
+     * @param strOrder the str order
+     * @param iWBPage the i wb page
+     * @return the str sort array
+     */
     private String [] getStrSortArray(String idtm, String [] strArray, String strOrder, int iWBPage) 
     {
         int cont=0;
@@ -166,6 +203,14 @@ public class SWBAIPFilter2 extends GenericResource {
         return strArray;
     }
 
+    /**
+     * Gets the int sort array.
+     * 
+     * @param idtm the idtm
+     * @param iArray the i array
+     * @param iWBPage the i wb page
+     * @return the int sort array
+     */
     private String[] getIntSortArray(String idtm, String[] iArray, int iWBPage) 
     {
         int cont=0;
@@ -195,6 +240,12 @@ public class SWBAIPFilter2 extends GenericResource {
         return iArray;
     }
 
+    /**
+     * Gets the array size.
+     * 
+     * @param idtm the idtm
+     * @return the array size
+     */
     private int getArraySize(String idtm) 
     {
         int cont=0;
@@ -207,6 +258,13 @@ public class SWBAIPFilter2 extends GenericResource {
         return cont;
     }
 
+    /**
+     * Gets the str obj table.
+     * 
+     * @param rec the rec
+     * @param row the row
+     * @return the str obj table
+     */
     private String getStrObjTable(IPFilter rec, int row) 
     {
         if(rec==null) return "";
@@ -238,6 +296,13 @@ public class SWBAIPFilter2 extends GenericResource {
         return sbRet.toString();
     }
 
+    /**
+     * Gets the page range.
+     * 
+     * @param iSize the i size
+     * @param iPageNum the i page num
+     * @return the page range
+     */
     private void getPageRange (int iSize, int iPageNum) 
     {
         iPage = I_INIT_PAGE;
@@ -255,6 +320,12 @@ public class SWBAIPFilter2 extends GenericResource {
         if(iSize < I_PAGE_SIZE*iPage) iFinPage = iSize;
     }
 
+    /**
+     * Gets the java script.
+     * 
+     * @param paramsRequest the params request
+     * @return the java script
+     */
     private String getJavaScript (SWBParamRequest paramsRequest) 
     {
         StringBuffer sbRet=new StringBuffer();
@@ -396,6 +467,15 @@ public class SWBAIPFilter2 extends GenericResource {
         return sbRet.toString();
     }
 
+    /**
+     * Gets the ini form.
+     * 
+     * @param strOrder the str order
+     * @param idtm the idtm
+     * @param paramsRequest the params request
+     * @return the ini form
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String getIniForm(String strOrder, String idtm, SWBParamRequest paramsRequest) throws SWBResourceException
     {
         StringBuffer sbRet=new StringBuffer();
@@ -480,6 +560,15 @@ public class SWBAIPFilter2 extends GenericResource {
         return sbRet.toString();
     }
 
+    /**
+     * Gets the form.
+     * 
+     * @param id the id
+     * @param idtm the idtm
+     * @param paramsRequest the params request
+     * @return the form
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String getForm(String id, String idtm, SWBParamRequest paramsRequest) throws SWBResourceException
     {
         StringBuffer sbRet=new StringBuffer();
@@ -573,6 +662,9 @@ public class SWBAIPFilter2 extends GenericResource {
         return sbRet.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
     

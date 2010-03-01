@@ -58,12 +58,16 @@ import org.semanticwb.portal.indexer.parser.WebPageParser;
 import org.semanticwb.portal.indexer.searcher.SearchQuery;
 import org.semanticwb.portal.indexer.searcher.SearchResults;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBIndexer.
+ * 
  * @author Javier Solis Gonzalez
  */
 public abstract class SWBIndexer
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBIndexer.class);
 
     /**Field name for the URI of a {@link Searchable} object.*/
@@ -87,8 +91,13 @@ public abstract class SWBIndexer
     /**Field name for the URL of a {@link Searchable} object.*/
     public static final String ATT_URL="url";
 
+    /** The props. */
     private Properties props = null;
+    
+    /** The name. */
     private String name = null;
+    
+    /** The timer. */
     private Timer timer=null;
 
     /**List of {@link Searchable} objects to add to the index.*/
@@ -103,26 +112,96 @@ public abstract class SWBIndexer
      * not-analyzed way.*/
     private static HashMap<String,IndexTerm> m_noAnalyzedTerms=new HashMap();
 
+    /**
+     * Inits the.
+     */
     public abstract void init();
 
+    /**
+     * Reset.
+     */
     public abstract void reset();
+    
+    /**
+     * Removes the.
+     */
     public abstract void remove();
+    
+    /**
+     * Un lock.
+     * 
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public abstract void unLock() throws IOException;
+    
+    /**
+     * Checks if is locked.
+     * 
+     * @return true, if is locked
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public abstract boolean isLocked() throws IOException;
+    
+    /**
+     * Optimize.
+     */
     public abstract void optimize();
+    
+    /**
+     * Creates the index.
+     */
     protected abstract void createIndex();
+    
+    /**
+     * Gets the index path.
+     * 
+     * @return the index path
+     */
     public abstract String getIndexPath();
 
+    /**
+     * Removes the model.
+     * 
+     * @param modelid the modelid
+     */
     public abstract void removeModel(String modelid);
+    
+    /**
+     * Search.
+     * 
+     * @param query the query
+     * @param user the user
+     * @return the search results
+     */
     public abstract SearchResults search(SearchQuery query, User user);
+    
+    /**
+     * Removes the searchable obj.
+     * 
+     * @param uri the uri
+     */
     protected abstract void removeSearchableObj(String uri);
+    
+    /**
+     * Write searchable obj.
+     * 
+     * @param obj the obj
+     */
     protected abstract void writeSearchableObj(Searchable obj);
 
-    /** Creates a new instance of WBIndexer */
+    /**
+     * Creates a new instance of WBIndexer.
+     */
     public SWBIndexer()
     {
     }
 
+    /**
+     * Inits the.
+     * 
+     * @param name the name
+     * @param props the props
+     */
     protected void init(String name, Properties props) {
         this.props = props;
         this.name = name;
@@ -168,7 +247,8 @@ public abstract class SWBIndexer
 
     /**
      * Removes an {@link IndexTerm} from the not-analyzed map.
-     * @param term {@link IndexTerm} to be removed.
+     * 
+     * @param field the field
      */
     public static void removeNoAnalyzedIndexTerm(String field)
     {
@@ -177,7 +257,9 @@ public abstract class SWBIndexer
 
     /**
      * Checks wheter an {@link IndexTerm} already exists in the not-analyzed map.
-     * @param term {@link IndexTerm} to be stored but not analyzed.
+     * 
+     * @param field the field
+     * @return true, if successful
      */
     public static boolean containsNoAnalyzedIndexTerm(String field)
     {
@@ -255,6 +337,9 @@ public abstract class SWBIndexer
         }
     }
 
+    /**
+     * _run.
+     */
     protected void _run()
     {
         log.debug("indexer:"+name+" is running...");
@@ -318,7 +403,8 @@ public abstract class SWBIndexer
     /**
      * Adds a {@link Searchable} object to the add list for future indexing
      * in the index.
-     * @param uri URI of the {@link Searchable} object to remove from the index.
+     * 
+     * @param serchable the serchable
      */
     public void indexSerchable(Searchable serchable)
     {
@@ -329,6 +415,11 @@ public abstract class SWBIndexer
         }
     }
 
+    /**
+     * Gets the index size.
+     * 
+     * @return the index size
+     */
     public int getIndexSize()
     {
         return m_add.size()+m_remove.size();

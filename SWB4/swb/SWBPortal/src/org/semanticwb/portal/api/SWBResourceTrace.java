@@ -34,6 +34,7 @@ import java.util.Random;
 import javax.servlet.http.*;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Se encarga de dar seguimiento a la invocaci�n de recursos.
  *
  * Object: It is in charge to follow the resource invocation.
@@ -42,17 +43,41 @@ import org.semanticwb.model.Resource;
  */
 public class SWBResourceTrace
 {
+    
+    /** The id. */
     long id=0;
+    
+    /** The time. */
     long time;
+    
+    /** The description. */
     String description = "nodesc";
+    
+    /** The wb resource. */
     SWBResource wbResource = null;
+    
+    /** The type. */
     String type = "";
+    
+    /** The thread. */
     Thread thread = null;
+    
+    /** The params request. */
     SWBParamRequest paramsRequest;
+    
+    /** The request. */
     HttpServletRequest request;
+    
+    /** The ran. */
     private static Random ran=new Random(10000);
 
-    /** Creates a new instance of WBResourceTrace */
+    /**
+     * Creates a new instance of WBResourceTrace.
+     * 
+     * @param wbres the wbres
+     * @param request the request
+     * @param paramsRequest the params request
+     */
     public SWBResourceTrace(SWBResource wbres, HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         this.paramsRequest=paramsRequest;
@@ -67,16 +92,31 @@ public class SWBResourceTrace
         thread = Thread.currentThread();
     }
     
+    /**
+     * Gets the wB param request.
+     * 
+     * @return the wB param request
+     */
     public SWBParamRequest getWBParamRequest()
     {
         return paramsRequest;
     }
     
+    /**
+     * Gets the request.
+     * 
+     * @return the request
+     */
     public HttpServletRequest getRequest()
     {
         return request;
     }
     
+    /**
+     * Gets the id.
+     * 
+     * @return the id
+     */
     public long getId()
     {
         return id;
@@ -137,9 +177,10 @@ public class SWBResourceTrace
     }
 
 
-    /** Setter for property resource.
-     * @param resource New value of property resource.
-     *
+    /**
+     * Setter for property resource.
+     * 
+     * @param wbResource the new wB resource
      */
     public void setWBResource(SWBResource wbResource)
     {
@@ -164,6 +205,9 @@ public class SWBResourceTrace
         this.type = type;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString()
     {
         return description + ", " + thread.toString();

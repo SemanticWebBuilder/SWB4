@@ -23,6 +23,7 @@
 
 package org.semanticwb.portal.indexer;
 
+// TODO: Auto-generated Javadoc
 /**
  * Index term wrapper. A term is a field-text pair which will be stored or
  * indexed in a search index in order to execute search queries.
@@ -34,18 +35,29 @@ package org.semanticwb.portal.indexer;
  */
 public class IndexTerm
 {
+    
+    /** The field. */
     private String field=null;
+    
+    /** The text. */
     private String text=null;
+    
+    /** The stored. */
     private boolean stored=false;
+    
+    /** The indexed. */
     private int indexed=1;
 
-    /**Term is not indexed*/
+    /** Term is not indexed. */
     public static int INDEXED_NO=0;                     //no indexado
-    /**Term is indexed, tokenized and analyzed*/
+    
+    /** Term is indexed, tokenized and analyzed. */
     public static int INDEXED_ANALYZED=1;               //tokenizado y analizado
-    /**Term is indexed, tokenized but not analyzed*/
+    
+    /** Term is indexed, tokenized but not analyzed. */
     public static int INDEXED_TOKENIZED_NO_ANALYZED=2;  //tokenizado y no analizado
-    /**Term is indexed, but not tokenized nor analyzed*/
+    
+    /** Term is indexed, but not tokenized nor analyzed. */
     public static int INDEXED_NO_ANALYZED=3;            //no tokenizado y no analizado
 
     /**
@@ -132,12 +144,13 @@ public class IndexTerm
      * Gets the index mode of the term.
      * <p>
      * Obtiene el modo en el que el término será indexado.
+     * 
      * @return  Index mode. Posible values are:
-     *          <p>
-     *          -{@code INDEXED_NO}: Term is not indexed.
-     *          -{@code INDEXED_ANALYZED}: Term is indexed, tokenized and analyzed.
-     *          -{@code INDEXED_TOKENIZED_NO_ANALYZED}: Term is indexed, tokenized but not analyzed.
-     *          -{@code INDEXED_NO_ANALYZED}: Term is indexed, but not tokenized nor analyzed.
+     * 
+     * -{@code INDEXED_NO}: Term is not indexed.
+     * -{@code INDEXED_ANALYZED}: Term is indexed, tokenized and analyzed.
+     * -{@code INDEXED_TOKENIZED_NO_ANALYZED}: Term is indexed, tokenized but not analyzed.
+     * -{@code INDEXED_NO_ANALYZED}: Term is indexed, but not tokenized nor analyzed.
      */
     public int getIndexed() {
         return indexed;
@@ -147,12 +160,8 @@ public class IndexTerm
      * Sets the index mode of the term.
      * <p>
      * Establece el modo en el que el término será indexado.
-     * @param  indexed Index mode. Posible values are:
-     *          <p>
-     *          -{@code INDEXED_NO}: Term is not indexed.
-     *          -{@code INDEXED_ANALYZED}: Term is indexed, tokenized and analyzed.
-     *          -{@code INDEXED_TOKENIZED_NO_ANALYZED}: Term is indexed, tokenized but not analyzed.
-     *          -{@code INDEXED_NO_ANALYZED}: Term is indexed, but not tokenized nor analyzed.
+     * 
+     * @param indexed the new indexed
      */
     public void setIndexed(int indexed) {
         this.indexed = indexed;

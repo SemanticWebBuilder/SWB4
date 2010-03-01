@@ -47,6 +47,7 @@ import org.semanticwb.portal.admin.resources.wbtree.SWBTreeExt;
 import org.semanticwb.portal.admin.resources.wbtree.SWBTreeUtil;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso para la administración de WebBuilder que muestra el árbol principal de
  * la administración con todos los elementos que existen en la aplicación.
@@ -57,31 +58,32 @@ import org.semanticwb.portal.api.*;
  */
 public class SWBATree extends GenericResource
 {
+    
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBATree.class);
+    
+    /** The ext. */
     ArrayList ext=new ArrayList();
 
+    /** The agzip. */
     boolean agzip=true;
 
     //TODO:Provicional hasta que este AdmFilterMgr
-    /**
-     *
-     */
+    /** The Constant NO_ACCESS. */
     public static final int NO_ACCESS = 0;
-    /**
-     *
-     */
+    
+    /** The Constant PARCIAL_ACCESS. */
     public static final int PARCIAL_ACCESS = 1;
-    /**
-     *
-     */
+    
+    /** The Constant FULL_ACCESS. */
     public static final int FULL_ACCESS = 2;
     //public static final String WBGLOBAL="WBGlobal";
-    /**
-     *
-     */
+    /** The Constant WBADMIN. */
     public static final String WBADMIN="WBAdmin";
 
-    /** Creates a new instance of WBTree */
+    /**
+     * Creates a new instance of WBTree.
+     */
     public SWBATree()
     {
         agzip = SWBPlatform.getEnv("wb/responseGZIPEncoding","true").equalsIgnoreCase("true");
@@ -105,11 +107,13 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -121,12 +125,14 @@ public class SWBATree extends GenericResource
 
 
     /**
-     *
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Gets the service.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the service
      * @return
      */
     public Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -148,9 +154,11 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
+     * Inits the tree.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document initTree(User user, Document src)
@@ -159,10 +167,12 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
-     * @param isFilter
+     * Inits the tree.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param isFilter the is filter
+     * @return the document
      * @return
      */
     public Document initTree(User user, Document src, boolean isFilter)
@@ -302,9 +312,11 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
+     * Inits the tree filter.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document initTreeFilter(User user, Document src)
@@ -313,10 +325,12 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
-     * @param act
+     * Gets the document.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param act the act
+     * @return the document
      * @return
      */
     public Document getDocument(User user, Document src, String act)
@@ -376,21 +390,34 @@ public class SWBATree extends GenericResource
         return dom;
     }
 
+    /**
+     * Adds the opt refresh.
+     * 
+     * @param menu the menu
+     * @param user the user
+     */
     private void addOptRefresh(Element menu, User user)
     {
         SWBTreeUtil.addOptRefresh(menu,user);
     }
 
+    /**
+     * Adds the separator.
+     * 
+     * @param menu the menu
+     */
     private void addSeparator(Element menu)
     {
         SWBTreeUtil.addSeparator(menu);
     }
 
     /**
-     *
-     * @param user
-     * @param src
-     * @param action
+     * Gets the path.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param action the action
+     * @return the path
      * @return
      */
     public Document getPath(User user, Document src, String action)
@@ -431,9 +458,10 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param res
+     * Adds the server.
+     * 
+     * @param user the user
+     * @param res the res
      */
     protected void addServer(User user, Element res)
     {
@@ -441,10 +469,11 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param res
-     * @param isFilter
+     * Adds the server.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param isFilter the is filter
      */
     protected void addServer(User user, Element res, boolean isFilter)
     {
@@ -495,10 +524,11 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param root
-     * @param access
+     * Adds the global.
+     * 
+     * @param user the user
+     * @param root the root
+     * @param access the access
      */
     protected void addGlobal(User user, Element root, int access)
     {
@@ -506,11 +536,12 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param root
-     * @param access
-     * @param isFilter
+     * Adds the global.
+     * 
+     * @param user the user
+     * @param root the root
+     * @param access the access
+     * @param isFilter the is filter
      */
     protected void addGlobal(User user, Element root, int access, boolean isFilter)
     {
@@ -561,11 +592,12 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param tm
-     * @param root
-     * @param access
+     * Adds the topic map.
+     * 
+     * @param user the user
+     * @param tm the tm
+     * @param root the root
+     * @param access the access
      */
     protected void addTopicMap(User user, WebSite tm, Element root, int access)
     {
@@ -573,13 +605,14 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param tm
-     * @param root
-     * @param access
-     * @param loadChild
-     * @param isFilter
+     * Adds the topic map.
+     * 
+     * @param user the user
+     * @param tm the tm
+     * @param root the root
+     * @param access the access
+     * @param loadChild the load child
+     * @param isFilter the is filter
      */
     protected void addTopicMap(User user, WebSite tm, Element root, int access, boolean loadChild, boolean isFilter)
     {
@@ -662,10 +695,11 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param tp
-     * @param res
+     * Adds the topic.
+     * 
+     * @param user the user
+     * @param tp the tp
+     * @param res the res
      */
     protected void addTopic(User user, WebPage tp, Element res)
     {
@@ -826,11 +860,13 @@ public class SWBATree extends GenericResource
 
 
     /**
-     *
-     * @param node
-     * @param id
-     * @param name
-     * @param parent
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
      * @return
      */
     protected Element addNode(String node, String id, String name, Element parent)
@@ -839,10 +875,12 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param name
-     * @param value
-     * @param parent
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
      * @return
      */
     protected Element addElement(String name, String value, Element parent)
@@ -851,8 +889,10 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param id
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
      * @return
      */
     protected Document getError(int id)
@@ -934,12 +974,13 @@ public class SWBATree extends GenericResource
 
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -1011,11 +1052,13 @@ public class SWBATree extends GenericResource
 
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -1033,8 +1076,10 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param it
+     * Sort iterator.
+     * 
+     * @param it the it
+     * @return the iterator
      * @return
      */
     public Iterator sortIterator(Iterator it)
@@ -1043,8 +1088,10 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param en
+     * Sort enumeration.
+     * 
+     * @param en the en
+     * @return the iterator
      * @return
      */
     public Iterator sortEnumeration(Enumeration en)
@@ -1053,8 +1100,10 @@ public class SWBATree extends GenericResource
     }
 
     /**
-     *
-     * @param collection
+     * Sort collection.
+     * 
+     * @param collection the collection
+     * @return the iterator
      * @return
      */
     public Iterator sortCollection(Collection collection)

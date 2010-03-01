@@ -32,24 +32,51 @@ import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JRRtfResource.
+ */
 public class JRRtfResource extends JRResource{
+    
+    /**
+     * Instantiates a new jR rtf resource.
+     * 
+     * @param jasperResource the jasper resource
+     * @param params the params
+     * @param dataSource the data source
+     */
     public JRRtfResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource){
         super(jasperResource, params, dataSource);
     }
     
+    /**
+     * Instantiates a new jR rtf resource.
+     * 
+     * @param jasperResource the jasper resource
+     * @param dataSource the data source
+     */
     public JRRtfResource(String jasperResource, JRBeanCollectionDataSource dataSource){
         super(jasperResource, null, dataSource);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#formatReport()
+     */
     protected void formatReport(){
         exporter = new JRRtfExporter();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#parametrizeReport()
+     */
     protected void parametrizeReport(){
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#exportReport(javax.servlet.http.HttpServletResponse)
+     */
     public void exportReport(HttpServletResponse response) throws java.io.IOException, JRException{
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.rtf\"");

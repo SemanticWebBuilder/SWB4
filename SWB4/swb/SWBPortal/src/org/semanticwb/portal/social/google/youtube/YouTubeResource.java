@@ -32,20 +32,36 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Resource that manage the integration between youtube and semanticwebbuilder (youtube java api)
- * and returns the user youtube videos, also the user can upload new videos, mark as favorites, etc
+ * and returns the user youtube videos, also the user can upload new videos, mark as favorites, etc.
+ * 
  * @author jorge.jimenez
  */
 public class YouTubeResource extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(YouTubeResource.class);
+    
+    /** The USERNAME. */
     String USERNAME = "george24Infotec@gmail.com";
+    
+    /** The PASSWORD. */
     String PASSWORD = "george24";
+    
+    /** The DEVELOPERKEY. */
     String DEVELOPERKEY = "AI39si4crQ_Zn6HmLxroe0TP48ZDkOXI71uodU9xc1QRyl8Y5TaRc2OIIOKMEatsw9Amce81__JcvvwObue_8yXD2yC6bFRhXA";
+    
+    /** The GENERICFEEDURL. */
     String GENERICFEEDURL = "http://gdata.youtube.com/feeds/api/users/";
+    
+    /** The FEEDUPLOADS. */
     String FEEDUPLOADS = "/uploads";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (USERNAME == null || PASSWORD == null || DEVELOPERKEY == null) {
@@ -64,6 +80,9 @@ public class YouTubeResource extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         YouTubeService service = getYouTubeService();
@@ -179,6 +198,11 @@ public class YouTubeResource extends GenericResource {
         }
     }
 
+    /**
+     * Gets the you tube service.
+     * 
+     * @return the you tube service
+     */
     private YouTubeService getYouTubeService() {
         YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", DEVELOPERKEY);
         try {

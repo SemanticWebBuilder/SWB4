@@ -39,21 +39,43 @@ import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBRecHits_.
+ */
 public class SWBRecHits_
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRecHits.class);
+    
+    /** The instance. */
     static private SWBRecHits_ instance;
 
+    /**
+     * Instantiates a new sWB rec hits_.
+     */
     private SWBRecHits_() {
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy() {
         instance=null;
     }
 
+    /**
+     * Inits the.
+     */
     public void init() {
     }
 
+    /**
+     * Gets the single instance of SWBRecHits_.
+     * 
+     * @return single instance of SWBRecHits_
+     */
     static synchronized public SWBRecHits_ getInstance() {
         if (instance == null) {
             instance = new SWBRecHits_();
@@ -62,6 +84,16 @@ public class SWBRecHits_
         return instance;
     }
 
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, int type, int year, int month, int day) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -105,6 +137,19 @@ public class SWBRecHits_
         return resumeRecHits;
     }
     
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -149,13 +194,15 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -218,13 +265,17 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -274,16 +325,20 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -334,13 +389,15 @@ public class SWBRecHits_
     }
 
         /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+         * Gets the res hits log.
+         * 
+         * @param modelid the modelid
+         * @param objid the objid
+         * @param type the type
+         * @param year the year
+         * @return the res hits log
+         * @return
+         */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -407,13 +464,17 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year, int month, int day) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -467,16 +528,20 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -530,13 +595,16 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -604,13 +672,18 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year, int month, int day, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -664,16 +737,21 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, Iterator<String> objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -737,13 +815,16 @@ public class SWBRecHits_
 
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -809,13 +890,18 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -877,16 +963,21 @@ public class SWBRecHits_
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @param items the items
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, HashMap items) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -948,6 +1039,17 @@ public class SWBRecHits_
 
 
 
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         ResultSet rs = null;
@@ -1032,6 +1134,19 @@ public class SWBRecHits_
         return resumeRecHits;
     }
 
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -1124,6 +1239,22 @@ public class SWBRecHits_
         return resumeRecHits;
     }
 
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();

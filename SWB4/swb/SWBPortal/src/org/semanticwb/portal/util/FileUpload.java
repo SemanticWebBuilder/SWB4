@@ -39,28 +39,44 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Utileria para el envio de archivos al servidor.
  * Class for send files to server
  */
 public class FileUpload
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FileUpload.class);
     
+    /** The sessid. */
     String sessid = null;
 
+    /**
+     * The Class CParameter.
+     */
     class CParameter
     {
 
+        /** The parametro. */
         public String parametro;
+        
+        /** The Valor. */
         public String Valor;
 
+        /**
+         * Instantiates a new c parameter.
+         */
         CParameter()
         {
         }
     }
 
 
+    /**
+     * Instantiates a new file upload.
+     */
     public FileUpload()
     {
         sContentType = null;
@@ -70,6 +86,12 @@ public class FileUpload
         maxSize = 0;
     }
 
+    /**
+     * Guarda.
+     * 
+     * @param html the html
+     * @param ruta the ruta
+     */
     private void Guarda(String html, String ruta)
     {
         try
@@ -83,6 +105,14 @@ public class FileUpload
         }
     }
 
+    /**
+     * Gets the files.
+     * 
+     * @param httpservletrequest the httpservletrequest
+     * @param httpservletresponse the httpservletresponse
+     * @return the files
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void getFiles(HttpServletRequest httpservletrequest, HttpServletResponse httpservletresponse)
             throws IOException
     {
@@ -112,11 +142,22 @@ public class FileUpload
         }
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @return the content type
+     */
     public String getContentType()
     {
         return sContentType;
     }
 
+    /**
+     * Gets the file data.
+     * 
+     * @param s the s
+     * @return the file data
+     */
     public byte[] getFileData(String s)
     {
         byte ret[] = null;
@@ -144,17 +185,36 @@ public class FileUpload
         return ret;
     }
 
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public int getSize()
     {
         return maxSize;
     }
 
+    /**
+     * Gets the file input stream.
+     * 
+     * @param s the s
+     * @return the file input stream
+     */
     public InputStream getFileInputStream(String s)
     {
         byte data[] = getFileData(s);
         return new ByteArrayInputStream(data);
     }
 
+    /**
+     * Save file.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String s, String s1)
             throws IOException
     {
@@ -195,6 +255,15 @@ public class FileUpload
         return flag;
     }
 
+    /**
+     * Save file.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param s2 the s2
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String s, String s1, String s2)
             throws IOException
     {
@@ -235,6 +304,16 @@ public class FileUpload
         return flag;
     }
 
+    /**
+     * Save file.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param smod1 the smod1
+     * @param smod2 the smod2
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String s, String s1, String smod1, String smod2)
             throws IOException
     {
@@ -275,6 +354,15 @@ public class FileUpload
         return flag;
     }
 
+    /**
+     * Save file parsed.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param s0 the s0
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFileParsed(String s, String s1, String s0)
             throws IOException
     {
@@ -318,6 +406,13 @@ public class FileUpload
         return flag;
     }
 
+    /**
+     * Find attaches.
+     * 
+     * @param s the s
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String FindAttaches(String s)
             throws IOException
     {
@@ -348,6 +443,13 @@ public class FileUpload
         return dataarc;
     }
 
+    /**
+     * Gets the file name.
+     * 
+     * @param s the s
+     * @return the file name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getFileName(String s)
             throws IOException
     {
@@ -376,6 +478,13 @@ public class FileUpload
         return null;
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @param s the s
+     * @return the content type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getContentType(String s)
             throws IOException
     {
@@ -404,6 +513,13 @@ public class FileUpload
         return null;
     }
 
+    /**
+     * Gets the value.
+     * 
+     * @param s the s
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getValue(String s)
             throws IOException
     {
@@ -417,6 +533,14 @@ public class FileUpload
         return null;
     }
 
+    /**
+     * Parses the multi.
+     * 
+     * @param s the s
+     * @param servletinputstream the servletinputstream
+     * @return the hashtable
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     Hashtable parseMulti(String s, ServletInputStream servletinputstream)
             throws IOException
     {
@@ -577,8 +701,15 @@ public class FileUpload
         return sessid;
     }
 
+    /** The s content type. */
     private String sContentType;
+    
+    /** The parametros. */
     Vector parametros;
+    
+    /** The table. */
     Hashtable table;
+    
+    /** The max size. */
     protected int maxSize;
 }

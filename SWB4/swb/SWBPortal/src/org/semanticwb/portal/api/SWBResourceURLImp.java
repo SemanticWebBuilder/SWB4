@@ -38,32 +38,70 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.servlet.internal.DistributorParams;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que implementa WBResourceURL, que sirve para generar un URL valido por el portal para el recursos.
  * @author Javier Solis Gonzalez
  */
 public class SWBResourceURLImp implements SWBResourceURL
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBResourceURLImp.class);
     
+    /** The action. */
     private String action=null;
+    
+    /** The call method. */
     private int callMethod=0;
+    
+    /** The mode. */
     private String mode=Mode_VIEW;
+    
+    /** The win state. */
     private String winState=WinState_NORMAL;
+    
+    /** The secure. */
     private boolean secure=false;
+    
+    /** The url type. */
     private int urlType=UrlType_RENDER;  //0 render, 1 action
+    
+    /** The resource. */
     private Resource resource=null;
+    
+    /** The virt resource. */
     private Resource virtResource=null;
+    
+    /** The topic. */
     private WebPage topic=null;
+    
+    /** The admin topic. */
     private WebPage adminTopic=null;
+    
+    /** The request. */
     private HttpServletRequest request=null;
+    
+    /** The map. */
     private HashMap map=new HashMap();    
+    
+    /** The ext params. */
     private String extParams=null;
     
+    /** The have virt tp. */
     private boolean haveVirtTP=false;
+    
+    /** The only content. */
     private boolean onlyContent=false;    
     
-    /** Creates a new instance of WBResRequest */
+    /**
+     * Creates a new instance of WBResRequest.
+     * 
+     * @param request the request
+     * @param resource the resource
+     * @param topic the topic
+     * @param urlType the url type
+     */
     public SWBResourceURLImp(HttpServletRequest request, Resource resource,WebPage topic, int urlType)
     {
         this.request=request;
@@ -74,44 +112,68 @@ public class SWBResourceURLImp implements SWBResourceURL
         this.adminTopic=topic;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#getAction()
+     */
     public String getAction()
     {
         return action;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#setAction(java.lang.String)
+     */
     public SWBResourceURL setAction(String action)
     {
         this.action=action;
         return this;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#getCallMethod()
+     */
     public int getCallMethod()
     {
         return callMethod;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#setCallMethod(int)
+     */
     public SWBResourceURL setCallMethod(int callMethod)
     {
         this.callMethod=callMethod;
         return this;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#getMode()
+     */
     public String getMode()
     {
         return mode;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#setMode(java.lang.String)
+     */
     public SWBResourceURL setMode(String mode)
     {
         this.mode=mode;
         return this;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#getWindowState()
+     */
     public String getWindowState()
     {
         return winState;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#setWindowState(java.lang.String)
+     */
     public SWBResourceURL setWindowState(String winState)
     {
         this.winState=winState;
@@ -119,7 +181,8 @@ public class SWBResourceURLImp implements SWBResourceURL
     }
     
     /**
-     * Regresa url del recurso
+     * Regresa url del recurso.
+     * 
      * @return String url
      */    
     @Override
@@ -134,7 +197,8 @@ public class SWBResourceURLImp implements SWBResourceURL
      * Note that the returned String may not be a valid URL, as it may
      * be rewritten by the portal/resource-container before returning the
      * markup to the client.
-     *
+     * 
+     * @param encodeAmp the encode amp
      * @return   the encoded URL as a string
      */
     public String toString(boolean encodeAmp)
@@ -209,22 +273,36 @@ public class SWBResourceURLImp implements SWBResourceURL
         return s;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#isSecure()
+     */
     public boolean isSecure()
     {
         return secure;
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#setSecure(boolean)
+     */
     public SWBResourceURL setSecure(boolean secure)
     {
         this.secure=secure;
         return this;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceURL#getURLType()
+     */
     public int getURLType()
     {
         return urlType;
     }
     
+    /**
+     * Sets the uRL type.
+     * 
+     * @param type the new uRL type
+     */
     public void setURLType(int type)
     {
         this.urlType=type;
@@ -280,22 +358,16 @@ public class SWBResourceURLImp implements SWBResourceURL
    * <p>
    * The given parameters do not need to be encoded
    * prior to calling this method.
-   *
-   * @param  parameters   Map containing parameter names for 
-   *                      the render phase as 
-   *                      keys and parameter values as map 
-   *                      values. The keys in the parameter
-   *                      map must be of type String. The values 
-   *                      in the parameter map must be of type
-   *                      String array (<code>String[]</code>).
-   *
-   * @exception	java.lang.IllegalArgumentException 
-   *                      if parameters is <code>null</code>, if
-   *                      any of the key/values in the Map are <code>null</code>, 
-   *                      if any of the keys is not a String, or if any of 
-   *                      the values is not a String array.
+   * 
+   * @param parameters the parameters
+   * @return the sWB resource url
+   * @exception	java.lang.IllegalArgumentException
+   * if parameters is <code>null</code>, if
+   * any of the key/values in the Map are <code>null</code>,
+   * if any of the keys is not a String, or if any of
+   * the values is not a String array.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public SWBResourceURL setParameters(java.util.Map parameters)
@@ -325,14 +397,14 @@ public class SWBResourceURLImp implements SWBResourceURL
    * <p>
    * The given parameter do not need to be encoded
    * prior to calling this method.
-   *
-   * @param  key    key of the render parameter
-   * @param  value  value of the render parameter
-   *
-   * @exception	java.lang.IllegalArgumentException	
-   *                      if key or value are <code>null</code>.
+   * 
+   * @param key the key
+   * @param value the value
+   * @return the sWB resource url
+   * @exception	java.lang.IllegalArgumentException
+   * if key or value are <code>null</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public SWBResourceURL setParameter(String key, String value)
@@ -356,13 +428,13 @@ public class SWBResourceURLImp implements SWBResourceURL
    * The given parameter do not need to be encoded
    * prior to calling this method.
    * 
-   * @param  key     key of the render parameter
-   * @param  values  values of the render parameter
-   *
-   * @exception	java.lang.IllegalArgumentException	
-   *                      if key or value are <code>null</code>.
+   * @param key the key
+   * @param values the values
+   * @return the sWB resource url
+   * @exception	java.lang.IllegalArgumentException
+   * if key or value are <code>null</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
     public SWBResourceURL setParameter(String key, String[] values)
@@ -391,6 +463,11 @@ public class SWBResourceURLImp implements SWBResourceURL
       haveVirtTP=true;
     }
   
+    /**
+     * Have virtual topic.
+     * 
+     * @return true, if successful
+     */
     public boolean haveVirtualTopic()
     {
         return haveVirtTP;
@@ -425,7 +502,9 @@ public class SWBResourceURLImp implements SWBResourceURL
   
     /**
      * Setter for property onlyContent.
+     * 
      * @param onlyContent New value of property onlyContent.
+     * @return the sWB resource url
      */
     public SWBResourceURL setOnlyContent(boolean onlyContent)
     {
@@ -443,8 +522,9 @@ public class SWBResourceURLImp implements SWBResourceURL
     }
     
     /**
-     * Parametros adicionales o bien parametros de otros recursos
-     * @param otherParams New value of property otherParams.
+     * Parametros adicionales o bien parametros de otros recursos.
+     * 
+     * @param extParams the new ext uri params
      */
     public void setExtURIParams(java.lang.String extParams)
     {

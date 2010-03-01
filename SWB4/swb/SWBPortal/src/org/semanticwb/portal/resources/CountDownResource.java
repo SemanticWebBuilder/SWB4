@@ -41,20 +41,27 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBParamRequest;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CountDownResource.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class CountDownResource extends GenericAdmResource
 {
     
-    /** Creates a new instance of CountDownResource */
+    /**
+     * Creates a new instance of CountDownResource.
+     */
     public CountDownResource()
     {
     }
     
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {

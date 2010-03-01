@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Restaurant.
+ */
 public class Restaurant extends org.semanticwb.model.comm.base.RestaurantBase 
 {
+    
+    /**
+     * Instantiates a new restaurant.
+     * 
+     * @param base the base
+     */
     public Restaurant(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

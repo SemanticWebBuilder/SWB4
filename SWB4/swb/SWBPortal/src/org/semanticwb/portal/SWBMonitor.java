@@ -39,23 +39,47 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBMonitor.
+ */
 public class SWBMonitor implements Serializable
 {
+    
+    /** The log. */
     static Logger log=SWBUtils.getLogger(SWBMonitor.class);    
     
+    /** The timer. */
     private transient Timer timer;
+    
+    /** The vec. */
     private transient Vector vec=new Vector();
+    
+    /** The max. */
     private transient int max=500;
+    
+    /** The delays. */
     private transient int delays = 5;
+    
+    /** The t. */
     private transient TimerTask t=null;
     
+    /** The instance hits. */
     private transient long instanceHits=0;
+    
+    /** The instance hit time. */
     private transient long instanceHitTime=15;
     
+    /**
+     * Instantiates a new sWB monitor.
+     */
     public SWBMonitor()
     {
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         vec=new Vector(max);
@@ -75,6 +99,9 @@ public class SWBMonitor implements Serializable
         log.event("Initializing SWBMonitor("+max+","+delays+"s)...");
     }        
     
+    /**
+     * _run.
+     */
     public void _run()
     {
         long maxm=Runtime.getRuntime().maxMemory();
@@ -112,11 +139,22 @@ public class SWBMonitor implements Serializable
         vec.add(mr);
     }   
     
+    /**
+     * Gets the monitor records.
+     * 
+     * @return the monitor records
+     */
     public Vector getMonitorRecords()
     {
         return vec;
     }
     
+    /**
+     * Gets the average monitor records.
+     * 
+     * @param ratio the ratio
+     * @return the average monitor records
+     */
     public Vector getAverageMonitorRecords(int ratio)
     {
         Vector ret=new Vector();
@@ -205,6 +243,9 @@ public class SWBMonitor implements Serializable
         return ret;
     }
     
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         timer.cancel();
@@ -247,6 +288,11 @@ public class SWBMonitor implements Serializable
         this.delays = delayms;
     }
     
+    /**
+     * Addinstance hit.
+     * 
+     * @param time the time
+     */
     public void addinstanceHit(long time)
     {
         time=time*100;
@@ -254,14 +300,36 @@ public class SWBMonitor implements Serializable
         instanceHitTime=(instanceHitTime*49+time)/50;
     }
     
+    /**
+     * The Class PoolRecord.
+     */
     public class PoolRecord implements Serializable
     {
+        
+        /** The hits. */
         private long hits=0;
+        
+        /** The hits time. */
         private long hitsTime=0;
+        
+        /** The total. */
         private int total=0;
+        
+        /** The free. */
         private int free=0;
+        
+        /** The max. */
         private int max=0;
         
+        /**
+         * Instantiates a new pool record.
+         * 
+         * @param hits the hits
+         * @param hitsTime the hits time
+         * @param total the total
+         * @param free the free
+         * @param max the max
+         */
         public PoolRecord(long hits, long hitsTime, int total, int free, int max)
         {
             this.hits=hits;
@@ -271,56 +339,111 @@ public class SWBMonitor implements Serializable
             this.max=max;
         }
 
+        /**
+         * Gets the hits.
+         * 
+         * @return the hits
+         */
         public long getHits()
         {
             return hits;
         }
 
+        /**
+         * Sets the hits.
+         * 
+         * @param hits the new hits
+         */
         public void setHits(long hits)
         {
             this.hits = hits;
         }
 
+        /**
+         * Gets the total connections.
+         * 
+         * @return the total connections
+         */
         public int getTotalConnections()
         {
             return total;
         }
 
+        /**
+         * Sets the total connections.
+         * 
+         * @param total the new total connections
+         */
         public void setTotalConnections(int total)
         {
             this.total = total;
         }
 
+        /**
+         * Gets the free connections.
+         * 
+         * @return the free connections
+         */
         public int getFreeConnections()
         {
             return free;
         }
         
+        /**
+         * Gets the used connections.
+         * 
+         * @return the used connections
+         */
         public int getUsedConnections()
         {
             return total-free;
         }        
 
+        /**
+         * Sets the free connections.
+         * 
+         * @param free the new free connections
+         */
         public void setFreeConnections(int free)
         {
             this.free = free;
         }
 
+        /**
+         * Gets the max connections.
+         * 
+         * @return the max connections
+         */
         public int getMaxConnections()
         {
             return max;
         }
 
+        /**
+         * Sets the max connections.
+         * 
+         * @param max the new max connections
+         */
         public void setMaxConnections(int max)
         {
             this.max = max;
         }
 
+        /**
+         * Gets the hits time.
+         * 
+         * @return the hits time
+         */
         public long getHitsTime()
         {
             return hitsTime;
         }
 
+        /**
+         * Sets the hits time.
+         * 
+         * @param hitsTime the new hits time
+         */
         public void setHitsTime(long hitsTime)
         {
             this.hitsTime = hitsTime;
@@ -328,24 +451,59 @@ public class SWBMonitor implements Serializable
     }
     
 
+    /**
+     * The Class MonitorRecord.
+     */
     public class MonitorRecord implements Serializable
     {
+        
+        /** The max. */
         private long max=0;
+        
+        /** The total. */
         private long total=0;
+        
+        /** The free. */
         private long free=0;
+        
+        /** The time. */
         private long time=0;
         
+        /** The hits. */
         private long hits=0;
+        
+        /** The hits time. */
         private long hitsTime=0;
         
+        /** The max users. */
         private int maxUsers=0;
         
+        /** The resource hits. */
         private long resourceHits=0;
+        
+        /** The cache res hits. */
         private long cacheResHits=0;
+        
+        /** The cache res load hits. */
         private long cacheResLoadHits=0;        
         
+        /** The pools. */
         private HashMap pools;
 
+        /**
+         * Instantiates a new monitor record.
+         * 
+         * @param max the max
+         * @param total the total
+         * @param free the free
+         * @param maxUsers the max users
+         * @param hits the hits
+         * @param hitsTime the hits time
+         * @param resourceHits the resource hits
+         * @param cacheResHits the cache res hits
+         * @param cacheResLoadHits the cache res load hits
+         * @param pools the pools
+         */
         public MonitorRecord(long max, long total, long free, int maxUsers, long hits, long hitsTime
         , long resourceHits, long cacheResHits, long cacheResLoadHits, HashMap pools)
         {
@@ -416,11 +574,21 @@ public class SWBMonitor implements Serializable
             this.free = free;
         }
 
+        /**
+         * Gets the used memory.
+         * 
+         * @return the used memory
+         */
         public long getUsedMemory()
         {
             return total-free;
         }
         
+        /**
+         * Sets the time.
+         * 
+         * @param time the new time
+         */
         public void setTime(long time)
         {
             this.time=time;
@@ -534,21 +702,41 @@ public class SWBMonitor implements Serializable
             this.cacheResLoadHits = cacheResLoadHits;
         }
 
+        /**
+         * Gets the hits time.
+         * 
+         * @return the hits time
+         */
         public long getHitsTime()
         {
             return hitsTime;
         }
 
+        /**
+         * Sets the hits time.
+         * 
+         * @param hitsTime the new hits time
+         */
         public void setHitsTime(long hitsTime)
         {
             this.hitsTime = hitsTime;
         }
 
+        /**
+         * Gets the pools.
+         * 
+         * @return the pools
+         */
         public HashMap getPools()
         {
             return pools;
         }
 
+        /**
+         * Sets the pools.
+         * 
+         * @param pools the new pools
+         */
         public void setPools(HashMap pools)
         {
             this.pools = pools;

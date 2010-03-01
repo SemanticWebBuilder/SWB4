@@ -79,6 +79,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
  * Executes initialization operations for the environment necesary to provide
  * Portal services, so users, templates, publication flows, resources, services,
@@ -104,10 +105,8 @@ public class SWBPortal
      * <p>Almacena el valor de la ruta de contexto configurada para esta instancia de portal.</p>
      */
     private String contextPath = "/";
-    /**
-     * Stores the work directory's web path value
-     * <p>Almacena el valor de la ruta web del directorio de trabajo</p>
-     */
+    
+    /** Stores the work directory's web path value <p>Almacena el valor de la ruta web del directorio de trabajo</p>. */
     private static String webWorkPath = "";
     /**
      * Stores the work directory's physical path.
@@ -230,12 +229,13 @@ public class SWBPortal
     private static SWBIndexMgr indmgr = null;
 
     /**
-     * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with
+     * Creates an object of this class, calling method {@code createInstance(ServletContext, Filter) with.
+     * 
+     * @param servletContext the {@code ServletContex} agregated to the new instance
+     * @return SWBPortal     the new instance of this component
      * {@code Filter}'s value equal to {@code null}.
      * <p>Crea un objeto de esta clase, llamando al m&eacute;todo {@code createInstance(ServletContext, Filter)
      * con el valor de {@code Filter} igual a {@code null}.</p>
-     * @param servletContext the {@code ServletContex} agregated to the new instance
-     * @return SWBPortal     the new instance of this component
      */
     static public synchronized SWBPortal createInstance(ServletContext servletContext)
     {
@@ -278,9 +278,9 @@ public class SWBPortal
 //        }
 //    }
     /**
-     * Constructor that initializes the environment of its new instance by calling method {@code init()}
-     * <p>Constructor que inicia el ambiente de su nueva instancia llamando al m&eacute;todo {@code init()}</p>
-     */
+ * Constructor that initializes the environment of its new instance by calling method {@code init()}
+ * <p>Constructor que inicia el ambiente de su nueva instancia llamando al m&eacute;todo {@code init()}</p>.
+ */
     private SWBPortal()
     {
         log.event("Initializing SemanticWebBuilder Portal...");
@@ -841,8 +841,9 @@ public class SWBPortal
      * Gets the context path for this resource's instance. For example: {@literal /swb}, or {@literal /} if
      * the context is the root context.
      * <p>Obtiene la ruta del contexto para esta instancia de portal. <br/>Por ejemplo:
-     * {@literal /swb}, o {@literal /} si es el contexto ra&iacute;z</p>
+     * 
      * @return the string representing the context path for this resource's instance.
+     * {@literal /swb}, o {@literal /} si es el contexto ra&iacute;z</p>
      */
     public static String getContextPath()
     {
@@ -927,16 +928,17 @@ public class SWBPortal
     }
 
     /**
-     * Retrieves the environment variable's value whose name matches the value of
-     * {@code name}, or returns the value of {@code defect}. The searched variable
-     * might be declared in web.xml or web.properties files.
-     * <p>Obtiene el valor de la variable de ambiente cuyo nombre coincida con el valor
-     * contenido en {@code name}, o devuelve el valor de {@code defect}. La variable 
-     * a buscar puede estar declarada en los archivos web.xml o web.properties.</p>
+     * Retrieves the environment variable's value whose name matches the value of.
+     * 
      * @param name un string que indica el nombre de la variable a buscar
      * @param defect un string con el valor a devolder por defecto, en caso de no encontrar la variable.
      * @return un string con el valor de la variable indicada por {@code name}, si existe,
      * en caso contrario devuelve el valor de {@code defect}.
+     * {@code name}, or returns the value of {@code defect}. The searched variable
+     * might be declared in web.xml or web.properties files.
+     * <p>Obtiene el valor de la variable de ambiente cuyo nombre coincida con el valor
+     * contenido en {@code name}, o devuelve el valor de {@code defect}. La variable
+     * a buscar puede estar declarada en los archivos web.xml o web.properties.</p>
      */
     public static String getEnv(String name, String defect)
     {
@@ -1047,11 +1049,12 @@ public class SWBPortal
      * Reads a file whose path is located within this portal's work directory.
      * <p>Lee un archivo cuya ruta est&aacute; ubicada dentro del directorio de
      * trabajo de este portal.</p>
+     * 
      * @param path the string representing the file's path to read, which has to
-     *             be within the work directory.
-     * @throws SWBException if the file path indicated cannot be located within the
-     *         work directory or is equal to {@code null}
+     * be within the work directory.
      * @return an inputStream with the indicated file's content
+     * @throws SWBException if the file path indicated cannot be located within the
+     * work directory or is equal to {@code null}
      */
     public static InputStream getFileFromWorkPath(String path) throws SWBException
     {
@@ -1097,10 +1100,12 @@ public class SWBPortal
     /**
      * Creates a file to the path and with the content indicated.
      * <p>Crea un archivo en la ruta y con el contenido indicados.</p>
+     * 
      * @param path a string representing the path within the work directory to create the file
      * @param in   an input stream with the new file's content
      * @param userid a string with the user id, wich is used if the file repository is shared among several clients
      * @throws org.semanticwb.SWBException if the path specified cannot be created or is {@code null}
+     * @throws SWBException the sWB exception
      */
     public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException
     {
@@ -1142,10 +1147,11 @@ public class SWBPortal
      * Reads a file whose path exists within the work directory and puts its content into a string.
      * <p>Lee un archivo cuya ruta existe dentro del directorio de trabajo ({@literal work})
      * y coloca su contenido en una string.</p>
+     * 
      * @param path the string representing the file's path within the work directory
      * @return a stream with the indicated file's content
      * @throws IOException if the file specified cannot be read.
-     * @throws SWBException
+     * @throws SWBException the sWB exception
      */
     public static String readFileFromWorkPath(String path) throws IOException, SWBException
     {
@@ -1158,11 +1164,13 @@ public class SWBPortal
      * <p>Lee un archivo cuya ruta se ubica dentro del directorio de trabajo ({@code work})
      * de este portal utilizando el c&oacute;digo de caracteres especificado.
      * Utiliza los servicios del m&eacute;todo {@code getFileFromWorkPath(String)}.</p>
+     * 
      * @param path a string representing the file's path to read, which has to be
-     *             within the work directory.
+     * within the work directory.
      * @param encode a string representing the character code to use while reading the file's content.
      * @return a stream with the indicated file's content
      * @throws org.semanticwb.SWBException if there's a problem while reading the file's content.
+     * @throws SWBException the sWB exception
      */
     public static InputStreamReader getFileFromWorkPath(String path, String encode) throws SWBException
     {
@@ -1474,6 +1482,11 @@ public class SWBPortal
          * Looks for relative paths in the attributes of HTML tags and replaces
          * their values with {@code ruta}, indicating the number of {@code pages} into which the content is divided.
          * The HTML tags it evaluates are: {@code img}, {@code applet}, {@code script}, {@code table},
+         * 
+         * @param datos the string with the HTML code to parse.
+         * @param ruta the string with the new path to write to {@code datos}.
+         * @param pages the number of pages which the content is divided into.
+         * @return a string with the HTML code with relative paths modified.
          * {@code tr}, {@code td}, {@code body}, {@code form}, {@code input}, {@code a}, {@code area}
          * {@code meta}, {@code bca}, {@code link}, {@code param}, {@code embed}, {@code iframe} and {@code frame} and
          * the attributes it evaluates are: {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
@@ -1487,10 +1500,6 @@ public class SWBPortal
          * {@code embed}, {@code iframe} y {@code frame}; los atributos que eval&uacute;a son:
          * {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
          * {@code onmouseover}, {@code onload}, {@code onmouseout} y {@code onclick}</p>
-         * @param datos the string with the HTML code to parse.
-         * @param ruta the string with the new path to write to {@code datos}.
-         * @param pages the number of pages which the content is divided into.
-         * @return a string with the HTML code with relative paths modified.
          * @author Jorge Jim&eacute;nez
          */
         public static String parseHTML(String datos, String ruta, int pages)
@@ -1762,11 +1771,12 @@ public class SWBPortal
          * Eliminates a leading substring from a string. For example: <br/>
          * if {@code value = "../images/favicon.ico"} <br/>
          * and {@code takeOff = ".."} <br/>
-         * {@code takeOffString(value, takeOff) = "/images/favicon.ico"}
-         * <p>Elimina una subcadena precedente de una string, como se ejemplifica arriba.</p>
+         * 
          * @param value the string that contains the substring to eliminate
          * @param takeOff the substring to eliminate
          * @return the string whithout {@code takeOff}
+         * {@code takeOffString(value, takeOff) = "/images/favicon.ico"}
+         * <p>Elimina una subcadena precedente de una string, como se ejemplifica arriba.</p>
          */
         public static String takeOffString(String value, String takeOff)
         {
@@ -1975,6 +1985,10 @@ public class SWBPortal
          * Looks for relative paths in the attributes of HTML tags and replaces
          * their values with {@code ruta}.
          * The HTML tags it evaluates are: {@code img}, {@code applet}, {@code script}, {@code table},
+         * 
+         * @param datos the string containing the HTML code to parse
+         * @param ruta the string representing the replacing path
+         * @return a string with the HTML code with relative paths modified.
          * {@code td}, {@code body}, {@code form}, {@code input}, {@code a},
          * {@code meta}, {@code bca}, {@code link}, {@code param}, {@code embed}, {@code iframe} and {@code frame} and
          * the attributes it evaluates are: {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value},
@@ -1987,9 +2001,6 @@ public class SWBPortal
          * y los atributos que eval&uacute;a son: {@code src}, {@code href}, {@code background},
          * {@code codebase}, {@code value}, {@code onmouseover}, {@code onload},
          * {@code onmouseout} and {@code onclick}.</p>
-         * @param datos the string containing the HTML code to parse
-         * @param ruta the string representing the replacing path
-         * @return a string with the HTML code with relative paths modified.
          */
         public static String parseXsl(String datos, String ruta)
         {
@@ -2101,8 +2112,11 @@ public class SWBPortal
         }
 
         /**
-         * Detects the relative file paths included in {@code datos} and returns them in 
+         * Detects the relative file paths included in {@code datos} and returns them in
          * a semicolon separated string. The file paths are searched for in the following tags:
+         * 
+         * @param datos the string representing the HTML code to analize.
+         * @return a semicolon separated string with the file paths retrieved
          * {@code img}, {@code applet}, {@code script}, {@code td}, {@code table}, {@code body}, {@code input},
          * {@code a}, {@code area}, {@code link}, {@code param}, {@code embed} and in the attributes:
          * {@code src}, {@code href}, {@code background}, {@code codebase}, {@code value} and {@code onmouseover}.
@@ -2112,8 +2126,6 @@ public class SWBPortal
          * {@code td}, {@code table}, {@code body}, {@code input}, {@code a}, {@code area}, {@code link},
          * {@code param}, {@code embed}; y en los atributos: {@code src}, {@code href},
          * {@code background}, {@code codebase}, {@code value} and {@code onmouseover}.</p>
-         * @param datos the string representing the HTML code to analize.
-         * @return a semicolon separated string with the file paths retrieved
          */
         public static String FindAttaches(String datos)
         {
@@ -2250,15 +2262,16 @@ public class SWBPortal
          * Finds a file path in a string whose file extension equals {@code ext}.
          * If there's no file path in {@code value} with the specified extension,
          * or if {@code value} starts with {@literal /} or {@literal http}, then
+         * 
+         * @param value a string that might contain a file path
+         * @param ext a string representing a file extension to look for
+         * @param ruta a string that is not used in this method, so don't bother
+         * @return a string with the local file path found with extension {@code ext}
          * {@code value} is returned intact. <p>Encuentra una ruta de archivo cuya
          * extensi&oacute;n equivalga a {@code ext}. Si {@code value} no contiene
          * una ruta con la extensi&oacute;n de archivo especificada o si {@code value}
          * inicia con {@literal /} o {@literal http}, entonces el valor de {@code value}
          * regresa intacto.</p>
-         * @param value a string that might contain a file path
-         * @param ext a string representing a file extension to look for
-         * @param ruta a string that is not used in this method, so don't bother
-         * @return a string with the local file path found with extension {@code ext}
          */
         private static String findImageInScript1(String value, String ext, String ruta)
         {
@@ -2306,16 +2319,17 @@ public class SWBPortal
          * a request attribute with name {@code swb_valCad} is generated and its value
          * is equal to the string represented in the image embedded in the HTTP response.
          * <p>Genera una imagen representando una string y la incrusta en una {@code HttpServletResponse}.
-         *  La string representada puede ser proporcionada mediante el argumento {@code cad}, o
+         * La string representada puede ser proporcionada mediante el argumento {@code cad}, o
          * si este argumento es {@code null} la string se genera aleatoriamente. Adicionalmente,
          * genera un atributo de petici&oacute;n -en {@code request}- con nombre
-         * {@code swb_valCad} y con valor igual a la string representada por la imagen.</p>
+         * 
          * @param request a HTTP request to respond
          * @param response the HTTP response that will contain the generated image
          * @param size the number of characters the generated string will contain, if {@code cad} is {@code null}
          * @param cad the string to represent in an image
-         * @throws javax.servlet.ServletException
-         * @throws java.io.IOException
+         * @throws ServletException the servlet exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         * {@code swb_valCad} y con valor igual a la string representada por la imagen.</p>
          */
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException
         {
@@ -2380,14 +2394,15 @@ public class SWBPortal
          * es {@code null} los caracteres que conforman la string son seleccionados
          * aleatoriamente. Adicionalmente, genera un atributo de petici&oacute;n
          * en {@code request} con el nombre determinado por el argumento
-         * {@code attributeName} y su valor es igual a la cadena representada en la imagen.</p>
+         * 
          * @param request a HTTP request to respond
          * @param response the HTTP response that will contain the generated image
          * @param attributeName a string with the name the request attribute is going to be
          * @param size the number of characters the generated string will contain, if {@code cad} is {@code null}
          * @param cad the string to represent in an image
-         * @throws javax.servlet.ServletException
-         * @throws java.io.IOException
+         * @throws ServletException the servlet exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         * {@code attributeName} y su valor es igual a la cadena representada en la imagen.</p>
          */
         public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException
         {
@@ -2438,22 +2453,50 @@ public class SWBPortal
             }
         }
 
+        /**
+         * Render gallery.
+         * 
+         * @param imgurl the imgurl
+         * @return the string
+         */
         public static String renderGallery(String... imgurl)
         {
             ImageGallery ig = new ImageGallery();
             return ig.renderGallery(imgurl);
         }
 
+        /**
+         * Install zip.
+         * 
+         * @param zipFile the zip file
+         * @return the web site
+         */
         public static WebSite InstallZip(File zipFile)
         {
             return InstallZip(zipFile, null, null, null);
         }
 
+        /**
+         * Install zip.
+         * 
+         * @param zipFile the zip file
+         * @param file2read the file2read
+         * @return the web site
+         */
         public static WebSite InstallZip(File zipFile, String file2read)
         {
             return InstallZip(zipFile, file2read, null, null);
         }
 
+        /**
+         * Install zip.
+         * 
+         * @param zipFile the zip file
+         * @param file2read the file2read
+         * @param newWebSiteid the new web siteid
+         * @param newWebSiteTitle the new web site title
+         * @return the web site
+         */
         public static WebSite InstallZip(File zipFile, String file2read, String newWebSiteid, String newWebSiteTitle)
         {
             try
@@ -2655,16 +2698,17 @@ public class SWBPortal
      * replaces the existing styles. The CSS styles in {@code content} are replaced
      * with those belonging to the set of name equal to {@code tmid} whose detail
      * is contained in {@code hTMhStyleObjs}. <p>Elimina del c&oacute;digo HTML en
-     * {@code content}, los tags de encabezado y cuerpo del documento y remplaza
-     * los estilos existentes. Los estilos CSS en {@code content} se remplazan con
-     * los que pertenecen al conjunto de nombre igual a {@code tmid} cuyo detalle
-     * lo contiene {@code hTMhStyleObjs}.</p>
+     * 
      * @param content a string with the HTML code to modify
      * @param tmid a string representing the name of the style set to use
      * @param hTMhStyleObjs the set of CSS styles available
      * @return a string similar to content but without the heading and body tags
-     *         and the styles modified according to the arguments received. If
-     *         {@code content} equals {@code null}, the returned value is an empty string.
+     * and the styles modified according to the arguments received. If
+     * {@code content}, los tags de encabezado y cuerpo del documento y remplaza
+     * los estilos existentes. Los estilos CSS en {@code content} se remplazan con
+     * los que pertenecen al conjunto de nombre igual a {@code tmid} cuyo detalle
+     * lo contiene {@code hTMhStyleObjs}.</p>
+     * {@code content} equals {@code null}, the returned value is an empty string.
      */
     public static String removeStylesOutDivs(String content, String tmid, HashMap hTMhStyleObjs)
     {
@@ -2804,17 +2848,18 @@ public class SWBPortal
     }
 
     /**
-     * Modifies some CSS styles in {@code styles} for those specified in
-     * {@code hTMhStyleObjs} whose identifier equals {@code tmid}. <p>Modifica
-     * algunos estilos CSS en {@code styles} por los que est&aacute;n especificados
-     * en {@code hTMhStyleObjs} cuyo identificador lo define {@code tmid}.</p>
+     * Modifies some CSS styles in {@code styles} for those specified in.
+     * 
      * @param styles a string containing the CSS styles to modify
      * @param tmid a string representing the identifier for the style set to use
      * @param hTMhStyleObjs a hash map containing the set of styles available
      * @return a string with the CSS style code in {@code styles} but whith the CSS styles modified.
-     *         The styles modified will be those defined for the font type used in {@literal <p>},
-     *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
-     *         contained in {@code hTMhStyleObjs}.
+     * The styles modified will be those defined for the font type used in {@literal },
+     * {@code hTMhStyleObjs} whose identifier equals {@code tmid}. <p>Modifica
+     * algunos estilos CSS en {@code styles} por los que est&aacute;n especificados
+     * en {@code hTMhStyleObjs} cuyo identificador lo define {@code tmid}.</p>
+     * {@literal <li>} and {@literal <div>} HTML tags according to the styles
+     * contained in {@code hTMhStyleObjs}.
      */
     private static String parseStyles2(String styles, String tmid, HashMap hTMhStyleObjs)
     {
@@ -2844,17 +2889,18 @@ public class SWBPortal
     }
 
     /**
-     * Replaces from {@code content} the styles defined for the {@literal <p>},
-     * {@literal <li>} and {@literal <div>} HTML tags with those specified in {@code hTMhStyleObjs}.
-     * <p>Remplaza de {@code content} los estilos definidos para los tags de HTML: {@literal <p>},
-     * {@literal <li>} and {@literal <div>} con los especificados en {@code hTMhStyleObjs}.</p>
+     * Replaces from {@code content} the styles defined for the {@literal <p>},.
+     * 
      * @param content the string representing the CSS styles to be modified
      * @param tmid a string representing the set of styles in {@code hTMhStyleObjs} to use
      * @param hTMhStyleObjs a hash map containing the set of styles available
      * @return a string similar to {@code content} but with some styles modified.
-     *         The styles modified will be those defined in {@code content} for the {@literal <p>},
-     *         {@literal <li>} and {@literal <div>} HTML tags according to the styles
-     *         contained in {@code hTMhStyleObjs}.
+     * The styles modified will be those defined in {@code content} for the {@literal },
+     * {@literal <li>} and {@literal <div>} HTML tags with those specified in {@code hTMhStyleObjs}.
+     * <p>Remplaza de {@code content} los estilos definidos para los tags de HTML: {@literal <p>},
+     * {@literal <li>} and {@literal <div>} con los especificados en {@code hTMhStyleObjs}.</p>
+     * {@literal <li>} and {@literal <div>} HTML tags according to the styles
+     * contained in {@code hTMhStyleObjs}.
      */
     private static String parseStyles(String content, String tmid, HashMap hTMhStyleObjs)
     {
@@ -2960,9 +3006,10 @@ public class SWBPortal
     }
 
     /**
-     * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios)
-     * @param node
-     * @param smodels
+     * Metodo sobrado en este momento, pero servira para cuando un submodelo (sitio), tenga mas submodelos (sitios,repositorios).
+     * 
+     * @param node the node
+     * @param smodels the smodels
      */
     private static void iteraModels(Node node, HashMap smodels)
     {
@@ -3001,6 +3048,13 @@ public class SWBPortal
         }
     }
 
+    /**
+     * Gets the file upload ctrl string.
+     * 
+     * @param name the name
+     * @param request the request
+     * @return the file upload ctrl string
+     */
     public static String getFileUploadCtrlString(String name, HttpServletRequest request)
     {
         String ret = "";
@@ -3074,6 +3128,11 @@ public class SWBPortal
         return ret;
     }
 
+    /**
+     * Check hsqlh ack.
+     * 
+     * @param con the con
+     */
     private void checkHSQLHAck(Connection con)
     {
         try

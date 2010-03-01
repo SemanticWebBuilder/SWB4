@@ -14,13 +14,18 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Resource that manage the integration between google Blogger and semanticwebbuilder (blogger java api)
- * and returns the user blogger blogs and post 
+ * and returns the user blogger blogs and post.
+ * 
  * @author jorge.jimenez
  */
 public class BloggerResource  extends GenericResource {
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {

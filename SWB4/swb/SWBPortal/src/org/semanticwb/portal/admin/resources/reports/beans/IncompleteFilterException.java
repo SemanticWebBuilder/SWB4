@@ -28,14 +28,25 @@
 
 package org.semanticwb.portal.admin.resources.reports.beans;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class IncompleteFilterException.
+ * 
  * @author Administrador
  */
 public class IncompleteFilterException extends Exception {
+    
+    /**
+     * Instantiates a new incomplete filter exception.
+     */
     public IncompleteFilterException(){
     }
     
+    /**
+     * Instantiates a new incomplete filter exception.
+     * 
+     * @param msg the msg
+     */
     public IncompleteFilterException(String msg){
         super(msg);
     }

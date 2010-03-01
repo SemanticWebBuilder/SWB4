@@ -41,6 +41,7 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * A Bookmarks manager resource. The bookmarks are sorted in groups.
  * <p>
@@ -58,8 +59,14 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     public static final int SORT_BYTAGS = 2;
     /**Date-based sorting constant. Constante para ordenamiento por fecha.*/
     public static final int SORT_BYDATE = 3;
+    
+    /** The Constant DISPLAY_LIST. */
     public static final int DISPLAY_LIST = 4;
+    
+    /** The Constant DISPLAY_TREE. */
     public static final int DISPLAY_TREE = 5;
+    
+    /** The Constant DISPLAY_CLOUD. */
     public static final int DISPLAY_CLOUD = 6;
     /**BookmarkEntry date-based comparator. Comparador de entradas basado en fecha.*/
     public static final Comparator DATE_ORDER_ASC = new Comparator() {
@@ -80,6 +87,7 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     };
 
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBBookmarks.class);
 
     /**
@@ -94,11 +102,16 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * Default constructor.
      * <p>
      * Constructor por defecto.
+     * 
+     * @param base the base
      */
     public SWBBookmarks(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
@@ -246,6 +259,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -265,11 +281,29 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         }
     }
 
+    /**
+     * Do render list.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRenderList(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         out.print(renderEntriesByUserGroup(request.getParameter("gid"), getSortType(), paramRequest));
     }
 
+    /**
+     * Do add new.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAddNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL aUrl = paramRequest.getActionUrl().setAction("ADDNEW");
         String url = request.getParameter("url");
@@ -364,6 +398,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         out.print(sbf.toString());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         BookmarkGroup generalGp = getUserBookmarkGroupByName(paramRequest.getUser(), "general");
@@ -472,6 +509,9 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         out.print(sbf.toString());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String path ="/swbadmin/jsp/bookmarks/bookmarksView.jsp";
@@ -523,6 +563,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         return getResourceBase().getId() + "/" + postfix;
     }
 
+    /**
+     * Do show admin.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doShowAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
         SWBResourceURL aUrl = paramRequest.getActionUrl();
@@ -615,6 +664,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         out.print(sbf.toString());
     }
 
+    /**
+     * Do show gadget.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doShowGadget(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
@@ -767,10 +825,10 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * Gets an iterator to the user's Bookmarks.
      * <p>
      * Devuelve un iterador a los favoritos del usuario.
-     *
+     * 
      * @param user owner of the bookmarks. Propietario de los favoritos.
-     *
-     * @throws SWBResourceException
+     * @return the iterator
+     * @throws SWBResourceException the sWB resource exception
      */
     public Iterator<BookmarkEntry> listAllEntriesByUser(User user) throws SWBResourceException {
         BookmarkGroup group = getUserBookmarkGroupByName(user, "general");
@@ -785,15 +843,15 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * Method to render the list of entries of the given group.
      * <p>
      * Método para construir una lista de favoritos pertenecientes a un grupo dado.
-     *
-     * @param groupId   ID of the group to list entries from. ID del grupo del
-     *                  que se listarán las entradas.
-     * @param sortType  Type of sorting (date, name, tags). Tipo de ordenamiento
-     *                  de la lista (por fecha, por tags, por nombre).
-     * @return          HTML code for the list of entries. Código HTML de la
-     *                  lista de favoritos.
      * 
-     * @throws SWBResourceException
+     * @param groupId   ID of the group to list entries from. ID del grupo del
+     * que se listarán las entradas.
+     * @param sortType  Type of sorting (date, name, tags). Tipo de ordenamiento
+     * de la lista (por fecha, por tags, por nombre).
+     * @param paramRequest the param request
+     * @return          HTML code for the list of entries. Código HTML de la
+     * lista de favoritos.
+     * @throws SWBResourceException the sWB resource exception
      */
     public String renderEntriesByUserGroup(String groupId, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
         ArrayList<BookmarkEntry> sEntries = new ArrayList<BookmarkEntry>();
@@ -849,17 +907,17 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
      * Method to render the list of entries of the given group.
      * <p>
      * Método para construir una lista de favoritos pertenecientes a un grupo dado.
-     *
-     * @param groupId   ID of the group to list entries from. ID del grupo del
-     *                  que se listarán las entradas.
-     * @param showInfo  wether to show bookmark's extended info. Indica si se
-     *                  debe mostrar toda la información de cada entrada.
-     * @param sortType  type of sorting (date, name, tags). Tipo de ordenamiento
-     *                  de la lista (por fecha, por tags, por nombre).
-     * @return          HTML code for the list of entries. Código HTML de la
-     *                  lista de favoritos.
      * 
-     * @throws SWBResourceException
+     * @param groupId   ID of the group to list entries from. ID del grupo del
+     * que se listarán las entradas.
+     * @param showInfo  wether to show bookmark's extended info. Indica si se
+     * debe mostrar toda la información de cada entrada.
+     * @param sortType  type of sorting (date, name, tags). Tipo de ordenamiento
+     * de la lista (por fecha, por tags, por nombre).
+     * @param paramRequest the param request
+     * @return          HTML code for the list of entries. Código HTML de la
+     * lista de favoritos.
+     * @throws SWBResourceException the sWB resource exception
      */
     public String renderEntriesByUserGroup(String groupId, boolean showInfo, int sortType, SWBParamRequest paramRequest) throws SWBResourceException {
         ArrayList<BookmarkEntry> sEntries = new ArrayList<BookmarkEntry>();
@@ -1080,13 +1138,14 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Creates navigation menu for Bookmarks administration. 
+     * Creates navigation menu for Bookmarks administration.
      * <p>
      * Crea un menú de navegación para la administración de favoritos.
-     *
+     * 
+     * @param paramRequest the param request
      * @return  HTML String for the navigation menu. Código HTML del menú de
-     *          navegación.
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * navegación.
+     * @throws SWBResourceException the sWB resource exception
      */
     public String renderMenu(SWBParamRequest paramRequest) throws SWBResourceException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
@@ -1184,12 +1243,30 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
         return sbf.toString();
     }
 
+    /**
+     * Do render content.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRenderContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         out.print(renderEntriesByUserGroup(request.getParameter("gid"), paramRequest));
     }
 
     
+    /**
+     * Render entries by user group.
+     * 
+     * @param gid the gid
+     * @param paramRequest the param request
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
     public String renderEntriesByUserGroup(String gid, SWBParamRequest paramRequest) throws IOException, SWBResourceException {
         BookmarkGroup group = getUserBookmarkGroupById(paramRequest.getUser(), gid);
         StringBuffer sbf = new StringBuffer();
@@ -1314,18 +1391,17 @@ public class SWBBookmarks extends org.semanticwb.portal.resources.sem.base.SWBBo
     }
 
     /**
-     * Checks wheter a bookmark entry exists. 
+     * Checks wheter a bookmark entry exists.
      * <p>
      * Verifica si existe una entrada de favoritos.
-     *
+     * 
      * @param user  owner of the bookmark. Propietario del favorito.
      * @param title title of the bookmark. Título del favorito.
      * @param url   URL of the bookmark. URL del favorito.
-     *
      * @return      {@code true} if a bookmark with the given URL exists for
-     *              the user. {@code true} si el usuario posee un favorito con
-     *              la URL especificada.
-     * @throws SWBResourceException
+     * the user. {@code true} si el usuario posee un favorito con
+     * la URL especificada.
+     * @throws SWBResourceException the sWB resource exception
      */
     public boolean entryExists(User user, String title, String url) throws SWBResourceException {
         Iterator<BookmarkEntry> entries = listAllEntriesByUser(user);

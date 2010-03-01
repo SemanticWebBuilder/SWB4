@@ -50,6 +50,7 @@ import org.w3c.dom.Element;
 
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase se encarga de desplegar y administrar el buscador del sitio bajo ciertos
  * criterios de configuraci�n. Viene de la versi�n 2 de WebBuilder.
  *
@@ -62,10 +63,15 @@ import org.w3c.dom.Element;
 
 public class Search extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Search.class);
     
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl; 
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() + "swbadmin/xsl/Search/";
 
     /**
@@ -76,8 +82,8 @@ public class Search extends GenericAdmResource
 
     /**
      * Asigna la informaci�n de la base de datos al recurso.
-     *
-     * @param     base  La informaci�n del recurso en memoria.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base)
@@ -101,11 +107,14 @@ public class Search extends GenericAdmResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -292,11 +301,13 @@ public class Search extends GenericAdmResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
@@ -312,11 +323,13 @@ public class Search extends GenericAdmResource
     } 
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
@@ -333,10 +346,12 @@ public class Search extends GenericAdmResource
     }
 
     /**
-     * @param doc
-     * @param parent
-     * @param elemName
-     * @param elemValue
+     * Adds the elem.
+     * 
+     * @param doc the doc
+     * @param parent the parent
+     * @param elemName the elem name
+     * @param elemValue the elem value
      */      
     private void addElem(Document doc, Element parent, String elemName, String elemValue)
     {

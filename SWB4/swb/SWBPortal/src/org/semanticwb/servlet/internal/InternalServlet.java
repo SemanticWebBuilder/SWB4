@@ -34,13 +34,31 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface InternalServlet.
+ * 
  * @author Jei
  */
 public interface InternalServlet 
 {
+    
+    /**
+     * Inits the.
+     * 
+     * @param config the config
+     * @throws ServletException the servlet exception
+     */
     public void init(ServletContext config) throws ServletException;
     
+    /**
+     * Do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param dparams the dparams
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ServletException the servlet exception
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException,ServletException;
 }

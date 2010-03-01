@@ -43,6 +43,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
+// TODO: Auto-generated Javadoc
 /**
  * Language se encarga de desplegar los lenguajes disponibles en WebBuilder bajo ciertos
  * criterios (configuraci�n de recurso) para actulizar el lenguaje del usuario final. Puede ser un
@@ -56,11 +57,19 @@ import org.w3c.dom.Document;
  */
 public class Language extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Language.class);
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl; 
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath()+"swbadmin/xsl/Language/";
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
@@ -86,6 +95,16 @@ public class Language extends GenericAdmResource
         }
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Document  dom = null;
@@ -139,11 +158,13 @@ public class Language extends GenericAdmResource
     
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -158,11 +179,13 @@ public class Language extends GenericAdmResource
     }    
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -183,10 +206,12 @@ public class Language extends GenericAdmResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @throws AFException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */      
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException

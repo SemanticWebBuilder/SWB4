@@ -31,6 +31,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo ReadOnly.
  * <p>
@@ -40,24 +41,45 @@ import org.w3c.dom.*;
 
 public class ReadOnlyFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ReadOnlyFE.class);
     
+    /** The value. */
     private String value=null;
+    
+    /** The size. */
     private int size=-1;
+    
+    /** The maxlength. */
     private int maxlength=-1;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The tag. */
     protected Node tag=null;
     
-    /** Creates a new instance of ReadOnlyFE */
+    /**
+     * Creates a new instance of ReadOnlyFE.
+     */
     public ReadOnlyFE() {
     }
     
-    /** Creates a new instance of ReadOnlyFE */
+    /**
+     * Creates a new instance of ReadOnlyFE.
+     * 
+     * @param name the name
+     */
     public ReadOnlyFE(String name) {
         this.name=name;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public ReadOnlyFE(Node tag){
         this.tag=tag;
         setAttributes();
@@ -65,47 +87,88 @@ public class ReadOnlyFE extends WBAdmResourceAbs
     
      //sets
     
-    public void setValue(String value){
+    /**
+      * Sets the value.
+      * 
+      * @param value the new value
+      */
+     public void setValue(String value){
         this.value=value;
     }
     
+     /**
+      * Sets the size.
+      * 
+      * @param size the new size
+      */
      public void setSize(int size){
         this.size=size;
     }
     
+    /**
+     * Sets the max length.
+     * 
+     * @param maxlength the new max length
+     */
     public void setMaxLength(int maxlength){
         this.maxlength=maxlength;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
     //gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+     /**
+      * Gets the size.
+      * 
+      * @param size the size
+      * @return the size
+      */
      public int getSize(int size){
         return size;
     }
     
+    /**
+     * Gets the max length.
+     * 
+     * @return the max length
+     */
     public int getMaxLength(){
         return maxlength;
     }
     
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+      * determines de xml tag name the form element will be added in a resource.
+      * 
+      * @return the xml tag
+      */
     public String getXmlTag(){
         return xmltag;
     }
     
    
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */    
      public String getHtml(){
         String xml="";
         try 
@@ -151,8 +214,8 @@ public class ReadOnlyFE extends WBAdmResourceAbs
      
      
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
     public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

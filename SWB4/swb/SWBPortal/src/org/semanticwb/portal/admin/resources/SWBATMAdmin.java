@@ -54,6 +54,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso para la administraci�n de WebBuilder que llama al applet para
  * administrar los mapa de t�picos.
@@ -64,23 +65,29 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class SWBATMAdmin extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBATMAdmin.class);
     
+    /** The agzip. */
     boolean agzip=true;      
     
-    /** Creates a new instance of WBTree */
+    /**
+     * Creates a new instance of WBTree.
+     */
     public SWBATMAdmin()
     {
         agzip = SWBPlatform.getEnv("swb/responseGZIPEncoding","true").equalsIgnoreCase("true");
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
@@ -92,6 +99,17 @@ public class SWBATMAdmin extends GenericResource
     }
     
     
+    /**
+     * Gets the service.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @param tp the tp
+     * @return the service
+     */
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, Topic tp)
     {
         System.out.println("Service mi entrada:"+cmd);
@@ -127,9 +145,11 @@ public class SWBATMAdmin extends GenericResource
     
     
     /**
-     *   Servicio 1
-     * @param user
-     * @param src
+     * Servicio 1.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the topic maps
      * @return
      */
     public Document getTopicMaps(User user, Document src)
@@ -175,9 +195,11 @@ public class SWBATMAdmin extends GenericResource
     }
     
     /**
-     *   Servicio 41
-     * @param user
-     * @param src
+     * Servicio 41.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the languages list
      * @return
      */
     public Document getLanguagesList(User user, Document src)
@@ -213,9 +235,11 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     /**
-     *   Servicio 71
-     * @param user
-     * @param src
+     * Servicio 71.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document createTopic(User user, Document src)
@@ -250,9 +274,11 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     /**
-     *   Servicio 72
-     * @param user
-     * @param src
+     * Servicio 72.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document updateTopic(User user, Document src)
@@ -323,9 +349,11 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     /**
-     *   Servicio 73
-     * @param user
-     * @param src
+     * Servicio 73.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document deleteTopic(User user, Document src)
@@ -366,9 +394,11 @@ public class SWBATMAdmin extends GenericResource
     }
 
     /**
-     *   Servicio 74
-     * @param user
-     * @param src
+     * Servicio 74.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document setStatusTopic(User user, Document src)
@@ -402,9 +432,11 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     /**
-     *   Servicio 180
-     * @param user
-     * @param src
+     * Servicio 180.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the topic map4 adm
      * @return
      */
     public Document getTopicMap4Adm(User user, Document src)
@@ -571,9 +603,11 @@ public class SWBATMAdmin extends GenericResource
     }
 
     /**
-     *   Servicio 181
-     * @param user
-     * @param src
+     * Servicio 181.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     public Document setTopicMap4Adm(User user, Document src)
@@ -903,6 +937,15 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     
+    /**
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
+     */
     private Element addNode(String node, String id, String name, Element parent)
     {
         Element ret=addElement(node,null,parent);
@@ -911,6 +954,14 @@ public class SWBATMAdmin extends GenericResource
         return ret;
     }
 
+    /**
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
+     */
     private Element addElement(String name, String value, Element parent)
     {
         Document doc = parent.getOwnerDocument();
@@ -922,9 +973,11 @@ public class SWBATMAdmin extends GenericResource
     
  
     /**
-     *
-     * @param vvector
-     * @param id
+     * Find vector.
+     * 
+     * @param vvector the vvector
+     * @param id the id
+     * @return true, if successful
      * @return
      */    
     public boolean FindVector(Vector vvector, String id)
@@ -942,8 +995,10 @@ public class SWBATMAdmin extends GenericResource
     }    
     
     /**
-     *
-     * @param id
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
      * @return
      */
     public Document getError(int id)
@@ -1024,12 +1079,13 @@ public class SWBATMAdmin extends GenericResource
     
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -1102,12 +1158,13 @@ public class SWBATMAdmin extends GenericResource
     
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException

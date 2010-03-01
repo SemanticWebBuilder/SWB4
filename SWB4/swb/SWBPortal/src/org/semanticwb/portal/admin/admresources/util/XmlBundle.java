@@ -40,24 +40,42 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.GenericXformsResource;
 
-/** Objeto que maneja el lenguaje en la api de administración de recursos para la utilización adecuada de xml's
+// TODO: Auto-generated Javadoc
+/**
+ * Objeto que maneja el lenguaje en la api de administración de recursos para la utilización adecuada de xml's
  * <p>
- * Object that handles the language in the resources administration api for correct use of xml's
+ * Object that handles the language in the resources administration api for correct use of xml's.
+ * 
  * @author Infotec
  * @version 1.1
  */
 
 public class XmlBundle 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
     
+    /** The bundles. */
     private static Hashtable bundles = new Hashtable();
     
+    /**
+     * Instantiates a new xml bundle.
+     * 
+     * @param className the class name
+     * @param baseName the base name
+     */
     public XmlBundle(String className, String baseName) 
     {
         init(className, baseName);
     }
 
+    /**
+     * Inits the.
+     * 
+     * @param className the class name
+     * @param baseName the base name
+     */
     public void init(String className, String baseName)
     {
         ArrayList languages=SWBPortal.getAppLanguages();
@@ -71,12 +89,25 @@ public class XmlBundle
         findBundle(className, baseName, new Locale("", ""));
     }
     
+    /**
+     * Gets the bundle.
+     * 
+     * @param baseName the base name
+     * @param locale the locale
+     * @return the bundle
+     */
     public static String getBundle(String baseName, Locale locale)
     {
         String ret=getBundleImpl(baseName, locale);
         return (null!=ret ? ret : getDefaultBundle(baseName));
     }    
 
+    /**
+     * Gets the default bundle.
+     * 
+     * @param baseName the base name
+     * @return the default bundle
+     */
     public static String getDefaultBundle(String baseName)
     {
         String ret=getBundleImpl(baseName, new Locale("", ""));
@@ -86,6 +117,13 @@ public class XmlBundle
         return ret;
     }
     
+    /**
+     * Gets the bundle impl.
+     * 
+     * @param baseName the base name
+     * @param locale the locale
+     * @return the bundle impl
+     */
     public static String getBundleImpl(String baseName, Locale locale)
     {
         final Vector names = calculateBundleNames(baseName, locale);
@@ -104,22 +142,49 @@ public class XmlBundle
         return null;
     }    
     
+    /**
+     * Find bundle.
+     * 
+     * @param className the class name
+     * @param baseName the base name
+     */
     public static void findBundle(String className, String baseName)
     {
         findBundleImpl(baseName, Locale.getDefault(), getLoader(className));
     }
 
+    /**
+     * Find bundle.
+     * 
+     * @param className the class name
+     * @param baseName the base name
+     * @param locale the locale
+     */
     public static void findBundle(String className, String baseName, Locale locale)
     {
         findBundleImpl(baseName, locale, getLoader(className));
     }
 
+    /**
+     * Find bundle.
+     * 
+     * @param baseName the base name
+     * @param locale the locale
+     * @param loader the loader
+     */
     public static void findBundle(String baseName, Locale locale, ClassLoader loader)
     {
         if (loader == null) throw new NullPointerException();
         findBundleImpl(baseName, locale, loader);
     }
 
+    /**
+     * Find bundle impl.
+     * 
+     * @param baseName the base name
+     * @param locale the locale
+     * @param loader the loader
+     */
     private static void findBundleImpl(String baseName, Locale locale, ClassLoader loader)
     {
         try 
@@ -140,6 +205,13 @@ public class XmlBundle
         catch (Exception e) { log.error("Error in XmlBundle while getting bundle", e); } 
     }
 
+    /**
+     * Calculate bundle names.
+     * 
+     * @param baseName the base name
+     * @param locale the locale
+     * @return the vector
+     */
     private static Vector calculateBundleNames(String baseName, Locale locale) 
     {
         final Vector result = new Vector();
@@ -182,6 +254,14 @@ public class XmlBundle
         return result;
     }
 
+    /**
+     * Load bundle.
+     * 
+     * @param loader the loader
+     * @param bundleName the bundle name
+     * @param baseName the base name
+     * @return the property xml bundle
+     */
     private static PropertyXmlBundle loadBundle(final ClassLoader loader, String bundleName, String baseName)
     {
         final String resName = bundleName.replace('.', '/') + ".xml";
@@ -229,6 +309,12 @@ public class XmlBundle
         return null;
     }
 
+    /**
+     * Gets the loader.
+     * 
+     * @param className the class name
+     * @return the loader
+     */
     private static ClassLoader getLoader(String className) 
     {
         //ClassLoader cl = WBLoader.getInstance().getClassLoader();

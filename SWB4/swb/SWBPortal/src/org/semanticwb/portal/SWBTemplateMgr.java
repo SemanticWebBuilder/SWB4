@@ -40,26 +40,42 @@ import org.semanticwb.model.TemplateRef;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBTemplateMgr.
+ * 
  * @author Jei
  */
 public class SWBTemplateMgr 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBTemplateMgr.class);
     
+    /** The templates. */
     private HashMap<String,TemplateImp> templates;                  
 
+    /**
+     * Instantiates a new sWB template mgr.
+     */
     public SWBTemplateMgr()
     {
         log.event("Initializing SWBTemplateMgr...");
     }
     
+    /**
+     * Inits the.
+     */
     public void init()
     {
         templates=new HashMap();
     }
 
+    /**
+     * Reload template.
+     * 
+     * @param tpl the tpl
+     */
     public void reloadTemplate(Template tpl)
     {
         Template tp=tpl.getWebSite().getTemplate(tpl.getId());
@@ -67,6 +83,12 @@ public class SWBTemplateMgr
         templates.put(ret.getURI(), ret);
     }
     
+    /**
+     * Gets the template imp.
+     * 
+     * @param tpl the tpl
+     * @return the template imp
+     */
     public Template getTemplateImp(Template tpl)
     {
         //TODO:revisar cache para eliminar elementos o reparsear
@@ -80,10 +102,13 @@ public class SWBTemplateMgr
     }
     
     /**
-     * @param user
-     * @param topic
-     * @throws AFException
-     * @return  */
+     * Gets the template.
+     * 
+     * @param user the user
+     * @param topic the topic
+     * @return the template
+     * @return
+     */
     public Template getTemplate(User user, WebPage topic)
     {
         ArrayList<Template> ret = null;

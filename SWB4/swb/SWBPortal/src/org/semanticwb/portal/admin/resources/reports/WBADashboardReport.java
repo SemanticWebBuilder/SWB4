@@ -39,7 +39,13 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WBADashboardReport.
+ */
 public class WBADashboardReport extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
 //    private static final String REPORT_IDAUX_GLOBAL = "_";
@@ -51,8 +57,12 @@ public class WBADashboardReport extends GenericResource {
 //    private static final int REPORT_TYPE_SESSIONS = 5;
 //    private static final int REPORT_TYPE_LOGINS = 6;
 
-    private String strRscType;
+    /** The str rsc type. */
+private String strRscType;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init(){
         Resource base = getResourceBase();
@@ -63,6 +73,9 @@ public class WBADashboardReport extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");

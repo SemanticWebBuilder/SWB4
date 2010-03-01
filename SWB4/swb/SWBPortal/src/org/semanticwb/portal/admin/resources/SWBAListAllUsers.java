@@ -40,20 +40,28 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAListAllUsers.
+ * 
  * @author juan.fernandez
  */
 public class SWBAListAllUsers extends GenericResource {
 
-    /** Creates a new instance of SWBAListAllUsers */
+    /**
+     * Creates a new instance of SWBAListAllUsers.
+     */
     public SWBAListAllUsers() {
     }
 
-    /** User view of the WBAListAllUsers resource
+    /**
+     * User view of the WBAListAllUsers resource.
+     * 
      * @param request the input parameters
      * @param response the response to the request
+     * @param paramRequest the param request
      * @throws IOException an exception of type IOException
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

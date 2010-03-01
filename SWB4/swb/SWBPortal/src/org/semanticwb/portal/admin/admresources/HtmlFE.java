@@ -34,6 +34,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra Html estatico en una forma de html.
  * <p>
@@ -43,35 +44,75 @@ import org.w3c.dom.*;
 
 public class HtmlFE extends WBAdmResourceAbs 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(HtmlFE.class);
     
+    /** The html. */
     private String html=null;
+    
+    /** The tag. */
     protected Node tag=null;
+    
+    /** The value. */
     protected String value=null;
+    
+    /** The language. */
     protected String language=null;
+    
+    /** The src. */
     protected String src=null;
+    
+    /** The a attrs. */
     protected ArrayList aAttrs=new ArrayList();
+    
+    /** The base. */
     protected Resource base=null;
         
+    /**
+     * Instantiates a new html fe.
+     */
     public HtmlFE() {
         html = null;
     }
     
+    /**
+     * Instantiates a new html fe.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public HtmlFE(String name,String value) {
         this.name=name;
         this.value=value;
     }
     
     
+    /**
+     * Instantiates a new html fe.
+     * 
+     * @param value the value
+     */
     public HtmlFE(String value) {
         this.value=value;
     }
     
+    /**
+     * Instantiates a new html fe.
+     * 
+     * @param tag the tag
+     */
     public HtmlFE(Node tag){
         this.tag=tag;
         setAttributes();
     }
     
+    /**
+     * Instantiates a new html fe.
+     * 
+     * @param tag the tag
+     * @param base the base
+     */
     public HtmlFE(Node tag, Resource base){
         this.tag=tag;
         setAttributes();
@@ -79,9 +120,11 @@ public class HtmlFE extends WBAdmResourceAbs
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */  
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */  
     public String getHtml() {
         String xml="";
         try 
@@ -109,45 +152,81 @@ public class HtmlFE extends WBAdmResourceAbs
         return xml;
     }
     
+   /* (non-Javadoc)
+    * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setName(java.lang.String)
+    */
    public void setName(String name){
         this.name=name;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getName()
+     */
     public String getName(){
         return name;
     }
     
+    /**
+     * Sets the language.
+     * 
+     * @param language the new language
+     */
     public void setLanguage(String language){
         this.language=language;
     }
     
     
+    /**
+     * Gets the language.
+     * 
+     * @return the language
+     */
     public String getLanguage(){
         return language;
     }    
     
+    /**
+     * Sets the src.
+     * 
+     * @param src the new src
+     */
     public void setSrc(String src)
     {
         this.src = src;
     }
     
+    /**
+     * Gets the src.
+     * 
+     * @return the src
+     */
     public String getSrc()
     {
         return src;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
     
     /**
-    * Set attributes to class according with the xml tag element
-    */
+     * Set attributes to class according with the xml tag element.
+     */
     public void setAttributes(){
         if(tag!=null)
         {
@@ -198,6 +277,12 @@ public class HtmlFE extends WBAdmResourceAbs
     
  
     
+    /**
+     * Gets the full text.
+     * 
+     * @param node the node
+     * @return the full text
+     */
     private String getFullText(Node node) 
     {
         if(node== null || (node!=null && !node.hasChildNodes())) return null;

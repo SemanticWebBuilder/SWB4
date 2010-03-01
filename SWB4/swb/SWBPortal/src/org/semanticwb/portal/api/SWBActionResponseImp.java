@@ -39,6 +39,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que implementa WBActionResponse.
  * Esta clase da acceso al Response del recurso cuando es llamado por el ActionResponse.
@@ -46,32 +47,75 @@ import org.semanticwb.model.WebPage;
  */
 public class SWBActionResponseImp implements SWBActionResponse
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBActionResponseImp.class);
+    
+    /** The response. */
     private HttpServletResponse response;
+    
+    /** The win state. */
     private String winState=WinState_NORMAL;
+    
+    /** The mode. */
     private String mode=Mode_VIEW;
+    
+    /** The location. */
     private String location=null;
+    
+    /** The map. */
     private HashMap map=new HashMap();
     
+    /** The topic. */
     private WebPage topic=null;
+    
+    /** The admin topic. */
     private WebPage adminTopic=null;
+    
+    /** The user. */
     private User user=null;
+    
+    /** The user level. */
     private int userLevel=0;    
+    
+    /** The action. */
     private String action=null;    
+    
+    /** The secure. */
     private boolean secure=false;   
+    
+    /** The resource. */
     private Resource resource=null;
+    
+    /** The virt resource. */
     private Resource virtResource=null;
+    
+    /** The call method. */
     private int callMethod=0;
 
+    /** The locale. */
     private Locale locale=null;
+    
+    /** The bundle. */
     private String bundle=null;
+    
+    /** The loader. */
     private ClassLoader loader=null;
     
+    /** The have virt tp. */
     private boolean haveVirtTP=false;
+    
+    /** The only content. */
     private boolean onlyContent=false;    
+    
+    /** The ext params. */
     private String extParams=null;    
     
-    /** Creates a new instance of WBResponse */
+    /**
+     * Creates a new instance of WBResponse.
+     * 
+     * @param response the response
+     */
     public SWBActionResponseImp(HttpServletResponse response)
     {
         this.response = response;
@@ -80,7 +124,7 @@ public class SWBActionResponseImp implements SWBActionResponse
   /**
    * Sets the window state of a resource to the given window state.
    * <p>
-   * Possible values are the standard window states and any custom 
+   * Possible values are the standard window states and any custom
    * window states supported by the portal and the resource.
    * Standard window states are:
    * <ul>
@@ -88,17 +132,14 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <li>NORMAL
    * <li>MAXIMIZED
    * </ul>
-   *
-   * @param windowState
-   *               the new resource window state
-   *
+   * 
+   * @param state the new window state
    * @exception WindowStateException
-   *                   if the resource cannot switch to the specified window state.
-   *                   To avoid this exception the resource can check the allowed
-   *                   window states with <code>Request.isWindowStateAllowed()</code>.
+   * if the resource cannot switch to the specified window state.
+   * To avoid this exception the resource can check the allowed
+   * window states with <code>Request.isWindowStateAllowed()</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
-   *
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    * @see WindowState
    */
 
@@ -108,6 +149,9 @@ public class SWBActionResponseImp implements SWBActionResponse
   }
   
 
+  /* (non-Javadoc)
+   * @see org.semanticwb.portal.api.SWBParameters#getWindowState()
+   */
   public String getWindowState()
   {
       return winState;
@@ -121,7 +165,7 @@ public class SWBActionResponseImp implements SWBActionResponse
    * Possible values are the standard resource modes and any custom
    * resource modes supported by the portal and the resource. Resources
    * must declare in the deployment descriptor the resource modes they
-   * support for each markup type.  
+   * support for each markup type.
    * Standard resource modes are:
    * <ul>
    * <li>EDIT
@@ -130,19 +174,17 @@ public class SWBActionResponseImp implements SWBActionResponse
    * </ul>
    * <p>
    * Note: The resource may still be called in a different window
-   *       state in the next render call, depending on the resource container / portal.
+   * state in the next render call, depending on the resource container / portal.
    * 
-   * @param resourceMode
-   *               the new resource mode
-   *
+   * @param mode the new mode
    * @exception ResourceModeException
-   *                   if the resource cannot switch to this resource mode,
-   *                   because the resource or portal does not support it for this markup,
-   *                   or the current user is not allowed to switch to this resource mode.
-   *                   To avoid this exception the resource can check the allowed
-   *                   resource modes with <code>Request.isResourceModeAllowed()</code>.
+   * if the resource cannot switch to this resource mode,
+   * because the resource or portal does not support it for this markup,
+   * or the current user is not allowed to switch to this resource mode.
+   * To avoid this exception the resource can check the allowed
+   * resource modes with <code>Request.isResourceModeAllowed()</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public void setMode(String mode)
@@ -150,6 +192,9 @@ public class SWBActionResponseImp implements SWBActionResponse
      this.mode=mode;
   }
   
+  /* (non-Javadoc)
+   * @see org.semanticwb.portal.api.SWBParameters#getMode()
+   */
   public String getMode()
   {
       return mode;
@@ -157,16 +202,16 @@ public class SWBActionResponseImp implements SWBActionResponse
 
   /**
    * Instructs the resource container to send a redirect response
-   * to the client using the specified redirect location URL.  
+   * to the client using the specified redirect location URL.
    * <p>
-   * This method only accepts an absolute URL (e.g. 
+   * This method only accepts an absolute URL (e.g.
    * <code>http://my.co/myportal/mywebap/myfolder/myresource.gif</code>)
    * or a full path URI (e.g. <code>/myportal/mywebap/myfolder/myresource.gif</code>).
-   * If required, 
+   * If required,
    * the resource container may encode the given URL before the
    * redirection is issued to the client.
    * <p>
-   * The sendRedirect method can not be invoked after any of the 
+   * The sendRedirect method can not be invoked after any of the
    * following methods of the ActionResponse interface has been called:
    * <ul>
    * <li>setResourceMode
@@ -174,16 +219,16 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <li>setRenderParameter
    * <li>setRenderParameters
    * </ul>
-   *
+   * 
+   * @param location the location
    * @param		location	the redirect location URL
-   *
-   * @exception	java.io.IOException	
-   *                    if an input or output exception occurs.
-   * @exception	java.lang.IllegalArgumentException	
-   *                    if a relative path URL is given
+   * @exception	java.io.IOException
+   * if an input or output exception occurs.
+   * @exception	java.lang.IllegalArgumentException
+   * if a relative path URL is given
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after any of above mentioned methods of 
-   *                    the ActionResponse interface has been called.
+   * if the method is invoked after any of above mentioned methods of
+   * the ActionResponse interface has been called.
    */
 
   public void sendRedirect(String location)
@@ -191,6 +236,9 @@ public class SWBActionResponseImp implements SWBActionResponse
       this.location=location.replace("&amp;","&");  //replace "&amp;" for "&"
   }
   
+  /* (non-Javadoc)
+   * @see org.semanticwb.portal.api.SWBActionResponse#getLocation()
+   */
   public String getLocation()
   {
         String s="";
@@ -263,22 +311,15 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <p>
    * The given parameters do not need to be encoded
    * prior to calling this method.
-   *
-   * @param  parameters   Map containing parameter names for 
-   *                      the render phase as 
-   *                      keys and parameter values as map 
-   *                      values. The keys in the parameter
-   *                      map must be of type String. The values 
-   *                      in the parameter map must be of type
-   *                      String array (<code>String[]</code>).
-   *
-   * @exception	java.lang.IllegalArgumentException 
-   *                      if parameters is <code>null</code>, if
-   *                      any of the key/values in the Map are <code>null</code>, 
-   *                      if any of the keys is not a String, or if any of 
-   *                      the values is not a String array.
+   * 
+   * @param parameters the new render parameters
+   * @exception	java.lang.IllegalArgumentException
+   * if parameters is <code>null</code>, if
+   * any of the key/values in the Map are <code>null</code>,
+   * if any of the keys is not a String, or if any of
+   * the values is not a String array.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public void setRenderParameters(java.util.Map parameters)
@@ -304,14 +345,13 @@ public class SWBActionResponseImp implements SWBActionResponse
    * <p>
    * The given parameter do not need to be encoded
    * prior to calling this method.
-   *
-   * @param  key    key of the render parameter
-   * @param  value  value of the render parameter
-   *
-   * @exception	java.lang.IllegalArgumentException	
-   *                      if key or value are <code>null</code>.
+   * 
+   * @param key the key
+   * @param value the value
+   * @exception	java.lang.IllegalArgumentException
+   * if key or value are <code>null</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public void setRenderParameter(String key, String value)
@@ -334,13 +374,12 @@ public class SWBActionResponseImp implements SWBActionResponse
    * The given parameter do not need to be encoded
    * prior to calling this method.
    * 
-   * @param  key     key of the render parameter
-   * @param  values  values of the render parameter
-   *
-   * @exception	java.lang.IllegalArgumentException	
-   *                      if key or value are <code>null</code>.
+   * @param key the key
+   * @param values the values
+   * @exception	java.lang.IllegalArgumentException
+   * if key or value are <code>null</code>.
    * @exception java.lang.IllegalStateException
-   *                    if the method is invoked after <code>sendRedirect</code> has been called.
+   * if the method is invoked after <code>sendRedirect</code> has been called.
    */
 
   public void setRenderParameter(String key, String[] values)
@@ -423,11 +462,19 @@ public class SWBActionResponseImp implements SWBActionResponse
       this.action = action;
   }
   
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#isSecure()
+     */
     public boolean isSecure()
     {
         return secure;
     }    
     
+    /**
+     * Sets the secure.
+     * 
+     * @param secure the new secure
+     */
     public void setSecure(boolean secure)
     {
         this.secure=secure;
@@ -442,9 +489,10 @@ public class SWBActionResponseImp implements SWBActionResponse
         return resource;
     }
     
-    /** Setter for property base.
-     * @param base New value of property base.
-     *
+    /**
+     * Setter for property base.
+     * 
+     * @param resource the new resource base
      */
     public void setResourceBase(Resource resource)
     {
@@ -478,27 +526,42 @@ public class SWBActionResponseImp implements SWBActionResponse
         this.virtResource = virtResource;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getCallMethod()
+     */
     public int getCallMethod()
     {
         return callMethod;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBActionResponse#setCallMethod(int)
+     */
     public void setCallMethod(int callMethod)
     {
         this.callMethod=callMethod;
     }    
     
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
         return getLocation();
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBActionResponse#getLocaleString(java.lang.String)
+     */
     public String getLocaleString(String key) throws SWBResourceException
     {
         return SWBUtils.TEXT.getLocaleString(bundle,key,locale,loader);
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBActionResponse#getLocaleLogString(java.lang.String)
+     */
     public String getLocaleLogString(String key) throws SWBResourceException
     {
         return SWBUtils.TEXT.getLocaleString(bundle,key,SWBUtils.TEXT.getLocale());
@@ -523,6 +586,11 @@ public class SWBActionResponseImp implements SWBActionResponse
         haveVirtTP=true;
     }
     
+    /**
+     * Sets the virtual topic.
+     * 
+     * @param virt the new virtual topic
+     */
     public void setVirtualTopic(WebPage virt)
     {
         adminTopic = topic;
@@ -530,6 +598,9 @@ public class SWBActionResponseImp implements SWBActionResponse
         haveVirtTP=true;
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#haveVirtualWebPage()
+     */
     public boolean haveVirtualWebPage()
     {
         return haveVirtTP;
@@ -572,8 +643,9 @@ public class SWBActionResponseImp implements SWBActionResponse
     }
     
     /**
-     * Parametros adicionales o bien parametros de otros recursos
-     * @param otherParams New value of property otherParams.
+     * Parametros adicionales o bien parametros de otros recursos.
+     * 
+     * @param extParams the new ext uri params
      */
     public void setExtURIParams(java.lang.String extParams)
     {

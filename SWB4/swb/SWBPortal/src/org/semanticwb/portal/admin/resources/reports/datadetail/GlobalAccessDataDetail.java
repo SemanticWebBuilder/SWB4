@@ -31,12 +31,24 @@ import java.util.ArrayList;
 import org.semanticwb.portal.db.SWBRecHits_;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GlobalAccessDataDetail.
+ */
 public class GlobalAccessDataDetail extends SWBDataDetail{
     
+    /**
+     * Instantiates a new global access data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public GlobalAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
 //        /*if(rfilter.hasNext()) {*/
@@ -45,18 +57,27 @@ public class GlobalAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year);
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, year, month, day);
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         resumeRecHits = SWBRecHits_.getInstance().getResHitsLog(site, rfilter, type, yearI, monthI, dayI, yearF, monthF, dayF);

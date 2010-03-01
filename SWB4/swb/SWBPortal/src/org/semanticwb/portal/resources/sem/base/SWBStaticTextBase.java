@@ -24,26 +24,54 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBStaticTextBase.
+ */
 public class SWBStaticTextBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbstatictext_text. */
     public static final org.semanticwb.platform.SemanticProperty swbstatictext_text=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/StaticText#text");
+    
+    /** The Constant swbstatictext_SWBStaticText. */
     public static final org.semanticwb.platform.SemanticClass swbstatictext_SWBStaticText=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/StaticText#SWBStaticText");
 
+    /**
+     * Instantiates a new sWB static text base.
+     */
     public SWBStaticTextBase()
     {
     }
 
+    /**
+     * Instantiates a new sWB static text base.
+     * 
+     * @param base the base
+     */
     public SWBStaticTextBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/StaticText#SWBStaticText");
 
+    /**
+     * Gets the text.
+     * 
+     * @return the text
+     */
     public String getText()
     {
         return getSemanticObject().getProperty(swbstatictext_text);
     }
 
+    /**
+     * Sets the text.
+     * 
+     * @param text the new text
+     */
     public void setText(String text)
     {
         getSemanticObject().setProperty(swbstatictext_text, text);

@@ -43,6 +43,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Muestra las facilidades para editar el c&oacute;digo de un archivo JSP
  * que se ejecutar&aacute; cuando se muestre en el navegador la secci&oacute;n con que
@@ -70,15 +71,17 @@ public class JSPEditor extends GenericAdmResource {
      * a la secci&oacute;n en que se da de alta este recurso.
      * <p>Shows the edition view of the code stored in a JSP file related to the section
      * this resource is associated to.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
-     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @param paramReq the param req
      * @throws java.io.IOException al obtener el <code>Writer</code> del <code>response</code> correspondiente.
-     *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
+     * when getting the corresponding <code>response</code>'s <code>Writer</code>.
      * @throws org.semanticwb.portal.api.SWBResourceException si no existe el
-     *         archivo de mensajes del idioma utilizado.
-     *         <p>if there is no file message of the corresponding language.</p>
+     * archivo de mensajes del idioma utilizado.
+     * <p>if there is no file message of the corresponding language.</p>
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
@@ -202,14 +205,16 @@ public class JSPEditor extends GenericAdmResource {
      * <p>Stores the code, typed in in the editor, in a file which path is defined
      * by this resource's work directory and its name is a randomly generated
      * string with the extension <quote>.jsp</quote></p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the
-     *                user's HTTP request</p>
+     * user's HTTP request</p>
      * @param response la respuesta a la acci&oacute;n solicitada por el usuario
-     *        <p>the response to the action requested by the user.</p>
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * <p>the response to the action requested by the user.</p>
      * @throws java.io.IOException si hay alg&uacute;n problema mientras se escribe el
-     *         c&oacute;digo en el archivo.
-     *         <p>if there is a problem while writing the code in the file.</p>
+     * c&oacute;digo en el archivo.
+     * <p>if there is a problem while writing the code in the file.</p>
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(HttpServletRequest request,
@@ -255,14 +260,16 @@ public class JSPEditor extends GenericAdmResource {
      * Presenta la vista del codigo HTML producido por la ejecuci&oacute;n del c&oacute;digo
      * capturado en el editor.
      * <p>Performs the execution call of the code typed in in the editor.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @throws java.io.IOException si este recurso no tiene asociado el archivo
-     *         que se crea cuando se edita el c&oacute;digo. <p>if this resource
-     *         has no file, which is created after editing code, associated</p>
+     * que se crea cuando se edita el c&oacute;digo. <p>if this resource
+     * has no file, which is created after editing code, associated</p>
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -288,18 +295,19 @@ public class JSPEditor extends GenericAdmResource {
      * Genera, de forma aleatoria, una cadena de <quote>length</quote> caracteres
      * alfanum&eacute;ricos, incluyendo gui&oacute;n bajo. <p>Generates, randomly,
      * a <quote>length</quote> character length, alphanumeric (underscore included) string</p>
+     * 
      * @param length n&uacute;mero de caracteres a seleccionar para formar la cadena a devolver.
-     *               Si el valor recibido es menor o igual a cero, se asigna 8 a
-     *               esta variable; o si es mayor a 25, se asigna u valor de 25.
-     *               <p>number of characters to select to form the returning string.
-     *               if this value is less or equal to zero, a value of 8 is asigned
-     *               to this variable; or if it's greater than 25, 25 is asigned.</p>
-     * @return una cadena de <quote>length</quote> (u 8, si length es menor o igual a cero)
-     *         caracteres de longitud seleccionados de forma aleatoria. <p>a
-     *         <quote>length</quote> (8, if {@code length} is less or equal to
-     *         zero, or 25 if it's greater than 25) character length String, each
-     *         of the characters is selected
-     *         randomly.</p>
+     * Si el valor recibido es menor o igual a cero, se asigna 8 a
+     * esta variable; o si es mayor a 25, se asigna u valor de 25.
+     * <p>number of characters to select to form the returning string.
+     * if this value is less or equal to zero, a value of 8 is asigned
+     * to this variable; or if it's greater than 25, 25 is asigned.</p>
+     * @return una cadena de  (u 8, si length es menor o igual a cero)
+     * caracteres de longitud seleccionados de forma aleatoria. a
+     *  (8, if {@code length} is less or equal to
+     * zero, or 25 if it's greater than 25) character length String, each
+     * of the characters is selected
+     * randomly.
      */
     private String generateRandomString(int length) {
 

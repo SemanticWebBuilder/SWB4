@@ -29,6 +29,7 @@
 
 package org.semanticwb.portal.lib;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que implementa HttpSession, la cual se utiliza para remplazar la
  * Sesión por defecto para se enviado al recurso.
@@ -37,86 +38,139 @@ package org.semanticwb.portal.lib;
 public class SWBSession implements javax.servlet.http.HttpSession
 {
 
-    /** Creates a new instance of WBSession */
+    /**
+     * Creates a new instance of WBSession.
+     */
     public SWBSession()
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getAttribute(java.lang.String)
+     */
     public Object getAttribute(String str)
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getAttributeNames()
+     */
     public java.util.Enumeration getAttributeNames()
     {
         return (new java.util.Vector()).elements();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getCreationTime()
+     */
     public long getCreationTime()
     {
         return new java.util.Date().getTime();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getId()
+     */
     public String getId()
     {
         return "";
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getLastAccessedTime()
+     */
     public long getLastAccessedTime()
     {
         return 0;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getMaxInactiveInterval()
+     */
     public int getMaxInactiveInterval()
     {
         return 30 * 1000;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getServletContext()
+     */
     public javax.servlet.ServletContext getServletContext()
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getSessionContext()
+     */
     public javax.servlet.http.HttpSessionContext getSessionContext()
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getValue(java.lang.String)
+     */
     public Object getValue(String str)
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#getValueNames()
+     */
     public String[] getValueNames()
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#invalidate()
+     */
     public void invalidate()
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#isNew()
+     */
     public boolean isNew()
     {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#putValue(java.lang.String, java.lang.Object)
+     */
     public void putValue(String str, Object obj)
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#removeAttribute(java.lang.String)
+     */
     public void removeAttribute(String str)
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#removeValue(java.lang.String)
+     */
     public void removeValue(String str)
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#setAttribute(java.lang.String, java.lang.Object)
+     */
     public void setAttribute(String str, Object obj)
     {
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSession#setMaxInactiveInterval(int)
+     */
     public void setMaxInactiveInterval(int param)
     {
     }

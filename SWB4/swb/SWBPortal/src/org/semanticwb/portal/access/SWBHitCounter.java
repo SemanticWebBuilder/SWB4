@@ -37,21 +37,43 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
-/** objeto: cuenta el resumen de hits a secciones y lo almacena a DB cada "wb/accessLogTime" intervalo de tiempo, por defecto: 60 segundos
+// TODO: Auto-generated Javadoc
+/**
+ * objeto: cuenta el resumen de hits a secciones y lo almacena a DB cada "wb/accessLogTime" intervalo de tiempo, por defecto: 60 segundos.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBHitCounter
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBHitCounter.class);
 
+    /** The hits. */
     private long hits = 0;
+    
+    /** The changed. */
     private boolean changed = false;
+    
+    /** The date. */
     private Date date = new Date();
+    
+    /** The timer. */
     private long timer;               //valores de sincronizacion de views, hits
+    
+    /** The time. */
     private static long time;                //tiempo en milisegundos por cada actualizacion
+    
+    /** The patern. */
     private String patern = null;
+    
+    /** The map. */
     private String map = null;
+    
+    /** The id. */
     private String id = "_";
+    
+    /** The type. */
     private int type = 0;
     //private RecResHits res=null;
 
@@ -67,9 +89,12 @@ public class SWBHitCounter
         }
     }
 
+    /** The df. */
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-    /** Creates a new instance of SWBHitCounter */
+    /**
+     * Creates a new instance of SWBHitCounter.
+     */
     public SWBHitCounter()
     {
         date.setHours(0);
@@ -78,19 +103,25 @@ public class SWBHitCounter
         patern = df.format(date);
     }
 
-    /** Creates a new instance of SWBHitCounter
-     * @param hits  */
+    /**
+     * Creates a new instance of SWBHitCounter.
+     * 
+     * @param hits the hits
+     */
     public SWBHitCounter(long hits)
     {
         this();
         this.hits = hits;
     }
 
-    /** Creates a new instance of SWBHitCounter
-     * @param map
-     * @param id
-     * @param type
-     * @param hits  */
+    /**
+     * Creates a new instance of SWBHitCounter.
+     * 
+     * @param map the map
+     * @param id the id
+     * @param type the type
+     * @param hits the hits
+     */
     public SWBHitCounter(String map, String id, int type, long hits)
     {
         this();
@@ -103,11 +134,14 @@ public class SWBHitCounter
     }
 
     /**
-     * @param map
-     * @param id
-     * @param type
-     * @param hits
-     * @param sdate  */
+     * Instantiates a new sWB hit counter.
+     * 
+     * @param map the map
+     * @param id the id
+     * @param type the type
+     * @param hits the hits
+     * @param sdate the sdate
+     */
     public SWBHitCounter(String map, String id, int type, long hits, String sdate)
     {
         this();
@@ -156,7 +190,10 @@ public class SWBHitCounter
     }
 
     /**
-     * @param sdate  */
+     * Hit.
+     * 
+     * @param sdate the sdate
+     */
     public void hit(String sdate)
     {
         long t=System.currentTimeMillis()-timer;
@@ -242,7 +279,10 @@ public class SWBHitCounter
     }
 
     /**
-     * @param sdate  */    
+     * Reset.
+     * 
+     * @param sdate the sdate
+     */    
     public synchronized void reset(String sdate)
     {
         //WBUtils.getInstance().debug("SWBHitCounter:reset:"+sdate+" map:"+map+" id:"+id+" type:"+type);
@@ -272,6 +312,11 @@ public class SWBHitCounter
         timer=System.currentTimeMillis();
     }
     
+    /**
+     * Load.
+     * 
+     * @param sdate the sdate
+     */
     private void load(String sdate)
     {
         try
@@ -292,11 +337,17 @@ public class SWBHitCounter
         }
     }
     
+    /* (non-Javadoc)
+     * @see java.lang.Object#finalize()
+     */
     public void finalize()
     {
         reset(patern);
     }
     
+    /**
+     * Update.
+     */
     public void update()
     {
         reset(patern);

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.semanticwb.portal.admin.admresources.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Esta es una clase abstracta que implementa la interface WBAdmResource y que es utilizada para los objetos de tipo contenedor(ej. FormFE,SelectFE)
  * <p>
@@ -39,17 +40,34 @@ import org.semanticwb.portal.admin.admresources.*;
 
 public abstract class WBContainerFE extends WBAdmResourceAbs {
     
+    /** The formelements. */
     protected ArrayList formelements;
+    
+    /** The ajsfe. */
     private ArrayList ajsfe;
+    
+    /**
+     * Instantiates a new wB container fe.
+     */
     public WBContainerFE() {
         formelements = new ArrayList();
         ajsfe = new ArrayList();
     }
     
+    /**
+     * Adds the.
+     * 
+     * @param obj the obj
+     */
     public void add(Object obj) {
         formelements.add(obj);
     }
     
+    /**
+     * Gets the form e.
+     * 
+     * @return the form e
+     */
     public String getFormE() {
         StringBuffer strb = new StringBuffer();
         Iterator iobj = formelements.iterator();
@@ -66,6 +84,12 @@ public abstract class WBContainerFE extends WBAdmResourceAbs {
         return strb.toString();
     }
     
+    /**
+     * Gets the form e.
+     * 
+     * @param formName the form name
+     * @return the form e
+     */
     public String getFormE(String formName) {
         StringBuffer strb = new StringBuffer();
         Iterator iobj = formelements.iterator();
@@ -85,10 +109,21 @@ public abstract class WBContainerFE extends WBAdmResourceAbs {
         return strb.toString();
     }
     
+    /**
+     * Gets the forms.
+     * 
+     * @return the forms
+     */
     public Iterator getForms(){
         return formelements.iterator();
     }
     
+    /**
+     * Gets the form.
+     * 
+     * @param formName the form name
+     * @return the form
+     */
     public FormFE getForm(String formName){
         Iterator iforms=formelements.iterator();
         while(iforms.hasNext()){
@@ -100,21 +135,43 @@ public abstract class WBContainerFE extends WBAdmResourceAbs {
         return null;
     }
     
+    /**
+     * Show.
+     * 
+     * @return the string
+     */
     public String show() {
         return getFormE();
     }
     
+    /**
+     * Show.
+     * 
+     * @param formName the form name
+     * @return the string
+     */
     public String show(String formName) {
         return getFormE(formName);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResource#getHtml()
+     */
     public String getHtml() {
         return null;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResource#setAttributes()
+     */
     public void setAttributes() {
     }
 
+    /**
+     * Gets the jscrips fe.
+     * 
+     * @return the jscrips fe
+     */
     public Iterator getJscripsFE(){
         return ajsfe.iterator();
     }

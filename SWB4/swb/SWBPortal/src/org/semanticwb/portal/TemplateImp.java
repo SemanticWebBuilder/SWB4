@@ -57,21 +57,45 @@ import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 import org.semanticwb.servlet.internal.DistributorParams;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TemplateImp.
+ */
 public class TemplateImp extends Template
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(TemplateImp.class);
     
+    /** The parts. */
     private ArrayList parts;
+    
+    /** The objects. */
     private HashMap objects = new HashMap();
 
+    /** The web path. */
     private String webPath;
+    
+    /** The work path. */
     private String workPath;
+    
+    /** The act path. */
     private String actPath;
+    
+    /** The act work path. */
     private String actWorkPath;
+    
+    /** The act rel work path. */
     private String actRelWorkPath;
 
+    /** The content type. */
     private String contentType=null;
     
+    /**
+     * Instantiates a new template imp.
+     * 
+     * @param base the base
+     */
     public TemplateImp(Template base)
     {
         super(base.getSemanticObject());
@@ -100,6 +124,13 @@ public class TemplateImp extends Template
         }
     }
 
+    /**
+     * Identify object.
+     * 
+     * @param val the val
+     * @param objects the objects
+     * @return the object
+     */
     public Object identifyObject(String val, HashMap objects)
     {
         try
@@ -127,6 +158,15 @@ public class TemplateImp extends Template
         return val;
     }
 
+    /**
+     * Replace objects values.
+     * 
+     * @param value the value
+     * @param auxparts the auxparts
+     * @param parts the parts
+     * @param objects the objects
+     * @return the string buffer
+     */
     public StringBuffer replaceObjectsValues(String value, StringBuffer auxparts, ArrayList parts, HashMap objects)
     {
         //ArrayList p = split(value, "\\{(.+?)[^\\}]@(.+?)\\}");
@@ -158,6 +198,12 @@ public class TemplateImp extends Template
         return auxparts;
     }
     
+    /**
+     * Gets the resource type.
+     * 
+     * @param type the type
+     * @return the resource type
+     */
     private ResourceType getResourceType(String type)
     {
         //busca el tipo de recurso en el topicmap del template
@@ -171,6 +217,13 @@ public class TemplateImp extends Template
      * Regresa ID (numero) del subtipo de recurso como string y concatena 
      * subtypemap en el caso de no coincidir con el topicmap de la plantilla
      */    
+    /**
+     * Gets the sub type.
+     * 
+     * @param type the type
+     * @param stype the stype
+     * @return the sub type
+     */
     public ResourceSubType getSubType(String type, String stype)
     {
         //busca el tipo de recurso en el topicmap del template
@@ -200,8 +253,12 @@ public class TemplateImp extends Template
     
 
     /**
-     * @param filename
-     * @return  */
+     * Parses the.
+     * 
+     * @param filename the filename
+     * @return the array list
+     * @return
+     */
     public ArrayList parse(String filename)
     {
         ArrayList parts = new ArrayList();
@@ -619,6 +676,13 @@ public class TemplateImp extends Template
         return parts;
     }
 
+    /**
+     * Find images in script.
+     * 
+     * @param value the value
+     * @param ext the ext
+     * @return the string
+     */
     private String findImagesInScript(String value, String ext)
     {
         StringBuffer aux = new StringBuffer(value.length());
@@ -646,6 +710,13 @@ public class TemplateImp extends Template
         return aux.toString();
     }
 
+    /**
+     * Find image in script.
+     * 
+     * @param value the value
+     * @param ext the ext
+     * @return the string
+     */
     private String findImageInScript(String value, String ext)
     {
         int f = value.indexOf(ext);
@@ -664,6 +735,17 @@ public class TemplateImp extends Template
         return value;
     }
     
+    /**
+     * Include.
+     * 
+     * @param src the src
+     * @param request the request
+     * @param response the response
+     * @param user the user
+     * @param topic the topic
+     * @param params the params
+     * @return the string
+     */
     public String include(String src, HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, HashMap params)
     {
         String ret="";
@@ -701,21 +783,27 @@ public class TemplateImp extends Template
     }
 
     /**
-     * @param request
-     * @param response
-     * @param user
-     * @param topic  */
+     * Builds the.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param user the user
+     * @param topic the topic
+     */
     public void build(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic) 
     {
         build(request, response, user, topic, false);
     }
 
     /**
-     * @param request
-     * @param response
-     * @param user
-     * @param topic
-     * @param savelog  */
+     * Builds the.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param user the user
+     * @param topic the topic
+     * @param savelog the savelog
+     */
     public void build(HttpServletRequest request, HttpServletResponse response, User user, WebPage topic, boolean savelog)
     {
         try
@@ -731,30 +819,47 @@ public class TemplateImp extends Template
     }
 
     /**
-     * @param request
-     * @param response
-     * @param out
-     * @param user
-     * @param topic
-     * @param savelog  */
+     * Builds the.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param user the user
+     * @param topic the topic
+     * @param savelog the savelog
+     */
     public void build(HttpServletRequest request, HttpServletResponse response, PrintWriter out, User user, WebPage topic, boolean savelog) 
     {
         build(request, response, out, user, topic, savelog, null,null);
     }
 
+    /**
+     * Builds the.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param user the user
+     * @param topic the topic
+     * @param savelog the savelog
+     * @param content the content
+     */
     public void build(HttpServletRequest request, HttpServletResponse response, PrintWriter out, User user, WebPage topic, boolean savelog, String content) 
     {
         build(request, response, out, user, topic, savelog, content,null);
     }
 
     /**
-     * @param request
-     * @param response
-     * @param out
-     * @param user
-     * @param topic
-     * @param savelog
-     * @param content
+     * Builds the.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param user the user
+     * @param topic the topic
+     * @param savelog the savelog
+     * @param content the content
+     * @param distparams the distparams
      */
     public void build(HttpServletRequest request, HttpServletResponse response, PrintWriter out, User user, WebPage topic, boolean savelog, String content, DistributorParams distparams) 
     {
@@ -1195,6 +1300,16 @@ public class TemplateImp extends Template
         log.debug("<!-- TemplateFin:"+ (System.currentTimeMillis()-tini) +"ms -->");
     }
     
+    /**
+     * Builds the contents.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param distparams the distparams
+     * @param savelog the savelog
+     * @param content the content
+     */
     public static void buildContents(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, PrintWriter out, DistributorParams distparams, boolean savelog, String content) 
     {
         StringBuffer logbuf = null;
@@ -1528,12 +1643,24 @@ public class TemplateImp extends Template
     }
 
 
+    /**
+     * Gets the file name.
+     * 
+     * @param version the version
+     * @return the file name
+     */
     public String getFileName(VersionInfo version)
     {
         return version.getVersionFile();
     }
     
     //UTILIDADES DE TEMPLATES
+    /**
+     * Sets the headers.
+     * 
+     * @param map the map
+     * @return the string
+     */
     public String setHeaders(HashMap map)
     {
         try
@@ -1568,6 +1695,12 @@ public class TemplateImp extends Template
         return "";
     }
     
+    /**
+     * Gets the request parameter.
+     * 
+     * @param map the map
+     * @return the request parameter
+     */
     public String getRequestParameter(HashMap map)
     {
         try
@@ -1586,6 +1719,12 @@ public class TemplateImp extends Template
         return "";        
     }
 
+    /**
+     * Write text.
+     * 
+     * @param map the map
+     * @return the string
+     */
     public String writeText(HashMap map)
     {
         try
@@ -1597,21 +1736,39 @@ public class TemplateImp extends Template
         return "";        
     }    
     
+    /**
+     * Write gt.
+     * 
+     * @return the string
+     */
     public String writeGT()
     {
         return "<";        
     }        
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.Template#reload()
+     */
     @Override
     public void reload()
     {
         SWBPortal.getTemplateMgr().reloadTemplate(this);
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @return the content type
+     */
     public String getContentType() {
         return contentType;
     }
 
+    /**
+     * Sets the content type.
+     * 
+     * @param contentType the new content type
+     */
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }

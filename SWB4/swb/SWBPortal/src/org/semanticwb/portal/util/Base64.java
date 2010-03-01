@@ -27,15 +27,18 @@
  */
 package org.semanticwb.portal.util;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Base64.
+ * 
  * @author victor.lorenzana
  */
 public class Base64
 {
 
 // Mapping table from 6-bit nibbles to Base64 characters.
-    private static char[] map1 = new char[64];
+    /** The map1. */
+private static char[] map1 = new char[64];
 
     static
     {
@@ -57,7 +60,8 @@ public class Base64
     }
 
 // Mapping table from Base64 characters to 6-bit nibbles.
-    private static byte[] map2 = new byte[128];
+    /** The map2. */
+private static byte[] map2 = new byte[128];
 
     static
     {
@@ -205,7 +209,10 @@ public class Base64
     }
 
 // Dummy constructor.
-    private Base64()
+    /**
+ * Instantiates a new base64.
+ */
+private Base64()
     {
     }
 } // end class Base64Coder

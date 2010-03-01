@@ -58,17 +58,29 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAResourceVersion.
+ * 
  * @author juan.fernandez
  */
 public class SWBAResourceVersion extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAResourceVersion.class);
+    
+    /** The webpath. */
     String webpath = SWBPlatform.getContextPath();
+    
+    /** The base. */
     Resource base;
+    
+    /** The ont. */
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -223,6 +235,12 @@ public class SWBAResourceVersion extends GenericResource {
         }
     }
 
+    /**
+     * Find first version.
+     * 
+     * @param obj the obj
+     * @return the version info
+     */
     private VersionInfo findFirstVersion(GenericObject obj) {
         VersionInfo ver = null;
         if (obj != null) {
@@ -275,6 +293,9 @@ public class SWBAResourceVersion extends GenericResource {
     }
 
     // Edición de la VersionInfo dependiendo el SemanticObject relacionado
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -370,6 +391,9 @@ public class SWBAResourceVersion extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String id = request.getParameter("suri"); // uri de la plantilla

@@ -52,12 +52,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.SWBPortal;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WBAAccessSessionReport.
+ */
 public class WBAAccessSessionReport extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBAAccessSessionReport.class);
+    
+    /** The str rsc type. */
     public String strRscType;
+    
+    /** The hm_detail. */
     private HashMap hm_detail = null;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init() {
         Resource base = getResourceBase();
@@ -68,6 +80,9 @@ public class WBAAccessSessionReport extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#render(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if (!paramsRequest.WinState_MINIMIZED.equals(paramsRequest.getWindowState())) {
@@ -75,6 +90,9 @@ public class WBAAccessSessionReport extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String mode = paramsRequest.getMode();
@@ -95,6 +113,15 @@ public class WBAAccessSessionReport extends GenericResource {
         }
     }
 
+    /**
+     * Do fill report agregate.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doFillReportAgregate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         JSONObject jobj = new JSONObject();
@@ -123,6 +150,15 @@ public class WBAAccessSessionReport extends GenericResource {
         response.getOutputStream().println(jobj.toString());
     }
 
+    /**
+     * Do fill report detalled.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doFillReportDetalled(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         JSONObject jobj = new JSONObject();
@@ -169,6 +205,9 @@ public class WBAAccessSessionReport extends GenericResource {
         response.getOutputStream().println(jobj.toString());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         final int I_ACCESS = 0;
@@ -432,6 +471,15 @@ public class WBAAccessSessionReport extends GenericResource {
         response.getWriter().print(ret.toString());
     }
 
+    /**
+     * Do detail.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
 
@@ -501,6 +549,15 @@ public class WBAAccessSessionReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Do graph.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer();
         Resource base = paramsRequest.getResourceBase();
@@ -583,6 +640,15 @@ public class WBAAccessSessionReport extends GenericResource {
         response.getWriter().print(ret.toString());
     }
 
+    /**
+     * Do rep excel.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"alr.xls\"");
@@ -669,6 +735,15 @@ public class WBAAccessSessionReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Do rep xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
@@ -775,7 +850,10 @@ public class WBAAccessSessionReport extends GenericResource {
     }*/
 
     /**
-     * @param request
+     * Gets the file names.
+     * 
+     * @param request the request
+     * @return the file names
      * @return
      */
     public Iterator<String> getFileNames(HttpServletRequest request) {
@@ -849,6 +927,13 @@ public class WBAAccessSessionReport extends GenericResource {
         return files.iterator();
     }
 
+    /**
+     * Gets the report results.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the report results
+     */
     private Iterator<String[]> getReportResults(HttpServletRequest request, SWBParamRequest paramsRequest) {
         final int I_ZERO = 0;
         final int I_ONE = 1;
@@ -1205,6 +1290,13 @@ public class WBAAccessSessionReport extends GenericResource {
         return al_pag.iterator();
     }
 
+    /**
+     * Gets the tokens.
+     * 
+     * @param line the line
+     * @return the tokens
+     * @throws Exception the exception
+     */
     private HashMap getTokens(String line) throws Exception {
         if( line==null || line.trim().equals("")) {
             return null;

@@ -52,6 +52,7 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso para consulta en lenguaje natural acotado a la base de datos de
  * Jena. Utiliza un traductor de lenguaje natural a SparQl.
@@ -63,10 +64,18 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBADBNatural extends GenericResource {
 
+    /** The lang. */
     private String lang = "x-x";
+    
+    /** The lex. */
     private SWBDictionary lex = null;
+    
+    /** The tr. */
     private SWBSparqlTranslator tr;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -77,6 +86,9 @@ public class SWBADBNatural extends GenericResource {
         }
     }
 
+   /* (non-Javadoc)
+    * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+    */
    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
@@ -522,6 +534,9 @@ public class SWBADBNatural extends GenericResource {
         response.getWriter().print(sbf.toString());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String query = request.getParameter("naturalQuery");
@@ -557,6 +572,15 @@ public class SWBADBNatural extends GenericResource {
         response.setMode(response.Mode_VIEW);
     }
 
+    /**
+     * Do suggest.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();

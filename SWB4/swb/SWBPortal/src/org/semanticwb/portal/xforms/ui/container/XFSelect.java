@@ -38,24 +38,47 @@ import org.semanticwb.portal.xforms.ElementsProp;
 import org.semanticwb.portal.xforms.ui.action.XFSetvalue;
 import org.semanticwb.xforms.ui.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFSelect.
+ * 
  * @author  jorge.jimenez
  */
 public class XFSelect extends WBXformsContainer 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(XFSetvalue.class);
+    
+    /** The appearance. */
     protected String appearance=null;
+    
+    /** The elements prop. */
     protected ElementsProp elementsProp=null;
+    
+    /** The instance elements. */
     HashMap instanceElements=new HashMap();
+    
+    /** The value. */
     protected String value=null;
     
     
+    /**
+     * Instantiates a new xF select.
+     * 
+     * @param elementsProp the elements prop
+     */
     public XFSelect(ElementsProp elementsProp){
         this.elementsProp=elementsProp;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF select.
+     * 
+     * @param elementsProp the elements prop
+     * @param instanceElements the instance elements
+     */
     public XFSelect(ElementsProp elementsProp,HashMap instanceElements){
         this.elementsProp=elementsProp;
         this.instanceElements=instanceElements;
@@ -64,24 +87,47 @@ public class XFSelect extends WBXformsContainer
     
     // Sets
     
+    /**
+     * Sets the appearance.
+     * 
+     * @param appearance the new appearance
+     */
     public void setAppearance(String appearance) {
         this.appearance=appearance;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets
     
+    /**
+     * Gets the appearance.
+     * 
+     * @return the appearance
+     */
     public String getAppearance() {
         return appearance;
     }
     
+     /**
+      * Gets the value.
+      * 
+      * @return the value
+      */
      public String getValue(){
         return value;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(elementsProp.getId()!=null) {
             id=elementsProp.getId();
@@ -112,6 +158,9 @@ public class XFSelect extends WBXformsContainer
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -153,11 +202,17 @@ public class XFSelect extends WBXformsContainer
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

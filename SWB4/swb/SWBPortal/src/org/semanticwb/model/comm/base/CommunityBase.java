@@ -24,43 +24,94 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommunityBase.
+ */
 public class CommunityBase extends org.semanticwb.model.comm.MicroSite implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Hiddenable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable
 {
+    
+    /** The Constant swbcomm_Community. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Community=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Community");
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Community");
 
+    /**
+     * Instantiates a new community base.
+     * 
+     * @param base the base
+     */
     public CommunityBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * List communitys.
+     * 
+     * @param model the model
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Community> listCommunitys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Community>(it, true);
     }
 
+    /**
+     * List communitys.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Community> listCommunitys()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Community>(it, true);
     }
 
+    /**
+     * Gets the community.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the community
+     */
     public static org.semanticwb.model.comm.Community getCommunity(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Community)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
+    /**
+     * Creates the community.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.model.comm. community
+     */
     public static org.semanticwb.model.comm.Community createCommunity(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Community)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /**
+     * Removes the community.
+     * 
+     * @param id the id
+     * @param model the model
+     */
     public static void removeCommunity(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
+    /**
+     * Checks for community.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return true, if successful
+     */
     public static boolean hasCommunity(String id, org.semanticwb.model.SWBModel model)
     {
         return (getCommunity(id, model)!=null);

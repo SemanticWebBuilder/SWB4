@@ -43,28 +43,47 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FBLogin.
+ * 
  * @author serch
  */
 public class FBLogin implements InternalServlet
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FBLogin.class);
+    
+    /** The _name. */
     private String _name = "fblogin";
+    
+    /** The handle error. */
     private boolean handleError = false;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config)
     {
         log.event("Initializing InternalServlet Login...");
     //TODO: preparar los aspectos configurables de la autenticación
     }
 
+        /**
+         * Sets the handle error.
+         * 
+         * @param handleError the new handle error
+         */
         public void setHandleError(boolean handleError)
     {
         this.handleError = handleError;
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         if (null == dparams.getWebPage())
@@ -165,6 +184,12 @@ public class FBLogin implements InternalServlet
         sendRedirect(response, url);
     }
 
+    /**
+     * Send redirect.
+     * 
+     * @param response the response
+     * @param url the url
+     */
     private void sendRedirect(HttpServletResponse response, String url)
     {
         try
@@ -181,6 +206,20 @@ public class FBLogin implements InternalServlet
     }
 
 
+    /**
+     * Gets the handler.
+     * 
+     * @param CBHClassName the cBH class name
+     * @param request the request
+     * @param response the response
+     * @param authType the auth type
+     * @param website the website
+     * @return the handler
+     * @throws ClassNotFoundException the class not found exception
+     * @throws InvocationTargetException the invocation target exception
+     * @throws InstantiationException the instantiation exception
+     * @throws IllegalAccessException the illegal access exception
+     */
     private CallbackHandler getHandler(String CBHClassName, HttpServletRequest request, HttpServletResponse response, String authType, String website) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException
     {
         Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
@@ -196,6 +235,16 @@ public class FBLogin implements InternalServlet
 
     }
 
+    /**
+     * Do response.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param distributorParams the distributor params
+     * @param alert the alert
+     * @param authMethod the auth method
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException
     {
 
@@ -211,6 +260,15 @@ public class FBLogin implements InternalServlet
 
     }
 
+    /**
+     * Form challenge.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param distributorParams the distributor params
+     * @param alert the alert
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void formChallenge(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException
     {
         String ruta = "/config/";
@@ -275,6 +333,15 @@ public class FBLogin implements InternalServlet
         out.close();
     }
 
+        /**
+         * Redirect alternate login.
+         * 
+         * @param request the request
+         * @param response the response
+         * @param distributorParams the distributor params
+         * @param alert the alert
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         private void redirectAlternateLogin(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert) throws IOException
     {
         String altURL = distributorParams.getWebPage().getWebSite().getUserRepository().getAlternateLoginURL();
@@ -284,6 +351,12 @@ public class FBLogin implements InternalServlet
             sendRedirect(response, altURL);
     }
 
+/**
+ * Send login log.
+ * 
+ * @param request the request
+ * @param usr the usr
+ */
 public static void sendLoginLog(HttpServletRequest request, User usr) {
         //User session log
         {

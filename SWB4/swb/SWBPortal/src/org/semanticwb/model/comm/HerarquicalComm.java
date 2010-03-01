@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HerarquicalComm.
+ */
 public class HerarquicalComm extends org.semanticwb.model.comm.base.HerarquicalCommBase 
 {
+    
+    /**
+     * Instantiates a new herarquical comm.
+     * 
+     * @param base the base
+     */
     public HerarquicalComm(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

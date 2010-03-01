@@ -26,31 +26,65 @@ package org.semanticwb.portal.monitor;
 
 import java.io.Serializable;
 import static org.semanticwb.portal.monitor.SWBFormatUtils.*;
+// TODO: Auto-generated Javadoc
+
 /**
- *
+ * The Class SWBSummaryData.
+ * 
  * @author serch
  */
 public class SWBSummaryData implements Serializable {
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 4012L;
+       
+       /** The start time. */
        public long upTime, startTime = -1L;
 //       public double systemLoadAverage;
-	public long processCpuTime = -1L;
+	/** The process cpu time. */
+public long processCpuTime = -1L;
+	
+	/** The time stamp. */
 	public long timeStamp;
+	
+	/** The n cp us. */
 	public int nCPUs;
+        
+        /** The vm boot class path. */
         public String vmName, vmVendor, vmInstanceName, jitCompiler, osName, vmArch, vmArgs, vmClassPath, vmLibraryPath, vmBootClassPath;//, internalName;
+        
+        /** The deamon th. */
         public int liveTh, peakTh, deamonTh =-1;
+        
+        /** The current class. */
         public int  currentClass = -1;
+        
+        /** The total class. */
         public long currentHeap, maxHeap, currentCommited, objectsPending, startedTh, unloadedClass, totalClass = -1L;
+        
+        /** The gc details. */
         public String[] gcDetails;
+        
+        /** The free swap mem. */
         public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, freeSwapMem = -1L;
+        
+        /** The instant cpu. */
         public float instantCPU = Float.MIN_VALUE;
 
+    /**
+     * Instantiates a new sWB summary data.
+     */
     public SWBSummaryData()
     {
         timeStamp = System.currentTimeMillis();
     }
 
 
+        /**
+         * Gets the sumary html.
+         * 
+         * @return the string
+         */
         public String GetSumaryHTML(){
             StringBuilder ret = new StringBuilder();
             ret.append("<div id=\"SWBSummary\">\n");

@@ -41,6 +41,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto: Se encarga de la recepcion y envio de mensajes UDP, para la sincronizacion de servidores.
  * Object: One is in charge of the reception and shipment of messages UDP, for the synchronization of servers.
@@ -48,35 +49,54 @@ import org.semanticwb.base.SWBObserver;
  */
 public class SWBMessageCenter
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBMessageCenter.class);
 
     //private WeakHashMap observers=new WeakHashMap();
+    /** The observers. */
     private HashMap observers = new HashMap();
 
+    /** The sa. */
     private boolean sa = true;                        //standalon
 
+    /** The server. */
     private SWBMessageServer server = null;
+    
+    /** The procesor. */
     private SWBMessageProcesor procesor = null;
 
+    /** The sock. */
     private DatagramSocket sock = null;
+    
+    /** The packets. */
     private ArrayList packets=new ArrayList();
     //private DatagramPacket packet = null;
+    /** The addr. */
     private InetAddress addr=null;
 
+    /** The messages. */
     private LinkedList messages = null;
 
+    /** The df. */
     private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /** The localaddr. */
     private String localaddr = "127.0.0.1";
 
 
-    /** Creates a new instance of SWBMessageCenter */
+    /**
+     * Creates a new instance of SWBMessageCenter.
+     */
     public SWBMessageCenter()
     {
         log.event("Initializing SWBMessageCenter...");
         messages = new LinkedList();
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         log.event("Destroy SWBMessageCenter...");
@@ -84,6 +104,9 @@ public class SWBMessageCenter
         if (server != null) server.stop();
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         try
@@ -193,12 +216,18 @@ public class SWBMessageCenter
     }
     
 
+    /**
+     * Refresh.
+     */
     public void refresh()
     {
     }
 
     /**
-     * @param message  */
+     * Send message.
+     * 
+     * @param message the message
+     */
     public void sendMessage(String message)
     {
         if (!sa && packets.size()>0)
@@ -251,8 +280,11 @@ public class SWBMessageCenter
     }
 
     /**
-     * @param message
-     * @param addr  */
+     * Incoming message.
+     * 
+     * @param message the message
+     * @param addr the addr
+     */
     public void incomingMessage(String message, String addr)
     {
         Date dt = new Date();
@@ -265,7 +297,10 @@ public class SWBMessageCenter
     }
 
     /**
-     * @param message  */
+     * Push message.
+     * 
+     * @param message the message
+     */
     public void pushMessage(String message)
     {
         synchronized(messages)
@@ -275,7 +310,11 @@ public class SWBMessageCenter
     }
 
     /**
-     * @return  */
+     * Pop message.
+     * 
+     * @return the string
+     * @return
+     */
     public String popMessage()
     {
         try
@@ -295,42 +334,75 @@ public class SWBMessageCenter
         return "";
     }
 
-    /** registra el objeto observador para que pueda recibir notoficaciones de cambios
-     * @param obs   */
+    /**
+     * registra el objeto observador para que pueda recibir notoficaciones de cambios.
+     * 
+     * @param key the key
+     * @param obs the obs
+     */
     public synchronized void registerObserver(String key, SWBObserver obs)
     {
         observers.put(key, obs);
     }
 
+    /**
+     * Removes the observer.
+     * 
+     * @param key the key
+     */
     public synchronized void removeObserver(String key)
     {
         observers.remove(key);
     }
 
+    /**
+     * Gets the observers.
+     * 
+     * @return the observers
+     */
     public Iterator getObservers()
     {
         return new ArrayList(observers.values()).iterator();
     }
 
+    /**
+     * Gets the observer.
+     * 
+     * @param key the key
+     * @return the observer
+     */
     public SWBObserver getObserver(String key)
     {
         return (SWBObserver) observers.get(key);
     }
 
     /**
-     * @return  */
+     * Checks for messages.
+     * 
+     * @return true, if successful
+     * @return
+     */
     public boolean hasMessages()
     {
         return !messages.isEmpty();
     }
 
+    /**
+     * Message size.
+     * 
+     * @return the int
+     */
     public int messageSize()
     {
         return messages.size();
     }
 
     /**
-     * @return  */
+     * Gets the address.
+     * 
+     * @return the address
+     * @return
+     */
     public String getAddress()
     {
         if (sock != null)
@@ -339,11 +411,21 @@ public class SWBMessageCenter
             return localaddr;
     }
 
+    /**
+     * Gets the message procesor.
+     * 
+     * @return the message procesor
+     */
     public SWBMessageProcesor getMessageProcesor()
     {
         return procesor;
     }
 
+    /**
+     * Gets the message server.
+     * 
+     * @return the message server
+     */
     public SWBMessageServer getMessageServer()
     {
         return server;

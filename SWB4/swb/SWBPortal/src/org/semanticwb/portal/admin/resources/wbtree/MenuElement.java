@@ -39,26 +39,59 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class MenuElement.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class MenuElement
 {
+    
+    /** The web page. */
     String webPage=null;
+    
+    /** The web page_action. */
     String webPage_action=null;
+    
+    /** The user. */
     User user=null;
+    
+    /** The target. */
     String target="work";
+    
+    /** The parameters. */
     HashMap parameters=new HashMap();
+    
+    /** The action. */
     String action=null;
+    
+    /** The tma. */
     WebSite tma=SWBContext.getAdminWebSite();
+    
+    /** The variant name. */
     boolean variantName=false;
+    
+    /** The vitual topic. */
     WebPage vitualTopic=null;
+    
+    /** The params. */
     String params=null;
+    
+    /** The uri. */
     String uri=null;
+    
+    /** The log. */
     private Logger log = SWBUtils.getLogger(MenuElement.class);
 
     
+    /**
+     * Instantiates a new menu element.
+     * 
+     * @param webPage the web page
+     * @param WebPage_action the web page_action
+     * @param user the user
+     */
     public MenuElement(String webPage, String WebPage_action, User user)
     {
         this.webPage=webPage;
@@ -66,6 +99,12 @@ public class MenuElement
         this.user=user;
     }
     
+    /**
+     * Adds the element.
+     * 
+     * @param menu the menu
+     * @return the element
+     */
     public Element addElement(Element menu)
     {
         if(!user.haveAccess(tma.getWebPage(webPage)))return null;
@@ -105,6 +144,11 @@ public class MenuElement
         return option;
     }
     
+    /**
+     * Gets the display name.
+     * 
+     * @return the display name
+     */
     public String getDisplayName()
     {
         String ret = webPage;
@@ -114,6 +158,11 @@ public class MenuElement
         return ret;
     }
     
+    /**
+     * Gets the variant name.
+     * 
+     * @return the variant name
+     */
     public String getVariantName()
     {
         String str=getDisplayName();
@@ -126,6 +175,13 @@ public class MenuElement
         return str;
     }    
     
+    /**
+     * Gets the confirm.
+     * 
+     * @param webPage_msg the web page_msg
+     * @param webPage_name the web page_name
+     * @return the confirm
+     */
     private String getConfirm(String webPage_msg, String webPage_name)
     {
         String str=webPage_msg+" "+webPage_name;
@@ -142,11 +198,36 @@ public class MenuElement
         return str + "?";
     }    
 
+    /**
+     * Adds the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param WebPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element add(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String tm, String id)
     {
         return add(menu, webPage, WebPage_action, vtp, user, tm, id, null);
     }
     
+    /**
+     * Adds the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @param params the params
+     * @return the element
+     */
     public static Element add(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id, String params)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -162,12 +243,37 @@ public class MenuElement
         return option;
     }
     
+    /**
+     * Edits the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element edit(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
         return edit(menu, webPage, webPage_action, vtp, user, tm, id, null);
     }
     
     
+    /**
+     * Edits the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @param params the params
+     * @return the element
+     */
     public static Element edit(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id, String params)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -182,6 +288,18 @@ public class MenuElement
         return option;
     }  
     
+    /**
+     * Active.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element active(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -196,6 +314,18 @@ public class MenuElement
         return option;
     }  
     
+    /**
+     * Unactive.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element unactive(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String tm, String id)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -211,12 +341,39 @@ public class MenuElement
         return option;
     }      
     
+    /**
+     * Removes the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param webPage_confirm the web page_confirm
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element remove(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id)
     {
         return remove(menu, webPage, webPage_action, vtp, user, webPage_confirm, tm, id, null);
     }
     
     
+    /**
+     * Removes the.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param webPage_confirm the web page_confirm
+     * @param tm the tm
+     * @param id the id
+     * @param params the params
+     * @return the element
+     */
     public static Element remove(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id, String params)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -235,11 +392,39 @@ public class MenuElement
         return option;
     }      
     
+    /**
+     * Copy.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param webPage_confirm the web page_confirm
+     * @param tm the tm
+     * @param id the id
+     * @return the element
+     */
     public static Element copy(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id)
     {
         return copy(menu, webPage, webPage_action, vtp, user, webPage_confirm, tm, id, null,"status");
     }
     
+    /**
+     * Copy.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param webPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param webPage_confirm the web page_confirm
+     * @param tm the tm
+     * @param id the id
+     * @param params the params
+     * @param target the target
+     * @return the element
+     */
     public static Element copy(Element menu, String webPage, String webPage_action, WebPage vtp, User user, String webPage_confirm, String tm, String id, String params, String target)
     {
         MenuElement ele=new MenuElement(webPage, webPage_action, user);
@@ -265,6 +450,19 @@ public class MenuElement
         return option;
     }       
     
+    /**
+     * Adds the option.
+     * 
+     * @param menu the menu
+     * @param webPage the web page
+     * @param WebPage_action the web page_action
+     * @param vtp the vtp
+     * @param user the user
+     * @param uri the uri
+     * @param tm the tm
+     * @param params the params
+     * @return the element
+     */
     public static Element addOption(Element menu, String webPage, String WebPage_action, WebPage vtp, User user, String uri, String tm, String params)
     {
         MenuElement ele=new MenuElement(webPage, WebPage_action, user);
@@ -278,12 +476,24 @@ public class MenuElement
         return option;
     }
     
+    /**
+     * Sets the parameter.
+     * 
+     * @param key the key
+     * @param value the value
+     */
     public void setParameter(String key, String value)
     {
         if(key!=null && value!=null)
             parameters.put(key, value);
     }
     
+    /**
+     * Gets the parameter.
+     * 
+     * @param key the key
+     * @return the parameter
+     */
     public String getParameter(String key)
     {
         return (String)parameters.get(key);
@@ -309,7 +519,8 @@ public class MenuElement
     
     /**
      * Setter for property target.
-     * @param target New value of property target.
+     * 
+     * @param action the new action
      */
     public void setAction(java.lang.String action)
     {
@@ -409,7 +620,8 @@ public class MenuElement
     
     /**
      * Setter for property url.
-     * @param url New value of property url.
+     * 
+     * @param uri the new uri
      */
     public void setUri(java.lang.String uri)
     {

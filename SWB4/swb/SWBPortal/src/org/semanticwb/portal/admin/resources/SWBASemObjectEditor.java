@@ -39,21 +39,32 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBASemObjectEditor.
+ * 
  * @author juan.fernandez
  */
 public class SWBASemObjectEditor extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBASemObjectEditor.class);
+    
+    /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         log.debug("doView(SWBASemObjectEditor...)");
         doEdit(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         log.debug("doEdit(SWBASemObjectEditor...)");
@@ -285,6 +296,9 @@ public class SWBASemObjectEditor extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String id = request.getParameter("suri");
@@ -427,9 +441,11 @@ public class SWBASemObjectEditor extends GenericResource {
     }
 
     /**
-     *
-     * @param dateTime
-     * @param lang
+     * Gets the date format.
+     * 
+     * @param dateTime the date time
+     * @param lang the lang
+     * @return the date format
      * @return
      */
     public String getDateFormat(long dateTime, String lang) {
@@ -447,8 +463,10 @@ public class SWBASemObjectEditor extends GenericResource {
 //
 //    }
     /**
-     *
-     * @param obj
+     * Gets the display sem obj.
+     * 
+     * @param obj the obj
+     * @return the display sem obj
      * @return
      */
     public String getDisplaySemObj(SemanticObject obj) {
@@ -462,12 +480,13 @@ public class SWBASemObjectEditor extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do form id.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -494,6 +513,9 @@ public class SWBASemObjectEditor extends GenericResource {
         out.println("</form>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals(MODE_IdREQUEST)) {

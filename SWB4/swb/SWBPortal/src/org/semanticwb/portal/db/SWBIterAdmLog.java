@@ -36,6 +36,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 
+// TODO: Auto-generated Javadoc
 /** objeto: iterador de base de datos de la tabla wbadmlog
  * regresa un iterador el cual se utiliza para accesar a los registros de una tabla en forma secuencial...
  *
@@ -46,19 +47,35 @@ import org.semanticwb.SWBUtils;
  */
 public class SWBIterAdmLog implements java.util.Iterator
 {
+    
+    /** The rs. */
     private ResultSet rs;
+    
+    /** The con. */
     private Connection con;
+    
+    /** The st. */
     private Statement st;
+    
+    /** The closed. */
     private boolean closed = false;
+    
+    /** The next. */
     private boolean next = false;
+    
+    /** The checked. */
     private boolean checked = false;
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBIterAdmLog.class);
 
-    /** Creates a new instance of IterAdmLog
-     * @param con
-     * @param st
-     * @param rs  */
+    /**
+     * Creates a new instance of IterAdmLog.
+     * 
+     * @param con the con
+     * @param st the st
+     * @param rs the rs
+     */
     public SWBIterAdmLog(Connection con, Statement st, ResultSet rs)
     {
         this.rs = rs;
@@ -67,7 +84,11 @@ public class SWBIterAdmLog implements java.util.Iterator
     }
 
     /**
-     * @return  */
+     * Checks for next.
+     * 
+     * @return true, if successful
+     * @return
+     */
     public boolean hasNext()
     {
         try
@@ -86,7 +107,11 @@ public class SWBIterAdmLog implements java.util.Iterator
     }
 
     /**
-     * @return  */
+     * Next.
+     * 
+     * @return the object
+     * @return
+     */
     public Object next()
     {
         try
@@ -108,10 +133,16 @@ public class SWBIterAdmLog implements java.util.Iterator
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
     }
 
+    /**
+     * Close.
+     */
     public void close()
     {
         closed = true;
@@ -127,6 +158,9 @@ public class SWBIterAdmLog implements java.util.Iterator
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#finalize()
+     */
     @Override
     public void finalize()
     {

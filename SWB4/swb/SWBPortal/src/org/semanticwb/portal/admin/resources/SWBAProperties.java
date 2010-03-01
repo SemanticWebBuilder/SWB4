@@ -41,23 +41,36 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAProperties.
+ * 
  * @author juan.fernandez
  */
 public class SWBAProperties extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAProperties.class);
+    
+    /** The properties. */
     ArrayList properties;
+    
+    /** The prop. */
     SWBProperties prop;
+    
+    /** The base. */
     Resource base;
     
-    /** Creates a new instance of WBAProperties */
+    /**
+     * Creates a new instance of WBAProperties.
+     */
     public SWBAProperties() {
     }
     
     /**
-     * Init the resource
+     * Init the resource.
+     * 
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void init() throws SWBResourceException {
@@ -72,8 +85,11 @@ public class SWBAProperties extends GenericResource {
 
     }
     
-    /** Init the resource base configuration
+    /**
+     * Init the resource base configuration.
+     * 
      * @param base a resource in the data base
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
@@ -108,11 +124,14 @@ public class SWBAProperties extends GenericResource {
         }     
     } 
 
-     /** Requested action of the WBAProperties resource
-     * @param request input parameters
-     * @param response an answer to the request and a list of objects (topic, user, action, ...)
-     * @throws IOException an IO Exception
-     */  
+     /**
+      * Requested action of the WBAProperties resource.
+      * 
+      * @param request input parameters
+      * @param response an answer to the request and a list of objects (topic, user, action, ...)
+      * @throws IOException an IO Exception
+      * @throws SWBResourceException the sWB resource exception
+      */  
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         base = getResourceBase();
@@ -173,11 +192,14 @@ public class SWBAProperties extends GenericResource {
         
     }
 
-    /** User view of WBAProperties resource
+    /**
+     * User view of WBAProperties resource.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (topic, user, action, ...)
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */   
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -290,12 +312,15 @@ public class SWBAProperties extends GenericResource {
         
     }
 
-     /** Edit view of WBAProperties resource
-     * @param request input parameters
-     * @param response an answer to the request
-     * @param paramRequest a list of objects (topic, user, action, ...)
-     * @throws IOException an IO Exception
-     */
+     /**
+      * Edit view of WBAProperties resource.
+      * 
+      * @param request input parameters
+      * @param response an answer to the request
+      * @param paramRequest a list of objects (topic, user, action, ...)
+      * @throws IOException an IO Exception
+      * @throws SWBResourceException the sWB resource exception
+      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -411,11 +436,14 @@ public class SWBAProperties extends GenericResource {
         }
     }
 
-    /** Admin view of WBAProperties resource
+    /**
+     * Admin view of WBAProperties resource.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (topic, user, action, ...)
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */   
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

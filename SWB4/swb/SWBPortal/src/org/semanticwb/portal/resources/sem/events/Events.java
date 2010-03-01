@@ -33,22 +33,35 @@ import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- * Object that manage events
+ * Object that manage events.
+ * 
  * @author jorge.jimenez
  */
 public class Events extends org.semanticwb.portal.resources.sem.events.base.EventsBase 
 {
 
+    /**
+     * Instantiates a new events.
+     */
     public Events()
     {
     }
 
+    /**
+     * Instantiates a new events.
+     * 
+     * @param base the base
+     */
     public Events(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("view2")) {
@@ -60,6 +73,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -75,6 +91,15 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     }
 
     
+     /**
+      * Do add.
+      * 
+      * @param request the request
+      * @param response the response
+      * @param paramRequest the param request
+      * @throws SWBResourceException the sWB resource exception
+      * @throws IOException Signals that an I/O exception has occurred.
+      */
      public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
 
@@ -96,6 +121,15 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println(mgr.renderForm(request));
     }
 
+     /**
+      * Do view2.
+      * 
+      * @param request the request
+      * @param response the response
+      * @param paramRequest the param request
+      * @throws SWBResourceException the sWB resource exception
+      * @throws IOException Signals that an I/O exception has occurred.
+      */
      public void doView2(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("EventUri"));
@@ -123,6 +157,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println(mgr.renderForm(request));
     }
 
+     /* (non-Javadoc)
+      * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+      */
      @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -145,6 +182,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     }
 
 
+     /* (non-Javadoc)
+      * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+      */
      @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action=response.getAction();

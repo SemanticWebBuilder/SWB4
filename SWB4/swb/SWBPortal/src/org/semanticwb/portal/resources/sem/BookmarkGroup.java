@@ -25,6 +25,7 @@ package org.semanticwb.portal.resources.sem;
 
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
 /**
  * Group of bookmarks. Composed by a set of bookmark entries.
  * <p>
@@ -33,11 +34,20 @@ import java.util.Iterator;
  */
 public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.BookmarkGroupBase 
 {
+    
+    /**
+     * Instantiates a new bookmark group.
+     * 
+     * @param base the base
+     */
     public BookmarkGroup(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.sem.base.BookmarkGroupBase#addEntry(org.semanticwb.portal.resources.sem.BookmarkEntry)
+     */
     @Override
     public void addEntry(org.semanticwb.portal.resources.sem.BookmarkEntry bookmarkentry)
     {
@@ -46,6 +56,9 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
         //System.out.println(getTitle() + " is now in " + getEntryCount());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.sem.base.BookmarkGroupBase#removeAllEntry()
+     */
     @Override
     public void removeAllEntry()
     {
@@ -53,6 +66,9 @@ public class BookmarkGroup extends org.semanticwb.portal.resources.sem.base.Book
         setEntryCount(0);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.sem.base.BookmarkGroupBase#removeEntry(org.semanticwb.portal.resources.sem.BookmarkEntry)
+     */
     @Override
     public void removeEntry(org.semanticwb.portal.resources.sem.BookmarkEntry bookmarkentry)
     {

@@ -31,32 +31,47 @@
 
 package org.semanticwb.portal.admin.resources.workflow.proxy;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase utileria utilizada en algunos metodos de la clase Proxy workflow, para
- * indicar id de flujo y versi�n generada dentro del motor de workflow
+ * indicar id de flujo y versi�n generada dentro del motor de workflow.
+ * 
  * @author Victor Lorenzana
  */
 public class WorkflowResponse {
     
+    /** The id. */
     String id;
+    
+    /** The version. */
     int version;
+    
     /**
      * Contructor de la clase WorlflowResponse, debe incluir el Id del flujo de
-     * publicaci�n y la versi�n del mismo
+     * publicaci�n y la versi�n del mismo.
+     * 
+     * @param id the id
+     * @param version the version
      */    
     public WorkflowResponse(String id,int version) {
         this.id=id;
         this.version=version;
     }
+    
     /**
      * Regresa el id del flujo de publicaci�n creado.
+     * 
+     * @return the iD
      */    
     public String getID()
     {
         return id;
     }
+    
     /**
      * Regresa la versi�n del flujo de publicaci�n creado.
+     * 
+     * @return the version
      */    
     public int getVersion()
     {

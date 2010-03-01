@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommunityContainer.
+ */
 public class CommunityContainer extends org.semanticwb.model.comm.base.CommunityContainerBase 
 {
+    
+    /**
+     * Instantiates a new community container.
+     * 
+     * @param base the base
+     */
     public CommunityContainer(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

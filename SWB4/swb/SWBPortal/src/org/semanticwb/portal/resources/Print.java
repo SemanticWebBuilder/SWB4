@@ -53,6 +53,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.semanticwb.portal.util.FileUpload;
 
+// TODO: Auto-generated Javadoc
 /** Objeto que se encarga de desplegar y administrar una interfaz parar imprimir topicos bajo ciertos
  * criterios(configuraci�n de recurso).
  *
@@ -65,21 +66,32 @@ import org.semanticwb.portal.util.FileUpload;
  */
 public class Print extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Print.class);
 
+    /** The work path. */
     String workPath = "";
+    
+    /** The web work path. */
     String webWorkPath = "/work";
+    
+    /** The windowconf. */
     String windowconf="";
+    
+    /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
 
     /**
-     * Creates a new instance of Imprimir
+     * Creates a new instance of Imprimir.
      */
     public Print() {
     }
 
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */
     public void setResourceBase(Resource base)
     {
@@ -93,6 +105,13 @@ public class Print extends GenericResource
     }
 
 
+    /**
+     * Gets the params.
+     * 
+     * @param request the request
+     * @param url the url
+     * @return the params
+     */
     public void getParams(javax.servlet.http.HttpServletRequest request, SWBResourceURLImp url)
     {
         if(null!=request.getQueryString())
@@ -118,11 +137,13 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -205,11 +226,13 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Prints the by page.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void printByPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -274,11 +297,13 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Prints the content.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void printContent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -304,6 +329,9 @@ public class Print extends GenericResource
         }
     }
 
+    /**
+     * Sets the window conf.
+     */
     private void setWindowConf()
     {
         Resource base=getResourceBase();
@@ -321,7 +349,9 @@ public class Print extends GenericResource
     }
 
     /**
-     * @return <b>String</b>
+     * Gets the window conf.
+     * 
+     * @return 
      */
     private String getWindowConf()
     {
@@ -329,11 +359,13 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Do admin.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -426,9 +458,11 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param base
-     * @param fup
-     * @param att
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
      */
     protected void setAttribute(Resource base, FileUpload fup, String att)
     {
@@ -443,10 +477,12 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param base
-     * @param fup
-     * @param att
-     * @param value
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
+     * @param value the value
      */
     protected void setAttribute(Resource base, FileUpload fup, String att, String value)
     {
@@ -463,9 +499,11 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b>
+     * Gets the form.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return 
      */
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
@@ -575,9 +613,11 @@ public class Print extends GenericResource
     }
 
     /**
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b>
+     * Gets the script.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return 
      */
     private String getScript(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {

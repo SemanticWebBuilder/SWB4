@@ -31,7 +31,8 @@ package org.semanticwb.portal.resources;
 import org.semanticwb.portal.api.GenericXformsResource;
 
 /**
- *
+ * The Class Controls.
+ * 
  * @author jorge.jimenez
  */
 public class Controls extends GenericXformsResource

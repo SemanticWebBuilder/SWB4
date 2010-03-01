@@ -37,12 +37,17 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class MapTree.
+ * 
  * @author juan.fernandez
  */
 public class MapTree extends GenericResource{
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if(paramsRequest.getMode().equals("getData")){
@@ -55,6 +60,15 @@ public class MapTree extends GenericResource{
     }
 
     
+    /**
+     * Do data.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
         response.setHeader("mimetype", "text/json-comment-filtered");
@@ -62,6 +76,15 @@ public class MapTree extends GenericResource{
         out.print(getData(paramsRequest.getWebPage()));
     }
     
+    /**
+     * Do childs.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
         response.setHeader("mimetype", "text/json-comment-filtered");
@@ -71,6 +94,12 @@ public class MapTree extends GenericResource{
         out.print(ret);
     }
     
+    /**
+     * Gets the data.
+     * 
+     * @param tp the tp
+     * @return the data
+     */
     public String getData(WebPage tp)
     {
         StringBuffer ret = new StringBuffer();
@@ -134,6 +163,12 @@ public class MapTree extends GenericResource{
         return ret.toString();
     }
     
+    /**
+     * Gets the childs.
+     * 
+     * @param tptmp the tptmp
+     * @return the childs
+     */
     public String getChilds(WebPage tptmp)
     {
         StringBuffer ret = new StringBuffer();
@@ -146,6 +181,12 @@ public class MapTree extends GenericResource{
         return ret.toString();
     }
     
+    /**
+     * Gets the only childs.
+     * 
+     * @param tptmp the tptmp
+     * @return the only childs
+     */
     public String getOnlyChilds(WebPage tptmp)
     {
         StringBuffer ret = new StringBuffer();
@@ -182,6 +223,9 @@ public class MapTree extends GenericResource{
     }
 
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         

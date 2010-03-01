@@ -24,83 +24,173 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class BookmarkEntryBase.
+ */
 public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
+    
+    /** The Constant swb_created. */
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    
+    /** The Constant swb_User. */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    
+    /** The Constant swb_modifiedBy. */
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    
+    /** The Constant swb_title. */
     public static final org.semanticwb.platform.SemanticProperty swb_title=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#title");
+    
+    /** The Constant swb_updated. */
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    
+    /** The Constant swb_res_bkm_bookmarkURL. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_bookmarkURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#bookmarkURL");
+    
+    /** The Constant swb_res_bkm_tags. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_bkm_tags=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#tags");
+    
+    /** The Constant swb_creator. */
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    
+    /** The Constant swb_description. */
     public static final org.semanticwb.platform.SemanticProperty swb_description=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#description");
+    
+    /** The Constant swb_res_bkm_BookmarkEntry. */
     public static final org.semanticwb.platform.SemanticClass swb_res_bkm_BookmarkEntry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkEntry");
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sem/SWBBookmarks#BookmarkEntry");
 
+    /**
+     * Instantiates a new bookmark entry base.
+     * 
+     * @param base the base
+     */
     public BookmarkEntryBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * List bookmark entrys.
+     * 
+     * @param model the model
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.BookmarkEntry> listBookmarkEntrys(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkEntry>(it, true);
     }
 
+    /**
+     * List bookmark entrys.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.BookmarkEntry> listBookmarkEntrys()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.BookmarkEntry>(it, true);
     }
 
+    /**
+     * Creates the bookmark entry.
+     * 
+     * @param model the model
+     * @return the org.semanticwb.portal.resources.sem. bookmark entry
+     */
     public static org.semanticwb.portal.resources.sem.BookmarkEntry createBookmarkEntry(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.portal.resources.sem.BookmarkEntry.createBookmarkEntry(String.valueOf(id), model);
     }
 
+    /**
+     * Gets the bookmark entry.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the bookmark entry
+     */
     public static org.semanticwb.portal.resources.sem.BookmarkEntry getBookmarkEntry(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.resources.sem.BookmarkEntry)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
+    /**
+     * Creates the bookmark entry.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.portal.resources.sem. bookmark entry
+     */
     public static org.semanticwb.portal.resources.sem.BookmarkEntry createBookmarkEntry(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.resources.sem.BookmarkEntry)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /**
+     * Removes the bookmark entry.
+     * 
+     * @param id the id
+     * @param model the model
+     */
     public static void removeBookmarkEntry(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
+    /**
+     * Checks for bookmark entry.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return true, if successful
+     */
     public static boolean hasBookmarkEntry(String id, org.semanticwb.model.SWBModel model)
     {
         return (getBookmarkEntry(id, model)!=null);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getCreated()
+     */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setCreated(java.util.Date)
+     */
     public void setCreated(java.util.Date created)
     {
         getSemanticObject().setDateProperty(swb_created, created);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setModifiedBy(org.semanticwb.model.User)
+     */
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#removeModifiedBy()
+     */
     public void removeModifiedBy()
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getModifiedBy()
+     */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -112,71 +202,121 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getTitle()
+     */
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String)
+     */
     public void setTitle(String title)
     {
         getSemanticObject().setProperty(swb_title, title);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getTitle(java.lang.String)
+     */
     public String getTitle(String lang)
     {
         return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayTitle(java.lang.String)
+     */
     public String getDisplayTitle(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String, java.lang.String)
+     */
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getUpdated()
+     */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setUpdated(java.util.Date)
+     */
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
+    /**
+     * Gets the bookmark url.
+     * 
+     * @return the bookmark url
+     */
     public String getBookmarkURL()
     {
         return getSemanticObject().getProperty(swb_res_bkm_bookmarkURL);
     }
 
+    /**
+     * Sets the bookmark url.
+     * 
+     * @param bookmarkURL the new bookmark url
+     */
     public void setBookmarkURL(String bookmarkURL)
     {
         getSemanticObject().setProperty(swb_res_bkm_bookmarkURL, bookmarkURL);
     }
 
+    /**
+     * Gets the tags.
+     * 
+     * @return the tags
+     */
     public String getTags()
     {
         return getSemanticObject().getProperty(swb_res_bkm_tags);
     }
 
+    /**
+     * Sets the tags.
+     * 
+     * @param tags the new tags
+     */
     public void setTags(String tags)
     {
         getSemanticObject().setProperty(swb_res_bkm_tags, tags);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setCreator(org.semanticwb.model.User)
+     */
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#removeCreator()
+     */
     public void removeCreator()
     {
         getSemanticObject().removeProperty(swb_creator);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getCreator()
+     */
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
@@ -188,26 +328,41 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDescription()
+     */
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String)
+     */
     public void setDescription(String description)
     {
         getSemanticObject().setProperty(swb_description, description);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDescription(java.lang.String)
+     */
     public String getDescription(String lang)
     {
         return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayDescription(java.lang.String)
+     */
     public String getDisplayDescription(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String, java.lang.String)
+     */
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);

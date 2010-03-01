@@ -48,20 +48,28 @@ import java.util.Iterator;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SparqlQueryResource.
+ * 
  * @author juan.fernandez
  */
 public class SparqlQueryResource extends GenericAdmResource {
 
+    /** The tpl. */
     private javax.xml.transform.Templates tpl;
     /**
      * XML form definition data.
      */
     /*private String xml;*/
     String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/SparqlQueryResource/";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SparqlQueryResource.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
@@ -74,6 +82,9 @@ public class SparqlQueryResource extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) {
         try {
@@ -104,12 +115,13 @@ public class SparqlQueryResource extends GenericAdmResource {
 
     /**
      * Gets the document that represents the query results.
-     *
+     * 
      * @param request the action request
      * @param response the action response
      * @param paramsRequest request arguments
+     * @return the dom
      * @throws SWBResourceException if an exception occurs while trying to get
-     *         the document.
+     * the document.
      */
     private Document getDom(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
@@ -408,6 +420,9 @@ public class SparqlQueryResource extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doXML(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
@@ -420,12 +435,12 @@ public class SparqlQueryResource extends GenericAdmResource {
     /**
      * Adds element to the document received as child of the specified element
      * with the name and the value received.
-     *
+     * 
      * @param doc <code>Document</code> base.
      * @param parent new <code>Element</code>'s parent <code>Element</code>.
      * @param elemName new <code>Element</code>'s name.
      * @param elemValue new <code>Element</code>'s value.
-     * @return elem <code>Element</code> created.
+     * @return elem  created.
      */
     private Element addElem(Document doc, Element parent, String elemName,
             String elemValue) {
@@ -491,6 +506,15 @@ public class SparqlQueryResource extends GenericAdmResource {
         return ret;
     }
 
+    /**
+     * Do excel.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
         request.setAttribute("excelFile", "yes");

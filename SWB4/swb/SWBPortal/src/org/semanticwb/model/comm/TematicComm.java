@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TematicComm.
+ */
 public class TematicComm extends org.semanticwb.model.comm.base.TematicCommBase 
 {
+    
+    /**
+     * Instantiates a new tematic comm.
+     * 
+     * @param base the base
+     */
     public TematicComm(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

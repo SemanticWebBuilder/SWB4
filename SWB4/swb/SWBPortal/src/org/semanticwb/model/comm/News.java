@@ -29,18 +29,33 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class News.
+ */
 public class News extends org.semanticwb.model.comm.base.NewsBase 
 {
 
+    /**
+     * Instantiates a new news.
+     */
     public News()
     {
     }
 
+    /**
+     * Instantiates a new news.
+     * 
+     * @param base the base
+     */
     public News(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

@@ -31,6 +31,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo calendario en una forma de html.
  * <p>
@@ -40,37 +41,73 @@ import org.w3c.dom.*;
 
 public class CalendarFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(CalendarFE.class);
 
     // General attributes
+    /** The tag. */
     protected Node   tag;
+    
+    /** The xmltag. */
     protected String xmltag;
     
     // Attributes for the input tag
+    /** The accesskey. */
     protected String accesskey;
+    
+    /** The value. */
     protected String value;    
+    
+    /** The isdisabled. */
     protected boolean isdisabled;
+    
+    /** The isreadonly. */
     protected boolean isreadonly;
+    
+    /** The size. */
     protected int size;
+    
+    /** The maxlength. */
     protected int maxlength;
     
     // Attributes for the img tag
+    /** The align. */
     protected String align;
+    
+    /** The alt. */
     protected String alt;    
+    
+    /** The src. */
     protected String src;    
+    
+    /** The onclick. */
     protected String onclick;
+    
+    /** The border. */
     protected int border;
+    
+    /** The hspace. */
     protected int hspace;
+    
+    /** The vspace. */
     protected int vspace;
+    
+    /** The width. */
     protected int width;
+    
+    /** The height. */
     protected int height;     
 
     // Attributes for the script tag
+    /** The script. */
     protected String script;    
+    
+    /** The language. */
     protected String language;
 
     /**
-     * Inicializa la clase
+     * Inicializa la clase.
      */    
     public CalendarFE()
     {
@@ -103,7 +140,8 @@ public class CalendarFE extends WBAdmResourceAbs
     }
 
     /**
-     * Inicializa la clase
+     * Inicializa la clase.
+     * 
      * @param tag Nodo del elemento que biene de la definici�n del xml de la admin de recurso
      */    
     public CalendarFE(Node tag)
@@ -139,9 +177,11 @@ public class CalendarFE extends WBAdmResourceAbs
 
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */    
     public String getHtml()
     {
         String xml="";
@@ -211,7 +251,7 @@ public class CalendarFE extends WBAdmResourceAbs
     /**
      * Descompone los atributos del nodo del xml de admin del recurso en propiedades de
      * la clase
-     *Set attributes to class according with the xml tag element
+     * Set attributes to class according with the xml tag element.
      */    
     public void setAttributes()
     {
@@ -348,146 +388,327 @@ public class CalendarFE extends WBAdmResourceAbs
         }
     }
 
+    /**
+     * Gets the xml tag.
+     * 
+     * @return the xml tag
+     */
     public String getXmlTag() {
         return this.xmltag;
     }
 
+    /**
+     * Sets the xml tag.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag) {
         this.xmltag = xmltag;
     }
     
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     public String getAccessKey() {
         return this.accesskey;
     }
 
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     private void setAccessKey(String accesskey) {
         this.accesskey = accesskey;
     }    
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue() {
         return this.value;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     private boolean getDisabled() {
         return this.isdisabled;
     }
 
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     private void setDisabled(boolean isdisabled) {
         this.isdisabled = isdisabled;
     }
 
+    /**
+     * Gets the readonly.
+     * 
+     * @return the readonly
+     */
     private boolean getReadonly() {
         return this.isreadonly;
     }      
 
+    /**
+     * Sets the readonly.
+     * 
+     * @param isreadonly the new readonly
+     */
     private void setReadonly(boolean isreadonly) {
         this.isreadonly= isreadonly;
     }  
 
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public int getSize() {
         return this.size;
     }
 
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     public void setSize(int size) {
         this.size = size;
     }
 
+    /**
+     * Gets the maxlength.
+     * 
+     * @return the maxlength
+     */
     public int getMaxlength() {
         return this.maxlength;
     }
 
+    /**
+     * Sets the maxlength.
+     * 
+     * @param maxlength the new maxlength
+     */
     public void setMaxlength(int maxlength) {
         this.maxlength = maxlength;
     }    
     
+    /**
+     * Gets the align.
+     * 
+     * @return the align
+     */
     public String getAlign() {
         return this.align;
     }
 
+    /**
+     * Sets the align.
+     * 
+     * @param align the new align
+     */
     public void setAlign(String align) {
         this.align = align;
     }    
 
+    /**
+     * Gets the alt.
+     * 
+     * @return the alt
+     */
     public String getAlt() {
         return this.alt;
     }
 
+    /**
+     * Sets the alt.
+     * 
+     * @param alt the new alt
+     */
     public void setAlt(String alt) {
         this.alt = alt;
     }
 
+    /**
+     * Gets the src.
+     * 
+     * @return the src
+     */
     public String getSrc() {
         return this.src;
     }
     
+    /**
+     * Sets the src.
+     * 
+     * @param src the new src
+     */
     public void setSrc(String src) {
         this.src = src;
     }    
 
+    /**
+     * Gets the onclick.
+     * 
+     * @return the onclick
+     */
     public String getOnclick() {
         return this.onclick;
     }
     
+    /**
+     * Sets the onclick.
+     * 
+     * @param onclick the new onclick
+     */
     public void setOnclick(String onclick) {
         this.onclick = onclick;
     } 
  
+    /**
+     * Gets the border.
+     * 
+     * @return the border
+     */
     public int getBorder() {
         return this.border;
     }
 
+    /**
+     * Sets the border.
+     * 
+     * @param border the new border
+     */
     public void setBorder(int border) {
         this.border = border;
     }
 
+    /**
+     * Gets the hspace.
+     * 
+     * @param hspace the hspace
+     * @return the hspace
+     */
     public int getHspace(int hspace) {
         return this.hspace;
     }
 
+    /**
+     * Sets the hspace.
+     * 
+     * @param hspace the new hspace
+     */
     public void setHspace(int hspace) {
         this.hspace = hspace;
     }
 
+    /**
+     * Gets the vspace.
+     * 
+     * @return the vspace
+     */
     public int getVspace() {
         return this.vspace;
     }
 
+    /**
+     * Sets the vspace.
+     * 
+     * @param vspace the new vspace
+     */
     public void setVspace(int vspace) {
         this.vspace = vspace;
     }
 
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth() {
         return this.width;
     }
 
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width) {
         this.width = width;
     }    
     
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight() {
         return this.height;
     }
 
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height) {
         this.height = height;
     }
 
+    /**
+     * Gets the script.
+     * 
+     * @return the script
+     */
     public String getScript() {
         return this.script;
     }
 
+    /**
+     * Sets the script.
+     * 
+     * @param script the new script
+     */
     public void setScript(String script) {
         this.script = script;
     }   
 
+    /**
+     * Gets the language.
+     * 
+     * @return the language
+     */
     public String getLanguage() {
         return this.language;
     }     
 
+    /**
+     * Sets the language.
+     * 
+     * @param language the new language
+     */
     public void setLanguage(String language) {
         this.language = language;
     }    

@@ -39,10 +39,12 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 
 
-/** objeto: cache de registro de base de datos de la tabla wbadmlog
- *
- * object: record cache of data base from the wbadmlog table
- *
+// TODO: Auto-generated Javadoc
+/**
+ * objeto: cache de registro de base de datos de la tabla wbadmlog
+ * 
+ * object: record cache of data base from the wbadmlog table.
+ * 
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
@@ -52,17 +54,30 @@ public class SWBRecAdmLog //implements WBDBRecord
 //    private ArrayList observers = new ArrayList();
 //    private ArrayList notifys = new ArrayList();
 
-    private String user;
+    /** The user. */
+private String user;
+    
+    /** The modelid. */
     private String modelid;
+    
+    /** The objuri. */
     private String objuri;
+    
+    /** The propid. */
     private String propid;
 
+    /** The action. */
     private String action;
+    
+    /** The date. */
     private Timestamp date;
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBRecAdmLog.class);
 
-    /** Creates new RecAdmLog */
+    /**
+     * Creates new RecAdmLog.
+     */
     public SWBRecAdmLog()
     {
         this.user = "_";
@@ -74,7 +89,10 @@ public class SWBRecAdmLog //implements WBDBRecord
     }
 
     /**
-     * @param rs  */
+     * Instantiates a new sWB rec adm log.
+     * 
+     * @param rs the rs
+     */
     public SWBRecAdmLog(ResultSet rs)
     {
         this();
@@ -92,12 +110,16 @@ public class SWBRecAdmLog //implements WBDBRecord
         }
     }
 
-    /** Creates new SWBRecAdmLog
-     * @param user
-     * @param action
-     * @param objuri
-     * @param modelid
-     * @param date  */
+    /**
+     * Creates new SWBRecAdmLog.
+     * 
+     * @param user the user
+     * @param modelid the modelid
+     * @param objuri the objuri
+     * @param propid the propid
+     * @param action the action
+     * @param date the date
+     */
     public SWBRecAdmLog(String user, String modelid, String objuri, String propid, String action, Timestamp date)
     {
         this();
@@ -125,10 +147,20 @@ public class SWBRecAdmLog //implements WBDBRecord
         this.user = user;
     }
 
+    /**
+     * Gets the prop id.
+     * 
+     * @return the prop id
+     */
     public String getPropId() {
         return propid;
     }
 
+    /**
+     * Sets the prop id.
+     * 
+     * @param propid the new prop id
+     */
     public void setPropId(String propid) {
         this.propid = propid;
     }
@@ -157,8 +189,10 @@ public class SWBRecAdmLog //implements WBDBRecord
         return objuri;
     }
 
-    /** Setter for property dbobject.
-     * @param dbobject New value of property dbobject.
+    /**
+     * Setter for property dbobject.
+     * 
+     * @param objuri the new dbobject
      */
     public void setDbobject(java.lang.String objuri)
     {
@@ -173,8 +207,11 @@ public class SWBRecAdmLog //implements WBDBRecord
         return modelid;
     }
 
-    /** Setter for property tpicmapid.
-     * @param topicmapid  */
+    /**
+     * Setter for property tpicmapid.
+     * 
+     * @param modelid the new model id
+     */
     public void setModelId(java.lang.String modelid)
     {
         this.modelid = modelid;
@@ -197,8 +234,11 @@ public class SWBRecAdmLog //implements WBDBRecord
     }
 
 
-    /** Elimina el registro de la base de datos asi como todopublic void remove() throws AFException
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * Elimina el registro de la base de datos asi como todopublic void remove() throws AFException.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void remove() throws SWBException
     {
         
@@ -229,15 +269,21 @@ public class SWBRecAdmLog //implements WBDBRecord
         }
     }
 
-    /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void update() throws SWBException
     {
 
     }
 
-    /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void create() throws SWBException
     {
         Connection con=null;
@@ -280,8 +326,11 @@ public class SWBRecAdmLog //implements WBDBRecord
         }
     }
 
-    /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void load() throws SWBException
     {
 

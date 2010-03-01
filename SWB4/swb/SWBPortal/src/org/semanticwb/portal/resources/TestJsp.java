@@ -31,7 +31,8 @@ package org.semanticwb.portal.resources;
 import org.semanticwb.portal.api.GenericAdmResource;
 
 /**
- *
+ * The Class TestJsp.
+ * 
  * @author jorge.jimenez
  */
 public class TestJsp extends GenericAdmResource{

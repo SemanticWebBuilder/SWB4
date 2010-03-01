@@ -28,6 +28,7 @@ package org.semanticwb.portal.admin.admresources.util.JSValidations;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si la entrada a un campo html es de tipo email o no en la apiadmin
  * <p>
@@ -38,6 +39,12 @@ import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 public class Js_EmailValFE extends WBJsValidationsFEAbs
 {
 
+    /**
+     * Instantiates a new js_ email val fe.
+     * 
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_EmailValFE(String field, int minsize)
     {
         this.field = field;
@@ -45,6 +52,13 @@ public class Js_EmailValFE extends WBJsValidationsFEAbs
             this.minsize = minsize;
     }
 
+    /**
+     * Instantiates a new js_ email val fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_EmailValFE(String formfeName, String field, int minsize)
     {
         this.formfeName = formfeName;
@@ -54,9 +68,12 @@ public class Js_EmailValFE extends WBJsValidationsFEAbs
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */    
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

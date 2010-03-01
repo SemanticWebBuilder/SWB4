@@ -36,16 +36,33 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SelectTree.
+ */
 public class SelectTree {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WebSiteSectionTree.class);
+    
+    /** The Constant pathImages. */
     protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
 
+    /** The lang. */
     private String lang;
 
+    /**
+     * Instantiates a new select tree.
+     */
     public SelectTree() {
         this("es");
     }
 
+    /**
+     * Instantiates a new select tree.
+     * 
+     * @param lang the lang
+     */
     public SelectTree(String lang) {
         if(lang!=null) {
             this.lang = lang;
@@ -54,6 +71,16 @@ public class SelectTree {
         }
     }
        
+    /**
+     * Render xhtml.
+     * 
+     * @param site the site
+     * @param request the request
+     * @param url the url
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String renderXHTML(String site, HashMap request, String url) throws SWBResourceException, IOException {
         StringBuilder html = new StringBuilder();
         StringBuilder params = new StringBuilder("&site="+site);
@@ -133,6 +160,17 @@ public class SelectTree {
         return html.toString();
     }
 
+    /**
+     * Adds the child.
+     * 
+     * @param request the request
+     * @param tmit the tmit
+     * @param pageroot the pageroot
+     * @param tpid the tpid
+     * @param url the url
+     * @param params the params
+     * @return the string
+     */
     protected String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, String url, StringBuilder params) {
         String style;
         boolean toggleopen;

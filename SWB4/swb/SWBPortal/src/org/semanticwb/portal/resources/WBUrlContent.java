@@ -46,6 +46,7 @@ import org.semanticwb.portal.admin.admresources.util.XmlBundle;
 import com.arthurdo.parser.*;
 import org.semanticwb.SWBPortal;
 
+// TODO: Auto-generated Javadoc
 /**
  * WBUrlContent recupera el contenido de una página web externa y la incrusta como contenido local.
  *
@@ -55,17 +56,37 @@ import org.semanticwb.SWBPortal;
  */
 
 public class WBUrlContent extends GenericAdmResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBUrlContent.class);
     
+    /** The xml. */
     String xml=null;
+    
+    /** The bundle. */
     XmlBundle bundle=null;
+    
+    /** The recproperties. */
     static Properties recproperties = null;
+    
+    /** The msg2. */
     String msg1 = null,msg2 = null;
+    
+    /** The host. */
     String host = "";
+    
+    /** The file. */
     String file = "";
+    
+    /** The paramfrom url. */
     String paramfromUrl = "";    
+    
+    /** The name class. */
     String nameClass="WBUrlContent";
    
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         FileInputStream fptr = null;
@@ -96,6 +117,9 @@ public class WBUrlContent extends GenericAdmResource {
         }
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
@@ -172,14 +196,16 @@ public class WBUrlContent extends GenericAdmResource {
     
     /**
      * Parsea el flujo del contenido remoto parseando rutas y ligas y generando el
-     * resultado final del mismo
-     * @param surl
-     * @param topic
-     * @param param
-     * @param othersparam
-     * @param request
-     * @param paramsRequest
-     * @throws SWBResourceException
+     * resultado final del mismo.
+     * 
+     * @param surl the surl
+     * @param topic the topic
+     * @param param the param
+     * @param othersparam the othersparam
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the string buffer
+     * @throws SWBResourceException the sWB resource exception
      * @return
      */    
     public StringBuffer CorrigeRuta(String surl, WebPage topic, String param, StringBuffer othersparam, HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
@@ -571,10 +597,12 @@ public class WBUrlContent extends GenericAdmResource {
     
     
     /**
-     * Parsea ciertas cadenas de strings
-     * @param value
-     * @param takeOff
-     * @param itakeOff
+     * Parsea ciertas cadenas de strings.
+     * 
+     * @param value the value
+     * @param takeOff the take off
+     * @param itakeOff the itake off
+     * @return the string
      * @return
      */    
     public String takeOffString(String value, String takeOff, int itakeOff) {
@@ -595,6 +623,14 @@ public class WBUrlContent extends GenericAdmResource {
         return value;
     }
     
+    /**
+     * Parses the word.
+     * 
+     * @param value the value
+     * @param ext the ext
+     * @param ruta the ruta
+     * @return the string
+     */
     String ParseWord(String value, String ext, String ruta) { // Parsea locations de javascript.
         StringBuffer aux = new StringBuffer(value.length());
         int off = 0;
@@ -651,7 +687,12 @@ public class WBUrlContent extends GenericAdmResource {
     
     
     /**
-     * Busca imagenes en javascripts, si las encuentra parsea sus rutas
+     * Busca imagenes en javascripts, si las encuentra parsea sus rutas.
+     * 
+     * @param value the value
+     * @param ext the ext
+     * @param ruta the ruta
+     * @return the string
      */    
     private String findImagesInScript(String value, String ext, String ruta) {
         StringBuffer aux = new StringBuffer(value.length());
@@ -701,10 +742,12 @@ public class WBUrlContent extends GenericAdmResource {
     }
     
     /**
-     * Decodifica un string
-     * @param cadena
-     * @param topic
-     * @throws SWBResourceException
+     * Decodifica un string.
+     * 
+     * @param cadena the cadena
+     * @param topic the topic
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
      * @return
      */    
     public String DeCodificaCadena(String cadena, WebPage topic) throws SWBResourceException {
@@ -721,6 +764,12 @@ public class WBUrlContent extends GenericAdmResource {
         return cadeDecoHex.toString();
     }
     
+    /**
+     * Gets the url encode params.
+     * 
+     * @param params the params
+     * @return the url encode params
+     */
     String getUrlEncodeParams(String params) {
         //String post = "_url_gracias=" + URLEncoder.encode( "gracias.html" ) + "&que=" + URLEncoder.encode( "Comentario" );
         if (params != null && params.length() > 1) {

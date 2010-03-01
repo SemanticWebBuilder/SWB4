@@ -56,17 +56,29 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WBAResTypes.
+ * 
  * @author jorge.jimenez
  */
 public class WBAResTypes extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBAResTypes.class);
+    
+    /** The prop resource types. */
     private Properties propResourceTypes = null;
+    
+    /** The I_ pag e_ size. */
     private final int I_PAGE_SIZE = 10;
+    
+    /** The I_ ini t_ page. */
     private final int I_INIT_PAGE = 1;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init() {
         String path = "/WEB-INF/classes/";
@@ -81,6 +93,9 @@ public class WBAResTypes extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
      public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("editForm")) {
@@ -90,6 +105,9 @@ public class WBAResTypes extends GenericResource {
         }
      }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
@@ -112,6 +130,14 @@ public class WBAResTypes extends GenericResource {
         getAddCat(website, strResTypes, resType, request, response, paramsRequest);
     }
 
+    /**
+     * Gets the cat sort array.
+     * 
+     * @param wsite the wsite
+     * @param actualPage the actual page
+     * @param resType the res type
+     * @return the cat sort array
+     */
     private String[] getCatSortArray(WebSite wsite, int actualPage, String resType) {
         Vector vRO = new Vector();
         Iterator<ResourceType> en1 = SWBContext.getGlobalWebSite().listResourceTypes();
@@ -177,6 +203,12 @@ public class WBAResTypes extends GenericResource {
         return strArray;
     }
 
+    /**
+     * Gets the resources types.
+     * 
+     * @param resType the res type
+     * @return the resources types
+     */
     private HashMap getResourcesTypes(String resType){
         HashMap hResTypes=new HashMap();
         
@@ -192,6 +224,18 @@ public class WBAResTypes extends GenericResource {
     }
     
 
+    /**
+     * Gets the adds the cat.
+     * 
+     * @param wsite the wsite
+     * @param strResTypes the str res types
+     * @param resType the res type
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the adds the cat
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String getAddCat(WebSite wsite, String[] strResTypes, String resType, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException {
         try {
             PrintWriter out = response.getWriter();
@@ -301,6 +345,13 @@ public class WBAResTypes extends GenericResource {
         return "";
     }
 
+    /**
+     * Gets the page range.
+     * 
+     * @param iSize the i size
+     * @param iPageNum the i page num
+     * @return the page range
+     */
     private String getPageRange(int iSize, int iPageNum) {
         int iTotPage = 0;
         int iPage = I_INIT_PAGE;
@@ -324,6 +375,15 @@ public class WBAResTypes extends GenericResource {
         return iIniPage + ":" + iFinPage + ":" + iTotPage;
     }
 
+    /**
+     * Do edit form.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doEditForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String strResId=request.getParameter("id");
         String tm=request.getParameter("tm");
@@ -486,6 +546,9 @@ public class WBAResTypes extends GenericResource {
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         WebSite website=SWBContext.getWebSite(request.getParameter("tmSel"));
@@ -526,6 +589,21 @@ public class WBAResTypes extends GenericResource {
         response.setRenderParameter("resType", request.getParameter("resType"));
     }
 
+    /**
+     * Creates the resource type.
+     * 
+     * @param website the website
+     * @param objClass the obj class
+     * @param classname the classname
+     * @param bundle the bundle
+     * @param classDisName the class dis name
+     * @param description the description
+     * @param mode the mode
+     * @param cache the cache
+     * @param xml the xml
+     * @param userid the userid
+     * @return the resource type
+     */
     private ResourceType createResourceType(WebSite website,String objClass,String classname, String bundle, String classDisName, String description,int mode,int cache,String xml,String userid) {
         try{
             ResourceType ptype = website.createResourceType(classname);

@@ -28,16 +28,24 @@ package org.semanticwb.portal.admin.admresources.util.JSValidations;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si la entrada a un campo html es de tipo n�merico con JavaScript
  * <p>
- * Object that verifies if a html field has a numeric value with JavaScript
+ * Object that verifies if a html field has a numeric value with JavaScript.
+ * 
  * @author  Jorge Alberto Jim�nez
  */
 
 public class Js_NumbersValFE extends WBJsValidationsFEAbs
 {
 
+    /**
+     * Instantiates a new js_ numbers val fe.
+     * 
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_NumbersValFE(String field, int minsize)
     {
         this.field = field;
@@ -45,6 +53,13 @@ public class Js_NumbersValFE extends WBJsValidationsFEAbs
             this.minsize = minsize;
     }
 
+    /**
+     * Instantiates a new js_ numbers val fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_NumbersValFE(String formfeName, String field, int minsize)
     {
         this.formfeName = formfeName;
@@ -54,9 +69,12 @@ public class Js_NumbersValFE extends WBJsValidationsFEAbs
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */    
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

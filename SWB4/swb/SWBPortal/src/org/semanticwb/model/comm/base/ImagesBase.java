@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ImagesBase.
+ */
 public class ImagesBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Images. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Images=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Images");
 
+    /**
+     * Instantiates a new images base.
+     */
     public ImagesBase()
     {
     }
 
+    /**
+     * Instantiates a new images base.
+     * 
+     * @param base the base
+     */
     public ImagesBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Images");
 }

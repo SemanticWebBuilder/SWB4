@@ -24,43 +24,94 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RestaurantBase.
+ */
 public class RestaurantBase extends org.semanticwb.model.comm.CompanySite implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Indexable
 {
+    
+    /** The Constant swbcomm_Restaurant. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Restaurant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Restaurant");
 
+    /**
+     * Instantiates a new restaurant base.
+     * 
+     * @param base the base
+     */
     public RestaurantBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * List restaurants.
+     * 
+     * @param model the model
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Restaurant> listRestaurants(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Restaurant>(it, true);
     }
 
+    /**
+     * List restaurants.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.model.comm.Restaurant> listRestaurants()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.comm.Restaurant>(it, true);
     }
 
+    /**
+     * Gets the restaurant.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the restaurant
+     */
     public static org.semanticwb.model.comm.Restaurant getRestaurant(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Restaurant)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
+    /**
+     * Creates the restaurant.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.model.comm. restaurant
+     */
     public static org.semanticwb.model.comm.Restaurant createRestaurant(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.model.comm.Restaurant)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /**
+     * Removes the restaurant.
+     * 
+     * @param id the id
+     * @param model the model
+     */
     public static void removeRestaurant(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
+    /**
+     * Checks for restaurant.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return true, if successful
+     */
     public static boolean hasRestaurant(String id, org.semanticwb.model.SWBModel model)
     {
         return (getRestaurant(id, model)!=null);

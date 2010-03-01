@@ -45,6 +45,7 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /** Recurso para la administarci�n de WebBuilder que permite seleccionar los t�picos
  * en los cuales se mostrar� el recurso seleccionado.
  *
@@ -53,15 +54,23 @@ import org.semanticwb.portal.api.*;
  */
 public class SWBAFilterResource extends SWBATree {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFilterResource.class);
+    
+    /** The Constant pathValids. */
     static final String[] pathValids = {"getServer", "getTopic", "getTopicMap"};
+    
+    /** The Constant namevalids. */
     static final String[] namevalids = {"node", "config", "icons", "icon", "res", "events", "willExpand"};
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -73,11 +82,13 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -120,11 +131,14 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Adds the.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the document
      * @return
      */
     public Document add(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response) {
@@ -141,11 +155,14 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Update filter.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the document
      * @return
      */
     public Document updateFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response) {
@@ -225,8 +242,11 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param user
-     * @param src
+     * Inits the tree.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     @Override
@@ -237,7 +257,10 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param e
+     * Checks if is name valid.
+     * 
+     * @param e the e
+     * @return true, if is name valid
      * @return
      */
     @SuppressWarnings({"static-access", "static-access"})
@@ -252,7 +275,10 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param path
+     * Checks if is valid.
+     * 
+     * @param path the path
+     * @return true, if is valid
      * @return
      */
     @SuppressWarnings({"static-access", "static-access"})
@@ -275,7 +301,9 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param ele
+     * Revisa nodo.
+     * 
+     * @param ele the ele
      */
     public void RevisaNodo(Node ele) {
         Vector vnodes = new Vector();
@@ -298,11 +326,14 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Gets the filter.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the filter
      * @return
      */
     public Document getFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response) {
@@ -352,10 +383,13 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -371,9 +405,12 @@ public class SWBAFilterResource extends SWBATree {
     }
 
     /**
-     * @param request
-     * @param response
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -452,6 +489,16 @@ public class SWBAFilterResource extends SWBATree {
     //System.out.println("Lo guardo");
     }
 
+    /**
+     * Gets the ini form.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @param user the user
+     * @return the ini form
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void getIniForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, User user) throws IOException {
         PrintWriter out = response.getWriter();
         //String tp=paramRequest.getWebPage().getId();
@@ -512,6 +559,12 @@ public class SWBAFilterResource extends SWBATree {
         }
     }
 
+    /**
+     * Gets the java script.
+     * 
+     * @param paramRequest the param request
+     * @return the java script
+     */
     private String getJavaScript(SWBParamRequest paramRequest) {
         StringBuffer sbRet = new StringBuffer();
         SWBResourceURL urlResAct = paramRequest.getActionUrl();
@@ -562,6 +615,15 @@ public class SWBAFilterResource extends SWBATree {
         return sbRet.toString();
     }
 
+    /**
+     * Sets the element.
+     * 
+     * @param dom the dom
+     * @param tm the tm
+     * @param tp the tp
+     * @param action the action
+     * @return the document
+     */
     private Document setElement(Document dom, String tm, String tp, String action) {
         Element res = null;
         Element eTm = null;
@@ -595,6 +657,12 @@ public class SWBAFilterResource extends SWBATree {
         return dom;
     }
 
+    /**
+     * Gets the filters.
+     * 
+     * @param strXml the str xml
+     * @return the filters
+     */
     private Vector getFilters(String strXml) {
         Vector vFilters = new Vector();
         if (strXml != null && !strXml.equals("")) {
@@ -612,6 +680,12 @@ public class SWBAFilterResource extends SWBATree {
         return vFilters;
     }
 
+    /**
+     * Gets the combo filters.
+     * 
+     * @param strXml the str xml
+     * @return the combo filters
+     */
     private String getComboFilters(String strXml) {
         StringBuffer sbRet = new StringBuffer();
         Vector vFilters = getFilters(strXml);
@@ -632,6 +706,12 @@ public class SWBAFilterResource extends SWBATree {
         return sbRet.toString();
     }
 
+    /**
+     * Gets the valores.
+     * 
+     * @param strXml the str xml
+     * @return the valores
+     */
     private String getValores(String strXml) {
         String strValores = "";
         Vector vFilters = getFilters(strXml);

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase adminsitra las cookies de los usuarios del portal.
  *
  * This class manages user's cookies.
@@ -39,23 +40,36 @@ import org.semanticwb.SWBPlatform;
  */
 public class SWBCookieMgr
 {
+    
+    /** The cookies. */
     ArrayList cookies;
 
+    /**
+     * Instantiates a new sWB cookie mgr.
+     */
     public SWBCookieMgr()
     {
         cookies = new ArrayList();
     }
 
     
+    /**
+     * Adds the cookie.
+     * 
+     * @param cookie the cookie
+     */
     public void addCookie(SWBCookie cookie)
     {
         cookies.add(cookie);
     }
 
     /**
-     * @param cadenaCookie
-     * @param host
-     * @param resid
+     * Sets the cookie.
+     * 
+     * @param cadenaCookie the cadena cookie
+     * @param host the host
+     * @param resid the resid
+     * @return true, if successful
      * @return
      */
     public boolean setCookie(String cadenaCookie, String host, long resid)
@@ -141,8 +155,12 @@ public class SWBCookieMgr
     
     
     /**
-     *  Hace un parser de un String separando las cookies
-     *  name1=value1; name2=value2
+     * Hace un parser de un String separando las cookies
+     * name1=value1; name2=value2.
+     * 
+     * @param headercookies the headercookies
+     * @param host the host
+     * @param resid the resid
      */
     public void addCookies(String headercookies, String host, long resid)
     {
@@ -170,11 +188,11 @@ public class SWBCookieMgr
 
     
         /**
-     * @param host
-     * @param path
-     * @param dfecha
-     * @return
-     */
+         * Gets the wBSSO cookies.
+         * 
+         * @return the wBSSO cookies
+         * @return
+         */
     public Iterator getWBSSOCookies()
     {
         String startName="_wb_sso";
@@ -196,9 +214,13 @@ public class SWBCookieMgr
     }
 
     /**
-     * @param host
-     * @param path
-     * @param dfecha
+     * Gets the cookie.
+     * 
+     * @param host the host
+     * @param path the path
+     * @param dfecha the dfecha
+     * @param resid the resid
+     * @return the cookie
      * @return
      */
     public String getCookie(String host, String path, Date dfecha, long resid)
@@ -240,6 +262,12 @@ public class SWBCookieMgr
         return SBcookie.toString();
     }
 
+    /**
+     * Have instance cookies.
+     * 
+     * @param resid the resid
+     * @return true, if successful
+     */
     public boolean haveInstanceCookies(long resid)
     {
         Iterator itkeycokie = cookies.iterator();
@@ -257,6 +285,11 @@ public class SWBCookieMgr
         return false;
     }
     
+    /**
+     * Removes the instance cookies.
+     * 
+     * @param resid the resid
+     */
     public void removeInstanceCookies(long resid)
     {
         Iterator itkeycokie = cookies.iterator();
@@ -274,14 +307,16 @@ public class SWBCookieMgr
     }
     
     
-    /** Clase que actua como utileria para busqueda,grabado y borrado
-     * de cookies
+    /**
+     * Clase que actua como utileria para busqueda,grabado y borrado
+     * de cookies.
+     * 
      * @param sName :<PRE>Este es el nombre de la cookie que este metodo debera
      * buscar en el sistema</PRE>
      * @param request :<PRE>request que recibe para buscar la cookie de acuerdo
      * al dominio del mismo</PRE>
-     * @return :<PRE>regresa el valor de la cookie en caso
-     * de haberla encontrado, de lo contrario regresa nulo</PRE>
+     * @return :regresa el valor de la cookie en caso
+     * de haberla encontrado, de lo contrario regresa nulo
      */
     public String SearchCookie(String sName, HttpServletRequest request)
     {
@@ -314,6 +349,16 @@ public class SWBCookieMgr
     }
     
     
+    /**
+     * Adds the cookie.
+     * 
+     * @param cookieName the cookie name
+     * @param cookieValue the cookie value
+     * @param save the save
+     * @param cookieEnable the cookie enable
+     * @param request the request
+     * @param response the response
+     */
     public void AddCookie(String cookieName, String cookieValue, boolean save, boolean cookieEnable,HttpServletRequest request, HttpServletResponse response)
     {
         String ena=null;
@@ -339,7 +384,9 @@ public class SWBCookieMgr
     }
     
     
-    /** metodo que se encarga de grabar y borrar una cookie
+    /**
+     * metodo que se encarga de grabar y borrar una cookie.
+     * 
      * @param cookieName :<PRE>Este es el nombre de la cookie que grabara o
      * borrara este metodo</PRE>
      * @param cookieValue :<PRE>Este es el valor de la cookie que sera grabada o borrada</PRE>

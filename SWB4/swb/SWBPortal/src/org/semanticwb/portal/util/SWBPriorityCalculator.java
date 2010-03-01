@@ -28,15 +28,22 @@
 
 package org.semanticwb.portal.util;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBPriorityCalculator.
+ * 
  * @author Jei
  */
 public class SWBPriorityCalculator 
 {
+    
     /**
-     * @param p
-     * @return  */
+     * Calc priority.
+     * 
+     * @param p the p
+     * @return the int
+     * @return
+     */
     public static int calcPriority(int p) {
         if (p == 0)
             return 0;

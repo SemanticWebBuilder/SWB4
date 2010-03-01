@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ForumBase.
+ */
 public class ForumBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Forum. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Forum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Forum");
 
+    /**
+     * Instantiates a new forum base.
+     */
     public ForumBase()
     {
     }
 
+    /**
+     * Instantiates a new forum base.
+     * 
+     * @param base the base
+     */
     public ForumBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Forum");
 }

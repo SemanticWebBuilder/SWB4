@@ -41,19 +41,33 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.base.util.SFBase64;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Login.
+ * 
  * @author serch
  */
 public class Login extends GenericAdmResource
 {
 
+    /** The log. */
     static Logger log = SWBUtils.getLogger(Login.class);
+    
+    /** The Constant FRM_LOGIN. */
     private static final String FRM_LOGIN = "frmlogin";
+    
+    /** The Constant FRM_LOGOUT. */
     private static final String FRM_LOGOUT = "frmlogout";
+    
+    /** The Constant TXT_login. */
     private static final String TXT_login = "<fieldset><form action=\"{?loginurl}\" method=\"post\">\n<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />\n<label>Contrase&ntilde;a:</label><input type=\"password\" id=\"wb_password\" name=\"wb_password\" /><br />\n<input type=\"submit\" value=\"Enviar\" /></form></fieldset>\n";
+    
+    /** The Constant TXT_logout. */
     private static final String TXT_logout = "<a href=\"{?logouturl}?wb_logout=true\" >Logout</a>";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -86,6 +100,9 @@ public class Login extends GenericAdmResource
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -170,6 +187,15 @@ public class Login extends GenericAdmResource
 
     }
 
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramRequest the param request
+     * @param url the url
+     * @return the string
+     */
     private String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, String url)
     {
         //System.out.print("\nstr:"+str+"-->");

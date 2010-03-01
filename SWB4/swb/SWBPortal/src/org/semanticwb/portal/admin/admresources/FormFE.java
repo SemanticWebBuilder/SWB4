@@ -37,6 +37,7 @@ import org.semanticwb.portal.admin.admresources.lib.WBContainerFE;
 import org.semanticwb.portal.admin.admresources.lib.WBJsInputFE;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Form de html.
  * <p>
@@ -46,38 +47,77 @@ import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE;
 
 public class FormFE extends WBContainerFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FormFE.class);
 
+    /** The locale. */
     private Locale locale=null;
+    
+    /** The action. */
     private String action=null;
+    
+    /** The method. */
     private String method=null;
+    
+    /** The enctype. */
     private String enctype="multipart/form-data";
+    
+    /** The acceptcharset. */
     private String acceptcharset=null;
+    
+    /** The accept. */
     private String accept=null;
+    
+    /** The id. */
     private String id=null;
+    
+    /** The redirect. */
     private String redirect=null;
+    
+    /** The ajsfe. */
     private ArrayList ajsfe=new ArrayList();
+    
+    /** The tag. */
     private Node tag=null;
+    
+    /** The base. */
     private Resource base=null;
+    
+    /** The request. */
     HttpServletRequest request=null;
     //TODO:Detectar el navegador, Para el caso de que sea firefox hacer que el jsframework no sea dojo
+    /** The jsframework. */
     private String jsframework="dojo";
 
 
     //ArrayList formelements=new ArrayList();
 
-    /** Creates a new instance of FormFE */
+    /**
+     * Creates a new instance of FormFE.
+     */
     public FormFE() {
     }
 
-    /** Creates a new instance of FormFE with default values*/
+    /**
+     * Creates a new instance of FormFE with default values.
+     * 
+     * @param name the name
+     * @param action the action
+     */
     public FormFE(String name,String action) {
         this.name=name;
         this.action=action;
         detectBrowser();
     }
 
-    /** Creates a new instance of FormFE with default values*/
+    /**
+     * Creates a new instance of FormFE with default values.
+     * 
+     * @param tag the tag
+     * @param base the base
+     * @param redirect the redirect
+     */
     public FormFE(Node tag, Resource base,String redirect) {
         this.tag=tag;
         this.base=base;
@@ -86,7 +126,14 @@ public class FormFE extends WBContainerFE
         detectBrowser();
     }
 
-    /** Creates a new instance of FormFE with default values*/
+    /**
+     * Creates a new instance of FormFE with default values.
+     * 
+     * @param tag the tag
+     * @param base the base
+     * @param redirect the redirect
+     * @param request the request
+     */
     public FormFE(Node tag, Resource base,String redirect, HttpServletRequest request) {
         this.tag=tag;
         this.base=base;
@@ -97,96 +144,172 @@ public class FormFE extends WBContainerFE
     }
 
     //Sets
+    /**
+     * Sets the locale.
+     * 
+     * @param locale the new locale
+     */
     public void setLocale(Locale locale){
         this.locale=locale;
     }
 
 
-    /** agrega el action del elemento forma */
+    /**
+     * agrega el action del elemento forma.
+     * 
+     * @param action the new action
+     */
     public void setAction(String action){
         this.action=action;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @param method the new method
+     */
     public void setMethod(String method){
         this.method=method;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     */
     public void setWidthOutEnctype(){
         this.enctype=null;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @param acceptcharset the new accept charset
+     */
     public void setAcceptCharset(String acceptcharset){
         this.acceptcharset=acceptcharset;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @param accept the new accept
+     */
     public void setAccept(String accept){
         this.accept=accept;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setId(java.lang.String)
+     */
     @Override
     public void setId(String id){
         this.id=id;
     }
 
+    /**
+     * Sets the js frame work.
+     * 
+     * @param jsframework the new js frame work
+     */
     public void setJsFrameWork(String jsframework){
         this.jsframework=jsframework;
     }
 
+    /**
+     * Sets the request.
+     * 
+     * @param request the new request
+     */
     public void setRequest(HttpServletRequest request){
         this.request=request;
     }
 
     //gets
-    /** agrega el action del elemento forma */
+    /**
+     * agrega el action del elemento forma.
+     * 
+     * @return the locale
+     */
     public Locale getLocale(){
         return this.locale;
     }
 
+    /**
+     * Gets the action.
+     * 
+     * @return the action
+     */
     public String getAction(){
         return action;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @return the method
+     */
     public String getMethod(){
         return method;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @return the enctype
+     */
     public String getEnctype(){
         return enctype;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @return the accept charset
+     */
     public String getAcceptCharset(){
         return acceptcharset;
     }
 
-    /** agrega el metodo del elemento forma */
+    /**
+     * agrega el metodo del elemento forma.
+     * 
+     * @return the accept
+     */
     public String getAccept(){
         return accept;
     }
 
+    /**
+     * Gets the size js fe.
+     * 
+     * @return the size js fe
+     */
     public int getSizeJsFE(){
         return ajsfe.size();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getId()
+     */
     @Override
     public String getId(){
         return id;
     }
 
+    /**
+     * Gets the js frame work.
+     * 
+     * @return the js frame work
+     */
     protected String getJsFrameWork(){
         return jsframework;
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */
     @Override
     public String getHtml()
     {
@@ -239,6 +362,11 @@ public class FormFE extends WBContainerFE
         return strb.toString();
     }
 
+    /**
+     * Gets the val html.
+     * 
+     * @return the val html
+     */
     private String getValHtml() {
         StringBuffer strb=new StringBuffer();
         strb.append("\n<script  language=\"JavaScript\">");
@@ -253,6 +381,11 @@ public class FormFE extends WBContainerFE
     }
 
 
+     /**
+      * Gets the js fe.
+      * 
+      * @return the js fe
+      */
      public String getJsFE(){
         StringBuffer strb=new StringBuffer();
         Iterator ijsfeObj=ajsfe.iterator();
@@ -263,16 +396,27 @@ public class FormFE extends WBContainerFE
         return strb.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#show()
+     */
     public String show(){
         return getFormE();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#add(java.lang.Object)
+     */
     public void add(Object obj){
        super.add(obj);
        setDBConnFE(obj);
        addJSFormFE(obj);
     }
 
+    /**
+     * Sets the dB conn fe.
+     * 
+     * @param obj the new dB conn fe
+     */
     private void setDBConnFE(Object obj){
        if(obj instanceof WBAdmResource){
            WBAdmResource objInJs=(WBAdmResource)obj;
@@ -281,6 +425,9 @@ public class FormFE extends WBContainerFE
          }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setAdmDBConnMgr(org.semanticwb.portal.admin.admresources.db.AdmDBConnMgr)
+     */
     public void setAdmDBConnMgr(AdmDBConnMgr dbconnmgr){
        this.dbconnmgr=dbconnmgr;
        if(!dbconnmgr.getIsDefConn()){
@@ -311,6 +458,11 @@ public class FormFE extends WBContainerFE
     }
 
 
+    /**
+     * Adds the js form fe.
+     * 
+     * @param obj the obj
+     */
     private void addJSFormFE(Object obj){
          if(obj instanceof WBJsInputFE){
            WBJsInputFE objInJs=(WBJsInputFE)obj;
@@ -352,8 +504,8 @@ public class FormFE extends WBContainerFE
     */
 
     /**
-    * Set attributes to class according with the xml tag element
-    */
+     * Set attributes to class according with the xml tag element.
+     */
     @Override
     public void setAttributes(){
         if(tag!=null){
@@ -392,8 +544,9 @@ public class FormFE extends WBContainerFE
 
 
     /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
+     * Manejo de Frameworks de JavaScript.
+     * 
+     * @param child the new js framework attributes
      */
     private void setJsFrameworkAttributes(Element child){
             String jsFramework=getJsFrameWork();
@@ -406,6 +559,9 @@ public class FormFE extends WBContainerFE
     }
 
 
+    /**
+     * Detect browser.
+     */
     private void detectBrowser(){
         if(request!=null){
            String browser=request.getHeader("User-Agent");

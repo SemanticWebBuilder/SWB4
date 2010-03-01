@@ -38,15 +38,21 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Document;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class HelloXforms.
+ * 
  * @author jorge.jimenez
  */
 public class HelloXforms extends GenericXformsResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericXformsResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -68,6 +74,9 @@ public class HelloXforms extends GenericXformsResource {
        "</html>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericXformsResource#saveData(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest, org.w3c.dom.Document)
+     */
     @Override
     public void saveData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, Document dom) throws SWBResourceException, IOException {
         if (request.getAttribute("wbmode").equals(paramsRequest.Mode_VIEW)) //Cuando es de vista 
@@ -100,6 +109,10 @@ public class HelloXforms extends GenericXformsResource {
 
     /**
      * Carga instancia, ya sea la de inicio o una ya grabada en BD del recurso en cuestión.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      */
     @Override
     public void doLoadInstance(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {

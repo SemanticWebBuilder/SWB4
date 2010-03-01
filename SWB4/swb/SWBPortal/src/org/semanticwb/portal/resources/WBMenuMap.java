@@ -42,29 +42,47 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * Muestra un menu desde Home y se abre segun la navegación
+ * Muestra un menu desde Home y se abre segun la navegación.
+ * 
  * @author  Javier Solis
  * @modified by  Jorge Jiménez
  */
 public class WBMenuMap extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBMenuMap.class);
 
+    /** The tpl. */
     javax.xml.transform.Templates tpl;
+    
+    /** The web work path. */
     String webWorkPath = "/work";
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenuMap/";
     //private int ancho=10;
+    /** The nsup. */
     private int nsup=0;
+    
+    /** The ninf. */
     private int ninf=0;
+    
+    /** The nini. */
     private int nini=0;
+    
+    /** The bro. */
     private boolean bro=true;
+    
+    /** The bro4ch. */
     private boolean bro4ch=false;
 
     /**
      * Asigna la información de la base de datos al recurso.
-     *
-     * @param     base  La información del recurso en memoria.
+     * 
+     * @param base the new resource base
      */
     public void setResourceBase(Resource base)
     {
@@ -116,12 +134,14 @@ public class WBMenuMap extends GenericAdmResource
     }
 
     /**
-     * Obtiene el resultado final del recurso en formato dom
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -166,6 +186,15 @@ public class WBMenuMap extends GenericAdmResource
         return null;
     }
 
+    /**
+     * Gets the limits.
+     * 
+     * @param aux the aux
+     * @param topic the topic
+     * @param level the level
+     * @param user the user
+     * @return the limits
+     */
     public int getLimits(WebPage aux, WebPage topic, int level, User user)
     {
         int max=level;
@@ -191,6 +220,20 @@ public class WBMenuMap extends GenericAdmResource
     }
 
 
+    /**
+     * Gets the childs.
+     * 
+     * @param dom the dom
+     * @param nodo the nodo
+     * @param aux the aux
+     * @param topic the topic
+     * @param lang the lang
+     * @param level the level
+     * @param rlevel the rlevel
+     * @param user the user
+     * @param max the max
+     * @return the childs
+     */
     public boolean getChilds(Document dom, Element nodo, WebPage aux, WebPage topic, String lang, int level, int rlevel, User user, int max)
     {
         //System.out.println("****************** enter"+level+":"+aux.getId()+" ***********************");
@@ -282,6 +325,13 @@ public class WBMenuMap extends GenericAdmResource
         return childs;
     }
 
+    /**
+     * Have childs.
+     * 
+     * @param aux the aux
+     * @param user the user
+     * @return true, if successful
+     */
     public boolean haveChilds(WebPage aux, User user)
     {
         Iterator it=aux.listChilds();
@@ -297,12 +347,13 @@ public class WBMenuMap extends GenericAdmResource
     }
 
     /**
-     * Obtiene el resultado final del recurso en formato xml
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -318,6 +369,9 @@ public class WBMenuMap extends GenericAdmResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

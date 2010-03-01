@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PersonalComm.
+ */
 public class PersonalComm extends org.semanticwb.model.comm.base.PersonalCommBase 
 {
+    
+    /**
+     * Instantiates a new personal comm.
+     * 
+     * @param base the base
+     */
     public PersonalComm(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

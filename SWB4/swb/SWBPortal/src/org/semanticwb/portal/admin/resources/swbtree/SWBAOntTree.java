@@ -49,20 +49,30 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAOntTree.
+ * 
  * @author javier.solis
  */
 public class SWBAOntTree extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBATree.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -75,6 +85,9 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -93,6 +106,15 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Do json.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doJSON(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         //contentType="text/html" %><%@page pageEncoding="UTF-8" %>
@@ -200,6 +222,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the web sites.
+     * 
+     * @param arr the arr
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addWebSites(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
@@ -215,6 +244,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the user reps.
+     * 
+     * @param arr the arr
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addUserReps(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
@@ -229,6 +265,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the doc repositories.
+     * 
+     * @param arr the arr
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addDocRepositories(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         //System.out.println("addWebSites");
@@ -243,6 +286,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the favorites.
+     * 
+     * @param arr the arr
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addFavorites(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         User user=SWBContext.getSessionUser();
@@ -263,6 +313,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the web sites trash.
+     * 
+     * @param arr the arr
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addWebSitesTrash(JSONArray arr, SWBParamRequest paramRequest)  throws JSONException
     {
         Iterator<WebSite> it=SWBComparator.sortSermanticObjects(paramRequest.getUser().getLanguage(), SWBContext.listWebSites());
@@ -304,6 +361,13 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Checks for herarquical nodes.
+     * 
+     * @param obj the obj
+     * @return true, if successful
+     * @throws JSONException the jSON exception
+     */
     public boolean hasHerarquicalNodes(SemanticObject obj) throws JSONException
     {
         boolean ret=false;
@@ -316,6 +380,14 @@ public class SWBAOntTree extends GenericResource
     }
 
 
+    /**
+     * Adds the herarquical nodes.
+     * 
+     * @param arr the arr
+     * @param obj the obj
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addHerarquicalNodes(JSONArray arr, SemanticObject obj, SWBParamRequest paramRequest) throws JSONException
     {
         Iterator<SemanticObject> it=SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
@@ -326,6 +398,16 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the herarquical node.
+     * 
+     * @param arr the arr
+     * @param node the node
+     * @param obj the obj
+     * @param addChilds the add childs
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, SWBParamRequest paramRequest) throws JSONException
     {
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
@@ -395,6 +477,16 @@ public class SWBAOntTree extends GenericResource
     }
 
     //TODO:Separar en una clase treeController
+    /**
+     * Adds the resource type.
+     * 
+     * @param arr the arr
+     * @param obj the obj
+     * @param addChilds the add childs
+     * @param addDummy the add dummy
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SWBParamRequest paramRequest) throws JSONException
     {
         boolean hasChilds=false;
@@ -525,11 +617,30 @@ public class SWBAOntTree extends GenericResource
     }
 
 
+    /**
+     * Adds the semantic object.
+     * 
+     * @param arr the arr
+     * @param obj the obj
+     * @param addChilds the add childs
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, SWBParamRequest paramRequest) throws JSONException
     {
         addSemanticObject(arr, obj, addChilds, false,paramRequest);
     }
 
+    /**
+     * Adds the semantic object.
+     * 
+     * @param arr the arr
+     * @param obj the obj
+     * @param addChilds the add childs
+     * @param addDummy the add dummy
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SWBParamRequest paramRequest) throws JSONException
     {
         boolean hasChilds=false;
@@ -674,7 +785,14 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
-/****************************************************************************/
+/**
+ * *************************************************************************.
+ * 
+ * @param arr the arr
+ * @param ont the ont
+ * @param paramRequest the param request
+ * @throws JSONException the jSON exception
+ */
 
     public void addClasses(JSONArray arr, SemanticOntology ont, SWBParamRequest paramRequest)  throws JSONException
     {
@@ -688,6 +806,14 @@ public class SWBAOntTree extends GenericResource
         addClass(arr, ont.getRDFOntModel().getOntClass(SemanticVocabulary.OWL_CLASS), ont);
     }
 
+    /**
+     * Adds the class.
+     * 
+     * @param arr the arr
+     * @param cls the cls
+     * @param ont the ont
+     * @throws JSONException the jSON exception
+     */
     public void addClass(JSONArray arr, OntClass cls, SemanticOntology ont) throws JSONException
     {
         boolean base=SWBPlatform.JENA_UTIL.isInBaseModel(cls, ont.getRDFOntModel());
@@ -714,6 +840,14 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the properties.
+     * 
+     * @param arr the arr
+     * @param ont the ont
+     * @param paramRequest the param request
+     * @throws JSONException the jSON exception
+     */
     public void addProperties(JSONArray arr, SemanticOntology ont, SWBParamRequest paramRequest)  throws JSONException
     {
         Iterator<OntProperty> it=ont.getRDFOntModel().listOntProperties();
@@ -724,6 +858,14 @@ public class SWBAOntTree extends GenericResource
         }
     }
 
+    /**
+     * Adds the property.
+     * 
+     * @param arr the arr
+     * @param prop the prop
+     * @param ont the ont
+     * @throws JSONException the jSON exception
+     */
     public void addProperty(JSONArray arr, OntProperty prop, SemanticOntology ont) throws JSONException
     {
         boolean base=SWBPlatform.JENA_UTIL.isInBaseModel(prop, ont.getRDFOntModel());

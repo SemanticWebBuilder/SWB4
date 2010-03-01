@@ -34,19 +34,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBGCDump.
+ * 
  * @author serch
  */
 public class SWBGCDump
 {
 
+    /** The garbage collector m beans. */
     private static List<GarbageCollectorMXBean> garbageCollectorMBeans = getGarbageCollectorMXBeans();
 
+    /**
+     * Gets the collectors.
+     * 
+     * @return the collectors
+     */
     public com.sun.management.GarbageCollectorMXBean[] getCollectors(){
         return garbageCollectorMBeans.toArray(new com.sun.management.GarbageCollectorMXBean[garbageCollectorMBeans.size()]);
     }
 
+    /**
+     * Gets the gc.
+     * 
+     * @return the gc
+     */
     public static String getGc()
     {
         StringBuilder ret = new StringBuilder();
@@ -60,6 +73,11 @@ public class SWBGCDump
         return ret.toString();
     }
 
+    /**
+     * Gets the verbose gc.
+     * 
+     * @return the verbose gc
+     */
     public static String getVerboseGc()
     {
         StringBuilder ret = new StringBuilder();
@@ -79,6 +97,12 @@ public class SWBGCDump
         return ret.toString();
     }
 
+    /**
+     * Gets the gC info.
+     * 
+     * @param gci the gci
+     * @return the gC info
+     */
     public static String getGCInfo(GcInfo gci)
     {
 

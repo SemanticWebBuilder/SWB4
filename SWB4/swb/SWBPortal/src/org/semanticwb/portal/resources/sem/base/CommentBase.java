@@ -24,82 +24,170 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommentBase.
+ */
 public class CommentBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
+    
+    /** The Constant swb_created. */
     public static final org.semanticwb.platform.SemanticProperty swb_created=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#created");
+    
+    /** The Constant swb_User. */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    
+    /** The Constant swb_modifiedBy. */
     public static final org.semanticwb.platform.SemanticProperty swb_modifiedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#modifiedBy");
+    
+    /** The Constant swb_res_cmts_comment. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_comment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBComments#comment");
+    
+    /** The Constant swb_updated. */
     public static final org.semanticwb.platform.SemanticProperty swb_updated=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#updated");
+    
+    /** The Constant swb_res_cmts_wsid. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_wsid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBComments#wsid");
+    
+    /** The Constant swb_res_cmts_wpid. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_wpid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBComments#wpid");
+    
+    /** The Constant swb_creator. */
     public static final org.semanticwb.platform.SemanticProperty swb_creator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#creator");
+    
+    /** The Constant swb_res_cmts_Comment. */
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_Comment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBComments#Comment");
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBComments#Comment");
 
+    /**
+     * Instantiates a new comment base.
+     * 
+     * @param base the base
+     */
     public CommentBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * List comments.
+     * 
+     * @param model the model
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.Comment> listComments(org.semanticwb.model.SWBModel model)
     {
         java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.Comment>(it, true);
     }
 
+    /**
+     * List comments.
+     * 
+     * @return the java.util. iterator
+     */
     public static java.util.Iterator<org.semanticwb.portal.resources.sem.Comment> listComments()
     {
         java.util.Iterator it=sclass.listInstances();
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.Comment>(it, true);
     }
 
+    /**
+     * Creates the comment.
+     * 
+     * @param model the model
+     * @return the org.semanticwb.portal.resources.sem. comment
+     */
     public static org.semanticwb.portal.resources.sem.Comment createComment(org.semanticwb.model.SWBModel model)
     {
         long id=model.getSemanticObject().getModel().getCounter(sclass);
         return org.semanticwb.portal.resources.sem.Comment.createComment(String.valueOf(id), model);
     }
 
+    /**
+     * Gets the comment.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the comment
+     */
     public static org.semanticwb.portal.resources.sem.Comment getComment(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.resources.sem.Comment)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
     }
 
+    /**
+     * Creates the comment.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.portal.resources.sem. comment
+     */
     public static org.semanticwb.portal.resources.sem.Comment createComment(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.portal.resources.sem.Comment)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /**
+     * Removes the comment.
+     * 
+     * @param id the id
+     * @param model the model
+     */
     public static void removeComment(String id, org.semanticwb.model.SWBModel model)
     {
         model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
     }
 
+    /**
+     * Checks for comment.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return true, if successful
+     */
     public static boolean hasComment(String id, org.semanticwb.model.SWBModel model)
     {
         return (getComment(id, model)!=null);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getCreated()
+     */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setCreated(java.util.Date)
+     */
     public void setCreated(java.util.Date created)
     {
         getSemanticObject().setDateProperty(swb_created, created);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setModifiedBy(org.semanticwb.model.User)
+     */
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#removeModifiedBy()
+     */
     public void removeModifiedBy()
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getModifiedBy()
+     */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -111,56 +199,101 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
          return ret;
     }
 
+    /**
+     * Gets the comment.
+     * 
+     * @return the comment
+     */
     public String getComment()
     {
         return getSemanticObject().getProperty(swb_res_cmts_comment);
     }
 
+    /**
+     * Sets the comment.
+     * 
+     * @param comment the new comment
+     */
     public void setComment(String comment)
     {
         getSemanticObject().setProperty(swb_res_cmts_comment, comment);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getUpdated()
+     */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setUpdated(java.util.Date)
+     */
     public void setUpdated(java.util.Date updated)
     {
         getSemanticObject().setDateProperty(swb_updated, updated);
     }
 
+    /**
+     * Gets the wsid.
+     * 
+     * @return the wsid
+     */
     public String getWsid()
     {
         return getSemanticObject().getProperty(swb_res_cmts_wsid);
     }
 
+    /**
+     * Sets the wsid.
+     * 
+     * @param wsid the new wsid
+     */
     public void setWsid(String wsid)
     {
         getSemanticObject().setProperty(swb_res_cmts_wsid, wsid);
     }
 
+    /**
+     * Gets the wpid.
+     * 
+     * @return the wpid
+     */
     public String getWpid()
     {
         return getSemanticObject().getProperty(swb_res_cmts_wpid);
     }
 
+    /**
+     * Sets the wpid.
+     * 
+     * @param wpid the new wpid
+     */
     public void setWpid(String wpid)
     {
         getSemanticObject().setProperty(swb_res_cmts_wpid, wpid);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#setCreator(org.semanticwb.model.User)
+     */
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#removeCreator()
+     */
     public void removeCreator()
     {
         getSemanticObject().removeProperty(swb_creator);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.TraceableBase#getCreator()
+     */
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;

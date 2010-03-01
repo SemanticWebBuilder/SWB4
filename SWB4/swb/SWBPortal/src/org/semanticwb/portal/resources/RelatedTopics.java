@@ -47,6 +47,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /** Esta clase se encarga de desplegar y administrar topicos relacionados bajo ciertos
  * criterios de configuraci�n. Utiliza un archivo XSL.
  *
@@ -58,8 +59,14 @@ import org.w3c.dom.Element;
 
 public class RelatedTopics extends GenericAdmResource 
 {
+	
+	/** The log. */
 	private static Logger log = SWBUtils.getLogger(RelatedTopics.class);
+    
+    /** The tpl. */
     javax.xml.transform.Templates tpl;
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/SemRelatedTopics/";
 	
     /**
@@ -68,10 +75,10 @@ public class RelatedTopics extends GenericAdmResource
     public RelatedTopics() {
     }
 	
-    /** Asigna la informaciÛn de la base de datos al recurso.
-     *
+    /**
+     * Asigna la informaciÛn de la base de datos al recurso.
+     * 
      * @param base La informaciÛn del recurso en memoria.
-     * @throws AFException
      */
     public void setResourceBase(Resource base)
     {
@@ -94,11 +101,14 @@ public class RelatedTopics extends GenericAdmResource
     }
 	
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBException the sWB exception
      */
     public org.w3c.dom.Document getDom(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBException, java.io.IOException
     {
@@ -204,11 +214,12 @@ public class RelatedTopics extends GenericAdmResource
     }
 	
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doXML(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws java.io.IOException
@@ -222,11 +233,12 @@ public class RelatedTopics extends GenericAdmResource
     }
 	
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param reqParams the req params
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws java.io.IOException

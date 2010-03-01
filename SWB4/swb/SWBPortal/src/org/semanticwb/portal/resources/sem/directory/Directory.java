@@ -38,21 +38,35 @@ import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
-* Object that manage any semanticObject, creates a catalog or directory of the object
-* @autor:Jorge Jiménez
-*/
+ * Object that manage any semanticObject, creates a catalog or directory of the object.
+ * 
+ * @autor:Jorge Jiménez
+ */
 public class Directory extends org.semanticwb.portal.resources.sem.directory.base.DirectoryBase {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Directory.class);
 
+    /**
+     * Instantiates a new directory.
+     */
     public Directory() {
     }
 
+    /**
+     * Instantiates a new directory.
+     * 
+     * @param base the base
+     */
     public Directory(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("view2")) {
@@ -64,6 +78,9 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getAction().equals("excel")) response.setContentType("application/vnd.ms-excel");
@@ -79,6 +96,15 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         }
     }
 
+    /**
+     * Do view2.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doView2(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("objInstUri"));
@@ -102,6 +128,9 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         out.println(mgr.renderForm(request));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -123,6 +152,15 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         out.println(mgr.renderForm(request));
     }
 
+    /**
+     * Do add.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite site=paramRequest.getWebPage().getWebSite();
         PrintWriter out = response.getWriter();
@@ -145,6 +183,9 @@ public class Directory extends org.semanticwb.portal.resources.sem.directory.bas
         out.println(mgr.renderForm(request));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action=response.getAction();

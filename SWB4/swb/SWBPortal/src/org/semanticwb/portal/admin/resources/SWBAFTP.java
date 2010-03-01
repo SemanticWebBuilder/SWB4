@@ -47,6 +47,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
 
+// TODO: Auto-generated Javadoc
 /** Recurso que despliega los archivos que se encuentran en el servidor, permitiendo
  * agregar archivos o carpetas, renombrarlos, eliminarlos y descargarlos.
  *
@@ -55,8 +56,19 @@ import org.semanticwb.portal.api.GenericResource;
  * @author Victor Lorenzana
  */
 public class SWBAFTP extends GenericResource{
+    
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFTP.class);
-    /** Creates a new instance of SWBAFTP */
+    
+    /**
+     * Creates a new instance of SWBAFTP.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("gateway"))
@@ -75,12 +87,17 @@ public class SWBAFTP extends GenericResource{
         
         
     }
+    
     /**
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Do download.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -120,12 +137,17 @@ public class SWBAFTP extends GenericResource{
             response.sendError(500);
         }
     }
+    
     /**
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Do upload.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -158,12 +180,17 @@ public class SWBAFTP extends GenericResource{
             response.sendError(500);
         }
     }
+    
     /**
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -197,10 +224,31 @@ public class SWBAFTP extends GenericResource{
         out.print(new String(ret.getBytes()));
         
     }
+    
+    /**
+     * Gets the service.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the service
+     */
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
         return getDocument(user, src, cmd);        
     }
+    
+    /**
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
+     */
     private Element addNode(String node, String id, String name, Element parent)
     {
         Element ret=addElement(node,null,parent);
@@ -209,6 +257,14 @@ public class SWBAFTP extends GenericResource{
         return ret;
     }
 
+    /**
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
+     */
     private Element addElement(String name, String value, Element parent)
     {
         Document doc = parent.getOwnerDocument();
@@ -217,6 +273,13 @@ public class SWBAFTP extends GenericResource{
         parent.appendChild(ele);
         return ele;
     }  
+    
+    /**
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
+     */
     private Document getError(int id)
     {
         Document dom = null;
@@ -293,8 +356,12 @@ public class SWBAFTP extends GenericResource{
         
         return dom;
     }
+    
     /**
-     * @param fdir
+     * Checks for subdirectories.
+     * 
+     * @param fdir the fdir
+     * @return true, if successful
      * @return
      */    
     public boolean hasSubdirectories(File fdir)
@@ -310,9 +377,13 @@ public class SWBAFTP extends GenericResource{
         }
         return false;
     }
+    
     /**
-     * @param edir
-     * @param fdir
+     * Gets the directories.
+     * 
+     * @param edir the edir
+     * @param fdir the fdir
+     * @return the directories
      */    
     public void getDirectories(Element edir,File fdir)
     {
@@ -329,9 +400,13 @@ public class SWBAFTP extends GenericResource{
             }
         }
     }
+    
     /**
-     * @param res
-     * @param src
+     * Gets the directories.
+     * 
+     * @param res the res
+     * @param src the src
+     * @return the directories
      */    
     public void getDirectories(Element res,Document src)
     {
@@ -351,9 +426,12 @@ public class SWBAFTP extends GenericResource{
             getDirectories(dir,apppath); 
         }
     }
+    
     /**
-     * @param res
-     * @param src
+     * Creates the dir.
+     * 
+     * @param res the res
+     * @param src the src
      */    
     public void createDir(Element res,Document src)
     {
@@ -371,9 +449,12 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("create", "false", res);
     }
+    
     /**
-     * @param res
-     * @param src
+     * Rename.
+     * 
+     * @param res the res
+     * @param src the src
      */    
     public void rename(Element res,Document src)
     {
@@ -403,9 +484,12 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("rename", "false", res);
     }
+    
     /**
-     * @param res
-     * @param src
+     * Exists.
+     * 
+     * @param res the res
+     * @param src the src
      */    
     public void exists(Element res,Document src)
     {
@@ -428,8 +512,12 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("exists", "false", res);
     }
+    
     /**
-     * @param f
+     * Checks if is protected.
+     * 
+     * @param f the f
+     * @return true, if is protected
      * @return
      */    
     public boolean isProtected(File f)
@@ -461,8 +549,10 @@ public class SWBAFTP extends GenericResource{
     }
     
     /**
-     * @param res
-     * @param src
+     * Delete.
+     * 
+     * @param res the res
+     * @param src the src
      */    
     public void delete(Element res,Document src)
     {
@@ -487,9 +577,13 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("delete", "false", res);
     }
+    
     /**
-     * @param res
-     * @param src
+     * Gets the files.
+     * 
+     * @param res the res
+     * @param src the src
+     * @return the files
      */    
     public void getFiles(Element res,Document src)
     {
@@ -527,10 +621,14 @@ public class SWBAFTP extends GenericResource{
             }
         }
     }
+    
     /**
-     * @param user
-     * @param src
-     * @param cmd
+     * Gets the document.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param cmd the cmd
+     * @return the document
      * @return
      */    
     public Document getDocument(User user, Document src, String cmd)
@@ -588,11 +686,15 @@ public class SWBAFTP extends GenericResource{
     }
 
     /**
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

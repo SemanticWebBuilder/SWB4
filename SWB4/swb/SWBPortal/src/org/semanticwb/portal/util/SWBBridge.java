@@ -34,6 +34,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.lib.SWBBridgeResponse;
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase sirve de puente entre un servidor WebBuilder y otro servidor del cual
  * obtien el c�digo html para presentarlo en WebBuilder.
  *
@@ -44,26 +45,49 @@ import org.semanticwb.portal.lib.SWBBridgeResponse;
  */
 public class SWBBridge
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBBridge.class);
     
+    /** The get params. */
     private HashMap getParams = new HashMap();
+    
+    /** The post params. */
     private HashMap postParams = new HashMap();
+    
+    /** The headers. */
     private HashMap headers = new HashMap();
+    
+    /** The cookies. */
     private ArrayList cookies = new ArrayList();
+    
+    /** The post data. */
     private byte[] postData=null;
+    
+    /** The request query string. */
     private boolean requestQueryString=true;
     
+    /** The follow redirects. */
     private boolean followRedirects=false;
+    
+    /** The replase host. */
     private boolean replaseHost=true;    
+    
+    /** The accept encoding. */
     private boolean acceptEncoding=true;    
 
-    /** Creates a new instance of WBBridge */
+    /**
+     * Creates a new instance of WBBridge.
+     */
     public SWBBridge()
     {
     }
 
     /**
-     * @param surl
+     * Gets the html.
+     * 
+     * @param surl the surl
+     * @return the html
      * @return
      */
     public String getHtml(String surl)
@@ -72,8 +96,11 @@ public class SWBBridge
     }
 
     /**
-     * @param surl
-     * @param request
+     * Gets the html.
+     * 
+     * @param surl the surl
+     * @param request the request
+     * @return the html
      * @return
      */
     public String getHtml(String surl, HttpServletRequest request)
@@ -92,12 +119,15 @@ public class SWBBridge
     }
     
     /**
-     * @param remoteURL
-     * @param request
-     * @param response
-     * @param instance
-     * @throws MalformedURLException
-     * @throws IOException
+     * Bridge.
+     * 
+     * @param remoteURL the remote url
+     * @param request the request
+     * @param response the response
+     * @param instance the instance
+     * @return the sWB bridge response
+     * @throws MalformedURLException the malformed url exception
+     * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
     public SWBBridgeResponse bridge(String remoteURL,  HttpServletRequest request, HttpServletResponse response, long instance) throws java.net.MalformedURLException, java.io.IOException
@@ -106,12 +136,15 @@ public class SWBBridge
     }
     
     /**
-     * @param remoteURL
-     * @param request
-     * @param out
-     * @param instance
-     * @throws MalformedURLException
-     * @throws IOException
+     * Bridge.
+     * 
+     * @param remoteURL the remote url
+     * @param request the request
+     * @param out the out
+     * @param instance the instance
+     * @return the sWB bridge response
+     * @throws MalformedURLException the malformed url exception
+     * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
     public SWBBridgeResponse bridge(String remoteURL, HttpServletRequest request, OutputStream out, long instance) throws java.net.MalformedURLException, java.io.IOException
@@ -121,12 +154,16 @@ public class SWBBridge
     
 
     /**
-     * @param remoteURL
-     * @param request
-     * @param response
-     * @param instance
-     * @throws MalformedURLException
-     * @throws IOException
+     * Bridge.
+     * 
+     * @param remoteURL the remote url
+     * @param ssoURL the sso url
+     * @param request the request
+     * @param response the response
+     * @param instance the instance
+     * @return the sWB bridge response
+     * @throws MalformedURLException the malformed url exception
+     * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
     public SWBBridgeResponse bridge(String remoteURL,String ssoURL,  HttpServletRequest request, HttpServletResponse response, long instance) throws java.net.MalformedURLException, java.io.IOException
@@ -135,12 +172,16 @@ public class SWBBridge
     }
 
     /**
-     * @param remoteURL
-     * @param request
-     * @param out
-     * @param instance
-     * @throws MalformedURLException
-     * @throws IOException
+     * Bridge.
+     * 
+     * @param remoteURL the remote url
+     * @param ssoURL the sso url
+     * @param request the request
+     * @param out the out
+     * @param instance the instance
+     * @return the sWB bridge response
+     * @throws MalformedURLException the malformed url exception
+     * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */
     public SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, OutputStream out, long instance) throws java.net.MalformedURLException, java.io.IOException
@@ -148,6 +189,20 @@ public class SWBBridge
         return bridge(remoteURL, ssoURL, request, null, out, false, instance);
     }
 
+    /**
+     * Bridge.
+     * 
+     * @param remoteURL the remote url
+     * @param ssoURL the sso url
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param usedResponse the used response
+     * @param instance the instance
+     * @return the sWB bridge response
+     * @throws MalformedURLException the malformed url exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private SWBBridgeResponse bridge(String remoteURL, String ssoURL, HttpServletRequest request, HttpServletResponse response, OutputStream out, boolean usedResponse, long instance) throws java.net.MalformedURLException, java.io.IOException
     {
         //System.out.println(""+System.currentTimeMillis()+": "+"EnterBridge:"+remoteURL);
@@ -397,92 +452,117 @@ public class SWBBridge
         return ret;
     }
 
-    /** Getter for property getParams.
+    /**
+     * Getter for property getParams.
+     * 
+     * @param name the name
      * @return Value of property getParams.
-     * @param name
      */
     public String getGetParameter(String name)
     {
         return (String) this.getParams.get(name);
     }
 
-    /** Setter for property getParams.
-     * @param name
-     * @param value
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
+     * @param value the value
      */
     public void addGetParameter(String name, String value)
     {
         this.getParams.put(name, value);
     }
 
-    /** Setter for property getParams.
-     * @param name
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
      */
     public void removeGetParameter(String name)
     {
         this.getParams.remove(name);
     }
 
-    /** Getter for property getParams.
+    /**
+     * Getter for property getParams.
+     * 
+     * @param name the name
      * @return Value of property getParams.
-     * @param name
      */
     public String getPostParameter(String name)
     {
         return (String) this.postParams.get(name);
     }
 
-    /** Setter for property getParams.
-     * @param name
-     * @param value
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
+     * @param value the value
      */
     public void addPostParameter(String name, String value)
     {
         this.postParams.put(name, value);
     }
 
-    /** Setter for property getParams.
-     * @param name
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
      */
     public void removePostParameter(String name)
     {
         this.postParams.remove(name);
     }
     
-    /** Getter for property getParams.
+    /**
+     * Getter for property getParams.
+     * 
+     * @param name the name
      * @return Value of property getParams.
-     * @param name
      */
     public String getHeader(String name)
     {
         return (String) this.headers.get(name);
     }
 
-    /** Setter for property getParams.
-     * @param name
-     * @param value
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
+     * @param value the value
      */
     public void addHeader(String name, String value)
     {
         this.headers.put(name, value);
     }
 
-    /** Setter for property getParams.
-     * @param name
+    /**
+     * Setter for property getParams.
+     * 
+     * @param name the name
      */
     public void removeHeader(String name)
     {
         this.headers.remove(name);
     }    
 
-    /** Setter for property getParams.
-     * @param cookie
+    /**
+     * Setter for property getParams.
+     * 
+     * @param cookie the cookie
      */
     public void addCookie(String cookie)
     {
         cookies.add(cookie);
     }
 
+    /**
+     * Gets the gets the query string.
+     * 
+     * @return the gets the query string
+     */
     private String getGetQueryString()
     {
         String ret = "";
@@ -497,6 +577,11 @@ public class SWBBridge
         return ret;
     }
 
+    /**
+     * Gets the post query string.
+     * 
+     * @return the post query string
+     */
     private String getPostQueryString()
     {
         String ret = "";
@@ -511,6 +596,11 @@ public class SWBBridge
         return ret;
     }
 
+    /**
+     * Gets the locale cookies.
+     * 
+     * @return the locale cookies
+     */
     private String getLocaleCookies()
     {
         String c = "";

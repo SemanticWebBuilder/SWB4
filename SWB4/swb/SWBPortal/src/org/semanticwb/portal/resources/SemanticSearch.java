@@ -66,17 +66,29 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.admin.resources.SWBAListRelatedObjects;
 import org.semanticwb.portal.api.GenericAdmResource;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticSearch.
+ * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SemanticSearch extends GenericAdmResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
+    
+    /** The tr. */
     private SWBSparqlTranslator tr = null;
+    
+    /** The lex. */
     private SWBDictionary lex = null;
+    
+    /** The lang. */
     private String lang = "x-x";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -90,11 +102,13 @@ public class SemanticSearch extends GenericAdmResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -453,6 +467,15 @@ public class SemanticSearch extends GenericAdmResource {
         out.print(sbf.toString());
     }    
 
+    /**
+     * Do suggest.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SortedSet objOptions = new TreeSet();
@@ -616,6 +639,15 @@ public class SemanticSearch extends GenericAdmResource {
         out.println(sbf.toString());
     }
 
+    /**
+     * Do show results.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doShowResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
@@ -891,10 +923,22 @@ public class SemanticSearch extends GenericAdmResource {
         out.print(sbf.toString());
     }
 
+    /**
+     * Creates the id.
+     * 
+     * @param suffix the suffix
+     * @return the string
+     */
     private String createId(String suffix) {
         return getResourceBase().getId() + "/" + suffix;
     }
 
+    /**
+     * Gets the organization by name.
+     * 
+     * @param name the name
+     * @return the organization by name
+     */
     private SemanticObject getOrganizationByName(String name) {
         String sparqlQuery = "PREFIX emex: <http://www.semanticwebbuilder.org/emexcatalog.owl#>\n" +
                 "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +

@@ -44,18 +44,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBTreeUtil.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBTreeUtil
 {
+    
     /**
-     *
-     * @param node
-     * @param id
-     * @param name
-     * @param parent
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
      * @return
      */    
     public static Element addNode(String node, String id, String name, Element parent)
@@ -67,10 +72,12 @@ public class SWBTreeUtil
     }
 
     /**
-     *
-     * @param name
-     * @param value
-     * @param parent
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
      * @return
      */    
     public static Element addElement(String name, String value, Element parent)
@@ -82,6 +89,12 @@ public class SWBTreeUtil
         return ele;
     }        
     
+    /**
+     * Adds the opt refresh.
+     * 
+     * @param menu the menu
+     * @param user the user
+     */
     public static void addOptRefresh(Element menu, User user)
     {
         WebSite tma=SWBContext.getAdminWebSite();
@@ -91,6 +104,11 @@ public class SWBTreeUtil
         option.setAttribute("icon","refresh");
     }   
     
+    /**
+     * Adds the separator.
+     * 
+     * @param menu the menu
+     */
     public static void addSeparator(Element menu)
     {
         NodeList nl=menu.getChildNodes();
@@ -104,8 +122,10 @@ public class SWBTreeUtil
     }     
     
     /**
-     *
-     * @param it
+     * Sort iterator.
+     * 
+     * @param it the it
+     * @return the iterator
      * @return
      */    
     public static Iterator sortIterator(Iterator it)
@@ -119,8 +139,10 @@ public class SWBTreeUtil
     }
     
     /**
-     *
-     * @param en
+     * Sort enumeration.
+     * 
+     * @param en the en
+     * @return the iterator
      * @return
      */    
     public static Iterator sortEnumeration(Enumeration en)
@@ -134,8 +156,10 @@ public class SWBTreeUtil
     }    
     
     /**
-     *
-     * @param collection
+     * Sort collection.
+     * 
+     * @param collection the collection
+     * @return the iterator
      * @return
      */    
     public static Iterator sortCollection(Collection collection)

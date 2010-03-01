@@ -44,19 +44,23 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBASchedule.
+ * 
  * @author juan.fernandez
  */
 public class SWBASchedule extends GenericResource {
 
-    /** Nombre del recurso */
+    /** Nombre del recurso. */
     private Logger log = SWBUtils.getLogger(SWBASchedule.class);
-    /**
-     *
-     */
+    
+    /** The str rsc type. */
     public String strRscType;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init() {
         try {
@@ -67,11 +71,13 @@ public class SWBASchedule extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -855,10 +861,12 @@ public class SWBASchedule extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -1158,11 +1166,12 @@ public class SWBASchedule extends GenericResource {
     }
 
     /**
-     *
-     * @param doc
-     * @param parent
-     * @param elemName
-     * @param elemValue
+     * Adds the elem.
+     * 
+     * @param doc the doc
+     * @param parent the parent
+     * @param elemName the elem name
+     * @param elemValue the elem value
      */
     public void addElem(Document doc, Element parent, String elemName, String elemValue) {
         Element elem = doc.createElement(elemName);
@@ -1171,9 +1180,11 @@ public class SWBASchedule extends GenericResource {
     }
 
     /**
-     *
-     * @param obj
-     * @param lang
+     * Gets the display sem obj.
+     * 
+     * @param obj the obj
+     * @param lang the lang
+     * @return the display sem obj
      * @return
      */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
@@ -1187,9 +1198,11 @@ public class SWBASchedule extends GenericResource {
     }
 
     /**
-     *
-     * @param obj
-     * @param prop
+     * Gets the value sem prop.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @return the value sem prop
      * @return
      */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
@@ -1220,6 +1233,13 @@ public class SWBASchedule extends GenericResource {
         return ret;
     }
 
+    /**
+     * Cambia formato.
+     * 
+     * @param fecha the fecha
+     * @param formato the formato
+     * @return the string
+     */
     private String cambiaFormato(String fecha, int formato) {
         String nf = fecha;
         String y = "";

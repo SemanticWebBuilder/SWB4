@@ -32,6 +32,7 @@ import org.semanticwb.portal.admin.admresources.lib.WBContainerFE;
 import org.w3c.dom.*;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Map en una forma de html.
  * <p>
@@ -41,57 +42,106 @@ import org.w3c.dom.*;
 
 public class MapFE extends WBContainerFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(MapFE.class);
     
+    /** The accesskey. */
     private String accesskey=null;
+    
+    /** The name. */
     private String name=null;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The tag. */
     protected Node tag=null;
 
    
-    /** Creates a new instance of AppletFE */
+    /**
+     * Creates a new instance of AppletFE.
+     * 
+     * @param name the name
+     */
     public MapFE(String name) {
         this.name=name;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public MapFE(Node tag){
         this.tag=tag;
         setAttributes();
     }
     
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     public void setAccessKey(String accesskey){
         this.accesskey=accesskey;
     }
    
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setName(java.lang.String)
+     */
     public void setName(String name){
         this.name=name;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
     //gets
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     public String getAccessKey(){
         return this.accesskey;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getName()
+     */
     public String getName(){
         return this.name;
     }
     
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+      * determines de xml tag name the form element will be added in a resource.
+      * 
+      * @return the xml tag
+      */
     public String getXmlTag(){
         return this.xmltag;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#add(java.lang.Object)
+     */
     public void add(Object obj){
        super.add(obj);
        setMapFEName(obj);
     }
     
+    /**
+     * Sets the map fe name.
+     * 
+     * @param obj the new map fe name
+     */
     private void setMapFEName(Object obj){
        if(obj instanceof AreaMapFE){
            AreaMapFE objareafe=(AreaMapFE)obj;
@@ -100,9 +150,11 @@ public class MapFE extends WBContainerFE
     }
    
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */  
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */  
     public String getHtml(){
         String xml="";
         try 
@@ -138,8 +190,8 @@ public class MapFE extends WBContainerFE
     
     
     /**
-    * Set attributes to class according with the xml tag element
-    */
+     * Set attributes to class according with the xml tag element.
+     */
     public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

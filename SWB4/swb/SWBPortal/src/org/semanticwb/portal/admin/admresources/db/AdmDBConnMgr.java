@@ -37,39 +37,84 @@ import org.semanticwb.model.*;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.util.WBFileUpload;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra conecci�n o connecciones de bd de la api de administraci�n de recursos
  * <p>
- * Object that administers bd conections in the resources administration api
+ * Object that administers bd conections in the resources administration api.
+ * 
  * @author  Jorge Alberto Jim�nez
  */
 public class AdmDBConnMgr {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(AdmDBConnMgr.class);
+    
+    /** The defconn. */
     private boolean defconn = true;
+    
+    /** The base. */
     private Resource base = null;
+    
+    /** The dom. */
     private Document dom = null;
+    
+    /** The req. */
     private HttpServletRequest req = null;
+    
+    /** The user. */
     private User user = null;
+    
+    /** The strbxmlp. */
     private StringBuffer strbxmlp = null;
+    
+    /** The imgapplet. */
     private String imgapplet = "";
+    
+    /** The tag. */
     private Node tag = null;
+    
+    /** The formfe. */
     private FormFE formfe = null;
+    
+    /** The conname. */
     private String conname = null;
+    
+    /** The tablename. */
     private String tablename = null;
+    
+    /** The fieldname. */
     private String fieldname = null;
+    
+    /** The res id. */
     private String resID = null;
+    
+    /** The res idtm. */
     private String resIDTM = null;
+    
+    /** The connparams. */
     private TreeMap connparams = null;
+    
+    /** The connparams insert. */
     private TreeMap connparamsInsert = null;
+    
+    /** The exist record. */
     private boolean existRecord = false;
+    
+    /** The adm res utils. */
     WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
 
-    /** Creates a new instance of AdmDBConnMgr */
+    /**
+     * Creates a new instance of AdmDBConnMgr.
+     */
     public AdmDBConnMgr() {
     }
 
-    /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
+    /**
+     * Creates a new instance of AdmDBConnMgr when is the dafult db.
+     * 
+     * @param base the base
+     */
     public AdmDBConnMgr(Resource base) {
         this.base = base;
         this.defconn = true;
@@ -77,7 +122,16 @@ public class AdmDBConnMgr {
         init();
     }
 
-    /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
+    /**
+     * Creates a new instance of AdmDBConnMgr when is the dafult db.
+     * 
+     * @param conname the conname
+     * @param tablename the tablename
+     * @param fieldname the fieldname
+     * @param resID the res id
+     * @param resIDTM the res idtm
+     * @param base the base
+     */
     public AdmDBConnMgr(String conname, String tablename, String fieldname, String resID, String resIDTM, Resource base) {
         this.defconn = false;
         this.conname = conname;
@@ -89,14 +143,29 @@ public class AdmDBConnMgr {
         init();
     }
 
-    /** Creates a new instance of AdmDBConnMgr */
+    /**
+     * Creates a new instance of AdmDBConnMgr.
+     * 
+     * @param req the req
+     * @param base the base
+     */
     public AdmDBConnMgr(HttpServletRequest req, Resource base) {
         this.req = req;
         this.base = base;
         createXmlAdmRes(req);
     }
 
-    /** Creates a new instance of AdmDBConnMgr */
+    /**
+     * Creates a new instance of AdmDBConnMgr.
+     * 
+     * @param req the req
+     * @param conname the conname
+     * @param tablename the tablename
+     * @param fieldname the fieldname
+     * @param resID the res id
+     * @param resIDTM the res idtm
+     * @param base the base
+     */
     public AdmDBConnMgr(HttpServletRequest req, String conname, String tablename, String fieldname, String resID, String resIDTM, Resource base) {
         this.defconn = false;
         this.req = req;
@@ -109,7 +178,13 @@ public class AdmDBConnMgr {
         createXmlAdmRes(req);
     }
 
-    /** Creates a new instance of AdmDBConnMgr when is the dafult db*/
+    /**
+     * Creates a new instance of AdmDBConnMgr when is the dafult db.
+     * 
+     * @param formfe the formfe
+     * @param tag the tag
+     * @param base the base
+     */
     public AdmDBConnMgr(FormFE formfe, Node tag, Resource base) {
         this.tag = tag;
         this.base = base;
@@ -118,11 +193,19 @@ public class AdmDBConnMgr {
         setAttrConn();
     }
 
+    /**
+     * Sets the request.
+     * 
+     * @param req the new request
+     */
     public void setRequest(HttpServletRequest req) {
         this.req = req;
         createXmlAdmRes(req);
     }
 
+    /**
+     * Inits the.
+     */
     public void init() {
         if (defconn) {
             dom = SWBUtils.XML.xmlToDom(base.getXml());
@@ -137,6 +220,12 @@ public class AdmDBConnMgr {
         }
     }
     //regresa el valor de un atributo
+    /**
+     * Gets the attribute.
+     * 
+     * @param attribute the attribute
+     * @return the attribute
+     */
     public String getAttribute(String attribute) {
         //return base.getAttribute(attribute);
         if (dom != null) {
@@ -152,6 +241,12 @@ public class AdmDBConnMgr {
         return null;
     }
     //Regresa una lista de valores de un atributo dado
+    /**
+     * Gets the attribute values.
+     * 
+     * @param attribute the attribute
+     * @return the attribute values
+     */
     public ArrayList getAttributeValues(String attribute) {
         ArrayList attrvalues = new ArrayList();
         if (dom != null) {
@@ -165,8 +260,11 @@ public class AdmDBConnMgr {
         return attrvalues;
     }
 
-    /** Crea el xml de la administraci�n de un recurso,
+    /**
+     * Crea el xml de la administraci�n de un recurso,
      * esto para cuando se edite el recurso ya tenga valores por defecto.
+     * 
+     * @param req the req
      */
     private void createXmlAdmRes(HttpServletRequest req) {
         this.req = req;
@@ -290,6 +388,11 @@ public class AdmDBConnMgr {
         }
     }
 
+    /**
+     * Gets the xml params.
+     * 
+     * @return the xml params
+     */
     public String getXmlParams() {
         String xmlparams = null;
         if (strbxmlp != null) {
@@ -300,7 +403,10 @@ public class AdmDBConnMgr {
 
     /**
      * Envia a actualizar a BD
-     * send to update a DB
+     * send to update a DB.
+     * 
+     * @param user the user
+     * @return the string
      */
     public String update2DB(User user) {
         this.user = user;
@@ -333,13 +439,18 @@ public class AdmDBConnMgr {
         return imgapplet;
     }
 
+    /**
+     * Gets the base.
+     * 
+     * @return the base
+     */
     public Resource getBase() {
         return base;
     }
 
     /**
      * Coloca atributos de conecci�n a propiedades de la clase
-     * insert connection attributes to class properties
+     * insert connection attributes to class properties.
      */
     public void setAttrConn() {
         if (tag != null) {
@@ -471,6 +582,12 @@ public class AdmDBConnMgr {
         }
     }
 
+    /**
+     * Creates the hidden tag.
+     * 
+     * @param tagName the tag name
+     * @param TagVavue the tag vavue
+     */
     private void createHiddenTag(String tagName, String TagVavue) {
         if (formfe != null) {
             HiddenFE hiddenfe = new HiddenFE(tagName);
@@ -479,6 +596,11 @@ public class AdmDBConnMgr {
         }
     }
 
+    /**
+     * Creates the record2 no def db.
+     * 
+     * @return true, if successful
+     */
     private boolean createRecord2NoDefDB() {
         Connection con;
         try {
@@ -666,7 +788,10 @@ public class AdmDBConnMgr {
 
     /**
      * Actualiza a una Bd que no es la de defecto de wb (tabla resource)
-     * updates a DB that it is not the WebBuilder default (wbresource)
+     * updates a DB that it is not the WebBuilder default (wbresource).
+     * 
+     * @return true, if successful
+     * @throws SWBException the sWB exception
      */
     public boolean update2NoDefDB() throws SWBException {
         boolean regresa = false;
@@ -758,7 +883,10 @@ public class AdmDBConnMgr {
 
     /**
      * Carga el xml del recurso en las propiedades de la clase
-     * loads resource xml in the class properties
+     * loads resource xml in the class properties.
+     * 
+     * @return the string
+     * @throws SWBException the sWB exception
      */
     public String loadXmlRes() throws SWBException {
         Connection con = null;
@@ -852,36 +980,73 @@ public class AdmDBConnMgr {
     }
 
     /**
-     * Obtiene el nombre de la conecci�n
+     * Obtiene el nombre de la conecci�n.
+     * 
+     * @return the con name
      */
     public String getConName() {
         return conname;
     }
 
+    /**
+     * Gets the table name.
+     * 
+     * @return the table name
+     */
     public String getTableName() {
         return tablename;
     }
 
+    /**
+     * Gets the field name.
+     * 
+     * @return the field name
+     */
     public String getFieldName() {
         return fieldname;
     }
 
+    /**
+     * Gets the res id.
+     * 
+     * @return the res id
+     */
     public String getResID() {
         return resID;
     }
 
+    /**
+     * Gets the res idtm.
+     * 
+     * @return the res idtm
+     */
     public String getResIDTM() {
         return resIDTM;
     }
 
+    /**
+     * Gets the checks if is def conn.
+     * 
+     * @return the checks if is def conn
+     */
     public boolean getIsDefConn() {
         return defconn;
     }
 
+    /**
+     * Gets the connparams.
+     * 
+     * @return the connparams
+     */
     public TreeMap getConnparams() {
         return connparams;
     }
 
+    /**
+     * Gets the connparams insert.
+     * 
+     * @return the connparams insert
+     */
     public TreeMap getConnparamsInsert() {
         return connparamsInsert;
     }

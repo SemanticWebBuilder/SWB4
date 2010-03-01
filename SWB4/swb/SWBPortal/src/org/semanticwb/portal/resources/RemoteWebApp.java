@@ -51,17 +51,23 @@ import org.semanticwb.servlet.internal.DistributorParams;
 
 
 
-/** Esta clase se encarga de desplegar y administrar un servicio SOP
- *
- * This class displays and manages a SOP service
+// TODO: Auto-generated Javadoc
+/**
+ * Esta clase se encarga de desplegar y administrar un servicio SOP
+ * 
+ * This class displays and manages a SOP service.
+ * 
  * @author : Javier Solis
  * @since September 4th 2002, 13:09
  */
 
 public class RemoteWebApp extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(RemoteWebApp.class);
     
+    /** The encryptor. */
     private org.semanticwb.util.Encryptor encryptor = null;
 
     //****************** login http://host:port/smc/logout.jsp  ********************************//
@@ -77,10 +83,12 @@ public class RemoteWebApp extends GenericAdmResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @throws AFException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
@@ -88,17 +96,36 @@ public class RemoteWebApp extends GenericAdmResource
         
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         doView(request,response,paramRequest,true);
     }
     
+    /**
+     * Gets the time.
+     * 
+     * @param iniTime the ini time
+     * @return the time
+     */
     public String getTime(long iniTime)
     {
         return "<!-- Time: "+(System.currentTimeMillis()-iniTime)+" -->";
     }
     
+    /**
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @param userIns the user ins
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, boolean userIns) throws SWBResourceException, IOException
     {
         long iniTime=System.currentTimeMillis();        
@@ -507,6 +534,14 @@ public class RemoteWebApp extends GenericAdmResource
         }
     }    
     
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the string
+     */
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest)
     {
         //System.out.print("\nstr:"+str+"-->");
@@ -556,6 +591,14 @@ public class RemoteWebApp extends GenericAdmResource
     }
     
     
+    /**
+     * Crop str.
+     * 
+     * @param initext the initext
+     * @param endtext the endtext
+     * @param content the content
+     * @return the string
+     */
     public String cropStr(String initext, String endtext, String content)
     {
         if(initext==null && endtext==null)return content;
@@ -616,6 +659,13 @@ public class RemoteWebApp extends GenericAdmResource
         return content;
     }       
     
+    /**
+     * Replace str.
+     * 
+     * @param replace the replace
+     * @param content the content
+     * @return the string
+     */
     public String replaceStr(String replace, String content)
     {
         if(replace==null)return content;
@@ -637,6 +687,13 @@ public class RemoteWebApp extends GenericAdmResource
         return content;
     }    
     
+    /**
+     * Checks if is direct.
+     * 
+     * @param direct the direct
+     * @param url the url
+     * @return true, if is direct
+     */
     public boolean isDirect(String direct, String url)
     {
         if(direct==null)return false;
@@ -649,6 +706,14 @@ public class RemoteWebApp extends GenericAdmResource
         return false;
     }      
     
+    /**
+     * Replace paths.
+     * 
+     * @param basePath the base path
+     * @param content the content
+     * @param buri the buri
+     * @return the string
+     */
     public String replacePaths(String basePath, String content, String buri)
     {
 //        if(basePath==null || buri==null)return content;
@@ -678,6 +743,14 @@ public class RemoteWebApp extends GenericAdmResource
         
     }
     
+    /**
+     * Gets the closer.
+     * 
+     * @param content the content
+     * @param off the off
+     * @param basePath the base path
+     * @return the closer
+     */
     private String getCloser(String content, int off, String basePath)
     {
         String ret=null;
@@ -696,6 +769,13 @@ public class RemoteWebApp extends GenericAdmResource
         return ret;
     }
     
+    /**
+     * Removes the paths.
+     * 
+     * @param removePath the remove path
+     * @param content the content
+     * @return the string
+     */
     public String removePaths(String removePath, String content)
     {
         if(removePath==null)return content;
@@ -709,6 +789,12 @@ public class RemoteWebApp extends GenericAdmResource
     }    
     
     
+    /**
+     * Adds the cookies.
+     * 
+     * @param bridge the bridge
+     * @param cookies the cookies
+     */
     public void addCookies(SWBBridge bridge, String cookies)
     {
         if(cookies==null)return;
@@ -723,6 +809,12 @@ public class RemoteWebApp extends GenericAdmResource
         }    
     }     
     
+    /**
+     * Adds the headers.
+     * 
+     * @param bridge the bridge
+     * @param headers the headers
+     */
     public void addHeaders(SWBBridge bridge, String headers)
     {
         if(headers==null)return;
@@ -740,6 +832,12 @@ public class RemoteWebApp extends GenericAdmResource
         }    
     }      
     
+    /**
+     * Adds the user attributes.
+     * 
+     * @param bridge the bridge
+     * @param user the user
+     */
     public void addUserAttributes(SWBBridge bridge, User user)
     {/* TODO:VER 4
         HashMap map=new HashMap();
@@ -780,6 +878,9 @@ public class RemoteWebApp extends GenericAdmResource
       * */
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#getResourceCacheID(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException
     {
         String retValue=null;

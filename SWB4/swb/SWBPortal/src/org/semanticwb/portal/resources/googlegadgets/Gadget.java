@@ -47,29 +47,68 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Gadget.
+ * 
  * @author victor.lorenzana
  */
 public class Gadget
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Gadget.class);
+    
+    /** The Constant DEFAULT_VALUE. */
     private static final String DEFAULT_VALUE = "default_value";
+    
+    /** The Constant MESSAGES_ATTRIBUTE. */
     private static final String MESSAGES_ATTRIBUTE = "messages";
+    
+    /** The Constant MSG_LOCALE. */
     private static final String MSG_LOCALE = "__MSG_locale__";
+    
+    /** The Constant PATH_FIRST_LOCALE. */
     private static final String PATH_FIRST_LOCALE = "/Module/ModulePrefs/Locale[1]";
+    
+    /** The Constant PATH_USER_PREFERENCES. */
     private static final String PATH_USER_PREFERENCES = "/Module/UserPref[@name=\'";
+    
+    /** The Constant TITLE_ATTRIBUTE. */
     private static final String TITLE_ATTRIBUTE = "title";
+    
+    /** The builder. */
     private static SAXBuilder builder = new SAXBuilder();
+    
+    /** The documents. */
     private static Hashtable<URL, Document> documents = new Hashtable<URL, Document>();
+    
+    /** The U p_ prefix. */
     private static String UP_PREFIX = "__UP_";
+    
+    /** The U p_ sufix. */
     private static String UP_SUFIX = "__";
+    
+    /** The MS g_ prefix. */
     private static String MSG_PREFIX = "__MSG_";
+    
+    /** The MS g_ sufix. */
     private static String MSG_SUFIX = "__";
+    
+    /** The url. */
     private URL url;
+    
+    /** The module. */
     private Document module;
+    
+    /** The module prefs. */
     private Element modulePrefs;
 
+    /**
+     * Instantiates a new gadget.
+     * 
+     * @param url the url
+     */
     public Gadget(URL url)
     {
         this.url = url;
@@ -95,6 +134,13 @@ public class Gadget
         }
     }
 
+    /**
+     * Gets the values.
+     * 
+     * @param name the name
+     * @param locale the locale
+     * @return the values
+     */
     public Hashtable<String, String> getValues(String name, Locale locale)
     {
         Hashtable<String, String> getValues = new Hashtable<String, String>();
@@ -119,6 +165,13 @@ public class Gadget
         return getValues;
     }
 
+    /**
+     * Gets the default value.
+     * 
+     * @param name the name
+     * @param locale the locale
+     * @return the default value
+     */
     public String getDefaultValue(String name, Locale locale)
     {
         String getDefaultValue = "";
@@ -141,6 +194,11 @@ public class Gadget
         return getDefaultValue;
     }
 
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public String getHeight()
     {
         String getHeight = "320";
@@ -152,6 +210,11 @@ public class Gadget
         return getHeight;
     }
 
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public String getWidth()
     {
         String getWidth = "320";
@@ -163,6 +226,12 @@ public class Gadget
         return getWidth;
     }
 
+    /**
+     * Checks if is enum.
+     * 
+     * @param name the name
+     * @return true, if is enum
+     */
     public boolean isEnum(String name)
     {
         boolean isEnum = false;
@@ -183,6 +252,12 @@ public class Gadget
         return isEnum;
     }
 
+    /**
+     * Checks if is required.
+     * 
+     * @param name the name
+     * @return true, if is required
+     */
     public boolean isRequired(String name)
     {
         boolean isRequired = false;
@@ -203,6 +278,13 @@ public class Gadget
         return isRequired;
     }
 
+    /**
+     * Gets the display name.
+     * 
+     * @param name the name
+     * @param locale the locale
+     * @return the display name
+     */
     public String getDisplayName(String name, Locale locale)
     {
         String getDisplayName = null;
@@ -225,6 +307,12 @@ public class Gadget
         return getDisplayName;
     }
 
+    /**
+     * Gets the data type.
+     * 
+     * @param name the name
+     * @return the data type
+     */
     public String getDataType(String name)
     {
         String getDataType = null;
@@ -246,6 +334,11 @@ public class Gadget
         return getDataType;
     }
 
+    /**
+     * Gets the parameter names.
+     * 
+     * @return the parameter names
+     */
     public Set<String> getParameterNames()
     {
         HashSet<String> getParameterNames = new HashSet<String>();
@@ -268,11 +361,23 @@ public class Gadget
         return getParameterNames;
     }
 
+    /**
+     * Gets the uRL.
+     * 
+     * @return the uRL
+     */
     public URL getURL()
     {
         return url;
     }
 
+    /**
+     * Gets the parameters.
+     * 
+     * @param resource the resource
+     * @param localeUser the locale user
+     * @return the parameters
+     */
     public String getParameters(Resource resource, Locale localeUser)
     {
         StringBuffer buffer = new StringBuffer();
@@ -294,6 +399,12 @@ public class Gadget
         return buffer.toString();
     }
 
+    /**
+     * Sets the default parameters.
+     * 
+     * @param resource the resource
+     * @param locale the locale
+     */
     private void setDefaultParameters(Resource resource, Locale locale)
     {
         try
@@ -332,6 +443,12 @@ public class Gadget
 
     }
 
+    /**
+     * Gets the locale.
+     * 
+     * @param locale the locale
+     * @return the locale
+     */
     private Document getLocale(Locale locale)
     {
         Document getLocale = null;
@@ -368,6 +485,11 @@ public class Gadget
 
     }
 
+    /**
+     * Gets the default language.
+     * 
+     * @return the default language
+     */
     private Document getDefaultLanguage()
     {
         Document getDefaultLanguage = null;
@@ -393,6 +515,12 @@ public class Gadget
         return getDefaultLanguage;
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @param value the value
+     * @return the name
+     */
     private String getName(String value)
     {
         int pos = value.indexOf(UP_PREFIX);
@@ -408,6 +536,13 @@ public class Gadget
         return value;
     }
 
+    /**
+     * Gets the value from user pref.
+     * 
+     * @param bundleName the bundle name
+     * @param locale the locale
+     * @return the value from user pref
+     */
     private String getValueFromUserPref(String bundleName, Locale locale)
     {
         String nameUserpref = getName(bundleName);
@@ -430,6 +565,12 @@ public class Gadget
         return bundleName;
     }
 
+    /**
+     * Gets the document.
+     * 
+     * @param url the url
+     * @return the document
+     */
     public static Document getDocument(URL url)
     {
         Document getDocument = null;
@@ -455,6 +596,13 @@ public class Gadget
         return getDocument;
     }
 
+    /**
+     * Gets the text from language.
+     * 
+     * @param bundleName the bundle name
+     * @param locale the locale
+     * @return the text from language
+     */
     private String getTextFromLanguage(String bundleName, Locale locale)
     {
         String getTextFromLanguage = bundleName;
@@ -516,6 +664,13 @@ public class Gadget
 
     }
 
+    /**
+     * Gets the description.
+     * 
+     * @param locale the locale
+     * @return the description
+     * @throws Exception the exception
+     */
     public String getDescription(Locale locale) throws Exception
     {
         String getDescription = "Sin Descripción";
@@ -527,6 +682,13 @@ public class Gadget
         return getDescription;
     }
 
+    /**
+     * Gets the src image.
+     * 
+     * @param locale the locale
+     * @return the src image
+     * @throws Exception the exception
+     */
     public String getSrcImage(Locale locale) throws Exception
     {
         String getSrcImage = null;
@@ -559,6 +721,13 @@ public class Gadget
         return getSrcImage;
     }
 
+    /**
+     * Gets the directory title.
+     * 
+     * @param locale the locale
+     * @return the directory title
+     * @throws Exception the exception
+     */
     public String getDirectoryTitle(Locale locale) throws Exception
     {
         String getDirectoryTitle = null;
@@ -574,11 +743,21 @@ public class Gadget
 
     }
 
+    /**
+     * Gets the module.
+     * 
+     * @return the module
+     */
     public Document getModule()
     {
         return module;
     }
 
+    /**
+     * Gets the languages.
+     * 
+     * @return the languages
+     */
     public Set<String> getLanguages()
     {
         HashSet<String> getLanguages = new HashSet<String>();
@@ -604,6 +783,11 @@ public class Gadget
         return getLanguages;
     }
 
+    /**
+     * Gets the author_ location.
+     * 
+     * @return the author_ location
+     */
     public String getAuthor_Location()
     {
         String getAuthor_Location = "";
@@ -614,6 +798,13 @@ public class Gadget
         return getAuthor_Location;
     }
 
+    /**
+     * Gets the title.
+     * 
+     * @param locale the locale
+     * @return the title
+     * @throws Exception the exception
+     */
     public String getTitle(Locale locale) throws Exception
     {
         String getTitle = "Sin título";
@@ -626,6 +817,11 @@ public class Gadget
         return getTitle;
     }
 
+    /**
+     * Gets the author.
+     * 
+     * @return the author
+     */
     public String getAuthor()
     {
         String getAuthor = "Sin autor";

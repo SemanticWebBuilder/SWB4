@@ -53,30 +53,46 @@ import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.Upload;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBVirtualHostFilter.
+ * 
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
 public class SWBVirtualHostFilter implements Filter
 {
 
+    /** The log. */
     static Logger log = SWBUtils.getLogger(SWBVirtualHostFilter.class);
+    
+    /** The swb portal. */
     private SWBPortal swbPortal = null;
+    
+    /** The int servlets. */
     private HashMap<String, InternalServlet> intServlets = new HashMap();
+    
+    /** The dist. */
     private InternalServlet dist=null;
+    
+    /** The login internal servlet. */
     private Login loginInternalServlet = new Login();
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured.
+    /** The filter config. */
     private FilterConfig filterConfig = null;
+    
+    /** The fist call. */
     private boolean fistCall = true;
 
     /**
-     *
+     * Do filter.
+     * 
      * @param request The servlet request we are processing
-     * @param response 
+     * @param response the response
      * @param chain The filter chain we are processing
-     *
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ServletException the servlet exception
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
@@ -240,17 +256,17 @@ public class SWBVirtualHostFilter implements Filter
     }
 
     /**
-     * Destroy method for this filter
-     *
+     * Destroy method for this filter.
      */
     public void destroy()
     {
     }
 
     /**
-     * Init method for this filter
-     *
-     * @param filterConfig 
+     * Init method for this filter.
+     * 
+     * @param filterConfig the filter config
+     * @throws ServletException the servlet exception
      */
     public void init(FilterConfig filterConfig) throws ServletException
     {
@@ -326,6 +342,8 @@ public class SWBVirtualHostFilter implements Filter
 
     /**
      * Return a String representation of this object.
+     * 
+     * @return the string
      */
     public String toString()
     {
@@ -341,6 +359,13 @@ public class SWBVirtualHostFilter implements Filter
 
     }
 
+    /**
+     * Validate db.
+     * 
+     * @param response the response
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private boolean validateDB(HttpServletResponse response) throws IOException
     {
         boolean ret = true;
@@ -359,6 +384,16 @@ public class SWBVirtualHostFilter implements Filter
         return ret;
     }
 
+    /**
+     * Process error.
+     * 
+     * @param err the err
+     * @param errMsg the err msg
+     * @param response the response
+     * @param dparams the dparams
+     * @throws ServletException the servlet exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void processError(int err, String errMsg, HttpServletResponse response, DistributorParams dparams)
             throws ServletException, IOException
     {
@@ -396,6 +431,12 @@ public class SWBVirtualHostFilter implements Filter
         out.close();
     }
 
+    /**
+     * Adds the mapping.
+     * 
+     * @param map the map
+     * @param iServlet the i servlet
+     */
     public void addMapping(String map, InternalServlet iServlet)
     {
         if (!intServlets.containsKey(map) && iServlet!=null)

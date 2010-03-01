@@ -24,32 +24,68 @@
 package org.semanticwb.portal.resources.sem.events.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EventsBase.
+ */
 public class EventsBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant eve_Event. */
     public static final org.semanticwb.platform.SemanticClass eve_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/Events#Event");
+    
+    /** The Constant eve_hasEvent. */
     public static final org.semanticwb.platform.SemanticProperty eve_hasEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/Events#hasEvent");
+    
+    /** The Constant eve_Events. */
     public static final org.semanticwb.platform.SemanticClass eve_Events=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/Events#Events");
 
+    /**
+     * Instantiates a new events base.
+     */
     public EventsBase()
     {
     }
 
+    /**
+     * Instantiates a new events base.
+     * 
+     * @param base the base
+     */
     public EventsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/Events#Events");
 
+    /**
+     * List events.
+     * 
+     * @return the org.semanticwb.model. generic iterator
+     */
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.events.Event> listEvents()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.events.Event>(getSemanticObject().listObjectProperties(eve_hasEvent));
     }
 
+    /**
+     * Checks for event.
+     * 
+     * @param event the event
+     * @return true, if successful
+     */
     public boolean hasEvent(org.semanticwb.portal.resources.sem.events.Event event)
     {
         if(event==null)return false;        return getSemanticObject().hasObjectProperty(eve_hasEvent,event.getSemanticObject());
     }
 
+    /**
+     * Gets the event.
+     * 
+     * @return the event
+     */
     public org.semanticwb.portal.resources.sem.events.Event getEvent()
     {
          org.semanticwb.portal.resources.sem.events.Event ret=null;

@@ -42,6 +42,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * RSSResource es un recurso de tipo contenido para incluir y tranformar un XML del tipo RSS Resource
  * como recurso.
@@ -52,9 +53,16 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @author Javier Solis Gonzalez
  */
 public class RSSResource extends GenericAdmResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(RSSResource.class);
+    
+    /** The tpl. */
     private javax.xml.transform.Templates tpl;
  
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) {
         try { 
@@ -79,6 +87,16 @@ public class RSSResource extends GenericAdmResource {
         }
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramReq the param req
+     * @return the dom
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         try {
@@ -94,6 +112,9 @@ public class RSSResource extends GenericAdmResource {
         return null;
     }
   
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doXML(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException {
         try {
@@ -106,6 +127,9 @@ public class RSSResource extends GenericAdmResource {
         }        
     }  
       
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException {
         response.setContentType("text/html; charset=iso-8859-1");

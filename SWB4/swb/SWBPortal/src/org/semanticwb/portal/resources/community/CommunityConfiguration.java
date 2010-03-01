@@ -52,19 +52,34 @@ import org.semanticwb.portal.resources.blog.BlogResource;
 import org.semanticwb.portal.resources.googlegadgets.GoogleGadget;
 import org.semanticwb.model.comm.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CommunityConfiguration.
+ * 
  * @author victor.lorenzana
  */
 public class CommunityConfiguration extends GenericResource
 {
 
+    /** The Constant COMMUNITY_CONTAINER_ID. */
     public static final String COMMUNITY_CONTAINER_ID = "Comunidades";
+    
+    /** The Constant resources. */
     public static final String[] resources;
+    
+    /** The Constant FORO_RESOURCE_TYPE_ID. */
     public static final String FORO_RESOURCE_TYPE_ID = "Forum";
+    
+    /** The Constant BLOG_RESOURCE_TYPE_ID. */
     public static final String BLOG_RESOURCE_TYPE_ID = "BlogResource";
+    
+    /** The Constant WIKI_RESOURCE_TYPE_ID. */
     public static final String WIKI_RESOURCE_TYPE_ID = "Wiki";
+    
+    /** The Constant GOOGLE_RESOURCE_TYPE_ID. */
     public static final String GOOGLE_RESOURCE_TYPE_ID = "GoogleGadget";
+    
+    /** The Constant CONFIGURATION_RESOURCE_TYPE_ID. */
     public static final String CONFIGURATION_RESOURCE_TYPE_ID = "CommunityConfiguration";
 
 
@@ -76,8 +91,19 @@ public class CommunityConfiguration extends GenericResource
         resources[2] = WIKI_RESOURCE_TYPE_ID;
         resources[3] = GOOGLE_RESOURCE_TYPE_ID;
     }
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(CommunityConfiguration.class);
 
+    /**
+     * Creates the comunnity person.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param locationentity the locationentity
+     * @param topic the topic
+     * @param resourceByDefault the resource by default
+     */
     public static void createComunnityPerson(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault)
     {
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
@@ -125,6 +151,17 @@ public class CommunityConfiguration extends GenericResource
         wiki.addTemplateRef(tplrefWiki);
     }
 
+    /**
+     * Creates the comunnity organization.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param locationentity the locationentity
+     * @param topic the topic
+     * @param resourceByDefault the resource by default
+     * @param response the response
+     * @param description the description
+     */
     public static void createComunnityOrganization(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault, SWBActionResponse response, String description)
     {
 
@@ -186,6 +223,16 @@ public class CommunityConfiguration extends GenericResource
         
     }
 
+    /**
+     * Creates the community topic.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param locationentity the locationentity
+     * @param topic the topic
+     * @param resourceByDefault the resource by default
+     * @param description the description
+     */
     public static void createCommunityTopic(WebSite site, String title, LocationEntity locationentity, WebPage topic, String resourceByDefault,String description)
     {
         WebPage communityContainer = site.getWebPage(COMMUNITY_CONTAINER_ID);
@@ -237,6 +284,15 @@ public class CommunityConfiguration extends GenericResource
         
     }
 
+    /**
+     * Creates the foro.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param parent the parent
+     * @param resourceByDefault the resource by default
+     * @return the web page
+     */
     public static WebPage createForo(WebSite site, String title, WebPage parent, String resourceByDefault)
     {
         WebPage foro = null;
@@ -274,6 +330,15 @@ public class CommunityConfiguration extends GenericResource
         return foro;
     }
 
+    /**
+     * Creates the wiki.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param parent the parent
+     * @param resourceByDefault the resource by default
+     * @return the web page
+     */
     public static WebPage createWiki(WebSite site, String title, WebPage parent, String resourceByDefault)
     {
         WebPage wiki = null;
@@ -310,6 +375,15 @@ public class CommunityConfiguration extends GenericResource
         return wiki;
     }
 
+    /**
+     * Creates the blog.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param parent the parent
+     * @param resourceByDefault the resource by default
+     * @return the web page
+     */
     public static WebPage createBlog(WebSite site, String title, WebPage parent, String resourceByDefault)
     {
         WebPage blog = null;
@@ -362,6 +436,15 @@ public class CommunityConfiguration extends GenericResource
         return blog;
     }
 
+    /**
+     * Creates the google gadget.
+     * 
+     * @param site the site
+     * @param title the title
+     * @param parent the parent
+     * @param resourceByDefault the resource by default
+     * @return the web page
+     */
     private static WebPage createGoogleGadget(WebSite site, String title, WebPage parent, String resourceByDefault)
     {
         WebPage googlegadget = null;
@@ -419,6 +502,13 @@ public class CommunityConfiguration extends GenericResource
         return googlegadget;
     }
 
+    /**
+     * Exists web page.
+     * 
+     * @param resourceID the resource id
+     * @param parent the parent
+     * @return true, if successful
+     */
     public static boolean existsWebPage(String resourceID, WebPage parent)
     {
         GenericIterator<WebPage> childs = parent.listChilds();
@@ -433,6 +523,13 @@ public class CommunityConfiguration extends GenericResource
         return false;
     }
 
+    /**
+     * Gets the web page.
+     * 
+     * @param resourceID the resource id
+     * @param parent the parent
+     * @return the web page
+     */
     public static WebPage getWebPage(String resourceID, WebPage parent)
     {
         GenericIterator<WebPage> childs = parent.listChilds();
@@ -447,6 +544,13 @@ public class CommunityConfiguration extends GenericResource
         return null;
     }
 
+    /**
+     * Exists resource.
+     * 
+     * @param resourceId the resource id
+     * @param parent the parent
+     * @return true, if successful
+     */
     public static boolean existsResource(String resourceId, WebPage parent)
     {
         Iterator<Resource> resourcesInWebPage = parent.listResources();
@@ -461,6 +565,9 @@ public class CommunityConfiguration extends GenericResource
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -498,6 +605,9 @@ public class CommunityConfiguration extends GenericResource
         response.setAction(response.Mode_VIEW);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -537,12 +647,21 @@ public class CommunityConfiguration extends GenericResource
         if(flag) out.println(strbf.toString());
   }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         doAdmin(request, response, paramRequest);
     }
 
+    /**
+     * Gets the resources.
+     * 
+     * @param page the page
+     * @return the resources
+     */
     public HashSet<String> getResources(WebPage page)
     {
         HashSet<String> resourcesPage = new HashSet<String>();

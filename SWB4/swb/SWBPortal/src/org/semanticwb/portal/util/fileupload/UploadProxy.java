@@ -29,6 +29,7 @@ import uk.ltd.getahead.dwr.WebContextFactory;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
+// TODO: Auto-generated Javadoc
 /**
  * Handles DWR progress requests. Progress requests should start after the upload request occurs. If
  * a request for progress is still made, this proxy should return an UploadStatus.STATUS_RETRY. If
@@ -42,6 +43,11 @@ import org.semanticwb.servlet.internal.UploadFormElement;
  */
 public class UploadProxy {
 
+    /**
+     * Gets the status.
+     * 
+     * @return the status
+     */
     public UploadStatus getStatus() {
         WebContext webCtx = WebContextFactory.get();
         HttpSession session = webCtx.getSession();

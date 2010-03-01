@@ -35,22 +35,42 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceabl
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JRDeviceAccessDataDetail.
+ */
 public class JRDeviceAccessDataDetail implements JRDataSourceable{
+    
+    /** The data detail. */
     private SWBDataDetail dataDetail;
     
+    /**
+     * Instantiates a new jR device access data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public JRDeviceAccessDataDetail(WBAFilterReportBean filterReportBean){
         dataDetail = new DeviceAccessDataDetail(filterReportBean);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#orderJRReport()
+     */
     public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException {
         List dataList = dataDetail.execute();
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dataList);
         return dataSource;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#prepareJRReport()
+     */
     public void prepareJRReport() throws JRException{
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#exportReport(javax.servlet.http.HttpServletResponse)
+     */
     public void exportReport(HttpServletResponse response) throws java.io.IOException, JRException{
     }
 }

@@ -37,6 +37,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo area en una forma de html.
  * <p>
@@ -47,22 +48,50 @@ import org.w3c.dom.*;
 
 public class AreaMapFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(AreaMapFE.class);
     
+    /** The title. */
     private String title=null;
+    
+    /** The shape. */
     private String shape=null;
+    
+    /** The coords. */
     private String coords=null;
+    
+    /** The href. */
     private String href=null;
+    
+    /** The alt. */
     private String alt=null;
+    
+    /** The onclick. */
     private String onclick=null;
+    
+    /** The mapfe. */
     private MapFE mapfe=null;
+    
+    /** The tag. */
     protected Node tag=null;
     
-    /** Creates a new instance of OptionSelectFE */
+    /**
+     * Creates a new instance of OptionSelectFE.
+     */
     public AreaMapFE() {
     }
     
-    /** Creates a new instance of OptionSelectFE width default values*/
+    /**
+     * Creates a new instance of OptionSelectFE width default values.
+     * 
+     * @param title the title
+     * @param shape the shape
+     * @param coords the coords
+     * @param href the href
+     * @param alt the alt
+     * @param onclick the onclick
+     */
     public AreaMapFE(String title, String shape, String coords, String href, String alt, String onclick) {
         this.title=title;
         this.shape=shape;
@@ -72,72 +101,143 @@ public class AreaMapFE extends WBAdmResourceAbs
         this.onclick=onclick;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public AreaMapFE(Node tag){
         this.tag=tag;
         setAttributes();
     }
     
     //sets
+    /**
+     * Sets the title.
+     * 
+     * @param title the new title
+     */
     public void setTitle(String title){
         this.title=title;
     }
     
+    /**
+     * Sets the shape.
+     * 
+     * @param shape the new shape
+     */
     public void setShape(String shape){
         this.shape=shape;
     }
     
  
+    /**
+     * Sets the coords.
+     * 
+     * @param coords the new coords
+     */
     public void setCoords(String coords){
         this.coords=coords;
     }
     
+    /**
+     * Sets the href.
+     * 
+     * @param href the new href
+     */
     public void setHref(String href){
         this.href=href;
     }    
     
+    /**
+     * Sets the alt.
+     * 
+     * @param alt the new alt
+     */
     public void setAlt(String alt){
         this.alt=alt;
     }      
 
+    /**
+     * Sets the onclick.
+     * 
+     * @param onclick the new onclick
+     */
     public void setOnclick(String onclick){
         this.onclick=onclick;
     }            
     
+    /**
+     * Sets the map fe obj.
+     * 
+     * @param mapfe the new map fe obj
+     */
     public void setMapFEObj(MapFE mapfe){
         this.mapfe=mapfe;
     }
     
     //gets
+    /**
+     * Gets the title.
+     * 
+     * @return the title
+     */
     public String getTitle(){
         return this.title;
     }
 
+    /**
+     * Gets the shape.
+     * 
+     * @return the shape
+     */
     public String getShape(){
         return this.shape;
     }
 
+   /**
+    * Gets the coords.
+    * 
+    * @return the coords
+    */
    public String getCoords(){
         return this.coords;
     }
  
+    /**
+     * Gets the href.
+     * 
+     * @return the href
+     */
     public String getHref(){
         return this.href;
     }   
 
+    /**
+     * Gets the alt.
+     * 
+     * @return the alt
+     */
     public String getAlt(){
         return this.alt;
     }   
 
+    /**
+     * Gets the onclick.
+     * 
+     * @return the onclick
+     */
     public String getOnclick(){
         return this.onclick;
     }       
     
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */ 
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */ 
     public String getHtml(){
         String xml="";
         try 
@@ -166,8 +266,8 @@ public class AreaMapFE extends WBAdmResourceAbs
      
     
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
      public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

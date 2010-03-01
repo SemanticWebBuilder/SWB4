@@ -29,6 +29,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo Password.
  * <p>
@@ -38,27 +39,41 @@ import org.w3c.dom.*;
 
 public class PasswordFE extends TextFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PasswordFE.class);
     
-    /** Creates a new instance of PasswordFE */
+    /**
+     * Creates a new instance of PasswordFE.
+     */
     public PasswordFE() {
     }
     
-    /** Creates a new instance of PasswordFE with default values*/
+    /**
+     * Creates a new instance of PasswordFE with default values.
+     * 
+     * @param name the name
+     */
     public PasswordFE(String name) {
         this.name=name;
     }
     
-     /** Creates a new instwance with the default parameters */
+     /**
+      * Creates a new instwance with the default parameters.
+      * 
+      * @param tag the tag
+      */
     public PasswordFE(Node tag){
         this.tag=tag; 
         setAttributes();
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */    
     public String getHtml(){
         String xml="";
         try 
@@ -113,8 +128,9 @@ public class PasswordFE extends TextFE
     }
     
     /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
+     * Manejo de Frameworks de JavaScript.
+     * 
+     * @param child the new js framework attributes
      */
     private void setJsFrameworkAttributes(Element child){
             String jsFramework=getFormFE().getJsFrameWork();

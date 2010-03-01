@@ -44,24 +44,40 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.SWBResourceMgr;
 
+// TODO: Auto-generated Javadoc
 /** objeto: almacena la instancia de un metodo dentro de un template.
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
 public class SWBMethod
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBMethod.class);
+    
+    /** The method. */
     private Method method;
+    
+    /** The obj. */
     private Object obj;
+    
+    /** The arguments. */
     private Object[] arguments;
+    
+    /** The tpl. */
     private Template tpl;
+    
+    /** The obj args. */
     private boolean objArgs;
 
     /**
-     * @param method
-     * @param obj
-     * @param arguments
-     * @param tpl  */
+     * Instantiates a new sWB method.
+     * 
+     * @param method the method
+     * @param obj the obj
+     * @param arguments the arguments
+     * @param tpl the tpl
+     */
     public SWBMethod(Method method, Object obj, Object[] arguments, Template tpl)
     {
         this.method = method;
@@ -70,6 +86,15 @@ public class SWBMethod
         this.tpl = tpl;
     }
 
+    /**
+     * Eval obj args.
+     * 
+     * @param topic the topic
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the object[]
+     */
     private Object[] evalObjArgs(WebPage topic, User user, HttpServletRequest request, HttpServletResponse response)
     {
         Object[] args = arguments;
@@ -120,7 +145,15 @@ public class SWBMethod
     }
 
     /**
-     * @return  */
+     * Invoke.
+     * 
+     * @param topic the topic
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the object
+     * @return
+     */
     public Object invoke(WebPage topic, User user, HttpServletRequest request, HttpServletResponse response )
     {
         Object[] args = evalObjArgs(topic, user, request, response);
@@ -139,8 +172,16 @@ public class SWBMethod
     }
 
     /**
-     * @param obj
-     * @return  */
+     * Invoke.
+     * 
+     * @param obj the obj
+     * @param topic the topic
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the object
+     * @return
+     */
     public Object invoke(Object obj, WebPage topic, User user, HttpServletRequest request, HttpServletResponse response)
     {
         Object[] args = evalObjArgs(topic, user, request,response);
@@ -157,10 +198,14 @@ public class SWBMethod
     }
 
     /**
-     * @param mgr
-     * @param user
-     * @param topic
-     * @return  */
+     * Invoke.
+     * 
+     * @param mgr the mgr
+     * @param user the user
+     * @param topic the topic
+     * @return the object
+     * @return
+     */
     public Object invoke(SWBResourceMgr mgr, User user, WebPage topic)
     {
         Object o = null;
@@ -218,9 +263,11 @@ public class SWBMethod
         this.method = method;
     }
 
-    /** Indexed getter for property arguments.
+    /**
+     * Indexed getter for property arguments.
+     * 
      * @param index Index of the property.
-     * @return Value of the property at <CODE>index</CODE>.
+     * @return Value of the property at .
      */
     public java.lang.Object getArguments(int index)
     {

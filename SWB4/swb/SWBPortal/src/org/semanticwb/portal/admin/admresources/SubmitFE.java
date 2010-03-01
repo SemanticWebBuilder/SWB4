@@ -29,24 +29,37 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo Submit
  * <p>
- * Object that administers an element Submit in a html form
+ * Object that administers an element Submit in a html form.
+ * 
  * @author  Jorge Alberto Jim�nez
  */
 
 public class SubmitFE extends ButtonFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SubmitFE.class);
     
+    /** The formfe. */
     FormFE formfe;
      
+    /**
+     * Instantiates a new submit fe.
+     */
     public SubmitFE()
     {
         formfe = null;
     }
 
+    /**
+     * Instantiates a new submit fe.
+     * 
+     * @param value the value
+     */
     public SubmitFE(String value)
     {
         formfe = null;
@@ -54,6 +67,12 @@ public class SubmitFE extends ButtonFE
         this.value = value;
     }
 
+    /**
+     * Instantiates a new submit fe.
+     * 
+     * @param value the value
+     * @param formfe the formfe
+     */
     public SubmitFE(String value, FormFE formfe)
     {
         this.formfe = null;
@@ -62,6 +81,12 @@ public class SubmitFE extends ButtonFE
         this.formfe = formfe;
     }
 
+    /**
+     * Instantiates a new submit fe.
+     * 
+     * @param tag the tag
+     * @param formfe the formfe
+     */
     public SubmitFE(Node tag,FormFE formfe)
     {
         this.formfe = formfe;
@@ -70,9 +95,11 @@ public class SubmitFE extends ButtonFE
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */
     public String getHtml()
     {
         String xml="";

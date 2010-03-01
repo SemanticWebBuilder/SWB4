@@ -32,12 +32,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FacebookUtils.
+ * 
  * @author Jorge Jiménez
  */
 public class FacebookUtils {
 
+    /**
+     * Gets the albums.
+     * 
+     * @param dom the dom
+     * @return the albums
+     */
     public ArrayList getAlbums(Document dom) {
         ArrayList aAlbums = new ArrayList();
         NodeList nList = dom.getElementsByTagName("album");
@@ -54,6 +62,12 @@ public class FacebookUtils {
         return aAlbums;
     }
 
+    /**
+     * Gets the photos.
+     * 
+     * @param dom the dom
+     * @return the photos
+     */
     public ArrayList getPhotos(Document dom) {
         ArrayList aAlbums = new ArrayList();
         NodeList nList = dom.getElementsByTagName("photo");

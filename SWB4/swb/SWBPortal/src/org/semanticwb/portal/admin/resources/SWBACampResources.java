@@ -41,24 +41,31 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- * Shows a list of Resources asociated to a specific Campain
- *
+ * Shows a list of Resources asociated to a specific Campain.
+ * 
  * @author juan.fernandez
  */
 public class SWBACampResources extends GenericResource {
 
+    /** The page_elements. */
     private static int page_elements = 20;
 
-    /** Creates a new instance of SWBACampResources */
+    /**
+     * Creates a new instance of SWBACampResources.
+     */
     public SWBACampResources() {
     }
 
-    /** User view for the SWBACampResources resource, show a list of resources asociated to a specific campain.
-     * @param request, parameters, input data
-     * @param response, an answer to user request
-     * @param paramRequest, a list of objects (WebPage, User, Action, ...)
-     * @throws IOException
+    /**
+     * User view for the SWBACampResources resource, show a list of resources asociated to a specific campain.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

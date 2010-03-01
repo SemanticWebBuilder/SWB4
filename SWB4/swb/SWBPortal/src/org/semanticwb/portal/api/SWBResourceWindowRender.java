@@ -38,21 +38,38 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBResourceWindowRender.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBResourceWindowRender
 {
+    
+    /** The resource. */
     SWBResource resource=null;
     
-    /** Creates a new instance of WBResourceWindow */
+    /**
+     * Creates a new instance of WBResourceWindow.
+     * 
+     * @param resource the resource
+     */
     public SWBResourceWindowRender(SWBResource resource)
     {
         this.resource=resource;
     }
     
     
+    /**
+     * Render.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException 
     {
         //System.out.println("id:"+paramsRequest.getResourceBase().getId()+" "+resource.getClass()+" "+(resource instanceof WBResourceWindow));
@@ -72,6 +89,16 @@ public class SWBResourceWindowRender
         }        
     }
     
+    /**
+     * Window.
+     * 
+     * @param request the request
+     * @param content the content
+     * @param out the out
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void window(HttpServletRequest request, String content, PrintWriter out, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         String title=((SWBResourceWindow)resource).getTitle(request, paramsRequest);
@@ -134,6 +161,13 @@ public class SWBResourceWindowRender
         out.println("</div>");   
     }    
     
+    /**
+     * Prints the mode.
+     * 
+     * @param out the out
+     * @param paramsRequest the params request
+     * @param mode the mode
+     */
     private void printMode(PrintWriter out,SWBParamRequest paramsRequest,String mode)
     {
         SWBResourceURL url=paramsRequest.getRenderUrl();
@@ -180,6 +214,13 @@ public class SWBResourceWindowRender
         }
     }   
     
+    /**
+     * Prints the window state.
+     * 
+     * @param out the out
+     * @param paramsRequest the params request
+     * @param state the state
+     */
     private void printWindowState(PrintWriter out,SWBParamRequest paramsRequest,String state)
     {
         SWBResourceURL url=paramsRequest.getRenderUrl();

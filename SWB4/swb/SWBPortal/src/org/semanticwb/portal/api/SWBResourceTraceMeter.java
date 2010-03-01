@@ -31,26 +31,48 @@
 
 package org.semanticwb.portal.api;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBResourceTraceMeter.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBResourceTraceMeter
 {
+    
+    /** The id. */
     private String id;
+    
+    /** The type map. */
     private String typeMap;
+    
+    /** The name. */
     private String name;
     
+    /** The min time. */
     private long minTime;
+    
+    /** The max time. */
     private long maxTime;
+    
+    /** The avg time. */
     private long avgTime;
+    
+    /** The count. */
     private long count=0;
     
-    /** Creates a new instance of WBResourceTraceMeter */
+    /**
+     * Creates a new instance of WBResourceTraceMeter.
+     */
     public SWBResourceTraceMeter()
     {
     }
     
+    /**
+     * Adds the time.
+     * 
+     * @param time the time
+     */
     public void addTime(long time)
     {
         long aux=count;
@@ -70,51 +92,101 @@ public class SWBResourceTraceMeter
         count++;
     }
 
+    /**
+     * Gets the min time.
+     * 
+     * @return the min time
+     */
     public long getMinTime()
     {
         return minTime;
     }
 
+    /**
+     * Gets the max time.
+     * 
+     * @return the max time
+     */
     public long getMaxTime()
     {
         return maxTime;
     }
 
+    /**
+     * Gets the avg time.
+     * 
+     * @return the avg time
+     */
     public long getAvgTime()
     {
         return avgTime;
     }
 
+    /**
+     * Gets the id.
+     * 
+     * @return the id
+     */
     public String getId()
     {
         return id;
     }
 
+    /**
+     * Sets the id.
+     * 
+     * @param id the new id
+     */
     public void setId(String id)
     {
         this.id = id;
     }
 
+    /**
+     * Gets the type map.
+     * 
+     * @return the type map
+     */
     public String getTypeMap()
     {
         return typeMap;
     }
 
+    /**
+     * Sets the type map.
+     * 
+     * @param typeMap the new type map
+     */
     public void setTypeMap(String typeMap)
     {
         this.typeMap = typeMap;
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
 
+    /**
+     * Sets the name.
+     * 
+     * @param name the new name
+     */
     public void setName(String name)
     {
         this.name = name;
     }
 
+    /**
+     * Gets the count.
+     * 
+     * @return the count
+     */
     public long getCount()
     {
         return count;

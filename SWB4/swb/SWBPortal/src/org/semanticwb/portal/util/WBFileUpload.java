@@ -39,23 +39,46 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WBFileUpload.
+ */
 public class WBFileUpload
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBFileUpload.class);
     
+    /** The sessid. */
     String sessid=null;
     
+    /** The s content type. */
     private String sContentType;
+    
+    /** The parametros. */
     Vector parametros;
+    
+    /** The table. */
     Hashtable table;
+    
+    /** The max size. */
     protected int maxSize;
     
+    /**
+     * The Class CParameter.
+     */
     class CParameter
     {
 
+        /** The parametro. */
         public String parametro;
+        
+        /** The Valor. */
         public ArrayList Valor;
 
+        /**
+         * Instantiates a new c parameter.
+         */
         CParameter(){
             parametro=null;
             Valor=new ArrayList();
@@ -63,6 +86,9 @@ public class WBFileUpload
     }
 
 
+    /**
+     * Instantiates a new wB file upload.
+     */
     public WBFileUpload()
     {
         sContentType = null;
@@ -72,6 +98,12 @@ public class WBFileUpload
         maxSize = 0;
     }
 
+    /**
+     * Guarda.
+     * 
+     * @param html the html
+     * @param ruta the ruta
+     */
     private void Guarda(String html, String ruta)
     {
         try
@@ -86,6 +118,13 @@ public class WBFileUpload
         }
     }
 
+    /**
+     * Gets the files.
+     * 
+     * @param httpservletrequest the httpservletrequest
+     * @return the files
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void getFiles(HttpServletRequest httpservletrequest)
         throws IOException
     {
@@ -113,11 +152,22 @@ public class WBFileUpload
         }
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @return the content type
+     */
     public String getContentType()
     {
         return sContentType;
     }
 
+    /**
+     * Gets the file data.
+     * 
+     * @param s the s
+     * @return the file data
+     */
     public byte[] getFileData(String s)
     {
         byte ret[] = null;
@@ -145,16 +195,35 @@ public class WBFileUpload
         return ret;
     }
 
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public int getSize(){
         return maxSize;
     }
 
+    /**
+     * Gets the file input stream.
+     * 
+     * @param s the s
+     * @return the file input stream
+     */
     public InputStream getFileInputStream(String s)
     {
         byte data[] = getFileData(s);
         return new ByteArrayInputStream(data);
     }
 
+    /**
+     * Save file.
+     * 
+     * @param filename the filename
+     * @param path the path
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String filename, String path)
         throws IOException
     {
@@ -195,6 +264,15 @@ public class WBFileUpload
         return flag;
     }
 
+    /**
+     * Save file.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param s2 the s2
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String s, String s1, String s2)
         throws IOException
     {
@@ -235,6 +313,16 @@ public class WBFileUpload
         return flag;
     }
 
+    /**
+     * Save file.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param smod1 the smod1
+     * @param smod2 the smod2
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFile(String s, String s1, String smod1, String smod2)
         throws IOException
     {
@@ -275,6 +363,15 @@ public class WBFileUpload
         return flag;
     }
 
+    /**
+     * Save file parsed.
+     * 
+     * @param s the s
+     * @param s1 the s1
+     * @param s0 the s0
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean saveFileParsed(String s, String s1, String s0)
         throws IOException
     {
@@ -322,6 +419,13 @@ public class WBFileUpload
         return flag;
     }
 
+    /**
+     * Find attaches.
+     * 
+     * @param s the s
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String FindAttaches(String s)
         throws IOException
     {
@@ -352,6 +456,13 @@ public class WBFileUpload
         return dataarc;
     }
 
+    /**
+     * Gets the file name.
+     * 
+     * @param s the s
+     * @return the file name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getFileName(String s) throws IOException
     {
         if(table == null)
@@ -379,6 +490,12 @@ public class WBFileUpload
         return null;
     }
     
+    /**
+     * Gets the file names.
+     * 
+     * @return the file names
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public ArrayList getFileNames() throws IOException
     {
         ArrayList afileNames=new ArrayList();
@@ -393,6 +510,13 @@ public class WBFileUpload
     }
     
     
+    /**
+     * Gets the content type.
+     * 
+     * @param s the s
+     * @return the content type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getContentType(String s)
         throws IOException
     {
@@ -421,6 +545,13 @@ public class WBFileUpload
         return null;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @param s the s
+     * @return the value
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public ArrayList getValue(String s) throws IOException {
         for(int i = 0; i < parametros.size(); i++)
         {
@@ -432,6 +563,12 @@ public class WBFileUpload
     }
     
     
+    /**
+     * Gets the param names.
+     * 
+     * @return the param names
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public ArrayList getParamNames() throws IOException
     {
         ArrayList aparams=new ArrayList();
@@ -443,6 +580,13 @@ public class WBFileUpload
         return aparams;
     }
 
+    /**
+     * Parses the multi.
+     * 
+     * @param s the s
+     * @param servletinputstream the servletinputstream
+     * @return the hashtable
+     */
     Hashtable parseMulti(String s, ServletInputStream servletinputstream) 
     {
      try{   
@@ -609,6 +753,12 @@ public class WBFileUpload
     }
 
     
+    /**
+     * Find paremeter.
+     * 
+     * @param parameter the parameter
+     * @return the c parameter
+     */
     private CParameter FindParemeter(String parameter){
         for(int i = 0; i < parametros.size(); i++){
             CParameter cparameter = (CParameter)parametros.elementAt(i);
@@ -618,6 +768,13 @@ public class WBFileUpload
       return null;
     }
     
+    /**
+     * Check value.
+     * 
+     * @param cParameter the c parameter
+     * @param value the value
+     * @return true, if successful
+     */
     private boolean CheckValue(CParameter cParameter,String value){
         Iterator values=cParameter.Valor.iterator();
         while(values.hasNext()){

@@ -59,12 +59,24 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WBAChannelReport.
+ */
 public class WBAChannelReport extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBAChannelReport.class);
 
+    /** The Constant I_REPORT_TYPE. */
     public static final int I_REPORT_TYPE = 3;
+    
+    /** The str rsc type. */
     private String strRscType;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init(){
         Resource base = getResourceBase();
@@ -76,11 +88,13 @@ public class WBAChannelReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -94,11 +108,13 @@ public class WBAChannelReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -434,6 +450,12 @@ public class WBAChannelReport extends GenericResource {
         response.getWriter().print(sb_ret.toString());
     }
 
+    /**
+     * Gets the available time.
+     * 
+     * @param inicio the inicio
+     * @return the available time
+     */
     public String getAvailableTime(Timestamp inicio) {
         StringBuffer ret = new StringBuffer();
         Timestamp min_actual = inicio;
@@ -478,11 +500,13 @@ public class WBAChannelReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do rep xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=utf-8");
@@ -575,6 +599,12 @@ public class WBAChannelReport extends GenericResource {
         out.close();
     }
     
+    /**
+     * Update report.
+     * 
+     * @param request the request
+     * @param topic the topic
+     */
     public void updateReport(HttpServletRequest request, WebPage topic) {
         Resource base = getResourceBase();
         String s_site = request.getParameter("wb_site");
@@ -621,6 +651,12 @@ public class WBAChannelReport extends GenericResource {
         }
     }
 
+    /**
+     * Gets the file list.
+     * 
+     * @param topic the topic
+     * @return the file list
+     */
     public HashMap getFileList(WebPage topic) {
         Resource base = getResourceBase();
         HashMap hm = new HashMap();
@@ -646,10 +682,12 @@ public class WBAChannelReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -716,6 +754,15 @@ public class WBAChannelReport extends GenericResource {
         }
     }
 
+    /**
+     * Do download.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String filename = request.getParameter("filename");
         String key = request.getParameter("key");

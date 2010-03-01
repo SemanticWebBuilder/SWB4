@@ -1,3 +1,25 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.admin.admresources.util;
 
 import java.util.HashMap;
@@ -8,25 +30,60 @@ import org.w3c.dom.Document;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class StylerDomParser.
+ */
 public class StylerDomParser {
+    
+    /** The dom. */
     private Document dom;
+    
+    /** The serial. */
     private int serial;
+    
+    /** The cp. */
     private int cp;
+    
+    /** The tabs. */
     private HashMap tabs;
+    
+    /** The client. */
     private Resource client;
 
+    /** The fstel. */
     private boolean fstel;
 
+    /**
+     * Instantiates a new styler dom parser.
+     * 
+     * @param xml the xml
+     * @param client the client
+     * @throws NullPointerException the null pointer exception
+     */
     public StylerDomParser(String xml, Resource client) throws NullPointerException {
         parseXml(xml);
         this.client = client;
     }
 
+    /**
+     * Instantiates a new styler dom parser.
+     * 
+     * @param dom the dom
+     * @param client the client
+     * @throws NullPointerException the null pointer exception
+     */
     public StylerDomParser(Document dom, Resource client) throws NullPointerException {
         this.dom = dom;
         this.client = client;
     }
 
+    /**
+     * Parses the xml.
+     * 
+     * @param xml the xml
+     * @throws NullPointerException the null pointer exception
+     */
     private void parseXml(String xml) throws NullPointerException {
         dom = SWBUtils.XML.xmlToDom(xml);
         if(dom==null) {
@@ -34,6 +91,11 @@ public class StylerDomParser {
         }
     }
 
+    /**
+     * Parses the.
+     * 
+     * @return the string
+     */
     public String parse() {
         tabs = new HashMap();
         StringBuilder script = new StringBuilder();
@@ -43,6 +105,11 @@ public class StylerDomParser {
         return script.toString();
     }
 
+    /**
+     * Process document.
+     * 
+     * @return the string
+     */
     private String processDocument() {
         StringBuilder script = new StringBuilder();
         Element docEle = dom.getDocumentElement();
@@ -54,6 +121,12 @@ public class StylerDomParser {
         return script.toString();
     }
 
+    /**
+     * Process class.
+     * 
+     * @param sel the sel
+     * @return the string
+     */
     private String processClass(Element sel) {
         StringBuilder script = new StringBuilder();
         String name = sel.getAttribute("name");
@@ -452,6 +525,11 @@ public class StylerDomParser {
         return script.toString();
     }
 
+    /**
+     * Process start document.
+     * 
+     * @return the string
+     */
     private String processStartDocument() {
         StringBuilder script = new StringBuilder();
 
@@ -497,6 +575,11 @@ public class StylerDomParser {
         return script.toString();
     }
 
+    /**
+     * Process end document.
+     * 
+     * @return the string
+     */
     private String processEndDocument() {
         StringBuilder script = new StringBuilder();
         script.append("</div>\n");
@@ -516,14 +599,30 @@ public class StylerDomParser {
         return script.toString();
     }
 
+    /**
+     * Gets the tabs.
+     * 
+     * @return the tabs
+     */
     public HashMap getTabs() {
         return tabs;
     }
 
+    /**
+     * The main method.
+     * 
+     * @param argv the arguments
+     */
     public static void main(String argv[]) {
 
     }
 
+    /**
+     * Process properties.
+     * 
+     * @param sel the sel
+     * @return the hash map
+     */
     private HashMap<String,String> processProperties(Element sel) {
         HashMap<String,String> attrs = new HashMap();
         NodeList nl = sel.getElementsByTagName("property");

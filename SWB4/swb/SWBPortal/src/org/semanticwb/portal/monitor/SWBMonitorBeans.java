@@ -31,22 +31,45 @@ import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBMonitorBeans.
+ * 
  * @author serch
  */
 public class SWBMonitorBeans
 {
 
+    /** The class loading m bean. */
     ClassLoadingMXBean classLoadingMBean = null;
+    
+    /** The compilation m bean. */
     CompilationMXBean compilationMBean = null;
+    
+    /** The memory m bean. */
     MemoryMXBean memoryMBean = null;
+    
+    /** The operating system m bean. */
     OperatingSystemMXBean operatingSystemMBean = null;
+    
+    /** The runtime m bean. */
     RuntimeMXBean runtimeMBean = null;
+    
+    /** The thread m bean. */
     ThreadMXBean threadMBean = null;
+    
+    /** The sun operating system mx bean. */
     com.sun.management.OperatingSystemMXBean sunOperatingSystemMXBean = null;
+    
+    /** The prev process cpu time. */
     long prevUpTime = -1l, prevProcessCpuTime = 0l;
 
+    /**
+     * Update cpu info.
+     * 
+     * @param data the data
+     * @return the float
+     */
     public float updateCPUInfo(SWBMonitorData data)
     {
         float cpuUsage = Float.MIN_VALUE;
@@ -67,6 +90,9 @@ public class SWBMonitorBeans
         return cpuUsage;
     }
 
+    /**
+     * Instantiates a new sWB monitor beans.
+     */
     public SWBMonitorBeans()
     {
         classLoadingMBean = getClassLoadingMXBean();

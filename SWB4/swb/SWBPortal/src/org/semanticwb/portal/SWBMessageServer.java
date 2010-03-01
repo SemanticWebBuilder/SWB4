@@ -35,23 +35,35 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Servidos de mensajes UDP de sincronizacion de hits.
  * @author Javier Solis Gonzalez
  * @version 1.0
  */
 public class SWBMessageServer extends java.lang.Thread
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBMessageServer.class);
 
+    /** The Constant PKSIZE. */
     private static final int PKSIZE = 1024;
 
+    /** The s. */
     private DatagramSocket s = null;
+    
+    /** The packet. */
     private DatagramPacket packet = null;
+    
+    /** The center. */
     private SWBMessageCenter center = null;
 
     /**
-     * @param center
-     * @throws java.net.SocketException  */
+     * Instantiates a new sWB message server.
+     * 
+     * @param center the center
+     * @throws SocketException the socket exception
+     */
     public SWBMessageServer(SWBMessageCenter center) throws java.net.SocketException
     {
         this.center = center;
@@ -74,6 +86,9 @@ public class SWBMessageServer extends java.lang.Thread
         log.event("Message Serrver en:"+"\t"+ s.getLocalAddress().getHostAddress() + ":" + port);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Thread#run()
+     */
     public void run()
     {
         log.info("Message Server Running...");

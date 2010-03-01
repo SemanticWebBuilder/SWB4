@@ -41,24 +41,44 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.db.SWBRecHits_;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DeviceAccessDataDetail.
+ */
 public class DeviceAccessDataDetail extends SWBDataDetail {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(DeviceAccessDataDetail.class);
     
+    /**
+     * Instantiates a new device access data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public DeviceAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
            
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, java.lang.String)
+     */
     protected List doDataList(String siteId, String rfilter, int type, String userLanguage) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         return resumeRecHits;
     }
     
         /**
-     * @param siteId
-     * @param rfilter
-     * @param type
-     * @param year
-     * @return  */
+         * Do data list.
+         * 
+         * @param siteId the site id
+         * @param rfilter the rfilter
+         * @param type the type
+         * @param year the year
+         * @param userLanguage the user language
+         * @return the list
+         * @throws IncompleteFilterException the incomplete filter exception
+         * @return
+         */
     protected List doDataList(String siteId, String rfilter,int type,int year, String userLanguage) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
@@ -83,6 +103,9 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, java.lang.String)
+     */
     protected List doDataList(String siteId, String rfilter, int type, int year, int month, int day, String userLanguage) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
@@ -107,6 +130,9 @@ public class DeviceAccessDataDetail extends SWBDataDetail {
         return resumeRecHits;
     }
         
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, int, int, int, java.lang.String)
+     */
     protected List doDataList(String siteId, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String userLanguage) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();

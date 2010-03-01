@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommunityElement.
+ */
 public class CommunityElement extends org.semanticwb.model.comm.base.CommunityElementBase 
 {
+    
+    /**
+     * Instantiates a new community element.
+     * 
+     * @param base the base
+     */
     public CommunityElement(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

@@ -52,6 +52,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.db.SWBRecAdmLog;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /** Muestra el historial de las acciones hechas sobre cada elemento de WebBuilder,
  * desde su creaci�n, modificaci�n y eliminaci�n; mostrando cada cambio realizado
  * y que usuario lo realiz�.
@@ -63,17 +64,23 @@ import org.w3c.dom.*;
  */
 public class SWBALogs extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBALogs.class);
 
-    /** Creates a new instance of Logs */
+    /**
+     * Creates a new instance of Logs.
+     */
     public SWBALogs() {
     }
 
-    /** Admin wiew of WBALogs Resource
+    /**
+     * Admin wiew of WBALogs Resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -328,11 +335,14 @@ public class SWBALogs extends GenericResource {
 
     }
 
-    /** User View of WBALogs Resource
+    /**
+     * User View of WBALogs Resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -633,11 +643,13 @@ public class SWBALogs extends GenericResource {
         out.println("</div>");
     }
 
-    /** Generate the log in Excel format
+    /**
+     * Generate the log in Excel format.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
-     * @throws SWBResourceException
+     * @throws SWBResourceException the sWB resource exception
      * @throws IOException an IO Exception
      */
     public void doExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -772,11 +784,14 @@ public class SWBALogs extends GenericResource {
 
     }
 
-    /** Generate the log in the XML format
+    /**
+     * Generate the log in the XML format.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -919,10 +934,13 @@ public class SWBALogs extends GenericResource {
         out.println(SWBUtils.XML.domToXml(dom));
     }
 
-    /** Add and Update of WBALogs properties
+    /**
+     * Add and Update of WBALogs properties.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -992,11 +1010,14 @@ public class SWBALogs extends GenericResource {
         response.setMode(response.Mode_ADMIN);
     }
 
-    /** Process the request to show the requested view
+    /**
+     * Process the request to show the requested view.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

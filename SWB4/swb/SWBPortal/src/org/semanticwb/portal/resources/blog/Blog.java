@@ -43,23 +43,55 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Blog.
+ * 
  * @author victor.lorenzana
  */
 public class Blog
 {
     
+    /** The log. */
     private Logger log=SWBUtils.getLogger(Blog.class);
+    
+    /** The posts. */
     ArrayList posts = new ArrayList();
+    
+    /** The blog id. */
     private long blogID;
+    
+    /** The name. */
     private String name;
+    
+    /** The add url. */
     public String addURL;
+    
+    /** The level user. */
     private int levelUser;
+    
+    /** The iso8601date format. */
     private SimpleDateFormat iso8601dateFormat;
+    
+    /** The deleteimage. */
     private String deleteimage;
+    
+    /** The editimage. */
     private String editimage;
+    
+    /** The addimage. */
     private String addimage;
+    
+    /**
+     * Instantiates a new blog.
+     * 
+     * @param blogID the blog id
+     * @param user the user
+     * @param format the format
+     * @param deleteimage the deleteimage
+     * @param editimage the editimage
+     * @param addimage the addimage
+     */
     public Blog(long blogID, User user,String format,String deleteimage,String editimage,String addimage)
     {
         iso8601dateFormat = new SimpleDateFormat(format);
@@ -187,26 +219,51 @@ public class Blog
         }
     }
 
+    /**
+     * New blog.
+     * 
+     * @param name the name
+     * @return the blog
+     */
     public static Blog newBlog(String name)
     {
         return null;
     }
 
+    /**
+     * Gets the blog id.
+     * 
+     * @return the blog id
+     */
     public long getBlogID()
     {
         return blogID;
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString()
     {
         return name;
     }
 
+    /**
+     * To xml.
+     * 
+     * @param nummax the nummax
+     * @return the document
+     */
     public Document toXML(int nummax)
     {
         Document doc = new Document();

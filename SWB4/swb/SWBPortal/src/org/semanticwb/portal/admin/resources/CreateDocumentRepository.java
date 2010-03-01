@@ -43,14 +43,20 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.repository.Workspace;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CreateDocumentRepository.
+ * 
  * @author Jorge Jiménez
  */
 public class CreateDocumentRepository extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBImportWebSite.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -82,6 +88,14 @@ public class CreateDocumentRepository extends GenericResource {
         }
     }
 
+    /**
+     * Gets the step1.
+     * 
+     * @param out the out
+     * @param url the url
+     * @param paramRequest the param request
+     * @return the step1
+     */
     private void getStep1(PrintWriter out, SWBResourceURL url, SWBParamRequest paramRequest) {
         try {
 

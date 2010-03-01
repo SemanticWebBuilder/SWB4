@@ -27,6 +27,7 @@ package org.semanticwb.portal.util;
 
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase se encarga de administrar los datos de un usuario final que entra en sesion
  * usando una cookie.
  *
@@ -35,13 +36,28 @@ package org.semanticwb.portal.util;
  */
 public class SWBCookie
 {
+    
+    /** The name. */
     private String name;
+    
+    /** The value. */
     private String value;
+    
+    /** The expires. */
     private String expires;
+    
+    /** The path. */
     private String path;
+    
+    /** The host. */
     private String host;
+    
+    /** The resid. */
     private long resid;
 
+    /**
+     * Instantiates a new sWB cookie.
+     */
     public SWBCookie()
     {
         name = null;
@@ -53,12 +69,14 @@ public class SWBCookie
     }
 
     /**
-     * @param name
-     * @param value
-     * @param expires
-     * @param path
-     * @param host
-     * @param resid
+     * Instantiates a new sWB cookie.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param expires the expires
+     * @param path the path
+     * @param host the host
+     * @param resid the resid
      */    
     public SWBCookie(String name, String value, String expires, String path, String host, long resid)
     {
@@ -72,6 +90,9 @@ public class SWBCookie
 
 
     /**
+     * Gets the name.
+     * 
+     * @return the name
      * @return
      */    
     public String getName()
@@ -80,6 +101,9 @@ public class SWBCookie
     }
 
     /**
+     * Gets the value.
+     * 
+     * @return the value
      * @return
      */    
     public String getValue()
@@ -88,6 +112,9 @@ public class SWBCookie
     }
 
     /**
+     * Gets the expires.
+     * 
+     * @return the expires
      * @return
      */    
     public String getExpires()
@@ -96,6 +123,9 @@ public class SWBCookie
     }
 
     /**
+     * Gets the path.
+     * 
+     * @return the path
      * @return
      */    
     public String getPath()
@@ -104,6 +134,9 @@ public class SWBCookie
     }
 
     /**
+     * Gets the host.
+     * 
+     * @return the host
      * @return
      */    
     public String getHost()
@@ -112,6 +145,9 @@ public class SWBCookie
     }
 
     /**
+     * Gets the res id.
+     * 
+     * @return the res id
      * @return
      */    
     public long getResID()
@@ -120,7 +156,9 @@ public class SWBCookie
     }
 
     /**
-     * @param name
+     * Sets the name.
+     * 
+     * @param name the new name
      */    
     public void setName(String name)
     {
@@ -128,7 +166,9 @@ public class SWBCookie
     }
 
     /**
-     * @param value
+     * Sets the value.
+     * 
+     * @param value the new value
      */    
     public void setValue(String value)
     {
@@ -136,7 +176,9 @@ public class SWBCookie
     }
 
     /**
-     * @param expires
+     * Sets the expires.
+     * 
+     * @param expires the new expires
      */    
     public void setExpires(String expires)
     {
@@ -144,7 +186,9 @@ public class SWBCookie
     }
 
     /**
-     * @param path
+     * Sets the path.
+     * 
+     * @param path the new path
      */    
     public void setPath(String path)
     {
@@ -152,7 +196,9 @@ public class SWBCookie
     }
 
     /**
-     * @param host
+     * Sets the host.
+     * 
+     * @param host the new host
      */    
     public void setHost(String host)
     {
@@ -160,7 +206,9 @@ public class SWBCookie
     }
 
     /**
-     * @param resid
+     * Sets the res id.
+     * 
+     * @param resid the new res id
      */    
     public void setResID(long resid)
     {

@@ -40,6 +40,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Almacena a la base de datos los cambios desde la administracion.
  *
  * Object: Save to a data base all the changes from the administration.
@@ -49,25 +50,39 @@ import org.semanticwb.platform.SemanticProperty;
  */
 public class SWBDBAdmLog {
 
+    /** The admlog email. */
     public String admlogEmail = null;
+    
+    /** The instance. */
     static private SWBDBAdmLog instance;       // The single instance
+    
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBDBAdmLog.class);
 
-    /** Creates new DBUser */
+    /**
+     * Creates new DBUser.
+     */
     public SWBDBAdmLog() {
         log.event(SWBUtils.TEXT.getLocaleString("locale_core", "log_DBAdmLog_DBAdmLog_init"));
         admlogEmail = (String) SWBPlatform.getEnv("wb/admlogEmail");
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy() {
         instance = null;
         log.event(SWBUtils.TEXT.getLocaleString("locale_core", "log_DBAdmLog_destroy_finalized"));
     }
 
     /**
-     * @param userid
-     * @param objuri
-     * @param accion  */
+     * Save adm log.
+     * 
+     * @param user the user
+     * @param obj the obj
+     * @param prop the prop
+     * @param accion the accion
+     */
     public void saveAdmLog(User user, SemanticObject obj, Object prop, String accion)
     {
         try {
@@ -92,20 +107,30 @@ public class SWBDBAdmLog {
         }
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
     }
 
     /**
-     * @return  */
+     * Gets the adm log.
+     * 
+     * @return the adm log
+     * @return
+     */
     public Iterator getAdmLog() {
         return executeQuery("select * from swb_admlog order by log_date");
     }
 
     /**
-     * @param obj
-     * @param id
-     * @return  */
+     * Gets the object log.
+     * 
+     * @param objuri the objuri
+     * @return the object log
+     * @return
+     */
     public Iterator getObjectLog(String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -130,10 +155,14 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /** Obtiene los registros de un determinado usuario y un tipo de objeto
-     * @param user
-     * @param object
-     * @return  */
+    /**
+     * Obtiene los registros de un determinado usuario y un tipo de objeto.
+     * 
+     * @param user the user
+     * @param objuri the objuri
+     * @return the user object log
+     * @return
+     */
     public Iterator getUserObjectLog(String user, String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -161,8 +190,12 @@ public class SWBDBAdmLog {
     }
 
     /**
-     * @param dbobjid
-     * @return  */
+     * Gets the bita content.
+     * 
+     * @param objuri the objuri
+     * @return the bita content
+     * @return
+     */
     public Iterator getBitaContent(String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -191,8 +224,13 @@ public class SWBDBAdmLog {
     }
 
     /**
-     * @param dbobjid
-     * @return  */
+     * Gets the bita obj uri.
+     * 
+     * @param modelid the modelid
+     * @param objuri the objuri
+     * @return the bita obj uri
+     * @return
+     */
     public Iterator getBitaObjURI(String modelid, String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -226,10 +264,14 @@ public class SWBDBAdmLog {
     }
 
     /**
-     * @param user
-     * @param action
-     * @param object
-     * @return  */
+     * Gets the user action object log.
+     * 
+     * @param user the user
+     * @param action the action
+     * @param objuri the objuri
+     * @return the user action object log
+     * @return
+     */
     public Iterator getUserActionObjectLog(String user, String action, String objuri) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -256,10 +298,14 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /** Obtiene los registros de objUri y un tipo de accion
-     * @param action
-     * @param object
-     * @return  */
+    /**
+     * Obtiene los registros de objUri y un tipo de accion.
+     * 
+     * @param action the action
+     * @param objuri the objuri
+     * @return the action object log
+     * @return
+     */
     public Iterator getActionObjectLog(String action, String objuri) {
         Iterator ret = new ArrayList().iterator();
 
@@ -286,10 +332,14 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /** Obtiene los registros de determinado usuario y un tipo de accion
-     * @param user
-     * @param action
-     * @return  */
+    /**
+     * Obtiene los registros de determinado usuario y un tipo de accion.
+     * 
+     * @param user the user
+     * @param action the action
+     * @return the user action log
+     * @return
+     */
     public Iterator getUserActionLog(String user, String action) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -315,8 +365,13 @@ public class SWBDBAdmLog {
         return ret;
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el UserId y menores a la Fecha  throws AFException
-     * @throws SWBException  */
+    /**
+     * Elimina todos los registros de la base de datos que cumplan con el UserId y menores a la Fecha  throws AFException.
+     * 
+     * @param Admuserid the admuserid
+     * @param lastupdate the lastupdate
+     * @throws SWBException the sWB exception
+     */
     public void removeLogByAdmuserId(String Admuserid, Timestamp lastupdate) throws SWBException {
         Connection con = null;
         try {
@@ -341,8 +396,13 @@ public class SWBDBAdmLog {
         }
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el modelid y menores a la Fecha throws AFException
-     * @throws WBException  */
+    /**
+     * Elimina todos los registros de la base de datos que cumplan con el modelid y menores a la Fecha throws AFException.
+     * 
+     * @param modelid the modelid
+     * @param lastupdate the lastupdate
+     * @throws SWBException the sWB exception
+     */
     public void removeLogByModelId(String modelid, Timestamp lastupdate) throws SWBException {
 
         Connection con = null;
@@ -368,8 +428,14 @@ public class SWBDBAdmLog {
         }
     }
 
-    /** Elimina todos los registros de la base de datos que cumplan con el ObjURI,ModelId y menores a Fecha throws AFException
-     * @throws WBException  */
+    /**
+     * Elimina todos los registros de la base de datos que cumplan con el ObjURI,ModelId y menores a Fecha throws AFException.
+     * 
+     * @param objuri the objuri
+     * @param modelid the modelid
+     * @param lastupdate the lastupdate
+     * @throws SWBException the sWB exception
+     */
     public void removeLogByDBObjUriAndModelId(String objuri, String modelid, Timestamp lastupdate) throws SWBException {
 
         Connection con = null;
@@ -397,12 +463,22 @@ public class SWBDBAdmLog {
     }
 
     /**
-     * @param user
-     * @return  */
+     * Gets the user log.
+     * 
+     * @param user the user
+     * @return the user log
+     * @return
+     */
     public Iterator getUserLog(String user) {
         return executeQuery("select * from swb_admlog where log_user='" + user + "' order by log_date");
     }
 
+    /**
+     * Execute query.
+     * 
+     * @param sql the sql
+     * @return the iterator
+     */
     private Iterator executeQuery(String sql) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -425,6 +501,12 @@ public class SWBDBAdmLog {
         return ret;
     }
 
+    /**
+     * Gets the changes.
+     * 
+     * @param lastupdate the lastupdate
+     * @return the changes
+     */
     public Iterator getChanges(Timestamp lastupdate) {
         Iterator ret = new ArrayList().iterator();
         try {
@@ -450,6 +532,9 @@ public class SWBDBAdmLog {
         return ret;
     }
 
+    /**
+     * Refresh.
+     */
     public void refresh() {
     }
 

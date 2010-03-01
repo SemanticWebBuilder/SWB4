@@ -37,19 +37,29 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
-/** Recurso de WB para la administracion de los Indexadores
- *
+// TODO: Auto-generated Javadoc
+/**
+ * Recurso de WB para la administracion de los Indexadores.
+ * 
  * @author  Juan Antonio Fernandez Arias
  */
 public class SWBAIndexer extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAIndexer.class);
+    
+    /** The base. */
     private Resource base = null;
 
-    /** Creates a new instance of SWBAIndexer */
+    /**
+     * Creates a new instance of SWBAIndexer.
+     */
     public SWBAIndexer() {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -232,12 +242,13 @@ public class SWBAIndexer extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do status.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doStatus(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -256,8 +267,10 @@ public class SWBAIndexer extends GenericResource {
     }
 
      /**
-      *
-      * @param indexName
+      * Load hmindtm.
+      * 
+      * @param indexName the index name
+      * @return the hash map
       * @return
       */
      public HashMap loadHMINDTM(String indexName) {
@@ -278,6 +291,9 @@ public class SWBAIndexer extends GenericResource {
         return hm_ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         base = getResourceBase();
@@ -381,6 +397,9 @@ public class SWBAIndexer extends GenericResource {
 
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("doStatus"))

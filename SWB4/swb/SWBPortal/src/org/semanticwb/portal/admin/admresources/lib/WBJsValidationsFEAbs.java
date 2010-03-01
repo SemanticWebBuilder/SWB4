@@ -25,10 +25,12 @@
 
 package org.semanticwb.portal.admin.admresources.lib;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase abstracta que implementa metodos de la interface WBJsValidationsFE
  * <p>
- * This is an abstract class that implements the  WBJsValidationsFE 
+ * This is an abstract class that implements the  WBJsValidationsFE.
+ * 
  * @author  Jorge Alberto Jim�nez
  * @version 1.0
  */
@@ -36,10 +38,18 @@ package org.semanticwb.portal.admin.admresources.lib;
 public abstract class WBJsValidationsFEAbs implements WBJsValidationsFE
 {
     
+    /** The formfe name. */
     protected String formfeName;
+    
+    /** The field. */
     protected String field;
+    
+    /** The minsize. */
     protected int minsize;
 
+    /**
+     * Instantiates a new wB js validations fe abs.
+     */
     public WBJsValidationsFEAbs()
     {
         formfeName = null;
@@ -47,31 +57,49 @@ public abstract class WBJsValidationsFEAbs implements WBJsValidationsFE
         minsize = 0;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#setFormFEName(java.lang.String)
+     */
     public void setFormFEName(String formfeName)
     {
         this.formfeName = formfeName;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#setField(java.lang.String)
+     */
     public void setField(String field)
     {
         this.field = field;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#setMinsize(int)
+     */
     public void setMinsize(int minsize)
     {
         this.minsize = minsize;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#getFormFEName()
+     */
     public String getFormFEName()
     {
         return formfeName;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#getField()
+     */
     public String getField()
     {
         return field;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFE#getMinsize()
+     */
     public int getMinsize()
     {
         return minsize;

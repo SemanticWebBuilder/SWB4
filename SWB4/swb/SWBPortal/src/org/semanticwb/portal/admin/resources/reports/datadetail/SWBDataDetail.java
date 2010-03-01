@@ -30,15 +30,34 @@ import java.util.Iterator;
 
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBDataDetail.
+ */
 public abstract class SWBDataDetail {
+    
+    /** The filter report bean. */
     private WBAFilterReportBean filterReportBean;
+    
+    /** The user types. */
     protected HashMap userTypes;
     
+    /**
+     * Instantiates a new sWB data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public SWBDataDetail(WBAFilterReportBean filterReportBean){
         this.filterReportBean = filterReportBean;
         userTypes = this.filterReportBean.getUserTypes();
     }
     
+    /**
+     * Execute.
+     * 
+     * @return the list
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     public final List execute() throws IncompleteFilterException{
         List resumeRecHits = null;        
         if(filterReportBean.getYearF()>0 && filterReportBean.getMonthF()>0 && filterReportBean.getDayF()>0){
@@ -53,14 +72,69 @@ public abstract class SWBDataDetail {
         return resumeRecHits;     
     }
     
+    /**
+     * Do data list.
+     * 
+     * @param siteId the site id
+     * @param objId the obj id
+     * @param type the type
+     * @param language the language
+     * @return the list
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     protected abstract List doDataList(String siteId, String objId, int type, String language) throws IncompleteFilterException;
     
+    /**
+     * Do data list.
+     * 
+     * @param siteId the site id
+     * @param objId the obj id
+     * @param type the type
+     * @param year the year
+     * @param language the language
+     * @return the list
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     protected abstract List doDataList(String siteId, String objId, int type, int year, String language) throws IncompleteFilterException;
     
+    /**
+     * Do data list.
+     * 
+     * @param siteId the site id
+     * @param objId the obj id
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param language the language
+     * @return the list
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     protected abstract List doDataList(String siteId, String objId, int type, int year, int month, int day, String language) throws IncompleteFilterException;
     
+    /**
+     * Do data list.
+     * 
+     * @param siteId the site id
+     * @param objId the obj id
+     * @param type the type
+     * @param yearI the year i
+     * @param monthI the month i
+     * @param dayI the day i
+     * @param yearF the year f
+     * @param monthF the month f
+     * @param dayF the day f
+     * @param language the language
+     * @return the list
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     protected abstract List doDataList(String siteId, String objId, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException;
 
+    /**
+     * Gets the filter report bean.
+     * 
+     * @return the filter report bean
+     */
     public WBAFilterReportBean getFilterReportBean() {
         return filterReportBean;
     }

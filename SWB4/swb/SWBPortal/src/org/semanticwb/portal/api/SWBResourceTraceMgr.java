@@ -40,6 +40,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Manejador de objetos WBResourceTrace disponibles en memoria.
  *
  * Object: Manager of WBResourceTrace objects availables in memory.
@@ -48,17 +49,29 @@ import org.semanticwb.SWBUtils;
  */
 public class SWBResourceTraceMgr extends TimerTask
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBResourceTraceMgr.class);
 
+    /** The timer. */
     private Timer timer = null;
+    
+    /** The lastupdate. */
     private Timestamp lastupdate;
 
+    /** The types. */
     private Hashtable types = new Hashtable();
+    
+    /** The types meter. */
     private Hashtable typesMeter = new Hashtable();
+    
+    /** The resource trace. */
     private boolean resourceTrace=false;
 
 
-    /** Creates a new instance of WBResourceTraceMgr */
+    /**
+     * Creates a new instance of WBResourceTraceMgr.
+     */
     public SWBResourceTraceMgr()
     {
         this.lastupdate = new Timestamp(new java.util.Date().getTime());
@@ -69,6 +82,11 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
 
+    /**
+     * Adds the resource.
+     * 
+     * @param res the res
+     */
     public void addResource(SWBResourceTrace res)
     {
         if (res != null)
@@ -83,6 +101,11 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
 
+    /**
+     * Removes the resource.
+     * 
+     * @param res the res
+     */
     public void removeResource(SWBResourceTrace res)
     {
         if (res != null)
@@ -96,6 +119,11 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
     
+    /**
+     * Adds the resource time.
+     * 
+     * @param res the res
+     */
     public void addResourceTime(SWBResourceTrace res)
     {
         if (res != null)
@@ -117,6 +145,16 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
     
+    /**
+     * Render traced.
+     * 
+     * @param res the res
+     * @param request the request
+     * @param response the response
+     * @param resReq the res req
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void renderTraced(SWBResource res, HttpServletRequest request, HttpServletResponse response, SWBParamRequest resReq ) throws SWBResourceException, java.io.IOException
     {
         SWBResourceTrace trace = null;
@@ -151,6 +189,9 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.util.TimerTask#run()
+     */
     public void run()
     {
         //System.out.println("Checking Connections...");
@@ -172,6 +213,9 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         log.event("WBResourceTraceMgr Finished...");
@@ -183,6 +227,9 @@ public class SWBResourceTraceMgr extends TimerTask
 
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         log.event("Initializing WBResourceTraceMgr...");
@@ -190,6 +237,9 @@ public class SWBResourceTraceMgr extends TimerTask
         timer.scheduleAtFixedRate(this, 30000, 30000);
     }
 
+    /**
+     * Stop.
+     */
     public void stop()
     {
         log.event("WBResourceTraceMgr Stoped...");
@@ -201,6 +251,9 @@ public class SWBResourceTraceMgr extends TimerTask
         }
     }
     
+    /**
+     * Clear resource trace.
+     */
     public void clearResourceTrace()
     {
         types = new Hashtable();
@@ -250,11 +303,21 @@ public class SWBResourceTraceMgr extends TimerTask
         return ret;
     }
 
+    /**
+     * Gets the types meter.
+     * 
+     * @return the types meter
+     */
     public Hashtable getTypesMeter()
     {
         return typesMeter;
     }
     
+    /**
+     * Gets the sort types meter.
+     * 
+     * @return the sort types meter
+     */
     public Set getSortTypesMeter()
     {
         TreeSet set=new TreeSet(new Comparator()

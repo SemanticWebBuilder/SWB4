@@ -36,23 +36,63 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface SWBTreeExt.
+ * 
  * @author Javier Solis Gonzalez
  */
 public interface SWBTreeExt
 {
+    
     /**
-     *  inicializa el arbol
+     * inicializa el arbol.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param isFilter the is filter
      */
     public void initTree(User user, Element res, boolean isFilter);
     
+    /**
+     * Adds the server.
+     * 
+     * @param user the user
+     * @param server the server
+     * @param isFilter the is filter
+     */
     public void addServer(User user, Element server, boolean isFilter);
     
+    /**
+     * Adds the global.
+     * 
+     * @param user the user
+     * @param global the global
+     * @param access the access
+     * @param isFilter the is filter
+     */
     public void addGlobal(User user, Element global, int access, boolean isFilter);
     
+    /**
+     * Adds the topic map.
+     * 
+     * @param user the user
+     * @param topicmap the topicmap
+     * @param tm the tm
+     * @param access the access
+     * @param isFilter the is filter
+     */
     public void addTopicMap(User user, Element topicmap, WebSite tm, int access, boolean isFilter);
     
+    /**
+     * Execute command.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param cmd the cmd
+     * @param id the id
+     * @return true, if successful
+     */
     public boolean executeCommand(User user, Element res, String cmd, String id);
     
 }

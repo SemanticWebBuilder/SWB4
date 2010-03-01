@@ -46,16 +46,26 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GenericSemResource.
+ * 
  * @author javier.solis
  */
 public class GenericSemResource extends GenericResource implements org.semanticwb.model.GenericObject
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(GenericSemResource.class);
 
+    /** The m_obj. */
     private SemanticObject m_obj=null;
 
+    /**
+     * Instantiates a new generic sem resource.
+     * 
+     * @param obj the obj
+     */
     public GenericSemResource(SemanticObject obj)
     {
         this.m_obj=obj;
@@ -70,10 +80,18 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         }catch(Exception e){log.error(e);}
     }
 
+    /**
+     * Instantiates a new generic sem resource.
+     */
     public GenericSemResource()
     {
     }
 
+    /**
+     * Gets the semantic class.
+     * 
+     * @return the semantic class
+     */
     public SemanticClass getSemanticClass()
     {
         SemanticClass cls=null;
@@ -88,6 +106,9 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         return cls;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -112,20 +133,32 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         out.println("</div>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         //TO Override
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.GenericObject#getURI()
+     */
     public String getURI() {
         return getSemanticObject().getURI();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.GenericObject#getId()
+     */
     public String getId() {
         return getSemanticObject().getId();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.GenericObject#getSemanticObject()
+     */
     public SemanticObject getSemanticObject()
     {
         if(m_obj==null)
@@ -153,7 +186,8 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     }
 
     /**
-     * Asigna la propiedad con el valor especificado
+     * Asigna la propiedad con el valor especificado.
+     * 
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -164,38 +198,63 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.GenericObject#removeProperty(java.lang.String)
+     */
     public GenericObject removeProperty(String prop)
     {
         getSemanticObject().removeProperty(_getProperty(prop));
         return this;
     }
 
+    /**
+     * Gets the property.
+     * 
+     * @param prop the prop
+     * @return the property
+     */
     public String getProperty(String prop)
     {
         return  getProperty(prop, null);
     }
 
+    /**
+     * Gets the property.
+     * 
+     * @param prop the prop
+     * @param defValue the def value
+     * @return the property
+     */
     public String getProperty(String prop, String defValue)
     {
         return getSemanticObject().getProperty(_getProperty(prop), defValue);
     }
 
+    /**
+     * _get property.
+     * 
+     * @param prop the prop
+     * @return the semantic property
+     */
     private SemanticProperty _getProperty(String prop)
     {
         return new SemanticProperty(getSemanticObject().getModel().getRDFModel().createProperty(m_obj.getModel().getNameSpace()+"prop_"+prop));
     }
 
      /**
-     * Regresa ruta de trabajo del objeto relativa al directorio work
-     * ejemplo: /sep/Template/1
-     *          /dominio/Objeto/id
-     *
-     * @return String con la ruta relativa al directorio work
-     */
+      * Regresa ruta de trabajo del objeto relativa al directorio work
+      * ejemplo: /sep/Template/1
+      * /dominio/Objeto/id.
+      * 
+      * @return String con la ruta relativa al directorio work
+      */
     public String getWorkPath() {
         return getResourceBase().getWorkPath();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.GenericObject#dispose()
+     */
     public void dispose() {
         
     }

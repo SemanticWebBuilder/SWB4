@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OrganizationComm.
+ */
 public class OrganizationComm extends org.semanticwb.model.comm.base.OrganizationCommBase 
 {
+    
+    /**
+     * Instantiates a new organization comm.
+     * 
+     * @param base the base
+     */
     public OrganizationComm(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

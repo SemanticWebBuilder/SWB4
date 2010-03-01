@@ -42,6 +42,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
 /** Esta clase se encarga de desplegar y administrar los indices tematicos bajo ciertos
  * criterios(configuraci�n de recurso), usa un archivo XSL. Es un recurso de contenidos que viene de la version 2 de Webbuilder.
  *
@@ -53,13 +54,26 @@ import org.w3c.dom.Element;
  */
 public class TematicIndexXSLConfig extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(TematicIndexXSLConfig.class);
 
+    /** The tpl. */
     javax.xml.transform.Templates tpl;
+    
+    /** The workpath. */
     String workpath = "/work";
+    
+    /** The webpath. */
     String webpath = (String) SWBPlatform.getContextPath();
+    
+    /** The path. */
     String path =  webpath +"swbadmin/xsl/TematicIndexXSL/";
+    
+    /** The CF g_ webpage. */
     private static String CFG_WEBPAGE =  "inisection";
+    
+    /** The CF g_ sendparams. */
     private static String CFG_SENDPARAMS =  "sendparams";
 
     /**
@@ -70,9 +84,9 @@ public class TematicIndexXSLConfig extends GenericAdmResource
 
     /**
      * Asigna la informaci�n de la base de datos al recurso.
-     *
-     * @param     base  La informaci�n del recurso en memoria.
-     * @throws AFException
+     * 
+     * @param base the new resource base
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
@@ -103,12 +117,14 @@ public class TematicIndexXSLConfig extends GenericAdmResource
     }
 
     /**
-     * Obtiene el resultado final del recurso como dom-document
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso como dom-document.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -273,12 +289,13 @@ public class TematicIndexXSLConfig extends GenericAdmResource
     }
 
     /**
-     * Obtiene el resultado final del recurso en formato xml
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -295,14 +312,14 @@ public class TematicIndexXSLConfig extends GenericAdmResource
 
     /**
      * Obtiene la vista del recurso.
-     *
-     * @param     request   El servlet container crea un objeto HttpServletRequest y
-     *                      se pasa como argumento al m�todo del servlet.
-     * @param     response  El servlet container crea un objeto HttpServletResponse y
-     *                      se pasa como argumento al m�todo del servlet.
-     * @param     paramsRequest Argumentos de la solicitud del recurso.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      * @exception com.infotec.appfw.exception.AFException
-     *              Si se origina cualquier error en el recurso al traer el html.
+     * Si se origina cualquier error en el recurso al traer el html.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException

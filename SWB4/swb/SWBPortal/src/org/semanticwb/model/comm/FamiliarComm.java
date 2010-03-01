@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FamiliarComm.
+ */
 public class FamiliarComm extends org.semanticwb.model.comm.base.FamiliarCommBase 
 {
+    
+    /**
+     * Instantiates a new familiar comm.
+     * 
+     * @param base the base
+     */
     public FamiliarComm(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

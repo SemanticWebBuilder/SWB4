@@ -32,21 +32,60 @@ package org.semanticwb.portal.api;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface SWBResourceWindow.
+ * 
  * @author Javier Solis Gonzalez
  */
 public interface SWBResourceWindow
 {
+    
+    /**
+     * Gets the modes.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the modes
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest)
         throws SWBResourceException, java.io.IOException;
 
+    /**
+     * Gets the window states.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the window states
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest)
         throws SWBResourceException, java.io.IOException;
     
+    /**
+     * Gets the title.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the title
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest)
         throws SWBResourceException, java.io.IOException;
     
+    /**
+     * Window support.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return true, if successful
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest)
         throws SWBResourceException, java.io.IOException;
 }

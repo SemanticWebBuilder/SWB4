@@ -29,7 +29,8 @@
 package org.semanticwb.portal.api;
 
 /**
- *
+ * The Class WebSiteJ.
+ * 
  * @author jorge.jimenez
  */
 public class WebSiteJ {

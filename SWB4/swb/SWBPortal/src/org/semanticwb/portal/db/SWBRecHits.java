@@ -39,6 +39,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Almacena resumenes de hits diarios:
  *
  * Se tienen 6 tipos de reportes diarios con la siguiente informacion:
@@ -66,16 +67,31 @@ import org.semanticwb.model.SWBContext;
  */
 public class SWBRecHits //implements AFAppObject, AFObserver
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRecHits.class);    
+    
+    /** The instance. */
     static private SWBRecHits instance;
 
+    /**
+     * Instantiates a new sWB rec hits.
+     */
     private SWBRecHits() {
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy() {
         instance=null;
     }
 
+    /**
+     * Gets the single instance of SWBRecHits.
+     * 
+     * @return single instance of SWBRecHits
+     */
     static synchronized public SWBRecHits getInstance() {
         if (instance == null) {
             instance = new SWBRecHits();
@@ -84,9 +100,18 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return instance;
     }
 
+    /**
+     * Inits the.
+     */
     public void init() {
     }
 
+    /**
+     * Gets the res global hits log.
+     * 
+     * @param hits_modelid the hits_modelid
+     * @return the res global hits log
+     */
     public Iterator getResGlobalHitsLog(String hits_modelid) {
         Iterator ret = new ArrayList().iterator();
 //        Connection con = SWBUtils.DB.getDefaultConnection();
@@ -111,10 +136,14 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -153,9 +182,13 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
 
     /**
-     * @param modelid
-     * @param type
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param type the type
+     * @return the res hits log
+     * @return
+     */
     public Iterator getResHitsLog(String modelid, int type) {
         Iterator ret = new ArrayList().iterator();
 //        Connection con = SWBUtils.DB.getDefaultConnection();
@@ -183,13 +216,17 @@ public class SWBRecHits //implements AFAppObject, AFObserver
 
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -276,16 +313,20 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
 
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -336,15 +377,19 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
 
     /**
-     * @param modelid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @return the res hits log
+     * @return
+     */
     public Iterator getResHitsLog(String modelid, int type, int year1, int month1, int day1, int year2, int month2, int day2) {
         Timestamp fecha = null;
         Timestamp fecha2 = null;
@@ -376,12 +421,18 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return ret;
     }
 
+    /**
+     * Refresh.
+     */
     public void refresh() {
     }
 
-    /** Avisa al observador de que se ha producido un cambio.
-     * @param s
-     * @param obj  */
+    /**
+     * Avisa al observador de que se ha producido un cambio.
+     * 
+     * @param s the s
+     * @param obj the obj
+     */
     public void sendDBNotify(String s, Object obj) {
         if (s.equals("remove")) {
         }
@@ -391,13 +442,15 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
     
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year) {
         List resumeRecHits = new ArrayList();        
         PreparedStatement st = null;
@@ -478,10 +531,15 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
     
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param item the item
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, String item) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -521,13 +579,16 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
     
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param item the item
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, String item) {
         List resumeRecHits = new ArrayList();
         int mi=0, mf=0;        
@@ -607,13 +668,18 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
     
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year
-     * @param month
-     * @param day
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param item the item
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, String item) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -671,16 +737,21 @@ public class SWBRecHits //implements AFAppObject, AFObserver
     }
     
     /**
-     * @param modelid
-     * @param objid
-     * @param type
-     * @param year1
-     * @param month1
-     * @param day1
-     * @param year2
-     * @param month2
-     * @param day2
-     * @return  */
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @param item the item
+     * @return the res hits log
+     * @return
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -727,6 +798,16 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return resumeRecHits;
     }
     
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -766,6 +847,17 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return resumeRecHits;
     }
     
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         PreparedStatement st = null;
@@ -848,6 +940,19 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return resumeRecHits;
     }
     
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year the year
+     * @param month the month
+     * @param day the day
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year, int month, int day, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();
@@ -938,6 +1043,22 @@ public class SWBRecHits //implements AFAppObject, AFObserver
         return resumeRecHits;
     }
     
+    /**
+     * Gets the res hits log.
+     * 
+     * @param modelid the modelid
+     * @param objid the objid
+     * @param type the type
+     * @param year1 the year1
+     * @param month1 the month1
+     * @param day1 the day1
+     * @param year2 the year2
+     * @param month2 the month2
+     * @param day2 the day2
+     * @param item the item
+     * @param iditem the iditem
+     * @return the res hits log
+     */
     public List getResHitsLog(String modelid, String objid, int type, int year1, int month1, int day1, int year2, int month2, int day2, String item, int iditem) {
         List resumeRecHits = new ArrayList();
         StringBuilder query = new StringBuilder();

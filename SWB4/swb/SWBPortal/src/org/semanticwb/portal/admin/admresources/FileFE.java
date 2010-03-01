@@ -34,6 +34,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo File en una forma de html.
  * <p>
@@ -43,110 +44,211 @@ import org.w3c.dom.*;
 
 public class FileFE extends WBJsInputFEAbs
 {   
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(CheckBoxFE.class);
     
+    /** The accept. */
     private String accept=null;
+    
+    /** The accesskey. */
     private String accesskey=null;
+    
+    /** The align. */
     private String align=null;
+    
+    /** The isdisabled. */
     private boolean isdisabled=false;
+    
+    /** The size. */
     private int size=-1;
+    
+    /** The maxlength. */
     private int maxlength=-1;
+    
+    /** The isreadonly. */
     private boolean isreadonly=false;
+    
+    /** The value. */
     private String value=null;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The showfile. */
     private boolean showfile=false;
+    
+    /** The msgfile. */
     private String msgfile=null;
+    
+    /** The width. */
     private int width=0;
+    
+    /** The height. */
     private int height=0;
+    
+    /** The tag. */
     private Node tag=null;
+    
+    /** The isremovefile. */
     private boolean isremovefile=false;
+    
+    /** The remove msg. */
     private String removeMsg=null;
+    
+    /** The replace. */
     private boolean replace=false;
+    
+    /** The filetype. */
     private String filetype=null;
+    
+    /** The bydefault. */
     private String bydefault=null;
+    
+    /** The msgbydefault. */
     private String msgbydefault=null;
+    
+    /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     
     
-    /** Creates a new instance of FileFE */
+    /**
+     * Creates a new instance of FileFE.
+     */
     public FileFE() {
     }
     
-    /** Creates a new instance of FileFE with default parameters*/
+    /**
+     * Creates a new instance of FileFE with default parameters.
+     * 
+     * @param name the name
+     */
     public FileFE(String name) {
         this.name=name;
     }
     
-    /** Creates a new instance of FileFE with default parameters*/
+    /**
+     * Creates a new instance of FileFE with default parameters.
+     * 
+     * @param tag the tag
+     */
     public FileFE(Node tag) {
         this.tag=tag;
         setAttributes();
     }
     
     
-    /** This attribute specifies the MIME types that the form processing server and script should correctly handle. 
-     A browser may use this information to filter out non-conforming files when prompting a user to select files to upload. 
-     *values: Comma-separated list of MIME types.
+    /**
+     * This attribute specifies the MIME types that the form processing server and script should correctly handle.
+     * A browser may use this information to filter out non-conforming files when prompting a user to select files to upload.
+     * values: Comma-separated list of MIME types.
+     * 
+     * @param accept the new accept
      */ 
     public void setAccept(String accept){
         this.accept=accept;
     }
     
-    /** This is a method of giving access/focus to an active HTML element using a keyboard character. 
-     This is a common GUI paradigm also known as a "keyboard shortcut" or "keyboard accelerator" A single character is used as the value of this attribute. 
-     In addition, a platform-dependent key is usually used in combination with the ACCESSKEY character to access the functionality of the active field. 
-     *values: A single, case-insensitive alphanumeric character from a browser's character set.
+    /**
+     * This is a method of giving access/focus to an active HTML element using a keyboard character.
+     * This is a common GUI paradigm also known as a "keyboard shortcut" or "keyboard accelerator" A single character is used as the value of this attribute.
+     * In addition, a platform-dependent key is usually used in combination with the ACCESSKEY character to access the functionality of the active field.
+     * values: A single, case-insensitive alphanumeric character from a browser's character set.
+     * 
+     * @param accesskey the new accesskey
      */
     public void setAccesskey(String accesskey){
         this.accesskey=accesskey;
     }
     
-    /**This attribute specifies the alignment of text following the INPUT reference relative to the field on screen. 
-     LEFT and RIGHT specify floating horizontal alignment of the form field in the browser window, and subsequent text will wrap around the form field.
-     *values:Left | Right | Top | Texttop | Middle | Absmiddle | Baseline | Bottom | Absbottom 
+    /**
+     * This attribute specifies the alignment of text following the INPUT reference relative to the field on screen.
+     * LEFT and RIGHT specify floating horizontal alignment of the form field in the browser window, and subsequent text will wrap around the form field.
+     * values:Left | Right | Top | Texttop | Middle | Absmiddle | Baseline | Bottom | Absbottom
+     * 
+     * @param align the new a lign
      */
     public void setALign(String align){
         this.align=align;
     }
     
-    /**This is a stand-alone attribute which indicates the element is initially non-functional. 
-     Disabled form elements should not be submitted to the form processing script. 
-     *values:NA
+    /**
+     * This is a stand-alone attribute which indicates the element is initially non-functional.
+     * Disabled form elements should not be submitted to the form processing script.
+     * values:NA
+     * 
+     * @param isdisabled the new disable
      */
     public void setDisable(boolean isdisabled){
         this.isdisabled=isdisabled;
     }
     
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     private void setSize(int size){
         this.size=size;
     }
     
+    /**
+     * Sets the max length.
+     * 
+     * @param maxlength the new max length
+     */
     private void setMaxLength(int maxlength){
         this.maxlength=maxlength;
     }
     
-    /**This is a stand-alone attribute which tells the browser that content in the field may not be modified by the reader. 
-     *values:NA
+    /**
+     * This is a stand-alone attribute which tells the browser that content in the field may not be modified by the reader.
+     * values:NA
+     * 
+     * @param isreadonly the new read only
      */
     public void setReadOnly(boolean isreadonly){
         this.isreadonly=isreadonly;
     }
     
+    /**
+     * Sets the remove file.
+     * 
+     * @param isremovefile the isremovefile
+     * @param removeMsg the remove msg
+     */
     public void setRemoveFile(boolean isremovefile,String removeMsg){
         this.isremovefile=isremovefile;
         this.removeMsg=removeMsg;
     }
     
+    /**
+     * Sets the remove file.
+     * 
+     * @param isremovefile the isremovefile
+     * @param removeMsg the remove msg
+     * @param replace the replace
+     */
     public void setRemoveFile(boolean isremovefile,String removeMsg,boolean replace){
         this.isremovefile=isremovefile;
         this.removeMsg=removeMsg;
         this.replace=replace;
     }
     
+    /**
+     * Gets the removes the file.
+     * 
+     * @return the removes the file
+     */
     public boolean getRemoveFile(){
         return isremovefile;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
@@ -156,19 +258,41 @@ public class FileFE extends WBJsInputFEAbs
         this.filetype=filetype;
     }*/
     
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
+    /**
+     * Sets the by default.
+     * 
+     * @param bydefault the new by default
+     */
     public void setByDefault(String bydefault){
         this.bydefault=bydefault;
     }   
     
+    /**
+     * Sets the msg by default.
+     * 
+     * @param msgbydefault the new msg by default
+     */
     public void setMsgByDefault(String msgbydefault){
         this.msgbydefault=msgbydefault;
     }     
     
+    /**
+     * Show file.
+     * 
+     * @param showfile the showfile
+     * @param msg the msg
+     * @param width the width
+     * @param height the height
+     */
     public void showFile(boolean showfile,String msg,int width,int height){
         this.showfile=showfile;
         this.msgfile=msg;
@@ -178,38 +302,84 @@ public class FileFE extends WBJsInputFEAbs
     
     //gets
     
+    /**
+     * Gets the accept.
+     * 
+     * @return the accept
+     */
     public String getAccept(){
         return accept;
     }
     
+    /**
+     * Gets the accesskey.
+     * 
+     * @return the accesskey
+     */
     public String getAccesskey(){
         return accesskey;
     }
     
+    /**
+     * Gets the a lign.
+     * 
+     * @return the a lign
+     */
     public String getALign(){
         return align;
     }
     
+    /**
+     * Gets the disable.
+     * 
+     * @return the disable
+     */
     public boolean getDisable(){
         return isdisabled;
     }
     
+    /**
+     * Gets the read only.
+     * 
+     * @return the read only
+     */
     public boolean getReadOnly(){
         return isreadonly;
     }
     
+    /**
+     * Gets the size.
+     * 
+     * @param size the size
+     * @return the size
+     */
     private int getSize(int size){
         return size;
     }
     
+    /**
+     * Gets the max length.
+     * 
+     * @return the max length
+     */
     private int getMaxLength(){
         return maxlength;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+     /**
+      * Gets the xml tag.
+      * 
+      * @return the xml tag
+      */
      public String getXmlTag(){
         return xmltag;
     }
@@ -218,14 +388,29 @@ public class FileFE extends WBJsInputFEAbs
         return filetype;
     }*/
      
+     /**
+      * Gets the by default.
+      * 
+      * @return the by default
+      */
      public String getByDefault(){
         return this.bydefault;
     }     
      
+     /**
+      * Gets the msg by default.
+      * 
+      * @return the msg by default
+      */
      public String getMsgByDefault(){
         return this.msgbydefault;
     }      
      
+    /**
+     * Gets the file.
+     * 
+     * @return the file
+     */
     private Node getFile()
     {
         if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null && !dbconnmgr.getAttribute(name).trim().equals(""))
@@ -262,6 +447,11 @@ public class FileFE extends WBJsInputFEAbs
         return null;
     }
     
+    /**
+     * Gets the file options.
+     * 
+     * @return the file options
+     */
     private Node getFileOptions()
     {
         if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null && !dbconnmgr.getAttribute(name).trim().equals(""))
@@ -280,9 +470,11 @@ public class FileFE extends WBJsInputFEAbs
     
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */ 
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */ 
     public String getHtml(){
         String xml="";
         try 
@@ -391,8 +583,8 @@ public class FileFE extends WBJsInputFEAbs
     
     
     /**
-    * Set attributes to class according with the xml tag element
-    */
+     * Set attributes to class according with the xml tag element.
+     */
     public void setAttributes(){
         boolean required=false;
         int minsize=0;

@@ -51,6 +51,7 @@ import java.sql.*;
 
 
 
+// TODO: Auto-generated Javadoc
 /** Muestra el pool de conexiones a la base de datos seleccionada por el usuario
  * administrador.
  *
@@ -61,15 +62,21 @@ import java.sql.*;
 public class SWBADBPool extends GenericResource {
     
     
-    /** Creates a new instance of SWBADBPool */
+    /**
+     * Creates a new instance of SWBADBPool.
+     */
     public SWBADBPool() {
     }
         
-    /** Process the user request action
-     * @param request, parameters, input data
-     * @param response, an answer to the user request, a list of objects (Action, user, WebPage, ...)
+    /**
+     * Process the user request action.
+     * 
+     * @param request the request
+     * @param response the response
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processAction(HttpServletRequest request,
@@ -93,12 +100,15 @@ public class SWBADBPool extends GenericResource {
     }
     
     /**
-     * Show the user view of the connection pool
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Show the user view of the connection pool.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -299,12 +309,16 @@ public class SWBADBPool extends GenericResource {
     
 
     /**
-     * Gets the data used into the chart
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Gets the data used into the chart.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the data
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
@@ -359,13 +373,16 @@ public class SWBADBPool extends GenericResource {
     }
     
     /**
-     * Gets the data used into the chart
-     *
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Gets the data used into the chart.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the data2
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void getData2(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
@@ -415,12 +432,15 @@ public class SWBADBPool extends GenericResource {
     }    
     
     /**
-     * Gets the data used into the chart
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Gets the data used into the chart.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void hitsTime(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
@@ -464,12 +484,15 @@ public class SWBADBPool extends GenericResource {
     
     
     /**
-     * Process the user request mode to show
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Process the user request mode to show.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processRequest(HttpServletRequest request,

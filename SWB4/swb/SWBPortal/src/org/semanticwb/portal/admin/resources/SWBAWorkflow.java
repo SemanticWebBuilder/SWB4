@@ -54,6 +54,7 @@ import org.semanticwb.portal.admin.resources.workflow.proxy.WorkflowResponse;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso para la administraci�n de WebBuilder que permite la administraci�n de
  * los flujos de trabajo.
@@ -65,19 +66,24 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class SWBAWorkflow extends GenericResource
 {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAWorkflow.class);
 
-    /** Creates a new instance of WBAWorkflow */
+    /**
+     * Creates a new instance of WBAWorkflow.
+     */
     public SWBAWorkflow()
     {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -94,13 +100,15 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
-     * @param paramRequest
+     * Gets the service.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the service
      * @return
      */
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
@@ -109,9 +117,11 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param res
-     * @param root
+     * Gets the permisos gral.
+     * 
+     * @param res the res
+     * @param root the root
+     * @return the permisos gral
      */
     public void getPermisosGral(Element res, WebPage root)
     {
@@ -127,9 +137,11 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param res
-     * @param tm
+     * Gets the catalog roles.
+     * 
+     * @param res the res
+     * @param tm the tm
+     * @return the catalog roles
      */
     public void getCatalogRoles(Element res, String tm)
     {        
@@ -186,11 +198,13 @@ public class SWBAWorkflow extends GenericResource
 //    }
 
     /**
-     *
-     * @param res
-     * @param tm
-     * @param src
-     */
+ * Gets the workflow.
+ * 
+ * @param res the res
+ * @param tm the tm
+ * @param src the src
+ * @return the workflow
+ */
     public void getWorkflow(Element res, String tm, Document src)
     {
         if (src.getElementsByTagName("id").getLength() > 0)
@@ -229,9 +243,11 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param res
-     * @param tm
+     * Gets the catalog users.
+     * 
+     * @param res the res
+     * @param tm the tm
+     * @return the catalog users
      */
     public void getCatalogUsers(Element res, String tm)
     {
@@ -279,13 +295,14 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param res
-     * @param wf
-     * @param user
-     * @param tm
-     * @param paramRequest
-     * @param request
+     * Update.
+     * 
+     * @param res the res
+     * @param src the src
+     * @param user the user
+     * @param tm the tm
+     * @param paramRequest the param request
+     * @param request the request
      */
 //    public void add(Element res,Element wf,User user,String tm,SWBParamRequest paramRequest,HttpServletRequest request)
 //    {
@@ -366,9 +383,11 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param res
-     * @param tm
+     * Gets the resource type cat.
+     * 
+     * @param res the res
+     * @param tm the tm
+     * @return the resource type cat
      */
     public void getResourceTypeCat(Element res, String tm)
     {
@@ -398,12 +417,14 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
-     * @param cmd
-     * @param paramRequest
-     * @param request
+     * Gets the document.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param cmd the cmd
+     * @param paramRequest the param request
+     * @param request the request
+     * @return the document
      * @return
      */
     public Document getDocument(User user, Document src, String cmd, SWBParamRequest paramRequest, HttpServletRequest request)
@@ -455,10 +476,12 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param user
-     * @param src
-     * @param action
+     * Gets the path.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param action the action
+     * @return the path
      * @return
      */
     public Document getPath(User user, Document src, String action)
@@ -501,11 +524,13 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param node
-     * @param id
-     * @param name
-     * @param parent
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
      * @return
      */
     private Element addNode(String node, String id, String name, Element parent)
@@ -523,10 +548,12 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param name
-     * @param value
-     * @param parent
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
      * @return
      */
     private Element addElement(String name, String value, Element parent)
@@ -542,8 +569,10 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param id
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
      * @return
      */
     private Document getError(int id)
@@ -642,12 +671,13 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -692,6 +722,9 @@ public class SWBAWorkflow extends GenericResource
         out.print(new String(ret.getBytes()));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -774,13 +807,18 @@ public class SWBAWorkflow extends GenericResource
         }
     }
 
+    /**
+     * The Class OrdenaUsuarios.
+     */
     private class OrdenaUsuarios implements Comparator
     {
 
         /**
-         *
-         * @param o1
-         * @param o2
+         * Compare.
+         * 
+         * @param o1 the o1
+         * @param o2 the o2
+         * @return the int
          * @return
          */
         public int compare(Object o1, Object o2)
@@ -795,13 +833,18 @@ public class SWBAWorkflow extends GenericResource
         }
     }
 
+    /**
+     * The Class OrdenaRole.
+     */
     private class OrdenaRole implements Comparator
     {
 
         /**
-         *
-         * @param o1
-         * @param o2
+         * Compare.
+         * 
+         * @param o1 the o1
+         * @param o2 the o2
+         * @return the int
          * @return
          */
         public int compare(Object o1, Object o2)
@@ -817,13 +860,15 @@ public class SWBAWorkflow extends GenericResource
     }
 
     /**
-     *
-     * @param tm
-     * @param xml
-     * @param userid
+     * Update pflow.
+     * 
+     * @param tm the tm
+     * @param xml the xml
+     * @param userid the userid
+     * @return the workflow response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws Exception the exception
      * @return
-     * @throws SWBResourceException
-     * @throws Exception
      */
     public WorkflowResponse updatePflow(String tm, Document xml, String userid) throws SWBResourceException, Exception
     {

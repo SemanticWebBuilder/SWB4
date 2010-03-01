@@ -52,26 +52,47 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.ContentUtils;
 import org.semanticwb.portal.util.WBFileUpload;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HTMLContent.
+ */
 public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLContentBase 
 {
 
-    /** Objeto utilizado para generacion de mensajes en el log */
+    /** Objeto utilizado para generacion de mensajes en el log. */
     private static Logger log = SWBUtils.getLogger(HTMLContent.class);
 
-    /**Ruta relativa para carpeta de archivos asociados a cada version */
+    /** Ruta relativa para carpeta de archivos asociados a cada version. */
     private static final String FOLDER = "images";
 
+    /** The snpages. */
     int snpages = 15;
+    
+    /** The stxtant. */
     String stxtant = "Anterior";
+    
+    /** The stxtsig. */
     String stxtsig = "Siguiente";
+    
+    /** The stfont. */
     String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
+    
+    /** The position. */
     int position = 1;
 
 
+    /**
+     * Instantiates a new hTML content.
+     */
     public HTMLContent()
     {
     }
 
+    /**
+     * Instantiates a new hTML content.
+     * 
+     * @param base the base
+     */
     public HTMLContent(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -82,11 +103,12 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      * objeto HttpServletRequest el valor numerico de una version especifica en un parametro
      * de nombre numversion. De lo contrario, se muestra el contenido definido por
      * la version indicada en el parametro.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -164,11 +186,12 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     /**
      * Presenta el editor de HTML para generar el contenido relacionado a la version
      * indicada por el valor del parametro numversion.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response,
@@ -238,12 +261,13 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
     /**
      * Determina el metodo a ejecutar en base al modo que se envia en el objeto
-     * HttpServletRequest recibido
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * HttpServletRequest recibido.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processRequest(HttpServletRequest request,
@@ -265,11 +289,12 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
      * Almacena en un archivo con extensi&oacute;n .html el contenido mostrado
      * en el editor, sustituyendo el contenido anterior de la versi&oacute;n
      * indicada por el parametro numversion.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void saveContent(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
@@ -381,10 +406,11 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     /**
      * Carga un archivo al file system del servidor en un directorio temporal
      * utilizando la interfaz del FCKEditor y el applet DragDrop.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws java.io.IOException
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private void uploadNewVersion(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
@@ -528,9 +554,11 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     /**
      * Muestra la interfaz para que el usuario seleccione un archivo de la m&aacute;quina
      * cliente y lo env&iacute;e al servidor.
-     * @param request
-     * @param response
-     * @param paramRequest
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private void selectFileInterface(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramRequest)
@@ -710,6 +738,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         return ver;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#getModes(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -727,6 +758,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         return super.getModes(request, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#windowSupport(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

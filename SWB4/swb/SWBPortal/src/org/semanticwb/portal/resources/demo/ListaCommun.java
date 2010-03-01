@@ -54,15 +54,26 @@ import java.util.TreeSet;
 import org.semanticwb.model.comm.MicroSite;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ListaCommun.
+ * 
  * @author serch
  */
 public class ListaCommun extends GenericResource {
+    
+    /** The refresh. */
     long refresh = 0;
+    
+    /** The buffer. */
     String buffer = "Cargando...... ";
+    
+    /** The Constant NL. */
     private static final String NL = System.getProperty("line.separator");
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -73,12 +84,23 @@ public class ListaCommun extends GenericResource {
         out.println(doSearchComm(temas, (LocationEntity)locate, model));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         super.processAction(request, response);
     }
 
+    /**
+     * Do search.
+     * 
+     * @param temas the temas
+     * @param localidad the localidad
+     * @param model the model
+     * @return the string
+     */
     private String doSearch(WebPage temas, LocationEntity localidad, Model model){
         String prolog = "PREFIX  swb:  <http://www.semanticwebbuilder.org/swb4/ontology#>"+NL+
         "PREFIX  rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+NL+
@@ -115,6 +137,14 @@ public class ListaCommun extends GenericResource {
         return "";
     }
 
+    /**
+     * Do search comm.
+     * 
+     * @param temas the temas
+     * @param localidad the localidad
+     * @param model the model
+     * @return the string
+     */
     private String doSearchComm(WebPage temas, LocationEntity localidad, Model model)
     {
         SortedSet<Contenedor> set = new TreeSet<Contenedor>();

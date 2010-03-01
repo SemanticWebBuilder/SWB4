@@ -43,21 +43,33 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
- * Resource that manage the integration between facebook and semanticwebbuilder (facebook java api)
+ * Resource that manage the integration between facebook and semanticwebbuilder (facebook java api).
+ * 
  * @author Jorge Jiménez
- *
  */
 public class FB_Login extends GenericAdmResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FB_Login.class);
+    
+    /** The AP i_ key. */
     private static String API_KEY = "";
+    
+    /** The SECRE t_ key. */
     private static String SECRET_KEY = "";
+    
+    /** The redirect. */
     private static String redirect = "";
+    
+    /** The Constant FACEBOOK_USER_CLIENT. */
     private static final String FACEBOOK_USER_CLIENT = "facebook.user.client";
 
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base) {
@@ -70,6 +82,9 @@ public class FB_Login extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         redirect=paramRequest.getResourceBase().getAttribute("redirect",paramRequest.getWebPage().getUrl());
@@ -109,10 +124,23 @@ public class FB_Login extends GenericAdmResource {
         }
     }
 
+    /**
+     * Gets the user client.
+     * 
+     * @param session the session
+     * @param redirect the redirect
+     * @return the user client
+     */
     static FacebookXmlRestClient getUserClient(HttpSession session, String redirect) {
         return (FacebookXmlRestClient) session.getAttribute(FACEBOOK_USER_CLIENT);
     }
 
+    /**
+     * Gets the params.
+     * 
+     * @param param the param
+     * @return the params
+     */
     private HashMap getParams(String param) {
         HashMap hParams = new HashMap();
         param = SWBUtils.TEXT.findInterStr(param, "{", "}").next();

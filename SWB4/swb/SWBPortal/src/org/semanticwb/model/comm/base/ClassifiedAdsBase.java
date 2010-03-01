@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ClassifiedAdsBase.
+ */
 public class ClassifiedAdsBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_ClassifiedAds. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_ClassifiedAds=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClassifiedAds");
 
+    /**
+     * Instantiates a new classified ads base.
+     */
     public ClassifiedAdsBase()
     {
     }
 
+    /**
+     * Instantiates a new classified ads base.
+     * 
+     * @param base the base
+     */
     public ClassifiedAdsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ClassifiedAds");
 }

@@ -23,6 +23,7 @@
  
 package org.semanticwb.portal.util.fileupload;
 
+// TODO: Auto-generated Javadoc
 /**
  * Contains upload status information: error message if any, bytes processed, time remaining, etc.
  * The status indicators (STATUS_IN_PROGRESS, STATUS_OK, STATUS_ERROR, STATUS_RETRY) provide meaningful
@@ -31,95 +32,183 @@ package org.semanticwb.portal.util.fileupload;
  * @author Marius Hanganu
  */
 public class UploadStatus {
-    /**
-     * Upload is in progress (continue making progress requests)
-     */
+    
+    /** Upload is in progress (continue making progress requests). */
     public static final int STATUS_IN_PROGRESS = 1;
 
-    /**
-     * Upload finished successfully (stop monitoring the upload)
-     */
+    /** Upload finished successfully (stop monitoring the upload). */
     public static final int STATUS_OK = 2;
 
-    /**
-     * An error occured during upload (check the message)
-     */
+    /** An error occured during upload (check the message). */
     public static final int STATUS_ERROR = 3;
 
-    /**
-     * Perhaps progress requests were made before the upload started, so keep asking the upload status
-     */
+    /** Perhaps progress requests were made before the upload started, so keep asking the upload status. */
     public static final int STATUS_RETRY = 4;
 
+    /** The status. */
     private int status;
+    
+    /** The message. */
     private String message;
+    
+    /** The bytes processed. */
     private long bytesProcessed;
+    
+    /** The size total. */
     private long sizeTotal;
+    
+    /** The percent complete. */
     private long percentComplete;
+    
+    /** The upload rate. */
     private double uploadRate;
+    
+    /** The time in seconds. */
     private long timeInSeconds;
+    
+    /** The estimated runtime. */
     private double estimatedRuntime;
 
+    /**
+     * Gets the status.
+     * 
+     * @return the status
+     */
     public int getStatus() {
         return status;
     }
 
+    /**
+     * Sets the status.
+     * 
+     * @param status the new status
+     */
     public void setStatus(int status) {
         this.status = status;
     }
 
+    /**
+     * Gets the message.
+     * 
+     * @return the message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Sets the message.
+     * 
+     * @param message the new message
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * Gets the bytes processed.
+     * 
+     * @return the bytes processed
+     */
     public long getBytesProcessed() {
         return bytesProcessed;
     }
 
+    /**
+     * Sets the bytes processed.
+     * 
+     * @param bytesProcessed the new bytes processed
+     */
     public void setBytesProcessed(long bytesProcessed) {
         this.bytesProcessed = bytesProcessed;
     }
 
+    /**
+     * Gets the size total.
+     * 
+     * @return the size total
+     */
     public long getSizeTotal() {
         return sizeTotal;
     }
 
+    /**
+     * Sets the size total.
+     * 
+     * @param sizeTotal the new size total
+     */
     public void setSizeTotal(long sizeTotal) {
         this.sizeTotal = sizeTotal;
     }
 
+    /**
+     * Gets the percent complete.
+     * 
+     * @return the percent complete
+     */
     public long getPercentComplete() {
         return percentComplete;
     }
 
+    /**
+     * Sets the percent complete.
+     * 
+     * @param percentComplete the new percent complete
+     */
     public void setPercentComplete(long percentComplete) {
         this.percentComplete = percentComplete;
     }
 
+    /**
+     * Gets the upload rate.
+     * 
+     * @return the upload rate
+     */
     public double getUploadRate() {
         return uploadRate;
     }
 
+    /**
+     * Sets the upload rate.
+     * 
+     * @param uploadRate the new upload rate
+     */
     public void setUploadRate(double uploadRate) {
         this.uploadRate = uploadRate;
     }
 
+    /**
+     * Gets the time in seconds.
+     * 
+     * @return the time in seconds
+     */
     public long getTimeInSeconds() {
         return timeInSeconds;
     }
 
+    /**
+     * Sets the time in seconds.
+     * 
+     * @param timeInSeconds the new time in seconds
+     */
     public void setTimeInSeconds(long timeInSeconds) {
         this.timeInSeconds = timeInSeconds;
     }
 
+    /**
+     * Gets the estimated runtime.
+     * 
+     * @return the estimated runtime
+     */
     public double getEstimatedRuntime() {
         return estimatedRuntime;
     }
 
+    /**
+     * Sets the estimated runtime.
+     * 
+     * @param estimatedRuntime the new estimated runtime
+     */
     public void setEstimatedRuntime(double estimatedRuntime) {
         this.estimatedRuntime = estimatedRuntime;
     }
