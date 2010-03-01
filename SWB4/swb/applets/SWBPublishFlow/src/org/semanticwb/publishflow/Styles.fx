@@ -16,7 +16,9 @@ import javafx.scene.image.Image;
 public-read var stylesheets = "{__DIR__}style.css";
 //public-read var color="#6060FF";
 public-read var color="#03689a";
-public-read var color_over="#FF6060";
+public-read var color_authorize="#33CC00";
+public-read var color_no_authorize="#CC0033";
+public-read var color_over="#999999";
 public-read var color_focused="#FF8080";
 public-read var color_fill="#f5f5ff";
 public-read var color_fill_pool="#d5d5ff";
@@ -35,8 +37,15 @@ public-read var style_gateway="fill: {color_fill}; stroke: {color_gateway}; stro
 public-read var style_message="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
 public-read var style_simbol="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 4;";
 public-read var style_event="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
-public-read var style_connection="stroke: {color}; strokeWidth: 2;";
-public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
+public-read var style_connection_authorize="stroke: {color_authorize}; strokeWidth: 2;";
+public-read var style_connection_arrow_authorize="stroke: {color_authorize}; strokeWidth: 2;";
+
+public-read var style_connection_over="stroke: {color_over}; strokeWidth: 3;";
+public-read var style_connection_row_over="stroke: {color_over}; strokeWidth: 3;";
+
+
+public-read var style_connection_not_authorize="stroke: {color_no_authorize}; strokeWidth: 2;";
+public-read var style_connection_arrow_not_authorize="stroke: {color_no_authorize}; strokeWidth: 2;";
 public-read var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
 public-read var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
 
