@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PropertyGroup.
+ */
 public class PropertyGroup extends PropertyGroupBase {
+    
+    /**
+     * Instantiates a new property group.
+     * 
+     * @param base the base
+     */
     public PropertyGroup(SemanticObject base) {
         super(base);
     }
