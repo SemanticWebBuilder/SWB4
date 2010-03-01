@@ -30,9 +30,12 @@ import org.apache.log4j.Level;
 import org.semanticwb.SWBUtils;
 
 
+// TODO: Auto-generated Javadoc
 /* Se eliminan los comentarios de documentaci&oacute;n de esta clase, para que
  * se hereden los de la clase padre. */
 /**
+ * The Class Logger4jImpl.
+ * 
  * @author Jei
  */
 public class Logger4jImpl implements Logger
@@ -127,17 +130,26 @@ public class Logger4jImpl implements Logger
         this.cls = cls;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#trace(java.lang.String, java.lang.Throwable)
+     */
     public void trace(String txt, Throwable t)
     {
         log.trace(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.TRACE);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#trace(java.lang.String)
+     */
     public void trace(String txt)
     {
         log.trace(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#trace(java.lang.Throwable)
+     */
     public void trace(Throwable t)
     {
         log.trace(null,t);
@@ -147,17 +159,26 @@ public class Logger4jImpl implements Logger
     /*
      * Usado para debugueos
      */
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#debug(java.lang.String, java.lang.Throwable)
+     */
     public void debug(String txt, Throwable t)
     {
         log.debug(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.DEBUG);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#debug(java.lang.String)
+     */
     public void debug(String txt)
     {
         log.debug(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#debug(java.lang.Throwable)
+     */
     public void debug(Throwable t)
     {
         log.debug(null,t);
@@ -167,34 +188,52 @@ public class Logger4jImpl implements Logger
     /*
      * Usado para Informacion del Sistema 
      */
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#info(java.lang.String, java.lang.Throwable)
+     */
     public void info(String txt, Throwable t)
     {
         log.info(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.INFO);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#info(java.lang.String)
+     */
     public void info(String txt)
     {
         log.info(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#info(java.lang.Throwable)
+     */
     public void info(Throwable t)
     {
         log.info(null,t);
         SWBUtils.ERROR.addError(null, t, cls, Logger4jImpl.INFO);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#warn(java.lang.String, java.lang.Throwable)
+     */
     public void warn(String txt, Throwable t)
     {
         log.warn(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.WARN);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#warn(java.lang.String)
+     */
     public void warn(String txt)
     {
         log.warn(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#warn(java.lang.Throwable)
+     */
     public void warn(Throwable t)
     {
         log.warn(null,t);
@@ -204,17 +243,26 @@ public class Logger4jImpl implements Logger
     /*
      * Usado para Errores
      */    
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#error(java.lang.String, java.lang.Throwable)
+     */
     public void error(String txt, Throwable t)
     {
         log.error(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.ERROR);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#error(java.lang.String)
+     */
     public void error(String txt)
     {
         log.error(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#error(java.lang.Throwable)
+     */
     public void error(Throwable t)
     {
         log.error(null,t);
@@ -224,17 +272,26 @@ public class Logger4jImpl implements Logger
     /*
      * Usado para Errores RunTime Exceptions
      */
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#fatal(java.lang.String, java.lang.Throwable)
+     */
     public void fatal(String txt, Throwable t)
     {
         log.fatal(txt,t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.FATAL);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#fatal(java.lang.String)
+     */
     public void fatal(String txt)
     {
         log.fatal(txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#fatal(java.lang.Throwable)
+     */
     public void fatal(Throwable t)
     {
         log.fatal(null,t);
@@ -244,17 +301,26 @@ public class Logger4jImpl implements Logger
     /*
      * Usado para notificacion de eventos
      */
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#event(java.lang.String, java.lang.Throwable)
+     */
     public void event(String txt, Throwable t)
     {
         log.log(Level.OFF, txt, t);
         SWBUtils.ERROR.addError(txt, t, cls, Logger4jImpl.EVENT);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#event(java.lang.String)
+     */
     public void event(String txt)
     {
         log.log(Level.OFF, txt);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.Logger#event(java.lang.Throwable)
+     */
     public void event(Throwable t)
     {
         log.log(Level.OFF, null, t);

@@ -24,6 +24,7 @@
 package org.semanticwb;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Exception that indicates that a method implementation must be provided by the
  * class in execution.
@@ -35,6 +36,9 @@ public class SWBMethodImplementationRequiredException extends SWBRuntimeExceptio
 {
 
 
+    /**
+     * Instantiates a new sWB method implementation required exception.
+     */
     public SWBMethodImplementationRequiredException()
     {
         super();

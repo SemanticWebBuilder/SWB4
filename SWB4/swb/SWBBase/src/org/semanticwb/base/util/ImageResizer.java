@@ -13,12 +13,24 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ImageResizer.
+ * 
  * @author serch
  */
 public class ImageResizer {
 
+    /**
+     * Resize.
+     * 
+     * @param origFile the orig file
+     * @param topsize the topsize
+     * @param centered the centered
+     * @param destfile the destfile
+     * @param type the type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void resize(File origFile, int topsize, boolean centered, File destfile, String type) throws IOException
     {
         BufferedImage bi = ImageIO.read(origFile);
@@ -37,6 +49,16 @@ public class ImageResizer {
         ImageIO.write(createResizedCopy(bi, calcWeight, calcHeight, centered, topsize), type, destfile);
     }
 
+    /**
+     * Creates the resized copy.
+     * 
+     * @param originalImage the original image
+     * @param scaledWidth the scaled width
+     * @param scaledHeight the scaled height
+     * @param centered the centered
+     * @param topsize the topsize
+     * @return the buffered image
+     */
     private static BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean centered, int topsize)
     {
 
@@ -68,6 +90,15 @@ public class ImageResizer {
         return scaledBI;
     }
 
+    /**
+     * Resize crop.
+     * 
+     * @param origFile the orig file
+     * @param topsize the topsize
+     * @param destfile the destfile
+     * @param type the type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void resizeCrop(File origFile, int topsize, File destfile, String type) throws IOException
     {
         BufferedImage bi = ImageIO.read(origFile);
@@ -84,6 +115,16 @@ public class ImageResizer {
         ImageIO.write(createResizedCropCopy(bi, calcWeight, calcHeight, true, topsize), type, destfile);
     }
 
+    /**
+     * Creates the resized crop copy.
+     * 
+     * @param originalImage the original image
+     * @param scaledWidth the scaled width
+     * @param scaledHeight the scaled height
+     * @param centered the centered
+     * @param topsize the topsize
+     * @return the buffered image
+     */
     private static BufferedImage createResizedCropCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean centered, int topsize)
     {
 

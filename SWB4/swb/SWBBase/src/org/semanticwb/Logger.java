@@ -24,6 +24,7 @@
 
 package org.semanticwb;
 
+// TODO: Auto-generated Javadoc
 /**
  * Registers data or messages in the application log file with different purposes.
  * <p>Registra informaci&oacute;n o mensajes en el archivo de bit&aacute;cora de

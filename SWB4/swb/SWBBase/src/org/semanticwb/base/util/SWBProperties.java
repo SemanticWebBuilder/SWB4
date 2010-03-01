@@ -33,20 +33,38 @@ import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto: para el manejo de archivos de propiedades.
  * @author Javier Solis Gonzalez
  */
 public class SWBProperties extends Properties {
 
+    /** The log. */
     Logger log = SWBUtils.getLogger(SWBProperties.class);
+    
+    /** The read only. */
     private boolean readOnly = false;
+    
+    /** The Constant PREFIX. */
     private final static String PREFIX = "_comm_";
+    
+    /** The Constant keyValueSeparators. */
     private static final String keyValueSeparators = "=: \t\r\n\f";
+    
+    /** The Constant strictKeyValueSeparators. */
     private static final String strictKeyValueSeparators = "=:";
+    
+    /** The Constant specialSaveChars. */
     private static final String specialSaveChars = "=: \t\r\n\f#!";
+    
+    /** The Constant whiteSpaceChars. */
     private static final String whiteSpaceChars = " \t\r\n\f";
+    
+    /** The arr. */
     private Vector arr = new Vector();
+    
+    /** The change. */
     private boolean change = false;
 
     /**
@@ -59,8 +77,8 @@ public class SWBProperties extends Properties {
 
     /**
      * Creates an empty property list with the specified defaults.
-     *
-     * @param   defaults   the defaults.
+     * 
+     * @param defaults the defaults
      */
     public SWBProperties(Properties defaults)
     {
@@ -71,7 +89,8 @@ public class SWBProperties extends Properties {
      * Copia el contenido de properties
      * ejemplo:
      * System.getProperties
-     * @param source 
+     * 
+     * @param source the source
      */
     public void copy(Properties source)
     {
@@ -92,11 +111,11 @@ public class SWBProperties extends Properties {
      * parallelism with the <tt>getProperty</tt> method. Enforces use of
      * strings for property keys and values. The value returned is the
      * result of the <tt>Hashtable</tt> call to <code>put</code>.
-     *
+     * 
      * @param key the key to be placed into this property list.
      * @param value the value corresponding to <tt>key</tt>.
      * @return     the previous value of the specified key in this property
-     *             list, or <code>null</code> if it did not have one.
+     * list, or  if it did not have one.
      * @see #getProperty
      * @since    1.2
      */
@@ -113,13 +132,13 @@ public class SWBProperties extends Properties {
      * strings for property keys and values. The value returned is the
      * result of the <tt>Hashtable</tt> call to <code>put</code>.
      * 
-     * @return the previous value of the specified key in this property
-     *             list, or <code>null</code> if it did not have one.
-     * @see #getProperty
-     * @since 1.2
-     * @param comment 
      * @param key the key to be placed into this property list.
      * @param value the value corresponding to <tt>key</tt>.
+     * @param comment the comment
+     * @return the previous value of the specified key in this property
+     * list, or  if it did not have one.
+     * @see #getProperty
+     * @since 1.2
      */
     public synchronized Object setProperty(String key, String value, String comment)
     {
@@ -162,8 +181,10 @@ public class SWBProperties extends Properties {
     }
 
     /**
+     * Checks for change it.
      * 
-     * @return 
+     * @return true, if successful
+     * @return
      */
     public boolean hasChangeIt()
     {
@@ -181,16 +202,16 @@ public class SWBProperties extends Properties {
      * and <a
      * href="http://java.sun.com/docs/books/jls/second_edition/html/lexical.doc.html#101089">&sect;3.10.6</a>
      * of the <i>Java Language Specification</i>).
-     *
+     * 
      * The differences from the character escape sequences used for
      * characters and strings are:
-     *
+     * 
      * <ul>
      * <li> Octal escapes are not recognized.
-     *
+     * 
      * <li> The character sequence <code>\b</code> does <i>not</i>
      * represent a backspace character.
-     *
+     * 
      * <li> The method does not treat a backslash character,
      * <code>\</code>, before a non-valid escape character as an
      * error; the backslash is silently dropped.  For example, in a
@@ -199,17 +220,17 @@ public class SWBProperties extends Properties {
      * the backslash.  Therefore, this method treats the two character
      * sequence <code>"\b"</code> as equivalent to the single
      * character <code>'b'</code>.
-     *
+     * 
      * <li> Escapes are not necessary for single and double quotes;
      * however, by the rule above, single and double quote characters
      * preceded by a backslash still yield single and double quote
      * characters, respectively.
-     *
+     * 
      * </ul>
-     *
+     * 
      * An <code>IllegalArgumentException</code> is thrown if a
      * malformed Unicode escape appears in the input.
-     *
+     * 
      * <p>
      * This method processes input in terms of lines.  A natural line
      * of input is terminated either by a set of line terminator
@@ -226,7 +247,7 @@ public class SWBProperties extends Properties {
      * lines, the continuation lines receive further processing, also
      * described below.  Lines are read from the input stream until
      * end of file is reached.
-     *
+     * 
      * <p>
      * A natural line that contains only white space characters is
      * considered blank and is ignored.  A comment line has an ASCII
@@ -238,7 +259,7 @@ public class SWBProperties extends Properties {
      * (<code>'\t'</code>, <code>'&#92;u0009'</code>), and form feed
      * (<code>'\f'</code>, <code>'&#92;u000C'</code>) to be white
      * space.
-     *
+     * 
      * <p>
      * If a logical line is spread across several natural lines, the
      * backslash escaping the line terminator sequence, the line
@@ -256,7 +277,7 @@ public class SWBProperties extends Properties {
      * 2<i>n</i> contiguous backslashes before a line terminator (or
      * elsewhere) encodes <i>n</i> backslashes after escape
      * processing.
-     *
+     * 
      * <p>
      * The key contains all of the characters in the line starting
      * with the first non-white space character and up to, but not
@@ -265,9 +286,9 @@ public class SWBProperties extends Properties {
      * terminator. All of these key termination characters may be
      * included in the key by escaping them with a preceding backslash
      * character; for example,<p>
-     *
+     * 
      * <code>\:\=</code><p>
-     *
+     * 
      * would be the two-character key <code>":="</code>.  Line
      * terminator characters can be included using <code>\r</code> and
      * <code>\n</code> escape sequences.  Any white space after the
@@ -280,7 +301,7 @@ public class SWBProperties extends Properties {
      * <code>&quot;&quot;</code>.  Once the raw character sequences
      * constituting the key and element are identified, escape
      * processing is performed as described above.
-     *
+     * 
      * <p>
      * As an example, each of the following three lines specifies the key
      * <code>"Truth"</code> and the associated element value
@@ -288,7 +309,7 @@ public class SWBProperties extends Properties {
      * <p>
      * <pre>
      * Truth = Beauty
-     *	Truth:Beauty
+     * Truth:Beauty
      * Truth			:Beauty
      * </pre>
      * As another example, the following three lines specify a single
@@ -296,8 +317,8 @@ public class SWBProperties extends Properties {
      * <p>
      * <pre>
      * fruits                           apple, banana, pear, \
-     *                                  cantaloupe, watermelon, \
-     *                                  kiwi, mango
+     * cantaloupe, watermelon, \
+     * kiwi, mango
      * </pre>
      * The key is <code>"fruits"</code> and the associated element is:
      * <p>
@@ -314,12 +335,13 @@ public class SWBProperties extends Properties {
      * </pre>
      * specifies that the key is <code>"cheeses"</code> and the associated
      * element is the empty string <code>""</code>.<p>
-     *
-     * @param      inStream   the input stream.
+     * 
+     * @param inStream the in stream
+     * @throws IOException Signals that an I/O exception has occurred.
      * @exception  IOException  if an error occurred when reading from the
-     *               input stream.
+     * input stream.
      * @throws	   IllegalArgumentException if the input stream contains a
-     * 		   malformed Unicode escape sequence.
+     * malformed Unicode escape sequence.
      */
     @Override
     public synchronized void load(InputStream inStream) throws IOException
@@ -459,6 +481,12 @@ public class SWBProperties extends Properties {
      * Converts encoded &#92;uxxxx to unicode chars
      * and changes special saved chars to their original forms
      */
+    /**
+     * Load convert.
+     * 
+     * @param theString the the string
+     * @return the string
+     */
     private String loadConvert(String theString)
     {
         char aChar;
@@ -559,8 +587,10 @@ public class SWBProperties extends Properties {
     }
 
     /**
+     * Property ordered names.
      * 
-     * @return 
+     * @return the enumeration
+     * @return
      */
     public Enumeration propertyOrderedNames()
     {
@@ -603,8 +633,8 @@ public class SWBProperties extends Properties {
      * If the key is not found in this property list, the default property list,
      * and its defaults, recursively, are then checked. The method returns
      * <code>null</code> if the property is not found.
-     *
-     * @param   key   the property key.
+     * 
+     * @param key the key
      * @return  the value in this property list with the specified key value.
      * @see     #setProperty
      * @see     #defaults
@@ -621,6 +651,13 @@ public class SWBProperties extends Properties {
      * Converts unicodes to encoded &#92;uxxxx
      * and writes out any of the characters in specialSaveChars
      * with a preceding slash
+     */
+    /**
+     * Save convert.
+     * 
+     * @param theString the the string
+     * @param escapeSpace the escape space
+     * @return the string
      */
     private String saveConvert(String theString, boolean escapeSpace)
     {
@@ -686,6 +723,12 @@ public class SWBProperties extends Properties {
      * Returns true if the given line is a line that must
      * be appended to the next line
      */
+    /**
+     * Continue line.
+     * 
+     * @param line the line
+     * @return true, if successful
+     */
     private boolean continueLine(String line)
     {
         int slashCount = 0;
@@ -697,18 +740,27 @@ public class SWBProperties extends Properties {
         return (slashCount % 2 != 0);
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Hashtable#hashCode()
+     */
     @Override
     public synchronized int hashCode()
     {
         return super.hashCode();
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Hashtable#equals(java.lang.Object)
+     */
     @Override
     public synchronized boolean equals(Object o)
     {
         return super.equals(o);
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Hashtable#remove(java.lang.Object)
+     */
     @Override
     public Object remove(Object key)
     {
@@ -721,7 +773,11 @@ public class SWBProperties extends Properties {
     /**
      * Writes this property list (key and element pairs) in this
      * <code>Properties</code> table to the output stream in a format suitable
-     * for loading into a <code>Properties</code> table using the
+     * for loading into a <code>Properties</code> table using the.
+     * 
+     * @param out the out
+     * @param header the header
+     * @throws IOException Signals that an I/O exception has occurred.
      * {@link #load(InputStream) load} method.
      * The stream is written using the ISO 8859-1 character encoding.
      * <p>
@@ -760,13 +816,10 @@ public class SWBProperties extends Properties {
      * <p>
      * After the entries have been written, the output stream is flushed.  The
      * output stream remains open after this method returns.
-     *
-     * @param   out      an output stream.
-     * @param   header   a description of the property list.
      * @exception  IOException if writing this property list to the specified
-     *             output stream throws an <tt>IOException</tt>.
+     * output stream throws an <tt>IOException</tt>.
      * @exception  ClassCastException  if this <code>Properties</code> object
-     *             contains any keys or values that are not <code>Strings</code>.
+     * contains any keys or values that are not <code>Strings</code>.
      * @exception  NullPointerException  if <code>out</code> is null.
      * @since 1.2
      */
@@ -804,6 +857,13 @@ public class SWBProperties extends Properties {
         awriter.flush();
     }
 
+    /**
+     * Writeln.
+     * 
+     * @param bw the bw
+     * @param s the s
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private static void writeln(BufferedWriter bw, String s) throws IOException
     {
         bw.write(s);
@@ -811,7 +871,10 @@ public class SWBProperties extends Properties {
     }
 
     /**
-     * Convert a nibble to a hex character
+     * Convert a nibble to a hex character.
+     * 
+     * @param nibble the nibble
+     * @return the char
      * @param	nibble	the nibble to convert.
      */
     private static char toHex(int nibble)
@@ -836,17 +899,28 @@ public class SWBProperties extends Properties {
     {
         this.readOnly = readOnly;
     }
-    /** A table of hex digits */
+    
+    /** A table of hex digits. */
     private static final char[] hexDigit =
     {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
+    /**
+     * Checks if is change.
+     * 
+     * @return true, if is change
+     */
     public boolean isChange()
     {
         return change;
     }
 
+    /**
+     * Sets the change.
+     * 
+     * @param change the new change
+     */
     public synchronized void setChange(boolean change)
     {
         this.change = change;

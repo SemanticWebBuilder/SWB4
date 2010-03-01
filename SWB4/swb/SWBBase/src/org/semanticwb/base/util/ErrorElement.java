@@ -27,6 +27,7 @@
  */
 package org.semanticwb.base.util;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto: Representa y contiene una exception junto con un identificador y la
  * fecha en la que se genero.
@@ -34,25 +35,55 @@ package org.semanticwb.base.util;
  */
 public class ErrorElement {
 
+    /** The counter. */
     static long counter;
+    
+    /** The id. */
     private long id = 0;
+    
+    /** The msg. */
     private String msg = null;
+    
+    /** The date. */
     private java.util.Date date;
+    
+    /** The throwable. */
     private Throwable throwable;
+    
+    /** The cls. */
     private Class cls;
+    
+    /** The level. */
     private String level;
 
+    /**
+     * Gets the error class.
+     * 
+     * @return the error class
+     */
     public Class getErrorClass()
     {
         return cls;
     }
 
+    /**
+     * Gets the error level.
+     * 
+     * @return the error level
+     */
     public String getErrorLevel()
     {
         return level;
     }
 
-    /** Creates a new instance of ErrorElement */
+    /**
+     * Creates a new instance of ErrorElement.
+     * 
+     * @param e the e
+     * @param msg the msg
+     * @param cls the cls
+     * @param level the level
+     */
     public ErrorElement(Throwable e, String msg, Class cls, String level)
     {
         id = getCounter();
@@ -61,6 +92,11 @@ public class ErrorElement {
         this.msg = msg;
     }
 
+    /**
+     * Gets the counter.
+     * 
+     * @return the counter
+     */
     public static synchronized long getCounter()
     {
         return counter++;
@@ -93,6 +129,11 @@ public class ErrorElement {
         return throwable;
     }
 
+    /**
+     * Gets the message.
+     * 
+     * @return the message
+     */
     public String getMessage()
     {  
         if (msg != null)
@@ -102,11 +143,22 @@ public class ErrorElement {
         return throwable.toString();
     }
 
+    /**
+     * Gets the stack trace.
+     * 
+     * @return the stack trace
+     */
     public String getStackTrace()
     {
         return printThrowable(throwable);
     }
 
+    /**
+     * Prints the throwable.
+     * 
+     * @param th the th
+     * @return the string
+     */
     private String printThrowable(Throwable th)
     {
         StringBuffer bug = new StringBuffer();

@@ -77,11 +77,24 @@ package org.semanticwb.base.util.parser.html;
  */
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Entities.
+ */
 public class Entities {
 
+    /** The Constant decoder. */
     static final Hashtable decoder = new Hashtable(300);
+    
+    /** The Constant encoder. */
     static final String[] encoder = new String[0x100];
 
+    /**
+     * Decode.
+     * 
+     * @param entity the entity
+     * @return the string
+     */
     static final String decode(String entity)
     {
         if (entity.charAt(entity.length() - 1) == ';')  // remove trailing semicolon
@@ -113,6 +126,12 @@ public class Entities {
         }
     }
 
+    /**
+     * Encode.
+     * 
+     * @param s the s
+     * @return the string
+     */
     static final public String encode(String s)
     {
         int length = s.length();
@@ -138,6 +157,12 @@ public class Entities {
         return buffer.toString();
     }
 
+    /**
+     * Adds the.
+     * 
+     * @param entity the entity
+     * @param value the value
+     */
     static final void add(String entity, int value)
     {
         decoder.put(entity, (Character.valueOf((char) value)).toString());

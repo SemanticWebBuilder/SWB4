@@ -115,13 +115,15 @@ import org.semanticwb.base.util.SWBProperties;
 import org.semanticwb.base.util.parser.html.HTMLParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+// TODO: Auto-generated Javadoc
 //import sun.misc.BASE64Encoder;
 
 /**
  * Contains utileries for managing error logs, text, database, IO, Zip files, emails,
  * Xml, Xslt , Dom, Collections and encriptions
  * <p>Contiene utilerias para manejo de log de errores, texto, base de datos, IO,
- * Zip, Email, Xml, colecciones y encripciones</p>
+ * Zip, Email, Xml, colecciones y encripciones</p>.
+ * 
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  * @author Jorge Jiménez (george24@infotec.com.mx)
  * @version 1.0
@@ -183,7 +185,7 @@ public class SWBUtils {
     private static int errorElementSize = 200;
 
     /**
-     * Creates a new object of this class
+     * Creates a new object of this class.
      */
     private SWBUtils()
     {
@@ -215,6 +217,9 @@ public class SWBUtils {
     /*
      * Initializes the class variables needed to provide this object's services
      * <p>Inicializa las variables de clase necesarias para proveer los servicios de este objeto.</p>
+     */
+    /**
+     * Inits the.
      */
     private void init()
     {
@@ -365,6 +370,8 @@ public class SWBUtils {
          * is defined by the class member {@code SWBUtils.errorElementSize}.
          * <p>Regresa el iterador de {@code SWBUtils.errorElement}, cuyo tamaño
          * est&aacute; definido por la variable de clase {@code SWBUtils.errorElementSize}.
+         * 
+         * @return the error elements
          */
         public static Iterator getErrorElements()
         {
@@ -424,14 +431,15 @@ public class SWBUtils {
          * will be {@value #CHARSET_ISO8859_1}. For example: <br>if {@code charset} contains <q>UTF-8</q>
          * or <q>UTF-2</q>, the value returned will be {@value #CHARSET_UTF8}.
          * <p>Dada una cadena especificando un c&oacute;digo de caracteres, regresa el valor de
-         * {@code SWBUtils.TEXT.CHARSET_ISO8859_1} o el valor de {@code SWBUtils.TEXT.CHARSET_UTF8}.
-         * Ejemplo: <br>si {@code charset} contiene <q>ISO-8859-1</q> o <q>ISO8859-1</q> o
-         * <q>8859-1</q> el valor regresado, ser&aacute; {@value #CHARSET_ISO8859_1}</p>
+         * 
          * @param charset a string representing the name of a charset (like <q>ISO-8859-1</q> or
          * <q>ISO8859-1</q> or <q>8859-1</q> or <q>UTF-8</q> or <q>UTF_8</q>
          * @return the string contained in {@code SWBUtils.TEXT.CHARSET_ISO8859_1}
-         *         or in {@code SWBUtils.TEXT.CHARSET_UTF8}, depending on the value
-         *         received in {@code charset}.
+         * or in {@code SWBUtils.TEXT.CHARSET_UTF8}, depending on the value
+         * received in {@code charset}.
+         * {@code SWBUtils.TEXT.CHARSET_ISO8859_1} o el valor de {@code SWBUtils.TEXT.CHARSET_UTF8}.
+         * Ejemplo: <br>si {@code charset} contiene <q>ISO-8859-1</q> o <q>ISO8859-1</q> o
+         * <q>8859-1</q> el valor regresado, ser&aacute; {@value #CHARSET_ISO8859_1}</p>
          */
         public static String getHomCharSet(String charset)
         {
@@ -450,18 +458,19 @@ public class SWBUtils {
          * <p>Regresa el n&uacute;mero correspondiente al nombre (completo) del mes
          * especificado, el nombre del mes debe ser especificado en el lenguaje indicado
          * en {@code language}.</p>
+         * 
          * @param month a string representing the month's full name in the specified {@code language}
          * @param language a string representing the language in which the month's name is specified
          * @return the number of month corresponding to the specified month's name.
-         *         If there is no match found between the name received and a month's name
-         *         in the specified language, a value of -1 is returned. If the language
-         *         specified is not accepted by {@link java.util.Locale}, the English language
-         *         will be used.
-         *         <p>el n&uacute;mero de mes correspondiente al nombre de mes especificado.
-         *         Si no hay correspondencia entre el nombre recibido y un nombre de mes
-         *         en el lenguaje especificado, un valor de -1, ser&aacute; regresado.
-         *         Si el lenguage especificado no es aceptado por {@code Locale}, el lenguaje
-         *         Ingl&eacute;s sera utilizado.</p>
+         * If there is no match found between the name received and a month's name
+         * in the specified language, a value of -1 is returned. If the language
+         * specified is not accepted by {@link java.util.Locale}, the English language
+         * will be used.
+         * el n&uacute;mero de mes correspondiente al nombre de mes especificado.
+         * Si no hay correspondencia entre el nombre recibido y un nombre de mes
+         * en el lenguaje especificado, un valor de -1, ser&aacute; regresado.
+         * Si el lenguage especificado no es aceptado por {@code Locale}, el lenguaje
+         * Ingl&eacute;s sera utilizado.
          */
         public static int monthToInt(String month, String language)
         {
@@ -492,8 +501,9 @@ public class SWBUtils {
         /**
          * Returns the name of the character encoding used by default.
          * <p>Regresa el nombre del c&oacute;digo de caracteres utilizado por defecto.</p>
+         * 
          * @return a string representing the character encoding used by default.
-         *         <p>una cadena que representa el c&oacute;digo de caracteres utilizado por defecto.</p>
+         * 
          */
         public static String getDafaultEncoding()
         {
@@ -510,13 +520,14 @@ public class SWBUtils {
          * Replaces from {@code str} all the occurrences of {@code match} with the
          * content in {@code replace}. <p>Reemplaza en {@code str} las ocurrencias
          * encontradas de {@code match} con el contenido de {@code replace}.</p>
+         * 
          * @param str a string with the original content to modify
          * @param match a string with the content to find in {@code str}
          * @param replace a string with the replacing text
          * @return a string with all the occurrences of {@code match} found  in {@code str}
-         *         substituted by {@code replace}.
-         *         <p>una cadena con todas las ocurrencias de {@code match} encontradas
-         *         en {@code str} substituidas por {@code replace}.</p>
+         * substituted by {@code replace}.
+         * una cadena con todas las ocurrencias de {@code match} encontradas
+         * en {@code str} substituidas por {@code replace}.
          */
         public static String replaceAll(String str, String match, String replace)
         {
@@ -554,13 +565,14 @@ public class SWBUtils {
          * content in {@code replace} ignoring case. <p>Reemplaza en {@code str} las ocurrencias
          * encontradas de {@code match} con el contenido de {@code replace} sin
          * sensibilidad a las may&uacute;sculas.</p>
+         * 
          * @param str a string with the original content to modify
          * @param match a string with the content to find in {@code str}
          * @param replace a string with the replacing text
          * @return a string with all the occurrences of {@code match} found in {@code str}
-         *         substituted by {@code replace}.
-         *         <p>una cadena con todas las ocurrencias de {@code match} encontradas
-         *         en {@code str} substituidas por {@code replace}.</p>
+         * substituted by {@code replace}.
+         * una cadena con todas las ocurrencias de {@code match} encontradas
+         * en {@code str} substituidas por {@code replace}.
          * @author Jorge Jim&eacute;nez
          */
         public static String replaceAllIgnoreCase(String str, String match, String replace)
@@ -589,13 +601,14 @@ public class SWBUtils {
          * content of {@code replace} ignoring case.
          * <p>Reemplaza la primera ocurrencia de {@code match} en {@code str} con
          * el contenido de {@code replace} ignorando las may&uacute;sculas.</p>
+         * 
          * @param str a string with the original content to modify
          * @param match a string with the content to find in {@code str}
          * @param replace a string with the replacing text
          * @return a string with the first occurrence of {@code match} found in {@code str}
-         *         substituted by {@code replace}.
-         *         <p>una cadena con la primer ocurrencia de {@code match} encontrada
-         *         en {@code str} substituida por {@code replace}.</p>
+         * substituted by {@code replace}.
+         * una cadena con la primer ocurrencia de {@code match} encontrada
+         * en {@code str} substituida por {@code replace}.
          * @author Jorge Jim&eacute;nez
          */
         public static String replaceFirstIgnoreCase(String str, String match, String replace)
@@ -619,10 +632,11 @@ public class SWBUtils {
         /**
          * Converts a date into a string with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.
          * <p>Convierte un objeto date a uno string con el formato {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.</p>
+         * 
          * @param date a date to convert
          * @return a string representing the date received with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.
-         *         <p>un objeto string que representa al date recibido, con el
-         *         formato {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.</p>
+         * un objeto string que representa al date recibido, con el
+         * formato {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}.
          */
         public static String iso8601DateFormat(Date date)
         {
@@ -633,12 +647,14 @@ public class SWBUtils {
         /**
          * Converts a string representing a date with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}
          * into a date. <p>Convierte un objeto string que representa una fecha con formato
-         * {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}, en un objeto date.</p>
+         * 
          * @param date a string representing a date with the format {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}
          * @return a date equivalent to the value of to the string received.
-         *         <p>un objeto date equivalente al valor representado por el string recibido.</p>
+         * 
          * @throws java.text.ParseException if the value received does not represent a valid date.
-         *         <p>Si el valor recibido no representa una fecha valida.</p>
+         * <p>Si el valor recibido no representa una fecha valida.</p>
+         * @throws ParseException the parse exception
+         * {@literal yyyy-MM-dd'T'HH:mm:ss'.'SSS}, en un objeto date.</p>
          */
         public static Date iso8601DateParse(String date) throws ParseException
         {
@@ -650,13 +666,14 @@ public class SWBUtils {
          * Converts a string in an integer value; if this is not possible, it returns
          * the integer received. <p>Convierte un objeto string en un valor entero;
          * si no es posible, devuelve el valor entero recibido.</p>
+         * 
          * @param val a string representing a valid integer
          * @param defa a value to return in case the convertion is not possible
          * @return an integer equivalent to the value represented by {@code val}, or {@code defa}
-         *         if the convertion is not possible or if {@code val} is {@code null}.
-         *         <p>un entero equivalente al valor representado por {@code val},
-         *         o {@code defa}, si la conversi&oacute;n no es posible o si {@code val}
-         *         es {@code null}.</p>
+         * if the convertion is not possible or if {@code val} is {@code null}.
+         * un entero equivalente al valor representado por {@code val},
+         * o {@code defa}, si la conversi&oacute;n no es posible o si {@code val}
+         * es {@code null}.
          */
         public static int getInt(String val, int defa)
         {
@@ -677,16 +694,19 @@ public class SWBUtils {
          * Applies the charset specified in {@code enc} to the {@code data} received.
          * <p>Aplica el conjunto de caracteres especificado en {@code enc} a la
          * informaci&oacute;n recibida en {@code data}.</p>
+         * 
          * @param data a string with the information to apply the charset
          * @param enc the charset to apply
          * @return the string containing the {@code data} received with the charset applied.
-         *         <p>el objeto string que contiene la informaci&oacute;n recibida
-         *         con el conjunto de caracteres aplicado.</p>
+         * el objeto string que contiene la informaci&oacute;n recibida
+         * con el conjunto de caracteres aplicado.
          * @throws java.io.UnsupportedEncodingException If the specified charset's
-         *         name is not supported. <p>Si el nombre del conjunto de caracteres
-         *         especificado no es soportado.</p>
+         * name is not supported. <p>Si el nombre del conjunto de caracteres
+         * especificado no es soportado.</p>
          * @throws java.io.IOException If there is a problem when applying the charset.
-         *         <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws IOException Signals that an I/O exception has occurred.
          */
         public static String encode(String data, String enc)
                 throws java.io.UnsupportedEncodingException, java.io.IOException
@@ -703,16 +723,19 @@ public class SWBUtils {
          * Decodes a string applying the specified charset in {@code enc}.
          * <p>Decodifica el contenido de {@code data} aplicando el conjunto de caracteres
          * especificado en {@code enc}.</p>
+         * 
          * @param data the string to decode
          * @param enc the charset to apply
          * @return a string resulting from applying the charset specified on {@code data}.
-         *         <p>el objeto string que contiene la informaci&oacute;n recibida
-         *         con el conjunto de caracteres aplicado.</p>
+         * el objeto string que contiene la informaci&oacute;n recibida
+         * con el conjunto de caracteres aplicado.
          * @throws java.io.UnsupportedEncodingException If the specified charset's
-         *         name is not supported. <p>Si el nombre del conjunto de caracteres
-         *         especificado no es soportado.</p>
+         * name is not supported. <p>Si el nombre del conjunto de caracteres
+         * especificado no es soportado.</p>
          * @throws java.io.IOException If there is a problem when applying the charset.
-         *         <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * <p>Si ocurre un problema al aplicar el conjunto de caracteres.</p>
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws IOException Signals that an I/O exception has occurred.
          */
         public static String decode(String data, String enc)
                 throws java.io.UnsupportedEncodingException, java.io.IOException
@@ -736,10 +759,11 @@ public class SWBUtils {
         /**
          * Encodes an regular ASCII string into the corresponding values in Base 64.
          * <p>Codifica un objeto string en los valores correspondientes en Base 64.</p>
+         * 
          * @param txt a string to convert to Base 64 encoding
          * @return a string equivalent to {@code txt} with the content represented in Base 64.
-         *         <p>un objeto string equivalente a {@code txt} con el contenido
-         *         representado en Base 64.</p>
+         * un objeto string equivalente a {@code txt} con el contenido
+         * representado en Base 64.
          */
         public static String encodeBase64(String txt)
         {
@@ -750,10 +774,11 @@ public class SWBUtils {
          * Decodes an ASCII Base 64 represented string into the corresponding values
          * in regular ASCII. <p>Decodifica un objeto string representado en ASCII en Base 64
          * en los valores correspondientes en c&oacute;digo ASCII regular.</p>
+         * 
          * @param txt a string to convert from Base 64 encoding
          * @return a string equivalent to {@code txt} with the content represented in ASCII encoding.
-         *         <p>un objeto string equivalente a {@code txt} con el contenido
-         *         representado en c&oacute;digo ASCII.</p>
+         * un objeto string equivalente a {@code txt} con el contenido
+         * representado en c&oacute;digo ASCII.
          */
         public static String decodeBase64(String txt)
         {
@@ -766,11 +791,12 @@ public class SWBUtils {
          * <p>Convierte a may&uacute;scula la primera letra de cada palabra en {@code str}.
          * Cada espacio en blanco, punto, gui&oacute;n y gui&oacute;n bajo se considera como
          * separador de palabras.</p>
+         * 
          * @param str a string whose content is going to be modified
          * @return a string with the same content as {@code str} but with every word's
-         *         first letter turned to upper case.
-         *         <p>un objeto string con el mismo contenido de {@code str} pero con
-         *         cada inicial de palabra convertida a may&uacute;scula.</p>
+         * first letter turned to upper case.
+         * un objeto string con el mismo contenido de {@code str} pero con
+         * cada inicial de palabra convertida a may&uacute;scula.
          */
         public static String toUpperCaseFL(String str)
         {
@@ -799,6 +825,12 @@ public class SWBUtils {
          * Replaces accented characters and blank spaces in the string given.
          * Makes the changes in a case sensitive manner, the following are some examples
          * of the changes this method makes: <br>
+         * 
+         * @param txt a string in which the characters are going to be replaced
+         * @param replaceSpaces a {@code boolean} indicating if blank spaces are going to be replaced or not
+         * @return a string similar to {@code txt} but with neither accented or
+         * special characters nor symbols in it. un objeto string similar
+         * a {@code txt} pero sin caracteres acentuados o especiales y sin s&iacute;mbolos
          * {@literal Á} is replaced by {@literal A} <br>
          * {@literal Ê} is replaced by {@literal E} <br>
          * {@literal Ï} is replaced by {@literal I} <br>
@@ -811,11 +843,6 @@ public class SWBUtils {
          * Realiza los cambios respetando caracteres en may&uacute;sculas o min&uacute;sculas
          * los caracteres en blanco son reemplazados por guiones bajos, cualquier s&iacute;mbolo
          * diferente a gui&oacute;n bajo es eliminado.</p>
-         * @param txt a string in which the characters are going to be replaced
-         * @param replaceSpaces a {@code boolean} indicating if blank spaces are going to be replaced or not
-         * @return a string similar to {@code txt} but with neither accented or
-         *         special characters nor symbols in it. <p>un objeto string similar
-         *         a {@code txt} pero sin caracteres acentuados o especiales y sin s&iacute;mbolos</p>
          */
         public static String replaceSpecialCharacters(String txt, boolean replaceSpaces)
         {
@@ -912,11 +939,12 @@ public class SWBUtils {
          * Gets the value for a {@code key} in the specified {@code Bundle} with
          * the default {@code locale}. <p>Obtiene el valor correspondiente al {@code key}
          * especificado con el objeto {@code locale} utilizado por defecto.</p>
+         * 
          * @param Bundle a string specifying the bundle that contains the data to retrieve
          * @param key a string indicating the key name whose value is required
          * @return a string representing the specified {@code key}'s value stored in {@code Bundle}.
-         *         <p>un objeto string que representa el valor del elemento {@code key}
-         *         especificado almacenado en {@code Bundle}.</p>
+         * un objeto string que representa el valor del elemento {@code key}
+         * especificado almacenado en {@code Bundle}.
          */
         public static String getLocaleString(String Bundle, String key)
         {
@@ -927,13 +955,14 @@ public class SWBUtils {
          * Gets the value for a {@code key} in the specified {@code Bundle} with
          * the indicated {@code locale}. <p>Obtiene el valor correspondiente al {@code key}
          * especificado con el objeto {@code locale} indicado.</p>
+         * 
          * @param Bundle a string specifying the bundle that contains the data to retrieve
          * @param key a string indicating the key name whose value is required
          * @param locale the locale that will be used to retrieve the {@code key} specified
          * @return a string representing the specified {@code key}'s value stored in {@code Bundle}
-         *         in the language indicated by {@code locale}.
-         *         <p>un objeto string que representa el valor del elemento {@code key}
-         *         especificado almacenado en {@code Bundle}.</p>
+         * in the language indicated by {@code locale}.
+         * un objeto string que representa el valor del elemento {@code key}
+         * especificado almacenado en {@code Bundle}.
          */
         public static String getLocaleString(String Bundle, String key, Locale locale)
         {
@@ -944,14 +973,15 @@ public class SWBUtils {
          * Gets the value for a {@code key} in the specified {@code Bundle} with
          * the indicated {@code locale} and class loader. <p>Obtiene el valor correspondiente
          * al {@code key} especificado con los objetos {@code locale} y {@code loader} indicados.</p>
+         * 
          * @param Bundle a string specifying the bundle that contains the data to retrieve
          * @param key a string indicating the key name whose value is required
          * @param locale the locale that will be used to retrieve the {@code key} specified
          * @param loader the class loader from which the resource bundle is loaded
          * @return a string representing the specified {@code key}'s value stored in {@code Bundle}
-         *         in the language indicated by {@code locale}.
-         *         <p>un objeto string que representa el valor del elemento {@code key}
-         *         especificado almacenado en {@code Bundle}.</p>
+         * in the language indicated by {@code locale}.
+         * un objeto string que representa el valor del elemento {@code key}
+         * especificado almacenado en {@code Bundle}.
          */
         public static String getLocaleString(String Bundle, String key,
                 Locale locale, ClassLoader loader)
@@ -980,7 +1010,9 @@ public class SWBUtils {
          * Returns the language which this object is working with.
          * <p>Regresa el lenguaje con el que est&aacute; trabajando este objeto.</p>
          * return the {@code locale} which this object is working with.
-         *        <p>el objeto {@code locale} con el que est&aacute; trabajando este objeto.</p>
+         * <p>el objeto {@code locale} con el que est&aacute; trabajando este objeto.</p>
+         * 
+         * @return the locale
          */
         public static Locale getLocale()
         {
@@ -994,12 +1026,13 @@ public class SWBUtils {
          * <p>Divide un objeto string de acuerdo a una expresi&oacute;n regular que es
          * tratada como delimitador. Todas las divisiones (subcadenas) y los delimitadores
          * encontrados se almacenan en un array list para al final ser devuelto.</p>
+         * 
          * @param txt a string to be split
          * @param regexp a regular expression used as a delimeter to split {@code txt}
          * @return an array list containing the substrings delimited by {@code regexp}
-         *         and all the substrings that complied with {@code regexp}
-         *         <p>un objeto array list que contiene las subcadenas delimitadas
-         *         por {@code regexp} y todas las subcadenas que cumplen con {@code regexp}.</p>
+         * and all the substrings that complied with {@code regexp}
+         * un objeto array list que contiene las subcadenas delimitadas
+         * por {@code regexp} y todas las subcadenas que cumplen con {@code regexp}.
          */
         //version 1.4
         public static ArrayList regExpSplit(String txt, String regexp)
@@ -1035,11 +1068,12 @@ public class SWBUtils {
          * Finds the substrings delimited by two given strings, inside another string.
          * <p>Encuentra las subcadenas delimitadas por dos objetos string dados, dentro
          * de otro objeto string.</p>
+         * 
          * @param str a string into which the substrings are going to be looked for
          * @param pre a string that precedes the substring to extract from {@code str}
          * @param pos pos a string that goes immediatly after the substring to extract from {@code str}
          * @return an iterator with all the substrings found.
-         *         <p>un objeto iterator con todas las subcadenas encontradas.</p>
+         * 
          */
         public static Iterator<String> findInterStr(String str, String pre, String pos)
         {
@@ -1059,15 +1093,16 @@ public class SWBUtils {
          * <p>Encuentra una subcadena en {@code str} cuya posici&oacute;n debe ser
          * posterior a {@code index} y es delimitada por las cadenas {@code pre} y {@code pos}.
          * La subcadena encontrada se almacena en {@code arr}.</p>
+         * 
          * @param str a string from which a substring is going to be extracted
          * @param pre a string that precedes the substring to extract from {@code str}
          * @param pos a string that goes immediatly after the substring to extract from {@code str}
          * @param index the position in {@code str} from which {@code pre} is looked for
          * @param arr the object in which the substring extracted is going to be stored
          * @return the index in {@code str} immediatly after {@code pos}, or -1
-         *         if {@code pre} is not found in {@code str}.
-         *         <p>El &iacute;ndice en {@code str} inmediatamente despu&eacute;s de
-         *         {@code pos}, o -1 si {@code pre} no es encontrado en {@code str}.</p>
+         * if {@code pre} is not found in {@code str}.
+         * El &iacute;ndice en {@code str} inmediatamente despu&eacute;s de
+         * {@code pos}, o -1 si {@code pre} no es encontrado en {@code str}.</p>
          */
         private static int findInterStr(String str, String pre, String pos,
                 int index, ArrayList arr)
@@ -1093,11 +1128,12 @@ public class SWBUtils {
          * <p>Obtiene el nombre del d&iacute;a correspondiente al n&uacute;mero recibido
          * especificando el d&iacute;a de la semana. El primer d&iacute;a de la
          * semana es Domingo y le corresponde el n&uacute;mero cero.</p>
+         * 
          * @param day the number of the day of the week
          * @param lang a string representing a language for obtaining the corresponding name
          * @return a string representing the name of the day specified.
-         *         <p>un objeto string que representa el nombre del d&iacute;a de la
-         *         semana especificado.</p>
+         * un objeto string que representa el nombre del d&iacute;a de la
+         * semana especificado.
          */
         public static String getStrDay(int day, String lang)
         {
@@ -1110,10 +1146,11 @@ public class SWBUtils {
          * <p>Obtiene el nombre del mes correspondiente al n&uacute;mero recibido
          * especificando el mes del a&ntilde;o. El primer mes del a&ntilde;o es
          * Enero y le corresponde el n&uacute;mero cero.</p>
+         * 
          * @param month the number of the month of the year
          * @param lang a string representing a language for obtaining the corresponding name
          * @return a string representing the name of the month specified.
-         *         <p>un objeto string que representa el nombre del mes especificado.</p>
+         * 
          */
         public static String getStrMonth(int month, String lang)
         {
@@ -1123,11 +1160,12 @@ public class SWBUtils {
         /**
          * Converts a given date into a string in the language specified.
          * <p>Convierte un objeto date dado en un objeto string en el lenguaje especificado.</p>
+         * 
          * @param date a date to be converted
          * @param lang a string representing the language to use in the convertion
          * @return a string representing the date specified writen in the language specified.
-         *         <p>un objeto string representando el objeto date especificado, escrito en el
-         *         lenguaje especificado.</p>
+         * un objeto string representando el objeto date especificado, escrito en el
+         * lenguaje especificado.
          */
         public static String getStrDate(Date date, String lang)
         {
@@ -1137,13 +1175,14 @@ public class SWBUtils {
         /**
          * Converts a date into a string with the format and in the language specified.
          * <p>Convierte una fecha en una cadena con el formato y en el lenguaje especificados.</p>
+         * 
          * @param date a date to convert to a string
          * @param lang a string representing the language of the string to return
          * @param format a string representing the date format to show in the string to return
          * @return a string representing the date received, in the language and with
-         *         the format specified.
-         *         <p>un objeto string que representa la fecha recibida, en el lenguaje y
-         *         con el formato especificados.</p>
+         * the format specified.
+         * un objeto string que representa la fecha recibida, en el lenguaje y
+         * con el formato especificados.
          */
         public static String getStrDate(Date date, String lang, String format)
         {
@@ -1183,22 +1222,23 @@ public class SWBUtils {
         /**
          * Formats a given {@code date} according to the specified {@code format} and language.
          * The valid patterns for each field in the date, are as follows:<br/>
-         *   Day:     DAY, Day, day, dd<br/>
-         *   Month:   MONTH, Month, month, mm<br/>
-         *   Year:    yyyy, yy<br/>
-         *   Hours:   hh<br/>
-         *   Minutes: %m<br/>
-         *   Seconds: ss
+         * Day:     DAY, Day, day, dd<br/>
+         * Month:   MONTH, Month, month, mm<br/>
+         * Year:    yyyy, yy<br/>
+         * Hours:   hh<br/>
+         * Minutes: %m<br/>
+         * Seconds: ss
          * <p>Da formato a una fecha proporcionada de acuerdo al patr&oacute;n de formato
          * y lenguaje especificado. Los patrones v&aacute;lidos para cada uno de los campos
          * de la fecha se describen arriba.</p>
+         * 
          * @param date a date to format
          * @param format a string representing the pattern to use in the convertion
          * @param lang a string representing the language of the string to return
          * @return a string representing the date received expressed in the format
-         *         and language specified.
-         *         <p>un objeto string que representa la fecha recibida, expresada
-         *         en el formato y lenguaje especificados.</p>
+         * and language specified.
+         * un objeto string que representa la fecha recibida, expresada
+         * en el formato y lenguaje especificados.
          */
         private static String getStrFormat(Date date, String format, String lang)
         {
@@ -1228,13 +1268,14 @@ public class SWBUtils {
          * Esta diferencia se expresa en la unidad de tiempo m&aacute;s grande posible.
          * Las unidades de tiempo manejadas son: segundos, minutos, horas,
          * d&iacute;s, meses y a&ntilde;os.</p>
+         * 
          * @param CreationDate the date to compare
          * @param lang a string indicating the language in which the date is going to be presented
          * @return a string representing the difference between the date given and
-         *         the system's date, expressed in the biggest unit of time possible.
-         *         <p>un objeto string que representa la diferencia entre la fecha dada
-         *         y la fecha del sistema, expresada en la unidad de tiempo
-         *         m&aacute;s grande posible.</p>
+         * the system's date, expressed in the biggest unit of time possible.
+         * un objeto string que representa la diferencia entre la fecha dada
+         * y la fecha del sistema, expresada en la unidad de tiempo
+         * m&aacute;s grande posible.
          */
         public static String getTimeAgo(Date CreationDate, String lang)
         {
@@ -1248,13 +1289,14 @@ public class SWBUtils {
          * <p>Obtiene la diferencia en tiempo entre dos fechas dadas. Esta diferencia se
          * expresa en la unidad de tiempo m&aacute;s grande posible. Las unidades de
          * tiempo manejadas son: segundos, minutos, horas, d&iacute;s, meses y a&ntilde;os.</p>
+         * 
          * @param CurrentDate the most recent date to compare
          * @param CreationDate the oldest date to compare
          * @param lang a string indicating the language in which the date is going to be presented
          * @return a string representing the difference between the two dates given,
-         *         expressed in the biggest unit of time possible.
-         *         <p>un objeto string que representa la diferencia entre dos fechas
-         *         dadas, expresada en la unidad de tiempo m&aacute;s grande posible.</p>
+         * expressed in the biggest unit of time possible.
+         * un objeto string que representa la diferencia entre dos fechas
+         * dadas, expresada en la unidad de tiempo m&aacute;s grande posible.
          */
         public static String getTimeAgo(Date CurrentDate, Date CreationDate, String lang)
         {
@@ -1437,12 +1479,13 @@ public class SWBUtils {
          * integer has only one digit.
          * <p>Convierte un entero en un objeto string y le agrega un cero a la izquierda
          * si ese entero est&aacute; formado por un solo d&iacute;gito.</p>
+         * 
          * @param num an integer to convert to a string
          * @return a string representing the integer received, with a zero preceding
-         *         the integer if it is formed by only one digit.
-         *         <p>un objeto string que representa el entero recibido, con un cero
-         *         precediendo al valor entero si &eacute;ste est&aacute; formado
-         *         solo por un d&iacute;gito.</p>
+         * the integer if it is formed by only one digit.
+         * un objeto string que representa el entero recibido, con un cero
+         * precediendo al valor entero si &eacute;ste est&aacute; formado
+         * solo por un d&iacute;gito.
          */
         private static String dateCeroComp(int num)
         {
@@ -1461,10 +1504,11 @@ public class SWBUtils {
          * <p>Encuentra en {@code path} la cadena de consulta contenida y extrae
          * todos los par&aacute;metros y sus valores correspondientes. Cada par&aacute;metro
          * tiene asociado un array de objetos string conteniendo todos sus valores.</p>
+         * 
          * @param path a string representing a path that contains a query string
          * @return a map that matches every parameter's name with its values.
-         *         <p>un objeto map que relaciona el nombre de cada par&aacute;metro
-         *         con el conjunto de sus valores almacenados en un array de objetos string.</p>
+         * un objeto map que relaciona el nombre de cada par&aacute;metro
+         * con el conjunto de sus valores almacenados en un array de objetos string.
          */
         public static Map parseQueryParams(String path)
         {
@@ -1531,15 +1575,16 @@ public class SWBUtils {
         /**
          * Encodes from {@code str} those characters whose ASCII code is greater than 127.
          * If a character has an ASCII code greater than 127, that character is replaced by
+         * 
+         * @param str a string to be parsed and modified
+         * @return a string with those characters whose ASCII code is greater than
+         * 127 replaced. If {@code str} is {@code null}, the empty string is returned.
+         * un objeto string con aquellos caracteres cuyo c&oacute;digo ASCII
+         * es superior a 127 reemplazados. Si {@code str} es nulo, regresa cadena vacia.
          * {@literal &#[ASCIIcode];} in {@code str}.
          * <p>Codifica aquellos caracteres cuyo c&oacute;digo ASCII es superior a 127 en {@code str}.
          * Si un caracter tiene un c&oacute;digo ASCII superior a 127, ese caracter
          * es reemplazado por {@literal &#[codigoASCII];}</p>
-         * @param str a string to be parsed and modified
-         * @return a string with those characters whose ASCII code is greater than
-         *         127 replaced. If {@code str} is {@code null}, the empty string is returned.
-         *         <p>un objeto string con aquellos caracteres cuyo c&oacute;digo ASCII
-         *         es superior a 127 reemplazados. Si {@code str} es nulo, regresa cadena vacia.
          */
         public static String encodeExtendedCharacters(String str)
         {
@@ -1564,11 +1609,12 @@ public class SWBUtils {
         /**
          * Decodes a string like the ones returned by {@link #encodeExtendedCharacters(java.lang.String)}.
          * <p>Decodifica una cadena como las que regresa el m&eacute;todo
-         * {@code encodeExtendedCharacters(java.lang.String)}.</p>
+         * 
          * @param str a string with those characters whose ASCII code is greater than 127
-         *            encoded as {@literal &#[ASCIIcode];}
+         * encoded as {@literal &#[ASCIIcode];}
          * @return a string with no characters encoded.
-         *         <p>un objeto string sin caracteres codificados como en el objeto original.</p>
+         * 
+         * {@code encodeExtendedCharacters(java.lang.String)}.</p>
          */
         public static String decodeExtendedCharacters(String str)
         {
@@ -1608,15 +1654,18 @@ public class SWBUtils {
         /**
          * Extracts all the text in a HTML document.
          * <p>Extrae todo el texto de un documento HTML.</p>
+         * 
          * @param txt a string representing the content of a HTML document
          * @return a string representing all the text in the HTML document.
-         *         <p>un objeto string que representa todo el texto contenido en
-         *         el documento HTML.</p>
+         * un objeto string que representa todo el texto contenido en
+         * el documento HTML.
          * @throws java.io.IOException if an I/O error occurs.
-         *         <p>si ocurre cualquier error de E/S.</p>
+         * <p>si ocurre cualquier error de E/S.</p>
          * @throws java.lang.InterruptedException if this execution thread is
-         *         interrupted by another thread.
-         *         <p>si este hilo de ejecuci&oacute;n es interrumpido por otro hilo.</p>
+         * interrupted by another thread.
+         * <p>si este hilo de ejecuci&oacute;n es interrumpido por otro hilo.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
+         * @throws InterruptedException the interrupted exception
          */
         public static String parseHTML(String txt) throws IOException,
                 InterruptedException
@@ -1636,22 +1685,27 @@ public class SWBUtils {
         /**
          * Extracts all the text in the Office document.
          * <p>Extrae todo el texto del documento de Office.</p>
+         * 
          * @param file a file pathname referencing the office document
          * @return a string representing all the text in the indicated Office document.
-         *         <p>un objeto string que representa todo el texto contenido en
-         *         el documento de Office indicado.</p>
+         * un objeto string que representa todo el texto contenido en
+         * el documento de Office indicado.
          * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException if
-         *         there is a problem with the document's format.
-         *         <p>si ocurre un problema con el formato del documento.</p>
+         * there is a problem with the document's format.
+         * <p>si ocurre un problema con el formato del documento.</p>
          * @throws org.apache.poi.openxml4j.exceptions.OpenXML4JException if a
-         *         critical error occurs.
-         *         <p>si ocurre un error cr&iacute;tico.</p>
+         * critical error occurs.
+         * <p>si ocurre un error cr&iacute;tico.</p>
          * @throws org.apache.xmlbeans.XmlException if an error occurs while
-         *         processing, parsing, or compiling XML.
-         *         <p>si ocurre un error durante el proceso, an&aacute;lisis o
-         *         compilaci&oacute;n de XML</p>
+         * processing, parsing, or compiling XML.
+         * <p>si ocurre un error durante el proceso, an&aacute;lisis o
+         * compilaci&oacute;n de XML</p>
          * @throws java.io.IOException if an I/O error occurs.
-         *         <p>si ocurre cualquier error de E/S.</p>
+         * <p>si ocurre cualquier error de E/S.</p>
+         * @throws InvalidFormatException the invalid format exception
+         * @throws OpenXML4JException the open xm l4 j exception
+         * @throws XmlException the xml exception
+         * @throws IOException Signals that an I/O exception has occurred.
          */
         public static String parseOfficeFile(File file)
                 throws InvalidFormatException, OpenXML4JException, XmlException,
@@ -1665,12 +1719,14 @@ public class SWBUtils {
         /**
          * Extracts all the text from a PDF formatted file.
          * <p>Extrae todo el texto de un archivo con formato PDF.</p>
+         * 
          * @param file a file pathname referencing the PDF document
          * @return a string representing all the text in the indicated PDF document.
-         *         <p>un objeto string que representa todo el texto contenido en
-         *         el documento indicado con formato PDF.</p>
+         * un objeto string que representa todo el texto contenido en
+         * el documento indicado con formato PDF.
          * @throws java.io.IOException if an I/O error occurs.
-         *         <p>si ocurre cualquier error de E/S.</p>
+         * <p>si ocurre cualquier error de E/S.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          */
         public String parserPDF(File file) throws java.io.IOException
         {
@@ -1728,8 +1784,9 @@ public class SWBUtils {
         /**
          * Gets the value for the class variable {@code SWBUtils.bufferSize}.
          * <p>Obtiene el valor de la variable de clase {@code SWBUtils.bufferSize}.</p>
+         * 
          * @return the integer value for the class variable {@code SWBUtils.bufferSize}.
-         *         <p>el valor de la variable de clase {@code SWBUtils.bufferSize}.</p>
+         * 
          */
         public static int getBufferSize()
         {
@@ -1739,9 +1796,10 @@ public class SWBUtils {
         /**
          * Creates an inputStream from the string received.
          * <p>Crea un objeto inputStream con el contenido del objeto string recibido.</p>
+         * 
          * @param str a string from which an input stream is created
          * @return the input stream created from the string received.
-         *         <p>el objeto inputStream creado a partir del objeto string recibido.</p>
+         * 
          */
         public static InputStream getStreamFromString(String str)
         {
@@ -1804,12 +1862,13 @@ public class SWBUtils {
         /**
          * Reads an input stream and creates a string with that content.
          * <p>Lee un objeto inputStream y crea un objeto string con el contenido le&iacute;do.</p>
+         * 
          * @param in an input stream to read its content
          * @return a string whose content is the same as for the input stream read.
-         *         <p>un objeto string cuyo contenido es el mismo que el del objeto
-         *         inputStream le&iacute;do.</p>
+         * un objeto string cuyo contenido es el mismo que el del objeto
+         * inputStream le&iacute;do.
          * @throws IOException if the input stream received is {@code null}.
-         *                     <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
+         * <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
          */
         public static String readInputStream(InputStream in) throws IOException
         {
@@ -1832,12 +1891,13 @@ public class SWBUtils {
         /**
          * Reads a reader and creates a string with that content.
          * <p>Lee un objeto Reader y crea un objeto string con el contenido le&iacute;do.</p>
+         * 
          * @param in an input stream to read its content
          * @return a string whose content is the same as for the input stream read.
-         *         <p>un objeto string cuyo contenido es el mismo que el del objeto
-         *         inputStream le&iacute;do.</p>
+         * un objeto string cuyo contenido es el mismo que el del objeto
+         * inputStream le&iacute;do.
          * @throws IOException if the input stream received is {@code null}.
-         *                     <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
+         * <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
          */
         public static String readReader(Reader in) throws IOException
         {
@@ -1862,17 +1922,20 @@ public class SWBUtils {
          * the charset especified by name through {@code enc}.
          * <p>Lee un objeto inputStream y crea una cadena con el contenido le&iacute;do
          * utilizando el conjunto de caracteres especificado por nombre a trav&eacute;s de
-         * {@code enc}.
+         * 
          * @param inp the input stream to read
          * @param enc the charset's name to use for representing the input stream's content
          * @return a string representing the input stream's content with the charset
-         *         specified.
-         *         <p>un objeto string que representa el contenido del objeto inputStream
-         *         con el conjunto de caracteres especificado.</p>
+         * specified.
+         * un objeto string que representa el contenido del objeto inputStream
+         * con el conjunto de caracteres especificado.
          * @throws java.io.UnsupportedEncodingException if {@code enc} is {@code null}.
-         *         <p>si el valor de {@code enc} es {@code null}.</p>
+         * <p>si el valor de {@code enc} es {@code null}.</p>
          * @throws java.io.IOException if {@code inp} is {@code null}.
-         *         <p>si el valor de {@code inp} es {@code null}.</p>
+         * <p>si el valor de {@code inp} es {@code null}.</p>
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         * {@code enc}.
          */
         public static String readInputStream(InputStream inp, String enc)
                 throws java.io.UnsupportedEncodingException, java.io.IOException
@@ -1909,11 +1972,12 @@ public class SWBUtils {
          * and removes any relative path.
          * <p>Normaliza la ruta descrita por {@code path}. Sustituyendo algunos
          * caracteres como se describe arriba y eliminando las rutas relativas encontradas.
+         * 
          * @param path a string representing a path
          * @return a string representing the path received normalized according to
-         *         the rules described above.
-         *         <p>un objeto string que representa la ruta recibida, normalizada de
-         *         acuerdo a las reglas descritas anteriormente.</p>
+         * the rules described above.
+         * un objeto string que representa la ruta recibida, normalizada de
+         * acuerdo a las reglas descritas anteriormente.
          */
         public static String normalizePath(String path)
         {
@@ -1976,9 +2040,10 @@ public class SWBUtils {
          * whose {@code path} is specified.
          * <p>Elimina del sistema de archivos, el directorio (con todos sus archivos
          * y subdirectorios) cuya ruta es especificada por {@code path}.</p>
+         * 
          * @param path a string representing the directory's path
          * @return a {@code boolean} indicating wheather the directory was eliminated or not.
-         *         <p>un booleano indicando si el directorio fue eliminado o no.</p>
+         * 
          */
         public static boolean removeDirectory(String path)
         {
@@ -2019,9 +2084,10 @@ public class SWBUtils {
         /**
          * Reads the file corresponding to the {@code path} specified.
          * <p>Lee el archivo correspondiente a la ruta especificada por {@code path}.</p>
+         * 
          * @param path a string representing the path of the file to read.
          * @return a string with the file's content read.
-         *         <p>un objeto string con el contenido del archivo le&iacute;do</p>
+         * 
          */
         public static String getFileFromPath(String path)
         {
@@ -2051,13 +2117,14 @@ public class SWBUtils {
          * <p>Calcula el n&uacute;mero de bytes ocupados por la ruta abstracta especificada.
          * Si la ruta corresponde a un directorio, se considera el tama&ntilde;o de
          * cada archivo que contiene el directorio y se agrega al resultado.</p>
+         * 
          * @param path a string representing the abstract pathname
          * @return a {@code long} value representing (in bytes) the length of the file, or the
-         *         size of the directory represented by the pathname received.
-         *         <p>un valor {@code long} que representa (en bytes) la longitud del archivo,
-         *         o el tama&ntilde;o del directorio representado por la ruta recibida.</p>
+         * size of the directory represented by the pathname received.
+         * un valor {@code long} que representa (en bytes) la longitud del archivo,
+         * o el tama&ntilde;o del directorio representado por la ruta recibida.
          * @throws NullPointerException if the pathname received is {@code null}.
-         *         <p>si la ruta recibida es {@code null}.</p>
+         * <p>si la ruta recibida es {@code null}.</p>
          */
         public static long getFileSize(String path)
         {
@@ -2071,13 +2138,14 @@ public class SWBUtils {
          * <p>Calcula el n&uacute;mero de bytes ocupados por el archivo o directorio especificado.
          * Si la ruta corresponde a un directorio, se considera el tama&ntilde;o de
          * cada archivo que contiene el directorio y se agrega al resultado.</p>
+         * 
          * @param file a file representing an abstract pathname
          * @return a {@code long} value representing (in bytes) the length of the file, or the
-         *         size of the directory represented by the pathname received.
-         *         <p>un valor {@code long} que representa (en bytes) la longitud del archivo,
-         *         o el tama&ntilde;o del directorio representado por la ruta recibida.</p>
+         * size of the directory represented by the pathname received.
+         * un valor {@code long} que representa (en bytes) la longitud del archivo,
+         * o el tama&ntilde;o del directorio representado por la ruta recibida.
          * @throws NullPointerException if the {@code file} received is {@code null}.
-         *         <p>si el objeto {@code file} recibido es {@code null}.</p>
+         * <p>si el objeto {@code file} recibido es {@code null}.</p>
          */
         public static long getFileSize(File file)
         {
@@ -2100,11 +2168,12 @@ public class SWBUtils {
         /**
          * Creates a directory in the specified pathname.
          * <p>Crea un directorio en el nombre de ruta especificado</p>
+         * 
          * @param path a string representing the pathname in which the new directory
-         *        will reside. If this parameter's value is {@code null} the directory
-         *        won't be created.
+         * will reside. If this parameter's value is {@code null} the directory
+         * won't be created.
          * @return a {@code boolean} indicating wheather the directory was crated or not.
-         *         <p>un valor booleano indicando si el directorio fue creado o no.</p>
+         * 
          */
         public static boolean createDirectory(String path)
         {
@@ -2130,11 +2199,12 @@ public class SWBUtils {
          * <p>Crea una copia de la subestructura del sistema de archivos de la ruta dada.
          * La ruta de origen ({@code source}) debe representar la ruta de un directorio
          * en el sistema de archivos.</p>
+         * 
          * @param source pathname of the directory to copy. Must not be null.
          * @param target pathname of the new directory where file system's substructure
-         *               will be copied. Must not be null.
+         * will be copied. Must not be null.
          * @return a {@code boolean} indicating if the source directory was copied succefully or not.
-         *         <p>un valor booleano indicando si el directorio fuente fue copiado exitosamente o no.</p>
+         * 
          */
         public static boolean copyStructure(String source, String target)
         {
@@ -2158,16 +2228,17 @@ public class SWBUtils {
          * reemplaza una ruta especificada por {@code sourcePath} en el contenido de los
          * archivos a copiar. La ruta de origen ({@code source}) debe representar la
          * ruta de un directorio en el sistema de archivos.</p>
+         * 
          * @param source pathname of the directory to copy. Must not be null.
          * @param target pathname of the new directory where file system's substructure
-         *               will be copied. Must not be null.
+         * will be copied. Must not be null.
          * @param ChangePath a {@code boolean} that indicates if the files' content
-         *               will be parsed. Must not be null.
+         * will be parsed. Must not be null.
          * @param sourcePath a pathname string located in the source files to be
-         *               replaced by {@code targetPath}. Must not be null.
+         * replaced by {@code targetPath}. Must not be null.
          * @param targetPath the pathname string to write in the target files in replacement of {@code sourcePath}
          * @return a {@code boolean} indicating if the source directory was copied succefully or not.
-         *         <p>un valor booleano indicando si el directorio fuente fue copiado exitosamente o no.</p>
+         * 
          */
         public static boolean copyStructure(String source, String target,
                 boolean ChangePath, String sourcePath, String targetPath)
@@ -2224,6 +2295,13 @@ public class SWBUtils {
         /**
          * Copies a file to another directory, modifying a path in its content.
          * If indicated through {@code ChangePath} the string represented by
+         * 
+         * @param source_name pathname of the file to copy. Must not be null.
+         * @param dest_name pathname of the new location of the file to copy. Must not be null.
+         * @param ChangePath a {@code boolean} indicating if the file will be parsed to modify its content
+         * @param sourcePath a pathname string in the source file to be replaced
+         * @param targetPath a pathname string that will replace {@code sourcePath}
+         * @throws IOException Signals that an I/O exception has occurred.
          * {@code sourcePath} is looked for in the file's content and replaced by
          * {@code targetPath}, only if the file to copy has an extension like: {@literal html},
          * {@literal html}, {@literal htm.orig} or {@literal html.orig}.
@@ -2233,11 +2311,6 @@ public class SWBUtils {
          * el representado en {@code targetPath}, solo si el archivo a copiar tiene
          * por extensi&oacute;n: {@literal html}, {@literal html}, {@literal htm.orig}
          * o {@literal html.orig}.</p>
-         * @param source_name pathname of the file to copy. Must not be null.
-         * @param dest_name pathname of the new location of the file to copy. Must not be null.
-         * @param ChangePath a {@code boolean} indicating if the file will be parsed to modify its content
-         * @param sourcePath a pathname string in the source file to be replaced
-         * @param targetPath a pathname string that will replace {@code sourcePath}
          */
         public static void copy(String source_name, String dest_name,
                 boolean ChangePath, String sourcePath, String targetPath)
@@ -2296,13 +2369,14 @@ public class SWBUtils {
          * to create an object.
          * <p>Decodifica el objeto string con formato hexadecimal recibido y deserealiza
          * el resultado para crear un objeto.</p>
+         * 
          * @param txt a hexadecimal formatted string representing an object's state
          * @return a deserialized object
-         *         <p>un objeto deserializado</p>
+         * 
          * @throws IOException if an I/O error occurs while reading stream header
-         *         <p>si un error de E/S ocurre mientras se lee el encabezado del objeto stream</p>
+         * <p>si un error de E/S ocurre mientras se lee el encabezado del objeto stream</p>
          * @throws ClassNotFoundException if the Class of a serialized object cannot be found
-         *         <p>si la clase de un objeto serializado no puede encontrarse</p>
+         * <p>si la clase de un objeto serializado no puede encontrarse</p>
          */
         public static Object decodeObject(String txt) throws IOException, ClassNotFoundException
         {
@@ -2327,13 +2401,14 @@ public class SWBUtils {
          * string with the object's state.
          * <p>Serializa el objeto recibido y genera un objeto string con el estado del
          * objeto en formato hexadecimal.</p>
+         * 
          * @param obj an object to serialize
          * @return a hexadecimal formatted string representing the received object's state
-         *         <p>un objeto string con formato hexadecimal que representa el
-         *         estado del objeto recibido.</p>
+         * un objeto string con formato hexadecimal que representa el
+         * estado del objeto recibido.
          * @throws IOException if any I/O problem occurs while serializing the object.
-         *         <p>si cualquier problema de E/S ocurre mientras se serializa el
-         *         objeto.</p>
+         * <p>si cualquier problema de E/S ocurre mientras se serializa el
+         * objeto.</p>
          */
         public static String encodeObject(Object obj) throws IOException
         {
@@ -2372,6 +2447,14 @@ public class SWBUtils {
          * @throws java.io.IOException if an I/O error occurs while reading the file's content.
          *         <p>si un error de E/S ocurre durante la lectura del contenido del archivo.</p>
          */
+        /**
+         * Read file.
+         * 
+         * @param file the file
+         * @return the byte[]
+         * @throws FileNotFoundException the file not found exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public static byte[] readFile(File file) throws FileNotFoundException, IOException
         {
             if (!file.exists())
@@ -2406,11 +2489,12 @@ public class SWBUtils {
          * indicated.
          * <p>Extrae los archivos incluidos en una petici&oacute;n HTTP y los almacena
          * en la ruta especificada.</p>
+         * 
          * @param request an HTTP request that contains the files to store.
          * @param path2Save the string representing the pathname where the files are to be stored
          * @return an iterator containing the file items detected in the HTTP request.
-         *         <p>un objeto iterador que contiene los archivos detectados en la
-         *         petici&oacute;n HTTP.</p>
+         * un objeto iterador que contiene los archivos detectados en la
+         * petici&oacute;n HTTP.
          */
         public static Iterator<FileItem> fileUpload(javax.servlet.http.HttpServletRequest request,
                 String path2Save)
@@ -2456,20 +2540,21 @@ public class SWBUtils {
 
         /**
          * Logs the message indicated in {@code msg} into the {@code filePath} received.
-         * <p>Registra el mensaje indicado en {@code msg} dentro del archivo definido 
+         * <p>Registra el mensaje indicado en {@code msg} dentro del archivo definido
          * por la ruta recibida en {@code filePath}.</p>
-         * @param pathFile a string representing a file path to register the message.
-         *        Must not be {@code null}.
+         * 
+         * @param filePath the file path
          * @param msg a string containing the message to register
          * @throws java.io.IOException if an I/O error occurs, which is possible
-         *         because the construction of the canonical pathname may require
-         *         filesystem queries or while writing the message into the file.
-         *         <p>si un error de E/S ocurre, lo que es posible debido a que la
-         *         construcci&oacute;n de la ruta de archivo can&oacute;nica puede
-         *         requerir consultas del sistema de archivos o que ocurra durante
-         *         la escritura del mensaje en el archivo.</p>
+         * because the construction of the canonical pathname may require
+         * filesystem queries or while writing the message into the file.
+         * <p>si un error de E/S ocurre, lo que es posible debido a que la
+         * construcci&oacute;n de la ruta de archivo can&oacute;nica puede
+         * requerir consultas del sistema de archivos o que ocurra durante
+         * la escritura del mensaje en el archivo.</p>
          * @throws NullPointerException if the pathname argument is {@code null}.
-         *         <p>si el argumento de la ruta del archivo es {@code null}.</p>
+         * <p>si el argumento de la ruta del archivo es {@code null}.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          */
         public static void log2File(String filePath, String msg) throws IOException
         {
@@ -2492,18 +2577,20 @@ public class SWBUtils {
         /**
          * Compress a directory's content into the zip output stream indicated.
          * <p>Comprime el contenido de un directorio en el objeto zip output stream indicado.</p>
+         * 
          * @param directory the {@code file} denoting the directory to compress.
-         *        If it is {@code null} or non-existent, no operation is done.
+         * If it is {@code null} or non-existent, no operation is done.
          * @param base the {@code file} denoting the directory base whose path is
-         *        treated as the base path for the files contained in the zip output stream.
+         * treated as the base path for the files contained in the zip output stream.
          * @param zos the zip output stream to contain the directory's content
          * @throws java.io.IOException if there is any I/O error during: ZIP formatting,
-         *         file inclusion in the zip output stream, data writing in the zip
-         *         output stream or closure of the streams used to read or to write data.
-         *         <p>si hay alg&uacute;n error de E/S durante: el formato en zip
-         *         de la informaci&oacute;n, la inclusi&oacute;n en el objeto {@code zip
-         *         output stream}; o el cierre de los flujos utilizados para para leer o
-         *         escribir informaci&oacute;n.</p>
+         * file inclusion in the zip output stream, data writing in the zip
+         * output stream or closure of the streams used to read or to write data.
+         * <p>si hay alg&uacute;n error de E/S durante: el formato en zip
+         * de la informaci&oacute;n, la inclusi&oacute;n en el objeto {@code zip
+         * output stream}; o el cierre de los flujos utilizados para para leer o
+         * escribir informaci&oacute;n.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          * @author Jorge Jim&eacute;nez
          */
         public static final void zip(File directory, File base, ZipOutputStream zos)
@@ -2540,12 +2627,14 @@ public class SWBUtils {
         /**
          * Adds the files received to the specified zip file.
          * <p>Agrega los archivos recibidos al archivo comprimido especificado.</p>
+         * 
          * @param zipFile a compressed file to include some files at
          * @param files an array of files that will be added to {@code zipFile}
          * @throws java.io.IOException if some I/O error occurs during data reading
-         *         or writing.
-         *         <p>si alg&uacute;n error de E/S ocurre durante la lectura o
-         *         escritura de informaci&oacute;n.</p>
+         * or writing.
+         * <p>si alg&uacute;n error de E/S ocurre durante la lectura o
+         * escritura de informaci&oacute;n.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          * @author Jorge Jim&eacute;nez
          */
         public static void addFilesToExistingZip(File zipFile, File[] files)
@@ -2621,10 +2710,12 @@ public class SWBUtils {
         /**
          * Unzips a zipped file to a specific directory.
          * <p>Descomprime un archivo comprimido en un directorio espec&iacute;fico.</p>
+         * 
          * @param zip a zipped file
          * @param extractTo a file that denotes a directory path
          * @throws java.io.IOException if an I/O error occurs during reading or writing data.
-         *         <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          * @author Jorge Jim&eacute;nez
          */
         public static final void unzip(File zip, File extractTo) throws IOException
@@ -2638,13 +2729,15 @@ public class SWBUtils {
          * <p>Descomprime un archivo comprimido a un directorio espec&iacute;fico
          * con la opci&oacute;n de reemplazar una cadena en aquellos archivos
          * cuyos nombres tengan las extensiones especificadas.</p>
+         * 
          * @param zip the zipped file to unzip
          * @param extractTo the directory in which the file will be unzipped
          * @param fext2parse list of the file extensions to consider for replacing a string in file's content
          * @param parse a string to look for in the file's content
          * @param parse2 a string that will replace {@code parse} in file's content
          * @throws java.io.IOException if an I/O error occurs during reading or writing data.
-         *         <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * <p>si un error ocurre durante la lectura o escritura de informaci&oacute;n.</p>
+         * @throws IOException Signals that an I/O exception has occurred.
          * @author Jorge Jim&eacute;nez
          */
         public static final void unzip(File zip, File extractTo,
@@ -2707,11 +2800,12 @@ public class SWBUtils {
          * Reads a zipped file's content and returns all files in an {@link java.util.Iterator}
          * <p>Lee el contenido de un archivo comprimido y regresa todos los archivos
          * en un {@code java.util.Iterator}</p>
+         * 
          * @param zipName a string representing the name of the zipped file to read
          * @return an {@code java.util.Iterator} containing all the entries (files)
-         *         in the zipped file specified.
-         *         <p>un objeto {@code java.util.Iterator} que contiene todas las
-         *         entradas (archivos) contenidas en el archivo comprimido.</p>
+         * in the zipped file specified.
+         * un objeto {@code java.util.Iterator} que contiene todas las
+         * entradas (archivos) contenidas en el archivo comprimido.
          */
         public static final Iterator<ZipEntry> readZip(String zipName)
         {
@@ -2753,10 +2847,11 @@ public class SWBUtils {
         /**
          * Reads a specific file contained in a zipped file.
          * <p>Lee un archivo espec&iacute;fico contenido en un archivo comprimido.</p>
+         * 
          * @param zipName a string representing the pathname of a zipped file
          * @param file2Read a string representing the pathname of a file inside the zipped file
          * @return a string with the specified file's content.
-         *         <p>un objeto string con el contenido del archivo especificado.</p>
+         * 
          * @author Jorge Jim&eacute;nez
          */
         public static final String readFileFromZipAsString(String zipName, String file2Read)
@@ -2833,10 +2928,11 @@ public class SWBUtils {
          * Gets the domain name or IP address for the SMTP server in use.
          * <p>Obtiene el nombre de dominio o la direcci&oacute;n IP del servidor
          * SMTP en uso.</p>
+         * 
          * @return a string representing the domain name or IP address for the SMTP
-         *         server in use.
-         *         <p>un objeto string que representa el nombre de dominio o la
-         *         direcci&oacute;n IP del servidor SMTP en uso.</p>
+         * server in use.
+         * un objeto string que representa el nombre de dominio o la
+         * direcci&oacute;n IP del servidor SMTP en uso.
          */
         public static String getSMTPServer()
         {
@@ -2861,33 +2957,34 @@ public class SWBUtils {
          * <p>Env&iacute;a un correo electr&oacute;nico con la informaci&oacute;n
          * proporcionada. El cuerpo del correo puede ser enviado en formato HTML
          * o en texto plano.</p>
+         * 
          * @param fromEmail a string representing the sender's e-mail account.
-         *        Must be a valid e-mail account, otherwise the mail will not be sent.
+         * Must be a valid e-mail account, otherwise the mail will not be sent.
          * @param fromName  a string representing the sender's name
          * @param address   a collection of the recipients' e-mail accounts. Every
-         *        element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
-         *        Must not be null, otherwise the mail will not be sent.
+         * element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
+         * Must not be null, otherwise the mail will not be sent.
          * @param ccEmail   a collection of e-mail accounts to send the email as a copy. Every
-         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
-         *        If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
+         * element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         * If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
          * @param bccEmail  a collection of e-mail accounts to send the email as a blind carbon copy. Every
-         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
-         *        If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
+         * element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         * If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
          * @param subject   a string indicating the e-mail's subject
          * @param contentType a string indicating the content type of the mail. {@literal HTML}
-         *        indicates the body has an HTML format, otherwise it will be send
-         *        in text plain format. Must not be {@code null}.
+         * indicates the body has an HTML format, otherwise it will be send
+         * in text plain format. Must not be {@code null}.
          * @param data      a string containing the e-mail body's text
          * @param login     a string representing a login name for SMTP server
-         *        authentication. If it is {@code null} authentication will not be performed.
+         * authentication. If it is {@code null} authentication will not be performed.
          * @param password  a string representing a password for SMTP server
-         *        authentication. If it is {@code null} authentication will not be performed.
+         * authentication. If it is {@code null} authentication will not be performed.
          * @param attachments a list containing all the attachments for the e-mail. Every
-         *        element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
+         * element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
          * @return a string that at the moment of writing this documentation is
-         *         equal to {@code null}.
-         *         <p>un objeto string que al momento de escribir esta documentaci&oacute;n
-         *         es igual a {@code null}.</p>
+         * equal to {@code null}.
+         * un objeto string que al momento de escribir esta documentaci&oacute;n
+         * es igual a {@code null}.
          */
         public static String sendMail(String fromEmail, String fromName,
                 Collection address, Collection ccEmail, Collection bccEmail,
@@ -2949,12 +3046,13 @@ public class SWBUtils {
          * <p>Env&iacute;a un correo electr&oacute;nico con la informaci&oacute;n
          * proporcionada a trav&eacute;s de {@code message}. El cuerpo del correo
          * puede ser enviado en formato HTML o en texto plano.</p>
+         * 
          * @param message an object of type {@link org.semanticwb.base.util.SWBMail}
          * @return a string that at the moment of writing this documentation is
-         *         equal to {@code null}.
-         *         <p>un objeto string que al momento de escribir esta documentaci&oacute;n
-         *         es igual a {@code null}.</p>
-         * @throws java.net.SocketException
+         * equal to {@code null}.
+         * un objeto string que al momento de escribir esta documentaci&oacute;n
+         * es igual a {@code null}.
+         * @throws SocketException the socket exception
          */
         public static String sendMail(SWBMail message) throws java.net.SocketException
         {
@@ -3008,16 +3106,18 @@ public class SWBUtils {
          * minimal information to be supplied.
          * <p>Env&iacute;a un correo electr&oacute;nico a la cuenta de {@code EMAIL.adminEmail},
          * requiriendo la informaci&oacute;n m&iacute;nima.</p>
+         * 
          * @param toEmail toEmail a string representing the repicients' e-mail accounts.
-         *        This string can contain more than one e-mail accounts, semicolon-separated.
-         *        If it is {@code null} the e-mail will not be sent.
+         * This string can contain more than one e-mail accounts, semicolon-separated.
+         * If it is {@code null} the e-mail will not be sent.
          * @param subject a string representing the message's subject
          * @param msg a string containing the message's body
          * @return by the time this documentation comments were included, this value
-         *         is always {@code null}.
-         *         <p>para cuando estos comentarios de documentaci&oacute;n fueron
-         *         incluidos, este valor siempre es {@code null}.</p>
+         * is always {@code null}.
+         * para cuando estos comentarios de documentaci&oacute;n fueron
+         * incluidos, este valor siempre es {@code null}.
          * @throws java.net.SocketException is never thrown
+         * @throws SocketException the socket exception
          */
         public static String sendMail(String toEmail, String subject, String msg)
                 throws java.net.SocketException
@@ -3060,14 +3160,16 @@ public class SWBUtils {
          * set in {@code EMAIL.adminEmail}.
          * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con la
          * cuenta de correo del remitente como la asignada a {@code EMAIL.adminEmail}.</p>
+         * 
          * @param toEmail a string representing the repicients' e-mail accounts.
-         *        This string can contain more than one e-mail accounts, semicolon-separated.
-         *        If it is {@code null} the e-mail will not be sent.
+         * This string can contain more than one e-mail accounts, semicolon-separated.
+         * If it is {@code null} the e-mail will not be sent.
          * @param subject a string representing the message's subject
          * @param body a string containing the message's body
          * @throws java.net.SocketException if an error occurs while creating the mail sender.
-         *         <p>si ocurre alg&uacute;n error en la creaci&oacute;n del remitente
-         *         de correos.</p>
+         * <p>si ocurre alg&uacute;n error en la creaci&oacute;n del remitente
+         * de correos.</p>
+         * @throws SocketException the socket exception
          */
         public static void sendBGEmail(String toEmail, String subject, String body)
                 throws java.net.SocketException
@@ -3103,34 +3205,36 @@ public class SWBUtils {
          * Sends an e-mail in background mode with the information supplied.
          * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con
          * la informaci&oacute;n proporcionada.</p>
+         * 
          * @param fromEmail a string representing the sender's e-mail account.
-         *        Must be a valid e-mail account, if it is equal to {@code null},
-         *        the value of {@code EMAIL.adminEmail} will be used.
+         * Must be a valid e-mail account, if it is equal to {@code null},
+         * the value of {@code EMAIL.adminEmail} will be used.
          * @param fromName  a string representing the sender's name
          * @param address   a collection of the recipients' e-mail accounts. Every
-         *        element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
-         *        Must not be null, otherwise the mail will not be sent.
+         * element in the collection is expected to be a valid {@link java.mail.internet.InternetAddress}.
+         * Must not be null, otherwise the mail will not be sent.
          * @param ccEmail   a collection of e-mail accounts to send the email as a copy. Every
-         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
-         *        If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
+         * element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         * If it is {@code null}, the mail won't be sent as a carbon copy to anyone.
          * @param bccEmail  a collection of e-mail accounts to send the email as a blind carbon copy. Every
-         *        element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
-         *        If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
+         * element in the collection is expected to be a valid {@literal java.mail.internet.InternetAddress}.
+         * If it is {@code null}, the mail won't be sent as a blind carbon copy to anyone.
          * @param subject   a string indicating the e-mail's subject
          * @param contentType a string indicating the content type of the mail. {@literal HTML}
-         *        indicates the body has an HTML format, otherwise it will be send
-         *        in text plain format. Must not be {@code null}.
+         * indicates the body has an HTML format, otherwise it will be send
+         * in text plain format. Must not be {@code null}.
          * @param data      a string containing the e-mail body's text
          * @param login     a string representing a login name for SMTP server
-         *        authentication. If it is {@code null} authentication will not be performed.
+         * authentication. If it is {@code null} authentication will not be performed.
          * @param password  a string representing a password for SMTP server
-         *        authentication. If it is {@code null} authentication will not be performed.
+         * authentication. If it is {@code null} authentication will not be performed.
          * @param attachments a list containing all the attachments for the e-mail. Every
-         *        element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
+         * element in the collection is expected to be of type {@literal org.apache.commons.mail.EmailAttachment}.
          * @throws java.net.SocketException if an error occurs during new thread's
-         *         creation for working in background mode.
-         *         <p>si ocurre un error durante la creaci&oacute;n del nuevo
-         *         thread para trabajar en segundo plano.</p>
+         * creation for working in background mode.
+         * <p>si ocurre un error durante la creaci&oacute;n del nuevo
+         * thread para trabajar en segundo plano.</p>
+         * @throws SocketException the socket exception
          */
         public static void sendBGEmail(String fromEmail, String fromName,
                 Collection address, Collection ccEmail, Collection bccEmail,
@@ -3203,11 +3307,13 @@ public class SWBUtils {
          * through {@code message}.
          * <p>Env&iacute;a un correo electr&oacute;nico en segundo plano con
          * la informaci&oacute;n proporcionada a trav&eacute;s de {@code message}.</p>
+         * 
          * @param message an object of type {@link org.semanticwb.base.util.SWBMail}
          * @throws java.net.SocketException if an error occurs during new thread's
-         *         creation for working in background mode.
-         *         <p>si ocurre un error durante la creaci&oacute;n del nuevo
-         *         thread para trabajar en segundo plano.</p>
+         * creation for working in background mode.
+         * <p>si ocurre un error durante la creaci&oacute;n del nuevo
+         * thread para trabajar en segundo plano.</p>
+         * @throws SocketException the socket exception
          */
         public static void sendBGEmail(SWBMail message) throws java.net.SocketException
         {
@@ -3280,8 +3386,9 @@ public class SWBUtils {
         /**
          * Gets the factory object of {@code javax.xml.xpath.XPath} objects.
          * <p>Obtiene el objeto f&aacute;brica de objetos {@code javax.xml.xpath.XPath}.</p>
+         * 
          * @return the factory object of {@code javax.xml.xpath.XPath} objects.
-         *         <p>el objeto f&aacute;brica de objetos {@code javax.xml.xpath.XPath}.</p>
+         * 
          */
         public static XPathFactory getXPathFactory()
         {
@@ -3292,8 +3399,9 @@ public class SWBUtils {
         /**
          * Gets the {@code XPath} object of this object.
          * <p>Obtiene el objeto {@code XPath} de este objeto.</p>
+         * 
          * @return the {@code XPath} object of this object.
-         *         <p>el objeto {@code XPath} de este objeto.</p>
+         * 
          */
         public static XPath getXPathObject()
         {
@@ -3304,8 +3412,9 @@ public class SWBUtils {
         /**
          * Gets a reference for the only one instance of this object.
          * <p>Obtiene una referencia para la &uacute;nica instancia de este objeto.</p>
+         * 
          * @return a reference for the only one instance of this object.
-         *         <p>una referencia para la &uacute;nica instancia de este objeto.</p>
+         * 
          */
         private static XML getInstance()
         {
@@ -3320,9 +3429,10 @@ public class SWBUtils {
          * Gets this object's document builder factory.
          * <p>Obtiene la f&aacute;brica constructora de documentos
          * de este objeto.</p>
+         * 
          * @return this object's document builder factory.
-         *         <p>la f&aacute;brica constructora de documentos
-         *         de este objeto.</p>
+         * la f&aacute;brica constructora de documentos
+         * de este objeto.
          */
         public static DocumentBuilderFactory getDocumentBuilderFactory()
         {
@@ -3333,8 +3443,9 @@ public class SWBUtils {
         /**
          * Gets this object's transformer factory.
          * <p>Obtiene la f&aacute;brica transformadora de este objeto.</p>
+         * 
          * @return this object's transformer factory.
-         *         <p>la f&aacute;brica transformadora de este objeto.</p>
+         * 
          */
         public static TransformerFactory getTransformerFactory()
         {
@@ -3380,13 +3491,14 @@ public class SWBUtils {
         /**
          * Transforms a DOM document into a XML formatted string.
          * <p>Transforma un documento DOM en un objeto string con formato XML.</p>
+         * 
          * @param dom a DOM document to transform. Must not be {@code null}.
          * @param encode a string representing the preferred character encoding
-         *        to use in the transformation. Must not be {@code null}.
+         * to use in the transformation. Must not be {@code null}.
          * @param indent a {@code boolean} indicating wheather or not to indent
-         *        (by 2 blank spaces) the XML to generate.
+         * (by 2 blank spaces) the XML to generate.
          * @return a string representing the DOM document received.
-         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         * 
          */
         public static String domToXml(Document dom, String encode, boolean indent)
         {
@@ -3428,9 +3540,10 @@ public class SWBUtils {
          * character encoding with no indentation.
          * <p>Transforma un documento DOM en un objeto string con formato XML
          * utilizando codificaci&oacute;n UTF-8 sin sangr&iacute;as.</p>
+         * 
          * @param dom a DOM document to transform. Must not be {@code null}.
          * @return a XML formatted, UTF-8 encodedstring representing the DOM document received.
-         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         * 
          */
         public static String domToXml(Document dom)
         {
@@ -3442,11 +3555,12 @@ public class SWBUtils {
          * character encoding with or whithout indentation.
          * <p>Transforma un documento DOM en un objeto string con formato XML
          * utilizando codificaci&oacute;n UTF-8 con o sin sangr&iacute;as.</p>
+         * 
          * @param dom a DOM document to transform. Must not be {@code null}.
          * @param ident a {@code boolean} indicating wheather or not to indent
-         *        (by 2 blank spaces) the XML to generate.
+         * (by 2 blank spaces) the XML to generate.
          * @return a XML formatted, UTF-8 encodedstring representing the DOM document received.
-         *         <p>un objeto string que representa el documento DOM recibido.</p>
+         * 
          */
         public static String domToXml(Document dom, boolean ident)
         {
@@ -3456,14 +3570,16 @@ public class SWBUtils {
         /**
          * Creates an exact copy of the document received.
          * <p>Crea una copia exacta del objeto document recibido.</p>
+         * 
          * @param dom a DOM document to copy.
          * @return a document with the same content as the document received.
-         *         <p>un objeto document con el mismo contenido que el objeto
-         *         document recibido.</p>
+         * un objeto document con el mismo contenido que el objeto
+         * document recibido.
          * @throws org.w3c.dom.DOMException if an exceptional circumstance occurs
-         *         while DOM operations are performed.
-         *         <p>si una circunstancia excepcional ocurre mientras se ejecutan
-         *         operaciones DOM.</p>
+         * while DOM operations are performed.
+         * <p>si una circunstancia excepcional ocurre mientras se ejecutan
+         * operaciones DOM.</p>
+         * @throws SWBException the sWB exception
          */
         public static Document copyDom(Document dom) throws SWBException
         {
@@ -3479,10 +3595,11 @@ public class SWBUtils {
         /**
          * Creates a document object from the string received.
          * <p>Crea un objeto document a partir del objeto string recibido.</p>
+         * 
          * @param xml a string representing the content for a DOM document.
          * @return a document created with the received string's content.
-         *         <p>un objeto document creado con el contenido del objeto string
-         *         recibido.</p>
+         * un objeto document creado con el contenido del objeto string
+         * recibido.
          */
         public static Document xmlToDom(String xml)
         {
@@ -3505,10 +3622,11 @@ public class SWBUtils {
         /**
          * Creates a document object from the input stream received.
          * <p>Crea un objeto document a partir de un flujo de entrada recibido.</p>
+         * 
          * @param xml an input stream from which the DOM document will be created.
          * @return a document containing the data provided by the input stream received.
-         *         <p>un objeto document que contiene la informaci&oacute;n proporcionada
-         *         por el flujo de entrada recibido.</p>
+         * un objeto document que contiene la informaci&oacute;n proporcionada
+         * por el flujo de entrada recibido.
          */
         public static Document xmlToDom(InputStream xml)
         {
@@ -3527,10 +3645,11 @@ public class SWBUtils {
         /**
          * Creates a document from the input source received.
          * <p>Crea un objeto document a partir de la fuente de entrada recibida.</p>
+         * 
          * @param xml an input source from which the DOM document will be created.
          * @return a document containing the data provided by the input source received.
-         *         <p>un objeto document que contiene la informaci&oacute;n proporcionada
-         *         por la fuente de entrada recibida.</p>
+         * un objeto document que contiene la informaci&oacute;n proporcionada
+         * por la fuente de entrada recibida.
          */
         public static Document xmlToDom(InputSource xml)
         {
@@ -3565,8 +3684,9 @@ public class SWBUtils {
         /**
          * Creates a new DOM document object.
          * <p>Crea un nuevo objeto document.</p>
+         * 
          * @return a brand new (empty) DOM document.
-         *         <p>un objeto document <q>nuevecito</q> (vac&iacute;o).</p>
+         * 
          */
         public static Document getNewDocument() //throws SWBException
         {
@@ -3593,15 +3713,17 @@ public class SWBUtils {
          * a XSLT.
          * <p>Genera un objeto template con el contenido del flujo de entrada
          * recibido, que representa el c&oacute;digo de un XSLT.</p>
+         * 
          * @param stream an input stream with an XSLT file's content
          * @return a template which is a compiled representation of the input
-         *         source's content.
-         *         <p>un objeto template que es una representaci&oacute;n compilada
-         *         del contenido del flujo de entrada recibido.</p>
+         * source's content.
+         * un objeto template que es una representaci&oacute;n compilada
+         * del contenido del flujo de entrada recibido.
          * @throws javax.xml.transform.TransformerConfigurationException if it fails the
-         *         construction of the template during parsing.
-         *         <p>si falla la construcci&oacute;n de la plantilla durante el
-         *         an&aacute;lisis sint&aacute;ctico.</p>
+         * construction of the template during parsing.
+         * <p>si falla la construcci&oacute;n de la plantilla durante el
+         * an&aacute;lisis sint&aacute;ctico.</p>
+         * @throws TransformerConfigurationException the transformer configuration exception
          */
         public static Templates loadTemplateXSLT(InputStream stream)
                 throws TransformerConfigurationException
@@ -3614,17 +3736,19 @@ public class SWBUtils {
          * Transforms a document by applying the specified template.
          * <p>Transforma un objeto document aplicando la plantilla de transformaciones
          * especificada.</p>
+         * 
          * @param tpl a transformations template
          * @param doc a DOM document to apply the transformations on
          * @return  a string representing the document's data transformed by
-         *          the template and ready to be displayed in a web browser.
-         *          <p>un objeto string que representa la informaci&oacute;n del
-         *          documento DOM con las transformaciones contenidas en la plantilla
-         *          y listo para ser desplegado en un navegador Web.</p>
+         * the template and ready to be displayed in a web browser.
+         * un objeto string que representa la informaci&oacute;n del
+         * documento DOM con las transformaciones contenidas en la plantilla
+         * y listo para ser desplegado en un navegador Web.
          * @throws javax.xml.transform.TransformerException if an exceptional
-         *         condition occurs during the transformation process.
-         *         <p>si una condici&oacute;n excepcional ocurre durante el 
-         *         proceso de transformaci&oacute;n.</p>
+         * condition occurs during the transformation process.
+         * <p>si una condici&oacute;n excepcional ocurre durante el
+         * proceso de transformaci&oacute;n.</p>
+         * @throws TransformerException the transformer exception
          */
         public static String transformDom(Templates tpl, Document doc) throws TransformerException
         {
@@ -3639,12 +3763,13 @@ public class SWBUtils {
          * according to the schema provided.
          * <p>Verifica si el documento DOM representado en la fuente de entrada
          * es v&aacute;lido de acuerdo al esquema provisto.</p>
+         * 
          * @param schema a represented schema to validate a document
          * @param xml an input source containing a DOM document
          * @return a {@code boolean} indicating if the document is valid or not,
-         *         according to the schema provided.
-         *         <p>un {@code boolean} que indica si el documento DOM recibido
-         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         * according to the schema provided.
+         * un {@code boolean} que indica si el documento DOM recibido
+         * es o no v&aacute;lido, de acuerdo al esquema proporcionado.
          */
         public static boolean xmlVerifier(org.xml.sax.InputSource schema,
                 org.xml.sax.InputSource xml)
@@ -3658,14 +3783,15 @@ public class SWBUtils {
          * <p>Verifica si el documento DOM representado en la fuente de entrada
          * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
          * fuente de entrada.</p>
+         * 
          * @param idschema a string representing a system id of the schema's input source
          * @param schema an input source containing a schema to validate a document
          * @param idxml a string representing a system id of the document's input source
          * @param xml an input source containing a document
          * @return a {@code boolean} indicating if the document is valid or not,
-         *         according to the schema provided.
-         *         <p>un {@code boolean} que indica si el documento DOM recibido
-         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         * according to the schema provided.
+         * un {@code boolean} que indica si el documento DOM recibido
+         * es o no v&aacute;lido, de acuerdo al esquema proporcionado.
          */
         public static boolean xmlVerifier(String idschema,
                 org.xml.sax.InputSource schema,
@@ -3704,12 +3830,13 @@ public class SWBUtils {
          * <p>Verifica si el documento DOM representado en el flujo de entrada
          * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otro
          * flujo de entrada.</p>
+         * 
          * @param schema an input stream containing a schema to validate a document
          * @param xml an input stream containing a document
          * @return a {@code boolean} indicating if the document is valid or not,
-         *         according to the schema provided.
-         *         <p>un {@code boolean} que indica si el documento DOM recibido
-         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         * according to the schema provided.
+         * un {@code boolean} que indica si el documento DOM recibido
+         * es o no v&aacute;lido, de acuerdo al esquema proporcionado.
          */
         public static boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml)
         {
@@ -3722,13 +3849,14 @@ public class SWBUtils {
          * <p>Verifica si el documento DOM representado en el flujo de entrada
          * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otro
          * flujo de entrada.</p>
+         * 
          * @param idschema a string representing a system id of the schema's input source
          * @param schema an input stream containing a schema to validate a document
          * @param xml an input stream containing a document
          * @return a {@code boolean} indicating if the document is valid or not,
-         *         according to the schema provided.
-         *         <p>un {@code boolean} que indica si el documento DOM recibido
-         *         es o no v&aacute;lido, de acuerdo al esquema proporcionado.</p>
+         * according to the schema provided.
+         * un {@code boolean} que indica si el documento DOM recibido
+         * es o no v&aacute;lido, de acuerdo al esquema proporcionado.
          */
         public static boolean xmlVerifier(String idschema, java.io.InputStream schema,
                 java.io.InputStream xml)
@@ -3754,19 +3882,20 @@ public class SWBUtils {
         /**
          * Verifies if a document is valid according to the schema provided.
          * <p>Verifica si un documento DOM es v&aacute;lido de acuerdo al esquema provisto.</p>
+         * 
          * @param sysid a string representing a system id of the input stream,
-         *        in case {@code objschema} being an input stream.
+         * in case {@code objschema} being an input stream.
          * @param objschema a schema to validate a document. This object can be an instance of
-         *        {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code java.io.InputStream}
-         *        or even {@code java.lang.String}.
          * @param objxml a document to validate against the schema provided. This
-         *        document can be contained in an instance of the following classes:
-         *        {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code org.w3c.dom.Node}
-         *        or even {@code java.lang.String}.
+         * document can be contained in an instance of the following classes:
          * @return a {@code boolean} indicating if the document received is valid
-         *         or not, according to the schema provided.
-         *         <p>un {@code boolean} indicando si el documento DOM recibido
-         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
+         * or not, according to the schema provided.
+         * un {@code boolean} indicando si el documento DOM recibido
+         * es v&aacute;lido o no, de acuerdo al esquema provisto.
+         * {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code java.io.InputStream}
+         * or even {@code java.lang.String}.
+         * {@code java.io.File}, {@code org.xml.sax.InputSource}, {@code org.w3c.dom.Node}
+         * or even {@code java.lang.String}.
          */
         private static boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml)
         {
@@ -3844,12 +3973,13 @@ public class SWBUtils {
          * <p>Verifica si el documento DOM representado por una cadena
          * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
          * cadena.</p>
+         * 
          * @param schema a string containing a schema to validate a document
          * @param xml a string containing a  DOM document
          * @return a {@code boolean} indicating if the document received is valid
-         *         or not, according to the schema provided.
-         *         <p>un {@code boolean} indicando si el documento DOM recibido
-         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
+         * or not, according to the schema provided.
+         * un {@code boolean} indicando si el documento DOM recibido
+         * es v&aacute;lido o no, de acuerdo al esquema provisto.
          */
         public static boolean xmlVerifier(String schema, String xml)
         {
@@ -3862,13 +3992,14 @@ public class SWBUtils {
          * <p>Verifica si el documento DOM representado por una cadena
          * es v&aacute;lido de acuerdo al esquema provisto a trav&eacute;s de otra
          * cadena.</p>
+         * 
          * @param sysid a string representing a system id for constructing the schema.
          * @param schema a string containing a schema to validate a document
          * @param xml a string containing a DOM document
          * @return a {@code boolean} indicating if the document received is valid
-         *         or not, according to the schema provided.
-         *         <p>un {@code boolean} indicando si el documento DOM recibido
-         *         es v&aacute;lido o no, de acuerdo al esquema provisto.</p>
+         * or not, according to the schema provided.
+         * un {@code boolean} indicando si el documento DOM recibido
+         * es v&aacute;lido o no, de acuerdo al esquema provisto.
          */
         public static boolean xmlVerifierByURL(String sysid, String schema, String xml)
         {
@@ -3878,13 +4009,14 @@ public class SWBUtils {
         /**
          * Converts a node into a document.
          * <p>Convierte un objeto node en un objeto document</p>
+         * 
          * @param node a node to convert
          * @return a document containing the node's content.
-         *         <p>un objeto document que contiene el contenido del objeto node.</p>
+         * 
          * @throws SWBException if an exceptional situation occurs during creation
-         *         of the new document.
-         *         <p>si una situaci&oacute;n excepcional ocurre durante la creaci&oacute;n
-         *         del nuevo documento.</p>
+         * of the new document.
+         * <p>si una situaci&oacute;n excepcional ocurre durante la creaci&oacute;n
+         * del nuevo documento.</p>
          */
         public static Document node2Document(Node node) throws SWBException
         {
@@ -3988,21 +4120,22 @@ public class SWBUtils {
         };
 
         /**
-         * Replaces some special characters in a XML-formatted string by their 
+         * Replaces some special characters in a XML-formatted string by their
          * entity names. The characters to replace are: {@literal \t, &, <, y >}.
          * <p>Reemplaza algunos de los caracteres especiales presentes en una
          * cadena con formato XML por su equivalente en nombre de entidad.
          * Los caracteres a reemplazar son: {@literal \t, &, <, y >.}</p>
+         * 
          * @param str an XML-formatted string with some replaceable characters
          * @return a string representing the same content that {@code str}, but with
-         *         some characters replaced according to the following relations:
-         *         <br>{@literal \t} replaced by 4 blank spaces
-         *         <br>{@literal &} replaced by {@literal &amp;}
-         *         <br>{@literal <} replaced by {@literal &lt;}
-         *         <br>{@literal >} replaced by {@literal &gt;}
-         *         <p>un objeto string que representa el mismo contenido que {@code str},
-         *         pero con algunos caracteres reemplazados de acuerdo a las
-         *         relaciones anteriormente mostradas.</p>
+         * some characters replaced according to the following relations:
+         * {@literal \t} replaced by 4 blank spaces
+         * {@literal &} replaced by {@literal &amp;}
+         * {@literal <} replaced by {@literal &lt;}
+         * } replaced by {@literal &gt;}
+         * un objeto string que representa el mismo contenido que {@code str},
+         * pero con algunos caracteres reemplazados de acuerdo a las
+         * relaciones anteriormente mostradas.
          */
         static public String replaceXMLChars(String str)
         {
@@ -4057,16 +4190,17 @@ public class SWBUtils {
          * in HTML code. The entity names to replace are: {@literal &lt;, &gt;, y &amp;}.
          * <p>Reemplaza el nombre de entidad de algunos caracteres especiales, por
          * su equivalente en HTML. Los nombres de entidad a reemplazar son:
-         * {@literal &lt;, &gt;, y &amp;}.</p>
+         * 
          * @param txt a string containing the text to replace
          * @return a string with the entity names of some special characters replaced
-         *         by their representation in HTML code. The entity names to look for are:
-         *         <br>{@literal &amp;} replaced by {@literal &}
-         *         <br>{@literal &lt;} replaced by {@literal <}
-         *         <br>{@literal &gt;} replaced by {@literal >}
-         *         <p>un objeto string con los nombres de entidad de algunos 
-         *         caracteres especiales reemplazados por su representaci&oacute;n
-         *         en c&oacute;digo HTML, arriba se mencionan los reemplazos realizados.</p>
+         * by their representation in HTML code. The entity names to look for are:
+         * {@literal &amp;} replaced by {@literal &}
+         * {@literal &lt;} replaced by {@literal <}
+         * }
+         * un objeto string con los nombres de entidad de algunos
+         * caracteres especiales reemplazados por su representaci&oacute;n
+         * en c&oacute;digo HTML, arriba se mencionan los reemplazos realizados.
+         * {@literal &lt;, &gt;, y &amp;}.</p>
          */
         static public String replaceXMLTags(String txt)
         {
@@ -4099,21 +4233,22 @@ public class SWBUtils {
         /**
          * Creates an empty child node for the one specified.
          * <p>Crea un nodo hijo vac&iacute;o al nodo especificado.</p>
+         * 
          * @param ele father node. Must not be {@code null}.
          * @param name a string representing the name for the node to create.
-         *        Must not be {@code null}.
+         * Must not be {@code null}.
          * @return a new {@code element} (node) that is a child of {@code ele} and
-         *         has the name indicated by {@code name}.
-         *         <p>un nuevo objeto {@code element} (nodo) que es hijo de {@code ele}
-         *         y tiene por nombre, el indicado por {@code name}.</p>
+         * has the name indicated by {@code name}.
+         * un nuevo objeto {@code element} (nodo) que es hijo de {@code ele}
+         * y tiene por nombre, el indicado por {@code name}.
          * @throws org.w3c.dom.DOMException if the name specified for the new node
-         *         is not an XML name according to the XML version in use specified in the
-         *         {@code Document.xmlVersion} attribute.
-         *         <p>si el nombre especificado para el nuevo nodo no es un nombre
-         *         de XML de acuerdo a la versi&oacute; en uso de XML especificada
-         *         en el atributo {@code Document.xmlVersion}.</p>
+         * is not an XML name according to the XML version in use specified in the
          * @throws java.lang.NullPointerException if {@code ele} is {@code null}.
-         *         <p>si {@code ele} es {@code null}.</p>
+         * <p>si {@code ele} es {@code null}.</p>
+         * {@code Document.xmlVersion} attribute.
+         * <p>si el nombre especificado para el nuevo nodo no es un nombre
+         * de XML de acuerdo a la versi&oacute; en uso de XML especificada
+         * en el atributo {@code Document.xmlVersion}.</p>
          */
         static public Element appendChild(Element ele, String name)
         {
@@ -4128,14 +4263,15 @@ public class SWBUtils {
          * contain the text received through {@code value}.
          * <p>Crea un nodo hijo de texto al nodo especificado. El nuevo nodo
          * contendr&aacute; el texto recibido a trav&eacute;s de {@code value}.</p>
+         * 
          * @param ele father node. This node will contain the new node.
          * @param name a string representing the name for the new node
          * @param value a string representing the new node's content
          * @return a new DOM {@code element} whose properties: name, value and father are
-         *         the same as the parameters received.
-         *         <p>un nuevo objeto {@code element} de DOM cuyas propiedades:
-         *         nombre, valor y padre tendr&aacute;n como valores los par&aacute;metros
-         *         recibidos.</p>
+         * the same as the parameters received.
+         * un nuevo objeto {@code element} de DOM cuyas propiedades:
+         * nombre, valor y padre tendr&aacute;n como valores los par&aacute;metros
+         * recibidos.
          */
         static public Element appendChild(Element ele, String name, String value)
         {
@@ -4149,17 +4285,19 @@ public class SWBUtils {
         /**
          * Evaluates a XPath expression in the context of the specified input
          * source and returns the result as the type specified in {@code resultType}.
+         * 
          * @param expression a string representing a XPath expression
          * @param input the input source that contains the context for the
-         *        expression to evaluate
+         * expression to evaluate
          * @param resultType the qualified name for the result type to retutrn
          * @return the specified object QName according to {@link XPathConstants},
-         *         for example {@code XPathConstants.NODE}.
-         *         <p>el objeto especificado QName de acuerdo a {@code XPathConstants},
-         *         por ejemplo {@code XPathConstants.NODE}.</p>
+         * for example {@code XPathConstants.NODE}.
+         * el objeto especificado QName de acuerdo a {@code XPathConstants},
+         * por ejemplo {@code XPathConstants.NODE}.
          * @throws javax.xml.xpath.XPathExpressionException if the expression cannot
-         *         be compiled.
-         *         <p>si la expresi&oacute;n no se puede compilar.</p>
+         * be compiled.
+         * <p>si la expresi&oacute;n no se puede compilar.</p>
+         * @throws XPathExpressionException the x path expression exception
          */
         public static Object getXpathEval(String expression, InputSource input,
                 QName resultType) throws javax.xml.xpath.XPathExpressionException
@@ -4223,16 +4361,17 @@ public class SWBUtils {
          * <p>Obtiene el valor de la primera ocurrencia de un elemento especificado
          * por su nombre de etiqueta a trav&eacute;s de {@code name}, o el valor
          * por defecto. Si el elemento no es encontrado, regresa {@code null}.</p>
+         * 
          * @param dom the DOM document which contains the data
          * @param name a string representing the name of the element to look for
          * @param defvalue a string to return if specified element is not found
          * @return a string containing the value asociated to the first element with
-         *         tag name {@code name} whithin the DOM document {@code dom}; or
-         *         the value of {@code defvalue} if the specified element does not exist.
-         *         <p>un objeto string que contiene el valor asociado al primer elemento
-         *         con nombre de etiqueta {@code name} dentro del documento DOM
-         *         {@code dom}; o el valor de {@code defvalue} si el elemento especificado
-         *         no existe.</p>
+         * tag name {@code name} whithin the DOM document {@code dom}; or
+         * the value of {@code defvalue} if the specified element does not exist.
+         * un objeto string que contiene el valor asociado al primer elemento
+         * con nombre de etiqueta {@code name} dentro del documento DOM
+         * {@code dom}; o el valor de {@code defvalue} si el elemento especificado
+         * no existe.</p>
          */
         public static String getAttribute(Document dom, String name, String defvalue)
         {
@@ -4250,13 +4389,14 @@ public class SWBUtils {
          * <p>Obtiene el valor de la primera ocurrencia de un elemento especificado
          * por su nombre de etiqueta a trav&eacute;s de {@code name}. Si el elemento
          * no es encontrado, regresa {@code null}.</p>
+         * 
          * @param dom the DOM document which contains the data
          * @param name a string representing the name of the element to look for
          * @return a string containing the value asociated to the first element with
-         *         tag name {@code name} whithin the DOM document {@code dom}.
-         *         <p>un objeto string que contiene el valor asociado al primer elemento
-         *         con nombre de etiqueta {@code name} dentro del documento DOM
-         *         {@code dom}.</p>
+         * tag name {@code name} whithin the DOM document {@code dom}.
+         * un objeto string que contiene el valor asociado al primer elemento
+         * con nombre de etiqueta {@code name} dentro del documento DOM
+         * {@code dom}.</p>
          */
         public static String getAttribute(Document dom, String name)
         {
@@ -4335,9 +4475,10 @@ public class SWBUtils {
          * Gets a reference to the database connection manager of this object.
          * <p>Obtiene una referencia al administrador de conexiones a base de datos
          * de este objeto.</p>
+         * 
          * @return a reference to the database connection manager of this object.
-         *         <p>una referencia al administrador de conexiones a base de datos
-         *         de este objeto.</p>
+         * una referencia al administrador de conexiones a base de datos
+         * de este objeto.
          */
         private static DBConnectionManager getConnectionManager()
         {
@@ -4351,9 +4492,10 @@ public class SWBUtils {
         /**
          * Gets all the database connection pools available.
          * <p>Obtiene todos los pools de conexiones a base de datos disponibles.</p>
+         * 
          * @return an enumeration of the database connection pools found.
-         *         <p>una enumeraci&oacute;n de los pools de conexi&oacute;n a
-         *         base de datos encontrados.</p>
+         * una enumeraci&oacute;n de los pools de conexi&oacute;n a
+         * base de datos encontrados.
          */
         public static Enumeration<DBConnectionPool> getPools()
         {
@@ -4364,10 +4506,11 @@ public class SWBUtils {
          * Retrieves the database connection pool whose name matches {@code name}.
          * <p>Recupera el pool de conexiones a base de datos cuyo nombre concuerda
          * con {@code name}.</p>
+         * 
          * @param name a string representing a registered connection pool name to retrieve
          * @return a database connection pool whose name matches {@code name}.
-         *         <p>un pool de conexiones a base de datos cuyo nombre concuerda
-         *         con {@code name}.</p>
+         * un pool de conexiones a base de datos cuyo nombre concuerda
+         * con {@code name}.
          */
         public static DBConnectionPool getPool(String name)
         {
@@ -4378,9 +4521,10 @@ public class SWBUtils {
          * Retrieves the database connection pool whose name matches {@code SWBUtils.DB.defaultPoolName}.
          * <p>Recupera el pool de conexiones a base de datos cuyo nombre concuerda
          * con {@code SWBUtils.DB.defaultPoolName} whose name matches {@code SWBUtils.DB.defaultPoolName}.</p>
+         * 
          * @return the database connection pool whose name matches {@code SWBUtils.DB.defaultPoolName}.
-         *         <p>el pool de conexiones a base de datos cuyo nombre concuerda
-         *         con {@code SWBUtils.DB.defaultPoolName}.</p>
+         * el pool de conexiones a base de datos cuyo nombre concuerda
+         * con {@code SWBUtils.DB.defaultPoolName}.
          */
         public static DBConnectionPool getDefaultPool()
         {
@@ -4390,9 +4534,10 @@ public class SWBUtils {
         /**
          * Gets the name for the default database connection pool.
          * <p>Obtiene el nombre del pool de conexiones a base de datos por defecto.</p>
+         * 
          * @return a string representing the name for the default database connection pool.
-         *         <p>un objeto string que representa el nombre del pool de
-         *         conexiones a base de datos por defecto.</p>
+         * un objeto string que representa el nombre del pool de
+         * conexiones a base de datos por defecto.
          */
         public static String getDefaultPoolName()
         {
@@ -4414,11 +4559,12 @@ public class SWBUtils {
          * Gets a database connection which does not belong to the connection pool specified.
          * <p>Obtiene una conexi&oacute;n a base de datos que no pertenece al pool de
          * conexiones especificado.</p>
+         * 
          * @param poolName a string representing the name of a registered connection pool
-         * @return a database connection that does not belong to the connection 
-         *         pool whose name matches {@code poolName}.
-         *         <p>una conexi&oacute;n a base de datos que no pertenece al pool
-         *         de conexiones cuyo nombre concuerda con {@code poolName}.</p>
+         * @return a database connection that does not belong to the connection
+         * pool whose name matches {@code poolName}.
+         * una conexi&oacute;n a base de datos que no pertenece al pool
+         * de conexiones cuyo nombre concuerda con {@code poolName}.
          */
         public static Connection getNoPoolConnection(String poolName)
         {
@@ -4431,7 +4577,8 @@ public class SWBUtils {
          * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
          * por defecto, fijando la descripci&oacute;n indicada a la conexi&oacute;n
          * de base de datos.</p>
-         * @param description 
+         * 
+         * @param description the description
          * @return Connection from DBPool.
          */
         public static Connection getDefaultConnection(String description)
@@ -4444,9 +4591,10 @@ public class SWBUtils {
          * with no description.
          * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
          * por defecto, sin descripci&oacute;n.</p>
+         * 
          * @return a database connection from the default database connection pool.
-         *         <p>una conexi&oacute;n a base de datos del pool de conexiones
-         *         por defecto.</p>
+         * una conexi&oacute;n a base de datos del pool de conexiones
+         * por defecto.
          */
         public static Connection getDefaultConnection()
         {
@@ -4458,11 +4606,12 @@ public class SWBUtils {
          * a description for that connection.
          * <p>Obtiene una conexi&oacute;n a base de datos del pool de conexiones
          * especificado, fijando una descripci&oacute;n para esa conexi&oacute;n.</p>
+         * 
          * @param poolName a string representing the name of a registered connection pool
-         *        from which a connection will be obtained
+         * from which a connection will be obtained
          * @param description a string with the description for the database connection
          * @return a database connection from the connection pool specified.
-         *         <p>una conexi&oacute;n a base de datos del pool de conexiones especificado.</p>
+         * 
          */
         public static Connection getConnection(String poolName, String description)
         {
@@ -4474,10 +4623,11 @@ public class SWBUtils {
          * Gets a database connection (descriptionless) from the connection pool specified.
          * <p>Obtiene una conexi&oacute;n a base de datos (sin descripci&oacute;n) del pool de conexiones
          * especificado.</p>
+         * 
          * @param name a string representing the name of a registered connection pool
-         *        from which a connection will be obtained
+         * from which a connection will be obtained
          * @return a database connection from the connection pool specified.
-         *         <p>una conexi&oacute;n a base de datos del pool de conexiones especificado.</p>
+         * 
          */
         public static Connection getConnection(String name)
         {
@@ -4488,10 +4638,11 @@ public class SWBUtils {
          * Gets the database name used by the default database connection pool.
          * <p>Obtiene el nombre de base de datos utilizado por el pool de conexiones
          * a base de datos por defecto.</p>
+         * 
          * @return a string containing the database name used by the default
-         *         database connection pool.
-         *         <p>un objeto string que contiene el nombre de base de datos
-         *         utilizado por el pool de conexiones a base de datos por defecto.</p>
+         * database connection pool.
+         * un objeto string que contiene el nombre de base de datos
+         * utilizado por el pool de conexiones a base de datos por defecto.
          */
         public static String getDatabaseName()
         {
@@ -4502,12 +4653,13 @@ public class SWBUtils {
          * Gets the database name used by the database connection pool specified.
          * <p>Obtiene el nombre de base de datos utilizado por el pool de conexiones
          * a base de datos especificado.</p>
+         * 
          * @param poolName a string indicating a registered connection pool name to use.
-         *        If it is {@code null}, the same is returned.
-         * @return a string containing the database name used by the database 
-         *         connection pool specified.
-         *         <p>un objeto string que contiene el nombre de base de datos
-         *         utilizado por el pool de conexiones especificado.</p>
+         * If it is {@code null}, the same is returned.
+         * @return a string containing the database name used by the database
+         * connection pool specified.
+         * un objeto string que contiene el nombre de base de datos
+         * utilizado por el pool de conexiones especificado.
          */
         public static String getDatabaseName(String poolName)
         {
@@ -4532,6 +4684,11 @@ public class SWBUtils {
          * Gets the database type used by the default connection pool. This database
          * type is determined by the connected database's name, according to this name, one
          * of the database identifiers ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * 
+         * @return a string representing the identified database type used by the
+         * default connection pool.
+         * un objeto string que representa el tipo de base de datos
+         * identificado que es utilizado por el pool de conexiones por defecto.
          * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
          * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) is returned.
          * <p>Obtiene el tipo de base de datos utilizado por el pool de conexiones
@@ -4540,10 +4697,6 @@ public class SWBUtils {
          * base de datos ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
          * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
          * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) es devuelto.</p>
-         * @return a string representing the identified database type used by the
-         *         default connection pool.
-         *         <p>un objeto string que representa el tipo de base de datos
-         *         identificado que es utilizado por el pool de conexiones por defecto.</p>
          */
         public static String getDatabaseType()
         {
@@ -4554,6 +4707,12 @@ public class SWBUtils {
          * Gets the database type used by the connection pool specified. This database
          * type is determined by the connected database's name, according to this name, one
          * of the database identifiers ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
+         * 
+         * @param poolName a string representing a registered connection pool name
+         * @return a string representing the identified database type used by the
+         * specified connection pool.
+         * un objeto string que representa el tipo de base de datos
+         * identificado que es utilizado por el pool de conexiones especificado.
          * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
          * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) is returned.
          * <p>Obtiene el tipo de base de datos utilizado por el pool de conexiones
@@ -4562,11 +4721,6 @@ public class SWBUtils {
          * base de datos ({@code SWBUtils.DB.DBTYPE_HSQL}, {@code SWBUtils.DB.DBTYPE_MySQL},
          * {@code SWBUtils.DB.DBTYPE_MsSQL}, {@code SWBUtils.DB.DBTYPE_Oracle},
          * {@code SWBUtils.DB.DBTYPE_PostgreSQL}, {@code SWBUtils.DB.DBTYPE_Derby}) es devuelto.</p>
-         * @param poolName a string representing a registered connection pool name
-         * @return a string representing the identified database type used by the
-         *         specified connection pool.
-         *         <p>un objeto string que representa el tipo de base de datos
-         *         identificado que es utilizado por el pool de conexiones especificado.</p>
          */
         public static String getDatabaseType(String poolName)
         {
@@ -4600,11 +4754,12 @@ public class SWBUtils {
          * Gets the number of opened database connections belonging to a certain connection pool.
          * <p>Obtiene el n&uacute;mero de conexiones a base de datos abiertas, pertenecientes
          * a un cierto pool de conexiones.</p>
+         * 
          * @param poolName a string representing a registered connection pool name.
          * @return the number of opened database connections belonging to a certain
-         *         connection pool.
-         *         <p>el n&uacute;mero de conexiones a base de datos abiertas,
-         *         pertenecientes a un cierto pool de conexiones.</p>
+         * connection pool.
+         * el n&uacute;mero de conexiones a base de datos abiertas,
+         * pertenecientes a un cierto pool de conexiones.
          */
         public static int getConnections(String poolName)
         {
@@ -4613,13 +4768,14 @@ public class SWBUtils {
 
         /**
          * Gets the number of free database connections into the specified connection pool.
-         * <p>Obtiene el n&uacute;mero de conexiones a base de datos libres en el 
+         * <p>Obtiene el n&uacute;mero de conexiones a base de datos libres en el
          * pool de conexiones especificado.</p>
+         * 
          * @param poolName a string representing a registered connection pool name.
          * @return the number of free database connections belonging to the
-         *         connection pool with name like {@code poolName}.
-         *         <p>el n&uacute;mero de conexiones a base de datos libres,
-         *         pertenecientes al pool de conexiones con nombre igual a {@code poolName}.</p>
+         * connection pool with name like {@code poolName}.
+         * el n&uacute;mero de conexiones a base de datos libres,
+         * pertenecientes al pool de conexiones con nombre igual a {@code poolName}.
          */
         public static int getFreeConnections(String poolName)
         {
@@ -4631,10 +4787,11 @@ public class SWBUtils {
          * connection manager.
          * <p>Obtiene una referencia al administrador del mecanismo de time-lock
          * del pool de conexiones asociado al administrador de conexiones.</p>
+         * 
          * @return a reference to the pool connection time-lock associated to the
-         *         connection manager.
-         *         <p>una referencia al administrador del mecanismo de time-lock
-         *         del pool de conexiones asociado al administrador de conexiones.</p>
+         * connection manager.
+         * una referencia al administrador del mecanismo de time-lock
+         * del pool de conexiones asociado al administrador de conexiones.
          */
         public static PoolConnectionTimeLock getTimeLock()
         {
@@ -4653,25 +4810,28 @@ public class SWBUtils {
          * SHA-512 algorithm, with a previous validation.
          * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
          * el algoritmo SHA-512, con una validaci&oacute;n previa.</p>
+         * 
          * @param toEncode a string containing the message to digest. If it starts
-         *         with any of the following prefixes: {@literal "{SHA-512}"},
-         *         {@literal "{SHA}"}, {@literal "{SSHA}"}, {@literal "{CRYPT}"},
-         *         {@literal "{SMD5}"} OR {@literal "{MD5}"},  the resulting
-         *         string is this same parameter.
+         * with any of the following prefixes: {@literal "{SHA-512}"},
          * @return a string representing the received message digested with an implementation
-         *         of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
-         *         <p>un objeto string que representa el mensaje recibido digerido
-         *         con una implementaci&oacute;n del algoritmo SHA-512. Este string
-         *         comienza con el prefijo "{SHA-512}".</p>
+         * of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
+         * un objeto string que representa el mensaje recibido digerido
+         * con una implementaci&oacute;n del algoritmo SHA-512. Este string
+         * comienza con el prefijo "{SHA-512}".
          * @throws java.security.NoSuchAlgorithmException if there is no implementation
-         *         of the SHA-512 algorithm available in the environment.
-         *         <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
-         *         disponible en el ambiente.</p>
+         * of the SHA-512 algorithm available in the environment.
+         * <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
+         * disponible en el ambiente.</p>
          * @throws java.io.UnsupportedEncodingException if the character encoding
-         *         used to obtain the bytes from the message received (ISO8859-1)
-         *         is not supported.
-         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
-         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * used to obtain the bytes from the message received (ISO8859-1)
+         * is not supported.
+         * <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         * bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * @throws NoSuchAlgorithmException the no such algorithm exception
+         * @throws UnsupportedEncodingException the unsupported encoding exception
+         * {@literal "{SHA}"}, {@literal "{SSHA}"}, {@literal "{CRYPT}"},
+         * {@literal "{SMD5}"} OR {@literal "{MD5}"},  the resulting
+         * string is this same parameter.
          */
         public static String passwordDigest(String toEncode)
                 throws NoSuchAlgorithmException, UnsupportedEncodingException
@@ -4698,21 +4858,24 @@ public class SWBUtils {
          * SHA-512 algorithm.
          * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
          * el algoritmo SHA-512.</p>
+         * 
          * @param toEncode a string containing the message to digest
          * @return a string representing the received message digested with an implementation
-         *         of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
-         *         <p>un objeto string que representa el mensaje recibido digerido
-         *         con una implementaci&oacute;n del algoritmo SHA-512. Este string
-         *         comienza con el prefijo "{SHA-512}".</p>
+         * of the SHA-512 algorithm. This string starts with the prefix "{SHA-512}".
+         * un objeto string que representa el mensaje recibido digerido
+         * con una implementaci&oacute;n del algoritmo SHA-512. Este string
+         * comienza con el prefijo "{SHA-512}".
          * @throws java.security.NoSuchAlgorithmException if there is no implementation
-         *         of the SHA-512 algorithm available in the environment.
-         *         <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
-         *         disponible en el ambiente.</p>
+         * of the SHA-512 algorithm available in the environment.
+         * <p>si no hay una implementaci&oacute;n del algoritmo SHA-512
+         * disponible en el ambiente.</p>
          * @throws java.io.UnsupportedEncodingException if the character encoding
-         *         used to obtain the bytes from the message received (ISO8859-1)
-         *         is not supported.
-         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
-         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * used to obtain the bytes from the message received (ISO8859-1)
+         * is not supported.
+         * <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         * bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * @throws NoSuchAlgorithmException the no such algorithm exception
+         * @throws UnsupportedEncodingException the unsupported encoding exception
          */
         public static String comparablePassword(String toEncode)
                 throws NoSuchAlgorithmException, UnsupportedEncodingException
@@ -4725,22 +4888,25 @@ public class SWBUtils {
          * algorithm specified by {@code digestAlgorithm}.
          * <p>Realiza la digesti&oacute;n del mensaje en {@code toEncode} utilizando
          * el algoritmo especificado por {@code digestAlgorithm}.</p>
+         * 
          * @param toEncode a string containing the message to digest
          * @param digestAlgorithm a string containing the algorithm's name to use
          * @return a string representing the received message digested with an implementation
-         *         of the specified algorithm. This string starts with the prefix "{SHA-512}".
-         *         <p>un objeto string que representa el mensaje recibido digerido
-         *         con una implementaci&oacute;n del algoritmo especificado. Este string
-         *         comienza con el prefijo "{SHA-512}".</p>
+         * of the specified algorithm. This string starts with the prefix "{SHA-512}".
+         * un objeto string que representa el mensaje recibido digerido
+         * con una implementaci&oacute;n del algoritmo especificado. Este string
+         * comienza con el prefijo "{SHA-512}".
          * @throws java.security.NoSuchAlgorithmException if there is no implementation
-         *         of the specified algorithm available in the environment.
-         *         <p>si no hay una implementaci&oacute;n del algoritmo especificado
-         *         disponible en el ambiente.</p>
+         * of the specified algorithm available in the environment.
+         * <p>si no hay una implementaci&oacute;n del algoritmo especificado
+         * disponible en el ambiente.</p>
          * @throws java.io.UnsupportedEncodingException if the character encoding
-         *         used to obtain the bytes from the message received (ISO8859-1)
-         *         is not supported.
-         *         <p>si el c&oacute;digo de caracteres utilizado para obtener los
-         *         bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * used to obtain the bytes from the message received (ISO8859-1)
+         * is not supported.
+         * <p>si el c&oacute;digo de caracteres utilizado para obtener los
+         * bytes del mensaje recibido (ISO8859-1) no es soportado.</p>
+         * @throws NoSuchAlgorithmException the no such algorithm exception
+         * @throws UnsupportedEncodingException the unsupported encoding exception
          */
         public static String comparablePassword(String toEncode, String digestAlgorithm)
                 throws NoSuchAlgorithmException, UnsupportedEncodingException
@@ -4757,14 +4923,16 @@ public class SWBUtils {
          * and a provided phrase as a password.
          * <p>Encripta informaci&oacute;n aplicando el algoritmo Advanced Encryption
          * Standard (AES) y una frase proporcionada a manera de contrase&ntilde;a.</p>
+         * 
          * @param passPhrase a string used as a password for decrypting the data afterward.
          * @param data an array of bytes containing the information to encrypt
          * @return an array of bytes containing the encrypted information.
-         *         <p>un arreglo de bytes que contiene la informaci&oacute;n encriptada.</p>
+         * 
          * @throws java.security.GeneralSecurityException if the key, derived from
-         *         {@code passPhrase}, used in the encryption process is not valid.
-         *         <p>si la llave, derivada de {@code passPhrase}, utilizada en el
-         *         proceso de encripci&oacute;n no es v&aacute;lida.</p>
+         * @throws GeneralSecurityException the general security exception
+         * {@code passPhrase}, used in the encryption process is not valid.
+         * <p>si la llave, derivada de {@code passPhrase}, utilizada en el
+         * proceso de encripci&oacute;n no es v&aacute;lida.</p>
          */
         public static byte[] PBEAES128Cipher(String passPhrase, byte[] data)
                 throws GeneralSecurityException
@@ -4790,15 +4958,17 @@ public class SWBUtils {
          * <p>Decripta informaci&oacute;n aplicando el algoritmo Advanced Encryption
          * Standard (AES) y una frase proporcionada a manera de contrase&ntilde;a, que
          * debi&oacute; ser usada durante el proceso de encriptaci&oacute;n.</p>
+         * 
          * @param passPhrase a string used as a password for decrypting the data.
-         *        This string must be the same that was used for encrypting {@code data}.
+         * This string must be the same that was used for encrypting {@code data}.
          * @param data an array of bytes containing the information to decrypt
          * @return an array of bytes containing the decrypted information.
-         *         <p>un arreglo de bytes que contiene la informaci&oacute;n decriptada.</p>
+         * 
          * @throws java.security.GeneralSecurityException if the key, derived from
-         *         {@code passPhrase}, used in the decryption process is not valid.
-         *         <p>si la llave, derivada de {@code passPhrase}, utilizada en el
-         *         proceso de decripci&oacute;n no es v&aacute;lida.</p>
+         * @throws GeneralSecurityException the general security exception
+         * {@code passPhrase}, used in the decryption process is not valid.
+         * <p>si la llave, derivada de {@code passPhrase}, utilizada en el
+         * proceso de decripci&oacute;n no es v&aacute;lida.</p>
          */
         public static byte[] PBEAES128Decipher(String passPhrase, byte[] data)
                 throws GeneralSecurityException
@@ -4819,7 +4989,8 @@ public class SWBUtils {
         }
 
         /**
-         * Generates a 512bit DH key pair for secure exchange of symetric keys
+         * Generates a 512bit DH key pair for secure exchange of symetric keys.
+         * 
          * @return a 512bit DH key pair
          */
         public static KeyPair genDH512KeyPair()
@@ -4847,6 +5018,11 @@ public class SWBUtils {
             return null;
         }
 
+        /**
+         * Storable kp.
+         * 
+         * @return the string[]
+         */
         public static String[] storableKP()
         {
             String[] llaves = new String[2];
@@ -4866,10 +5042,11 @@ public class SWBUtils {
         /**
          * Copies the elements in an {@code iterator} into an {@code arrayList}.
          * <p>Copia los elementos de un objeto {@code iterator} en un objeto {@code arrayList}.</p>
+         * 
          * @param it an {@code iterator} from which the elements will be copied.
          * @return a {@code list} formed by the same elements {@code it} has.
-         *         <p>un objeto {@code list} formado por los mismos elementos que
-         *         tiene {@code it}.</p>
+         * un objeto {@code list} formado por los mismos elementos que
+         * tiene {@code it}.
          */
         public static List copyIterator(Iterator it)
         {
@@ -4886,9 +5063,10 @@ public class SWBUtils {
          * Calculates the number of elements in an {@code iterator} and returns that number.
          * <p>Calcula el n&uacute;mero de elementos en un objeto {@code iterator}
          * y regresa ese n&uacute;mero.</p>
+         * 
          * @param it an {@code iterator} from which the number of elements will be calculated.
          * @return the number of elements in the {@code iterator} received.
-         *         <p>el n&uacute;mero de elementos en el objeto {@code iterator} recibido.</p>
+         * 
          */
         public static long sizeOf(Iterator it)
         {

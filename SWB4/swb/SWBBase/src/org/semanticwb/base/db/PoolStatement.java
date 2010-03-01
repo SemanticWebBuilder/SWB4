@@ -32,19 +32,28 @@ package org.semanticwb.base.db;
 
 import java.sql.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que sobrescribe la clase Statement para poder tener control la misma desde el Pool de conexiones.
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx) 
  */
 public class PoolStatement implements java.sql.Statement
 {
+    
+    /** The st. */
     Statement st;
+    
+    /** The closed. */
     boolean closed = false;
 
+    /** The con. */
     Connection con;
 
-    /** Creates a new instance of PoolStatement
-     * @param st 
+    /**
+     * Creates a new instance of PoolStatement.
+     * 
+     * @param st the st
+     * @param con the con
      */
     public PoolStatement(Statement st, Connection con)
     {
@@ -52,194 +61,310 @@ public class PoolStatement implements java.sql.Statement
         this.con=con;
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#addBatch(java.lang.String)
+     */
     public void addBatch(String str) throws java.sql.SQLException
     {
         st.addBatch(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#cancel()
+     */
     public void cancel() throws java.sql.SQLException
     {
         st.cancel();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#clearBatch()
+     */
     public void clearBatch() throws java.sql.SQLException
     {
         st.clearBatch();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#clearWarnings()
+     */
     public void clearWarnings() throws java.sql.SQLException
     {
         st.clearWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#close()
+     */
     public void close() throws java.sql.SQLException
     {
         closed = true;
         st.close();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String)
+     */
     public boolean execute(String str) throws java.sql.SQLException
     {
         return st.execute(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeBatch()
+     */
     public int[] executeBatch() throws java.sql.SQLException
     {
         return st.executeBatch();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeQuery(java.lang.String)
+     */
     public java.sql.ResultSet executeQuery(String str) throws java.sql.SQLException
     {
         return st.executeQuery(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String)
+     */
     public int executeUpdate(String str) throws java.sql.SQLException
     {
         return st.executeUpdate(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getConnection()
+     */
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
         return con;
         //return st.getConnection();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getFetchDirection()
+     */
     public int getFetchDirection() throws java.sql.SQLException
     {
         return st.getFetchDirection();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getFetchSize()
+     */
     public int getFetchSize() throws java.sql.SQLException
     {
         return st.getFetchSize();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMaxFieldSize()
+     */
     public int getMaxFieldSize() throws java.sql.SQLException
     {
         return st.getMaxFieldSize();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMaxRows()
+     */
     public int getMaxRows() throws java.sql.SQLException
     {
         return st.getMaxRows();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMoreResults()
+     */
     public boolean getMoreResults() throws java.sql.SQLException
     {
         return st.getMoreResults();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getQueryTimeout()
+     */
     public int getQueryTimeout() throws java.sql.SQLException
     {
         return st.getQueryTimeout();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSet()
+     */
     public java.sql.ResultSet getResultSet() throws java.sql.SQLException
     {
         return st.getResultSet();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetConcurrency()
+     */
     public int getResultSetConcurrency() throws java.sql.SQLException
     {
         return st.getResultSetConcurrency();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetType()
+     */
     public int getResultSetType() throws java.sql.SQLException
     {
         return st.getResultSetType();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getUpdateCount()
+     */
     public int getUpdateCount() throws java.sql.SQLException
     {
         return st.getUpdateCount();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getWarnings()
+     */
     public java.sql.SQLWarning getWarnings() throws java.sql.SQLException
     {
         return st.getWarnings();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setCursorName(java.lang.String)
+     */
     public void setCursorName(String str) throws java.sql.SQLException
     {
         st.setCursorName(str);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setEscapeProcessing(boolean)
+     */
     public void setEscapeProcessing(boolean param) throws java.sql.SQLException
     {
         st.setEscapeProcessing(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setFetchDirection(int)
+     */
     public void setFetchDirection(int param) throws java.sql.SQLException
     {
         st.setFetchDirection(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setFetchSize(int)
+     */
     public void setFetchSize(int param) throws java.sql.SQLException
     {
         st.setFetchSize(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setMaxFieldSize(int)
+     */
     public void setMaxFieldSize(int param) throws java.sql.SQLException
     {
         st.setMaxFieldSize(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setMaxRows(int)
+     */
     public void setMaxRows(int param) throws java.sql.SQLException
     {
         st.setMaxRows(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#setQueryTimeout(int)
+     */
     public void setQueryTimeout(int param) throws java.sql.SQLException
     {
         st.setQueryTimeout(param);
     }
 
+    /**
+     * Checks if is closed.
+     * 
+     * @return true, if is closed
+     */
     public boolean isClosed()
     {
         return closed;
     }
 
 //********************************** version 1.4
-    public boolean execute(String str, String[] str1) throws java.sql.SQLException
+    /* (non-Javadoc)
+ * @see java.sql.Statement#execute(java.lang.String, java.lang.String[])
+ */
+public boolean execute(String str, String[] str1) throws java.sql.SQLException
     {
         return st.execute(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String, int[])
+     */
     public boolean execute(String str, int[] values) throws java.sql.SQLException
     {
         return st.execute(str, values);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#execute(java.lang.String, int)
+     */
     public boolean execute(String str, int param) throws java.sql.SQLException
     {
         return st.execute(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getResultSetHoldability()
+     */
     public int getResultSetHoldability() throws java.sql.SQLException
     {
         return st.getResultSetHoldability();
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getMoreResults(int)
+     */
     public boolean getMoreResults(int param) throws java.sql.SQLException
     {
         return st.getMoreResults(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, java.lang.String[])
+     */
     public int executeUpdate(String str, String[] str1) throws java.sql.SQLException
     {
         return st.executeUpdate(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, int)
+     */
     public int executeUpdate(String str, int param) throws java.sql.SQLException
     {
         return st.executeUpdate(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#executeUpdate(java.lang.String, int[])
+     */
     public int executeUpdate(String str, int[] values) throws java.sql.SQLException
     {
         return st.executeUpdate(str, values);
     }
 
+    /* (non-Javadoc)
+     * @see java.sql.Statement#getGeneratedKeys()
+     */
     public java.sql.ResultSet getGeneratedKeys() throws java.sql.SQLException
     {
         return st.getGeneratedKeys();

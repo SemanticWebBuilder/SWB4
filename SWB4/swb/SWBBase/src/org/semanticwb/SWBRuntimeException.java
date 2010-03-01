@@ -24,6 +24,7 @@
 package org.semanticwb;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * A specialization of {@code RuntimeException} for the SemanticWebBuilder API.
  * <p>Una especializaci&oacute;n de {@code RuntimeException} para el API de SemanticWebBuilder.</p>
@@ -33,6 +34,9 @@ public class SWBRuntimeException extends RuntimeException
 {
 
 
+    /**
+     * Instantiates a new sWB runtime exception.
+     */
     public SWBRuntimeException()
     {
         super();

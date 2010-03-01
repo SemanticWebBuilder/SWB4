@@ -79,15 +79,29 @@ package org.semanticwb.base.util.parser.html;
 
 import java.io.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ParserThread.
+ */
 class ParserThread extends Thread
 {
+    
+    /** The parser. */
     HTMLParser parser;
 
+    /**
+     * Instantiates a new parser thread.
+     * 
+     * @param p the p
+     */
     ParserThread(HTMLParser p)
     {
         parser = p;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Thread#run()
+     */
     public void run()
     {				  // convert pipeOut to pipeIn
         try

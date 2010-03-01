@@ -29,6 +29,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.image.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * GIFEncoder is a class which takes an image and saves it to a stream
  * using the GIF file format (<A
@@ -76,8 +77,13 @@ import java.awt.image.*;
  */
 public class GIFEncoder {
 
+    /** The height_. */
     short width_, height_;
+    
+    /** The num colors_. */
     int numColors_;
+    
+    /** The colors_. */
     byte pixels_[], colors_[];
     //ScreenDescriptor sd_;
     //ImageDescriptor id_;
@@ -85,13 +91,14 @@ public class GIFEncoder {
     /**
      * Construct a GIFEncoder. The constructor will convert the image to
      * an indexed color array. <B>This may take some time.</B><P>
-     *
+     * 
      * @param image The image to encode. The image <B>must</B> be
      * completely loaded.
+     * @throws AWTException the aWT exception
      * @exception AWTException Will be thrown if the pixel grab fails. This
      * can happen if Java runs out of memory. It may also indicate that the image
      * contains more than 256 colors.
-     * */
+     */
     public GIFEncoder(Image image) throws AWTException
     {
         width_ = (short) image.getWidth(null);
@@ -123,18 +130,18 @@ public class GIFEncoder {
     /**
      * Construct a GIFEncoder. The constructor will convert the image to
      * an indexed color array. <B>This may take some time.</B><P>
-     *
+     * 
      * Each array stores intensity values for the image. In other words,
      * r[x][y] refers to the red intensity of the pixel at column x, row
      * y.<P>
-     *
+     * 
      * @param r An array containing the red intensity values.
      * @param g An array containing the green intensity values.
      * @param b An array containing the blue intensity values.
-     *
+     * @throws AWTException the aWT exception
      * @exception AWTException Will be thrown if the image contains more than
      * 256 colors.
-     * */
+     */
     public GIFEncoder(byte r[][], byte g[][], byte b[][]) throws AWTException
     {
         width_ = (short) (r.length);
@@ -143,13 +150,17 @@ public class GIFEncoder {
         ToIndexedColor(r, g, b);
     }
 
-    /*********************************************************************
-     * @param  values
-     *   An array of 24-bit color values.  The length of values[]
-     *   must be width * height.  There must be 256 colors or less.
+    /**
+     * *******************************************************************.
+     * 
+     * @param width the width
+     * @param height the height
+     * @param values the values
+     * @throws AWTException the aWT exception
      * @author
-     *   <A HREF="http://www.alumni.caltech.edu/~croft/">David W. Croft</A>
-     *********************************************************************/
+     * <A HREF="http://www.alumni.caltech.edu/~croft/">David W. Croft</A>
+     * *******************************************************************
+     */
     public GIFEncoder(
             short width,
             short height,
@@ -169,12 +180,12 @@ public class GIFEncoder {
      * Writes the image out to a stream in the GIF file format. This will
      * be a single GIF87a image, non-interlaced, with no background color.
      * <B>This may take some time.</B><P>
-     *
+     * 
      * @param output The stream to output to. This should probably be a
      * buffered stream.
-     *
+     * @throws IOException Signals that an I/O exception has occurred.
      * @exception IOException Will be thrown if a write operation fails.
-     * */
+     */
     public void Write(OutputStream output) throws IOException
     {
         BitUtils.WriteString(output, "GIF87a");
@@ -203,6 +214,14 @@ public class GIFEncoder {
         output.flush();
     }
 
+    /**
+     * To indexed color.
+     * 
+     * @param r the r
+     * @param g the g
+     * @param b the b
+     * @throws AWTException the aWT exception
+     */
     void ToIndexedColor(byte r[][], byte g[][],
             byte b[][]) throws AWTException
     {
@@ -246,17 +265,23 @@ public class GIFEncoder {
         colors_ = copy;
     }
 
-    /*********************************************************************
+    /**
+     * *******************************************************************
      * Loads the values of three 8-bit arrays (red, green, blue) of
      * arrays ([ width ] [ height ]) with the masked values from a
      * 24-bit color array of length width * height.
-     *
-     * @param  values
-     *   An array of 24-bit color values.  The length of values[]
-     *   must be width * height.  There must be 256 colors or less.
+     * 
+     * @param width the width
+     * @param height the height
+     * @param values the values
+     * @param r the r
+     * @param g the g
+     * @param b the b
+     * @throws AWTException the aWT exception
      * @author
-     *   <A HREF="http://www.alumni.caltech.edu/~croft/">David W. Croft</A>
-     *********************************************************************/
+     * <A HREF="http://www.alumni.caltech.edu/~croft/">David W. Croft</A>
+     * *******************************************************************
+     */
     public static void toRGB(
             short width,
             short height,
