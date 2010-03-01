@@ -28,13 +28,27 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PasswordUpdate.
+ */
 public class PasswordUpdate extends PasswordUpdateBase {
+    
+    /** The Constant passphrase. */
     private static final String passphrase = "{MD5}tq5RXfs6DGIXD6dlHUgeQA==";
 
+    /**
+     * Instantiates a new password update.
+     * 
+     * @param base the base
+     */
     public PasswordUpdate(SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -53,11 +67,33 @@ public class PasswordUpdate extends PasswordUpdateBase {
         return ret;
     }
 
+    /**
+     * Render iphone.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderIphone(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                String mode, String lang) {
         return "";
     }
 
+    /**
+     * Render xhtml.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                               String mode, String lang) {
         String         ret      = "";
@@ -121,6 +157,9 @@ public class PasswordUpdate extends PasswordUpdateBase {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         if (prop.isDataTypeProperty()) {
