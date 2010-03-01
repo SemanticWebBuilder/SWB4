@@ -29,18 +29,33 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Images.
+ */
 public class Images extends org.semanticwb.model.comm.base.ImagesBase 
 {
 
+    /**
+     * Instantiates a new images.
+     */
     public Images()
     {
     }
 
+    /**
+     * Instantiates a new images.
+     * 
+     * @param base the base
+     */
     public Images(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

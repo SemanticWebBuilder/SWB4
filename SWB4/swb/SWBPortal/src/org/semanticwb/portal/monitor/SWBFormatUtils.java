@@ -26,17 +26,35 @@ package org.semanticwb.portal.monitor;
 
 import java.text.DateFormat;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBFormatUtils.
+ * 
  * @author serch
  */
 public class SWBFormatUtils {
+    
+    /** The Constant SEGUNDO. */
     final static long SEGUNDO = 1000;
+    
+    /** The Constant MINUTO. */
     final static long MINUTO = 60 * SEGUNDO;
+    
+    /** The Constant HORA. */
     final static long HORA   = 60 * MINUTO;
+    
+    /** The Constant DIA. */
     final static long DIA    = 24 * HORA;
+    
+    /** The df. */
     private static DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
 
+    /**
+     * Format time.
+     * 
+     * @param t the t
+     * @return the string
+     */
     static String formatTime(long t) {
         String str;
         if (t < 1 * MINUTO) {
@@ -61,14 +79,32 @@ public class SWBFormatUtils {
         return str;
     }
 
+    /**
+     * Format date.
+     * 
+     * @param time the time
+     * @return the string
+     */
     static synchronized String formatDate(long time){
         return df.format(time);
     }
 
+    /**
+     * Format long.
+     * 
+     * @param value the value
+     * @return the string
+     */
     static String formatLong(long value) {
 	return String.format("%,d", value);
     }
 
+    /**
+     * Format millis.
+     * 
+     * @param ms the ms
+     * @return the string
+     */
     static String formatMillis(long ms)
     {
         return String.format("%.4fsec", ms / 1000d);

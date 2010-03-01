@@ -45,6 +45,7 @@ import java.util.*;
 import java.io.*;
 
 
+// TODO: Auto-generated Javadoc
 /** Recurso de administraci�n de WebBuilder que monitorea el uso de memoria de la
  * aplicaci�n, su memoria m�xima, la memoria total, la memoria utilizada y la
  * memoria disponible. Permite tambi�n llamar al colector de basura.
@@ -57,16 +58,20 @@ import java.io.*;
 public class SWBAMMemory extends GenericResource {
 
     
-    /** Creates a new instance of WBAMemory */
+    /**
+     * Creates a new instance of WBAMemory.
+     */
     public SWBAMMemory() {
     }
     
     
     /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processAction(HttpServletRequest request,
@@ -80,12 +85,14 @@ public class SWBAMMemory extends GenericResource {
     }
     
    /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
-     */    
+    * Do view.
+    * 
+    * @param request the request
+    * @param response the response
+    * @param paramsRequest the params request
+    * @throws SWBResourceException the sWB resource exception
+    * @throws IOException Signals that an I/O exception has occurred.
+    */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -129,12 +136,14 @@ public class SWBAMMemory extends GenericResource {
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Gets the data.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the data
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
@@ -187,11 +196,13 @@ public class SWBAMMemory extends GenericResource {
     
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processRequest(HttpServletRequest request,

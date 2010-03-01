@@ -48,16 +48,26 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.XmlBundle;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GenericXformsResource.
+ * 
  * @author jorge.jimenez
  */
 public class GenericXformsResource extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GenericXformsResource.class);
+    
+    /** The bundles. */
     static Hashtable bundles = new Hashtable();
+    
+    /** The bundle. */
     XmlBundle bundle = null;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
@@ -85,6 +95,14 @@ public class GenericXformsResource extends GenericResource {
         }
     }
 
+    /**
+     * Load xform.
+     * 
+     * @param className the class name
+     * @param name the name
+     * @param lang the lang
+     * @return the string
+     */
     public String loadXform(String className, String name, String lang) {
         bundle = (XmlBundle) bundles.get(name);
         if (bundle == null) {
@@ -96,6 +114,9 @@ public class GenericXformsResource extends GenericResource {
         return bundle.getBundle(name, new java.util.Locale(lang));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("loadInstance")) {
@@ -109,6 +130,10 @@ public class GenericXformsResource extends GenericResource {
 
     /**
      * Carga instancia, ya sea la de inicio o una ya grabada en BD del recurso en cuestión.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      */
     public void doLoadInstance(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {
         try {
@@ -128,8 +153,12 @@ public class GenericXformsResource extends GenericResource {
     }
 
     /**
-     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
-     **/
+     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String initViewModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         String instanceName = getClass().getName() + "_V_inst";
@@ -140,8 +169,12 @@ public class GenericXformsResource extends GenericResource {
     }
 
     /**
-     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
-     **/
+     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String initAdminModel(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         Resource base = getResourceBase();
@@ -169,8 +202,12 @@ public class GenericXformsResource extends GenericResource {
     }
 
     /**
-     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale
-     **/
+     * Metodo que proporciona una instancia de inicio para el recurso xForms, busca un archivo NombreClase_inst_locale.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String initAdminModelFromFile(HttpServletRequest request, SWBParamRequest paramsRequest) // Inicializa el modelo de la forma, puede leerse de un archivo xml
     {
         String instanceName = getClass().getName() + "_inst";
@@ -180,16 +217,31 @@ public class GenericXformsResource extends GenericResource {
         return bundle.getBundle(instanceName, new java.util.Locale(paramsRequest.getUser().getLanguage()));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         doMethod(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         doMethod(request, response, paramRequest);
     }
 
+    /**
+     * Do method.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doMethod(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String xml = null;
         String replaceVal = null;
@@ -232,6 +284,13 @@ public class GenericXformsResource extends GenericResource {
         }
     }
 
+    /**
+     * Configx forms.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     */
     private void configxForms(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {
         HttpSession session = request.getSession(true);
         request.setAttribute(WebFactory.SCRIPTED, "true");
@@ -287,6 +346,13 @@ public class GenericXformsResource extends GenericResource {
         log.info("End Render XForm Servlet");
     }
 
+    /**
+     * Do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {
         try {
             request.setAttribute("wbmode", request.getParameter("wbmode"));
@@ -327,10 +393,26 @@ public class GenericXformsResource extends GenericResource {
         }
     }
 
+    /**
+     * Save data.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @param dom the dom
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void saveData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, Document dom) throws SWBResourceException, IOException {
         response.getOutputStream().println(processData(dom));
     }
 
+    /**
+     * Process data.
+     * 
+     * @param dom the dom
+     * @return the string
+     */
     public String processData(Document dom) {
         Resource base = getResourceBase();
         String data = null;
@@ -381,6 +463,11 @@ public class GenericXformsResource extends GenericResource {
         return data;
     }
 
+    /**
+     * Upload files.
+     * 
+     * @param doc the doc
+     */
     private void uploadFiles(Document doc) {
         Resource resource = getResourceBase();
         NodeList nListUploads = doc.getFirstChild().getChildNodes();
@@ -431,6 +518,17 @@ public class GenericXformsResource extends GenericResource {
         }
     }
 
+    /**
+     * Sets the data.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @param xformsFiles the xforms files
+     * @param action the action
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void setData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, String xformsFiles, String action) throws SWBResourceException, IOException {
         //Carga archivo xml de formulario y lo agrega como atributo del request
         request.setAttribute("xformsDoc", SWBUtils.XML.xmlToDom(loadXform(getClass().getName(), xformsFiles, paramsRequest.getUser().getLanguage())));
@@ -441,7 +539,12 @@ public class GenericXformsResource extends GenericResource {
     }
     //TODO: PASAR LOS SIGUIENTES METODOS A SWBUitls en version SWB 4.0
     /**
-     * Comvierte un Node a Document
+     * Comvierte un Node a Document.
+     * 
+     * @param node the node
+     * @return the document
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private Document toDocument(Node node) throws SWBResourceException, IOException {
         // ensure xerces dom
@@ -458,7 +561,11 @@ public class GenericXformsResource extends GenericResource {
     }
 
     /**
-     * Comvierte un Node a Document
+     * Comvierte un Node a Document.
+     * 
+     * @return the document builder
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private DocumentBuilder getDocumentBuilder() throws SWBResourceException, IOException {
         // ensure xerces dom

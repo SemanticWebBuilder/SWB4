@@ -37,13 +37,18 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Menu.
+ * 
  * @author Jei
  */
 public class Menu extends GenericResource
 {
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {

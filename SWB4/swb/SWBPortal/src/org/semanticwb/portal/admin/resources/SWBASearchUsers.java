@@ -40,23 +40,31 @@ import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBASearchUsers.
+ * 
  * @author juan.fernandez
  */
 public class SWBASearchUsers extends GenericResource
 {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBASearchUsers.class);
+    
+    /** The pagezise. */
     private int pagezise = 10;
 
     /**
-     *
+     * Instantiates a new sWBA search users.
      */
     public SWBASearchUsers()
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
@@ -151,12 +159,13 @@ public class SWBASearchUsers extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do search.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doSearch(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
@@ -229,12 +238,13 @@ public class SWBASearchUsers extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do json data.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doJsonData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -288,12 +298,13 @@ public class SWBASearchUsers extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do roles.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRoles(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
@@ -314,12 +325,13 @@ public class SWBASearchUsers extends GenericResource
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do groups.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGroups(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException
@@ -1067,7 +1079,10 @@ public class SWBASearchUsers extends GenericResource
 //        return bOk;
 //    }
 //
-    @Override
+    /* (non-Javadoc)
+ * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+ */
+@Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
 

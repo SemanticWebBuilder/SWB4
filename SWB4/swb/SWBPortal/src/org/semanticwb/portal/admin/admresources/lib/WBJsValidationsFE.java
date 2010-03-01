@@ -25,6 +25,7 @@
 
 package org.semanticwb.portal.admin.admresources.lib;
 
+// TODO: Auto-generated Javadoc
 /**
  * Interface que determina los metodos a implementar por los objetos de tipo validaci�n de JavaScript
  * <p>
@@ -36,17 +37,53 @@ package org.semanticwb.portal.admin.admresources.lib;
 public interface WBJsValidationsFE
 {
 
+    /**
+     * Sets the form fe name.
+     * 
+     * @param s the new form fe name
+     */
     public abstract void setFormFEName(String s);
 
+    /**
+     * Sets the field.
+     * 
+     * @param s the new field
+     */
     public abstract void setField(String s);
 
+    /**
+     * Sets the minsize.
+     * 
+     * @param i the new minsize
+     */
     public abstract void setMinsize(int i);
 
+    /**
+     * Gets the form fe name.
+     * 
+     * @return the form fe name
+     */
     public abstract String getFormFEName();
 
+    /**
+     * Gets the field.
+     * 
+     * @return the field
+     */
     public abstract String getField();
 
+    /**
+     * Gets the minsize.
+     * 
+     * @return the minsize
+     */
     public abstract int getMinsize();
 
+    /**
+     * Gets the html.
+     * 
+     * @param locale the locale
+     * @return the html
+     */
     public abstract String getHtml(java.util.Locale locale);
 }

@@ -36,6 +36,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que escanea un DOM y extrae sus elementos
  * Object that scanner a DOM and get its elements
@@ -55,21 +56,39 @@ import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
  */
 public class AdmResourceScanner 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(AdmResourceScanner.class);
     
     
+    /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
+    
+    /** The indom. */
     org.w3c.dom.Document indom;
+    
+    /** The outdom. */
     org.w3c.dom.Document outdom;
+    
+    /** The frmroot. */
     org.w3c.dom.Node     frmroot;
+    
+    /** The frmnode. */
     org.w3c.dom.Node     frmnode;
+    
+    /** The frmelement. */
     org.w3c.dom.Element  frmelement;
+    
+    /** The str error. */
     String strError="";
+    
+    /** The b error. */
     boolean bError=false;
 
-    /** Create new AdmResourceScanner with org.w3c.dom.Document.
+    /**
+     * Create new AdmResourceScanner with org.w3c.dom.Document.
+     * 
      * @param xml       XML
-     * @param outdom    Output Document
      */
     public AdmResourceScanner(String xml) {
         try
@@ -90,15 +109,21 @@ public class AdmResourceScanner
         this.outdom=SWBUtils.XML.getNewDocument();
     }
     
-    /** Create new AdmResourceScanner with org.w3c.dom.Document.
-     * @param indom     Input Document
+    /**
+     * Create new AdmResourceScanner with org.w3c.dom.Document.
+     * 
+     * @param indocument the indocument
      */
     public AdmResourceScanner(org.w3c.dom.Document indocument) {
         this.indom=indocument;
         outdom=SWBUtils.XML.getNewDocument();
     }
    
-    /** Scan through org.w3c.dom.Document document. */
+    /**
+     * Scan through org.w3c.dom.Document document.
+     * 
+     * @return true, if successful
+     */
     public boolean visitDocument()
     {
         org.w3c.dom.Element element=null;
@@ -107,14 +132,21 @@ public class AdmResourceScanner
         return bError;
     }
 
-    /** Return org.w3c.dom.Document document. */
+    /**
+     * Return org.w3c.dom.Document document.
+     * 
+     * @return the out document
+     */
     public org.w3c.dom.Document getOutDocument()
     {
         return this.outdom;
     }
     
-    /** Scan through org.w3c.dom.Element named 
+    /**
+     * Scan through org.w3c.dom.Element named
      * ADMRESOURCE.
+     * 
+     * @param element the element
      */
     void visitAdmResource(org.w3c.dom.Element element) 
     {
@@ -166,8 +198,11 @@ public class AdmResourceScanner
         }
     }
 
-    /** Scan through org.w3c.dom.Element named 
+    /**
+     * Scan through org.w3c.dom.Element named
      * XSLFILE.
+     * 
+     * @param element the element
      */
     void visitXslFile(org.w3c.dom.Element element) 
     {
@@ -199,8 +234,11 @@ public class AdmResourceScanner
         }
     }
     
-    /** Scan through org.w3c.dom.Element named 
+    /**
+     * Scan through org.w3c.dom.Element named
      * FORM.
+     * 
+     * @param element the element
      */
     void visitForm(org.w3c.dom.Element element) 
     {
@@ -276,8 +314,12 @@ public class AdmResourceScanner
             }
         }
     }
-    /** Scan through org.w3c.dom.Element named 
-     * ADMDBCONNMGR. 
+    
+    /**
+     * Scan through org.w3c.dom.Element named
+     * ADMDBCONNMGR.
+     * 
+     * @param element the element
      */
     void visitAdmDBConnMgr(org.w3c.dom.Element element) 
     { 
@@ -323,8 +365,11 @@ public class AdmResourceScanner
         this.frmnode.appendChild(appendChild(element));
     }
     
-    /** Scan through org.w3c.dom.Element named 
-     * READONLY. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * READONLY.
+     * 
+     * @param element the element
      */
     void visitReadonly(org.w3c.dom.Element element) 
     { 
@@ -373,8 +418,11 @@ public class AdmResourceScanner
         this.frmnode.appendChild(appendChild(element));
     }
 
-    /** Scan through org.w3c.dom.Element named 
-     * IMG. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * IMG.
+     * 
+     * @param element the element
      */
     void visitImg(org.w3c.dom.Element element) 
     { 
@@ -432,8 +480,11 @@ public class AdmResourceScanner
         this.frmnode.appendChild(appendChild(element));
     }
     
-    /** Scan through org.w3c.dom.Element named
-     * INPUT. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * INPUT.
+     * 
+     * @param element the element
      */
     void visitInput(org.w3c.dom.Element element) 
     {
@@ -560,8 +611,11 @@ public class AdmResourceScanner
         this.frmnode.appendChild(appendChild(element));
     }
 
-    /** Scan through org.w3c.dom.Element named 
-     * SELECT. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * SELECT.
+     * 
+     * @param element the element
      */
     void visitSelect(org.w3c.dom.Element element) 
     {
@@ -639,8 +693,11 @@ public class AdmResourceScanner
         this.frmnode.appendChild(this.frmelement);
     }
 
-    /** Scan through org.w3c.dom.Element named 
-     * OPTION. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * OPTION.
+     * 
+     * @param element the element
      */
     void visitOption(org.w3c.dom.Element element) 
     { 
@@ -706,8 +763,11 @@ public class AdmResourceScanner
         this.frmelement.appendChild(childElement);
     }
     
-    /** Scan through org.w3c.dom.Element named 
-     * TEXTAREA. 
+    /**
+     * Scan through org.w3c.dom.Element named
+     * TEXTAREA.
+     * 
+     * @param element the element
      */
     void visitTextarea(org.w3c.dom.Element element) 
     {
@@ -770,6 +830,12 @@ public class AdmResourceScanner
         this.frmnode.appendChild(appendChild(element));
     }
 
+    /**
+     * Eval core attributes.
+     * 
+     * @param attr the attr
+     * @return true, if successful
+     */
     boolean evalCoreAttributes(org.w3c.dom.Attr attr)
     {
         String[] coreAttrs = {"class","style","moreattr"};
@@ -791,6 +857,12 @@ public class AdmResourceScanner
         return bOk;
     }
 
+    /**
+     * Eval wb script attributes.
+     * 
+     * @param attr the attr
+     * @return true, if successful
+     */
     boolean evalWBScriptAttributes(org.w3c.dom.Attr attr)
     {
         String[] wbscriptAttrs = {"jsrequired","minsize","jsvaltype","jsvalidchars","isvalidchars","isshowchars"};
@@ -827,6 +899,12 @@ public class AdmResourceScanner
         return bOk;
     }    
     
+    /**
+     * Append child.
+     * 
+     * @param element the element
+     * @return the org.w3c.dom. element
+     */
     org.w3c.dom.Element appendChild(org.w3c.dom.Element element)
     {
         org.w3c.dom.NodeList nodes = element.getChildNodes();

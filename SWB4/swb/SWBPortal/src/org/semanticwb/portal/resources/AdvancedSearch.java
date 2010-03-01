@@ -72,28 +72,59 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericAdmResource;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class AdvancedSearch.
+ * 
  * @author Hasdai Pacheco {haxdai(at)gmail.com}
  */
 public class AdvancedSearch extends GenericAdmResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(AdvancedSearch.class);
+    
+    /** The lang. */
     private String lang = "x-x";
+    
+    /** The lex. */
     private SWBDictionary lex;
+    
+    /** The tr. */
     private SWBSparqlTranslator tr;
+    
+    /** The so_lat. */
     private SemanticProperty so_lat = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#latitude");
+    
+    /** The so_long. */
     private SemanticProperty so_long = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/emexcatalog.owl#longitude");
+    
+    /** The org. */
     private SemanticClass org = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/emexcatalog.owl#Organisation");
+    
+    /** The solutions. */
     private ArrayList<String> solutions = null;
+    
+    /** The query string. */
     private String queryString = "";
+    
+    /** The dym. */
     private String dym = "";
+    
+    /** The index. */
     private IndexLARQ index;
+    
+    /** The smodel. */
     private Model smodel;
 
+    /**
+     * Instantiates a new advanced search.
+     */
     public AdvancedSearch() {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
@@ -105,6 +136,9 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }    
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -121,7 +155,9 @@ public class AdvancedSearch extends GenericAdmResource {
      * Execute a query and gather the results. A natural language query is done
      * in first place. If there is no results a second query (using lucene) is
      * executed.
-     * @param query
+     * 
+     * @param query the query
+     * @return the results
      */
     public ArrayList<String> getResults(String query) {
         ArrayList<String> res = new ArrayList<String>();
@@ -250,6 +286,9 @@ public class AdvancedSearch extends GenericAdmResource {
         return res;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl();
@@ -616,6 +655,15 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }
 
+    /**
+     * Do suggest.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doSuggest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuffer sbf = new StringBuffer();
@@ -779,6 +827,15 @@ public class AdvancedSearch extends GenericAdmResource {
         out.println(sbf.toString());
     }
 
+    /**
+     * Do show page.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doShowPage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL rUrl = paramRequest.getRenderUrl().setMode("PAGE");
         PrintWriter out = response.getWriter();
@@ -863,6 +920,15 @@ public class AdvancedSearch extends GenericAdmResource {
         }
     }
 
+    /**
+     * Do show results.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doShowResults(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         queryString = request.getParameter("q");
 
@@ -877,7 +943,9 @@ public class AdvancedSearch extends GenericAdmResource {
 
     /**
      * Gathers information of a Semantic Object.
+     * 
      * @param o Semantic Object to gather information from.
+     * @return the string
      */
     public String buildAbstract(SemanticObject o) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -932,6 +1000,8 @@ public class AdvancedSearch extends GenericAdmResource {
 
     /**
      * Builds an index to perform searchs.
+     * 
+     * @return the index larq
      */
     public IndexLARQ buildIndex()
     {
@@ -949,6 +1019,12 @@ public class AdvancedSearch extends GenericAdmResource {
         return index ;
     }
 
+    /**
+     * Gets the open text results.
+     * 
+     * @param q the q
+     * @return the open text results
+     */
     public ArrayList<String> getOpenTextResults(String q) {
         ArrayList<String> res = new ArrayList<String>();
 

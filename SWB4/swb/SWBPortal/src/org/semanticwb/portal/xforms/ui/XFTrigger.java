@@ -37,24 +37,43 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.xforms.ElementsProp;
 import org.semanticwb.xforms.ui.action.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFTrigger.
+ * 
  * @author  jorge.jimenez
  */
 public class XFTrigger extends WBXformsContainer 
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(XFTrigger.class);
+    
+    /** The appearance. */
     protected String appearance=null;    
+    
+    /** The elements prop. */
     protected ElementsProp elementsProp=null;
     
+    /** The instance elements. */
     HashMap instanceElements=new HashMap();
     
+    /**
+     * Instantiates a new xF trigger.
+     * 
+     * @param elementsProp the elements prop
+     */
     public XFTrigger(ElementsProp elementsProp){
         this.elementsProp=elementsProp;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF trigger.
+     * 
+     * @param elementsProp the elements prop
+     * @param instanceElements the instance elements
+     */
     public XFTrigger(ElementsProp elementsProp,HashMap instanceElements){
         this.elementsProp=elementsProp;
         this.instanceElements=instanceElements;
@@ -63,16 +82,29 @@ public class XFTrigger extends WBXformsContainer
     
     // Sets
     
+    /**
+     * Sets the appearance.
+     * 
+     * @param appearance the new appearance
+     */
     public void setAppearance(String appearance) {
         this.appearance=appearance;
     }
     
     // Gets
     
+    /**
+     * Gets the appearance.
+     * 
+     * @return the appearance
+     */
     public String getAppearance() {
         return appearance;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(elementsProp.getId()!=null) {
             id=elementsProp.getId();
@@ -97,6 +129,9 @@ public class XFTrigger extends WBXformsContainer
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -131,11 +166,17 @@ public class XFTrigger extends WBXformsContainer
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

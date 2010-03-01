@@ -42,23 +42,37 @@ import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.Indexable;
 import org.semanticwb.model.SWBModel;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBIndexMgr.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBIndexMgr implements SWBAppObject
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBIndexMgr.class);
 
+    /** The indexers. */
     private HashMap<String, SWBIndexer> indexers=new HashMap();
+    
+    /** The prop. */
     private Properties prop;   
+    
+    /** The default indexer. */
     private String defaultIndexer="swb";
     
+    /** The timer. */
     private Timer timer = null;
+    
+    /** The lastupdate. */
     private Timestamp lastupdate;
 
     
-    /** Creates a new instance of WBIndexMgr */
+    /**
+     * Creates a new instance of WBIndexMgr.
+     */
     public SWBIndexMgr()
     {
         this.lastupdate = new Timestamp(new java.util.Date().getTime());
@@ -72,12 +86,18 @@ public class SWBIndexMgr implements SWBAppObject
         //init();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#destroy()
+     */
     public void destroy()
     {
         timer.cancel();
         log.event("Webbuilder SWBIndexMgr Stoped");
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#init()
+     */
     public void init()
     {
         if(SWBPortal.isClient())return;
@@ -265,6 +285,9 @@ public class SWBIndexMgr implements SWBAppObject
     }    
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#refresh()
+     */
     public void refresh()
     {
     }
@@ -278,11 +301,23 @@ public class SWBIndexMgr implements SWBAppObject
         return indexers;
     }
     
+    /**
+     * Gets the indexer.
+     * 
+     * @param name the name
+     * @return the indexer
+     */
     public SWBIndexer getIndexer(String name)
     {
         return (SWBIndexer)indexers.get(name);
     }    
     
+    /**
+     * Gets the model indexer.
+     * 
+     * @param model the model
+     * @return the model indexer
+     */
     public SWBIndexer getModelIndexer(SWBModel model)
     {
         SWBIndexer ret=null;
@@ -303,6 +338,11 @@ public class SWBIndexMgr implements SWBAppObject
         return ret;
     }        
 
+    /**
+     * Gets the default indexer.
+     * 
+     * @return the default indexer
+     */
     public SWBIndexer getDefaultIndexer()
     {
         return (SWBIndexer)indexers.get(defaultIndexer);

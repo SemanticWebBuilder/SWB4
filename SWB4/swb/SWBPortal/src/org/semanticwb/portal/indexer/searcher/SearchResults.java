@@ -15,22 +15,40 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.indexer.parser.GenericParser;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SearchResults.
+ * 
  * @author Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SearchResults
 {
+    
+    /** The docs. */
     private TreeSet<SearchDocument> docs = null;
+    
+    /** The m_user. */
     private User m_user = null;
 
+    /** The page length. */
     private int pageLength=10;
     
+    /**
+     * Instantiates a new search results.
+     * 
+     * @param user the user
+     */
     public SearchResults (User user)
     {
         this(user,null);
     }
     
+    /**
+     * Instantiates a new search results.
+     * 
+     * @param user the user
+     * @param comparator the comparator
+     */
     public SearchResults (User user, Comparator comparator)
     {
         m_user=user;
@@ -43,6 +61,11 @@ public class SearchResults
         }
     }
 
+    /**
+     * Adds the.
+     * 
+     * @param doc the doc
+     */
     public void add(SearchDocument doc)
     {
         //System.out.println("add:"+doc.getURI());
@@ -58,14 +81,30 @@ public class SearchResults
         }
     }
 
+    /**
+     * Size.
+     * 
+     * @return the int
+     */
     public int size() {
         return docs.size();
     }
 
+    /**
+     * List documents.
+     * 
+     * @return the iterator
+     */
     public Iterator<SearchDocument> listDocuments () {
         return docs.iterator();
     }
 
+    /**
+     * List documents.
+     * 
+     * @param page the page
+     * @return the iterator
+     */
     public Iterator<SearchDocument> listDocuments (int page)
     {
         ArrayList arr=new ArrayList();

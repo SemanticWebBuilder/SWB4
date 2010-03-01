@@ -29,6 +29,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo Reset.
  * <p>
@@ -38,18 +39,33 @@ import org.w3c.dom.*;
 
 public class ResetFE extends ButtonFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ResetFE.class);
     
     
+    /**
+     * Instantiates a new reset fe.
+     */
     public ResetFE()
     {
     }
 
+    /**
+     * Instantiates a new reset fe.
+     * 
+     * @param value the value
+     */
     public ResetFE(String value)
     {
         this.value = value;
     }
 
+    /**
+     * Instantiates a new reset fe.
+     * 
+     * @param tag the tag
+     */
     public ResetFE(Node tag)
     {
         this.tag = tag;
@@ -57,9 +73,11 @@ public class ResetFE extends ButtonFE
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */  
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */  
     public String getHtml()
     {
         String xml="";

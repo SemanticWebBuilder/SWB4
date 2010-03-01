@@ -54,6 +54,7 @@ import java.util.regex.Pattern;
 
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Demonstrates authenticated YouTube Data API operations using the Java client
  * library.
@@ -72,42 +73,28 @@ public class YouTubeWriteClient {
   public static final String YOUTUBE_GDATA_SERVER = "http://gdata.youtube.com";
 
 
-  /**
-   * The URL of the videos feed
-   */
+  /** The URL of the videos feed. */
   public static final String VIDEOS_FEED = YOUTUBE_GDATA_SERVER
       + "/feeds/api/videos";
 
-  /**
-   * The prefix of the user feeds
-   */
+  /** The prefix of the user feeds. */
   public static final String USER_FEED_PREFIX = YOUTUBE_GDATA_SERVER
       + "/feeds/api/users/";
   
-  /**
-   * The prefix of recent activity feeds
-   */
+  /** The prefix of recent activity feeds. */
   public static final String ACTIVITY_FEED_PREFIX = YOUTUBE_GDATA_SERVER
       + "/feeds/api/events";
 
-  /**
-   * The URL suffix of the test user's uploads feed
-   */
+  /** The URL suffix of the test user's uploads feed. */
   public static final String UPLOADS_FEED_SUFFIX = "/uploads";
 
-  /**
-   * The URL suffix of the test user's favorites feed
-   */
+  /** The URL suffix of the test user's favorites feed. */
   public static final String FAVORITES_FEED_SUFFIX = "/favorites";
 
-  /**
-   * The URL suffix of the test user's playlists feed
-   */
+  /** The URL suffix of the test user's playlists feed. */
   public static final String PLAYLISTS_FEED_SUFFIX = "/playlists";
   
-  /**
-   * The URL suffix of the friends activity feed
-   */
+  /** The URL suffix of the friends activity feed. */
   public static final String FRIENDS_ACTIVITY_FEED_SUFFIX = "/friendsactivity";
 
   /**
@@ -120,22 +107,28 @@ public class YouTubeWriteClient {
    */
   public static final String DEFAULT_VIDEO_ID = "scoMN8DYkCw";
 
-  /**
-   * The URL used to upload video
-   */
+  /** The URL used to upload video. */
   public static final String VIDEO_UPLOAD_FEED = 
       "http://uploads.gdata.youtube.com/feeds/api/users/"
       + DEFAULT_USER + "/uploads";
 
   /**
-   * Enum to deal with various playlist operations: 
-   *    VIEW = print user's playlists 
-   *    LIST = print contents of a playlist 
-   *    CREATE = create new playlist
-   *    ADD = add video to playlist
+   * Enum to deal with various playlist operations:
+   * VIEW = print user's playlists
+   * LIST = print contents of a playlist
+   * CREATE = create new playlist
+   * ADD = add video to playlist.
    */
   private enum PlaylistOperation {
-    VIEW, LIST, CREATE, ADD
+    
+    /** The VIEW. */
+    VIEW, 
+ /** The LIST. */
+ LIST, 
+ /** The CREATE. */
+ CREATE, 
+ /** The ADD. */
+ ADD
   }
 
   /**
@@ -241,8 +234,8 @@ public class YouTubeWriteClient {
   /**
    * Reads a line of text from the standard input.
    * 
-   * @throws IOException If unable to read a line from the standard input.
    * @return A line of text read from the standard input.
+   * @throws IOException If unable to read a line from the standard input.
    */
   private static String readLine() throws IOException {
     return bufferedReader.readLine();
@@ -252,8 +245,8 @@ public class YouTubeWriteClient {
    * Reads a line of text from the standard input and returns the parsed
    * integer representation.
    * 
-   * @throws IOException If unable to read a line from the standard input.
    * @return An integer read from the standard input.
+   * @throws IOException If unable to read a line from the standard input.
    */
   private static int readInt() throws IOException {
     String input = readLine();
@@ -326,9 +319,9 @@ public class YouTubeWriteClient {
    * Displays a user's playlists and lets the user manipulate them.
    * 
    * @param service A YouTubeService object.
-   * @throws IOExcep
-   * tion Error sending request or reading the feed.
+   * @throws IOExcep tion Error sending request or reading the feed.
    * @throws ServiceException If the service is unable to handle the request.
+   * @throws IOException Signals that an I/O exception has occurred.
    */
   private static void showPlaylists(YouTubeService service) throws IOException,
       ServiceException {
@@ -689,7 +682,7 @@ public class YouTubeWriteClient {
   }
 
   /**
-   * Performs a given operation on the user's playlists feed
+   * Performs a given operation on the user's playlists feed.
    * 
    * @param service An authenticated YouTubeService object.
    * @param op The operation to perform on the playlists feed.

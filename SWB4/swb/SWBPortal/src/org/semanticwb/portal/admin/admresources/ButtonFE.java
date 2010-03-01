@@ -31,6 +31,7 @@ import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.w3c.dom.*;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo button en una forma de html.
  * <p>
@@ -40,22 +41,42 @@ import org.w3c.dom.*;
 
 public class ButtonFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ButtonFE.class);
     
+    /** The accesskey. */
     protected String accesskey;
+    
+    /** The align. */
     protected String align;
+    
+    /** The isdisabled. */
     protected boolean isdisabled;
+    
+    /** The width. */
     protected int width;
+    
+    /** The height. */
     protected int height;
+    
+    /** The value. */
     protected String value;
+    
+    /** The tag. */
     protected Node tag;
+    
+    /** The on click. */
     protected String onClick;
 
+    /** The prompt message. */
     protected String promptMessage=null;
+    
+    /** The invalid message. */
     protected String invalidMessage=null;
 
     /**
-     * Inicializa la clase
+     * Inicializa la clase.
      */    
     public ButtonFE()
     {
@@ -70,7 +91,8 @@ public class ButtonFE extends WBAdmResourceAbs
     }
 
     /**
-     * Inicializa la clase
+     * Inicializa la clase.
+     * 
      * @param name Nombre del boton
      * @param value Valor del boton
      */    
@@ -89,7 +111,8 @@ public class ButtonFE extends WBAdmResourceAbs
     }
 
     /**
-     * Inicializa la clase
+     * Inicializa la clase.
+     * 
      * @param tag Nodo de elemento boton que se encontro en la definici�n de xml de la
      * admministraci�n
      */    
@@ -107,70 +130,132 @@ public class ButtonFE extends WBAdmResourceAbs
         setAttributes();
     }
 
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value)
     {
         this.value = value;
     }
 
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     private void setAccessKey(String accesskey)
     {
         this.accesskey = accesskey;
     }
 
+    /**
+     * Sets the align.
+     * 
+     * @param align the new align
+     */
     public void setAlign(String align)
     {
         this.align = align;
     }
 
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     private void setDisabled(boolean isdisabled)
     {
         this.isdisabled = isdisabled;
     }
 
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width)
     {
         this.width = width;
     }
 
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height)
     {
         this.height = height;
     }
 
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue()
     {
         return value;
     }
 
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     private String getAccessKey()
     {
         return accesskey;
     }
 
+    /**
+     * Gets the align.
+     * 
+     * @return the align
+     */
     public String getAlign()
     {
         return align;
     }
 
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     private boolean getDisabled()
     {
         return isdisabled;
     }
 
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth()
     {
         return width;
     }
 
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight()
     {
         return height;
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */     
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */     
     public String getHtml()
     {
         String xml="";
@@ -301,9 +386,10 @@ public class ButtonFE extends WBAdmResourceAbs
     }
      
      /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
-     */
+      * Manejo de Frameworks de JavaScript.
+      * 
+      * @param child the new js framework attributes
+      */
     protected void setJsFrameworkAttributes(Element child){
             String jsFramework=getFormFE().getJsFrameWork();
             if(jsFramework!=null){

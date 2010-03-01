@@ -1,3 +1,25 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.admin.admresources.util;
 
 /**
@@ -16,19 +38,52 @@ import javax.xml.parsers.SAXParser;
 
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class StyleHandler.
+ */
 public class StyleHandler extends DefaultHandler {
+    
+    /** The serial. */
     private long serial;
+    
+    /** The cp. */
     private long cp;
+    
+    /** The matriz. */
     private HashMap matriz;
+    
+    /** The client. */
     private Resource client;
 
+    /** The style file. */
     File styleFile;
+    
+    /** The script. */
     StringBuilder script = new StringBuilder();
 
+    /**
+     * Instantiates a new style handler.
+     * 
+     * @param filename the filename
+     * @param client the client
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the sAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public StyleHandler(String filename, Resource client) throws ParserConfigurationException, SAXException, IOException {
         this(new File(filename), client);
     }
 
+    /**
+     * Instantiates a new style handler.
+     * 
+     * @param file the file
+     * @param client the client
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the sAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public StyleHandler(File file, Resource client) throws ParserConfigurationException, SAXException, IOException {
         this.client = client;
 
@@ -37,6 +92,15 @@ public class StyleHandler extends DefaultHandler {
         saxParser.parse(file, this );        
     }
 
+    /**
+     * Instantiates a new style handler.
+     * 
+     * @param is the is
+     * @param client the client
+     * @throws ParserConfigurationException the parser configuration exception
+     * @throws SAXException the sAX exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public StyleHandler(InputStream is, Resource client) throws ParserConfigurationException, SAXException, IOException {
         this.client = client;
         
@@ -46,6 +110,9 @@ public class StyleHandler extends DefaultHandler {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.xml.sax.helpers.DefaultHandler#startDocument()
+     */
     @Override
     public void startDocument() throws SAXException {
         script.append("<style type=\"text/css\">\n");
@@ -101,6 +168,9 @@ public class StyleHandler extends DefaultHandler {
         matriz = new HashMap();
     }
 
+    /* (non-Javadoc)
+     * @see org.xml.sax.helpers.DefaultHandler#endDocument()
+     */
     @Override
     public void endDocument() throws SAXException {
         script.append("</div>\n");
@@ -119,6 +189,9 @@ public class StyleHandler extends DefaultHandler {
         script.append("</script>\n");
     }
 
+    /* (non-Javadoc)
+     * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     */
     @Override
     public void startElement (String uri, String localName, String qName, Attributes attributes) throws SAXException {
 	String eName = localName; // element name
@@ -370,21 +443,38 @@ public class StyleHandler extends DefaultHandler {
         }        
     }
 
+    /* (non-Javadoc)
+     * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void endElement (String uri, String localName, String qName) throws SAXException {
         nl();
     }
 
+    /* (non-Javadoc)
+     * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
+     */
     @Override
     public void characters (char ch[], int start, int length) throws SAXException {
 //	String s = new String(ch, start, length);
 //        emit(s);
     }
 
+    /**
+     * Gets the script.
+     * 
+     * @return the script
+     */
     public String getScript() {
         return script.toString();
     }
 
+    /**
+     * Emit.
+     * 
+     * @param s the s
+     * @throws SAXException the sAX exception
+     */
     private void emit(String s) throws SAXException {
 //        try {
 //            out.write(s);
@@ -394,12 +484,22 @@ public class StyleHandler extends DefaultHandler {
 //        }
     }
 
+    /**
+     * Nl.
+     * 
+     * @throws SAXException the sAX exception
+     */
     private void nl() throws SAXException {
         script.append("\n");
 //        String lineEnd = System.getProperty("line.separator");
 //            script.append(lineEnd);
     }
 
+    /**
+     * The main method.
+     * 
+     * @param args the arguments
+     */
     public static void main(String[] args) {
         try {
             StyleHandler handler = new StyleHandler("D:/temp/Videojuego/src/xml/recurso.xml", null);
@@ -409,6 +509,11 @@ public class StyleHandler extends DefaultHandler {
         }
     }
 
+    /**
+     * Gets the matriz.
+     * 
+     * @return the matriz
+     */
     public HashMap getMatriz() {
         return matriz;
     }

@@ -36,27 +36,49 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBIFMethod.
+ * 
  * @author javier.solis
  */
 public class SWBIFMethod
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBIFMethod.class);
+    
+    /** The tpl. */
     private Template tpl;
+    
+    /** The tag. */
     private HtmlTag tag;
+    
+    /** The txt. */
     private String txt;
+    
+    /** The type. */
     private String type=null;
+    
+    /** The notlangs. */
     private boolean notlangs=false;
+    
+    /** The langs. */
     private ArrayList<String> langs=null;
+    
+    /** The notdevices. */
     private boolean notdevices=false;
+    
+    /** The devices. */
     private ArrayList<Device> devices=null;
 
     /**
-     * @param method
-     * @param obj
-     * @param arguments
-     * @param tpl  */
+     * Instantiates a new sWBIF method.
+     * 
+     * @param tag the tag
+     * @param txt the txt
+     * @param tpl the tpl
+     */
     public SWBIFMethod(HtmlTag tag, String txt, Template tpl)
     {
         this.tpl=tpl;
@@ -68,6 +90,9 @@ public class SWBIFMethod
         initUser();
     }
 
+    /**
+     * Inits the user.
+     */
     private void initUser()
     {
         String lang=tag.getParam("language");
@@ -115,6 +140,13 @@ public class SWBIFMethod
         }catch(Exception e){log.error("Error reading if user devices...",e);}
     }
 
+    /**
+     * Eval.
+     * 
+     * @param user the user
+     * @param webpage the webpage
+     * @return the string
+     */
     public String eval(User user, WebPage webpage)
     {
         String ret=txt;

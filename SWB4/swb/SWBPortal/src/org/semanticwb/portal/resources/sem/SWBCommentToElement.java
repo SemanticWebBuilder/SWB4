@@ -38,6 +38,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Agrupa un conjunto de comentarios asociados al uri recibido como parametro de un
  * HttpServletRequest y muestra el listado de los mismos correspondientes al uri recibido.
@@ -55,9 +56,17 @@ public class SWBCommentToElement
     //private static final int secureCodeLength = 7;
 
 
+    /**
+     * Instantiates a new sWB comment to element.
+     */
     public SWBCommentToElement() {
     }
 
+    /**
+     * Instantiates a new sWB comment to element.
+     * 
+     * @param base the base
+     */
     public SWBCommentToElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
@@ -65,10 +74,11 @@ public class SWBCommentToElement
     /**
      * Al recibir la acción definida por <code>action_ADD</code> crea un nuevo comentario con los
      * datos existentes en el HttpServletRequest recibido.
+     * 
      * @param request Petición que contiene los datos para crear comentarios.
      * @param response Contiene la información para continuar con la atención de la petición.
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(HttpServletRequest request,
@@ -114,11 +124,12 @@ public class SWBCommentToElement
     /**
      * Presenta la interfaz para capturar comentarios asociados al uri recibido.
      * O muestra el mensaje para que el usuario se firme y pueda generar comentarios.
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws org.semanticwb.portal.api.SWBResourceException
-     * @throws java.io.IOException
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -302,10 +313,11 @@ public class SWBCommentToElement
 
     /**
      * Busca los comentarios asociados al uri recibido para mostrar sus datos.
+     * 
      * @param paramRequest utilizado para buscar los comentarios y escribir los mensajes localizados.
      * @param uri Al que están asociados los comentarios a buscar.
      * @return La cadena con la información de los comentarios correspondientes.
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @throws SWBResourceException the sWB resource exception
      */
     private String renderListComments(SWBParamRequest paramRequest, String uri)
             throws SWBResourceException {

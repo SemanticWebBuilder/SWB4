@@ -45,53 +45,112 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.base.FormElementBase;
 import org.semanticwb.platform.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBFormMgr.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBFormMgr 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBFormMgr.class);
 
+    /** The Constant MODE_VIEW. */
     public static final String MODE_VIEW="view";
+    
+    /** The Constant MODE_EDIT. */
     public static final String MODE_EDIT="edit";
+    
+    /** The Constant MODE_CREATE. */
     public static final String MODE_CREATE="create";
+    
+    /** The Constant TYPE_XHTML. */
     public static final String TYPE_XHTML="xhtml";
+    
+    /** The Constant TYPE_DOJO. */
     public static final String TYPE_DOJO="dojo";
+    
+    /** The Constant TYPE_IPHONE. */
     public static final String TYPE_IPHONE="iphone";
 
+    /** The Constant PRM_ID. */
     public static final String PRM_ID="id";
+    
+    /** The Constant PRM_MODE. */
     public static final String PRM_MODE="smode";
+    
+    /** The Constant PRM_REF. */
     public static final String PRM_REF="sref";
+    
+    /** The Constant PRM_URI. */
     public static final String PRM_URI="suri";
+    
+    /** The Constant PRM_CLS. */
     public static final String PRM_CLS="scls";
     
+    /** The m_obj. */
     private SemanticObject m_obj;
+    
+    /** The m_ref. */
     private SemanticObject m_ref;
+    
+    /** The m_cls. */
     private SemanticClass m_cls;
+    
+    /** The m_fview. */
     private FormView m_fview=null;
+    
+    /** The m_propmap. */
     private Map<SemanticProperty, String> m_propmap=null;
+    
+    /** The m_mode. */
     private String m_mode=MODE_VIEW;
+    
+    /** The m_action. */
     private String m_action="";
+    
+    /** The m_method. */
     private String m_method="POST";
+    
+    /** The m_onsubmit. */
     private String m_onsubmit=null;
+    
+    /** The m_lang. */
     private String m_lang="es";
+    
+    /** The m_type. */
     private String m_type=TYPE_XHTML;
+    
+    /** The m_general. */
     private PropertyGroup m_general=null;
 
+    /** The hidden. */
     private HashMap<String, String> hidden=null;
+    
+    /** The hidden props. */
     private ArrayList hiddenProps=null;
+    
+    /** The buttons. */
     private ArrayList<Object> buttons=null;
 
+    /** The filter required. */
     private boolean filterRequired=true;
+    
+    /** The filter html tags. */
     private boolean filterHTMLTags=true;
     
+    /** The groups. */
     private HashMap<PropertyGroup, TreeSet> groups=null;
 
+    /** The submit by ajax. */
     private boolean submitByAjax=false;
 
+    /** The removed. */
     private ArrayList<SemanticProperty> removed=null;
 
+    /** The DOJ o_ required. */
     public static String DOJO_REQUIRED=
         "    <script type=\"text/javascript\">"+"\n"+
         "      // scan page for widgets and instantiate them"+"\n"+
@@ -118,6 +177,13 @@ public class SWBFormMgr
         "    </script>"+"\n";
 
     
+    /**
+     * Instantiates a new sWB form mgr.
+     * 
+     * @param obj the obj
+     * @param frmview the frmview
+     * @param mode the mode
+     */
     public SWBFormMgr(SemanticObject obj, String frmview, String mode)
     {
         this.m_obj=obj;
@@ -128,9 +194,11 @@ public class SWBFormMgr
     }
 
     /**
-     * Modo creacion
-     * @param cls
-     * @param frmview
+     * Modo creacion.
+     * 
+     * @param cls the cls
+     * @param ref the ref
+     * @param frmview the frmview
      */
     public SWBFormMgr(SemanticClass cls, SemanticObject ref, String frmview)
     {
@@ -142,6 +210,9 @@ public class SWBFormMgr
     }
 
     
+    /**
+     * Inits the.
+     */
     public void init()
     {
         m_general=(PropertyGroup)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(SemanticVocabulary.SWBXF_URI+"pg_General");
@@ -164,21 +235,42 @@ public class SWBFormMgr
         }
     }
 
+    /**
+     * Hide property.
+     * 
+     * @param prop the prop
+     */
     public void hideProperty(SemanticProperty prop)
     {
         removed.add(prop);
     }
 
+    /**
+     * Gets the groups.
+     * 
+     * @return the groups
+     */
     public HashMap<PropertyGroup, TreeSet> getGroups()
     {
         return groups;
     }
 
+    /**
+     * Adds the property.
+     * 
+     * @param prop the prop
+     */
     public void addProperty(SemanticProperty prop)
     {
         addProperty(prop, false);
     }
     
+    /**
+     * Adds the property.
+     * 
+     * @param prop the prop
+     * @param filterRequired the filter required
+     */
     public void addProperty(SemanticProperty prop, boolean filterRequired)
     {
         //System.out.println("prop:"+prop);
@@ -258,39 +350,84 @@ public class SWBFormMgr
         }
     }
     
+    /**
+     * Gets the action.
+     * 
+     * @return the action
+     */
     public String getAction() {
         return m_action;
     }
 
+    /**
+     * Sets the action.
+     * 
+     * @param action the new action
+     */
     public void setAction(String action) {
         this.m_action = action;
     }
 
+    /**
+     * Gets the method.
+     * 
+     * @return the method
+     */
     public String getMethod() {
         return m_method;
     }
 
+    /**
+     * Sets the method.
+     * 
+     * @param method the new method
+     */
     public void setMethod(String method) {
         this.m_method = method;
     }
     
+    /**
+     * Gets the lang.
+     * 
+     * @return the lang
+     */
     public String getLang() {
         return m_lang;
     }
 
+    /**
+     * Sets the lang.
+     * 
+     * @param lang the new lang
+     */
     public void setLang(String lang) {
         this.m_lang = lang;
     }    
     
+    /**
+     * Gets the type.
+     * 
+     * @return the type
+     */
     public String getType() {
         return m_type;
     }
 
+    /**
+     * Sets the type.
+     * 
+     * @param type the new type
+     */
     public void setType(String type) {
         this.m_type = type;
     }
 
 
+    /**
+     * Gets the identifier element.
+     * 
+     * @return the identifier element
+     */
     private String getIdentifierElement()
     {
         boolean DOJO=false;
@@ -315,7 +452,9 @@ public class SWBFormMgr
     }
 
     /**
-     * Regresa input del tipo hidden requeridos para el processForm
+     * Regresa input del tipo hidden requeridos para el processForm.
+     * 
+     * @return the form hiddens
      * @return
      */
     public String getFormHiddens()
@@ -335,7 +474,9 @@ public class SWBFormMgr
     }
 
     /**
-     * Regresa lista de FormElements a renderear
+     * Regresa lista de FormElements a renderear.
+     * 
+     * @return the properties
      * @return
      */
     public List<SemanticProperty> getProperties()
@@ -372,6 +513,11 @@ public class SWBFormMgr
         return arr;
     }
 
+    /**
+     * List properties.
+     * 
+     * @return the iterator
+     */
     private Iterator<SemanticProperty> listProperties()
     {
         ArrayList<SemanticProperty> arr=new ArrayList();
@@ -390,8 +536,10 @@ public class SWBFormMgr
     }
 
     /**
-     * Genera HTML de la forma del tipo de objeto especificado en el constructor
-     * @param request
+     * Genera HTML de la forma del tipo de objeto especificado en el constructor.
+     * 
+     * @param request the request
+     * @return the string
      * @return
      */
     public String renderForm(HttpServletRequest request)
@@ -528,6 +676,13 @@ public class SWBFormMgr
         return ret.toString();
     }
 
+    /**
+     * Validate form.
+     * 
+     * @param request the request
+     * @return the semantic object
+     * @throws FormValidateException the form validate exception
+     */
     public SemanticObject validateForm(HttpServletRequest request) throws FormValidateException
     {
         SemanticObject ret=m_obj;
@@ -544,6 +699,13 @@ public class SWBFormMgr
         return ret;
     }
 
+    /**
+     * Process form.
+     * 
+     * @param request the request
+     * @return the semantic object
+     * @throws FormValidateException the form validate exception
+     */
     public SemanticObject processForm(HttpServletRequest request) throws FormValidateException
     {
         validateForm(request);
@@ -581,11 +743,12 @@ public class SWBFormMgr
 
 
     /**
-     * Rederea propiedad (metodo interno del SWBFormMgr
-     * @param request
-     * @param ret
-     * @param prop
-     * @param ele
+     * Rederea propiedad (metodo interno del SWBFormMgr.
+     * 
+     * @param request the request
+     * @param ret the ret
+     * @param prop the prop
+     * @param ele the ele
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele)
     {
@@ -593,11 +756,13 @@ public class SWBFormMgr
     }
 
     /**
-     * Rederea propiedad (metodo interno del SWBFormMgr
-     * @param request
-     * @param ret
-     * @param prop
-     * @param ele
+     * Rederea propiedad (metodo interno del SWBFormMgr.
+     * 
+     * @param request the request
+     * @param ret the ret
+     * @param prop the prop
+     * @param ele the ele
+     * @param mode the mode
      */
     public void renderProp(HttpServletRequest request, StringBuffer ret, SemanticProperty prop, FormElement ele, String mode)
     {
@@ -664,6 +829,11 @@ public class SWBFormMgr
         }
     }
 
+    /**
+     * Gets the form name.
+     * 
+     * @return the form name
+     */
     public String getFormName()
     {
         String uri;
@@ -678,6 +848,14 @@ public class SWBFormMgr
         return frmname=uri+"/form";
     }
 
+    /**
+     * Render element.
+     * 
+     * @param request the request
+     * @param propName the prop name
+     * @param mode the mode
+     * @return the string
+     */
     public String renderElement(HttpServletRequest request, String propName, String mode)
     {
         String ret=null;
@@ -690,11 +868,24 @@ public class SWBFormMgr
         return ret;
     }
 
+    /**
+     * Render element.
+     * 
+     * @param request the request
+     * @param propName the prop name
+     * @return the string
+     */
     public String renderElement(HttpServletRequest request, String propName)
     {
         return renderElement(request, propName,m_mode);
     }
     
+    /**
+     * Gets the form element.
+     * 
+     * @param prop the prop
+     * @return the form element
+     */
     public FormElement getFormElement(SemanticProperty prop)
     {
         SemanticObject obj=prop.getDisplayProperty();
@@ -721,18 +912,39 @@ public class SWBFormMgr
         return ele;
     }
 
+    /**
+     * Validate element.
+     * 
+     * @param request the request
+     * @param prop the prop
+     * @throws FormValidateException the form validate exception
+     */
     public void validateElement(HttpServletRequest request, SemanticProperty prop) throws FormValidateException
     {
         FormElement ele=getFormElement(prop);
         ele.validate(request, m_obj, prop);
     }
     
+    /**
+     * Process element.
+     * 
+     * @param request the request
+     * @param prop the prop
+     */
     public void processElement(HttpServletRequest request, SemanticProperty prop)
     {
         FormElement ele=getFormElement(prop);
         ele.process(request, m_obj, prop);
     }
     
+    /**
+     * Render label.
+     * 
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
     public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
     {
         String ret=null;
@@ -742,6 +954,14 @@ public class SWBFormMgr
         return ret;
     }
 
+    /**
+     * Render element.
+     * 
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
     public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
     {
         String ret=null;
@@ -751,6 +971,12 @@ public class SWBFormMgr
         return ret;
     }
     
+    /**
+     * Adds the hidden parameter.
+     * 
+     * @param key the key
+     * @param value the value
+     */
     public void addHiddenParameter(String key, String value)
     {
         if(key!=null && value!=null)hidden.put(key, value);
@@ -759,31 +985,48 @@ public class SWBFormMgr
     /**
      * Add HTML text for Button
      * Sample: <button dojoType="dijit.form.Button" type="submit">Guardar</button>
-     * @param html
+     * 
+     * @param html the html
      */
     public void addButton(String html)
     {
         buttons.add(html);
     }
 
+    /**
+     * Adds the button.
+     * 
+     * @param button the button
+     */
     public void addButton(SWBFormButton button)
     {
         buttons.add(button);
     }
 
+    /**
+     * Sets the on submit.
+     * 
+     * @param onsubmit the new on submit
+     */
     public void setOnSubmit(String onsubmit)
     {
         m_onsubmit=onsubmit;
     }
 
+    /**
+     * Sets the submit by ajax.
+     * 
+     * @param submitByAjax the new submit by ajax
+     */
     public void setSubmitByAjax(boolean submitByAjax)
     {
         this.submitByAjax=submitByAjax;
     }
 
     /**
-     * Filtra solo requeridas en la creacion, por default = true
-     * @param onlyRequired
+     * Filtra solo requeridas en la creacion, por default = true.
+     * 
+     * @param onlyRequired the new filter required
      */
     public void setFilterRequired(boolean onlyRequired)
     {
@@ -791,32 +1034,57 @@ public class SWBFormMgr
         init();
     }
 
+    /**
+     * Sets the mode.
+     * 
+     * @param mode the new mode
+     */
     public void setMode(String mode)
     {
         m_mode=mode;
     }
 
+    /**
+     * Gets the mode.
+     * 
+     * @return the mode
+     */
     public String getMode()
     {
         return m_mode;
     }
 
+    /**
+     * Sets the semantic object.
+     * 
+     * @param obj the new semantic object
+     */
     public void setSemanticObject(SemanticObject obj)
     {
         m_obj=obj;
     }
 
+    /**
+     * Gets the semantic object.
+     * 
+     * @return the semantic object
+     */
     public SemanticObject getSemanticObject()
     {
         return m_obj;
     }
 
+    /**
+     * Clear properties.
+     */
     public void clearProperties()
     {
         groups=new HashMap();
     }
 
     /**
+     * Checks if is filter html tags.
+     * 
      * @return the filterHTMLTags
      */
     public boolean isFilterHTMLTags() {
@@ -824,6 +1092,8 @@ public class SWBFormMgr
     }
 
     /**
+     * Sets the filter html tags.
+     * 
      * @param filterHTMLTags the filterHTMLTags to set
      */
     public void setFilterHTMLTags(boolean filterHTMLTags) {

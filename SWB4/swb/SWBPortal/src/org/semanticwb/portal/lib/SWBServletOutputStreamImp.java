@@ -30,20 +30,31 @@ package org.semanticwb.portal.lib;
 
 import java.io.OutputStream;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBServletOutputStreamImp.
+ * 
  * @author jorge.jimenez
  */
 public class SWBServletOutputStreamImp extends javax.servlet.ServletOutputStream
 {
+    
+    /** The out. */
     OutputStream out=null;
     
-    /** Creates a new instance of WBServletOutputStreamImp */
+    /**
+     * Creates a new instance of WBServletOutputStreamImp.
+     * 
+     * @param out the out
+     */
     public SWBServletOutputStreamImp(OutputStream out)
     {
         this.out=out;
     }
     
+    /* (non-Javadoc)
+     * @see java.io.OutputStream#write(int)
+     */
     public void write(int b) throws java.io.IOException
     {
         out.write(b);

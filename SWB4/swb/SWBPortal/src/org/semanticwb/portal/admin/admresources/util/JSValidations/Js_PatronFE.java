@@ -28,6 +28,7 @@ package org.semanticwb.portal.admin.admresources.util.JSValidations;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si la entrada a un campo html cumple con un cierto patron de expresiones regulares mediante JavaScript.
  * <p>
@@ -37,20 +38,41 @@ import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
 public class Js_PatronFE extends WBJsValidationsFEAbs {
     
+    /** The patron. */
     String patron=null;
+    
+    /** The showpatron. */
     boolean showpatron=true;
     
+    /**
+     * Instantiates a new js_ patron fe.
+     * 
+     * @param field the field
+     */
     public Js_PatronFE(String field)
     {
         this.field = field;
     }
 
+    /**
+     * Instantiates a new js_ patron fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     */
     public Js_PatronFE(String formfeName, String field)
     {
         this.formfeName = formfeName;
         this.field = field;
     }
     
+    /**
+     * Instantiates a new js_ patron fe.
+     * 
+     * @param field the field
+     * @param patron the patron
+     * @param showpatron the showpatron
+     */
     public Js_PatronFE(String field, String patron, boolean showpatron)
     {
         this.field = field;
@@ -58,6 +80,14 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
         this.showpatron = showpatron;
     }
     
+    /**
+     * Instantiates a new js_ patron fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param patron the patron
+     * @param showpatron the showpatron
+     */
     public Js_PatronFE(String formfeName,String field, String patron, boolean showpatron)
     {
         this.formfeName = formfeName;
@@ -66,26 +96,47 @@ public class Js_PatronFE extends WBJsValidationsFEAbs {
         this.showpatron = showpatron;
     }
     
+    /**
+     * Sets the patron.
+     */
     public void setPatron(){
         this.patron=patron;
     }
     
+    /**
+     * Gets the patron.
+     * 
+     * @return the patron
+     */
     public String getPatron(){
         return patron;
     }
     
+    /**
+     * Sets the showpatron.
+     * 
+     * @param showpatron the new showpatron
+     */
     public void setShowpatron(boolean showpatron){
         this.showpatron=showpatron;
     }
     
+    /**
+     * Gets the showpatron.
+     * 
+     * @return the showpatron
+     */
     public boolean getShowpatron(){
         return showpatron;
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */     
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */     
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

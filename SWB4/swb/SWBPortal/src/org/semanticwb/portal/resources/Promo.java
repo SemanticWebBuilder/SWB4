@@ -38,6 +38,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Promo se encarga de desplegar y administrar un texto promocional con una
  * imagen opcional bajo ciertos criterios(configuraci�n de recurso). Es un recurso
@@ -52,12 +53,17 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 
 public class Promo extends GenericAdmResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Promo.class);
     
+    /** The web work path. */
     String webWorkPath= "/work";
     
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */    
     @Override
     public void setResourceBase(Resource base) {
@@ -69,6 +75,9 @@ public class Promo extends GenericAdmResource {
         }
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=utf-8");
@@ -86,6 +95,11 @@ public class Promo extends GenericAdmResource {
         pw.print(out);        
     }
 
+    /**
+     * Render with style.
+     * 
+     * @return the string
+     */
     private String renderWithStyle() {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
@@ -277,6 +291,11 @@ public class Promo extends GenericAdmResource {
         return out.toString();
     }
 
+    /**
+     * Render.
+     * 
+     * @return the string
+     */
     private String render() {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
@@ -390,7 +409,11 @@ public class Promo extends GenericAdmResource {
     }
      
     /**
-     * Obtiene las ligas de redireccionamiento del promocional
+     * Obtiene las ligas de redireccionamiento del promocional.
+     * 
+     * @param paramRequest the param request
+     * @param base the base
+     * @return the url html
      */    
     private String getUrlHtml(SWBParamRequest paramRequest, Resource base) {
         StringBuffer ret = new StringBuffer("");
@@ -409,7 +432,11 @@ public class Promo extends GenericAdmResource {
     
     /**
      * Obtiene la imagen del promocional asi como su posicionamiento (en caso de
-     * existir)
+     * existir).
+     * 
+     * @param reqParams the req params
+     * @param base the base
+     * @return the img promo
      */    
     private String getImgPromo(SWBParamRequest reqParams, Resource base) {
         StringBuffer ret = new StringBuffer("");
@@ -508,7 +535,11 @@ public class Promo extends GenericAdmResource {
     }
 
     /**
-     * Obtiene el html de la imagen
+     * Obtiene el html de la imagen.
+     * 
+     * @param paramRequest the param request
+     * @param base the base
+     * @return the img html
      */    
     private String getImgHtml(SWBParamRequest paramRequest, Resource base) {
         StringBuffer ret = new StringBuffer("");
@@ -553,7 +584,10 @@ public class Promo extends GenericAdmResource {
     }
 
     /**
-     * Obtiene el texto del promocional ya armado
+     * Obtiene el texto del promocional ya armado.
+     * 
+     * @param base the base
+     * @return the text html
      */    
     private String getTextHtml(Resource base) {
         StringBuffer ret = new StringBuffer("");
@@ -571,10 +605,12 @@ public class Promo extends GenericAdmResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {

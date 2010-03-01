@@ -28,19 +28,33 @@ package org.semanticwb.portal.admin.admresources.util.JSValidations;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si se capturan o no caracteres validos o invalidos en un campo html con JavaScript en la apiadmin
  * <p>
- * Object that handles if a field has some valid or invalid characters with JavaScript in the apiadmin
+ * Object that handles if a field has some valid or invalid characters with JavaScript in the apiadmin.
+ * 
  * @author  Jorge Alberto Jim�nez
  */
 
 public class Js_ConfValFE extends WBJsValidationsFEAbs
 {
+    
+    /** The validchars. */
     private String validchars;
+    
+    /** The invalidchars. */
     private String invalidchars;
+    
+    /** The isshowchars. */
     private boolean isshowchars;
     
+    /**
+     * Instantiates a new js_ conf val fe.
+     * 
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_ConfValFE(String field, int minsize)
     {
         validchars = null;
@@ -51,6 +65,13 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
             this.minsize = minsize;
     }
 
+    /**
+     * Instantiates a new js_ conf val fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_ConfValFE(String formfeName, String field, int minsize)
     {
         validchars = null;
@@ -62,6 +83,15 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
             this.minsize = minsize;
     }
 
+    /**
+     * Instantiates a new js_ conf val fe.
+     * 
+     * @param field the field
+     * @param minsize the minsize
+     * @param valid the valid
+     * @param confchars the confchars
+     * @param isshowchars the isshowchars
+     */
     public Js_ConfValFE(String field, int minsize, boolean valid, String confchars, boolean isshowchars)
     {
         validchars = null;
@@ -77,6 +107,16 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
         this.isshowchars = isshowchars;
     }
 
+    /**
+     * Instantiates a new js_ conf val fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param minsize the minsize
+     * @param valid the valid
+     * @param confchars the confchars
+     * @param isshowchars the isshowchars
+     */
     public Js_ConfValFE(String formfeName, String field, int minsize, boolean valid, String confchars, boolean isshowchars)
     {
         validchars = null;
@@ -93,6 +133,12 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
         this.isshowchars = isshowchars;
     }
 
+    /**
+     * Sets the conf chars.
+     * 
+     * @param valid the valid
+     * @param confchars the confchars
+     */
     public void setConfChars(boolean valid, String confchars)
     {
         if(valid)
@@ -101,30 +147,53 @@ public class Js_ConfValFE extends WBJsValidationsFEAbs
             invalidchars = confchars;
     }
 
+    /**
+     * Show chars.
+     * 
+     * @param isshowchars the isshowchars
+     */
     public void showChars(boolean isshowchars)
     {
         this.isshowchars = isshowchars;
     }
 
+    /**
+     * Gets the valid chars.
+     * 
+     * @return the valid chars
+     */
     public String getValidChars()
     {
         return validchars;
     }
 
+    /**
+     * Gets the invalid valid chars.
+     * 
+     * @return the invalid valid chars
+     */
     public String getInvalidValidChars()
     {
         return invalidchars;
     }
 
+    /**
+     * Show chars.
+     * 
+     * @return true, if successful
+     */
     public boolean showChars()
     {
         return isshowchars;
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */     
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */     
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

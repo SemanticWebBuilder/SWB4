@@ -36,19 +36,36 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * CallbackHandler for login password credentials
- * CallbackHandler para credenciales login password
+ * CallbackHandler para credenciales login password.
+ * 
  * @author Sergio Martínez sergio.martinez@acm.org
  */
 public class SWB4CallbackHandlerLoginPasswordImp extends SWB4CallbackHandler {
+
+/** The log. */
 private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordImp.class);
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 12896L;
+    
+    /** The request. */
     private HttpServletRequest request;
+    
+    /** The response. */
     private HttpServletResponse response;
+    
+    /** The auth type. */
     private String authType;
+    
+    /** The website. */
     private String website;
 
+    /**
+     * Instantiates a new sW b4 callback handler login password imp.
+     */
     public SWB4CallbackHandlerLoginPasswordImp() {
         log.trace("Simple CallbackHandler");
         this.request = null;
@@ -57,6 +74,14 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         this.website = null;
     }
 
+    /**
+     * Instantiates a new sW b4 callback handler login password imp.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param authType the auth type
+     * @param website the website
+     */
     public SWB4CallbackHandlerLoginPasswordImp(HttpServletRequest request, HttpServletResponse response, String authType, String website) {
         log.trace("Complete CallbackHandler");
         this.request = request;
@@ -67,10 +92,11 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
 
     /**
      * Manejo de los parámetros para enviarlos al JAAS
-     * parameter management as required by JAAS
-     * @param callbacks
-     * @throws java.io.IOException
-     * @throws javax.security.auth.callback.UnsupportedCallbackException
+     * parameter management as required by JAAS.
+     * 
+     * @param callbacks the callbacks
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws UnsupportedCallbackException the unsupported callback exception
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
         log.trace("Tipo de Autenticacion: " + authType);
@@ -82,6 +108,12 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         }
     }
 
+    /**
+     * Gets the basic credentials.
+     * 
+     * @param callbacks the callbacks
+     * @return the basic credentials
+     */
     private void getBasicCredentials(Callback[] callbacks) {
         String login = "";
         String password = "";
@@ -115,6 +147,12 @@ private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordI
         }
     }
 
+    /**
+     * Gets the form credentials.
+     * 
+     * @param callbacks the callbacks
+     * @return the form credentials
+     */
     private void getFormCredentials(Callback[] callbacks) {
         String login = request.getParameter("wb_username");
         String password = request.getParameter("wb_password");

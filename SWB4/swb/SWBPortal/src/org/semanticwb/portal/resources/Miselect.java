@@ -35,8 +35,15 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Miselect.
+ */
 public class Miselect extends GenericAdmResource {
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
@@ -47,6 +54,15 @@ public class Miselect extends GenericAdmResource {
         }
     }
 
+    /**
+     * Do render select.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRenderSelect(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
@@ -69,6 +85,9 @@ public class Miselect extends GenericAdmResource {
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");

@@ -40,6 +40,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 
+// TODO: Auto-generated Javadoc
 /** Recurso gen�rico utilizado como plantilla para la generaci�n de nuevos recursos para
  * WebBuilder.
  *
@@ -50,18 +51,28 @@ import org.semanticwb.model.WebSite;
  */
 public class GenericResource implements SWBResource, SWBResourceCache, SWBResourceWindow
 {
+    
+    /** The base. */
     private Resource base;
     
-    /** Creates a new instance of GenericResource */
+    /**
+     * Creates a new instance of GenericResource.
+     */
     public GenericResource()
     {
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResource#destroy()
+     */
     public void destroy()
     {
     }
     
     /**
+     * Gets the resource base.
+     * 
+     * @return the resource base
      * @return
      */    
     public Resource getResourceBase()
@@ -70,25 +81,31 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @throws SWBResourceException
+     * Inits the.
+     * 
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void init() throws SWBResourceException
     {
     }
     
     /**
-     * @param recobj
-     * @throws SWBResourceException
+     * Install.
+     * 
+     * @param recobj the recobj
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void install(ResourceType recobj) throws SWBResourceException
     {
     }
     
     /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -96,11 +113,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Render.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void render(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -111,11 +130,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -147,11 +168,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -159,11 +182,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do edit.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -171,11 +196,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do help.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -183,11 +210,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do admin.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -204,11 +233,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do admin hlp.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -216,11 +247,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do index.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -228,11 +261,13 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -240,8 +275,10 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
 
     /**
-     * @param base
-     * @throws SWBResourceException
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void setResourceBase(Resource base) throws SWBResourceException
     {
@@ -249,15 +286,22 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
     }
     
     /**
-     * @param recobj
-     * @throws SWBResourceException
+     * Uninstall.
+     * 
+     * @param recobj the recobj
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void uninstall(ResourceType recobj) throws SWBResourceException
     {
     }
     
     /**
-     * by default this method will return null when the request have paramaters
+     * by default this method will return null when the request have paramaters.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the resource cache id
+     * @throws SWBResourceException the sWB resource exception
      */
 
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException
@@ -272,6 +316,9 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
         }
     }
    
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceWindow#getModes(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         WebSite tm=SWBContext.getAdminWebSite();
@@ -285,16 +332,25 @@ public class GenericResource implements SWBResource, SWBResourceCache, SWBResour
         return new String[]{paramRequest.Mode_VIEW};
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceWindow#getTitle(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public String getTitle(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         return paramRequest.getWindowTitle();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceWindow#getWindowStates(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public String[] getWindowStates(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         return new String[]{paramRequest.WinState_MINIMIZED, paramRequest.WinState_NORMAL, paramRequest.WinState_MAXIMIZED};
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBResourceWindow#windowSupport(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public boolean windowSupport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException
     {
         //System.out.println("----> "+paramRequest.getResourceBase().getId()+" windowSupport:"+paramRequest.getResourceBase().getConfAttribute("resourceWindow","0"));

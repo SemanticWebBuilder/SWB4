@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class LocationBase.
+ */
 public class LocationBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Location. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Location=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Location");
 
+    /**
+     * Instantiates a new location base.
+     */
     public LocationBase()
     {
     }
 
+    /**
+     * Instantiates a new location base.
+     * 
+     * @param base the base
+     */
     public LocationBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Location");
 }

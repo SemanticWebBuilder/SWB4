@@ -37,22 +37,36 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBSessionObject.
+ * 
  * @author Jei
  * Modified by Serch
  */
 public class SWBSessionObject implements HttpSessionBindingListener, Serializable
 {
+    
+    /** The log. */
     static private Logger log = SWBUtils.getLogger(SWBSessionObject.class);
 
+    /** The mapa. */
     private transient HashMap<String, Subject> mapa;
 
+    /**
+     * Instantiates a new sWB session object.
+     */
     public SWBSessionObject()
     {
         mapa = new HashMap<String, Subject>();
     }
 
+    /**
+     * Gets the subject.
+     * 
+     * @param website the website
+     * @return the subject
+     */
     public Subject getSubject(String website)
     {
         String ur = SWBContext.getWebSite(website).getUserRepository().getId();
@@ -65,17 +79,29 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
         return sub;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSessionBindingListener#valueBound(javax.servlet.http.HttpSessionBindingEvent)
+     */
     public void valueBound(HttpSessionBindingEvent arg0)
     {
         //System.out.println("SWBSessionObject.valueBound:"+arg0+" "+subject);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpSessionBindingListener#valueUnbound(javax.servlet.http.HttpSessionBindingEvent)
+     */
     public void valueUnbound(HttpSessionBindingEvent arg0)
     {
         //System.out.println("SWBSessionObject.valueUnbound:"+arg0+" "+subject);
         SWBPortal.getUserMgr().unboundSessionObject(arg0.getSession().getId());
     }
 
+    /**
+     * Write object.
+     * 
+     * @param oos the oos
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private synchronized void writeObject(java.io.ObjectOutputStream oos) throws java.io.IOException
     {
         oos.writeLong(mapa.size());
@@ -91,6 +117,13 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
         }
     }
 
+    /**
+     * Read object.
+     * 
+     * @param s the s
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ClassNotFoundException the class not found exception
+     */
     private void readObject(java.io.ObjectInputStream s) throws
             java.io.IOException,
             ClassNotFoundException

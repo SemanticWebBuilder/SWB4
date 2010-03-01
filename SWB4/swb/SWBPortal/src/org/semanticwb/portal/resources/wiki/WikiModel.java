@@ -41,20 +41,40 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WikiModel.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class WikiModel extends info.bliki.wiki.model.WikiModel
 {
+    
+    /** The params request. */
     private SWBParamRequest paramsRequest;
+    
+    /** The request. */
     private javax.servlet.http.HttpServletRequest request;
     
+    /**
+     * Instantiates a new wiki model.
+     * 
+     * @param imageBaseURL the image base url
+     * @param linkBaseURL the link base url
+     */
     public WikiModel(String imageBaseURL, String linkBaseURL) 
     {
         super(imageBaseURL, linkBaseURL);
     }
     
+    /**
+     * Instantiates a new wiki model.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @param imageBaseURL the image base url
+     * @param linkBaseURL the link base url
+     */
     public WikiModel(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest, String imageBaseURL, String linkBaseURL)
     {
         super(Configuration.DEFAULT_CONFIGURATION, new Locale(paramsRequest.getUser().getLanguage()), imageBaseURL, linkBaseURL);
@@ -64,6 +84,9 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
     }
 
     
+    /* (non-Javadoc)
+     * @see info.bliki.wiki.model.WikiModel#appendInternalLink(java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void appendInternalLink(String link, String hashSection, String linkText) 
     {
@@ -103,6 +126,9 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
             aTagNode.addChild(text);            
     }
     
+    /* (non-Javadoc)
+     * @see info.bliki.wiki.model.AbstractWikiModel#appendInternalImageLink(java.lang.String, java.lang.String, info.bliki.wiki.model.ImageFormat)
+     */
     @Override
     public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat)
     {
@@ -113,11 +139,21 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
         super.appendInternalImageLink(ref, srcImageLink, imageFormat);
     }
 
+    /**
+     * Gets the params request.
+     * 
+     * @return the params request
+     */
     public SWBParamRequest getParamsRequest()
     {
         return paramsRequest;
     }
 
+    /**
+     * Gets the request.
+     * 
+     * @return the request
+     */
     public javax.servlet.http.HttpServletRequest getRequest()
     {
         return request;

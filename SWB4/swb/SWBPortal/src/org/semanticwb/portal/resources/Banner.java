@@ -50,6 +50,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Banner se encarga de desplegar y administrar un banner bajo ciertos
  * criterios(configuraci�n de recurso).
@@ -63,8 +64,13 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 public class Banner extends GenericAdmResource 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Banner.class);
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         //System.out.println("Banner.doView");
@@ -170,6 +176,15 @@ public class Banner extends GenericAdmResource
         out.print(ret.toString());        
     }
 
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param user the user
+     * @param webpage the webpage
+     * @return the string
+     */
     public String replaceTags(String str, HttpServletRequest request, User user,WebPage webpage)
     {
         if(str==null || str.trim().length()==0)
@@ -218,7 +233,12 @@ public class Banner extends GenericAdmResource
     }
     
     /**
-     * Metodo para hacer operaciones
+     * Metodo para hacer operaciones.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException

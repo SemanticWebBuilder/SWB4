@@ -23,6 +23,7 @@
  
 package org.semanticwb.portal.resources.sem;
 
+// TODO: Auto-generated Javadoc
 /**
  * Wrapper for a bookmark entry object.
  * <p>
@@ -32,8 +33,11 @@ package org.semanticwb.portal.resources.sem;
  */
 public class BookmarkEntry extends org.semanticwb.portal.resources.sem.base.BookmarkEntryBase 
 {
+    
     /**
      * Constructor.
+     * 
+     * @param base the base
      */
     public BookmarkEntry(org.semanticwb.platform.SemanticObject base)
     {

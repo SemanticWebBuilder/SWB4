@@ -51,8 +51,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class PFlowManager.
+ * 
  * @author victor.lorenzana
  * Si status es -1= enviado al autor del contenido, es como si no fuera enviado
  * Si status es 0 = no enviado ninguna vez
@@ -63,17 +65,30 @@ import org.w3c.dom.NodeList;
 public class PFlowManager
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PFlowManager.class);
 
+    /**
+     * Instantiates a new p flow manager.
+     */
     public PFlowManager()
     {
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         log.event("Initializing PFlowManager...");
     }
 
+    /**
+     * Gets the flows to send content.
+     * 
+     * @param resource the resource
+     * @return the flows to send content
+     */
     public PFlow[] getFlowsToSendContent(Resource resource)
     {
         HashSet<PFlow> flows = new HashSet<PFlow>();
@@ -107,6 +122,12 @@ public class PFlowManager
         return flows.toArray(new PFlow[flows.size()]);
     }
 
+    /**
+     * Gets the flows.
+     * 
+     * @param page the page
+     * @return the flows
+     */
     public PFlow[] getFlows(WebPage page)
     {
         HashSet<PFlow> flows = new HashSet<PFlow>();
@@ -122,6 +143,13 @@ public class PFlowManager
         return flows.toArray(new PFlow[flows.size()]);
     }
 
+    /**
+     * Gets the contents at flow of user.
+     * 
+     * @param user the user
+     * @param site the site
+     * @return the contents at flow of user
+     */
     public Resource[] getContentsAtFlowOfUser(User user, WebSite site)
     {
         HashSet<Resource> getContentsAtFlowOfUser = new HashSet<Resource>();
@@ -146,6 +174,12 @@ public class PFlowManager
         return getContentsAtFlowOfUser.toArray(new Resource[getContentsAtFlowOfUser.size()]);
     }
 
+    /**
+     * Gets the contents at flow all.
+     * 
+     * @param site the site
+     * @return the contents at flow all
+     */
     public Resource[] getContentsAtFlowAll(WebSite site)
     {
         HashSet<Resource> getContentsAtFlowAll = new HashSet<Resource>();
@@ -170,6 +204,13 @@ public class PFlowManager
         return getContentsAtFlowAll.toArray(new Resource[getContentsAtFlowAll.size()]);
     }
 
+    /**
+     * Gets the contents at flow.
+     * 
+     * @param user the user
+     * @param site the site
+     * @return the contents at flow
+     */
     public Resource[] getContentsAtFlow(User user, WebSite site)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
@@ -194,6 +235,12 @@ public class PFlowManager
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
 
+    /**
+     * Gets the contents at flow.
+     * 
+     * @param pflow the pflow
+     * @return the contents at flow
+     */
     public Resource[] getContentsAtFlow(PFlow pflow)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
@@ -210,6 +257,13 @@ public class PFlowManager
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
 
+    /**
+     * Gets the contents at flow.
+     * 
+     * @param pflow the pflow
+     * @param site the site
+     * @return the contents at flow
+     */
     public Resource[] getContentsAtFlow(PFlow pflow, WebSite site)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
@@ -229,6 +283,12 @@ public class PFlowManager
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
 
+    /**
+     * Gets the contents at flow.
+     * 
+     * @param user the user
+     * @return the contents at flow
+     */
     public Resource[] getContentsAtFlow(User user)
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
@@ -248,6 +308,11 @@ public class PFlowManager
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
 
+    /**
+     * Gets the contents at flow.
+     * 
+     * @return the contents at flow
+     */
     public Resource[] getContentsAtFlow()
     {
         HashSet<Resource> getContentsAtFlow = new HashSet<Resource>();
@@ -267,6 +332,12 @@ public class PFlowManager
         return getContentsAtFlow.toArray(new Resource[getContentsAtFlow.size()]);
     }
 
+    /**
+     * Gets the activity name.
+     * 
+     * @param resource the resource
+     * @return the activity name
+     */
     public String getActivityName(Resource resource)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -280,6 +351,13 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Checks if is reviewer.
+     * 
+     * @param resource the resource
+     * @param user the user
+     * @return true, if is reviewer
+     */
     public boolean isReviewer(Resource resource, User user)
     {
         boolean isReviewer = false;
@@ -331,10 +409,26 @@ public class PFlowManager
         return isReviewer;
     }
 
+    /**
+     * Approve resource.
+     * 
+     * @param resource the resource
+     * @param user the user
+     * @param msg the msg
+     */
     public void approveResource(Resource resource, User user, String msg)
     {
         this.approveResource(resource, user, msg, null);
     }
+    
+    /**
+     * Approve resource.
+     * 
+     * @param resource the resource
+     * @param user the user
+     * @param msg the msg
+     * @param notification the notification
+     */
     public void approveResource(Resource resource, User user, String msg, FlowNotification notification)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -452,6 +546,14 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Reject content.
+     * 
+     * @param resource the resource
+     * @param activity the activity
+     * @param pflow the pflow
+     * @param msgReject the msg reject
+     */
     private void rejectContent(Resource resource, String activity, PFlow pflow, String msgReject)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -562,6 +664,13 @@ public class PFlowManager
 
     }
 
+    /**
+     * Reject resource.
+     * 
+     * @param resource the resource
+     * @param user the user
+     * @param msg the msg
+     */
     public void rejectResource(Resource resource, User user, String msg)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -595,6 +704,13 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Inits the content.
+     * 
+     * @param resource the resource
+     * @param pflow the pflow
+     * @param message the message
+     */
     private void initContent(Resource resource, PFlow pflow, String message)
     {
         PFlowInstance instance = resource.getPflowInstance();
@@ -651,6 +767,16 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Send notification reject.
+     * 
+     * @param message the message
+     * @param resource the resource
+     * @param pflow the pflow
+     * @param version the version
+     * @param activityName the activity name
+     * @param wbUser the wb user
+     */
     private void sendNotificationReject(String message, Resource resource, PFlow pflow, String version, String activityName, User wbUser)
     {
         Document docworkflow = SWBUtils.XML.xmlToDom(pflow.getXml());
@@ -741,6 +867,14 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Send resource to authorize.
+     * 
+     * @param resource the resource
+     * @param pflow the pflow
+     * @param message the message
+     * @param user the user
+     */
     public void sendResourceToAuthorize(Resource resource, PFlow pflow, String message, User user)
     {
         if (message == null)
@@ -769,6 +903,12 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Checks if is authorized.
+     * 
+     * @param resource the resource
+     * @return true, if is authorized
+     */
     public boolean isAuthorized(Resource resource)
     {
         if (resource == null)
@@ -800,6 +940,12 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Checks if is in flow.
+     * 
+     * @param resource the resource
+     * @return true, if is in flow
+     */
     public boolean isInFlow(Resource resource)
     {
         if (resource.getPflowInstance() == null)
@@ -820,6 +966,12 @@ public class PFlowManager
         return false;
     }
 
+    /**
+     * Need an authorization.
+     * 
+     * @param resource the resource
+     * @return true, if successful
+     */
     public boolean needAnAuthorization(Resource resource)
     {
         Iterator<Resourceable> resourceables = resource.listResourceables();
@@ -875,6 +1027,14 @@ public class PFlowManager
         return false;
     }
 
+    /**
+     * Mail to notify.
+     * 
+     * @param resource the resource
+     * @param activityName the activity name
+     * @param messageType the message type
+     * @param message the message
+     */
     private void mailToNotify(Resource resource, String activityName, String messageType, String message)
     {
         User wbuser = resource.getCreator();
@@ -1062,6 +1222,11 @@ public class PFlowManager
         }
     }
 
+    /**
+     * Noauthorize content.
+     * 
+     * @param resource the resource
+     */
     private void noauthorizeContent(Resource resource)
     {
         PFlowInstance instance = resource.getPflowInstance();

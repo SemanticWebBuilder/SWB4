@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TwitterBase.
+ */
 public class TwitterBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Twitter. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Twitter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Twitter");
 
+    /**
+     * Instantiates a new twitter base.
+     */
     public TwitterBase()
     {
     }
 
+    /**
+     * Instantiates a new twitter base.
+     * 
+     * @param base the base
+     */
     public TwitterBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Twitter");
 }

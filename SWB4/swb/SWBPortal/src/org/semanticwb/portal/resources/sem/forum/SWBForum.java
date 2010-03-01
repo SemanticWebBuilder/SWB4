@@ -54,28 +54,44 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
+// TODO: Auto-generated Javadoc
 /**
-* Resource that manage a forum
-* @author : Jorge Alberto Jiménez
-* @version 1.0
-*/
+ * Resource that manage a forum.
+ * 
+ * @author : Jorge Alberto Jiménez
+ * @version 1.0
+ */
 
 public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWBForumBase
 {
 
+    /**
+     * Instantiates a new sWB forum.
+     */
     public SWBForum()
     {
        
     }
 
+    /**
+     * Instantiates a new sWB forum.
+     * 
+     * @param base the base
+     */
     public SWBForum(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBForum.class);
+    
+    /** The lang. */
     private String lang = "es";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("addThread")) {
@@ -91,6 +107,9 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -103,6 +122,15 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
     }
 
+    /**
+     * Do add thread.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAddThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, paramRequest.getWebPage().getSemanticObject(), null);
@@ -124,6 +152,15 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         out.println(mgr.renderForm(request));
     }
 
+    /**
+     * Do reply post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doReplyPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         WebSite website=paramRequest.getWebPage().getWebSite();
@@ -174,6 +211,15 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         out.println(mgr.renderForm(request));
     }
 
+    /**
+     * Do edit post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
@@ -221,6 +267,15 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         out.println(mgr.renderForm(request));
     }
 
+    /**
+     * Do edit thread.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
@@ -279,6 +334,9 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         out.println(mgr.renderForm(request));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         WebPage page = response.getWebPage();
@@ -477,6 +535,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
     }
 
+    /**
+     * Gets the childs2 remove.
+     * 
+     * @param post the post
+     * @param childPost the child post
+     * @return the childs2 remove
+     */
     private int getChilds2Remove(Post post, int childPost) {
         GenericIterator<Post> gitPost = post.listchildPosts();
         while (gitPost.hasNext()) {
@@ -486,6 +551,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         return childPost;
     }
 
+    /**
+     * Process files.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param sobj the sobj
+     */
     private void processFiles(HttpServletRequest request, SWBActionResponse response, SemanticObject sobj) {
         Date date = new Date();
         Resource base = response.getResourceBase();

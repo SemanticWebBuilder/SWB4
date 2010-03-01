@@ -40,24 +40,32 @@ import org.semanticwb.portal.SWBMonitor;
 import org.semanticwb.portal.SWBSessionObject;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAListActiveUsers.
+ * 
  * @author juan.fernandez
  */
 public class SWBAListActiveUsers extends GenericResource {
     
+    /** The log. */
     private Logger log=SWBUtils.getLogger(SWBAListActiveUsers.class);
     
-/** Creates a new instance of SWBAListActiveUsers */
+/**
+ * Creates a new instance of SWBAListActiveUsers.
+ */
     public SWBAListActiveUsers() {
     }
 
-    /** User view of the WBAListActiveUsers resource
+    /**
+     * User view of the WBAListActiveUsers resource.
+     * 
      * @param request the input parameters
      * @param response the answer to the user request
      * @param paramRequest a list of objects (topic, user, action, ...)
      * @throws AFException an exception of type AFException
      * @throws IOException an exception of type IOException
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -357,11 +365,16 @@ public class SWBAListActiveUsers extends GenericResource {
         out.println("</div>");
     }
 
-    /** Process the requested action of the WBAListActiveUsers resource
+    /**
+     * Process the requested action of the WBAListActiveUsers resource.
+     * 
      * @param request the input parameters
      * @param response the answer to the user request and a list of objects (topic, user, action, ...)
+     * @param paramRequest the param request
+     * @return the data
      * @throws AFException an exception of type AFException
      * @throws IOException an exception of type IOException
+     * @throws SWBResourceException the sWB resource exception
      */
 //    @Override
 //    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -432,12 +445,15 @@ public class SWBAListActiveUsers extends GenericResource {
         out.println("zoom=true");
     }
 
-    /** Process the user request
+    /**
+     * Process the user request.
+     * 
      * @param request the input parameters
      * @param response the answer to the user request
      * @param paramRequest a list of objects (topic, user, action, ...)
      * @throws AFException an exception of type AFException
      * @throws IOException an exception of type IOException
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -447,6 +463,12 @@ public class SWBAListActiveUsers extends GenericResource {
         }else super.processRequest(request,response,paramRequest);
     }
 
+    /**
+     * String null validate.
+     * 
+     * @param obj the obj
+     * @return the string
+     */
     public String stringNullValidate(Object obj)
     {
         if(obj==null)return "";

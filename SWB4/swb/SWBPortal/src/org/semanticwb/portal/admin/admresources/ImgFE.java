@@ -30,6 +30,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Img en una forma de html.
  * <p>
@@ -40,23 +41,40 @@ import org.w3c.dom.*;
 public class ImgFE extends ImageFE
 {
     
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ImgFE.class);
 
+    /**
+     * Instantiates a new img fe.
+     */
     public ImgFE(){
     }
 
+    /**
+     * Instantiates a new img fe.
+     * 
+     * @param tag the tag
+     */
     public ImgFE(Node tag) {
         super(tag);
     }
     
+    /**
+     * Instantiates a new img fe.
+     * 
+     * @param name the name
+     * @param src the src
+     */
     public ImgFE(String name, String src) {
         super(name, src);
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */ 
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */ 
     public String getHtml()
     {
         String xml="";

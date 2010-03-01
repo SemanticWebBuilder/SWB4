@@ -25,23 +25,43 @@ package org.semanticwb.portal.monitor;
 import java.io.Serializable;
 import java.lang.management.MemoryUsage;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBMonitorData.
+ * 
  * @author serch
  */
 public class SWBMonitorData implements Serializable
 {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 4012L;
+    
+    /** The start time. */
     public long upTime, startTime = -1L;
+    
+    /** The process cpu time. */
     public long processCpuTime = -1L;
+    
+    /** The time stamp. */
     public long timeStamp;
+    
+    /** The n cp us. */
     public int nCPUs;
+    
+    /** The objects pending. */
     public long currentHeap, maxHeap, currentCommited, objectsPending = -1L;
+    
+    /** The instant cpu. */
     public float instantCPU = Float.MIN_VALUE;
   //  public long commitedVirtualMem, totalPhysicalMem, freePhysicalMem, totalSwapMem, FreeSwapMem = -1L;
 
-    public SWBMonitorData(SWBMonitorBeans beans)
+    /**
+   * Instantiates a new sWB monitor data.
+   * 
+   * @param beans the beans
+   */
+  public SWBMonitorData(SWBMonitorBeans beans)
     {
         if (null != beans.sunOperatingSystemMXBean)
         {

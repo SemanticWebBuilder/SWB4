@@ -41,29 +41,53 @@ import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 
-/** <PRE>
+// TODO: Auto-generated Javadoc
+/**
+ * <PRE>
  * objeto: registra hits a archivo log y administra objetos SWBHitCounter
- *
+ * 
  * Opciones en "wb/accessLogPeriod":
- *      ***           - yearly    (un archivo por a�o)
- *      ***           - monthly   (un archivo por mes ***por defecto***)
- *      ***           - daily     (un archivo diario)
- * </PRE>
+ * ***           - yearly    (un archivo por a�o)
+ * ***           - monthly   (un archivo por mes ***por defecto***)
+ * ***           - daily     (un archivo diario)
+ * </PRE>.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBAccessLog implements SWBAppObject
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBAccessLog.class);
 
+    /** The global. */
     private HashMap global;                 //tipo 0
+    
+    /** The device. */
     private HashMap device;                 //tipo 1
+    
+    /** The language. */
     private HashMap language;               //tipo 2
+    
+    /** The topic. */
     private HashMap topic;                  //tipo 3
+    
+    /** The usertype. */
     private HashMap usertype;               //tipo 4
+    
+    /** The session. */
     private HashMap session;                //tipo 5
+    
+    /** The login. */
     private HashMap login;                  //tipo 6
+    
+    /** The unique login. */
     private HashMap uniqueLogin;            //tipo 7
+    
+    /** The unique login ids. */
     private ArrayList uniqueLoginIds;       //tipo 7
+    
+    /** The resource. */
     private HashMap resource;               //tipo 8
 
     //public PrintWriter log = null;
@@ -71,26 +95,48 @@ public class SWBAccessLog implements SWBAppObject
     //public PrintWriter logsess = null;
     //public PrintWriter loglogin = null;
     
+    /** The hlog. */
     public HashMap hlog = null;
+    
+    /** The hlogh. */
     public HashMap hlogh = null;
+    
+    /** The hlogsess. */
     public HashMap hlogsess = null;
+    
+    /** The hloglogin. */
     public HashMap hloglogin = null;
     
+    /** The date patern. */
     public String datePatern = null;
+    
+    /** The len patern. */
     public int lenPatern = 7;
 
+    /** The dbpatern. */
     public String dbpatern=null;
     
+    /** The df. */
     private SimpleDateFormat df = null;
     
+    /** The workp. */
     private String workp="/";
     
+    /** The instance hits. */
     private long instanceHits=0;
+    
+    /** The instance sess. */
     private long instanceSess=0;
+    
+    /** The instance logins. */
     private long instanceLogins=0;
+    
+    /** The instance unique logins. */
     private long instanceUniqueLogins=0;
 
-    /** Creates a new instance of SWBAccessLog */
+    /**
+     * Creates a new instance of SWBAccessLog.
+     */
     public SWBAccessLog()
     {
         log.event("Initializing SWBAccessLog...");
@@ -111,6 +157,11 @@ public class SWBAccessLog implements SWBAppObject
         hloglogin =  new HashMap();  
     }
 
+    /**
+     * Close logs.
+     * 
+     * @param logs the logs
+     */
     private void closeLogs(HashMap logs)
     {
         if(logs==null)return;
@@ -123,6 +174,9 @@ public class SWBAccessLog implements SWBAppObject
         }
     }
     
+    /**
+     * Close logs.
+     */
     private void closeLogs()
     {
         closeLogs(hlog);
@@ -131,6 +185,14 @@ public class SWBAccessLog implements SWBAppObject
         closeLogs(hloglogin);
     }    
     
+    /**
+     * Open log.
+     * 
+     * @param logs the logs
+     * @param key the key
+     * @param idFile the id file
+     * @return the prints the writer
+     */
     private PrintWriter openLog(HashMap logs, String key, String idFile)
     {
         String logFile = workp +"_"+key+idFile+"." + datePatern + ".log";        
@@ -159,6 +221,9 @@ public class SWBAccessLog implements SWBAppObject
     }
     
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#destroy()
+     */
     public void destroy()
     {
         log.info("Stoping SWBAccessLog...");
@@ -167,6 +232,9 @@ public class SWBAccessLog implements SWBAppObject
         log.info("SWBAccessLog End");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#init()
+     */
     public void init()
     {
         if (SWBPlatform.getEnv("swb/accessLog","/logs/swb_log").startsWith("file:"))
@@ -192,12 +260,19 @@ public class SWBAccessLog implements SWBAppObject
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.base.SWBAppObject#refresh()
+     */
     public void refresh()
     {
     }
 
     /**
-     * @return  */
+     * Gets the patern.
+     * 
+     * @return the patern
+     * @return
+     */
     public String getPatern()
     {
         if(df==null) {
@@ -214,6 +289,14 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     
+    /**
+     * Log.
+     * 
+     * @param hm the hm
+     * @param tm the tm
+     * @param strFile the str file
+     * @param str the str
+     */
     public synchronized void log(HashMap hm, String tm, String strFile, String str)
     {
         PrintWriter log=null;
@@ -236,14 +319,21 @@ public class SWBAccessLog implements SWBAppObject
     
 
     /**
-     * @param str  */
+     * Log acc.
+     * 
+     * @param tm the tm
+     * @param str the str
+     */
     public void logAcc(String tm, String str)
     {
         log(hlog,tm,"_acc",str);
     }
 
     /**
-     * @param str  */
+     * Hit log.
+     * 
+     * @param str the str
+     */
     public void hitLog(String str)
     {
         StringTokenizer st = new StringTokenizer(str, "|");
@@ -265,14 +355,22 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param str  */
+     * Session log.
+     * 
+     * @param rep the rep
+     * @param str the str
+     */
     public void sessionLog(String rep, String str)
     {
         log(hlogsess,rep,"_sess",str);
     }    
     
     /**
-     * @param str  */
+     * Login log.
+     * 
+     * @param rep the rep
+     * @param str the str
+     */
     public void loginLog(String rep, String str)
     {
         log(hloglogin,rep,"_logins",str);
@@ -280,7 +378,10 @@ public class SWBAccessLog implements SWBAppObject
     
 
     /**
-     * @param str  */
+     * Update res.
+     * 
+     * @param str the str
+     */
     public void updateRes(String str)
     {
         //2002-10-07 10:33:31|127.0.0.1|200.38.188.168|egobierno|Egob_Empleo|egob||web|en|275|66|182|3|38|166
@@ -367,7 +468,10 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param str  */
+     * Update sess.
+     * 
+     * @param str the str
+     */
     public void updateSess(String str)
     {
         //2002-10-07 10:33:31|127.0.0.1|200.38.188.168|wb|nologin|sadfasdfsdsdfsfasklfjsadf
@@ -405,7 +509,10 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param str  */
+     * Update login.
+     * 
+     * @param str the str
+     */
     public void updateLogin(String str)
     {
         //2002-10-07 10:33:31|127.0.0.1|200.38.188.168|wb|nologin|sadfasdfsdsdfsfasklfjsadf
@@ -450,8 +557,11 @@ public class SWBAccessLog implements SWBAppObject
     }    
 
     /**
-     * @param map
-     * @param sdate  */
+     * Global hit.
+     * 
+     * @param map the map
+     * @param sdate the sdate
+     */
     public void globalHit(String map, String sdate)
     {
         instanceHits++;
@@ -469,7 +579,11 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param sdate  */
+     * Global sess.
+     * 
+     * @param rep the rep
+     * @param sdate the sdate
+     */
     public void globalSess(String rep, String sdate)
     {
         instanceSess++;
@@ -487,9 +601,11 @@ public class SWBAccessLog implements SWBAppObject
     }    
     
     /**
-     * @param map
-     * @param rep
-     * @param sdate  */
+     * Global unique logins.
+     * 
+     * @param rep the rep
+     * @param sdate the sdate
+     */
     public void globalUniqueLogins(String rep, String sdate)
     {
         instanceUniqueLogins++;
@@ -507,9 +623,11 @@ public class SWBAccessLog implements SWBAppObject
     }      
     
     /**
-     * @param map
-     * @param rep
-     * @param sdate  */
+     * Global logins.
+     * 
+     * @param rep the rep
+     * @param sdate the sdate
+     */
     public void globalLogins(String rep, String sdate)
     {
         instanceLogins++;
@@ -527,9 +645,12 @@ public class SWBAccessLog implements SWBAppObject
     }     
 
     /**
-     * @param map
-     * @param dev
-     * @param sdate  */
+     * Device hit.
+     * 
+     * @param map the map
+     * @param dev the dev
+     * @param sdate the sdate
+     */
     public void deviceHit(String map, String dev, String sdate)
     {
         Object obj = device.get(map);
@@ -562,9 +683,12 @@ public class SWBAccessLog implements SWBAppObject
     }
 
     /**
-     * @param map
-     * @param lang
-     * @param sdate  */
+     * Language hit.
+     * 
+     * @param map the map
+     * @param lang the lang
+     * @param sdate the sdate
+     */
     public void languageHit(String map, String lang, String sdate)
     {
         Object obj = language.get(map);
@@ -593,9 +717,12 @@ public class SWBAccessLog implements SWBAppObject
     }
 
     /**
-     * @param map
-     * @param tp
-     * @param sdate  */
+     * Topic hit.
+     * 
+     * @param map the map
+     * @param tp the tp
+     * @param sdate the sdate
+     */
     public void topicHit(String map, String tp, String sdate)
     {
         Object obj = topic.get(map);
@@ -624,9 +751,12 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param map
-     * @param dev
-     * @param sdate  */
+     * Resource hit.
+     * 
+     * @param map the map
+     * @param res the res
+     * @param sdate the sdate
+     */
     public void resourceHit(String map, String res, String sdate)
     {
         Object obj = resource.get(map);
@@ -659,9 +789,12 @@ public class SWBAccessLog implements SWBAppObject
     }    
 
     /**
-     * @param map
-     * @param ut
-     * @param sdate  */
+     * User type hit.
+     * 
+     * @param map the map
+     * @param ut the ut
+     * @param sdate the sdate
+     */
     public void userTypeHit(String map, String ut, String sdate)
     {
         Object obj = usertype.get(map);
@@ -691,8 +824,12 @@ public class SWBAccessLog implements SWBAppObject
 
 
     /**
-     * @param map
-     * @return  */
+     * Gets the global hits.
+     * 
+     * @param map the map
+     * @return the global hits
+     * @return
+     */
     public long getGlobalHits(String map)
     {
         long ret = 0;
@@ -701,30 +838,54 @@ public class SWBAccessLog implements SWBAppObject
         return ret;
     }
 
+    /**
+     * Gets the instance hits.
+     * 
+     * @return the instance hits
+     */
     public long getInstanceHits()
     {
         return instanceHits;
     }
 
+    /**
+     * Gets the instance sessions.
+     * 
+     * @return the instance sessions
+     */
     public long getInstanceSessions()
     {
         return instanceSess;
     }
 
+    /**
+     * Gets the instance logins.
+     * 
+     * @return the instance logins
+     */
     public long getInstanceLogins()
     {
         return instanceLogins;
     }
     
+    /**
+     * Gets the instance unique logins.
+     * 
+     * @return the instance unique logins
+     */
     public long getInstanceUniqueLogins()
     {
         return instanceUniqueLogins;
     }    
 
     /**
-     * @param map
-     * @param id
-     * @return  */
+     * Gets the device hits.
+     * 
+     * @param map the map
+     * @param id the id
+     * @return the device hits
+     * @return
+     */
     public long getDeviceHits(String map, String id)
     {
         long ret = 0;
@@ -738,9 +899,13 @@ public class SWBAccessLog implements SWBAppObject
     }
 
     /**
-     * @param map
-     * @param id
-     * @return  */
+     * Gets the language hits.
+     * 
+     * @param map the map
+     * @param id the id
+     * @return the language hits
+     * @return
+     */
     public long getLanguageHits(String map, String id)
     {
         long ret = 0;
@@ -754,9 +919,13 @@ public class SWBAccessLog implements SWBAppObject
     }
 
     /**
-     * @param map
-     * @param id
-     * @return  */
+     * Gets the topic hits.
+     * 
+     * @param map the map
+     * @param id the id
+     * @return the topic hits
+     * @return
+     */
     public long getTopicHits(String map, String id)
     {
         long ret = 0;
@@ -770,9 +939,13 @@ public class SWBAccessLog implements SWBAppObject
     }
     
     /**
-     * @param map
-     * @param id
-     * @return  */
+     * Gets the resource hits.
+     * 
+     * @param map the map
+     * @param id the id
+     * @return the resource hits
+     * @return
+     */
     public long getResourceHits(String map, String id)
     {
         long ret = 0;
@@ -786,9 +959,13 @@ public class SWBAccessLog implements SWBAppObject
     }    
 
     /**
-     * @param map
-     * @param id
-     * @return  */
+     * Gets the user type hits.
+     * 
+     * @param map the map
+     * @param id the id
+     * @return the user type hits
+     * @return
+     */
     public long getUserTypeHits(String map, String id)
     {
         long ret = 0;
@@ -802,6 +979,9 @@ public class SWBAccessLog implements SWBAppObject
     }
 
    
+    /**
+     * Update hits.
+     */
     public void updateHits()
     {
         log.info("Updating hits...");
@@ -851,6 +1031,11 @@ public class SWBAccessLog implements SWBAppObject
         updateHitsIter(resource.values().iterator());        
     }
     
+    /**
+     * Update hits iter.
+     * 
+     * @param it the it
+     */
     private void updateHitsIter(Iterator it)
     {
         while(it.hasNext())

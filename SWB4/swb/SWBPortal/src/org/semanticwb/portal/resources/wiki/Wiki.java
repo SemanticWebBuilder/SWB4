@@ -55,20 +55,32 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Wiki.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class Wiki extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Wiki.class);
+    
+    /** The parser. */
     WikiParser parser;
+    
+    /** The df. */
     SimpleDateFormat df = new SimpleDateFormat("dd-MM-yy_H-mm-ss-SSS");
 
-    /** Creates a new instance of Wiki */
+    /**
+     * Creates a new instance of Wiki.
+     */
     public Wiki() {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -84,6 +96,9 @@ public class Wiki extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         String WBWikiTextbox = request.getParameter("WBWikiTextbox");
@@ -133,6 +148,12 @@ public class Wiki extends GenericResource {
         out.println("  </form>");
     }
 
+    /**
+     * Gets the header.
+     * 
+     * @param data the data
+     * @return the header
+     */
     public String getHeader(String data) {
         String pattern = "\n#EndHeader\n";
         int i = data.indexOf(pattern);
@@ -142,6 +163,12 @@ public class Wiki extends GenericResource {
         return "#EndHeader\n";
     }
 
+    /**
+     * Gets the content.
+     * 
+     * @param data the data
+     * @return the content
+     */
     public String getContent(String data) {
         String ret = "";
         if (data != null) {
@@ -156,6 +183,12 @@ public class Wiki extends GenericResource {
         return ret;
     }
 
+    /**
+     * Read file.
+     * 
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String readFile(SWBParamRequest paramsRequest) {
         String topic = paramsRequest.getWebPage().getId();
         String ret = null;
@@ -167,6 +200,13 @@ public class Wiki extends GenericResource {
         return ret;
     }
 
+    /**
+     * Back up content.
+     * 
+     * @param paramsRequest the params request
+     * @param summary the summary
+     * @return the string
+     */
     public String backUpContent(SWBParamRequest paramsRequest, String summary) {
         StringBuffer header = new StringBuffer();
         String topic = paramsRequest.getWebPage().getId();
@@ -191,6 +231,12 @@ public class Wiki extends GenericResource {
         return header.toString();
     }
 
+    /**
+     * Write content.
+     * 
+     * @param paramsRequest the params request
+     * @param content the content
+     */
     public void writeContent(SWBParamRequest paramsRequest, String content) {
         String topic = paramsRequest.getWebPage().getId();
         String userid = paramsRequest.getUser().getId();
@@ -202,12 +248,18 @@ public class Wiki extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         parser = new WikiParser();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#getModes(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public String[] getModes(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException {
         String arr[] = super.getModes(request, paramRequest);
@@ -219,6 +271,9 @@ public class Wiki extends GenericResource {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#getResourceCacheID(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException {
         String retValue = super.getResourceCacheID(request, paramsRequest);
@@ -228,6 +283,9 @@ public class Wiki extends GenericResource {
         return retValue;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -295,6 +353,9 @@ public class Wiki extends GenericResource {
         out.println("</div>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 //        if(request.getParameter("save")!=null)
@@ -325,6 +386,12 @@ public class Wiki extends GenericResource {
         }
     }
 
+    /**
+     * User can edit.
+     * 
+     * @param paramrequest the paramrequest
+     * @return true, if successful
+     */
     private boolean userCanEdit(SWBParamRequest paramrequest)
     {
         boolean access = false;

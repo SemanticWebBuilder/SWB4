@@ -36,6 +36,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Se encarga de manejar los objetos SWBResourceCached disponibles en memoria.
  *
  * Object: It is in chatge of manage the SWBResourceCached objects availables in memory.
@@ -44,18 +45,33 @@ import org.semanticwb.model.Resource;
  */
 public class SWBResourceCachedMgr
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBResourceCachedMgr.class);
 
+    /** The cache. */
     private Hashtable cache;
+    
+    /** The mrulist. */
     private LinkedList mrulist;
+    
+    /** The cachesize. */
     private int cachesize;
     
+    /** The resource hits. */
     private long resourceHits;
+    
+    /** The cache hits. */
     private long cacheHits;
+    
+    /** The cache load hits. */
     private long cacheLoadHits;
 
-    /** Creates a new instance of SWBResourceCacheMgr
-     * @param max  */
+    /**
+     * Creates a new instance of SWBResourceCacheMgr.
+     * 
+     * @param max the max
+     */
     public SWBResourceCachedMgr(int max)
     {
         log.event("Initializing SWBResourceCachedMgr: " + max);
@@ -65,8 +81,14 @@ public class SWBResourceCachedMgr
     }
 
     /**
-     * @param res
-     * @return  */
+     * Gets the resource.
+     * 
+     * @param res the res
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the resource
+     * @return
+     */
     public SWBResource getResource(SWBResource res, HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         //System.out.println("getCache:"+res.getResourceBase().getId());
@@ -116,6 +138,11 @@ public class SWBResourceCachedMgr
         return ret;
     }
 
+    /**
+     * Removes the resource.
+     * 
+     * @param base the base
+     */
     public void removeResource(Resource base)
     {
         String mkey=getKey(base);
@@ -131,6 +158,12 @@ public class SWBResourceCachedMgr
         }
     }
     
+    /**
+     * Gets the key.
+     * 
+     * @param base the base
+     * @return the key
+     */
     public static String getKey(Resource base)
     {
         return base.getURI();
@@ -147,7 +180,7 @@ public class SWBResourceCachedMgr
     
     /**
      * Setter for property cacheLoadHits.
-     * @param cacheLoadHits New value of property cacheLoadHits.
+     * 
      */
     public void incResourceHits()
     {
@@ -165,7 +198,7 @@ public class SWBResourceCachedMgr
     
     /**
      * Setter for property cacheLoadHits.
-     * @param cacheLoadHits New value of property cacheLoadHits.
+     * 
      */
     public void incCacheHits()
     {
@@ -183,7 +216,7 @@ public class SWBResourceCachedMgr
     
     /**
      * Setter for property cacheLoadHits.
-     * @param cacheLoadHits New value of property cacheLoadHits.
+     * 
      */
     public void incCacheLoadHits()
     {

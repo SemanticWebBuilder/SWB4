@@ -53,23 +53,36 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.servlet.internal.Login;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBUserMgr.
+ * 
  * @author Jei
  */
 public class SWBUserMgr 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBUserMgr.class);
+    
+    /** The sessionobjects. */
     private ConcurrentHashMap<String, SWBSessionObject> sessionobjects;
     //private HashMap<String, HttpSession> sessions;
     
+    /** The Constant SUBJECTATT. */
     public static final String SUBJECTATT = "_swbsubject";
     
+    /**
+     * Instantiates a new sWB user mgr.
+     */
     public SWBUserMgr()
     {
         
     }
     
+    /**
+     * Inits the.
+     */
     public void init() {
         log.event("Initializing SWBUserMgr...");
         sessionobjects=new ConcurrentHashMap<String, SWBSessionObject>();
@@ -77,8 +90,11 @@ public class SWBUserMgr
     }
     
     /**
+     * Gets the subject.
+     * 
      * @param request <PRE>Recibe <I>requets</I> para buscar cookie de Usuario y de languaje</PRE>
-     * @return <PRE>Regresa un objeto <I>WBUser</I></PRE>
+     * @param website the website
+     * @return 
      */
     public Subject getSubject(HttpServletRequest request, String website)
     {
@@ -98,22 +114,44 @@ public class SWBUserMgr
         return  sessobj.getSubject(website);
     }
 
+    /**
+     * Gets the number of session objects.
+     * 
+     * @return the number of session objects
+     */
     public int getNumberOfSessionObjects()
     {
         return sessionobjects.size();
     }
 
+    /**
+     * List session objects.
+     * 
+     * @return the iterator
+     */
     public Iterator<SWBSessionObject> listSessionObjects()
     {
         return sessionobjects.values().iterator();
     }
 
+    /**
+     * Unbound session object.
+     * 
+     * @param sessID the sess id
+     */
     public void unboundSessionObject(String sessID)
     {
         sessionobjects.remove(sessID);
         //sessions.remove(sessID);
     }
     
+    /**
+     * Gets the user.
+     * 
+     * @param request the request
+     * @param site the site
+     * @return the user
+     */
     public User getUser(HttpServletRequest request, WebSite site)
     {
         User ret=null;
@@ -173,6 +211,13 @@ public class SWBUserMgr
         return ret;
     }
 
+    /**
+     * Gets the device.
+     * 
+     * @param request the request
+     * @param site the site
+     * @return the device
+     */
     private Device getDevice(HttpServletRequest request, WebSite site)
     {
         Device ret=null;
@@ -218,6 +263,18 @@ public class SWBUserMgr
         return ret;
     }
 
+    /**
+     * Login.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param website the website
+     * @throws ClassNotFoundException the class not found exception
+     * @throws InvocationTargetException the invocation target exception
+     * @throws InstantiationException the instantiation exception
+     * @throws IllegalAccessException the illegal access exception
+     * @throws LoginException the login exception
+     */
     public void login(HttpServletRequest request, HttpServletResponse response, WebSite website) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException, LoginException
     {
         UserRepository ur = website.getUserRepository();

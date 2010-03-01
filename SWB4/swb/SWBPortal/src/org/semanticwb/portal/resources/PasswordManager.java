@@ -25,30 +25,58 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class PasswordManager.
+ * 
  * @author serch
  */
 public class PasswordManager extends GenericResource {
 
+    /** The SIZE. */
     static int SIZE = 16;
+    
+    /** The letras. */
     static String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    
+    /** The generator. */
     static SecureRandom generator = new SecureRandom();
     
 
     {
         generator.setSeed(System.currentTimeMillis());
     }
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(PasswordManager.class);
+    
+    /** The Constant FRM_CHGPWD. */
     private static final String FRM_CHGPWD = "frmchgpwd";
+    
+    /** The Constant FRM_NEWPWD. */
     private static final String FRM_NEWPWD = "frmnewpwd";
+    
+    /** The Constant FRM_LOGREQ. */
     private static final String FRM_LOGREQ = "frmlogreq";
+    
+    /** The Constant FRM_MAILMS. */
     private static final String FRM_MAILMS = "frmmailms";
+    
+    /** The Constant TXT_chgpwd. */
     private static final String TXT_chgpwd = "<fieldset><form action=\"{actionurlUPG}\" method=\"post\">\n<label>Cambio password:</label><input type=\"password\" id=\"swb_newPassword\" name=\"swb_newPassword\" /><br />\n<label>Confirmar password:</label><input type=\"password\" id=\"swb_newPassword2\" name=\"swb_newPassword2\" /><br />\n<input type=\"submit\" value=\"Enviar\" /><input type=\"hidden\" name=\"cadcontrol\" value=\"{?cadcontrol}\" /></form></fieldset>\n";
+    
+    /** The Constant TXT_newpwd. */
     private static final String TXT_newpwd = "<fieldset><form action=\"{actionurlADD}\" method=\"post\">\n<label>Nuevo password:</label><input type=\"password\" id=\"swb_newPassword\" name=\"swb_newPassword\" /><br />\n<label>Confirmar password:</label><input type=\"password\" id=\"swb_newPassword2\" name=\"swb_newPassword2\" /><br />\n<input type=\"submit\" value=\"Enviar\" /><input type=\"hidden\" name=\"cadcontrol\" value=\"{?cadcontrol}\" /></form></fieldset>\n";
+    
+    /** The Constant TXT_logreq. */
     private static final String TXT_logreq = "<fieldset><form action=\"{actionurlSML}\" method=\"post\">\n<label>Login:</label><input type=\"text\" id=\"swb_login\" name=\"swb_login\" /><br />\n<input type=\"submit\" value=\"Enviar\" /><input type=\"hidden\" name=\"cadcontrol\" value=\"{?cadcontrol}\" /></form></fieldset>\n";
+    
+    /** The Constant TXT_mailms. */
     private static final String TXT_mailms = "Ha solicitado recuperar su contraseña, para continuar acuda a {?url}";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -67,6 +95,9 @@ public class PasswordManager extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         //System.out.println("En ProcessAction");
@@ -138,6 +169,15 @@ public class PasswordManager extends GenericResource {
 
     }
 
+    /**
+     * Show password change.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void showPasswordChange(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_CHGPWD);
@@ -150,6 +190,15 @@ public class PasswordManager extends GenericResource {
 
     }
 
+    /**
+     * Show login request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void showLoginRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_LOGREQ);
@@ -161,6 +210,16 @@ public class PasswordManager extends GenericResource {
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
     }
 
+    /**
+     * Show new password.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @param login the login
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     void showNewPassword(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, String login) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         String frmcontent = getResourceBase().getAttribute(FRM_NEWPWD);
@@ -173,6 +232,15 @@ public class PasswordManager extends GenericResource {
         out.println(replaceTags(frmcontent, request, paramRequest, cadcontrol));
     }
 
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramRequest the param request
+     * @param url the url
+     * @return the string
+     */
     String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, String url) {
         //System.out.print("\nstr:"+str+"-->");
         if (str == null || str.trim().length() == 0) {
@@ -234,6 +302,9 @@ public class PasswordManager extends GenericResource {
         return str;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -342,6 +413,11 @@ public class PasswordManager extends GenericResource {
 
     }
 
+    /**
+     * Gets the cad control.
+     * 
+     * @return the cad control
+     */
     String getCadControl() {
         StringBuilder sb = new StringBuilder(SIZE);
         for (int i = 0; i < SIZE; i++) {
@@ -350,6 +426,13 @@ public class PasswordManager extends GenericResource {
         return sb.toString();
     }
 
+    /**
+     * Generate token.
+     * 
+     * @param login the login
+     * @return the string
+     * @throws GeneralSecurityException the general security exception
+     */
     String generateToken(String login) throws GeneralSecurityException {
         String value = login + "|" + (System.currentTimeMillis() + 1000L * 60 * 60 * 48) + "|" +
                 SWBPlatform.getVersion();
@@ -357,6 +440,13 @@ public class PasswordManager extends GenericResource {
         return value;
     }
 
+    /**
+     * Got valid token login.
+     * 
+     * @param request the request
+     * @return the string
+     * @throws GeneralSecurityException the general security exception
+     */
     String gotValidTokenLogin(HttpServletRequest request) throws GeneralSecurityException {
         StringBuffer url = request.getRequestURL();
         String ret = null;

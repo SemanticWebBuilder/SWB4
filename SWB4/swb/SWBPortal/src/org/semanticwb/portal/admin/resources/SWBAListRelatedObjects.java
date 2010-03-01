@@ -39,17 +39,29 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBAListRelatedObjects.
+ * 
  * @author juan.fernandez
  */
 public class SWBAListRelatedObjects extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAListRelatedObjects.class);
+    
+    /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
+    
+    /** The Mode_ action. */
     String Mode_Action = "PACTION";
+    
+    /** The base. */
     Resource base = null;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -59,6 +71,9 @@ public class SWBAListRelatedObjects extends GenericResource {
         doEdit(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -237,9 +252,11 @@ public class SWBAListRelatedObjects extends GenericResource {
     }
 
     /**
-     *
-     * @param obj
-     * @param prop
+     * Gets the value sem prop.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @return the value sem prop
      * @return
      */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {

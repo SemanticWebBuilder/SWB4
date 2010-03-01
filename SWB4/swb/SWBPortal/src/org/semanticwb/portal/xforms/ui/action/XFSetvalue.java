@@ -34,32 +34,57 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.xforms.ElementsProp;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFSetvalue.
+ * 
  * @author  jorge.jimenez
  */
 public class XFSetvalue extends XformsBaseImp 
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(XFSetvalue.class);
+    
+    /** The elements prop. */
     protected ElementsProp elementsProp=null;
+    
+    /** The value. */
     protected String value=null;
     
+    /**
+     * Instantiates a new xF setvalue.
+     * 
+     * @param elementsProp the elements prop
+     */
     public XFSetvalue(ElementsProp elementsProp){
         this.elementsProp=elementsProp;
         setRDFAttributes();
     }
     
     // Sets
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets    
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(elementsProp.getId()!=null) {
             id=elementsProp.getId();
@@ -69,6 +94,9 @@ public class XFSetvalue extends XformsBaseImp
     
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -89,6 +117,9 @@ public class XFSetvalue extends XformsBaseImp
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

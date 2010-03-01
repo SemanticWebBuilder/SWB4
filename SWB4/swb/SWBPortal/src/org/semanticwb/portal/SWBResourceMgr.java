@@ -59,28 +59,46 @@ import org.semanticwb.portal.api.SWBResourceCachedMgr;
 import org.semanticwb.portal.api.SWBResourceTraceMgr;
 import org.semanticwb.portal.util.SWBPriorityComparator;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBResourceMgr.
+ * 
  * @author Jei
  */
 public class SWBResourceMgr
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBResourceMgr.class);
 
+    /** The resources. */
     private HashMap<String,SWBResource> resources;                  //WBResource
+    
+    /** The resource loaders. */
     private HashMap<String,ClassLoader> resourceLoaders;            //Resources ClassLoaders
+    
+    /** The res reloader. */
     private boolean resReloader = false;
 
 //    private SWBIntervalEvaluation intereval;
-    private SWBResourceCachedMgr cache;
+    /** The cache. */
+private SWBResourceCachedMgr cache;
+    
+    /** The tracer. */
     private SWBResourceTraceMgr tracer;
 
+    /**
+     * Instantiates a new sWB resource mgr.
+     */
     public SWBResourceMgr()
     {
         log.event("Initializing SWBResourceMgr...");
     }
 
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         resources=new HashMap();
@@ -105,6 +123,9 @@ public class SWBResourceMgr
         loadResourceModels();
     }
 
+    /**
+     * Load resource models.
+     */
     public void loadResourceModels()
     {
         Iterator<WebSite> it=SWBContext.listWebSites();
@@ -121,6 +142,11 @@ public class SWBResourceMgr
         SWBPlatform.getSemanticMgr().getSchema().rebind();
     }
 
+    /**
+     * Load resource type model.
+     * 
+     * @param type the type
+     */
     public void loadResourceTypeModel(ResourceType type)
     {
         String cls=type.getResourceOWL();
@@ -147,6 +173,13 @@ public class SWBResourceMgr
         }
     }
 
+    /**
+     * Gets the resource.
+     * 
+     * @param model the model
+     * @param id the id
+     * @return the resource
+     */
     public SWBResource getResource(String model, String id)
     {
         //System.out.println("model:"+model+" id:"+id);
@@ -154,6 +187,12 @@ public class SWBResourceMgr
         return getResource(resource);
     }
 
+    /**
+     * Gets the resource.
+     * 
+     * @param uri the uri
+     * @return the resource
+     */
     public SWBResource getResource(String uri)
     {
         SWBResource res=resources.get(uri);
@@ -165,6 +204,12 @@ public class SWBResourceMgr
         return res;
     }
 
+    /**
+     * Gets the resource.
+     * 
+     * @param resource the resource
+     * @return the resource
+     */
     public SWBResource getResource(Resource resource)
     {
         SWBResource res=null;
@@ -184,6 +229,14 @@ public class SWBResourceMgr
         return res;
     }
 
+    /**
+     * Gets the resource cached.
+     * 
+     * @param res the res
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the resource cached
+     */
     public SWBResource getResourceCached(SWBResource res, HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         cache.incResourceHits();
@@ -198,11 +251,15 @@ public class SWBResourceMgr
 
 
     /**
-     * @param user
-     * @param topic
-     * @param params
-     * @param tpl
-     * @return  */
+     * Gets the contents.
+     * 
+     * @param user the user
+     * @param topic the topic
+     * @param params the params
+     * @param tpl the tpl
+     * @return the contents
+     * @return
+     */
     public Iterator getContents(User user, WebPage topic, HashMap params, Template tpl)
     {
         Date today = new Date();
@@ -240,12 +297,17 @@ public class SWBResourceMgr
     }
 
     /**
-     * @param type
-     * @param user
-     * @param topic
-     * @param params
-     * @param tpl
-     * @return  */
+     * Gets the resources.
+     * 
+     * @param type the type
+     * @param stype the stype
+     * @param user the user
+     * @param topic the topic
+     * @param params the params
+     * @param tpl the tpl
+     * @return the resources
+     * @return
+     */
     public Iterator getResources(ResourceType type, ResourceSubType stype, User user, WebPage topic, HashMap params, Template tpl)
     {
         Date today = new Date();
@@ -422,13 +484,16 @@ public class SWBResourceMgr
     }
 
     /**
-     * @param base
-     * @param user
-     * @param stype
-     * @param camp
-     * @param today
-     * @param topic
-     * @return  */
+     * Check resource.
+     * 
+     * @param base the base
+     * @param user the user
+     * @param camp the camp
+     * @param today the today
+     * @param topic the topic
+     * @return true, if successful
+     * @return
+     */
     public boolean checkResource(Resource base, User user, int camp, Date today, WebPage topic)
     {
         boolean passrules = true;
@@ -479,9 +544,13 @@ public class SWBResourceMgr
     }
 
 
-    /** Valida carga de Recursos de versiones anteriore
-     *  Si el recursos es de una version anterior
-     *  asigna setWb2Resource(true) del recursos
+    /**
+     * Valida carga de Recursos de versiones anteriore
+     * Si el recursos es de una version anterior
+     * asigna setWb2Resource(true) del recursos.
+     * 
+     * @param obj the obj
+     * @return the object
      */
     public Object convertOldWBResource(Object obj)  //Resource base
     {
@@ -522,11 +591,26 @@ public class SWBResourceMgr
         return aux;
     }
 
+    /**
+     * Creates the swb resource class.
+     * 
+     * @param clsname the clsname
+     * @return the class
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Class createSWBResourceClass(String clsname) throws ClassNotFoundException
     {
         return createSWBResourceClass(clsname, false);
     }
 
+    /**
+     * Creates the swb resource class.
+     * 
+     * @param clsname the clsname
+     * @param replaceLoader the replace loader
+     * @return the class
+     * @throws ClassNotFoundException the class not found exception
+     */
     public Class createSWBResourceClass(String clsname, boolean replaceLoader) throws ClassNotFoundException
     {
         Class cls = null;
@@ -557,6 +641,12 @@ public class SWBResourceMgr
         return cls;
     }
 
+    /**
+     * Creates the swb resource.
+     * 
+     * @param resource the resource
+     * @return the sWB resource
+     */
     public SWBResource createSWBResource(Resource resource)
     {
         SWBResource obj = null;
@@ -637,10 +727,11 @@ public class SWBResourceMgr
         return cache;
     }
 
-    /** Regresa el ClassLoader utilizado para cargar el tipo de recurso
+    /**
+     * Regresa el ClassLoader utilizado para cargar el tipo de recurso.
+     * 
      * @param className nombre de la clase del recurso
      * @return ClassLoader del recurso
-     *
      */
     public ClassLoader getResourceLoader(String className)
     {
@@ -665,6 +756,12 @@ public class SWBResourceMgr
         this.resourceLoaders = resourceLoaders;
     }
 
+    /**
+     * Gets the class base.
+     * 
+     * @param classname the classname
+     * @return the class base
+     */
     private String getClassBase(String classname)
     {
         String ret=null;

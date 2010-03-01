@@ -47,6 +47,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra elementos html de una forma.
  * <p>
@@ -56,21 +57,40 @@ import org.semanticwb.SWBUtils;
 
 public class AdmResourceMgr extends WBContainerFE 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(AdmResourceMgr.class);
     
+    /** The user. */
     private User user;
+    
+    /** The isedit. */
     private boolean isedit;
+    
+    /** The dom. */
     private Document dom;
+    
+    /** The xml. */
     private String xml;
+    
+    /** The isdefconn. */
     private boolean isdefconn;
+    
+    /** The base. */
     private Resource base;
+    
+    /** The str res. */
     String strRes;
+    
+    /** The redirect. */
     String redirect;
+    
+    /** The request. */
     HttpServletRequest request=null;
     
     
     /**
-     * Inicializa el objeto
+     * Inicializa el objeto.
      */    
     public AdmResourceMgr() {
         user=null;
@@ -85,7 +105,8 @@ public class AdmResourceMgr extends WBContainerFE
     }
     
     /**
-     * Inicializa el objeto
+     * Inicializa el objeto.
+     * 
      * @param user Objeto wbuser del usuario que realiza la acci�n
      */    
     public AdmResourceMgr(User user) {
@@ -100,7 +121,8 @@ public class AdmResourceMgr extends WBContainerFE
     }*/
     
     /**
-     * Agrega el xml de la definici�n de admin al objeto
+     * Agrega el xml de la definici�n de admin al objeto.
+     * 
      * @param xml Inserta el xml al objeto
      * @param base Objeto base del recurso
      * @param redirect Ruta de redireccionamiento para el submit de la forma
@@ -112,6 +134,11 @@ public class AdmResourceMgr extends WBContainerFE
         createHtmlObjs();
     }
 
+    /**
+     * Sets the request.
+     * 
+     * @param request the new request
+     */
     public void setRequest(HttpServletRequest request){
         this.request=request;
     }
@@ -119,7 +146,7 @@ public class AdmResourceMgr extends WBContainerFE
     
    /**
     * Crea objetos html de acuerdo a tags del xml de la administraci�n de los recursos
-    * Creates html objects according with the tags of xml admin resources
+    * Creates html objects according with the tags of xml admin resources.
     */ 
     private void createHtmlObjs() {
         dom = SWBUtils.XML.xmlToDom(xml);
@@ -167,9 +194,13 @@ public class AdmResourceMgr extends WBContainerFE
     }
     
      /**
-    * Crea la forma con todos sus elementos de html
-    * Creates the form with the html tag elements as objects
-    */ 
+      * Crea la forma con todos sus elementos de html
+      * Creates the form with the html tag elements as objects.
+      * 
+      * @param tag the tag
+      * @param forma the forma
+      * @return the form fe
+      */ 
     private FormFE createObj(Node tag, FormFE forma) {
         if(tag.getNodeName().equalsIgnoreCase("FORM"))
         {
@@ -265,6 +296,12 @@ public class AdmResourceMgr extends WBContainerFE
         return forma;
     }
     
+    /**
+     * Find type.
+     * 
+     * @param tag the tag
+     * @return the string
+     */
     private String findType(Node tag) {
         String type = null;
         NamedNodeMap nnodemap = tag.getAttributes();
@@ -275,6 +312,13 @@ public class AdmResourceMgr extends WBContainerFE
         return type;
     }
     
+    /**
+     * Adds the childs fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -293,6 +337,13 @@ public class AdmResourceMgr extends WBContainerFE
         return obj;
     }
 
+    /**
+     * Adds the childs applet fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsAppletFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {
@@ -311,6 +362,13 @@ public class AdmResourceMgr extends WBContainerFE
         return obj;
     }
     
+    /**
+     * Adds the childs map fe.
+     * 
+     * @param tag the tag
+     * @param obj the obj
+     * @return the object
+     */
     private Object addChildsMapFE(Node tag, Object obj) {
         NodeList ndlchilds = tag.getChildNodes();
         if(ndlchilds.getLength() > 0) {

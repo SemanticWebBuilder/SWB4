@@ -26,15 +26,24 @@ package org.semanticwb.portal.monitor;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBThreadDumper.
+ * 
  * @author serch
  */
 public class SWBThreadDumper
 {
 
+    /** The thbean. */
     private static ThreadMXBean thbean = java.lang.management.ManagementFactory.getThreadMXBean();
 
+    /**
+     * Format thread info.
+     * 
+     * @param ti the ti
+     * @return the string
+     */
     private static String formatThreadInfo(ThreadInfo ti)
     {
         StringBuilder sb = new StringBuilder("\"" + ti.getThreadName() + "\""
@@ -66,6 +75,11 @@ public class SWBThreadDumper
         return sb.toString();
     }
 
+    /**
+     * Dump death lock.
+     * 
+     * @return the string
+     */
     public static String dumpDeathLock()
     {
         String ret = "No DeathLock found!\n";
@@ -87,6 +101,11 @@ public class SWBThreadDumper
         return ret;
     }
 
+    /**
+     * Dump thread.
+     * 
+     * @return the string
+     */
     public static String dumpThread()
     {
 
@@ -99,6 +118,11 @@ public class SWBThreadDumper
         return sb.toString();
     }
 
+    /**
+     * Dump thread with stack trace.
+     * 
+     * @return the string
+     */
     public static String dumpThreadWithStackTrace()
     {
 
@@ -110,6 +134,12 @@ public class SWBThreadDumper
         }
         return sb.toString();
     }
+    
+    /**
+     * Dump blocked thread.
+     * 
+     * @return the string
+     */
     public static String dumpBLOCKEDThread()
     {
 
@@ -124,6 +154,11 @@ public class SWBThreadDumper
         return sb.toString();
     }
 
+    /**
+     * Dump blocked thread with stack trace.
+     * 
+     * @return the string
+     */
     public static String dumpBLOCKEDThreadWithStackTrace()
     {
 

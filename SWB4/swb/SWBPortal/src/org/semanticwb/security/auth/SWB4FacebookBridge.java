@@ -33,21 +33,43 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.servlet.SWBVirtualHostFilter;
 import org.semanticwb.servlet.internal.InternalServlet;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWB4FacebookBridge.
+ * 
  * @author serch
  */
 public class SWB4FacebookBridge extends ExtUserRepInt
 {
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(SWB4FacebookBridge.class);
+    
+    /** The user rep. */
     private UserRepository userRep;
+    
+    /** The props. */
     private Properties props;
+    
+    /** The app key. */
     private String appKey;
+    
+    /** The app secret. */
     private String appSecret;
+    
+    /** The app id. */
     private String appID;
+    
+    /** The app base domain. */
     private String appBaseDomain;
 
 
+    /**
+     * Instantiates a new sW b4 facebook bridge.
+     * 
+     * @param UserRep the user rep
+     * @param props the props
+     */
     public SWB4FacebookBridge(UserRepository UserRep, Properties props)
     {
         this.userRep = UserRep;
@@ -70,39 +92,68 @@ public class SWB4FacebookBridge extends ExtUserRepInt
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#syncUsers()
+     */
     @Override
     public void syncUsers()
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#validateCredential(java.lang.String, java.lang.Object)
+     */
     @Override
     public boolean validateCredential(String login, Object credential)
     {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#syncUser(java.lang.String, org.semanticwb.model.User)
+     */
     @Override
     public boolean syncUser(String login, User user)
     {
         return false;
     }
 
+    /**
+     * Gets the app base domain.
+     * 
+     * @return the app base domain
+     */
     public String getAppBaseDomain()
     {
         return appBaseDomain;
     }
 
+    /**
+     * Gets the app id.
+     * 
+     * @return the app id
+     */
     public String getAppID()
     {
         return appID;
     }
 
+    /**
+     * Gets the app key.
+     * 
+     * @return the app key
+     */
     public String getAppKey()
     {
         return appKey;
     }
 
+    /**
+     * Gets the app secret.
+     * 
+     * @return the app secret
+     */
     public String getAppSecret()
     {
         return appSecret;

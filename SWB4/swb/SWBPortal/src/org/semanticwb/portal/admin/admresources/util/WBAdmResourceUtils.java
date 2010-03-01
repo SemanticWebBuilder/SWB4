@@ -43,6 +43,7 @@ import org.semanticwb.portal.admin.admresources.*;
 import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.util.WBFileUpload;
 
+// TODO: Auto-generated Javadoc
 /** objeto: Utilerias de uso comun para los objetos de la api de administraci�n de recursos.
  * <p>
  * methods utils for common use in the administration api objetcs
@@ -51,11 +52,24 @@ import org.semanticwb.portal.util.WBFileUpload;
  */
 public class WBAdmResourceUtils {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBAdmResourceUtils.class);
+    
+    /** The web work path. */
     private String webWorkPath = SWBPortal.getWebWorkPath();
+    
+    /** The work path. */
     private String workPath = SWBPortal.getWorkPath();
+    
+    /** The web path. */
     private String webPath = SWBPortal.getContextPath();
 
+    /**
+     * Xml verifier default.
+     * 
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifierDefault(String xml) {
         boolean bOk = false;
         String schema = null;
@@ -70,30 +84,83 @@ public class WBAdmResourceUtils {
         return bOk;
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param schema the schema
+     * @param dom the dom
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String schema, org.w3c.dom.Document dom) {
         return xmlVerifier(null, schema, dom);
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param sysid the sysid
+     * @param schema the schema
+     * @param dom the dom
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String sysid, String schema, org.w3c.dom.Document dom) {
         return xmlVerifier(sysid, schema, SWBUtils.XML.domToXml(dom));
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String schema, String xml) {
         return xmlVerifier(null, schema, xml);
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param sysid the sysid
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String sysid, String schema, String xml) {
         return xmlVerifier(sysid, SWBUtils.IO.getStreamFromString(schema), SWBUtils.IO.getStreamFromString(xml));
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(java.io.File schema, java.io.File xml) {
         return xmlVerifierImpl(null, schema, xml);
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(org.xml.sax.InputSource schema, org.xml.sax.InputSource xml) {
         return xmlVerifier(null, schema, null, xml);
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param idschema the idschema
+     * @param schema the schema
+     * @param idxml the idxml
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String idschema, org.xml.sax.InputSource schema, String idxml, org.xml.sax.InputSource xml) {
         boolean bOk = false;
         if (schema == null || xml == null) {
@@ -115,10 +182,25 @@ public class WBAdmResourceUtils {
         return bOk;
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(java.io.InputStream schema, java.io.InputStream xml) {
         return xmlVerifier(null, schema, xml);
     }
 
+    /**
+     * Xml verifier.
+     * 
+     * @param idschema the idschema
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifier(String idschema, java.io.InputStream schema, java.io.InputStream xml) {
         boolean bOk = false;
         if (schema == null || xml == null) {
@@ -134,6 +216,14 @@ public class WBAdmResourceUtils {
         return bOk;
     }
 
+    /**
+     * Xml verifier impl.
+     * 
+     * @param sysid the sysid
+     * @param objschema the objschema
+     * @param objxml the objxml
+     * @return true, if successful
+     */
     public boolean xmlVerifierImpl(String sysid, Object objschema, Object objxml) {
         boolean bOk = false;
 //        if (objschema == null || objxml == null) {
@@ -185,14 +275,38 @@ public class WBAdmResourceUtils {
         return bOk;
     }
 
+    /**
+     * Xml verifier by url.
+     * 
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifierByURL(String schema, String xml) {
         return xmlVerifierByURL(null, schema, xml);
     }
 
+    /**
+     * Xml verifier by url.
+     * 
+     * @param sysid the sysid
+     * @param schema the schema
+     * @param xml the xml
+     * @return true, if successful
+     */
     public boolean xmlVerifierByURL(String sysid, String schema, String xml) {
         return xmlVerifierImpl(sysid, schema, xml);
     }
 
+    /**
+     * Transform adm resource.
+     * 
+     * @param user the user
+     * @param path the path
+     * @param redirect the redirect
+     * @param base the base
+     * @return the document
+     */
     public Document transformAdmResource(User user, String path, String redirect, Resource base) {
         if (path == null || base == null) {
             return null;
@@ -202,6 +316,16 @@ public class WBAdmResourceUtils {
         return dom;
     }
 
+    /**
+     * Transform adm resource.
+     * 
+     * @param user the user
+     * @param path the path
+     * @param redirect the redirect
+     * @param base the base
+     * @param form the form
+     * @return the document
+     */
     public Document transformAdmResource(User user, String path, String redirect, Resource base, String form) {
         if (path == null || base == null) {
             return null;
@@ -218,6 +342,16 @@ public class WBAdmResourceUtils {
         return transformAdmResourceByXml(user, xml, redirect, base, form, null);
     }
 
+    /**
+     * Transform adm resource.
+     * 
+     * @param user the user
+     * @param path the path
+     * @param redirect the redirect
+     * @param base the base
+     * @param plt the plt
+     * @return the string
+     */
     public String transformAdmResource(User user, String path, String redirect, Resource base, Templates plt) {
         if (path == null || base == null || plt == null) {
             return null;
@@ -225,6 +359,17 @@ public class WBAdmResourceUtils {
         return transformAdmResource(user, path, redirect, base, plt, null);
     }
 
+    /**
+     * Transform adm resource.
+     * 
+     * @param user the user
+     * @param path the path
+     * @param redirect the redirect
+     * @param base the base
+     * @param plt the plt
+     * @param form the form
+     * @return the string
+     */
     public String transformAdmResource(User user, String path, String redirect, Resource base, Templates plt, String form) {
         if (path == null || base == null || plt == null) {
             return null;
@@ -242,6 +387,15 @@ public class WBAdmResourceUtils {
         return ret.toString();
     }
 
+    /**
+     * Transform adm resource by xml.
+     * 
+     * @param user the user
+     * @param xml the xml
+     * @param redirect the redirect
+     * @param base the base
+     * @return the document
+     */
     public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base) {
         if (xml == null || base == null) {
             return null;
@@ -251,6 +405,17 @@ public class WBAdmResourceUtils {
         return dom;
     }
 
+    /**
+     * Transform adm resource by xml.
+     * 
+     * @param user the user
+     * @param xml the xml
+     * @param redirect the redirect
+     * @param base the base
+     * @param form the form
+     * @param request the request
+     * @return the document
+     */
     public Document transformAdmResourceByXml(User user, String xml, String redirect, Resource base, String form, HttpServletRequest request) {
         if (xml == null || base == null) {
             return null;
@@ -272,6 +437,17 @@ public class WBAdmResourceUtils {
         return SWBUtils.XML.xmlToDom(xml);
     }
 
+     /**
+      * Transform adm resource by xml.
+      * 
+      * @param user the user
+      * @param xml the xml
+      * @param redirect the redirect
+      * @param base the base
+      * @param plt the plt
+      * @param request the request
+      * @return the string
+      */
      public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, HttpServletRequest request) {
         if (xml == null || base == null || plt == null) {
             return null;
@@ -279,6 +455,16 @@ public class WBAdmResourceUtils {
         return transformAdmResourceByXml(user, xml, redirect, base, plt, null, request);
     }
 
+    /**
+     * Transform adm resource by xml.
+     * 
+     * @param user the user
+     * @param xml the xml
+     * @param redirect the redirect
+     * @param base the base
+     * @param plt the plt
+     * @return the string
+     */
     public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt) {
         if (xml == null || base == null || plt == null) {
             return null;
@@ -286,6 +472,18 @@ public class WBAdmResourceUtils {
         return transformAdmResourceByXml(user, xml, redirect, base, plt, null, null);
     }
 
+    /**
+     * Transform adm resource by xml.
+     * 
+     * @param user the user
+     * @param xml the xml
+     * @param redirect the redirect
+     * @param base the base
+     * @param plt the plt
+     * @param form the form
+     * @param request the request
+     * @return the string
+     */
     public String transformAdmResourceByXml(User user, String xml, String redirect, Resource base, Templates plt, String form, HttpServletRequest request) {
         if (xml == null || base == null || plt == null) {
             return null;
@@ -303,6 +501,15 @@ public class WBAdmResourceUtils {
         return ret.toString();
     }
 
+    /**
+     * Transform dom.
+     * 
+     * @param plt the plt
+     * @param dom the dom
+     * @param encode the encode
+     * @return the string
+     * @throws TransformerException the transformer exception
+     */
     public String transformDom(Templates plt, Document dom, String encode) throws TransformerException {
         if (plt == null || dom == null) {
             return "";
@@ -330,6 +537,11 @@ public class WBAdmResourceUtils {
         }
     };
 
+    /**
+     * Gets the app languages.
+     * 
+     * @return the app languages
+     */
     public ArrayList getAppLanguages() {
         ArrayList languages = new ArrayList();
         Iterator<WebSite> it = SWBContext.listWebSites();
@@ -346,6 +558,12 @@ public class WBAdmResourceUtils {
         return languages;
     }
 
+    /**
+     * Checks if is not null.
+     * 
+     * @param eval the eval
+     * @return true, if is not null
+     */
     public boolean isNotNull(String eval) {
         if (eval != null && !eval.trim().equals("")) {
             return true;
@@ -353,6 +571,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is boolean.
+     * 
+     * @param eval the eval
+     * @return true, if is boolean
+     */
     public boolean isBoolean(String eval) {
         if (eval != null && (eval.trim().toUpperCase().equals("TRUE") || eval.trim().toUpperCase().equals("FALSE"))) {
             return true;
@@ -360,6 +584,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is character.
+     * 
+     * @param eval the eval
+     * @return true, if is character
+     */
     public boolean isCharacter(String eval) {
 //        if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -374,6 +604,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is digit.
+     * 
+     * @param eval the eval
+     * @return true, if is digit
+     */
     public boolean isDigit(String eval) {
         if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -388,6 +624,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is number.
+     * 
+     * @param eval the eval
+     * @return true, if is number
+     */
     public boolean isNumber(String eval) {
         if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -402,6 +644,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is iD.
+     * 
+     * @param eval the eval
+     * @return true, if is iD
+     */
     public boolean isID(String eval) {
         if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -416,6 +664,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is cDATA.
+     * 
+     * @param eval the eval
+     * @return true, if is cDATA
+     */
     public boolean isCDATA(String eval) {
         if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -430,6 +684,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is email.
+     * 
+     * @param eval the eval
+     * @return true, if is email
+     */
     public boolean isEmail(String eval) {
         if (eval != null && !eval.trim().equals("")) {
 //            try {
@@ -444,6 +704,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is form method.
+     * 
+     * @param eval the eval
+     * @return true, if is form method
+     */
     public boolean isFormMethod(String eval) {
         if (eval != null && (eval.trim().toUpperCase().equals("GET") || eval.trim().toUpperCase().equals("POST"))) {
             return true;
@@ -451,6 +717,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is input type.
+     * 
+     * @param eval the eval
+     * @return true, if is input type
+     */
     public boolean isInputType(String eval) {
         if (eval != null) {
             if (eval.trim().toUpperCase().equals("TEXT") ||
@@ -469,6 +741,12 @@ public class WBAdmResourceUtils {
         return false;
     }
 
+    /**
+     * Checks if is js val type.
+     * 
+     * @param eval the eval
+     * @return true, if is js val type
+     */
     public boolean isJsValType(String eval) {
         if (eval != null) {
             if (eval.trim().toLowerCase().equals("js_alphabetic") ||
@@ -482,9 +760,10 @@ public class WBAdmResourceUtils {
 
     /**
      * Despliega imagen en su representación html.
-     *
-     * @param   base    La información del recurso en memoria.
-     * @param   pImage  El nombre de la imagen que se va a desplegar.
+     * 
+     * @param base the base
+     * @param pImage the image
+     * @param pNode the node
      * @return  Regresa un nuevo String que contiene la representación html de la imagen.
      */
     public String displayImage(Resource base, String pImage, String pNode) {
@@ -539,9 +818,11 @@ public class WBAdmResourceUtils {
     
     /**
      * Despliega imagen en su representaciÃ³n html.
-     *
-     * @param   base    La informaciÃ³n del recurso en memoria.
-     * @param   filename  El nombre de la imagen que se va a desplegar.
+     * 
+     * @param base the base
+     * @param filename the filename
+     * @param width the width
+     * @param height the height
      * @return  Regresa un nuevo String que contiene la representaciÃ³n html de la imagen.
      */
     public String displayImage(Resource base, String filename, int width, int height) {
@@ -593,6 +874,8 @@ public class WBAdmResourceUtils {
 
     /**
      * Elimina un archivo dado de .
+     * 
+     * @param path the path
      * @return a boolean value if the file was removed or not.
      */
     public boolean removeFileFromFS(String path) {
@@ -610,11 +893,12 @@ public class WBAdmResourceUtils {
     }
 
     /**
-     * Sube un archivo parseado al filesystem. 
-     *
-     * @param     base      La información del recurso en memoria.
-     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
-     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * Sube un archivo parseado al filesystem.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
+     * @param idsession the idsession
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
     public String uploadFileParsed(Resource base, WBFileUpload fUp, String pInForm, String idsession) {
@@ -703,10 +987,12 @@ public class WBAdmResourceUtils {
     
     /**
      * Sube un archivo parseado al filesystem.
-     *
-     * @param     base      La información del recurso en memoria.
-     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
-     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
+     * @param idsession the idsession
+     * @param path2save the path2save
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
     public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm, String idsession,String path2save)
@@ -780,11 +1066,11 @@ public class WBAdmResourceUtils {
     }
 
     /**
-     * Sube un archivo al filesystem. 
-     *
-     * @param     base      La información del recurso en memoria.
-     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
-     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * Sube un archivo al filesystem.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
     public boolean uploadFile(Resource base, WBFileUpload fUp, String pInForm) {
@@ -814,10 +1100,10 @@ public class WBAdmResourceUtils {
     
     /**
      * Sube un archivo al filesystem.
-     *
-     * @param     base      La información del recurso en memoria.
-     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
-     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
     public boolean uploadFile(Resource base, FileUpload fUp, String pInForm)
@@ -846,8 +1132,8 @@ public class WBAdmResourceUtils {
 
     /**
      * Elimina archivos del filesystem relacionados al recurso.
-     *
-     * @param     base      La información del recurso en memoria.
+     * 
+     * @param base the base
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
     public String removeResource(Resource base) {
@@ -877,8 +1163,9 @@ public class WBAdmResourceUtils {
 
     /**
      * Obtiene el nombre del archivo de una ruta.
-     *
-     * @param     pFile     El nombre del archivo que se va a guardar.
+     * 
+     * @param base the base
+     * @param pFile the file
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
     public String getFileName(Resource base, String pFile) {
@@ -893,8 +1180,8 @@ public class WBAdmResourceUtils {
 
     /**
      * Obtiene el nombre del archivo de una ruta.
-     *
-     * @param     pFile     El nombre del archivo que se va a guardar.
+     * 
+     * @param pFile the file
      * @return    Regresa un nuevo String que contiene el nombre del archivo que se guardó.
      */
     public String getFileName(String pFile) {
@@ -913,12 +1200,12 @@ public class WBAdmResourceUtils {
     }
 
     /**
-     * Valida extensión de archivo
-     *
-     * @param     pFile     El nombre del archivo que se va a guardar.
-     * @param     pExt      Lista de extensiones dentro de las cuales el archivo debe pertenecer a alguna.
+     * Valida extensión de archivo.
+     * 
+     * @param pFile the file
+     * @param pExt the ext
      * @return    Regresa un nuevo String que contiene la descripción del error en caso de que el archivo
-     *            no cumpliera con la extensión requerida.
+     * no cumpliera con la extensión requerida.
      */
     public boolean isFileType(String pFile, String pExt) {
         boolean bOk = false;
@@ -945,6 +1232,12 @@ public class WBAdmResourceUtils {
         return bOk;
     }
 
+    /**
+     * Load color applet.
+     * 
+     * @param param the param
+     * @return the string
+     */
     public String loadColorApplet(java.util.HashMap param) {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("\n<applet name=\"");
@@ -1014,6 +1307,13 @@ public class WBAdmResourceUtils {
         return sbfRet.toString();
     }
 
+    /**
+     * Load window configuration.
+     * 
+     * @param base the base
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String loadWindowConfiguration(Resource base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
         StringBuffer ret = new StringBuffer("");
         try {
@@ -1323,6 +1623,12 @@ public class WBAdmResourceUtils {
         return sbfRet.toString();
     }
     
+    /**
+     * Load is number.
+     * 
+     * @param radix the radix
+     * @return the string
+     */
     public String loadIsNumber(int radix) {
         if(radix!=8 && radix!=10 && radix!=16) {
             radix = 10;
@@ -1380,6 +1686,11 @@ public class WBAdmResourceUtils {
     }
     
     
+    /**
+     * Load is hexadecimal.
+     * 
+     * @return the string
+     */
     public String loadIsHexadecimal()
     {
         StringBuffer sbfRet = new StringBuffer();
@@ -1442,10 +1753,10 @@ public class WBAdmResourceUtils {
     
     /**
      * Sube un archivo parseado al filesystem.
-     *
-     * @param     base      La información del recurso en memoria.
-     * @param     pfUpload  Objeto que permite obtener la información del formulario con tipo de codificación multipart/form-data.
-     * @param     pInForm   El nombre del campo del formulario donde se definió el archivo.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
      * @return    Regresa un nuevo String que contiene el applet para subir las imágenes relativas al archivo parseado.
      */
     public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm)
@@ -1454,6 +1765,15 @@ public class WBAdmResourceUtils {
     }
 
     
+    /**
+     * Upload file parsed.
+     * 
+     * @param base the base
+     * @param fUp the f up
+     * @param pInForm the in form
+     * @param idsession the idsession
+     * @return the string
+     */
     public String uploadFileParsed(Resource base, FileUpload fUp, String pInForm, String idsession){
         return uploadFileParsed(base, fUp, pInForm, idsession,null);
     }

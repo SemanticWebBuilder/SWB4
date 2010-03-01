@@ -49,14 +49,27 @@ import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WBAContentsReport.
+ */
 public class WBAContentsReport extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBASectionReport.class);
 
+    /** The str rsc type. */
     private String strRscType;
 
+    /**
+     * Instantiates a new wBA contents report.
+     */
     public WBAContentsReport() {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init(){
         Resource base = getResourceBase();
@@ -68,11 +81,13 @@ public class WBAContentsReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
@@ -89,6 +104,15 @@ public class WBAContentsReport extends GenericResource {
         }
     }
 
+    /**
+     * Do render section tree.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doRenderSectionTree(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -118,6 +142,15 @@ public class WBAContentsReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Do fill report.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doFillReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         String lang = paramsRequest.getUser().getLanguage();
@@ -162,6 +195,13 @@ public class WBAContentsReport extends GenericResource {
         response.getOutputStream().println(jobj.toString());
     }
 
+    /**
+     * Do data store.
+     * 
+     * @param node the node
+     * @param jarr the jarr
+     * @param lang the lang
+     */
     private void doDataStore(WebPage node, JSONArray jarr, final String lang) {
         Iterator<WebPage> childs = node.listVisibleChilds(lang);
         while(childs.hasNext()) {
@@ -193,11 +233,13 @@ public class WBAContentsReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("text/html;charset=iso-8859-1");
@@ -408,11 +450,13 @@ public class WBAContentsReport extends GenericResource {
 
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do rep excel.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
@@ -477,6 +521,13 @@ public class WBAContentsReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Gets the content in html.
+     * 
+     * @param childs the childs
+     * @param language the language
+     * @return the content in html
+     */
     private String getContentInHtml(Iterator<WebPage> childs, String language) {
         StringBuilder html = new StringBuilder();
         while(childs.hasNext()) {
@@ -506,11 +557,13 @@ public class WBAContentsReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do rep xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("text/xml;charset=iso-8859-1");
@@ -572,6 +625,14 @@ public class WBAContentsReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Gets the content in xml.
+     * 
+     * @param dom the dom
+     * @param childs the childs
+     * @param language the language
+     * @return the content in xml
+     */
     private void getContentInXml(Document dom, Iterator<WebPage> childs, String language) {
         Element report = dom.getDocumentElement();
         while(childs.hasNext()) {
@@ -620,6 +681,15 @@ public class WBAContentsReport extends GenericResource {
     }
 
 
+    /**
+     * Checks for broken links.
+     * 
+     * @param p_datapage the p_datapage
+     * @param p_page the p_page
+     * @param p_content the p_content
+     * @param p_site the p_site
+     * @return true, if successful
+     */
     public boolean hasBrokenLinks(ArrayList p_datapage, int p_page, String p_content, String p_site) {
         boolean b_return = false;
         /*ContentMonitor content_mon = null;
@@ -648,17 +718,33 @@ public class WBAContentsReport extends GenericResource {
         return b_return;
     }
 
+    /**
+     * The Class Bool.
+     */
     private class Bool {
+        
+        /** The first. */
         private boolean first;
 
+        /**
+         * Instantiates a new bool.
+         */
         public Bool() {
             first = true;
         }
 
+        /**
+         * Checks if is first.
+         * 
+         * @return true, if is first
+         */
         public boolean isFirst() {
             return first;
         }
 
+        /**
+         * Sets the first.
+         */
         public void setFirst() {
             first = false;
         }

@@ -49,18 +49,32 @@ import org.semanticwb.portal.util.fileupload.FileUploadListener;
 import org.semanticwb.portal.util.fileupload.UploadStatus;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * Uploads file via ajax (dwr)
+ * Uploads file via ajax (dwr).
+ * 
  * @author jorge.jimenez
  */
 public class UploadFormElement implements InternalServlet {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(UploadFormElement.class);
+    
+    /** The Constant UPLOAD_STATUS. */
     public static final String UPLOAD_STATUS = "uploadStatus";
+    
+    /** The Constant FILE_UPLOAD_STATS. */
     public static final String FILE_UPLOAD_STATS = "fileUploadStats";
+    
+    /** The Constant FILES_UPLOADED. */
     public static final String FILES_UPLOADED = "FILES_UPLOADED";
+    
+    /** The Constant UNIQUE_IDENTIFIER. */
     public static final String UNIQUE_IDENTIFIER = "uniqueFileIdentifier";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         HttpSession session = request.getSession();
         UploadStatus status = new UploadStatus();
@@ -98,10 +112,19 @@ public class UploadFormElement implements InternalServlet {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config) throws ServletException {
         log.event("Initializing InternalServlet UploadFormElement...");
     }
 
+    /**
+     * Store files on session.
+     * 
+     * @param request the request
+     * @param items the items
+     */
     private void storeFilesOnSession(HttpServletRequest request, List items) {
         // check if there's a request to identify the file to be uploaded
         String uniqueIdentifier = request.getParameter(UNIQUE_IDENTIFIER);

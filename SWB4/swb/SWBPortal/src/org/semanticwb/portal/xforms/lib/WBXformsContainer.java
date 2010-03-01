@@ -34,23 +34,40 @@ import java.util.Iterator;
 import org.semanticwb.xforms.lib.XformsBase;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WBXformsContainer.
+ * 
  * @author  jorge.jimenez
  */
 
 public abstract class WBXformsContainer extends XformsBaseImp
 {
+    
+    /** The formelements. */
     protected ArrayList formelements;
     
+    /**
+     * Instantiates a new wB xforms container.
+     */
     public WBXformsContainer() {
         formelements = new ArrayList();
     }
     
+    /**
+     * Adds the.
+     * 
+     * @param obj the obj
+     */
     public void add(Object obj) {
         formelements.add(obj);
     }
     
+    /**
+     * Gets the xform.
+     * 
+     * @return the xform
+     */
     public String getXform() {
         StringBuffer strb = new StringBuffer();
         Iterator iobj = formelements.iterator();
@@ -68,6 +85,11 @@ public abstract class WBXformsContainer extends XformsBaseImp
         return strb.toString();
     }
     
+     /**
+      * Gets the xform binds.
+      * 
+      * @return the xform binds
+      */
      public String getXformBinds() {
         StringBuffer strb = new StringBuffer();
         Iterator iobj = formelements.iterator();
@@ -88,10 +110,20 @@ public abstract class WBXformsContainer extends XformsBaseImp
         return strb.toString();
     }
         
+    /**
+     * Show.
+     * 
+     * @return the string
+     */
     public String show() {
         return getXform();
     }
     
+    /**
+     * Show binds.
+     * 
+     * @return the string
+     */
     public String showBinds() {
         return getXformBinds();
     }

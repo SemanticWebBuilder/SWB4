@@ -54,6 +54,7 @@ import org.w3c.dom.Node;
 
 
 
+// TODO: Auto-generated Javadoc
 /** Objeto que se encarga de desplegar y administrar recomendaciones de usuarios finales
  * interactuando con archivos de tipo Flash bajo ciertos criterios(configuraci&oacute;n del
  * recurso).
@@ -68,6 +69,7 @@ import org.w3c.dom.Node;
 public class RecommendSwf extends Recommend {
     
     
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(RecommendSwf.class);
     
     
@@ -76,12 +78,14 @@ public class RecommendSwf extends Recommend {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws AFException
-     * @throws IOException
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return 
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */       
     @Override
     public Document getDom(HttpServletRequest request,
@@ -167,11 +171,13 @@ public class RecommendSwf extends Recommend {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Do admin.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doAdmin(HttpServletRequest request,
@@ -352,9 +358,11 @@ public class RecommendSwf extends Recommend {
     }
 
     /**
-     * @param base
-     * @param fup
-     * @param att
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
      */  
     protected void setAttribute(Resource base, FileUpload fup, String att) {
         try {
@@ -370,10 +378,12 @@ public class RecommendSwf extends Recommend {
     }
     
     /**
-     * @param base
-     * @param fup
-     * @param att
-     * @param value
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
+     * @param value the value
      */  
     protected void setAttribute(Resource base, FileUpload fup, String att,
             String value) {
@@ -391,9 +401,11 @@ public class RecommendSwf extends Recommend {
     }
     
     /**
-     * @param dom
-     * @param nodeType
-     * @param name
+     * Removes the all nodes.
+     * 
+     * @param dom the dom
+     * @param nodeType the node type
+     * @param name the name
      */  
     private void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
@@ -409,9 +421,13 @@ public class RecommendSwf extends Recommend {
     }
     
     /**
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b>
+     * Gets the form.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return 
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private String getForm(HttpServletRequest request,
                            SWBParamRequest paramRequest) 
@@ -662,9 +678,13 @@ public class RecommendSwf extends Recommend {
     }
         
     /**
-     * @param request
-     * @param paramsRequest
-     * @return <b>String</b>
+     * Gets the script.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return 
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */     
     private String getScript(HttpServletRequest request,
             SWBParamRequest paramRequest)

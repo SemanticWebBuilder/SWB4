@@ -37,33 +37,46 @@ import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- * This resource add and show Contents related to a WebPage
- *
+ * This resource add and show Contents related to a WebPage.
+ * 
  * @author juan.fernandez
  */
 public class SWBAWebPageContents extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAWebPageContents.class);
+    
+    /** The webpath. */
     String webpath = SWBPlatform.getContextPath();
+    
+    /** The distributor. */
     String distributor = SWBPlatform.getEnv("wb/distributor");
+    
+    /** The Mode_ action. */
     String Mode_Action = "paction";
 
-    /** Creates a new instance of SWBAWebPageContents */
+    /**
+     * Creates a new instance of SWBAWebPageContents.
+     */
     public SWBAWebPageContents() {
     }
 
+    /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
 
     /**
      * User view of the resource, this call to a doEdit() mode.
-     *
+     * 
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
-     **/
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -75,13 +88,15 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * User edit view of the resource, this show a list of contents related to a webpage, user can add, remove, activate, deactivate contents.
-     *
+     * 
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
-     **/
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -866,12 +881,15 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Shows the preview of the content
+     * Shows the preview of the content.
+     * 
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPreview(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String id = request.getParameter("sval");
@@ -889,12 +907,15 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Show the list of the pflows to select one and send the element to the selected publish flow
+     * Show the list of the pflows to select one and send the element to the selected publish flow.
+     * 
      * @param request , this holds the parameters, an input data
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doPFlowMessage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String id = request.getParameter("suri"); // id recurso
@@ -960,11 +981,14 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Do a specific action like add, remove, send to a publish flow, delete the reference between WebPage and Content
+     * Do a specific action like add, remove, send to a publish flow, delete the reference between WebPage and Content.
+     * 
      * @param request , this holds the parameters
      * @param response , an answer to the user request, and a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -1105,12 +1129,15 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Do an update, update status, active or unactive action of a Content element requested by the user
+     * Do an update, update status, active or unactive action of a Content element requested by the user.
+     * 
      * @param request , this holds the parameters
      * @param response , an answer to the user request
      * @param paramRequest , a list of objects like user, webpage, Resource, ...
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doAction(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -1288,9 +1315,10 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Gets a date format based on the language parameter
-     * @param dateTime, a date time in milliseconds
-     * @param lang, explicit language
+     * Gets a date format based on the language parameter.
+     * 
+     * @param dateTime the date time
+     * @param lang the lang
      * @return a string of the date time in a selected language
      */
     public String getDateFormat(long dateTime, String lang) {
@@ -1303,9 +1331,10 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
     /**
-     * Gets the string of display name property of a semantic object
-     * @param obj, semantic object
-     * @param lang, explicit language
+     * Gets the string of display name property of a semantic object.
+     * 
+     * @param obj the obj
+     * @param lang the lang
      * @return a string value of the DisplayName property
      */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
@@ -1320,8 +1349,9 @@ public class SWBAWebPageContents extends GenericResource {
 
     /**
      * Gets the property value, it depends on the property type.
-     * @param obj, semantic object
-     * @param prop, property to eval
+     * 
+     * @param obj the obj
+     * @param prop the prop
      * @return get the corresponding property value
      */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
@@ -1355,13 +1385,16 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
      /**
-     * Process the mode request by the session user
-     * @param request , this holds the parameters
-     * @param response , an answer to the user request
-     * @param paramRequest , a list of objects like user, webpage, Resource, ...
-     * @throws SWBResourceException, a Resource Exception
-     * @throws IOException, an In Out Exception
-     */
+      * Process the mode request by the session user.
+      * 
+      * @param request , this holds the parameters
+      * @param response , an answer to the user request
+      * @param paramRequest , a list of objects like user, webpage, Resource, ...
+      * @throws SWBResourceException, a Resource Exception
+      * @throws IOException, an In Out Exception
+      * @throws SWBResourceException the sWB resource exception
+      * @throws IOException Signals that an I/O exception has occurred.
+      */
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

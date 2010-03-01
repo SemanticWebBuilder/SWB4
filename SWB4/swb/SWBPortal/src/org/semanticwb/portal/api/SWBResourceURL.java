@@ -30,12 +30,14 @@
 
 package org.semanticwb.portal.api;
 
+// TODO: Auto-generated Javadoc
 /**
  * Interfase que sirve para generar un URL valido por el portal para el recursos.
  * @author Javier Solis Gonzalez
  */
 public interface SWBResourceURL extends SWBResourceModes
 {
+    
     /**
      * Sets the window state of a resource to the given window state.
      * <p>
@@ -47,26 +49,40 @@ public interface SWBResourceURL extends SWBResourceModes
      * <li>NORMAL
      * <li>MAXIMIZED
      * </ul>
-     *
-     * @param windowState
-     *               the new resource window state
-     *
+     * 
+     * @param state the state
+     * @return the sWB resource url
      * @exception WindowStateException
-     *                   if the resource cannot switch to the specified window state.
-     *                   To avoid this exception the resource can check the allowed
-     *                   window states with <code>Request.isWindowStateAllowed()</code>.
+     * if the resource cannot switch to the specified window state.
+     * To avoid this exception the resource can check the allowed
+     * window states with <code>Request.isWindowStateAllowed()</code>.
      * @exception java.lang.IllegalStateException
-     *                    if the method is invoked after <code>sendRedirect</code> has been called.
-     *
+     * if the method is invoked after <code>sendRedirect</code> has been called.
      * @see WindowState
      */
     
     public SWBResourceURL setWindowState(String state);
     
+    /**
+     * Gets the window state.
+     * 
+     * @return the window state
+     */
     public String getWindowState();
     
+    /**
+     * Gets the call method.
+     * 
+     * @return the call method
+     */
     public int getCallMethod();
     
+    /**
+     * Sets the call method.
+     * 
+     * @param callMethod the call method
+     * @return the sWB resource url
+     */
     public SWBResourceURL setCallMethod(int callMethod);
     
     
@@ -86,27 +102,42 @@ public interface SWBResourceURL extends SWBResourceModes
      * </ul>
      * <p>
      * Note: The resource may still be called in a different window
-     *       state in the next render call, depending on the resource container / portal.
-     *
-     * @param resourceMode
-     *               the new resource mode
-     *
+     * state in the next render call, depending on the resource container / portal.
+     * 
+     * @param mode the mode
+     * @return the sWB resource url
      * @exception ResourceModeException
-     *                   if the resource cannot switch to this resource mode,
-     *                   because the resource or portal does not support it for this markup,
-     *                   or the current user is not allowed to switch to this resource mode.
-     *                   To avoid this exception the resource can check the allowed
-     *                   resource modes with <code>Request.isResourceModeAllowed()</code>.
+     * if the resource cannot switch to this resource mode,
+     * because the resource or portal does not support it for this markup,
+     * or the current user is not allowed to switch to this resource mode.
+     * To avoid this exception the resource can check the allowed
+     * resource modes with <code>Request.isResourceModeAllowed()</code>.
      * @exception java.lang.IllegalStateException
-     *                    if the method is invoked after <code>sendRedirect</code> has been called.
+     * if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
     public SWBResourceURL setMode(String mode);
     
+    /**
+     * Gets the mode.
+     * 
+     * @return the mode
+     */
     public String getMode();
     
+    /**
+     * Checks if is secure.
+     * 
+     * @return true, if is secure
+     */
     public boolean isSecure();
     
+    /**
+     * Sets the secure.
+     * 
+     * @param secure the secure
+     * @return the sWB resource url
+     */
     public SWBResourceURL setSecure(boolean secure);
     
     /** Getter for property action.
@@ -115,9 +146,11 @@ public interface SWBResourceURL extends SWBResourceModes
      */
     public java.lang.String getAction();
     
-    /** Setter for property action.
+    /**
+     * Setter for property action.
+     * 
      * @param action New value of property action.
-     *
+     * @return the sWB resource url
      */
     public SWBResourceURL setAction(java.lang.String action);
 
@@ -140,7 +173,8 @@ public interface SWBResourceURL extends SWBResourceModes
     public String toString();
     
     /**
-     * Regresa url del recurso
+     * Regresa url del recurso.
+     * 
      * @param encodeAmp boolean codifica "&" por "&amp;"
      * @return String url
      */
@@ -159,22 +193,16 @@ public interface SWBResourceURL extends SWBResourceModes
      * <p>
      * The given parameters do not need to be encoded
      * prior to calling this method.
-     *
-     * @param  parameters   Map containing parameter names for
-     *                      the render phase as
-     *                      keys and parameter values as map
-     *                      values. The keys in the parameter
-     *                      map must be of type String. The values
-     *                      in the parameter map must be of type
-     *                      String array (<code>String[]</code>).
-     *
+     * 
+     * @param parameters the parameters
+     * @return the sWB resource url
      * @exception	java.lang.IllegalArgumentException
-     *                      if parameters is <code>null</code>, if
-     *                      any of the key/values in the Map are <code>null</code>,
-     *                      if any of the keys is not a String, or if any of
-     *                      the values is not a String array.
+     * if parameters is <code>null</code>, if
+     * any of the key/values in the Map are <code>null</code>,
+     * if any of the keys is not a String, or if any of
+     * the values is not a String array.
      * @exception java.lang.IllegalStateException
-     *                    if the method is invoked after <code>sendRedirect</code> has been called.
+     * if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
     public SWBResourceURL setParameters(java.util.Map parameters);
@@ -192,14 +220,14 @@ public interface SWBResourceURL extends SWBResourceModes
      * <p>
      * The given parameter do not need to be encoded
      * prior to calling this method.
-     *
-     * @param  key    key of the render parameter
-     * @param  value  value of the render parameter
-     *
+     * 
+     * @param key the key
+     * @param value the value
+     * @return the sWB resource url
      * @exception	java.lang.IllegalArgumentException
-     *                      if key or value are <code>null</code>.
+     * if key or value are <code>null</code>.
      * @exception java.lang.IllegalStateException
-     *                    if the method is invoked after <code>sendRedirect</code> has been called.
+     * if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
     public SWBResourceURL setParameter(String key, String value);
@@ -217,23 +245,25 @@ public interface SWBResourceURL extends SWBResourceModes
      * <p>
      * The given parameter do not need to be encoded
      * prior to calling this method.
-     *
-     * @param  key     key of the render parameter
-     * @param  values  values of the render parameter
-     *
+     * 
+     * @param key the key
+     * @param values the values
+     * @return the sWB resource url
      * @exception	java.lang.IllegalArgumentException
-     *                      if key or value are <code>null</code>.
+     * if key or value are <code>null</code>.
      * @exception java.lang.IllegalStateException
-     *                    if the method is invoked after <code>sendRedirect</code> has been called.
+     * if the method is invoked after <code>sendRedirect</code> has been called.
      */
     
     public SWBResourceURL setParameter(String key, String[] values);
     
     
     /**
-     *    Regresa tipo de URL (render, action)
-     *    Render = 0
-     *    Action = 1
+     * Regresa tipo de URL (render, action)
+     * Render = 0
+     * Action = 1.
+     * 
+     * @return the uRL type
      */
     public int getURLType();
     
@@ -245,7 +275,9 @@ public interface SWBResourceURL extends SWBResourceModes
     
     /**
      * Setter for property onlyContent.
+     * 
      * @param onlyContent New value of property onlyContent.
+     * @return the sWB resource url
      */
     public SWBResourceURL setOnlyContent(boolean onlyContent);
     

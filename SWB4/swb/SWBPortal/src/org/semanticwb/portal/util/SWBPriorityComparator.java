@@ -33,30 +33,44 @@ package org.semanticwb.portal.util;
 import java.util.*;
 import org.semanticwb.portal.api.SWBResource;
 
-/** objeto: compara la prioridad de dos recirsos
+// TODO: Auto-generated Javadoc
+/**
+ * objeto: compara la prioridad de dos recirsos.
+ * 
  * @author Javier Solis Gonzalez
  * @version 1.0
  */
 public class SWBPriorityComparator implements Comparator
 {
 
+    /** The content. */
     boolean content=false;
     
-    /** Creates new WBPriorityComaprator */
+    /**
+     * Creates new WBPriorityComaprator.
+     */
     public SWBPriorityComparator()
     {
     }
     
-    /** Creates new WBPriorityComaprator */
+    /**
+     * Creates new WBPriorityComaprator.
+     * 
+     * @param content the content
+     */
     public SWBPriorityComparator(boolean content)
     {
         this.content=content;
     }
 
     /**
-     * @param obj
-     * @param obj1
-     * @return  */
+     * Compare.
+     * 
+     * @param obj the obj
+     * @param obj1 the obj1
+     * @return the int
+     * @return
+     */
     public int compare(java.lang.Object obj, java.lang.Object obj1)
     {
         int x;

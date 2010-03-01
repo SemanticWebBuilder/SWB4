@@ -24,48 +24,97 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBCommentToElementBase.
+ */
 public class SWBCommentToElementBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swb_res_cmts_CommentToElement. */
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_CommentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#CommentToElement");
+    
+    /** The Constant swb_res_cmts_hasComment. */
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_hasComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#hasComment");
+    
+    /** The Constant swb_res_cmts_SWBCommentToElement. */
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_SWBCommentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#SWBCommentToElement");
 
+    /**
+     * Instantiates a new sWB comment to element base.
+     */
     public SWBCommentToElementBase()
     {
     }
 
+    /**
+     * Instantiates a new sWB comment to element base.
+     * 
+     * @param base the base
+     */
     public SWBCommentToElementBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#SWBCommentToElement");
 
+    /**
+     * List comments.
+     * 
+     * @return the org.semanticwb.model. generic iterator
+     */
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement> listComments()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement>(getSemanticObject().listObjectProperties(swb_res_cmts_hasComment));
     }
 
+    /**
+     * Checks for comment.
+     * 
+     * @param commenttoelement the commenttoelement
+     * @return true, if successful
+     */
     public boolean hasComment(org.semanticwb.portal.resources.sem.CommentToElement commenttoelement)
     {
         if(commenttoelement==null)return false;
         return getSemanticObject().hasObjectProperty(swb_res_cmts_hasComment,commenttoelement.getSemanticObject());
     }
 
+    /**
+     * Adds the comment.
+     * 
+     * @param commenttoelement the commenttoelement
+     */
     public void addComment(org.semanticwb.portal.resources.sem.CommentToElement commenttoelement)
     {
         getSemanticObject().addObjectProperty(swb_res_cmts_hasComment, commenttoelement.getSemanticObject());
     }
 
+    /**
+     * Removes the all comment.
+     */
     public void removeAllComment()
     {
         getSemanticObject().removeProperty(swb_res_cmts_hasComment);
     }
 
+    /**
+     * Removes the comment.
+     * 
+     * @param commenttoelement the commenttoelement
+     */
     public void removeComment(org.semanticwb.portal.resources.sem.CommentToElement commenttoelement)
     {
         getSemanticObject().removeObjectProperty(swb_res_cmts_hasComment,commenttoelement.getSemanticObject());
     }
 
+    /**
+     * Gets the comment.
+     * 
+     * @return the comment
+     */
     public org.semanticwb.portal.resources.sem.CommentToElement getComment()
     {
          org.semanticwb.portal.resources.sem.CommentToElement ret=null;

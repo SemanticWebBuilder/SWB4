@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ContentBase.
+ */
 public class ContentBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Content. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Content=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Content");
 
+    /**
+     * Instantiates a new content base.
+     */
     public ContentBase()
     {
     }
 
+    /**
+     * Instantiates a new content base.
+     * 
+     * @param base the base
+     */
     public ContentBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Content");
 }

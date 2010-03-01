@@ -46,20 +46,30 @@ import org.semanticwb.portal.resources.RSSResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBTips.
+ * 
  * @author Jorge Jiménez
  */
 public class SWBTips extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(RSSResource.class);
+    
+    /** The swb news. */
     private ArrayList swbNews=new ArrayList();
+    
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramReq the param req
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException
     {
@@ -80,11 +90,13 @@ public class SWBTips extends GenericAdmResource
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramReq the param req
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, java.io.IOException

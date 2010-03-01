@@ -36,6 +36,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * PDFContent se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
  * bajo ciertos criterios (configuraci�n de recurso).
@@ -47,18 +48,24 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @version 1.0
  */
 public class PDFContent extends GenericAdmResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PDFContent.class);
 
+    /**
+     * Instantiates a new pDF content.
+     */
     public PDFContent() {
     }
     
     /**
-     * Metodo que genera el html final del recurso
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws SWBResourceException
-     * @throws IOException
+     * Metodo que genera el html final del recurso.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramReq the param req
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException {
@@ -71,12 +78,13 @@ public class PDFContent extends GenericAdmResource {
     }
 
     /**
-     * Metodo que genera el html final del recurso
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws SWBResourceException
-     * @throws IOException
+     * Metodo que genera el html final del recurso.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramReq the param req
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */        
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException {        
         Resource base=getResourceBase();

@@ -39,15 +39,21 @@ import org.semanticwb.SWBUtils;
 import sun.misc.Resource;
 import sun.misc.URLClassPath;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que extiende de ClassLoader utilizada para la carga dinamica de recursos.
  * @author Javier Solis Gonzalez
  */
 public class SWBClassLoader extends ClassLoader
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBClassLoader.class);
     
+    /** The ucp. */
     URLClassPath ucp = null;
+    
+    /** The filter. */
     private String filter=null;
 
     /**
@@ -94,6 +100,9 @@ public class SWBClassLoader extends ClassLoader
         setClassPath();
     }
 
+    /**
+     * Sets the class path.
+     */
     private void setClassPath()
     {
         try
@@ -110,6 +119,11 @@ public class SWBClassLoader extends ClassLoader
         }
     }
 
+    /**
+     * Adds the url.
+     * 
+     * @param url the url
+     */
     public void addURL(URL url)
     {
         ucp.addURL(url);
@@ -120,9 +134,10 @@ public class SWBClassLoader extends ClassLoader
      * Finds and loads the class with the specified name from the URL search
      * path. Any URLs referring to JAR files are loaded and opened as needed
      * until the class is found.
-     *
+     * 
      * @param name the name of the class
      * @return the resulting class
+     * @throws ClassNotFoundException the class not found exception
      * @exception java.lang.ClassNotFoundException if the class could not be found
      */
     @Override
@@ -143,6 +158,12 @@ public class SWBClassLoader extends ClassLoader
         }
     }
 
+    /**
+     * Load class data.
+     * 
+     * @param name the name
+     * @return the byte[]
+     */
     private byte[] loadClassData(String name)
     {
         byte[] ret = null;
@@ -152,26 +173,28 @@ public class SWBClassLoader extends ClassLoader
     /**
      * Loads the class with the specified name.  The default implementation of
      * this method searches for classes in the following order:<p>
-     *
+     * 
      * <ol>
      * <li> Call {@link #findLoadedClass(java.lang.String)} to check if the class has
-     *      already been loaded. <p>
+     * already been loaded. <p>
      * <li> Call the <code>loadClass</code> method on the parent class
-     *      loader.  If the parent is <code>null</code> the class loader
-     *      built-in to the virtual machine is used, instead. <p>
+     * loader.  If the parent is <code>null</code> the class loader
+     * built-in to the virtual machine is used, instead. <p>
      * <li> Call the {@link #findClass(java.lang.String)} method to find the class. <p>
      * </ol>
-     *
+     * 
      * If the class was found using the above steps, and the
      * <code>resolve</code> flag is true, this method will then call the
+     * 
+     * @param name the name
+     * @param resolve the resolve
+     * @return the class
+     * @throws ClassNotFoundException the class not found exception
      * {@link #resolveClass(java.lang.Class)} method on the resulting class object.
      * <p>
      * From the Java 2 SDK, v1.2, subclasses of ClassLoader are
      * encouraged to override
      * {@link #findClass(java.lang.String)}, rather than this method.<p>
-     *
-     * @param     name the name of the class
-     * @param     resolve if <code>true</code> then resolve the class
      * @return	  the resulting <code>Class</code> object
      * @exception java.lang.ClassNotFoundException if the class could not be found
      */
@@ -212,6 +235,13 @@ public class SWBClassLoader extends ClassLoader
         return c;
     }
     
+    /**
+     * Gets the parent class.
+     * 
+     * @param name the name
+     * @return the parent class
+     * @throws ClassNotFoundException the class not found exception
+     */
     private synchronized Class getParentClass(String name) throws ClassNotFoundException
     {
         Class c=null;

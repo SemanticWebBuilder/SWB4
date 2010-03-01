@@ -45,6 +45,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+// TODO: Auto-generated Javadoc
 /** Muestra la lista de errores generados en WebBuilder. Permite ver a detalle del
  * error seleccionando con la posibilidad de enviar el error por correo
  * electronico.
@@ -54,18 +55,27 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author Juan Antonio Fernandez Arias
  */
 public class SWBAErrorElementViewer extends GenericResource{
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBAErrorElementViewer.class);
-    /** Creates a new instance of SWBAErrorElementViewer */
+    
+    /**
+     * Creates a new instance of SWBAErrorElementViewer.
+     */
     public SWBAErrorElementViewer() {
     }
 
-    /** User View of the SWBAErrorElementViewer Resource; it shows an error list generated from the resources
-     * in the Semantic WebBuilder application
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+    /**
+     * User View of the SWBAErrorElementViewer Resource; it shows an error list generated from the resources
+     * in the Semantic WebBuilder application.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -314,9 +324,10 @@ public class SWBAErrorElementViewer extends GenericResource{
     }
     
     /**
-     * Get the position of the Error Element
-     * @param hmErr, list of Error Elements
-     * @param err_id, Error Element Id
+     * Get the position of the Error Element.
+     * 
+     * @param hmErr the hm err
+     * @param err_id the err_id
      * @return The position of the Error Element
      */
     public int getErrPos(Vector hmErr, long err_id)
@@ -339,9 +350,10 @@ public class SWBAErrorElementViewer extends GenericResource{
     }
     
     /**
-     * Gets the Error Element Id
-     * @param hmErr, a list of ErrorElement
-     * @param pos, positon of the Error Element
+     * Gets the Error Element Id.
+     * 
+     * @param hmErr the hm err
+     * @param pos the pos
      * @return the Error Element Id
      */
     public long getErrID(Vector hmErr, int pos)

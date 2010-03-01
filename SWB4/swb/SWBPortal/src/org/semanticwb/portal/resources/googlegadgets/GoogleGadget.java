@@ -49,24 +49,48 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GoogleGadget.
+ * 
  * @author victor.lorenzana
  */
 public class GoogleGadget extends GenericResource
 {
 
+    /** The Constant COUNTRY_ATTRIBUTE. */
     private static final String COUNTRY_ATTRIBUTE = "country";
+    
+    /** The Constant GOOGLE_URL. */
     private static final String GOOGLE_URL = "http://www.google.com";
+    
+    /** The Constant PATH_DIRECTORY. */
     private static final String PATH_DIRECTORY = "/ig/directory";
+    
+    /** The Constant LANGUAGE_ATTRIBUTE. */
     private static final String LANGUAGE_ATTRIBUTE = "lang";
+    
+    /** The Constant URL_ATTRIBUTE. */
     private static final String URL_ATTRIBUTE = "url";
+    
+    /** The UR l_ frame. */
     private static String URL_FRAME = "http://www.gmodules.com/ig/ifr";
+    
+    /** The UR l_ directory. */
     private static String URL_DIRECTORY = GOOGLE_URL + PATH_DIRECTORY + "?synd=trogedit&source=gghp";
+    
+    /** The LAN g_ parameter. */
     private static String LANG_PARAMETER = "hl";
+    
+    /** The Constant URL_TO_FIND. */
     private static final String URL_TO_FIND = "n_32\\x3durl%3Dhttp";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GenericResource.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -152,6 +176,9 @@ public class GoogleGadget extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
@@ -174,6 +201,15 @@ public class GoogleGadget extends GenericResource
         }
     }
 
+    /**
+     * Do add from list2.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void doAddFromList2(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
@@ -294,6 +330,14 @@ public class GoogleGadget extends GenericResource
         out.close();
     }
 
+    /**
+     * Replace.
+     * 
+     * @param html the html
+     * @param startText the start text
+     * @param endText the end text
+     * @param replace the replace
+     */
     public static void replace(StringBuffer html, String startText, String endText, String replace)
     {
         int pos = html.indexOf(startText);
@@ -312,6 +356,13 @@ public class GoogleGadget extends GenericResource
         }
     }
 
+    /**
+     * Replace.
+     * 
+     * @param html the html
+     * @param text the text
+     * @param replace the replace
+     */
     public static void replace(StringBuffer html, String text, String replace)
     {
         int pos = html.indexOf(text);
@@ -322,6 +373,15 @@ public class GoogleGadget extends GenericResource
         }
     }
 
+    /**
+     * Do add from list.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void doAddFromList(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
@@ -397,6 +457,12 @@ public class GoogleGadget extends GenericResource
         }*/
     }
 
+    /**
+     * Gets the gadgets.
+     * 
+     * @param html the html
+     * @return the gadgets
+     */
     private Set<URL> getGadgets(String html)
     {
         HashSet<URL> getGadgets = new HashSet<URL>();
@@ -427,6 +493,15 @@ public class GoogleGadget extends GenericResource
         return getGadgets;
     }
 
+    /**
+     * Do change gadget.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void doChangeGadget(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
@@ -458,6 +533,15 @@ public class GoogleGadget extends GenericResource
         out.close();
     }
 
+    /**
+     * Do change config.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void doChangeConfig(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
     {
@@ -591,6 +675,12 @@ public class GoogleGadget extends GenericResource
         out.close();
     }
 
+    /**
+     * Show gadget.
+     * 
+     * @param out the out
+     * @param paramsRequest the params request
+     */
     private void showGadget(PrintWriter out, SWBParamRequest paramsRequest)
     {
         Locale localeUser = new Locale(paramsRequest.getUser().getLanguage());
@@ -619,6 +709,9 @@ public class GoogleGadget extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
@@ -628,6 +721,9 @@ public class GoogleGadget extends GenericResource
         out.close();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws IOException, SWBResourceException
@@ -707,6 +803,13 @@ public class GoogleGadget extends GenericResource
             doAddFromList(request, response, paramsRequest);
         }
     }
+    
+    /**
+     * Asign google gadget.
+     * 
+     * @param url the url
+     * @param values the values
+     */
     public void asignGoogleGadget(String url,Hashtable<String,String> values)
     {
         this.getResourceBase().setAttribute(URL_ATTRIBUTE,url);

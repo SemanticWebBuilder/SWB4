@@ -44,23 +44,45 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class LDAPLoginModule.
+ * 
  * @author serch
  */
 public class LDAPLoginModule implements LoginModule
 {
 
+    /** The log. */
     static Logger log = SWBUtils.getLogger(LDAPLoginModule.class);
+    
+    /** The subject. */
     protected Subject subject;
+    
+    /** The callback handler. */
     protected CallbackHandler callbackHandler;
+    
+    /** The shared state. */
     protected Map sharedState;
+    
+    /** The options. */
     protected Map options;
+    
+    /** The loginflag. */
     protected boolean loginflag = false;
+    
+    /** The principal. */
     protected User principal = null;
+    
+    /** The credential. */
     protected Object credential = null;
+    
+    /** The website. */
     protected String website = null;
 
+    /* (non-Javadoc)
+     * @see javax.security.auth.spi.LoginModule#initialize(javax.security.auth.Subject, javax.security.auth.callback.CallbackHandler, java.util.Map, java.util.Map)
+     */
     public void initialize(Subject subject, CallbackHandler callbackHandler, Map<String, ?> sharedState, Map<String, ?> options)
     {
         this.subject = subject;
@@ -71,6 +93,9 @@ public class LDAPLoginModule implements LoginModule
     }
 
 
+    /* (non-Javadoc)
+     * @see javax.security.auth.spi.LoginModule#login()
+     */
     public boolean login() throws LoginException
     {
         if (callbackHandler == null)
@@ -134,6 +159,9 @@ public class LDAPLoginModule implements LoginModule
     }
 
 
+    /* (non-Javadoc)
+     * @see javax.security.auth.spi.LoginModule#commit()
+     */
     public boolean commit() throws LoginException
     {
         boolean flag = false;
@@ -152,6 +180,9 @@ public class LDAPLoginModule implements LoginModule
         return loginflag;
     }
 
+    /* (non-Javadoc)
+     * @see javax.security.auth.spi.LoginModule#abort()
+     */
     public boolean abort() throws LoginException
     {
         if (subject != null)
@@ -163,6 +194,9 @@ public class LDAPLoginModule implements LoginModule
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see javax.security.auth.spi.LoginModule#logout()
+     */
     public boolean logout() throws LoginException
     {
         if (subject != null)

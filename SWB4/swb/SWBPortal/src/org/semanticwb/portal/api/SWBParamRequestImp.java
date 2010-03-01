@@ -39,6 +39,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que implementa WBParamRequest.
  * Ccontiene los objetos que son pasados al recurso como parametros.
@@ -47,31 +48,81 @@ import org.semanticwb.model.WebPage;
  */
 public class SWBParamRequestImp implements SWBParamRequest
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBParamRequestImp.class);
+    
+    /** The args. */
     private Map args=new HashMap();
+    
+    /** The topic. */
     private WebPage topic=null;
+    
+    /** The admin topic. */
     private WebPage adminTopic=null;
+    
+    /** The user. */
     private User user=null;
+    
+    /** The user level. */
     private int userLevel=0;
+    
+    /** The resource. */
     private Resource resource=null;
+    
+    /** The virt resource. */
     private Resource virtResource=null;
+    
+    /** The action. */
     private String action=Action_EDIT;
+    
+    /** The call method. */
     private int callMethod=0;
+    
+    /** The mode. */
     private String mode=Mode_VIEW;
+    
+    /** The win state. */
     private String winState=WinState_NORMAL;
+    
+    /** The secure. */
     private boolean secure=false;
+    
+    /** The request. */
     private HttpServletRequest request=null;
+    
+    /** The locale. */
     private Locale locale=null;
+    
+    /** The bundle. */
     private String bundle=null;
+    
+    /** The loader. */
     private ClassLoader loader=null;
+    
+    /** The window title. */
     private String windowTitle=null;
+    
+    /** The template head. */
     private String templateHead=null;
     
+    /** The have virt tp. */
     private boolean haveVirtTP=false;
+    
+    /** The only content. */
     private boolean onlyContent=false;
+    
+    /** The ext params. */
     private String extParams=null;
     
-    /** Creates a new instance of WBResRequest */
+    /**
+     * Creates a new instance of WBResRequest.
+     * 
+     * @param request the request
+     * @param resource the resource
+     * @param topic the topic
+     * @param user the user
+     */
     public SWBParamRequestImp(HttpServletRequest request, Resource resource, WebPage topic, User user)
     {
         this.request=request;
@@ -92,22 +143,36 @@ public class SWBParamRequestImp implements SWBParamRequest
         }catch(Exception e){log.error(e);}
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getAction()
+     */
     public String getAction()
     {
         return action;
     }
     
+    /**
+     * Sets the action.
+     * 
+     * @param action the new action
+     */
     public void setAction(String action)
     {
         this.action=action;
     }
     
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getArgument(java.lang.String)
+     */
     public String getArgument(String key)
     {
         return (String)args.get(key);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getArgument(java.lang.String, java.lang.String)
+     */
     public String getArgument(String key, String defValue)
     {
         String str=(String)args.get(key);        
@@ -115,83 +180,147 @@ public class SWBParamRequestImp implements SWBParamRequest
         return str;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getArguments()
+     */
     public java.util.Map getArguments()
     {
         return args;
     }
     
+    /**
+     * Sets the arguments.
+     * 
+     * @param args the new arguments
+     */
     public void setArguments(Map args)
     {
         this.args=args;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getCallMethod()
+     */
     public int getCallMethod()
     {
         return callMethod;
     }
     
+    /**
+     * Sets the call method.
+     * 
+     * @param callMethod the new call method
+     */
     public void setCallMethod(int callMethod)
     {
         this.callMethod=callMethod;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getMode()
+     */
     public String getMode()
     {
         return mode;
     }
 
+    /**
+     * Sets the mode.
+     * 
+     * @param mode the new mode
+     */
     public void setMode(String mode)
     {
         this.mode=mode;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getWebPage()
+     */
     public WebPage getWebPage()
     {
         return topic;
     }
 
+    /**
+     * Sets the topic.
+     * 
+     * @param topic the new topic
+     */
     public void setTopic(WebPage topic)
     {
         this.topic=topic;
         if(adminTopic==null)adminTopic=topic;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getUser()
+     */
     public User getUser()
     {
         return user;
     }
 
+    /**
+     * Sets the user.
+     * 
+     * @param user the new user
+     */
     public void setUser(User user)
     {
         if(user!=null)locale=new Locale(user.getLanguage());
         this.user=user;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getUserLevel()
+     */
     public int getUserLevel()
     {
         return userLevel;
     }
 
+    /**
+     * Sets the user level.
+     * 
+     * @param userLevel the new user level
+     */
     public void setUserLevel(int userLevel)
     {
         this.userLevel=userLevel;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getWindowState()
+     */
     public String getWindowState()
     {
         return winState;
     }
     
+    /**
+     * Sets the window state.
+     * 
+     * @param winState the new window state
+     */
     public void setWindowState(String winState)
     {
         this.winState=winState;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#getResourceBase()
+     */
     public Resource getResourceBase()
     {
         return resource;
     }
     
+    /**
+     * Sets the resource base.
+     * 
+     * @param resource the new resource base
+     */
     public void setResourceBase(Resource resource)
     {
         try
@@ -206,6 +335,9 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.virtResource=resource;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getActionUrl()
+     */
     public SWBResourceURL getActionUrl()
     {
         SWBResourceURLImp url=new SWBResourceURLImp(request,resource,topic,UrlType_ACTION);
@@ -221,6 +353,9 @@ public class SWBParamRequestImp implements SWBParamRequest
         return url;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getRenderUrl()
+     */
     public SWBResourceURL getRenderUrl()
     {
         SWBResourceURLImp url=new SWBResourceURLImp(request,resource,topic,UrlType_RENDER);
@@ -237,11 +372,19 @@ public class SWBParamRequestImp implements SWBParamRequest
         return url;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#isSecure()
+     */
     public boolean isSecure()
     {
         return secure;
     }    
     
+    /**
+     * Sets the secure.
+     * 
+     * @param secure the new secure
+     */
     public void setSecure(boolean secure)
     {
         this.secure=secure;
@@ -265,11 +408,17 @@ public class SWBParamRequestImp implements SWBParamRequest
         this.request = request;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getLocaleString(java.lang.String)
+     */
     public String getLocaleString(String key) throws SWBResourceException
     {
         return SWBUtils.TEXT.getLocaleString(bundle,key,locale,loader);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParamRequest#getLocaleLogString(java.lang.String)
+     */
     public String getLocaleLogString(String key) throws SWBResourceException
     {
         //System.out.println("bundle:"+bundle+" key:"+key+" loc:"+AFUtils.getLocale());
@@ -295,6 +444,11 @@ public class SWBParamRequestImp implements SWBParamRequest
         haveVirtTP=true;
     }
     
+    /**
+     * Sets the virtual topic.
+     * 
+     * @param virt the new virtual topic
+     */
     public void setVirtualTopic(WebPage virt)
     {
         adminTopic = topic;
@@ -302,6 +456,9 @@ public class SWBParamRequestImp implements SWBParamRequest
         haveVirtTP=true;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.SWBParameters#haveVirtualWebPage()
+     */
     public boolean haveVirtualWebPage()
     {
         return haveVirtTP;
@@ -373,8 +530,9 @@ public class SWBParamRequestImp implements SWBParamRequest
     }
     
     /**
-     * Parametros adicionales o bien parametros de otros recursos
-     * @param otherParams New value of property otherParams.
+     * Parametros adicionales o bien parametros de otros recursos.
+     * 
+     * @param extParams the new ext uri params
      */
     public void setExtURIParams(java.lang.String extParams)
     {
@@ -391,7 +549,8 @@ public class SWBParamRequestImp implements SWBParamRequest
     }
 
     /**
-     * Pasarle contenido al header del Template (style, javascript, etc)
+     * Pasarle contenido al header del Template (style, javascript, etc).
+     * 
      * @param templateHead New value of property templateHead.
      */    
     public void setTemplateHead(String templateHead)

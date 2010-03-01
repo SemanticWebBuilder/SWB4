@@ -38,24 +38,34 @@ import java.io.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- * Utils to find in ms documents (word, excel, power point, pdf) via poi api
+ * Utils to find in ms documents (word, excel, power point, pdf) via poi api.
+ * 
  * @author jorge.jimenez
  * @since version 3.0
- *
  */
 public class DocumentExtractorSrv implements HSSFListener
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(DocumentExtractorSrv.class);
     
+    /** The sstrec. */
     private SSTRecord sstrec;
+    
+    /** The excel buf. */
     private static StringBuffer excelBuf=new StringBuffer();
     
     
     /**
      * Extrae el string de un archivo pdf
-     *
-     * Extract the string of a pdf document
+     * 
+     * Extract the string of a pdf document.
+     * 
+     * @param file the file
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public String pdfExtractor(File file) throws java.io.IOException {
         FileInputStream is=new FileInputStream(file);

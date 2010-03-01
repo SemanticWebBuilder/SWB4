@@ -51,19 +51,25 @@ import org.w3c.dom.NodeList;
 
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Resource that manage the integration between facebook and semanticwebbuilder (facebook java api)
- * and returns the user facebook friends (that is in the facebook session)
+ * and returns the user facebook friends (that is in the facebook session).
+ * 
  * @author Jorge Jiménez
- *
  */
 public class FB_MyFriends extends GenericResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FB_MyPhotos.class);
+    
+    /** The Constant FACEBOOK_USER_CLIENT. */
     private static final String FACEBOOK_USER_CLIENT = "facebook.user.client";
    
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base) {
@@ -74,6 +80,9 @@ public class FB_MyFriends extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -130,6 +139,12 @@ public class FB_MyFriends extends GenericResource {
         }
     }
 
+    /**
+     * Gets the user client.
+     * 
+     * @param session the session
+     * @return the user client
+     */
     static FacebookXmlRestClient getUserClient(HttpSession session) {
         return (FacebookXmlRestClient) session.getAttribute(FACEBOOK_USER_CLIENT);
     }

@@ -29,18 +29,33 @@ import java.io.PrintWriter;
 import javax.servlet.http.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBStaticText.
+ */
 public class SWBStaticText extends org.semanticwb.portal.resources.sem.base.SWBStaticTextBase 
 {
 
+    /**
+     * Instantiates a new sWB static text.
+     */
     public SWBStaticText()
     {
     }
 
+    /**
+     * Instantiates a new sWB static text.
+     * 
+     * @param base the base
+     */
     public SWBStaticText(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

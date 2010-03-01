@@ -32,6 +32,7 @@ package org.semanticwb.portal.api;
 
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Intefase que extiende de WBParameter la cual contiene los objetos que son pasados
  * al recurso como parametros.
@@ -40,23 +41,81 @@ import java.util.*;
  */
 public interface SWBParamRequest extends SWBParameters
 {
+    
+    /**
+     * Gets the arguments.
+     * 
+     * @return the arguments
+     */
     public Map getArguments();
 
+    /**
+     * Gets the argument.
+     * 
+     * @param key the key
+     * @return the argument
+     */
     public String getArgument(String key);
 
+    /**
+     * Gets the argument.
+     * 
+     * @param key the key
+     * @param defvalue the defvalue
+     * @return the argument
+     */
     public String getArgument(String key, String defvalue);
     
+    /**
+     * Gets the action url.
+     * 
+     * @return the action url
+     */
     public SWBResourceURL getActionUrl();
     
+    /**
+     * Gets the render url.
+     * 
+     * @return the render url
+     */
     public SWBResourceURL getRenderUrl();
     
+    /**
+     * Gets the locale string.
+     * 
+     * @param key the key
+     * @return the locale string
+     * @throws SWBResourceException the sWB resource exception
+     */
     public String getLocaleString(String key) throws SWBResourceException;
 
+    /**
+     * Gets the locale log string.
+     * 
+     * @param key the key
+     * @return the locale log string
+     * @throws SWBResourceException the sWB resource exception
+     */
     public String getLocaleLogString(String key) throws SWBResourceException;
     
+    /**
+     * Gets the window title.
+     * 
+     * @return the window title
+     */
     public java.lang.String getWindowTitle();
     
+    /**
+     * Sets the window title.
+     * 
+     * @param windowTitle the new window title
+     */
     public void setWindowTitle(java.lang.String windowTitle);
     
+    /**
+     * Sets the template head.
+     * 
+     * @param templateHead the new template head
+     */
     public void setTemplateHead(String templateHead);
 }

@@ -29,17 +29,27 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si un campo es de tipo alphabetico con JavaScript en la apiadmin
  * <p>
- * Object that handles if a field is of type alphabetic with JavaScript in the apiadmin
+ * Object that handles if a field is of type alphabetic with JavaScript in the apiadmin.
+ * 
  * @author  Jorge Alberto Jim�nez
  */
 
 public class Js_AlphabeticValFE extends WBJsValidationsFEAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Js_AlphabeticValFE.class);
     
+    /**
+     * Instantiates a new js_ alphabetic val fe.
+     * 
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_AlphabeticValFE(String field, int minsize)
     {
         this.field = field;
@@ -48,6 +58,13 @@ public class Js_AlphabeticValFE extends WBJsValidationsFEAbs
         }
     }
 
+    /**
+     * Instantiates a new js_ alphabetic val fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param minsize the minsize
+     */
     public Js_AlphabeticValFE(String formfeName, String field, int minsize)
     {
         this.formfeName = formfeName;
@@ -58,9 +75,12 @@ public class Js_AlphabeticValFE extends WBJsValidationsFEAbs
     }
 
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */   
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */   
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

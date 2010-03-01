@@ -31,6 +31,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Option en un input de una forma de html.
  * <p>
@@ -40,28 +41,53 @@ import org.w3c.dom.*;
 
 public class OptionSelectFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(OptionSelectFE.class);
 
+    /** The value. */
     private String value=null;
+    
+    /** The label. */
     private String label=null;
+    
+    /** The isselected. */
     private boolean isselected=false;
+    
+    /** The selectfe. */
     private SelectFE selectfe=null;
+    
+    /** The tag. */
     protected Node tag=null;
+    
+    /** The isdisabled. */
     private boolean isdisabled=false;
     
     
-    /** Creates a new instance of OptionSelectFE */
+    /**
+     * Creates a new instance of OptionSelectFE.
+     */
     public OptionSelectFE() {
     }
     
-    /** Creates a new instance of OptionSelectFE width default values*/
+    /**
+     * Creates a new instance of OptionSelectFE width default values.
+     * 
+     * @param value the value
+     * @param label the label
+     * @param isselected the isselected
+     */
     public OptionSelectFE(String value,String label,boolean isselected) {
         this.value=value;
         this.label=label;
         this.isselected=isselected;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public OptionSelectFE(Node tag){
         this.tag=tag;
         setAttributes();
@@ -69,48 +95,91 @@ public class OptionSelectFE extends WBAdmResourceAbs
     
     //sets
    
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     public void setDisabled(boolean isdisabled){
         this.isdisabled=isdisabled;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setLabel(java.lang.String)
+     */
     public void setLabel(String label){
         this.label=label;
     }
     
+    /**
+     * Sets the selected.
+     * 
+     * @param isselected the new selected
+     */
     public void setSelected(boolean isselected){
         this.isselected=isselected;
     }
     
+    /**
+     * Sets the select fe obj.
+     * 
+     * @param selectfe the new select fe obj
+     */
     public void setSelectFEObj(SelectFE selectfe){
         this.selectfe=selectfe;
     }
     
     //gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     public boolean getDisabled(){
         return isdisabled;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getLabel()
+     */
     public String getLabel(){
         return label;
     }
     
+    /**
+     * Gets the selected.
+     * 
+     * @return the selected
+     */
     public boolean getSelected(){
         return isselected;
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */   
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */   
      public String getHtml()
      {
         boolean flag=false; 
@@ -165,8 +234,8 @@ public class OptionSelectFE extends WBAdmResourceAbs
      
      
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
      public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

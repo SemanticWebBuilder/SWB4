@@ -45,14 +45,20 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class EditFile.
+ * 
  * @author jorge.jimenez
  */
 public class EditFile implements InternalServlet {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(EditFile.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         try {
             String lang=dparams.getUser().getLanguage();
@@ -158,6 +164,9 @@ public class EditFile implements InternalServlet {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config) throws ServletException {
         log.event("Initializing InternalServlet EditFile...");
     }

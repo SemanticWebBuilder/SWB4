@@ -34,6 +34,7 @@ import com.google.gdata.util.ServiceException;
 import java.io.IOException;
 import java.net.URL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Demonstrates how to use the Google Data API's Java client library to
  * interface with the Blogger service. There are examples for the following
@@ -53,13 +54,20 @@ import java.net.URL;
  */
 public class BloggerClient {
 
+  /** The Constant METAFEED_URL. */
   private static final String METAFEED_URL =
       "http://www.blogger.com/feeds/default/blogs";
 
+  /** The Constant FEED_URI_BASE. */
   private static final String FEED_URI_BASE = "http://www.blogger.com/feeds";
+  
+  /** The Constant POSTS_FEED_URI_SUFFIX. */
   private static final String POSTS_FEED_URI_SUFFIX = "/posts/default";
+  
+  /** The Constant COMMENTS_FEED_URI_SUFFIX. */
   private static final String COMMENTS_FEED_URI_SUFFIX = "/comments/default";
 
+  /** The feed uri. */
   private static String feedUri;
 
   /**

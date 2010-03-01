@@ -29,6 +29,7 @@ package org.semanticwb.portal.admin.admresources.util.JSValidations;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que valida si la entrada a un campo html es de tipo file y si cumple con las extenciones definidas en el mismo objeto
  * <p>
@@ -38,21 +39,44 @@ import org.semanticwb.portal.admin.admresources.lib.WBJsValidationsFEAbs;
 
 public class Js_FileTypeFE extends WBJsValidationsFEAbs {
     
+    /** The patron. */
     String patron=null;
+    
+    /** The filetypes. */
     String filetypes=null;
+    
+    /** The showfiletypes. */
     boolean showfiletypes=true;
     
+    /**
+     * Instantiates a new js_ file type fe.
+     * 
+     * @param field the field
+     */
     public Js_FileTypeFE(String field)
     {
         this.field = field;
     }
 
+    /**
+     * Instantiates a new js_ file type fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     */
     public Js_FileTypeFE(String formfeName, String field)
     {
         this.formfeName = formfeName;
         this.field = field;
     }
     
+    /**
+     * Instantiates a new js_ file type fe.
+     * 
+     * @param field the field
+     * @param filetypes the filetypes
+     * @param showfiletypes the showfiletypes
+     */
     public Js_FileTypeFE(String field, String filetypes, boolean showfiletypes)
     {
         this.field = field;
@@ -60,6 +84,14 @@ public class Js_FileTypeFE extends WBJsValidationsFEAbs {
         this.showfiletypes = showfiletypes;
     }
     
+    /**
+     * Instantiates a new js_ file type fe.
+     * 
+     * @param formfeName the formfe name
+     * @param field the field
+     * @param filetypes the filetypes
+     * @param showfiletypes the showfiletypes
+     */
     public Js_FileTypeFE(String formfeName,String field, String filetypes, boolean showfiletypes)
     {
         this.formfeName = formfeName;
@@ -68,26 +100,49 @@ public class Js_FileTypeFE extends WBJsValidationsFEAbs {
         this.showfiletypes = showfiletypes;
     }
     
+    /**
+     * Sets the file types.
+     * 
+     * @param filetypes the new file types
+     */
     public void setFileTypes(String filetypes){
         this.filetypes=filetypes;
     }
     
+    /**
+     * Gets the file types.
+     * 
+     * @return the file types
+     */
     public String getFileTypes(){
         return filetypes;
     }
     
+    /**
+     * Sets the show filetypes.
+     * 
+     * @param showfiletypes the new show filetypes
+     */
     public void setShowFiletypes(boolean showfiletypes){
         this.showfiletypes=showfiletypes;
     }
     
+    /**
+     * Gets the show file types.
+     * 
+     * @return the show file types
+     */
     public boolean getShowFileTypes(){
         return showfiletypes;
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */     
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @param locale the locale
+     * @return the html
+     */     
     public String getHtml(java.util.Locale locale)
     {
         StringBuffer strb = new StringBuffer();

@@ -24,48 +24,100 @@
 package org.semanticwb.portal.resources.sem.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBRankWebPageBase.
+ */
 public class SWBRankWebPageBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant rankwebpage_fullStar. */
     public static final org.semanticwb.platform.SemanticProperty rankwebpage_fullStar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/SWBRankWebPage#fullStar");
+    
+    /** The Constant rankwebpage_emptyStar. */
     public static final org.semanticwb.platform.SemanticProperty rankwebpage_emptyStar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/SWBRankWebPage#emptyStar");
+    
+    /** The Constant rankwebpage_halfStar. */
     public static final org.semanticwb.platform.SemanticProperty rankwebpage_halfStar=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/SWBRankWebPage#halfStar");
+    
+    /** The Constant rankwebpage_SWBRankWebPage. */
     public static final org.semanticwb.platform.SemanticClass rankwebpage_SWBRankWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBRankWebPage#SWBRankWebPage");
 
+    /**
+     * Instantiates a new sWB rank web page base.
+     */
     public SWBRankWebPageBase()
     {
     }
 
+    /**
+     * Instantiates a new sWB rank web page base.
+     * 
+     * @param base the base
+     */
     public SWBRankWebPageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/SWBRankWebPage#SWBRankWebPage");
 
+    /**
+     * Gets the full star.
+     * 
+     * @return the full star
+     */
     public String getFullStar()
     {
         return getSemanticObject().getProperty(rankwebpage_fullStar);
     }
 
+    /**
+     * Sets the full star.
+     * 
+     * @param fullStar the new full star
+     */
     public void setFullStar(String fullStar)
     {
         getSemanticObject().setProperty(rankwebpage_fullStar, fullStar);
     }
 
+    /**
+     * Gets the empty star.
+     * 
+     * @return the empty star
+     */
     public String getEmptyStar()
     {
         return getSemanticObject().getProperty(rankwebpage_emptyStar);
     }
 
+    /**
+     * Sets the empty star.
+     * 
+     * @param emptyStar the new empty star
+     */
     public void setEmptyStar(String emptyStar)
     {
         getSemanticObject().setProperty(rankwebpage_emptyStar, emptyStar);
     }
 
+    /**
+     * Gets the half star.
+     * 
+     * @return the half star
+     */
     public String getHalfStar()
     {
         return getSemanticObject().getProperty(rankwebpage_halfStar);
     }
 
+    /**
+     * Sets the half star.
+     * 
+     * @param halfStar the new half star
+     */
     public void setHalfStar(String halfStar)
     {
         getSemanticObject().setProperty(rankwebpage_halfStar, halfStar);

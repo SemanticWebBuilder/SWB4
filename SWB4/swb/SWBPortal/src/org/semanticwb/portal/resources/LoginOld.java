@@ -48,6 +48,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso que permite que el usuario final se firme en el sitio. Utilizando un
  * archivo xslt para mostrar la forma para pedir usuario y contraseña.
@@ -62,22 +63,39 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class LoginOld extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(LoginOld.class);
     
+    /** The global. */
     boolean global = false;
     //LoginInterface li = null;
+    /** The list. */
     Hashtable list = null;
+    
+    /** The templates. */
     Templates templates = null;
+    
+    /** The base. */
     Resource base = null;
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() + "swbadmin/xsl/Login/";
+    
+    /** The redirect. */
     String redirect = SWBPlatform.getContextPath();
+    
+    /** The msg. */
     String msg = null;
+    
+    /** The flag. */
     boolean flag = false;
 
     /**
-     * Initializes the Login resource loading a set of classes and xslt templates
-     *
+     * Initializes the Login resource loading a set of classes and xslt templates.
+     * 
      * @throws AFException if something goes wrong
+     * @throws SWBResourceException the sWB resource exception
      */
     public void init() throws SWBResourceException {
         // super.init();
@@ -124,6 +142,9 @@ public class LoginOld extends GenericAdmResource
         */
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);

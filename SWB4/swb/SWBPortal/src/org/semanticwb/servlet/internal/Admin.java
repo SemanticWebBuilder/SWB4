@@ -46,17 +46,27 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.util.JarFile;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Admin.
+ * 
  * @author Jei
  */
 public class Admin implements InternalServlet
 {
+    
+    /** The log. */
     static Logger log=SWBUtils.getLogger(Login.class);
     
+    /** The date formats. */
     protected static SimpleDateFormat dateFormats[];
+    
+    /** The asegurar. */
     boolean asegurar=false;
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext scontext) 
     {
         try
@@ -81,6 +91,9 @@ public class Admin implements InternalServlet
         dateFormats[2].setTimeZone(tz);
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         String acont=request.getContextPath();
@@ -161,6 +174,15 @@ public class Admin implements InternalServlet
     }
     
     
+    /**
+     * Check if headers.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param file the file
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected boolean checkIfHeaders(HttpServletRequest request, HttpServletResponse response, JarFile file)
         throws IOException
     {
@@ -250,6 +272,12 @@ public class Admin implements InternalServlet
         return true;
     }
 
+    /**
+     * Gets the e tag.
+     * 
+     * @param file the file
+     * @return the e tag
+     */
     protected String getETag(JarFile file)
     {
         return "\"" + file.length() + "-" + file.lastModified() + "\"";

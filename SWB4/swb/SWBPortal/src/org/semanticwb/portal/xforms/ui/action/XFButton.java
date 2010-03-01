@@ -34,17 +34,27 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.xforms.ElementsProp;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFButton.
+ * 
  * @author  jorge.jimenez
  */
 public class XFButton extends XformsBaseImp
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(XFButton.class);
      
+    /** The elements prop. */
     protected ElementsProp elementsProp=null;
    
     
+    /**
+     * Instantiates a new xF button.
+     * 
+     * @param elementsProp the elements prop
+     */
     public XFButton(ElementsProp elementsProp){
         this.elementsProp=elementsProp;
         setRDFAttributes();
@@ -54,6 +64,9 @@ public class XFButton extends XformsBaseImp
     
     // Gets        
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(elementsProp.getId()!=null) {
             id=elementsProp.getId();
@@ -63,6 +76,9 @@ public class XFButton extends XformsBaseImp
         }        
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() 
     {
@@ -86,6 +102,9 @@ public class XFButton extends XformsBaseImp
     }
     
     /**/
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

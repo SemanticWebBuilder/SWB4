@@ -50,6 +50,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Demonstrates basic Youtube Data API operations using the Java client library:
  * <ol>
@@ -64,7 +65,7 @@ import java.util.List;
  * <li> Retrieve a playlist
  * <li> Retrieve a list of a user's subscriptions
  * <li> Retrieve a user's profile
- * </ol>
+ * </ol>.
  */
 public class YouTubeReadonlyClient {
 
@@ -74,77 +75,51 @@ public class YouTubeReadonlyClient {
   private static final  BufferedReader bufferedReader = new BufferedReader(
         new InputStreamReader(System.in));
 
-  /**
-   * The name of the server hosting the YouTube GDATA feeds
-   */
+  /** The name of the server hosting the YouTube GDATA feeds. */
   public static final String YOUTUBE_GDATA_SERVER = "http://gdata.youtube.com";
 
-  /**
-   * The prefix common to all standard feeds
-   */
+  /** The prefix common to all standard feeds. */
   public static final String STANDARD_FEED_PREFIX = YOUTUBE_GDATA_SERVER
       + "/feeds/api/standardfeeds/";
 
-  /**
-   * The URL of the "Most Recent" feed
-   */
+  /** The URL of the "Most Recent" feed. */
   public static final String MOST_RECENT_FEED = STANDARD_FEED_PREFIX
       + "most_recent";
 
-  /**
-   * The URL of the "Top Rated" feed
-   */
+  /** The URL of the "Top Rated" feed. */
   public static final String TOP_RATED_FEED = STANDARD_FEED_PREFIX
       + "top_rated";
 
-  /**
-   * The URL of the "Most Viewed" feed
-   */
+  /** The URL of the "Most Viewed" feed. */
   public static final String MOST_VIEWED_FEED = STANDARD_FEED_PREFIX
       + "most_viewed";
 
-  /**
-   * The URL of the "Recently Featured" feed
-   */
+  /** The URL of the "Recently Featured" feed. */
   public static final String RECENTLY_FEATURED_FEED = STANDARD_FEED_PREFIX
       + "recently_featured";
 
-  /**
-   * The URL of the "Watch On Mobile" feed
-   */
+  /** The URL of the "Watch On Mobile" feed. */
   public static final String WATCH_ON_MOBILE_FEED = STANDARD_FEED_PREFIX
       + "watch_on_mobile";
 
-  /**
-   * The URL of the "Videos" feed
-   */
+  /** The URL of the "Videos" feed. */
   public static final String VIDEOS_FEED = YOUTUBE_GDATA_SERVER
       + "/feeds/api/videos";
 
-  /**
-   * The prefix of the User Feeds
-   */
+  /** The prefix of the User Feeds. */
   public static final String USER_FEED_PREFIX = YOUTUBE_GDATA_SERVER
       + "/feeds/api/users/";
 
-  /**
-   * The URL suffix of the test user's uploads feed
-   */
+  /** The URL suffix of the test user's uploads feed. */
   public static final String UPLOADS_FEED_SUFFIX = "/uploads";
 
-  /**
-   * The URL suffix of the test user's favorites feed
-   */
+  /** The URL suffix of the test user's favorites feed. */
   public static final String FAVORITES_FEED_SUFFIX = "/favorites";
 
-  /**
-   * The URL suffix of the test user's subscriptions feed
-   */
+  /** The URL suffix of the test user's subscriptions feed. */
   public static final String SUBSCRIPTIONS_FEED_SUFFIX = "/subscriptions";
 
-  /**
-   * The URL suffix of the test user's playlists feed
-   */
+  /** The URL suffix of the test user's playlists feed. */
   public static final String PLAYLISTS_FEED_SUFFIX = "/playlists";
 
   /**
@@ -381,8 +356,9 @@ public class YouTubeReadonlyClient {
 
   /**
    * Reads a line of text from the standard input.
-   * @throws IOException if unable to read a line from the standard input
+   * 
    * @return a line of text read from the standard input
+   * @throws IOException if unable to read a line from the standard input
    */
   private static String readLine() throws IOException {
     return bufferedReader.readLine();
@@ -391,14 +367,18 @@ public class YouTubeReadonlyClient {
   /**
    * Reads a line of text from the standard input, and returns the parsed
    * integer representation.
-   * @throws IOException if unable to read a line from the standard input
+   * 
    * @return an integer read from the standard input
+   * @throws IOException if unable to read a line from the standard input
    */
   private static int readInt() throws IOException {
     String input = readLine();
     return Integer.parseInt(input);
   }
 
+  /**
+   * Prints the usage.
+   */
   private static void printUsage() {
     System.out.println("Choose one of the following demo options:");
     System.out.println("\t1) Print Standard Feeds");
@@ -511,8 +491,10 @@ public class YouTubeReadonlyClient {
 
   /**
    * Prompts the user to enter his user name on the standard input.
+   * 
    * @return a username entered by the user
    * @throws java.io.IOException if unable to read a line from standard input
+   * @throws IOException Signals that an I/O exception has occurred.
    */
   private static String promptForUser() throws IOException {
     System.out.println("\nEnter YouTube username [default " + defaultTestUser

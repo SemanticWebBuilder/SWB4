@@ -36,23 +36,33 @@ import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBATrash.
+ * 
  * @author juan.fernandez
  */
 public class SWBATrash extends GenericResource {
 
+    /** The log. */
     private Logger log=SWBUtils.getLogger(SWBATrash.class);
+    
+    /** The debugvar. */
     private boolean debugvar=true;
     
-    /** Creates a new instance of SWBATrash */
+    /**
+     * Creates a new instance of SWBATrash.
+     */
     public SWBATrash() { }
 
-    /** Admin view of a WBATrash resource
+    /**
+     * Admin view of a WBATrash resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -93,11 +103,14 @@ public class SWBATrash extends GenericResource {
         
     }
 
-    /** User view of WBATrash resource
+    /**
+     * User view of WBATrash resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest list of objects
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -581,10 +594,13 @@ public class SWBATrash extends GenericResource {
         response.getWriter().print(ret.toString());
     }
 
-    /** Recover or Eliminate an WB objects like topic, topicmpas, contents, resources.
+    /**
+     * Recover or Eliminate an WB objects like topic, topicmpas, contents, resources.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {

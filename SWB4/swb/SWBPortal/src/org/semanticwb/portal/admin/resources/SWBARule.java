@@ -39,28 +39,48 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBARule.
+ * 
  * @author juan.fernandez
  */
 public class SWBARule extends GenericResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBARule.class);
+    
+    /** The sb tree. */
     StringBuffer sbTree = null;
+    
+    /** The combo att. */
     HashMap comboAtt = null;
+    
+    /** The vec order att. */
     Vector vecOrderAtt = null;
+    
+    /** The local doc. */
     Document localDoc = null;
+    
+    /** The elem num. */
     int elemNum = 0;
+    
+    /** The xml attr. */
     String xmlAttr = null;
 
-    /** Creates a new instance of Rules */
+    /**
+     * Creates a new instance of Rules.
+     */
     public SWBARule() {
     }
 
-    /** User view, creates the rules
+    /**
+     * User view, creates the rules.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (WebPage, user, action, ...)
+     * @return the applet
      * @throws SWBResourceException an SWB Resource Exception
      * @throws IOException an IO Exception
      */
@@ -102,7 +122,9 @@ public class SWBARule extends GenericResource {
         return ret.toString();
     }
 
-    /** Add, update or removes rules
+    /**
+     * Add, update or removes rules.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @throws SWBResourceException an SWB Resource Exception
@@ -203,12 +225,13 @@ public class SWBARule extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -219,12 +242,15 @@ public class SWBARule extends GenericResource {
         }
     }
 
-    /** Edit view, Rule information edition
+    /**
+     * Edit view, Rule information edition.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramRequest a list of objects (WebPage, user, action, ...)
      * @throws AFException an AF Exception
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -313,10 +339,14 @@ public class SWBARule extends GenericResource {
         response.getWriter().print(ret.toString());
     }
 
-    /** load in a HashMap all user attributes and default attribute to creates rules
+    /**
+     * load in a HashMap all user attributes and default attribute to creates rules.
+     * 
      * @param tmid identificador de mapa de tópicos
      * @param ruleid identificador de la regla
      * @param paramRequest lista de objetos (WebPage, user, action, ...)
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest) throws SWBResourceException, java.io.IOException {
 
@@ -721,8 +751,12 @@ public class SWBARule extends GenericResource {
 
     }
 
-    /** Gets the document with the user attributes
+    /**
+     * Gets the document with the user attributes.
+     * 
      * @return a document with the user attributes
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     private Document getXMLComboAttr() throws SWBResourceException, java.io.IOException {
         Document dom = null;
@@ -787,6 +821,12 @@ public class SWBARule extends GenericResource {
         return dom;
     }
 
+    /**
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
+     */
     private Document getError(int id) {
         Document dom = null;
         try {
@@ -842,12 +882,13 @@ public class SWBARule extends GenericResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -878,6 +919,14 @@ public class SWBARule extends GenericResource {
         out.print(new String(ret.getBytes()));
     }
 
+    /**
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
+     */
     private Element addElement(String name, String value, Element parent) {
         Document doc = parent.getOwnerDocument();
         Element ele = doc.createElement(name);
@@ -888,6 +937,17 @@ public class SWBARule extends GenericResource {
         return ele;
     }
 
+    /**
+     * Gets the service.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the service
+     */
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String tmpcmd = cmd, tm = null, id = null;

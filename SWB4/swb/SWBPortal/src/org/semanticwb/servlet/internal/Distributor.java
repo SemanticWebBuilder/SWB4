@@ -51,20 +51,36 @@ import org.semanticwb.portal.api.SWBResourceModes;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.servlet.SWBHttpServletResponseWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Distributor.
+ * 
  * @author Jei
  */
 public class Distributor implements InternalServlet
 {
+    
+    /** The log. */
     static Logger log=SWBUtils.getLogger(Distributor.class);
+    
+    /** The name. */
     String name = "swb";
+    
+    /** The agzip. */
     boolean agzip = true;
+    
+    /** The admin. */
     boolean admin = true;
+    
+    /** The secure. */
     boolean secure = false;
     
+    /** The adm map. */
     WebSite admMap=null;
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext scontext) 
     {
         log.event("Initializing InternalServlet Distributor...");
@@ -75,6 +91,9 @@ public class Distributor implements InternalServlet
         admMap=SWBContext.getAdminWebSite();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         long time=System.currentTimeMillis();
@@ -84,6 +103,15 @@ public class Distributor implements InternalServlet
         }
     }    
     
+    /**
+     * _do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param dparams the dparams
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean _doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams)throws IOException 
     {
         long tini=System.currentTimeMillis();
@@ -443,6 +471,12 @@ public class Distributor implements InternalServlet
         return ret;
     }
     
+    /**
+     * Send error403.
+     * 
+     * @param request the request
+     * @param response the response
+     */
     private void sendError403(HttpServletRequest request, HttpServletResponse response) 
     {
         try

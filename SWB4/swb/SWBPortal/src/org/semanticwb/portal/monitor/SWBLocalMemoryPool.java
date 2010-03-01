@@ -32,19 +32,33 @@ import java.lang.management.MemoryUsage;
 import java.util.*;
 import javax.management.ObjectName;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBLocalMemoryPool.
+ * 
  * @author serch
  */
 public class SWBLocalMemoryPool
 {
 
+    /** The pool name. */
     private String poolName;
    // private ObjectName objName;
-    private MemoryPoolMXBean pool;
+    /** The pool. */
+   private MemoryPoolMXBean pool;
+    
+    /** The gc m beans. */
     private Map<ObjectName, Long> gcMBeans;
+    
+    /** The last gc info. */
     private GcInfo lastGcInfo;
 
+    /**
+     * Instantiates a new sWB local memory pool.
+     * 
+     * @param poolName the pool name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public SWBLocalMemoryPool(ObjectName poolName) throws java.io.IOException
     {
         //this.objName = objName;
@@ -73,6 +87,11 @@ public class SWBLocalMemoryPool
         }
     }
 
+    /**
+     * Checks if is collected memory pool.
+     * 
+     * @return true, if is collected memory pool
+     */
     public boolean isCollectedMemoryPool()
     {
         return (gcMBeans.size() != 0);
@@ -83,7 +102,13 @@ public class SWBLocalMemoryPool
 //        return objName;
 //    }
 
-    public SWBMemoryPoolStat getStat() throws java.io.IOException
+    /**
+ * Gets the stat.
+ * 
+ * @return the stat
+ * @throws IOException Signals that an I/O exception has occurred.
+ */
+public SWBMemoryPoolStat getStat() throws java.io.IOException
     {
         long usageThreshold = (pool.isUsageThresholdSupported()
                 ? pool.getUsageThreshold()

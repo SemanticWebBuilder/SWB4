@@ -41,27 +41,45 @@ import org.semanticwb.util.ObjectDecoder;
 import org.semanticwb.util.ObjectEncoder;
 
 
-/** objeto: cache de registro de base de datos de la tabla swb_reshits
- *
- * object: record cache of the data base of the swb_reshits table
- *
+// TODO: Auto-generated Javadoc
+/**
+ * objeto: cache de registro de base de datos de la tabla swb_reshits
+ * 
+ * object: record cache of the data base of the swb_reshits table.
+ * 
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
 public class RecResHits //implements WBDBRecord
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(RecResHits.class);
 
+    /** The observers. */
     private ArrayList observers = new ArrayList();
+    
+    /** The notifys. */
     private ArrayList notifys = new ArrayList();
 
+    /** The hits_date. */
     private Timestamp hits_date;
+    
+    /** The hits_modelid. */
     private String hits_modelid;
+    
+    /** The hits_objid. */
     private String hits_objid;
+    
+    /** The hits_type. */
     private int hits_type;
+    
+    /** The hits. */
     private long hits;
 
-    /** Creates new RecResHits */
+    /**
+     * Creates new RecResHits.
+     */
     public RecResHits()
     {
         this.hits_date = null;
@@ -72,11 +90,14 @@ public class RecResHits //implements WBDBRecord
     }
 
     /**
-     * @param hits_date
-     * @param hits_modelid
-     * @param hits_objid
-     * @param hits_type
-     * @param hits  */
+     * Instantiates a new rec res hits.
+     * 
+     * @param hits_date the hits_date
+     * @param hits_modelid the hits_modelid
+     * @param hits_objid the hits_objid
+     * @param hits_type the hits_type
+     * @param hits the hits
+     */
     public RecResHits(Timestamp hits_date, String hits_modelid, String hits_objid, int hits_type, long hits)
     {
         this();
@@ -87,6 +108,11 @@ public class RecResHits //implements WBDBRecord
         this.hits = hits;
     }
     
+    /**
+     * Instantiates a new rec res hits.
+     * 
+     * @param dec the dec
+     */
     public RecResHits(ObjectDecoder dec)
     {
         this.hits_date = dec.getTimeStamp(0);
@@ -96,6 +122,11 @@ public class RecResHits //implements WBDBRecord
         this.hits = dec.getLong(4);
     }
     
+    /**
+     * Gets the encoder.
+     * 
+     * @return the encoder
+     */
     public ObjectEncoder getEncoder()
     {
         ObjectEncoder enc=new ObjectEncoder("RecResHits");
@@ -108,14 +139,21 @@ public class RecResHits //implements WBDBRecord
     }
     
     /**
-     * @param rs  */
+     * Instantiates a new rec res hits.
+     * 
+     * @param rs the rs
+     */
     public RecResHits(ResultSet rs)
     {
         this(rs,true);
     }
 
     /**
-     * @param rs  */
+     * Instantiates a new rec res hits.
+     * 
+     * @param rs the rs
+     * @param hasWBDate the has wb date
+     */
     public RecResHits(ResultSet rs, boolean hasWBDate)
     {
         this();
@@ -157,8 +195,11 @@ public class RecResHits //implements WBDBRecord
         return hits_modelid;
     }
 
-    /** Setter for property hits_modelid.
-     * @param hits_modelid  */
+    /**
+     * Setter for property hits_modelid.
+     * 
+     * @param hits_modelid the new model id
+     */
     public void setModelId(java.lang.String hits_modelid)
     {
         this.hits_modelid = hits_modelid;
@@ -188,8 +229,11 @@ public class RecResHits //implements WBDBRecord
         return hits_type;
     }
 
-    /** Setter for property hits_type.
-     * @param hits_type  */
+    /**
+     * Setter for property hits_type.
+     * 
+     * @param hits_type the new type
+     */
     public void setType(int hits_type)
     {
         this.hits_type = hits_type;
@@ -204,39 +248,54 @@ public class RecResHits //implements WBDBRecord
         return hits;
     }
 
-    /** Setter for property hits.
-     * @param hits  */
+    /**
+     * Setter for property hits.
+     * 
+     * @param hits the new hits
+     */
     public void setHits(int hits)
     {
         this.hits = hits;
     }
 
-    /** registra el objeto observador para que pueda recibir notoficaciones de cambios
-     * @param obs  */
+    /**
+     * registra el objeto observador para que pueda recibir notoficaciones de cambios.
+     * 
+     * @param obs the obs
+     */
     public void registerObserver(SWBObserver obs)
     {
         if (!observers.contains(obs)) observers.add(obs);
     }
 
-    /** Elimina el registro de la base de datos asi como todopublic vodate remove() throws AFException
-     * @param user
-     * @param comment
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * Elimina el registro de la base de datos asi como todopublic vodate remove() throws AFException.
+     * 
+     * @param user the user
+     * @param comment the comment
+     * @throws SWBException the sWB exception
+     */
     public void remove(long user, String comment) throws SWBException
     {
 
     }
 
-    /** Elimina el registro de la base de datos asi como todopublic vodate remove() throws AFException
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * Elimina el registro de la base de datos asi como todopublic vodate remove() throws AFException.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void remove() throws SWBException
     {
 
     }
 
 
-    /** actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * actualiza el objeto en la base de datos y altualiza la informacion de los objetos que esten en memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void update() throws SWBException
     {
         Connection con=null;
@@ -268,8 +327,11 @@ public class RecResHits //implements WBDBRecord
         } 
     }
 
-    /** crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * crea un nuevo registro en la base de datos asi como un nuevo objeto en memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void create() throws SWBException
     {
         Connection con=null;
@@ -300,8 +362,11 @@ public class RecResHits //implements WBDBRecord
         } 
     }
 
-    /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
-     * @throws com.infotec.appfw.exception.AFException  */
+    /**
+     * refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria.
+     * 
+     * @throws SWBException the sWB exception
+     */
     public void load() throws SWBException
     {
         Connection con=null;
@@ -336,9 +401,13 @@ public class RecResHits //implements WBDBRecord
     }
 
 
-    /** refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria
+    /**
+     * refresca el objeto, esto es lo lee de la base de datos y actualiza los objetos que estan en la memoria.
+     * 
+     * @return true, if successful
+     * @throws SWBException the sWB exception
      * @return
-     * @throws com.infotec.appfw.exception.AFException  */
+     */
     public boolean exist() throws SWBException
     {
         boolean ret = false;
@@ -370,6 +439,9 @@ public class RecResHits //implements WBDBRecord
     }
 
 
+    /**
+     * Send notify.
+     */
     public void sendNotify()
     {
         Iterator nt = notifys.iterator();
@@ -386,7 +458,10 @@ public class RecResHits //implements WBDBRecord
     }
 
     /**
-     * @param message  */
+     * Send notify.
+     * 
+     * @param message the message
+     */
     public void sendNotify(String message)
     {
         Iterator it = observers.iterator();

@@ -41,6 +41,7 @@ import org.semanticwb.SWBPortal;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
+// TODO: Auto-generated Javadoc
 //import org.semanticwb.Logger;
 
 
@@ -53,16 +54,22 @@ import java.util.*;
  */
 public class SWBACacheMonitor extends GenericResource {
     
-    /** Creates a new instance of WBACacheMonitor */
+    /**
+     * Creates a new instance of WBACacheMonitor.
+     */
     public SWBACacheMonitor() {
     }
     
-    /** User view of the WBACacheMonitor resource
-     * @param request, input parameters
-     * @param response, output info
-     * @param paramsRequest, a list of objects (topic, user, action, ...)
+    /**
+     * User view of the WBACacheMonitor resource.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -99,12 +106,16 @@ public class SWBACacheMonitor extends GenericResource {
     }
     
     /**
-     * Get Data used in chart
-     * @param request, input parameters
-     * @param response, output data, answer to request
-     * @param paramsRequest, a list of objects (topic, user, action, ...)
+     * Get Data used in chart.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the data
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void getData(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
@@ -171,7 +182,9 @@ public class SWBACacheMonitor extends GenericResource {
         out.println("zoom=true");
     }
     
-    /**  Process the user request
+    /**
+     * Process the user request.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramsRequest a list of objects (topic, user, action, ...)

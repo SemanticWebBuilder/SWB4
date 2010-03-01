@@ -31,12 +31,24 @@ package org.semanticwb.portal.api;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface SWBResourceCache.
+ * 
  * @author Javier Solis Gonzalez
  */
 public interface SWBResourceCache
 {
+    
+    /**
+     * Gets the resource cache id.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the resource cache id
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest)
         throws SWBResourceException, java.io.IOException;
 }

@@ -45,13 +45,26 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Contact.
+ */
 public class Contact extends GenericAdmResource
 {
+
+/** The log. */
 private static Logger log = SWBUtils.getLogger(Contact.class);
+    
+    /**
+     * Instantiates a new contact.
+     */
     public Contact()
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     public void processAction(HttpServletRequest request, SWBActionResponse response)
         throws SWBResourceException, IOException
     {
@@ -93,6 +106,9 @@ private static Logger log = SWBUtils.getLogger(Contact.class);
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
         throws SWBResourceException, IOException
     {
@@ -162,12 +178,31 @@ private static Logger log = SWBUtils.getLogger(Contact.class);
         }
     }
 
+    /**
+     * String null validate.
+     * 
+     * @param obj the obj
+     * @return the string
+     */
     private static String stringNullValidate(Object obj)
     {
         if(obj==null)return "";
         else return obj.toString();
     }
 
+     /**
+      * Send email.
+      * 
+      * @param fromEmail the from email
+      * @param toEmail the to email
+      * @param ccEmail the cc email
+      * @param bccEmail the bcc email
+      * @param subject the subject
+      * @param contentType the content type
+      * @param priority the priority
+      * @param data the data
+      * @return true, if successful
+      */
      private static boolean sendEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
                                     String subject, String contentType, int priority, String data)
     {
@@ -209,6 +244,19 @@ private static Logger log = SWBUtils.getLogger(Contact.class);
     }
 
 
+    /**
+     * Send s email.
+     * 
+     * @param fromEmail the from email
+     * @param toEmail the to email
+     * @param ccEmail the cc email
+     * @param bccEmail the bcc email
+     * @param subject the subject
+     * @param contentType the content type
+     * @param priority the priority
+     * @param data the data
+     * @return true, if successful
+     */
     private static boolean sendSEmail(String fromEmail, String toEmail, String ccEmail, String bccEmail,
                                     String subject, String contentType, int priority, String data)
     {

@@ -47,74 +47,165 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que lee parametros del request y se los envia al distribuidor para la realización de ciertas operaciones
  * <p>
- * Object that reads request parameters and send them to the wb distributor for some operations
- *
+ * Object that reads request parameters and send them to the wb distributor for some operations.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class DistributorParams
 {
+    
+    /** The log. */
     static Logger log=SWBUtils.getLogger(DistributorParams.class);
+    
+    /** The Constant ACC_TYPE_NONE. */
     public static final int ACC_TYPE_NONE=0;
+    
+    /** The Constant ACC_TYPE_RENDER. */
     public static final int ACC_TYPE_RENDER=1;
+    
+    /** The Constant ACC_TYPE_ACTION. */
     public static final int ACC_TYPE_ACTION=2;
+    
+    /** The Constant URLP_RENDERID. */
     public static final String URLP_RENDERID="_rid";
+    
+    /** The Constant URLP_TOPICMAPID. */
     public static final String URLP_TOPICMAPID="_idtm";
+    
+    /** The Constant URLP_NUMBERID. */
     public static final String URLP_NUMBERID="_nid";
+    
+    /** The Constant URLP_ACTIONID. */
     public static final String URLP_ACTIONID="_aid";
+    
+    /** The Constant URLP_METHOD. */
     public static final String URLP_METHOD="_mto";
+    
+    /** The Constant URLP_MODE. */
     public static final String URLP_MODE="_mod";
+    
+    /** The Constant URLP_WINSTATE. */
     public static final String URLP_WINSTATE="_wst";
+    
+    /** The Constant URLP_ACTION. */
     public static final String URLP_ACTION="_act";
+    
+    /** The Constant URLP_VTOPIC. */
     public static final String URLP_VTOPIC="_vtp";
+    
+    /** The Constant URLP_ONLYCONTENT. */
     public static final String URLP_ONLYCONTENT="_cnt";
+    
+    /** The Constant URLP_LANG. */
     public static final String URLP_LANG="_lang";
+    
+    /** The Constant URLP_DEVICE. */
     public static final String URLP_DEVICE="_devc";
+    
+    /** The Constant URLP_PARAMKEY. */
     public static final String URLP_PARAMKEY="_prk_";
+    
+    /** The Constant URLP_PARAMVALUE. */
     public static final String URLP_PARAMVALUE="_prv_";
+    
+    /** The Constant URLP_REMOTEURL. */
     public static final String URLP_REMOTEURL="_url";
     
     //String nombre = "wb2";
     
+    /** The user. */
     private User user=null;
+    
+    /** The webpage. */
     private WebPage webpage=null;
+    
+    /** The virtwebpage. */
     private WebPage virtwebpage=null;
+    
+    /** The filtered. */
     private int filtered=-1;
+    
+    /** The URI params. */
     private ArrayList URIParams=null;
     
+    /** The vmodel. */
     private String vmodel=null;
+    
+    /** The vwebpage. */
     private String vwebpage=null;
+    
+    /** The smodel. */
     private String smodel=null;
+    
+    /** The swebpage. */
     private String swebpage=null;
+    
+    /** The resparams. */
     private HashMap resparams=null;
+    
+    /** The ordresparams. */
     private ArrayList ordresparams=null;
+    
+    /** The adicparams. */
     private HashMap adicparams=null;    
+    
+    /** The acc resource. */
     private HashMap accResource=null;
+    
+    /** The acc resource id. */
     private String accResourceID=null;
+    
+    /** The acc type. */
     private int accType=0;
+    
+    /** The query string. */
     private String queryString=null;
+    
+    /** The internal query. */
     private HashMap internalQuery=null;
     
+    /** The only content. */
     private boolean onlyContent=false;
+    
+    /** The lang. */
     private String lang=null;
+    
+    /** The device. */
     private String device=null;
 
-    /** Creates a new instance of DistributorParams */
+    /**
+     * Creates a new instance of DistributorParams.
+     * 
+     * @param request the request
+     * @param uri the uri
+     * @param lang the lang
+     */
     public DistributorParams(HttpServletRequest request, String uri, String lang)
     {
         this.lang=lang;
         init(request,uri);
     }
     
-    /** Creates a new instance of DistributorParams */
+    /**
+     * Creates a new instance of DistributorParams.
+     * 
+     * @param request the request
+     * @param uri the uri
+     */
     public DistributorParams(HttpServletRequest request, String uri)
     {
         init(request,uri);
     }
     
-    /** Creates a new instance of DistributorParams */
+    /**
+     * Creates a new instance of DistributorParams.
+     * 
+     * @param request the request
+     */
     public DistributorParams(HttpServletRequest request)
     {
         String uri = request.getRequestURI();
@@ -146,6 +237,12 @@ public class DistributorParams
         init(request, auri);
     }
 
+    /**
+     * Inits the.
+     * 
+     * @param request the request
+     * @param uri the uri
+     */
     private void init(HttpServletRequest request, String uri)
     {
         URIParams=_getURIParams(request, uri);
@@ -174,6 +271,13 @@ public class DistributorParams
         //System.out.println("queryString:"+queryString);
     }
     
+    /**
+     * _get uri params.
+     * 
+     * @param request the request
+     * @param uri the uri
+     * @return the array list
+     */
     private ArrayList _getURIParams(HttpServletRequest request, String uri)
     {
         ArrayList arr=new ArrayList();
@@ -309,6 +413,9 @@ public class DistributorParams
     
     /**
      * regresa un congunto de parametros relacionados con el id de un recurso.
+     * 
+     * @param resid the resid
+     * @return the resource uri
      */
     public HashMap getResourceURI(String resid)
     {
@@ -318,6 +425,8 @@ public class DistributorParams
     
     /**
      * Tiene parametros relacionados de los recursos.
+     * 
+     * @return true, if successful
      */
     public boolean haveResourcesURI()
     {
@@ -327,6 +436,8 @@ public class DistributorParams
 
     /**
      * regresa parametros de recursos ordernados.
+     * 
+     * @return the resources uri
      */
     public ArrayList getResourcesURI()
     {
@@ -335,6 +446,13 @@ public class DistributorParams
     
     /*
      * regresa el valor de un parametro de un recurso.
+     */
+    /**
+     * Gets the resource uri value.
+     * 
+     * @param resid the resid
+     * @param param the param
+     * @return the resource uri value
      */
     public String getResourceURIValue(String resid, String param)
     {
@@ -346,6 +464,13 @@ public class DistributorParams
         return null;
     }
     
+    /**
+     * _get user.
+     * 
+     * @param request the request
+     * @param site the site
+     * @return the user
+     */
     private User _getUser(HttpServletRequest request, WebSite site)
     {
         User user=SWBPortal.getUserMgr().getUser(request, site);
@@ -370,6 +495,12 @@ public class DistributorParams
         return user;        
     }
     
+    /**
+     * _get web page.
+     * 
+     * @param request the request
+     * @return the web page
+     */
     private WebPage _getWebPage(HttpServletRequest request)
     {
         WebPage webpage=null;
@@ -425,6 +556,11 @@ public class DistributorParams
         return webpage;
     }
     
+    /**
+     * _get virt web page.
+     * 
+     * @return the web page
+     */
     private WebPage _getVirtWebPage()
     {
         WebPage webpage=null;
@@ -439,6 +575,12 @@ public class DistributorParams
         return webpage;
     }    
     
+    /**
+     * _get filtered.
+     * 
+     * @param request the request
+     * @return the int
+     */
     private int _getFiltered(HttpServletRequest request)
     {
         //TODO:
@@ -467,6 +609,11 @@ public class DistributorParams
         return -1;
     }
     
+    /**
+     * Gets the filtered.
+     * 
+     * @return the filtered
+     */
     public int getFiltered()
     {
         return filtered;
@@ -499,11 +646,21 @@ public class DistributorParams
         return webpage;
     } 
     
+    /**
+     * Sets the web page.
+     * 
+     * @param webpage the new web page
+     */
     public void setWebPage(WebPage webpage)
     {
         this.webpage=webpage;
     }
     
+    /**
+     * Gets the virt web page.
+     * 
+     * @return the virt web page
+     */
     public WebPage getVirtWebPage()
     {
         //TODO: Filtros de Sitios        
@@ -519,10 +676,12 @@ public class DistributorParams
     } 
     
     /**
-     *  Regresa ArrayList de Strings con todos los parametros de URI
+     * Regresa ArrayList de Strings con todos los parametros de URI
      * Ejemplo:
      * Se tiene este URI -> /wb/WBAdmin/home/_rid/15/_idtm/demo
-     * el arreglo que retorna -> ["WBAdmin","home","_rid","15","_idtm","demo"]
+     * el arreglo que retorna -> ["WBAdmin","home","_rid","15","_idtm","demo"].
+     * 
+     * @return the uRI params
      */
     public ArrayList getURIParams()
     {
@@ -530,7 +689,9 @@ public class DistributorParams
     }
 
     /**
-     * Regresa parametros adicionales o extendidos, no reconocidos en la ruta base
+     * Regresa parametros adicionales o extendidos, no reconocidos en la ruta base.
+     * 
+     * @return the ext uri params
      */
     public ArrayList getExtURIParams()
     {
@@ -539,6 +700,9 @@ public class DistributorParams
     
     /**
      * Regresa parametros adicionales o extendidos, no reconocidos como parametros del recurso.
+     * 
+     * @param res the res
+     * @return the ext uri resource params
      */
     public ArrayList getExtURIResourceParams(String res)
     {
@@ -554,13 +718,20 @@ public class DistributorParams
         return accResource;
     }    
     
+    /**
+     * Gets the acc resource id.
+     * 
+     * @return the acc resource id
+     */
     public String getAccResourceID()
     {
         return accResourceID;
     }
     
     /**
-     * Regresa Iterador de Longs con identificadores de recursos pasados por URL
+     * Regresa Iterador de Longs con identificadores de recursos pasados por URL.
+     * 
+     * @return the resource i ds
      */
     public Iterator getResourceIDs()
     {
@@ -576,6 +747,9 @@ public class DistributorParams
      * getNotAccResourceURI(86)
      * ejemplo:   /wb/Test/Test_testsuite/_rid/88/_mod/help/_nid/86/_mod/help
      * resultado: /_nid/88/_mod/help
+     * 
+     * @param resid the resid
+     * @return the not acc resource uri
      */
     public String getNotAccResourceURI(String resid)
     {
@@ -646,6 +820,12 @@ public class DistributorParams
         return ret.toString();
     }
     
+    /**
+     * Gets the resource tmid.
+     * 
+     * @param resid the resid
+     * @return the resource tmid
+     */
     public String getResourceTMID(String resid)
     {
         String tm=getResourceURIValue(resid,URLP_TOPICMAPID);
@@ -659,6 +839,11 @@ public class DistributorParams
         return tm;        
     }    
     
+    /**
+     * Gets the acc resource tmid.
+     * 
+     * @return the acc resource tmid
+     */
     public String getAccResourceTMID()
     {
         return getResourceTMID(accResourceID);
@@ -674,7 +859,8 @@ public class DistributorParams
     }    
     
     /**
-     * Mostrar solamente el contenido
+     * Mostrar solamente el contenido.
+     * 
      * @return Value of property onlyContent.
      */
     public boolean isOnlyContent()
@@ -684,6 +870,12 @@ public class DistributorParams
     
     /*
      *  regresa queryString codificado en base a los parametros del HashMap (String, String[])
+     */
+    /**
+     * _get query string.
+     * 
+     * @param map the map
+     * @return the string
      */
     public static String _getQueryString(HashMap map)
     {
@@ -725,6 +917,12 @@ public class DistributorParams
     }    
     
     //regresa queryString codificado
+    /**
+     * _get query string.
+     * 
+     * @param request the request
+     * @return the string
+     */
     public String _getQueryString(HttpServletRequest request)
     {
         String qs=request.getQueryString();
@@ -763,11 +961,23 @@ public class DistributorParams
         return null;
     }
     
+    /**
+     * Gets the int resource query.
+     * 
+     * @param resid the resid
+     * @return the int resource query
+     */
     public ArrayList getIntResourceQuery(String resid)
     {
         return (ArrayList)internalQuery.get(resid);
     }
     
+    /**
+     * Adds the request params.
+     * 
+     * @param req the req
+     * @param arr the arr
+     */
     private void addRequestParams(HttpServletRequest req, ArrayList arr)
     {
         if(arr!=null)
@@ -800,6 +1010,13 @@ public class DistributorParams
         }        
     }
     
+    /**
+     * Gets the internal request.
+     * 
+     * @param request the request
+     * @param rid the rid
+     * @return the internal request
+     */
     public HttpServletRequest getInternalRequest(javax.servlet.http.HttpServletRequest request, String rid)
     {
         ArrayList arr=getIntResourceQuery(rid);

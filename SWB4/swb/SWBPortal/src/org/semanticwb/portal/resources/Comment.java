@@ -62,6 +62,7 @@ import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Presenta la interfaz para el env&iacute;o de comentarios al sitio en la categor&iacute;a
  * seleccionada por el usuario. Este recurso cuenta con facilidades de administraci&oacute;n
@@ -86,7 +87,9 @@ public class Comment extends GenericResource {
     javax.xml.transform.Templates tpl = null;
 
 
-    /** Creates a new instance of Comment */
+    /**
+     * Creates a new instance of Comment.
+     */
     public Comment() {
     }
     
@@ -141,15 +144,16 @@ public class Comment extends GenericResource {
      * cuenta aquellos para el env&iacute;o del correo y genera un objeto
      * <code>Document</code> con ellos. <p>Gets this resource's configuration data (whithout
      * those to send e-mails) and generates a <code>Document</code> object with it</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
-     * @return <b>Document</b> estructura de la interfaz de captura de comentarios.
-     *                     <p>the commentaries' capture interface structure</p>
+     * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return  estructura de la interfaz de captura de comentarios.
+     * 
      * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
-     *         <p>if there is no file message of the corresponding language.</p>
-     * @throws IOException
+     * <p>if there is no file message of the corresponding language.</p>
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public Document getDom(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest reqParams)
@@ -335,14 +339,15 @@ public class Comment extends GenericResource {
      * un objeto <b>Document</b> con ellos.<p>Gets all the
      * configuration data for this resource and generates a <b>Document</b> object
      * with it.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
-     * @return <b>Document</b> informaci&oacute;n de un comentario para su env&iacute;o.
-     *                     <p>the commentaries' data to send</p>
+     * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return  informaci&oacute;n de un comentario para su env&iacute;o.
+     * 
      * @throws SWBResourceException si el nombre del remitente, su correo y mensaje
-     *         son nulos. <p>if sender's name, e-mail account and message is null.</p>
+     * son nulos. <p>if sender's name, e-mail account and message is null.</p>
      */    
     public Document getDomEmail(HttpServletRequest request, 
             HttpServletResponse response, SWBParamRequest reqParams)
@@ -1145,14 +1150,15 @@ public class Comment extends GenericResource {
 
     
     /**
-     * Arma una cadena que contiene el c&oacute;digo HTML para mostrar la forma de los 
+     * Arma una cadena que contiene el c&oacute;digo HTML para mostrar la forma de los
      * datos presentados por la pantalla de administraci&oacute;n del recurso.
      * <p>Gets the HTML code for this resource's administration screen.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @return el c&oacute;digo HTML a mostrar.
-     *         <p>the HTML code to show in the browser.</p>
+     * 
      */       
     private String getForm(HttpServletRequest request, 
                            SWBParamRequest paramsRequest) {
@@ -1562,11 +1568,12 @@ public class Comment extends GenericResource {
      * comentario contenido en <code>dom</code>.
      * <p>Parses <code>dom</code> looking for the following data: area, recipient
      * and e-mail account; of each commentary.</p>
+     * 
      * @param dom <code>Document</code> con los datos a extraer <p>data to parse</p>
-     * @return <code>ArrayList</code> con objetos <code>TypeComment</code> que
-     *         almacenan los datos del &aacute;rea, responsable y cuenta de correo
-     *         <p>with <code>TypeComment</code> objects which contain area, recipient
-     * and e-mail account information.</p>
+     * @return  que
+     * almacenan los datos del &aacute;rea, responsable y cuenta de correo
+     *  objects which contain area, recipient
+     * and e-mail account information.
      */
     private ArrayList getTypesComment(Document dom) {
         ArrayList<TypeComment> list = new ArrayList<TypeComment>();
@@ -1634,11 +1641,12 @@ public class Comment extends GenericResource {
      * capturados en la forma presentada por <code>getForm()</code>. <p>Gets the
      * JavaScript code which performs the validations asociated with the code
      * generated by <code>getForm()</code>.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
-     * @return <b>String</b> contiene el c&oacute;digo de JavaScript a ejecutar
-     *         <p>JavaScript code to execute.</p>
+     * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
+     * @return  contiene el c&oacute;digo de JavaScript a ejecutar
+     * 
      */
     private String getScript(HttpServletRequest request,
             SWBParamRequest paramsRequest) {
@@ -1812,11 +1820,13 @@ public class Comment extends GenericResource {
     /**
      * Agrega la informaci&oacute;n enviada por correo, al archivo log de este
      * recurso. <p>Adds to this resource's log the commentaries' data set by mail.</p>
+     * 
      * @param dom <code>Document</code> que contiene los datos enviados por correo.
-     *            <p>comment's data sent by mail</p>
+     * <p>comment's data sent by mail</p>
      * @param user objeto <code>User</code> que identifica al usuario que ejecuta la
-     *            acci&oacute;n de env&iacute;o de comentario sobre el recurso
-     *            <p>user who executes the action of sending the comment</p>
+     * acci&oacute;n de env&iacute;o de comentario sobre el recurso
+     * <p>user who executes the action of sending the comment</p>
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     protected void feedCommentLog(Document dom, User user) throws IOException {
         

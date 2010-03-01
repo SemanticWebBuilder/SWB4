@@ -39,15 +39,32 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceabl
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JRResAppearedDataDetail.
+ */
 public class JRResAppearedDataDetail implements JRDataSourceable{
+    
+    /** The topicmap. */
     private String topicmap;
+    
+    /** The locale. */
     private Locale locale;
     
+    /**
+     * Instantiates a new jR res appeared data detail.
+     * 
+     * @param site the site
+     * @param locale the locale
+     */
     public JRResAppearedDataDetail(String site, Locale locale){
         topicmap = site;
         this.locale = locale;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#orderJRReport()
+     */
     public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException{
         List dataList = new ArrayList();        
 //        Enumeration enuRecs = DBResource.getInstance().getResources(topicmap);
@@ -105,9 +122,15 @@ public class JRResAppearedDataDetail implements JRDataSourceable{
         return dataSource;        
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#prepareJRReport()
+     */
     public void prepareJRReport() throws JRException{
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable#exportReport(javax.servlet.http.HttpServletResponse)
+     */
     public void exportReport(HttpServletResponse response) throws java.io.IOException, JRException{
     }
 }

@@ -48,33 +48,56 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.SFBase64;
 import org.semanticwb.platform.SemanticModel;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBSparQL.
+ * 
  * @author juan.fernandez
  */
 public class SWBSparQL extends GenericResource {
 
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBSparQL.class);
 
+    /** The encryptor. */
     private org.semanticwb.util.Encryptor encryptor = null;
 
+    /** The Constant NL. */
     static public final String NL = System.getProperty("line.separator") ;
 
+    /** The Constant PRM_QUERY. */
     public static final String PRM_QUERY="query";
+    
+    /** The Constant PRM_ONTTYPE. */
     public static final String PRM_ONTTYPE="onttype";
+    
+    /** The Constant PRM_MODELS. */
     public static final String PRM_MODELS="models";
 
+    /** The Constant OT_RDF. */
     public static final String OT_RDF="rdf";
+    
+    /** The Constant OT_ONTOLOGY. */
     public static final String OT_ONTOLOGY="ontology";
+    
+    /** The Constant OT_ONTRDFINF. */
     public static final String OT_ONTRDFINF="ontrdfinf";
 
+    /** The Constant DPL_HEAD. */
     public static final String DPL_HEAD="dplheader";
+    
+    /** The Constant DPL_ITERATOR. */
     public static final String DPL_ITERATOR="dpliterator";
+    
+    /** The Constant DPL_FOOT. */
     public static final String DPL_FOOT="dplfoot";
 
+    /** The model. */
     private SemanticModel model=null;
 
-    /** Creates a new instance of WBADBQuery */
+    /**
+     * Creates a new instance of WBADBQuery.
+     */
     public SWBSparQL()
     {
         //pedir llave en la administracion
@@ -82,6 +105,9 @@ public class SWBSparQL extends GenericResource {
 //        encryptor = new org.semanticwb.util.Encryptor(key);
     }
 
+    /**
+     * Creates the semantic model.
+     */
     public void createSemanticModel()
     {
         model=null;
@@ -112,11 +138,19 @@ public class SWBSparQL extends GenericResource {
 
     }
 
+    /**
+     * Gets the semantic model.
+     * 
+     * @return the semantic model
+     */
     public SemanticModel getSemanticModel()
     {
         return model;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
     {
@@ -124,6 +158,9 @@ public class SWBSparQL extends GenericResource {
         createSemanticModel();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -312,11 +349,13 @@ public class SWBSparQL extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -376,6 +415,15 @@ public class SWBSparQL extends GenericResource {
         }
     }
 
+    /**
+     * Replace tags.
+     * 
+     * @param str the str
+     * @param request the request
+     * @param paramRequest the param request
+     * @param qs the qs
+     * @return the string
+     */
     public String replaceTags(String str, HttpServletRequest request, SWBParamRequest paramRequest, QuerySolution qs)
     {
         //System.out.print("\nstr:"+str+"-->");

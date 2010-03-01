@@ -32,22 +32,37 @@ package org.semanticwb.portal.lib;
 
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBBridgeResponse.
+ * 
  * @author  Administrador
  */
 public class SWBBridgeResponse
 {
 
+    /** The response code. */
     private int responseCode = 0;
+    
+    /** The response message. */
     private String responseMessage = null;
+    
+    /** The error message. */
     private String errorMessage = null;
+    
+    /** The content type. */
     private String contentType = null;
+    
+    /** The headerkey. */
     private ArrayList headerkey = new ArrayList();
+    
+    /** The headervalue. */
     private ArrayList headervalue = new ArrayList();
 
 
-    /** Creates a new instance of WBBridgeResponse */
+    /**
+     * Creates a new instance of WBBridgeResponse.
+     */
     public SWBBridgeResponse()
     {
     }
@@ -100,12 +115,24 @@ public class SWBBridgeResponse
         this.responseMessage = responseMessage;
     }
 
+    /**
+     * Gets the header field key.
+     * 
+     * @param pos the pos
+     * @return the header field key
+     */
     public String getHeaderFieldKey(int pos)
     {
         if (pos > headerkey.size()) return null;
         return (String) headerkey.get(pos - 1);
     }
 
+    /**
+     * Gets the header field.
+     * 
+     * @param key the key
+     * @return the header field
+     */
     public String getHeaderField(String key)
     {
         int pos = headerkey.indexOf(key);
@@ -113,17 +140,34 @@ public class SWBBridgeResponse
         return (String) headervalue.get(pos);
     }
 
+    /**
+     * Gets the header field.
+     * 
+     * @param pos the pos
+     * @return the header field
+     */
     public String getHeaderField(int pos)
     {
         if (pos > headervalue.size()) return null;
         return (String) headervalue.get(pos - 1);
     }
 
+    /**
+     * Gets the header size.
+     * 
+     * @return the header size
+     */
     public int getHeaderSize()
     {
         return headerkey.size();
     }
 
+    /**
+     * Adds the header.
+     * 
+     * @param key the key
+     * @param value the value
+     */
     public void addHeader(String key, String value)
     {
         headerkey.add(key);

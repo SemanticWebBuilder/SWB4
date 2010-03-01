@@ -43,19 +43,32 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FrmProcess.
+ * 
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
 public class FrmProcess implements InternalServlet
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FrmProcess.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config)
     {
         log.event("Initializing InternalServlet FrmProcess...");
     }
 
+    /**
+     * Checks if is valid id.
+     * 
+     * @param id the id
+     * @return true, if is valid id
+     */
     boolean isValidId(String id)
     {
         boolean ret=true;
@@ -78,6 +91,9 @@ public class FrmProcess implements InternalServlet
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
     {
         response.setHeader("Cache-Control", "no-cache");

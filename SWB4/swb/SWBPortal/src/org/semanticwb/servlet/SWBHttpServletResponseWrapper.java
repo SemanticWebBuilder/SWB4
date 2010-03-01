@@ -38,32 +38,58 @@ import javax.servlet.ServletOutputStream;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBHttpServletResponseWrapper.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 {
 
+    /** The log. */
     static Logger log = SWBUtils.getLogger(SWBHttpServletResponseWrapper.class);
 
+    /** The bout. */
     ByteArrayOutputStream bout = new ByteArrayOutputStream(1024);
+    
+    /** The sout. */
     ServletOutputStream sout = new SWBServletOutputStreamImp(bout);
+    
+    /** The pout. */
     PrintWriter pout = null;
+    
+    /** The send redirect. */
     private String sendRedirect = null;
+    
+    /** The err. */
     private int err = -1;
+    
+    /** The err message. */
     private String errMessage = null;
+    
+    /** The trap send error. */
     private boolean trapSendError = false;
+    
+    /** The trap content type. */
     private boolean trapContentType = true;
 
+    /** The content type. */
     private String contentType=null;
 
-    /** Creates a new instance of WBHttpServletResponseWrapper */
+    /**
+     * Creates a new instance of WBHttpServletResponseWrapper.
+     * 
+     * @param response the response
+     */
     public SWBHttpServletResponseWrapper(HttpServletResponse response)
     {
         super(response);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#getOutputStream()
+     */
     @Override
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
@@ -80,6 +106,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return sout;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#getWriter()
+     */
     @Override
     public java.io.PrintWriter getWriter() throws java.io.IOException
     {
@@ -96,6 +125,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return pout;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#flushBuffer()
+     */
     @Override
     public void flushBuffer() throws java.io.IOException
     {
@@ -104,6 +136,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         bout.flush();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#getBufferSize()
+     */
     @Override
     public int getBufferSize()
     {
@@ -112,6 +147,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return bout.size();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#resetBuffer()
+     */
     @Override
     public void resetBuffer()
     {
@@ -119,6 +157,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         bout.reset();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#setBufferSize(int)
+     */
     @Override
     public void setBufferSize(int param)
     {
@@ -126,6 +167,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     //bout = new ByteArrayOutputStream(param);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
@@ -157,6 +201,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return ret;
     }
 
+    /**
+     * To byte array.
+     * 
+     * @return the byte[]
+     */
     public byte[] toByteArray()
     {
         try
@@ -184,6 +233,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         return arr;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponseWrapper#sendRedirect(java.lang.String)
+     */
     @Override
     public void sendRedirect(String location) throws java.io.IOException
     {
@@ -193,16 +245,29 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         sendRedirect = location;
     }
 
+    /**
+     * Gets the send redirect.
+     * 
+     * @return the send redirect
+     */
     public String getSendRedirect()
     {
         return sendRedirect;
     }
 
+    /**
+     * Checks if is send redirect.
+     * 
+     * @return true, if is send redirect
+     */
     public boolean isSendRedirect()
     {
         return sendRedirect != null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponseWrapper#sendError(int)
+     */
     @Override
     public void sendError(int err) throws IOException
     {
@@ -215,6 +280,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         }
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponseWrapper#sendError(int, java.lang.String)
+     */
     @Override
     public void sendError(int err, String msg) throws IOException
     {
@@ -230,26 +298,49 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     }
 
+    /**
+     * Checks if is send error.
+     * 
+     * @return true, if is send error
+     */
     public boolean isSendError()
     {
         return err != -1;
     }
 
+    /**
+     * Gets the error.
+     * 
+     * @return the error
+     */
     public int getError()
     {
         return err;
     }
 
+    /**
+     * Gets the error msg.
+     * 
+     * @return the error msg
+     */
     public String getErrorMsg()
     {
         return errMessage;
     }
 
+    /**
+     * Sets the trap send error.
+     * 
+     * @param trapSendError the new trap send error
+     */
     public void setTrapSendError(boolean trapSendError)
     {
         this.trapSendError = trapSendError;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponseWrapper#setContentType(java.lang.String)
+     */
     @Override
     public void setContentType(String type) 
     {
@@ -261,16 +352,31 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
         }
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @return the content type
+     */
     public String getContentType()
     {
         return contentType;
     }
 
+    /**
+     * Sets the trap content type.
+     * 
+     * @param trapContentType the new trap content type
+     */
     public void setTrapContentType(boolean trapContentType)
     {
         this.trapContentType = trapContentType;
     }
 
+    /**
+     * Gets the trap content type.
+     * 
+     * @return the trap content type
+     */
     public boolean getTrapContentType()
     {
         return this.trapContentType;

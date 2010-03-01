@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommUtil.
+ */
 public class CommUtil extends org.semanticwb.model.comm.base.CommUtilBase 
 {
+    
+    /**
+     * Instantiates a new comm util.
+     * 
+     * @param base the base
+     */
     public CommUtil(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

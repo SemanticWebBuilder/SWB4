@@ -24,17 +24,33 @@
 package org.semanticwb.model.comm.base;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EventsBase.
+ */
 public class EventsBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    
+    /** The Constant swbcomm_Events. */
     public static final org.semanticwb.platform.SemanticClass swbcomm_Events=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Events");
 
+    /**
+     * Instantiates a new events base.
+     */
     public EventsBase()
     {
     }
 
+    /**
+     * Instantiates a new events base.
+     * 
+     * @param base the base
+     */
     public EventsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+    
+    /** The Constant sclass. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#Events");
 }

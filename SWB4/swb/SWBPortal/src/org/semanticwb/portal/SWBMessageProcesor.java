@@ -39,31 +39,47 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
 
 
+// TODO: Auto-generated Javadoc
 /** objecto: Procesa los mensajes UDP recibidos y los redireciona a su destino final, los mensajes pueden ser, "ini", "log", "hit".
  *
  * @author Javier Solis Gonzalez
  */
 public class SWBMessageProcesor extends TimerTask
 {
+    
+    /** The log. */
     public static Logger log = SWBUtils.getLogger(SWBMessageProcesor.class);
+    
+    /** The timer. */
     Timer timer;
+    
+    /** The center. */
     SWBMessageCenter center = null;
     //static int c=0;
 
-    /** Creates a new instance of WBMessageServer
-     * @param center
-     * @throws java.net.SocketException  */
+    /**
+     * Creates a new instance of WBMessageServer.
+     * 
+     * @param center the center
+     * @throws SocketException the socket exception
+     */
     public SWBMessageProcesor(SWBMessageCenter center) throws java.net.SocketException
     {
         this.center = center;
     }
     
+    /**
+     * Inits the.
+     */
     public void init()
     {
         timer=new Timer();
         timer.schedule(this,1000,1000);        
     }
 
+    /* (non-Javadoc)
+     * @see java.util.TimerTask#run()
+     */
     public void run()
     {
 //        while (true)

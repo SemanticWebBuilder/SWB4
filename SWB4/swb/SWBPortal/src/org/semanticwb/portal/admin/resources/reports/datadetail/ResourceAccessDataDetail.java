@@ -32,12 +32,24 @@ import org.semanticwb.portal.admin.resources.reports.beans.*;
 import org.semanticwb.portal.db.SWBRecHits;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResourceAccessDataDetail.
+ */
 public class ResourceAccessDataDetail extends SWBDataDetail{
     
+    /**
+     * Instantiates a new resource access data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public ResourceAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
@@ -49,6 +61,9 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
@@ -60,6 +75,9 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;        
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");
@@ -71,6 +89,9 @@ public class ResourceAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
 //        StringTokenizer st_res = new StringTokenizer(rfilter,"|");

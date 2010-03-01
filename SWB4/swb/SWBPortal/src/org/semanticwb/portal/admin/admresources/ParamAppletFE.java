@@ -30,6 +30,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Param en un applet.
  * <p>
@@ -40,21 +41,43 @@ import org.w3c.dom.*;
 
 public class ParamAppletFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ParamAppletFE.class);
     
+    /** The name. */
     private String name=null;
+    
+    /** The value. */
     private String value=null;
+    
+    /** The label. */
     private String label=null;
+    
+    /** The input. */
     private String input=null;
+    
+    /** The appletfe. */
     private AppletFE appletfe=null;
+    
+    /** The tag. */
     protected Node tag=null;
     
     
-    /** Creates a new instance of OptionSelectFE */
+    /**
+     * Creates a new instance of OptionSelectFE.
+     */
     public ParamAppletFE() {
     }
     
-    /** Creates a new instance of OptionSelectFE width default values*/
+    /**
+     * Creates a new instance of OptionSelectFE width default values.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param label the label
+     * @param input the input
+     */
     public ParamAppletFE(String name, String value, String label, String input) {
         this.name=name;
         this.value=value;
@@ -62,54 +85,97 @@ public class ParamAppletFE extends WBAdmResourceAbs
         this.input=input;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public ParamAppletFE(Node tag){
         this.tag=tag;
         setAttributes();
     }
     
     //sets
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setName(java.lang.String)
+     */
     public void setName(String name){
         this.name=name;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
  
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setLabel(java.lang.String)
+     */
     public void setLabel(String label){
         this.label=label;
     }
     
+    /**
+     * Sets the input.
+     * 
+     * @param input the new input
+     */
     public void setInput(String input){
         this.input=input;
     }    
     
+    /**
+     * Sets the applet fe obj.
+     * 
+     * @param appletfe the new applet fe obj
+     */
     public void setAppletFEObj(AppletFE appletfe){
         this.appletfe=appletfe;
     }
     
     //gets
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getName()
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+   /* (non-Javadoc)
+    * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#getLabel()
+    */
    public String getLabel(){
         return label;
     }
    
+   /**
+    * Gets the input.
+    * 
+    * @return the input
+    */
    public String getInput(){
         return input;
     }   
     
    /**
     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
+    * obtains the final xml element to show in the resource admin.
+    * 
+    * @return the html
     */ 
     public String getHtml(){
         String xml="";
@@ -158,8 +224,8 @@ public class ParamAppletFE extends WBAdmResourceAbs
     }
      
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
      public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

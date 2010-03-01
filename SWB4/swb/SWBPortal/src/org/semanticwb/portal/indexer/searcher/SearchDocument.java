@@ -27,17 +27,34 @@ import org.semanticwb.model.Searchable;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SearchDocument.
+ * 
  * @author javier.solis
  */
 public class SearchDocument implements Comparable
 {
+    
+    /** The m_uri. */
     private String m_uri;
+    
+    /** The m_summary. */
     private String m_summary;
+    
+    /** The m_score. */
     private float m_score;
+    
+    /** The m_sdoc. */
     private Searchable m_sdoc=null;
 
+    /**
+     * Instantiates a new search document.
+     * 
+     * @param uri the uri
+     * @param summary the summary
+     * @param score the score
+     */
     public SearchDocument(String uri, String summary, float score)
     {
         this.m_score=score;
@@ -45,6 +62,11 @@ public class SearchDocument implements Comparable
         this.m_summary=summary;
     }
 
+    /**
+     * Gets the searchable.
+     * 
+     * @return the searchable
+     */
     public Searchable getSearchable()
     {
         if(m_sdoc==null)
@@ -63,6 +85,8 @@ public class SearchDocument implements Comparable
     }
 
     /**
+     * Gets the uRI.
+     * 
      * @return the uri
      */
     public String getURI() {
@@ -70,6 +94,8 @@ public class SearchDocument implements Comparable
     }
 
     /**
+     * Sets the uRI.
+     * 
      * @param uri the uri to set
      */
     public void setURI(String uri) {
@@ -77,6 +103,8 @@ public class SearchDocument implements Comparable
     }
 
     /**
+     * Gets the summary.
+     * 
      * @return the summary
      */
     public String getSummary() {
@@ -84,6 +112,8 @@ public class SearchDocument implements Comparable
     }
 
     /**
+     * Sets the summary.
+     * 
      * @param summary the summary to set
      */
     public void setSummary(String summary) {
@@ -92,6 +122,8 @@ public class SearchDocument implements Comparable
 
 
     /**
+     * Gets the score.
+     * 
      * @return the score
      */
     public float getScore() {
@@ -99,12 +131,17 @@ public class SearchDocument implements Comparable
     }
 
     /**
+     * Sets the score.
+     * 
      * @param score the score to set
      */
     public void setScore(float score) {
         this.m_score = score;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     public int compareTo(Object o) {
         return 1;
     }

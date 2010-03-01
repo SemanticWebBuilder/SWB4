@@ -45,28 +45,54 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBRankWebPage.
+ */
 public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWBRankWebPageBase
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRankWebPage.class);
     // http://www.semanticwebbuilder.org/swb4/ontology#rank
     // http://www.semanticwebbuilder.org/swb4/ontology#reviews
 
 
+    /** The full star path. */
     private String fullStarPath;
+    
+    /** The half star path. */
     private String halfStarPath;
+    
+    /** The empty star path. */
     private String emptyStarPath;
+    
+    /** The Constant sp_rank. */
     private static final org.semanticwb.platform.SemanticProperty sp_rank = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rank");
+    
+    /** The Constant sp_reviews. */
     private static final org.semanticwb.platform.SemanticProperty sp_reviews = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
 
+    /**
+     * Instantiates a new sWB rank web page.
+     */
     public SWBRankWebPage()
     {
     }
 
+    /**
+     * Instantiates a new sWB rank web page.
+     * 
+     * @param base the base
+     */
     public SWBRankWebPage(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException
     {
@@ -88,6 +114,9 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -176,6 +205,15 @@ function votedPage(){
 
     }
 
+    /**
+     * Prints the star.
+     * 
+     * @param current the current
+     * @param rank the rank
+     * @param out the out
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     */
     private void printStar(int current, int rank, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException
     {
         /*SWBResourceURL url = paramRequest.getActionUrl();
@@ -193,6 +231,9 @@ function votedPage(){
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -253,6 +294,9 @@ function votedPage(){
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doHelp(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -268,6 +312,9 @@ function votedPage(){
              out.print("OK");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -370,7 +417,10 @@ function votedPage(){
 //
 //    }
 
-    @Override
+    /* (non-Javadoc)
+ * @see org.semanticwb.portal.api.GenericResource#doAdminHlp(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+ */
+@Override
     public void doAdminHlp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         final Percentage per = new Percentage();
@@ -482,13 +532,30 @@ function votedPage(){
     }
 
  
+    /**
+     * The Class Percentage.
+     */
     private class Percentage
     {
+        
+        /** The per. */
         int per = 0;
+        
+        /**
+         * Sets the percentage.
+         * 
+         * @param per the new percentage
+         */
         public void setPercentage(int per)
         {
             this.per = per;
         }
+        
+        /**
+         * Gets the percentage.
+         * 
+         * @return the percentage
+         */
         public int getPercentage()
         {
             return per;

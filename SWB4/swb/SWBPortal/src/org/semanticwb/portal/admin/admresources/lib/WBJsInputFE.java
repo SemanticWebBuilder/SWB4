@@ -25,6 +25,7 @@
 
 package org.semanticwb.portal.admin.admresources.lib;
 
+// TODO: Auto-generated Javadoc
 /**
  * Esta es una clase interface que implementa la interface WBAdmResource y que es utilizada para los objetos de tipo validaci�n de JavaScript (ej. Js_AlphabeticValFE,Js_ConfValFE)
  * <p>
@@ -36,15 +37,51 @@ package org.semanticwb.portal.admin.admresources.lib;
 public interface WBJsInputFE extends WBAdmResource
 {
 
+    /**
+     * Sets the js is required.
+     * 
+     * @param flag the new js is required
+     */
     public abstract void setJsIsRequired(boolean flag);
 
+    /**
+     * Sets the js val type.
+     * 
+     * @param s the new js val type
+     */
     public abstract void setJsValType(String s);
 
+    /**
+     * Sets the js val type flags.
+     * 
+     * @param flag the flag
+     * @param flag1 the flag1
+     * @param flag2 the flag2
+     * @param flag3 the flag3
+     */
     public abstract void setJsValTypeFlags(boolean flag, boolean flag1, boolean flag2, boolean flag3);
 
+    /**
+     * Sets the js valid chars.
+     * 
+     * @param flag the flag
+     * @param s the s
+     * @param flag1 the flag1
+     */
     public abstract void setJsValidChars(boolean flag, String s, boolean flag1);
     
+    /**
+     * Sets the js patron.
+     * 
+     * @param patron the patron
+     * @param flag the flag
+     */
     public abstract void setJsPatron(String patron, boolean flag);
 
+    /**
+     * Gets the js val obj.
+     * 
+     * @return the js val obj
+     */
     public abstract Object[] getJsValObj();
 }

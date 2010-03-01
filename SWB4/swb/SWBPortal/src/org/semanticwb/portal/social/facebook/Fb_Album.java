@@ -29,7 +29,8 @@
 package org.semanticwb.portal.social.facebook;
 
 /**
- *
+ * The Class Fb_Album.
+ * 
  * @author Jorge Jiménez
  */
 public class Fb_Album {

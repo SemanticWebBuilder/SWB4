@@ -31,6 +31,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo TextArea.
  * <p>
@@ -40,47 +41,100 @@ import org.w3c.dom.*;
 
 public class TextAreaFE extends WBJsInputFEAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(TextAreaFE.class);
     
     
+    /** The accesskey. */
     private String accesskey=null;
+    
+    /** The cols. */
     private int cols=-1;
+    
+    /** The rows. */
     private int rows=-1;
+    
+    /** The isdisabled. */
     private boolean isdisabled=false;
+    
+    /** The isreadonly. */
     private boolean isreadonly=false;
+    
+    /** The width. */
     private int width=-1;
+    
+    /** The height. */
     private int height=-1;
+    
+    /** The wrap. */
     private String wrap=null;
+    
+    /** The value. */
     private String value=null;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The tag. */
     private Node tag=null;
 
+    /** The required. */
     protected boolean required=false;
+    
+    /** The svaltype. */
     protected String svaltype=null;
+    
+    /** The sjspatron. */
     protected String sjspatron=null;
+    
+    /** The prompt message. */
     protected String promptMessage=null;
+    
+    /** The invalid message. */
     protected String invalidMessage=null;
+    
+    /** The reg exp. */
     protected String regExp=null;
+    
+    /** The trim. */
     protected boolean trim=false;
     
-    /** Creates a new instance of TextAreaFE */
+    /**
+     * Creates a new instance of TextAreaFE.
+     */
     public TextAreaFE() {
     }
     
-    /** Creates a new instance of TextAreaFE */
+    /**
+     * Creates a new instance of TextAreaFE.
+     * 
+     * @param cols the cols
+     * @param rows the rows
+     */
     public TextAreaFE(int cols,int rows) {
         this.cols=cols;
         this.rows=rows;
     }
     
-    /** Creates a new instance of TextAreaFE */
+    /**
+     * Creates a new instance of TextAreaFE.
+     * 
+     * @param cols the cols
+     * @param rows the rows
+     * @param name the name
+     */
     public TextAreaFE(int cols,int rows,String name) {
         this.cols=cols;
         this.rows=rows;
         this.name=name;
     }
     
-    /** Creates a new instance of TextAreaFE */
+    /**
+     * Creates a new instance of TextAreaFE.
+     * 
+     * @param tag the tag
+     */
     public TextAreaFE(Node tag) {
         this.tag=tag;
         setAttributes();
@@ -89,95 +143,195 @@ public class TextAreaFE extends WBJsInputFEAbs
     
      //sets
     
-    public void setAccessKey(String accesskey){
+    /**
+      * Sets the access key.
+      * 
+      * @param accesskey the new access key
+      */
+     public void setAccessKey(String accesskey){
         this.accesskey=accesskey;
     }
     
+    /**
+     * Sets the cols.
+     * 
+     * @param cols the new cols
+     */
     public void setCols(int cols){
         this.cols=cols;
     }
     
+    /**
+     * Sets the rows.
+     * 
+     * @param rows the new rows
+     */
     public void setRows(int rows){
         this.rows=rows;
     }
     
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     public void setDisabled(boolean isdisabled){
         this.isdisabled=isdisabled;
     }
     
+    /**
+     * Sets the read only.
+     * 
+     * @param isreadonly the new read only
+     */
     public void setReadOnly(boolean isreadonly){
         this.isreadonly=isreadonly;
     }
      
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width){
         this.width=width;
     }
     
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height) {
         this.height=height;
     }
      
+    /**
+     * Sets the wrap.
+     * 
+     * @param wrap the new wrap
+     */
     public void setWrap(String wrap) {
         this.wrap=wrap;
     } 
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
      //gets
     
-    public String getAccessKey(){
+    /**
+      * Gets the access key.
+      * 
+      * @return the access key
+      */
+     public String getAccessKey(){
         return accesskey;
     }
     
+    /**
+     * Gets the cols.
+     * 
+     * @return the cols
+     */
     public int getCols(){
         return cols;
     }
     
+    /**
+     * Gets the rows.
+     * 
+     * @return the rows
+     */
     public int getRows(){
         return rows;
     }
     
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     public boolean getDisabled(){
        return isdisabled;
     }
     
+    /**
+     * Gets the read only.
+     * 
+     * @return the read only
+     */
     public boolean getReadOnly(){
         return isreadonly;
     }
      
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth(){
         return width;
     }
     
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight() {
         return height;
     }
      
+    /**
+     * Gets the wrap.
+     * 
+     * @return the wrap
+     */
     public String getWrap() {
         return wrap;
     } 
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
    
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+      * determines de xml tag name the form element will be added in a resource.
+      * 
+      * @return the xml tag
+      */
     public String getXmlTag(){
         return xmltag;
     }
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */    
     public String getHtml(){
         String xml="";
         try 
@@ -231,8 +385,8 @@ public class TextAreaFE extends WBJsInputFEAbs
     }
     
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
     public void setAttributes(){
         int minsize=0;
         String sjsvalchars=null;
@@ -289,8 +443,9 @@ public class TextAreaFE extends WBJsInputFEAbs
     }
 
     /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
+     * Manejo de Frameworks de JavaScript.
+     * 
+     * @param child the new js framework attributes
      */
     private void setJsFrameworkAttributes(Element child){
             String jsFramework=getFormFE().getJsFrameWork();

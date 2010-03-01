@@ -44,6 +44,7 @@ import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.admin.resources.StyleInner;
 
+// TODO: Auto-generated Javadoc
 /**
  * ImageGallery se encarga de desplegar y administrar una colección de imágenes
  * dispuestas en un carrusel.
@@ -59,15 +60,28 @@ import org.semanticwb.portal.admin.resources.StyleInner;
  */
 
 public class ImageGallery extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ImageGallery.class);
+    
+    /** The adm res utils. */
     private WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
+    
+    /** The work path. */
     private String workPath;
+    
+    /** The web work path. */
     private String webWorkPath;
 
+    /** The Constant _thumbnail. */
     private static final String _thumbnail = "thumbn_";
 
+    /** The si. */
     private StyleInner si;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base) {
         try
@@ -106,6 +120,9 @@ public class ImageGallery extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         /*response.setContentType("text/html;charset=iso-8859-1");
@@ -131,6 +148,19 @@ public class ImageGallery extends GenericResource {
         out.flush();
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param oid the oid
+     * @param width the width
+     * @param height the height
+     * @param autoplay the autoplay
+     * @param pause the pause
+     * @param fadetime the fadetime
+     * @param title the title
+     * @param imagepath the imagepath
+     * @return the gallery script
+     */
     public String getGalleryScript(String oid, int width, int height, boolean autoplay, int pause, int fadetime, String title, String[] imagepath) {
         Resource base = getResourceBase();
         StringBuilder out = new StringBuilder();
@@ -197,26 +227,67 @@ public class ImageGallery extends GenericResource {
         return out.toString();
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param divId the div id
+     * @param title the title
+     * @param imgpath the imgpath
+     * @return the gallery script
+     */
     public String getGalleryScript(String divId, String title, String[] imgpath) {
         return getGalleryScript(divId, 220, 170, false, 2500, 500, title, imgpath);
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param imgpath the imgpath
+     * @return the gallery script
+     */
     public String getGalleryScript(String[] imgpath) {
         return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, "", imgpath);
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param autoplay the autoplay
+     * @param imgpath the imgpath
+     * @return the gallery script
+     */
     public String getGalleryScript(boolean autoplay, String[] imgpath) {
         return getGalleryScript(Integer.toString((int)Math.random()*100), 220, 170, autoplay, 2500, 500, "", imgpath);
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param width the width
+     * @param height the height
+     * @param imgpath the imgpath
+     * @return the gallery script
+     */
     public String getGalleryScript(int width, int height, String[] imgpath) {
         return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, false, 2500, 500, "", imgpath);
     }
 
+    /**
+     * Gets the gallery script.
+     * 
+     * @param width the width
+     * @param height the height
+     * @param autoplay the autoplay
+     * @param imgpath the imgpath
+     * @return the gallery script
+     */
     public String getGalleryScript(int width, int height, boolean autoplay, String[] imgpath) {
         return getGalleryScript(Integer.toString((int)Math.random()*100), width, height, autoplay, 2500, 500, "", imgpath);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
@@ -313,6 +384,13 @@ public class ImageGallery extends GenericResource {
         out.flush();
     }
 
+    /**
+     * Gets the form.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the form
+     */
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuffer ret=new StringBuffer();
         Resource base=getResourceBase();
@@ -584,6 +662,11 @@ ret.append("\n  </tr> ");
         return ret.toString();
     }
 
+    /**
+     * Gets the script.
+     * 
+     * @return the script
+     */
     private String getScript() {
         StringBuffer ret = new StringBuffer();
         try {
@@ -603,6 +686,9 @@ ret.append("\n  </tr> ");
         return ret.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if(paramsRequest.getMode().equalsIgnoreCase("fillStyle")) {
@@ -612,6 +698,15 @@ ret.append("\n  </tr> ");
         }
     }
 
+    /**
+     * Do edit style.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditStyle(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         String stel = request.getParameter("stel");
@@ -651,10 +746,32 @@ ret.append("\n  </tr> ");
         }
     }
 
+    /**
+     * Render gallery.
+     * 
+     * @param imgpath the imgpath
+     * @return the string
+     */
     public String renderGallery(String[] imgpath) {
         return renderGallery(Integer.toString((int)Math.random()*100), 220, 170, false, 2500, 500, 420, 370, "", "", imgpath);
     }
 
+    /**
+     * Render gallery.
+     * 
+     * @param oid the oid
+     * @param width the width
+     * @param height the height
+     * @param autoplay the autoplay
+     * @param pause the pause
+     * @param fadetime the fadetime
+     * @param fullwidth the fullwidth
+     * @param fullheight the fullheight
+     * @param title the title
+     * @param titlestyle the titlestyle
+     * @param imagepath the imagepath
+     * @return the string
+     */
     public String renderGallery(String oid, int width, int height, boolean autoplay, int pause, int fadetime, int fullwidth, int fullheight, String title, String titlestyle, String[] imagepath) {
         StringBuilder out = new StringBuilder();
 

@@ -56,14 +56,21 @@ import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.servlet.SWBHttpServletRequestWrapper;
 import org.semanticwb.servlet.internal.DistributorParams;
 
+// TODO: Auto-generated Javadoc
 /**
- * Permite incorporar Un recurso dentro del Wiki
+ * Permite incorporar Un recurso dentro del Wiki.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class ResourceTag extends HTMLTag implements INoBodyParsingTag 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ResourceTag.class);
 
+	/**
+	 * Instantiates a new resource tag.
+	 */
 	public ResourceTag() {
 		super("resource");
                 addAllowedAttribute("stype");
@@ -72,6 +79,12 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
                 addAllowedAttribute("language");
 	}
         
+        /**
+         * Filter attributes.
+         * 
+         * @param attributes the attributes
+         * @return the hash map
+         */
         HashMap<String, String> filterAttributes(Map<String, String> attributes)
         {
             HashMap map=new HashMap();
@@ -88,6 +101,9 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
             return map;
         }
 
+	/* (non-Javadoc)
+	 * @see info.bliki.wiki.tags.HTMLTag#renderHTML(info.bliki.wiki.filter.ITextConverter, java.lang.Appendable, info.bliki.wiki.model.IWikiModel)
+	 */
 	@Override
 	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException 
         {
@@ -174,11 +190,17 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
             }
 	}
 
+	/* (non-Javadoc)
+	 * @see org.htmlcleaner.TagToken#isReduceTokenStack()
+	 */
 	@Override
 	public boolean isReduceTokenStack() {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.htmlcleaner.TagNode#getParents()
+	 */
 	@Override
 	public String getParents() {
 		return Configuration.SPECIAL_BLOCK_TAGS;

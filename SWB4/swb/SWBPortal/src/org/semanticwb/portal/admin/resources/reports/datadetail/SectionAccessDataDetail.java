@@ -31,8 +31,17 @@ import java.util.HashMap;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 import org.semanticwb.portal.db.SWBRecHits_;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SectionAccessDataDetail.
+ */
 public class SectionAccessDataDetail extends SWBDataDetail{
     
+    /**
+     * Instantiates a new section access data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public SectionAccessDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
@@ -43,6 +52,9 @@ public class SectionAccessDataDetail extends SWBDataDetail{
         return urlJR;
     }*/    
        
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, java.lang.String)
+     */
     protected List doDataList(String site, String rfilter, int type, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
 //        HashMap labels=new HashMap();
@@ -50,6 +62,9 @@ public class SectionAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, java.lang.String)
+     */
     protected List doDataList(String site, String rfilter, int type, int year, String language) throws IncompleteFilterException{
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();        
@@ -57,6 +72,9 @@ public class SectionAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, java.lang.String)
+     */
     protected List doDataList(String site, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();
@@ -64,6 +82,9 @@ public class SectionAccessDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, int, int, int, java.lang.String)
+     */
     protected List doDataList(String site, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         HashMap labels=new HashMap();

@@ -40,23 +40,51 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWB4GenericLDAPBridge.
+ * 
  * @author serch
  */
 public class SWB4GenericLDAPBridge extends ExtUserRepInt
 {
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(SWB4GenericLDAPBridge.class);
+    
+    /** The user rep. */
     private UserRepository userRep;
+    
+    /** The props. */
     private Properties props;
+    
+    /** The seek field. */
     private String seekField;
+    
+    /** The user object class. */
     private String userObjectClass;
+    
+    /** The field first name. */
     private String fieldFirstName;
+    
+    /** The field last name. */
     private String fieldLastName;
+    
+    /** The field middle name. */
     private String fieldMiddleName;
+    
+    /** The field email. */
     private String fieldEmail;
+    
+    /** The value language. */
     private String valueLanguage;
 
+    /**
+     * Instantiates a new sW b4 generic ldap bridge.
+     * 
+     * @param UserRep the user rep
+     * @param props the props
+     */
     public SWB4GenericLDAPBridge(UserRepository UserRep, Properties props)
     {
         this.userRep = UserRep;
@@ -71,6 +99,9 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#syncUsers()
+     */
     @Override
     public void syncUsers()
     {
@@ -89,12 +120,18 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#validateCredential(java.lang.String, java.lang.Object)
+     */
     @Override
     public boolean validateCredential(String login, Object credential)
     {
         return AuthenticateLP(login, credential);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.security.auth.ExtUserRepInt#syncUser(java.lang.String, org.semanticwb.model.User)
+     */
     @Override
     public boolean syncUser(String login, User user)
     {
@@ -122,6 +159,11 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         return ret;
     }
 
+    /**
+     * Gets the properties hash.
+     * 
+     * @return the properties hash
+     */
     private Hashtable getPropertiesHash()
     {
         Hashtable env = new Hashtable();
@@ -133,6 +175,12 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         return env;
     }
 
+    /**
+     * Gets the cN from login.
+     * 
+     * @param login the login
+     * @return the cN from login
+     */
     private String getCNFromLogin(String login)
     {
         DirContext ctx = null;
@@ -160,6 +208,13 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         }
     }
 
+    /**
+     * Authenticate lp.
+     * 
+     * @param login the login
+     * @param credential the credential
+     * @return true, if successful
+     */
     private boolean AuthenticateLP(String login, Object credential)
     {
         Hashtable env = new Hashtable();
@@ -181,6 +236,12 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         return true;
     }
 
+    /**
+     * Gets the user list.
+     * 
+     * @return the user list
+     * @throws NamingException the naming exception
+     */
     private NamingEnumeration getUserList() throws NamingException
     {
         Hashtable env = getPropertiesHash();
@@ -206,6 +267,13 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         return answers;
     }
 
+    /**
+     * Gets the user attributes.
+     * 
+     * @param login the login
+     * @return the user attributes
+     * @throws NamingException the naming exception
+     */
     public Attributes getUserAttributes(String login) throws NamingException
     {
         DirContext ctx = new InitialDirContext(getPropertiesHash());
@@ -223,6 +291,12 @@ public class SWB4GenericLDAPBridge extends ExtUserRepInt
         return answer;
     }
 
+    /**
+     * Load attrs2 rec user.
+     * 
+     * @param attrs the attrs
+     * @param ru the ru
+     */
     public void loadAttrs2RecUser(Attributes attrs, User ru)
     {
 

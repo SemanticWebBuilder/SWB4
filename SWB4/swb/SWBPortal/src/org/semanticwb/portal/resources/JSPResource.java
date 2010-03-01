@@ -40,6 +40,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.lib.SWBResponse;
 
+// TODO: Auto-generated Javadoc
 /** Este recurso permite ejecutar un archivo jsp, dando la ruta del archivo a
  * ejecutar dentro del sitio, pudi&eacute;ndose presentar como contenido o como
  * recurso.
@@ -64,14 +65,15 @@ public class JSPResource extends GenericAdmResource
      * vista de administraci&oacute;n de este recurso.
      * <p>Performs the execution call of the JSP file specified in this resource's
      * administration view.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
-     * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
-     *        del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * @param paramRequest the param request
      * @throws java.io.IOException si este recurso no tiene asociado el archivo
-     *         que se crea cuando se edita el c&oacute;digo. <p>if this resource
-     *         has no file, which is created after editing code, associated</p>
+     * que se crea cuando se edita el c&oacute;digo. <p>if this resource
+     * has no file, which is created after editing code, associated</p>
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -100,14 +102,16 @@ public class JSPResource extends GenericAdmResource
      * vista de administraci&oacute;n de este recurso.
      * <p>Performs the execution call of the JSP file specified in this resource's
      * administration view.</p>
+     * 
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the
-     *                user's HTTP request</p>
+     * user's HTTP request</p>
      * @param actionResponse la respuesta a la acci&oacute;n solicitada por el usuario
-     *        <p>the response to the action requested by the user.</p>
-     * @throws org.semanticwb.portal.api.SWBResourceException
+     * <p>the response to the action requested by the user.</p>
      * @throws java.io.IOException si hay alg&uacute;n problema mientras se escribe el
-     *         c&oacute;digo en el archivo.
-     *         <p>if there is a problem while writing the code in the file.</p>
+     * c&oacute;digo en el archivo.
+     * <p>if there is a problem while writing the code in the file.</p>
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processAction(HttpServletRequest request,

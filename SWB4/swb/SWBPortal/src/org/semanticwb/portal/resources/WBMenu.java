@@ -44,6 +44,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase muestra el men� con las secciones de un sitio (padres e hijos).
  * Utiliza un archivo XSL. Este recurso viene de la versi�n 2 de WebBuilder
  *
@@ -55,20 +56,28 @@ import org.w3c.dom.Element;
 public class WBMenu extends GenericAdmResource 
 {
     
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBMenu.class);
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl; 
+    
+    /** The web work path. */
     String webWorkPath = "/work";  
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenu/";
     
-    /** Creates a new instance of WBMenu */
+    /**
+     * Creates a new instance of WBMenu.
+     */
     public WBMenu() {
     }
     
     /**
      * Asigna la informaci�n de la base de datos al recurso.
-     *
-     * @param     base  La informaci�n del recurso en memoria.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base)
@@ -97,12 +106,14 @@ public class WBMenu extends GenericAdmResource
     
     
     /**
-     * Obtiene el resultado final del recurso en formato dom
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -230,12 +241,13 @@ public class WBMenu extends GenericAdmResource
     }
     
     /**
-     * Obtiene el resultado final del recurso en formato xml
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
@@ -251,12 +263,13 @@ public class WBMenu extends GenericAdmResource
     }    
     
     /**
-     * Obtiene el formato final del recurso en formato html
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el formato final del recurso en formato html.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 

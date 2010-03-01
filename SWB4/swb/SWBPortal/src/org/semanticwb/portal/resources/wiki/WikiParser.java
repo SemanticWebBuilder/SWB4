@@ -36,23 +36,41 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.SWBParamRequest;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WikiParser.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class WikiParser
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WikiParser.class);
 
+    /** The image. */
     private String image;
+    
+    /** The page. */
     private String page;
+    
+    /** The mapid. */
     private String mapid;
     
-    /** Creates a new instance of WikiParser */
+    /**
+     * Creates a new instance of WikiParser.
+     */
     public WikiParser()
     {
     }
 
+    /**
+     * Parses the.
+     * 
+     * @param content the content
+     * @param urlbase the urlbase
+     * @return the string
+     */
     public String parse(String content, String urlbase)
     {
         this.image="${image}";
@@ -71,6 +89,14 @@ public class WikiParser
         return htmlStr;
     }
     
+    /**
+     * Parses the.
+     * 
+     * @param content the content
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String parse(String content, javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
         String mapid=paramsRequest.getWebPage().getWebSiteId();

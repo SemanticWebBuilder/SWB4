@@ -32,6 +32,7 @@ import org.semanticwb.portal.admin.admresources.db.AdmDBConnMgr;
 import org.semanticwb.portal.admin.admresources.lib.*;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento de tipo Hidden en una forma de html.
  * <p>
@@ -41,28 +42,50 @@ import org.w3c.dom.*;
 
 public class HiddenFE extends WBAdmResourceAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(HiddenFE.class);
     
+    /** The value. */
     private String value=null;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The tag. */
     protected Node tag=null;
     
-    /** Creates a new instance of HiddenFE */
+    /**
+     * Creates a new instance of HiddenFE.
+     */
     public HiddenFE() {
     }
     
-    /** Creates a new instance of HiddenFE with default values*/
+    /**
+     * Creates a new instance of HiddenFE with default values.
+     * 
+     * @param name the name
+     */
     public HiddenFE(String name) {
         this.name=name;
     }
     
-    /** Creates a new instance of HiddenFE with default values*/
+    /**
+     * Creates a new instance of HiddenFE with default values.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public HiddenFE(String name,String value) {
         this.name=name;
         this.value=value;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public HiddenFE(Node tag){
         this.tag=tag;
         setAttributes();
@@ -71,31 +94,51 @@ public class HiddenFE extends WBAdmResourceAbs
     //sets
     
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
     //gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+      * determines de xml tag name the form element will be added in a resource.
+      * 
+      * @return the xml tag
+      */
     public String getXmlTag(){
         return xmltag;
     }
     
     
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */    
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */    
      public String getHtml(){
         String xml="";
         try 
@@ -125,8 +168,8 @@ public class HiddenFE extends WBAdmResourceAbs
      
      
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
     public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();

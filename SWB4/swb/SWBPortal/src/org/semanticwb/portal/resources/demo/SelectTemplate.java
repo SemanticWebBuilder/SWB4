@@ -52,12 +52,17 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.lib.SWBResponse;
 import org.semanticwb.servlet.internal.DistributorParams;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SelectTemplate.
+ * 
  * @author serch
  */
 public class SelectTemplate extends GenericResource{
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -98,6 +103,9 @@ public class SelectTemplate extends GenericResource{
         out.println("</td></tr></table></div>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {

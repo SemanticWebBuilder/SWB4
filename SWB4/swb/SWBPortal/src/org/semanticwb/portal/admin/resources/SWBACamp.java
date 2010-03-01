@@ -46,25 +46,38 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBACamp.
+ * 
  * @author juan.fernandez
  */
 public class SWBACamp extends GenericResource {
 
 
+    /** The str rsc type. */
     String strRscType=SWBACamp.class.getName();
+    
+    /** The log. */
     private Logger log=SWBUtils.getLogger(SWBACamp.class);
+    
+    /** The base. */
     Resource base=null;
- /** Creates a new instance of SWBACamp */
+ 
+ /**
+  * Creates a new instance of SWBACamp.
+  */
     public SWBACamp() {
     }
     
-    /** User View of SWBACamp Resource
+    /**
+     * User View of SWBACamp Resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -139,11 +152,14 @@ public class SWBACamp extends GenericResource {
     }
 
     
-    /** Edition view of SWBACamp Resource
+    /**
+     * Edition view of SWBACamp Resource.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @param paramRequest a list of objects (user, topic, action, ...)
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -291,10 +307,13 @@ public class SWBACamp extends GenericResource {
         }
     }
 
-    /** Add and Update action of WBAGrpTemplates information
+    /**
+     * Add and Update action of WBAGrpTemplates information.
+     * 
      * @param request parameters
      * @param response answer to the request
      * @throws IOException an IO Exception
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {

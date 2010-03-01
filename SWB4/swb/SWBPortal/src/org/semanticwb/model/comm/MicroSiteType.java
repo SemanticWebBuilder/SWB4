@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MicroSiteType.
+ */
 public class MicroSiteType extends org.semanticwb.model.comm.base.MicroSiteTypeBase 
 {
+    
+    /**
+     * Instantiates a new micro site type.
+     * 
+     * @param base the base
+     */
     public MicroSiteType(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

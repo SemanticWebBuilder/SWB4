@@ -30,6 +30,7 @@ import java.util.Date;
 import org.semanticwb.SWBUtils;
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase se encarga de desplegar el formato largo de la fecha en espa�ol.
  * Viene de la versi�n 2 de WebBuilder.
  *
@@ -48,6 +49,9 @@ public class WBDate
     }
 
     /**
+     * Gets the date es.
+     * 
+     * @return the date es
      * @return
      */    
     public String getDateEs()
@@ -56,6 +60,9 @@ public class WBDate
     }
 
     /**
+     * Gets the date.
+     * 
+     * @return the date
      * @return
      */    
     public String getDate()
@@ -64,7 +71,10 @@ public class WBDate
     }
 
     /**
-     * @param args
+     * Gets the date.
+     * 
+     * @param args the args
+     * @return the date
      * @return
      */    
     public String getDate(HashMap args)

@@ -30,6 +30,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo Text.
  * Object that administers an element Text in a html form
@@ -38,42 +39,91 @@ import org.w3c.dom.*;
 
 public class TextFE extends WBJsInputFEAbs
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(TextFE.class);
     
+    /** The value. */
     protected String value=null;
+    
+    /** The defvalue. */
     protected String defvalue=null;
+    
+    /** The size. */
     protected int size=-1;
+    
+    /** The maxlength. */
     protected int maxlength=-1;
+    
+    /** The accesskey. */
     protected String accesskey=null;
+    
+    /** The align. */
     protected String align=null;
+    
+    /** The isdisabled. */
     protected boolean isdisabled=false;
+    
+    /** The isreadonly. */
     protected boolean isreadonly=false;
+    
+    /** The isautocomplete. */
     protected boolean isautocomplete=true;
+    
+    /** The width. */
     protected int width=-1;
+    
+    /** The height. */
     protected int height=-1;
+    
+    /** The tag. */
     protected Node tag=null;
 
+    /** The required. */
     protected boolean required=false;
+    
+    /** The svaltype. */
     protected String svaltype=null;
+    
+    /** The sjspatron. */
     protected String sjspatron=null;
+    
+    /** The prompt message. */
     protected String promptMessage=null;
+    
+    /** The invalid message. */
     protected String invalidMessage=null;
+    
+    /** The reg exp. */
     protected String regExp=null;
+    
+    /** The trim. */
     protected boolean trim=false;
 
+    /** The xmltag. */
     protected String xmltag=null;
     
     
-    /** Creates a new instance of Text */
+    /**
+     * Creates a new instance of Text.
+     */
     public TextFE(){
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param name the name
+     */
     public TextFE(String name){
         this.name=name;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public TextFE(Node tag){
         this.tag=tag;
         setAttributes();
@@ -81,51 +131,110 @@ public class TextFE extends WBJsInputFEAbs
     
     // Sets
     
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     public void setAccessKey(String accesskey){
         this.accesskey=accesskey;
     }
     
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     public void setSize(int size){
         this.size=size;
     }
     
+    /**
+     * Sets the max length.
+     * 
+     * @param maxlength the new max length
+     */
     public void setMaxLength(int maxlength){
         this.maxlength=maxlength;
     }
     
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width){
         this.width=width;
     }
     
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height){
         this.height=height;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
+    /**
+     * Sets the def value.
+     * 
+     * @param defvalue the new def value
+     */
     public void setDefValue(String defvalue){
         this.defvalue=defvalue;
     }
     
+    /**
+     * Sets the align.
+     * 
+     * @param align the new align
+     */
     public void setAlign(String align){
         this.align=align;
     }
     
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     public void setDisabled(boolean isdisabled){
         this.isdisabled=isdisabled;
     }
     
+    /**
+     * Sets the read only.
+     * 
+     * @param isreadonly the new read only
+     */
     public void setReadOnly(boolean isreadonly){
         this.isreadonly=isreadonly;
     }
     
+    /**
+     * Sets the auto complete.
+     * 
+     * @param isautocomplete the new auto complete
+     */
     public void setAutoComplete(boolean isautocomplete){
         this.isautocomplete=isautocomplete;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
@@ -133,58 +242,120 @@ public class TextFE extends WBJsInputFEAbs
 
     // Gets
     
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     public String getAccessKey(){
         return accesskey;
     }
     
+    /**
+     * Gets the size.
+     * 
+     * @param size the size
+     * @return the size
+     */
     public int getSize(int size){
         return size;
     }
     
+    /**
+     * Gets the max length.
+     * 
+     * @return the max length
+     */
     public int getMaxLength(){
         return maxlength;
     }
     
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth(){
         return width;
     }
     
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight(){
         return height;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Gets the def value.
+     * 
+     * @return the def value
+     */
     public String getDefValue(){
         return defvalue;
     }
     
+    /**
+     * Gets the align.
+     * 
+     * @return the align
+     */
     public String getAlign(){
         return align;
     }
     
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     private boolean getDisabled(){
         return isdisabled;
     }
     
+    /**
+     * Gets the read only.
+     * 
+     * @return the read only
+     */
     public boolean getReadOnly(){
         return isreadonly;
     }
     
+    /**
+     * Gets the auto complete.
+     * 
+     * @return the auto complete
+     */
     public boolean getAutoComplete(){
         return isautocomplete;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @return the xml tag
+     */
     public String getXmlTag(){
         return xmltag;
     }
     
     /**
      * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-     * obtains the final xml element to show in the resource admin
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
      */    
     public String getHtml()
     {
@@ -248,7 +419,7 @@ public class TextFE extends WBJsInputFEAbs
     
     
     /**
-     * Set attributes to class according with the xml tag element
+     * Set attributes to class according with the xml tag element.
      */    
     public void setAttributes(){        
         int minsize=0;
@@ -319,8 +490,9 @@ public class TextFE extends WBJsInputFEAbs
     }
 
     /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
+     * Manejo de Frameworks de JavaScript.
+     * 
+     * @param child the new js framework attributes
      */
     private void setJsFrameworkAttributes(Element child){
             String jsFramework=getFormFE().getJsFrameWork();

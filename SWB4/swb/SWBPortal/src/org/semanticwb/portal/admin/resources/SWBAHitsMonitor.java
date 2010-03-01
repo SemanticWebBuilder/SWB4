@@ -43,6 +43,7 @@ import org.semanticwb.SWBPortal;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
+// TODO: Auto-generated Javadoc
 //import java.sql.*;
 
 
@@ -57,11 +58,15 @@ public class SWBAHitsMonitor extends GenericResource {
     //private static Logger log = SWBUtils.getLogger(SWBAHitsMonitor.class);
 
     
-    /** Creates a new instance of WBAHitsMonitor */
+    /**
+     * Creates a new instance of WBAHitsMonitor.
+     */
     public SWBAHitsMonitor() {
     }
     
-    /** User view of the SWBAHitsMonitor resource
+    /**
+     * User view of the SWBAHitsMonitor resource.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramsRequest a list of objects (topic, user, action, ...)
@@ -287,7 +292,9 @@ public class SWBAHitsMonitor extends GenericResource {
     */
    
    
-    /**  Process the user request
+    /**
+     * Process the user request.
+     * 
      * @param request input parameters
      * @param response an answer to the request
      * @param paramsRequest a list of objects (topic, user, action, ...)
@@ -316,12 +323,13 @@ public class SWBAHitsMonitor extends GenericResource {
     }       
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Hits monitor.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void hitsMonitor(HttpServletRequest request,
             HttpServletResponse response, SWBParamRequest paramsRequest)
@@ -368,12 +376,13 @@ public class SWBAHitsMonitor extends GenericResource {
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Hits time.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void hitsTime(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest)
@@ -415,12 +424,13 @@ public class SWBAHitsMonitor extends GenericResource {
     }
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Hits x sec.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void hitsXSec(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) 

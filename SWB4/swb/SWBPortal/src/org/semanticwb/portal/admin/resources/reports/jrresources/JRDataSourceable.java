@@ -31,10 +31,33 @@ import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterExcep
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface JRDataSourceable.
+ */
 public interface JRDataSourceable {
+    
+    /**
+     * Order jr report.
+     * 
+     * @return the jR bean collection data source
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     public JRBeanCollectionDataSource orderJRReport() throws IncompleteFilterException;
     
+    /**
+     * Prepare jr report.
+     * 
+     * @throws JRException the jR exception
+     */
     public void prepareJRReport() throws JRException;
     
+    /**
+     * Export report.
+     * 
+     * @param response the response
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JRException the jR exception
+     */
     public void exportReport(HttpServletResponse response) throws java.io.IOException, JRException;
 }

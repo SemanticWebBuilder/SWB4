@@ -38,17 +38,36 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBComments.
+ */
 public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCommentsBase {
+    
+    /** The Constant Action_ADD. */
     private static final String Action_ADD = "add";
+    
+    /** The Constant secureCodeLength. */
     private static final int secureCodeLength = 7;
 
+    /**
+     * Instantiates a new sWB comments.
+     */
     public SWBComments() {
     }
 
+    /**
+     * Instantiates a new sWB comments.
+     * 
+     * @param base the base
+     */
     public SWBComments(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
@@ -74,11 +93,17 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         super.processRequest(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out=response.getWriter();
@@ -175,6 +200,13 @@ public class SWBComments extends org.semanticwb.portal.resources.sem.base.SWBCom
         out.close();
     }
 
+    /**
+     * Render list comments.
+     * 
+     * @param paramRequest the param request
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String renderListComments(SWBParamRequest paramRequest) throws SWBResourceException{
         StringBuilder script = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");

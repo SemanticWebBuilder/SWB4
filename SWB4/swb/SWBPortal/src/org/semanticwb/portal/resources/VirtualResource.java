@@ -38,6 +38,7 @@ import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * VirtualResource muestra el contenido de cualquier recurso de WebBuilder, recibe el
  * identificador del recurso a desplegar.
@@ -50,16 +51,20 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class VirtualResource extends GenericAdmResource
 { 
     
-    /** Creates a new instance of VirtualResource */
+    /**
+     * Creates a new instance of VirtualResource.
+     */
     public VirtualResource() {
     }
    
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

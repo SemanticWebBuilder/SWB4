@@ -44,15 +44,21 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.util.MultipartInputStream;
 
+// TODO: Auto-generated Javadoc
 /**
- * Uploads file via ajax
+ * Uploads file via ajax.
+ * 
  * @author jorge.jimenez
  */
 public class Upload implements InternalServlet
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Upload.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException {
         //String repository=com.infotec.wb.core.db.DBUser.getInstance().getDefaultRepository();
         //com.infotec.wb.core.WBUser admuser = com.infotec.wb.core.WBUserMgr.getInstance().getUser(request, repository);
@@ -99,6 +105,9 @@ public class Upload implements InternalServlet
         upload.processRequest(request, response);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config) throws ServletException {
         log.event("Initializing InternalServlet Upload...");
     }

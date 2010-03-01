@@ -33,26 +33,53 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JRXlsResource.
+ */
 public class JRXlsResource extends JRResource {
+    
+    /**
+     * Instantiates a new jR xls resource.
+     * 
+     * @param jasperResource the jasper resource
+     * @param params the params
+     * @param dataSource the data source
+     */
     public JRXlsResource(String jasperResource, HashMap params, JRBeanCollectionDataSource dataSource){
         super(jasperResource, params, dataSource);
     }
     
+    /**
+     * Instantiates a new jR xls resource.
+     * 
+     * @param jasperResource the jasper resource
+     * @param dataSource the data source
+     */
     public JRXlsResource(String jasperResource, JRBeanCollectionDataSource dataSource){
         super(jasperResource, null, dataSource);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#formatReport()
+     */
     protected void formatReport(){
         //exporter = new JRXlsExporter();
         exporter = new JExcelApiExporter();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#parametrizeReport()
+     */
     protected void parametrizeReport(){
         exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
         exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
         exporter.setParameter(JRXlsExporterParameter. IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.jrresources.JRResource#exportReport(javax.servlet.http.HttpServletResponse)
+     */
     public void exportReport(HttpServletResponse response) throws java.io.IOException, JRException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"gar.xls\"");

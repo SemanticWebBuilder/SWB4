@@ -42,15 +42,21 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import twitter4j.Twitter;
 
+// TODO: Auto-generated Javadoc
 /**
  * Resource that manage the integration between twitter and semanticwebbuilder (twitter java api)
- * and returns the user twitts and also can publish new twitts to twitter
+ * and returns the user twitts and also can publish new twitts to twitter.
+ * 
  * @author Jorge Jiménez
  */
 public class TwitterResource extends GenericAdmResource {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(TwitterResource.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
@@ -62,6 +68,9 @@ public class TwitterResource extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         try {

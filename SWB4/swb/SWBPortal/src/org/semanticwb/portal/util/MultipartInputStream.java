@@ -32,6 +32,7 @@ package org.semanticwb.portal.util;
 
 import java.io.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que identifica y separa los archivos recibidos por POST.
  * @author Javier Solis Gonzalez
@@ -39,16 +40,34 @@ import java.io.*;
  */
 public class MultipartInputStream extends InputStream
 {
+    
+    /** The in. */
     InputStream in = null;
+    
+    /** The boundary. */
     byte boundary[] = null;
+    
+    /** The buffer. */
     byte buffer[] = null;
+    
+    /** The part end. */
     boolean partEnd = false;
+    
+    /** The file end. */
     boolean fileEnd = false;
+    
+    /** The size. */
     public long size = 0;
 
     // Read boundary bytes of input in buffer
     // Return true if enough bytes available, false otherwise.
 
+    /**
+     * Read boundary bytes.
+     * 
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private final boolean readBoundaryBytes()
             throws IOException
     {
@@ -66,6 +85,12 @@ public class MultipartInputStream extends InputStream
     // Skip to next input boundary, set stream at begining of content:
     // Returns true if boundary was found, false otherwise.
 
+    /**
+     * Skip to boundary.
+     * 
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     protected boolean skipToBoundary()
             throws IOException
     {
@@ -121,7 +146,9 @@ public class MultipartInputStream extends InputStream
 
     /**
      * Read one byte of data from the current part.
-     * @return A byte of data, or <strong>-1</strong> if end of file.
+     * 
+     * @return A byte of data, or  if end of file.
+     * @throws IOException Signals that an I/O exception has occurred.
      * @exception java.io.IOException If some IO error occured.
      */
 
@@ -187,8 +214,13 @@ public class MultipartInputStream extends InputStream
 
     /**
      * Read n bytes of data from the current part.
-     * @return the number of bytes data, read or <strong>-1</strong>
+     * 
+     * @param b the b
+     * @param off the off
+     * @param len the len
+     * @return the number of bytes data, read or 
      * if end of file.
+     * @throws IOException Signals that an I/O exception has occurred.
      * @exception java.io.IOException If some IO error occured.
      */
     @Override
@@ -207,6 +239,9 @@ public class MultipartInputStream extends InputStream
         return got;
     }
 
+    /* (non-Javadoc)
+     * @see java.io.InputStream#skip(long)
+     */
     @Override
     public long skip(long n)
             throws IOException
@@ -216,6 +251,9 @@ public class MultipartInputStream extends InputStream
         return n;
     }
 
+    /* (non-Javadoc)
+     * @see java.io.InputStream#available()
+     */
     public int available()
             throws IOException
     {
@@ -226,8 +264,10 @@ public class MultipartInputStream extends InputStream
      * Switch to the next available part of data.
      * One can interrupt the current part, and use this method to switch
      * to next part before current part was totally read.
-     * @return A boolean <strong>true</strong> if there next partis ready,
-     * or <strong>false</strong> if this was the last part.
+     * 
+     * @return A boolean  if there next partis ready,
+     * or  if this was the last part.
+     * @throws IOException Signals that an I/O exception has occurred.
      */
 
     public boolean nextInputStream()

@@ -33,16 +33,27 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBFormButton.
+ * 
  * @author javier.solis
  */
 public class SWBFormButton
 {
+    
+    /** The attributes. */
     private HashMap<String,String> attributes=null;
+    
+    /** The titles. */
     private HashMap<String,String> titles=null;
+    
+    /** The busy button. */
     private boolean busyButton=false;
 
+    /**
+     * Instantiates a new sWB form button.
+     */
     public SWBFormButton()
     {
         attributes=new HashMap();
@@ -50,10 +61,12 @@ public class SWBFormButton
     }
 
     /**
-     * Regresa String con el código del boton
-     * @param request
+     * Regresa String con el código del boton.
+     * 
+     * @param request the request
      * @param codetype Tipo de codigo generado SWBFormMgr.TYPE_XHTML, SWBFormMgr.TYPE_IPHONE, SWBFormMgr.TYPE_DOJO
-     * @param lang
+     * @param lang the lang
+     * @return the string
      * @return
      */
     public String renderButton(HttpServletRequest request, String codetype, String lang)
@@ -84,6 +97,12 @@ public class SWBFormButton
         return ret.toString();
     }
 
+    /**
+     * Gets the title.
+     * 
+     * @param lang the lang
+     * @return the title
+     */
     public String getTitle(String lang)
     {
         String ret=titles.get(lang);
@@ -94,18 +113,37 @@ public class SWBFormButton
         return ret;
     }
 
+    /**
+     * Sets the attribute.
+     * 
+     * @param name the name
+     * @param value the value
+     * @return the sWB form button
+     */
     public SWBFormButton setAttribute(String name, String value)
     {
         attributes.put(name.toLowerCase(), value);
         return this;
     }
 
+    /**
+     * Sets the title.
+     * 
+     * @param title the title
+     * @param lang the lang
+     * @return the sWB form button
+     */
     public SWBFormButton setTitle(String title, String lang)
     {
         titles.put(lang, title);
         return this;
     }
 
+    /**
+     * Gets the attributes.
+     * 
+     * @return the attributes
+     */
     public String getAttributes()
     {
         StringBuffer ret=new StringBuffer();
@@ -119,42 +157,79 @@ public class SWBFormButton
         return ret.toString();
     }
 
+    /**
+     * New save button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newSaveButton()
     {
         return new SWBFormButton().setTitle("Guardar", "es").setTitle("Save", "en").setAttribute("type", "submit").setBusyButton(true);
     }
 
+    /**
+     * New cancel button dlg.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newCancelButtonDlg()
     {
         return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en").setAttribute("onclick", "dijit.byId('swbDialog').hide();");
     }
 
+    /**
+     * New close button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newCloseButton()
     {
         return new SWBFormButton().setTitle("Cerrar", "es").setTitle("Close", "en").setAttribute("onclick", "window.close();");
     }
 
+    /**
+     * New cancel button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newCancelButton()
     {
         return new SWBFormButton().setTitle("Cancelar", "es").setTitle("Cancel", "en");
     }
 
+    /**
+     * New back button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newBackButton()
     {
         return new SWBFormButton().setTitle("Regresar", "es").setTitle("Return", "en").setAttribute("onclick", "history.back();");
     }
 
+    /**
+     * New delete button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newDeleteButton()
     {
         return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setBusyButton(true);
     }
 
+    /**
+     * New reset button.
+     * 
+     * @return the sWB form button
+     */
     public static SWBFormButton newResetButton()
     {
         return new SWBFormButton().setTitle("Restaurar", "es").setTitle("Reset", "en");
     }
 
     /**
+     * Checks if is busy button.
+     * 
      * @return the busyButton
      */
     public boolean isBusyButton() {
@@ -162,7 +237,10 @@ public class SWBFormButton
     }
 
     /**
+     * Sets the busy button.
+     * 
      * @param busyButton the busyButton to set
+     * @return the sWB form button
      */
     public SWBFormButton setBusyButton(boolean busyButton) {
         this.busyButton = busyButton;

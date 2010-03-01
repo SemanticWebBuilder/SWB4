@@ -20,20 +20,36 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWB4CallbackHandlerFaceBook.
+ * 
  * @author serch
  */
 public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWB4CallbackHandlerLoginPasswordImp.class);
+    
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 12896L;
+    
+    /** The request. */
     private HttpServletRequest request;
+    
+    /** The response. */
     private HttpServletResponse response;
+    
+    /** The auth type. */
     private String authType;
+    
+    /** The website. */
     private String website;
 
+    /**
+     * Instantiates a new sW b4 callback handler face book.
+     */
     public SWB4CallbackHandlerFaceBook()
     {
         log.trace("Simple CallbackHandler");
@@ -43,6 +59,14 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
         this.website = null;
     }
 
+    /**
+     * Instantiates a new sW b4 callback handler face book.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param authType the auth type
+     * @param website the website
+     */
     public SWB4CallbackHandlerFaceBook(HttpServletRequest request, HttpServletResponse response, String authType, String website)
     {
         log.trace("Complete CallbackHandler");
@@ -54,10 +78,11 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
 
     /**
      * Manejo de los parámetros para enviarlos al JAAS
-     * parameter management as required by JAAS
-     * @param callbacks
-     * @throws java.io.IOException
-     * @throws javax.security.auth.callback.UnsupportedCallbackException
+     * parameter management as required by JAAS.
+     * 
+     * @param callbacks the callbacks
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws UnsupportedCallbackException the unsupported callback exception
      */
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException
     {
@@ -116,6 +141,12 @@ public class SWB4CallbackHandlerFaceBook extends SWB4CallbackHandler
         }
     }
 
+    /**
+     * Gets the form credentials.
+     * 
+     * @param callbacks the callbacks
+     * @return the form credentials
+     */
     private void getFormCredentials(Callback[] callbacks)
     {
     }

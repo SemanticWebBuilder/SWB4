@@ -28,17 +28,29 @@
 
 package org.semanticwb.portal.util;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ContentStyles.
+ * 
  * @author Jorge Jiménez
  */
 public class ContentStyles {
 
+    /** The name. */
     private String name;
+    
+    /** The font. */
     private String font;
+    
+    /** The size. */
     private String size;
+    
+    /** The color. */
     private String color;
    
+    /**
+     * Instantiates a new content styles.
+     */
     public ContentStyles(){
         this.name=null;
         this.font=null;
@@ -47,29 +59,75 @@ public class ContentStyles {
     }
 
     //sets
+    /**
+     * Sets the name.
+     * 
+     * @param name the new name
+     */
     public void setName(String name){
         this.name=name;
     }
+    
+    /**
+     * Sets the font.
+     * 
+     * @param font the new font
+     */
     public void setFont(String font){
         this.font=font;
     }
+    
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     public void setSize(String size){
         this.size=size;
     }
+    
+    /**
+     * Sets the color.
+     * 
+     * @param color the new color
+     */
     public void setColor(String color){
         this.color=color;
     }
 
     //gets
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName(){
         return name;
     }
+    
+    /**
+     * Gets the font.
+     * 
+     * @return the font
+     */
     public String getFont(){
         return font;
     }
+    
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public String getSize(){
         return size;
     }
+    
+    /**
+     * Gets the color.
+     * 
+     * @return the color
+     */
     public String getColor(){
         return color;
     }

@@ -61,6 +61,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.admin.resources.wbtree.SWBTreeExt;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /** Recurso de administraci�n de WebBuilder que permite agregar filtros, editarlos,
  * actualizarlos o eliminarlos seg�n sea el caso.
  *
@@ -70,16 +71,34 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class SWBAFilters extends SWBATree {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFilters.class);
+    
+    /** The Constant pathValids. */
     static final String[] pathValids = {"getSemanticObject","getGlobal", "getTemplates", "getServer", "getResources", "getResourceTypes", "getSysResources", "getTopic", "getTemplateGroup", "getUserRep", "getRules", "getPFlows", "getLanguages", "getDevices", "getMDTables", "getDnss", "getTopicMap", "getUserReps", "getCamps", "getCamp", "getCntResources","getSemanticClass"};
+    
+    /** The Constant namevalids. */
     static final String[] namevalids = {"node", "config", "icons", "icon", "res", "events", "willExpand", "Template"};
+    
+    /** The hmclass. */
     private HashMap hmclass = null;
+    
+    /** The jsondom. */
     private Document jsondom = null;
 
-    /** Creates a new instance of WBAFilters */
+    /**
+     * Creates a new instance of WBAFilters.
+     */
     public SWBAFilters() {
     }
 
+    /**
+     * Gets the locale string.
+     * 
+     * @param key the key
+     * @param lang the lang
+     * @return the locale string
+     */
     public String getLocaleString(String key, String lang)
     {
         String ret="";
@@ -95,10 +114,13 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -111,6 +133,9 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.SWBATree#getDocument(org.semanticwb.model.User, org.w3c.dom.Document, java.lang.String)
+     */
     @Override
     public Document getDocument(User user, Document src, String act)
     {
@@ -195,10 +220,13 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param map
-     * @param etopic
-     * @param root
-     * @param user
+     * Gets the menus.
+     * 
+     * @param map the map
+     * @param etopic the etopic
+     * @param root the root
+     * @param user the user
+     * @return the menus
      */
     public void getMenus(WebSite map, Element etopic, WebPage root, User user)
     {
@@ -236,11 +264,14 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Gets the menus.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the menus
      * @return
      */
     public Document getMenus(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -276,10 +307,13 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param map
-     * @param etopic
-     * @param root
-     * @param user
+     * Gets the sub menus.
+     * 
+     * @param map the map
+     * @param etopic the etopic
+     * @param root the root
+     * @param user the user
+     * @return the sub menus
      */
     public void getSubMenus(WebSite map, Element etopic, WebPage root, User user)
     {
@@ -310,11 +344,14 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Gets the elements.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the elements
      * @return
      */
     public Document getElements(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -345,8 +382,11 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param user
-     * @param src
+     * Inits the tree.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     @Override
@@ -358,6 +398,9 @@ public class SWBAFilters extends SWBATree {
         return doc;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.SWBATree#initTree(org.semanticwb.model.User, org.w3c.dom.Document, boolean)
+     */
     @Override
     public Document initTree(User user, Document src, boolean isFilter)
     {
@@ -500,8 +543,11 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param user
-     * @param src
+     * Inits the tree filter.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the document
      * @return
      */
     @Override
@@ -514,7 +560,10 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param e
+     * Checks if is name valid.
+     * 
+     * @param e the e
+     * @return true, if is name valid
      * @return
      */
     public boolean isNameValid(Element e)
@@ -529,7 +578,9 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param ele
+     * Revisa nodo.
+     * 
+     * @param ele the ele
      */
     public void RevisaNodo(Node ele) {
         Vector vnodes = new Vector();
@@ -552,7 +603,10 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param path
+     * Checks if is valid.
+     * 
+     * @param path the path
+     * @return true, if is valid
      * @return
      */
     public boolean isValid(String path) {
@@ -575,11 +629,13 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -633,6 +689,9 @@ public class SWBAFilters extends SWBATree {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.SWBATree#getService(java.lang.String, org.w3c.dom.Document, org.semanticwb.model.User, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
     @Override
     public Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
@@ -649,11 +708,14 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Adds the.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the document
      * @return
      */
     public Document add(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -704,11 +766,14 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Update.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the document
      * @return
      */
     public Document update(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response) {
@@ -760,11 +825,14 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     * @param cmd
-     * @param src
-     * @param user
-     * @param request
-     * @param response
+     * Gets the filter.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the filter
      * @return
      */
     public Document getFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -821,12 +889,14 @@ public class SWBAFilters extends SWBATree {
         return docres;
     }
 
-    /** Add or update the filter resource configuration
-     * @param cmd, text command action to do
-     * @param src, source document that hold the resource configuration
-     * @param user, a session User
-     * @param request, parameters, input data
-     * @param response, an anwer to the user request
+    /**
+     * Add or update the filter resource configuration.
+     * 
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
      * @return return an updated dom document
      */
     public Document updateFilter(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
@@ -842,12 +912,16 @@ public class SWBAFilters extends SWBATree {
         return null;
     }
 
-    /** User View of the SWBAFilters Resource; it shows a resource filter configuration,
-     * configure in wich webpage it shows, in the Semantic WebBuilder application
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+    /**
+     * User View of the SWBAFilters Resource; it shows a resource filter configuration,
+     * configure in wich webpage it shows, in the Semantic WebBuilder application.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exc
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -1047,8 +1121,9 @@ public class SWBAFilters extends SWBATree {
 
 
     /**
-     * Get true if a Semantic objects have Herarquical Nodes
-     * @param obj, semantic object to eval
+     * Get true if a Semantic objects have Herarquical Nodes.
+     * 
+     * @param obj the obj
      * @return boolean, true if semantic object have Herarquical nodes or False.
      */
     public boolean hasHerarquicalNodes(SemanticObject obj)
@@ -1064,10 +1139,11 @@ public class SWBAFilters extends SWBATree {
 
 
     /**
-     *  Add server to dom document
-     * @param user, used to eval access to each element tree
-     * @param res, element of the tree
-     * @param isFilter, to eval if have filter or not
+     * Add server to dom document.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param isFilter the is filter
      */
     @Override
     protected void addServer(User user, Element res, boolean isFilter)
@@ -1119,6 +1195,13 @@ public class SWBAFilters extends SWBATree {
 
 
 
+    /**
+     * Adds the herarquical nodes.
+     * 
+     * @param user the user
+     * @param obj the obj
+     * @param ele the ele
+     */
     public void addHerarquicalNodes(User user, SemanticObject obj, Element ele)
     {
         Iterator<SemanticObject> it=SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
@@ -1129,6 +1212,15 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     * Adds the herarquical node.
+     * 
+     * @param user the user
+     * @param node the node
+     * @param obj the obj
+     * @param ele the ele
+     * @param addChilds the add childs
+     */
     public void addHerarquicalNode(User user, HerarquicalNode node, SemanticObject obj, Element ele, boolean addChilds)
     {
         addChilds=true;
@@ -1156,14 +1248,13 @@ public class SWBAFilters extends SWBATree {
 
 
      /**
-     *  Add web site to dom document
-     * @param user, used to eval access to each element tree
-     * @param tm,
-     * @param root, first element of the tree
-     * @param access, level of the user access
-     * @param loadChild, for load root childs element
-     * @param isFilter, to eval if have filter or not
-     */
+      * Add web site to dom document.
+      * 
+      * @param user the user
+      * @param obj the obj
+      * @param node the node
+      * @param addChilds the add childs
+      */
     protected void addSemanticObject(User user, SemanticObject obj, Element node, boolean addChilds)
     //public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
     {
@@ -1237,14 +1328,13 @@ public class SWBAFilters extends SWBATree {
 
 
      /**
-     *  Add web site to dom document
-     * @param user, used to eval access to each element tree
-     * @param tm,
-     * @param root, first element of the tree
-     * @param access, level of the user access
-     * @param loadChild, for load root childs element
-     * @param isFilter, to eval if have filter or not
-     */
+      * Add web site to dom document.
+      * 
+      * @param user the user
+      * @param sc the sc
+      * @param node the node
+      * @param addChilds the add childs
+      */
     protected void addSemanticClass(User user, SemanticClass sc, Element node, boolean addChilds)
     //public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, String lang) throws JSONException
     {
@@ -1282,14 +1372,15 @@ public class SWBAFilters extends SWBATree {
 
 
      /**
-     *  Add web site to dom document
-     * @param user, used to eval access to each element tree
-     * @param tm,
-     * @param root, first element of the tree
-     * @param access, level of the user access
-     * @param loadChild, for load root childs element
-     * @param isFilter, to eval if have filter or not
-     */
+      * Add web site to dom document.
+      * 
+      * @param user the user
+      * @param tm the tm
+      * @param root the root
+      * @param access the access
+      * @param loadChild the load child
+      * @param isFilter the is filter
+      */
     @Override
     protected void addTopicMap(User user, WebSite tm, Element root, int access, boolean loadChild, boolean isFilter)
     {
@@ -1360,9 +1451,11 @@ public class SWBAFilters extends SWBATree {
     }
 
     /**
-     *  Add web pages to dom document
-     * @param user, used to eval access to each element tree
-     * @param res, element of the tree
+     * Add web pages to dom document.
+     * 
+     * @param user the user
+     * @param tp the tp
+     * @param res the res
      */
     @Override
     protected void addTopic(User user, WebPage tp, Element res)

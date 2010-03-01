@@ -53,6 +53,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /** Recurso de administraci�n que permite la edici�n de contenidos y plantillas en
  * la administraci�n de WebBuilder.
  *
@@ -62,11 +63,19 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBAEditor extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBAEditor.class);
 
+    /**
+     * The Class ResCatComp.
+     */
     class ResCatComp implements Comparator
     {
         
+        /* (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         public int compare(Object o1, Object o2)
         {
             if(o1 instanceof ResourceType && o2 instanceof ResourceType)
@@ -79,9 +88,16 @@ public class SWBAEditor extends GenericResource
         }
         
     }
+    
+    /**
+     * The Class SubResCatComp.
+     */
     class SubResCatComp implements Comparator
     {
         
+        /* (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         public int compare(Object o1, Object o2)
         {
             if(o1 instanceof ResourceSubType && o2 instanceof ResourceSubType)
@@ -94,17 +110,22 @@ public class SWBAEditor extends GenericResource
         }
         
     }
-    /** Creates a new instance of WBTree */
+    
+    /**
+     * Creates a new instance of WBTree.
+     */
     public SWBAEditor()
     {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
@@ -123,7 +144,10 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param it
+     * Sort iterator.
+     * 
+     * @param it the it
+     * @return the iterator
      * @return
      */    
     public Iterator sortIterator(Iterator it)
@@ -132,8 +156,11 @@ public class SWBAEditor extends GenericResource
     }    
     
     /**
-     * @param res
-     * @param tm
+     * Gets the resource type cat.
+     * 
+     * @param res the res
+     * @param tm the tm
+     * @return the resource type cat
      */    
     public void getResourceTypeCat(Element res,String tm)
     {
@@ -164,6 +191,17 @@ public class SWBAEditor extends GenericResource
         }   
     }
     
+    /**
+     * Gets the service.
+     * 
+     * @param paramsRequest the params request
+     * @param cmd the cmd
+     * @param src the src
+     * @param user the user
+     * @param request the request
+     * @param response the response
+     * @return the service
+     */
     private Document getService(SWBParamRequest paramsRequest, String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
         //System.out.println("Service mi entrada:"+cmd);
@@ -233,9 +271,12 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param user
-     * @param src
-     * @param ver
+     * Inits the.
+     * 
+     * @param user the user
+     * @param src the src
+     * @param ver the ver
+     * @return the document
      * @return
      */    
     public Document init(User user, Document src, int ver)
@@ -275,13 +316,16 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param paramsRequest
-     * @param user
-     * @param src
-     * @param workpath
-     * @param webpath
-     * @param filename
-     * @param ver
+     * Inits the files.
+     * 
+     * @param paramsRequest the params request
+     * @param user the user
+     * @param src the src
+     * @param workpath the workpath
+     * @param webpath the webpath
+     * @param filename the filename
+     * @param ver the ver
+     * @return the document
      * @return
      */    
     public Document initFiles(SWBParamRequest paramsRequest, User user, Document src, String workpath, String webpath, String filename, int ver)
@@ -317,13 +361,16 @@ public class SWBAEditor extends GenericResource
     }    
     
     /**
-     * @param paramsRequest
-     * @param res
-     * @param workpath
-     * @param webpath
-     * @param filename
-     * @param ver
-     * @throws SWBResourceException
+     * Gets the files.
+     * 
+     * @param paramsRequest the params request
+     * @param res the res
+     * @param workpath the workpath
+     * @param webpath the webpath
+     * @param filename the filename
+     * @param ver the ver
+     * @return the files
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void getFiles(SWBParamRequest paramsRequest, Element res, String workpath, String webpath, String filename, int ver) throws SWBResourceException
     {
@@ -374,13 +421,16 @@ public class SWBAEditor extends GenericResource
     }
         
     /**
-     * @param paramsRequest
-     * @param root
-     * @param file
-     * @param workpath
-     * @param webpath
-     * @param ver
-     * @throws SWBResourceException
+     * Gets the file.
+     * 
+     * @param paramsRequest the params request
+     * @param root the root
+     * @param file the file
+     * @param workpath the workpath
+     * @param webpath the webpath
+     * @param ver the ver
+     * @return the file
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void getFile(SWBParamRequest paramsRequest, Element root, File file, String workpath, String webpath, int ver) throws SWBResourceException
     {
@@ -427,13 +477,16 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param paramsRequest
-     * @param root
-     * @param dir
-     * @param workpath
-     * @param webpath
-     * @param ver
-     * @throws SWBResourceException
+     * Gets the dir.
+     * 
+     * @param paramsRequest the params request
+     * @param root the root
+     * @param dir the dir
+     * @param workpath the workpath
+     * @param webpath the webpath
+     * @param ver the ver
+     * @return the dir
+     * @throws SWBResourceException the sWB resource exception
      */    
     public void getDir(SWBParamRequest paramsRequest, Element root, File dir, String workpath, String webpath, int ver) throws SWBResourceException
     {
@@ -481,14 +534,17 @@ public class SWBAEditor extends GenericResource
     
     
     /**
-     * @param paramsRequest
-     * @param user
-     * @param src
-     * @param act
-     * @param workpath
-     * @param webpath
-     * @param filename
-     * @param ver
+     * Gets the document.
+     * 
+     * @param paramsRequest the params request
+     * @param user the user
+     * @param src the src
+     * @param act the act
+     * @param workpath the workpath
+     * @param webpath the webpath
+     * @param filename the filename
+     * @param ver the ver
+     * @return the document
      * @return
      */    
     public Document getDocument(SWBParamRequest paramsRequest, User user, Document src, String act, String workpath, String webpath, String filename, int ver)
@@ -546,6 +602,15 @@ public class SWBAEditor extends GenericResource
     
     
     
+    /**
+     * Adds the node.
+     * 
+     * @param node the node
+     * @param id the id
+     * @param name the name
+     * @param parent the parent
+     * @return the element
+     */
     private Element addNode(String node, String id, String name, Element parent)
     {
         Element ret=addElement(node,null,parent);
@@ -554,6 +619,14 @@ public class SWBAEditor extends GenericResource
         return ret;
     }
 
+    /**
+     * Adds the element.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param parent the parent
+     * @return the element
+     */
     private Element addElement(String name, String value, Element parent)
     {
         Document doc = parent.getOwnerDocument();
@@ -563,6 +636,12 @@ public class SWBAEditor extends GenericResource
         return ele;
     }    
     
+    /**
+     * Gets the error.
+     * 
+     * @param id the id
+     * @return the error
+     */
     private Document getError(int id)
     {
         Document dom = null;
@@ -640,11 +719,13 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do upload.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -790,9 +871,12 @@ public class SWBAEditor extends GenericResource
 //    }
     
     /**
-     * @param in
-     * @param fout
-     * @throws IOException
+     * Write file.
+     * 
+     * @param in the in
+     * @param fout the fout
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
      * @return
      */    
     public String writeFile(InputStream in, FileOutputStream fout) throws IOException
@@ -822,11 +906,13 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do download.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -836,11 +922,13 @@ public class SWBAEditor extends GenericResource
     
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do gateway.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -884,11 +972,13 @@ public class SWBAEditor extends GenericResource
     
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
@@ -955,11 +1045,14 @@ public class SWBAEditor extends GenericResource
     }
     
     /**
-     * @param out
-     * @param topicmapid
-     * @param templateid
-     * @param version
-     * @param user
+     * Gets the template applet.
+     * 
+     * @param out the out
+     * @param topicmapid the topicmapid
+     * @param templateid the templateid
+     * @param version the version
+     * @param user the user
+     * @return the template applet
      */    
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user)
     {

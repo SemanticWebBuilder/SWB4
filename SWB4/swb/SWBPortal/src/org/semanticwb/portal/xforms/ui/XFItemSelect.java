@@ -34,18 +34,29 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.xforms.ElementsProp;
 import org.semanticwb.xforms.lib.XformsBaseImp;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFItemSelect.
+ * 
  * @author  jorge.jimenez
  */
 public class XFItemSelect extends XformsBaseImp 
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(XFItemSelect.class);
+    
+    /** The elements prop. */
     protected ElementsProp elementsProp=null;
     
+    /** The value. */
     protected String value=null;
     
+    /**
+     * Instantiates a new xF item select.
+     * 
+     * @param elementsProp the elements prop
+     */
     public XFItemSelect(ElementsProp elementsProp){
         this.elementsProp=elementsProp;
         setRDFAttributes();
@@ -53,17 +64,30 @@ public class XFItemSelect extends XformsBaseImp
     
     // Sets
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(elementsProp.getId()!=null) {
             id=elementsProp.getId();
@@ -77,6 +101,9 @@ public class XFItemSelect extends XformsBaseImp
         
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -99,6 +126,9 @@ public class XFItemSelect extends XformsBaseImp
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     public void setXml(String xml) {
         this.xml=xml;
     }

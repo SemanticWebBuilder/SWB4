@@ -39,36 +39,74 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Vector;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBHttpServletRequestWrapper.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
 {
+    
+    /** The remove parameters. */
     private boolean removeParameters=false;
+    
+    /** The merge parameters. */
     private boolean mergeParameters=false;
+    
+    /** The parms. */
     private Hashtable parms = new Hashtable();    
+    
+    /** The lang. */
     private String lang;
+    
+    /** The idtm. */
     private String idtm;
     
-    /** Creates a new instance of WBHttpServletRequestWrapper */
+    /**
+     * Creates a new instance of WBHttpServletRequestWrapper.
+     * 
+     * @param request the request
+     */
     public SWBHttpServletRequestWrapper(HttpServletRequest request)
     {
         super(request);
     }
     
-    /** Creates a new instance of WBHttpServletRequestWrapper */
+    /**
+     * Creates a new instance of WBHttpServletRequestWrapper.
+     * 
+     * @param request the request
+     * @param removeParameters the remove parameters
+     */
     public SWBHttpServletRequestWrapper(HttpServletRequest request, boolean removeParameters)
     {
         super(request);
         this.removeParameters=removeParameters;
     }
     
+    /**
+     * Instantiates a new sWB http servlet request wrapper.
+     * 
+     * @param request the request
+     * @param lang the lang
+     * @param idtm the idtm
+     * @param removeParameters the remove parameters
+     */
     public SWBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters)
     {
         this(request, lang, idtm, removeParameters,false);
     }    
     
+    /**
+     * Instantiates a new sWB http servlet request wrapper.
+     * 
+     * @param request the request
+     * @param lang the lang
+     * @param idtm the idtm
+     * @param removeParameters the remove parameters
+     * @param mergeParameters the merge parameters
+     */
     public SWBHttpServletRequestWrapper(HttpServletRequest request, String lang, String idtm, boolean removeParameters, boolean mergeParameters)
     {
         super(request);
@@ -79,6 +117,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     }
     
     
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getParameter(java.lang.String)
+     */
     @Override
     public String getParameter(String str)
     {
@@ -97,6 +138,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         }
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getParameterMap()
+     */
     @Override
     public java.util.Map getParameterMap()
     {
@@ -115,6 +159,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         }
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getParameterNames()
+     */
     @Override
     public java.util.Enumeration getParameterNames()
     {
@@ -131,6 +178,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         }
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getParameterValues(java.lang.String)
+     */
     @Override
     public String[] getParameterValues(String str)
     {
@@ -148,6 +198,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             return super.getParameterValues(str);        
     }  
     
+    /**
+     * Adds the parameter map.
+     * 
+     * @param map the map
+     */
     public void addParameterMap(java.util.Map map)
     {
         if(removeParameters || mergeParameters)
@@ -156,6 +211,12 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         }
     }
     
+    /**
+     * Adds the parameter.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public void addParameter(String name, String value)
     {
         //System.out.println("addParameter:"+name+"="+value);
@@ -180,6 +241,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         }
     }    
     
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletRequestWrapper#getQueryString()
+     */
     @Override
     public String getQueryString()
     {
@@ -190,6 +254,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             return super.getQueryString();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getReader()
+     */
     @Override
     public java.io.BufferedReader getReader() throws java.io.IOException
     {
@@ -200,6 +267,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             return super.getReader();
     }    
     
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getContentLength()
+     */
     @Override
     public int getContentLength()
     {
@@ -209,6 +279,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             return super.getContentLength();
     }    
     
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getInputStream()
+     */
     @Override
     public javax.servlet.ServletInputStream getInputStream() throws java.io.IOException
     {
@@ -218,6 +291,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
             return super.getInputStream();
     }    
     
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getLocale()
+     */
     @Override
     public java.util.Locale getLocale()
     {
@@ -225,6 +301,9 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
         return super.getLocale();
     }
     
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletRequestWrapper#getLocales()
+     */
     @Override
     public java.util.Enumeration getLocales() 
     {

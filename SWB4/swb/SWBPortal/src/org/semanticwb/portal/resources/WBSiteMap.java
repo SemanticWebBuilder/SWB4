@@ -43,6 +43,7 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
         
 
+// TODO: Auto-generated Javadoc
 /**
  * WBSiteMap muestra el mapa del sitio de acuerdo a un determinado TopicMap.
  *
@@ -52,15 +53,28 @@ import org.semanticwb.portal.api.*;
  */
 public class WBSiteMap extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBSiteMap.class);
     
+    /** The web work path. */
     String webWorkPath;  
+    
+    /** The max level. */
     int maxLevel;
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
 
+    /**
+     * Instantiates a new wB site map.
+     */
     public WBSiteMap() {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
+     */
     @Override
     public void setResourceBase(Resource base)
     {
@@ -72,6 +86,9 @@ public class WBSiteMap extends GenericAdmResource
         }
     }
      
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equalsIgnoreCase("Json")) {
@@ -83,6 +100,15 @@ public class WBSiteMap extends GenericAdmResource
         }
     }
 
+    /**
+     * Do bind.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -106,6 +132,15 @@ public class WBSiteMap extends GenericAdmResource
         out.flush();
     }
         
+    /**
+     * Do childs.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/json;charset=iso-8859-1");
         PrintWriter out = response.getWriter();
@@ -145,6 +180,13 @@ public class WBSiteMap extends GenericAdmResource
         out.flush();
     }
 
+    /**
+     * Adds the references.
+     * 
+     * @param node the node
+     * @param lang the lang
+     * @return the string
+     */
     private String addReferences(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
@@ -159,6 +201,13 @@ public class WBSiteMap extends GenericAdmResource
         return json.toString();
     }
 
+    /**
+     * Adds the childs.
+     * 
+     * @param node the node
+     * @param lang the lang
+     * @return the string
+     */
     private String addChilds(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
@@ -189,6 +238,9 @@ public class WBSiteMap extends GenericAdmResource
         return json.toString();
     }
    
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
@@ -282,17 +334,44 @@ public class WBSiteMap extends GenericAdmResource
 
 
     
+    /**
+     * The Class SelectTree.
+     */
     private class SelectTree {
+        
+        /** The path images. */
         private final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons";
+        
+        /** The website. */
         private String website;
+        
+        /** The url. */
         private String url;
+        
+        /** The open on click. */
         private boolean openOnClick;
+        
+        /** The level. */
         private int level;
+        
+        /** The title. */
         private String title;
+        
+        /** The language. */
         private String language;
 
+        /** The height. */
         private String width, height;
 
+        /**
+         * Instantiates a new select tree.
+         * 
+         * @param website the website
+         * @param url the url
+         * @param openOnClick the open on click
+         * @param title the title
+         * @param language the language
+         */
         public SelectTree(String website, String url, boolean openOnClick, String title, String language) {
             this.website = website;
             this.url = url;
@@ -301,6 +380,16 @@ public class WBSiteMap extends GenericAdmResource
             this.language = language;
         }
 
+        /**
+         * Instantiates a new select tree.
+         * 
+         * @param website the website
+         * @param url the url
+         * @param openOnClick the open on click
+         * @param level the level
+         * @param title the title
+         * @param language the language
+         */
         public SelectTree(String website, String url, boolean openOnClick, int level, String title, String language) {
             this.website = website;
             this.url = url;
@@ -312,6 +401,14 @@ public class WBSiteMap extends GenericAdmResource
             this.language = language;
         }
 
+        /**
+         * Render xhtml first time.
+         * 
+         * @param request the request
+         * @return the string
+         * @throws SWBResourceException the sWB resource exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public String renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
             StringBuilder html = new StringBuilder();
             StringBuilder params = new StringBuilder("&site="+website);
@@ -408,6 +505,14 @@ public class WBSiteMap extends GenericAdmResource
             return html.toString();
         }
 
+        /**
+         * Render xhtml.
+         * 
+         * @param request the request
+         * @return the string
+         * @throws SWBResourceException the sWB resource exception
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public String renderXHTML(HashMap request) throws SWBResourceException, IOException {
             StringBuilder html = new StringBuilder();
             StringBuilder params = new StringBuilder("&site="+website);
@@ -492,6 +597,18 @@ public class WBSiteMap extends GenericAdmResource
             return html.toString();
         }
 
+        /**
+         * Adds the child.
+         * 
+         * @param request the request
+         * @param tmit the tmit
+         * @param pageroot the pageroot
+         * @param tpid the tpid
+         * @param params the params
+         * @param level the level
+         * @param language the language
+         * @return the string
+         */
         private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language) {
             boolean opened;
 
@@ -564,6 +681,17 @@ public class WBSiteMap extends GenericAdmResource
             return html.toString();
         }
 
+        /**
+         * Adds the child.
+         * 
+         * @param request the request
+         * @param tmit the tmit
+         * @param pageroot the pageroot
+         * @param tpid the tpid
+         * @param params the params
+         * @param language the language
+         * @return the string
+         */
         private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, String language) {
             boolean opened;
 
@@ -635,6 +763,8 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         /**
+         * Gets the width.
+         * 
          * @return the width
          */
         public String getWidth() {
@@ -642,6 +772,8 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         /**
+         * Sets the width.
+         * 
          * @param width the width to set
          */
         public void setWidth(String width) {
@@ -649,6 +781,8 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         /**
+         * Gets the height.
+         * 
          * @return the height
          */
         public String getHeight() {
@@ -656,6 +790,8 @@ public class WBSiteMap extends GenericAdmResource
         }
 
         /**
+         * Sets the height.
+         * 
          * @param height the height to set
          */
         public void setHeight(String height) {

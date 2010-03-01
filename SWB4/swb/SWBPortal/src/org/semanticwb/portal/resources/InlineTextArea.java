@@ -47,6 +47,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
  * InlineTextArea se encarga de desplegar y administrar un texto est�tico, este texto
  * se agrega en la administraci�n del recurso, acepta tags de html para cambiar su
@@ -59,8 +60,13 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author Carlos Ramos Inchaustegui
  */
 public class InlineTextArea extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Banner.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -95,6 +101,9 @@ public class InlineTextArea extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = response.getResourceBase();
@@ -116,6 +125,9 @@ public class InlineTextArea extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         /*response.setContentType("text/html; charset=ISO-8859-1");
@@ -220,6 +232,12 @@ public class InlineTextArea extends GenericResource {
         out.println("</div>");
     }
 
+    /**
+     * User can edit.
+     * 
+     * @param paramrequest the paramrequest
+     * @return true, if successful
+     */
     private boolean userCanEdit(SWBParamRequest paramrequest) {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", "0");

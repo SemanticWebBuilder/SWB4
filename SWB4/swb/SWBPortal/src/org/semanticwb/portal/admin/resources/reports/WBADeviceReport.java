@@ -55,6 +55,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 
+// TODO: Auto-generated Javadoc
 /** Esta clase genera el reporte de dispositivos, toma la informaci�n de los
  * objetos de WebBuilder de acuerdo con los par�metros recibidos del usuario. Este
  * archivo es usado en la parte de reportes.
@@ -67,12 +68,22 @@ import org.w3c.dom.Element;
 
  */
 public class WBADeviceReport extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBADeviceReport.class);
+    
+    /** The Constant UNKNOW. */
     public static final String UNKNOW = "Desconocido";
     
+    /** The Constant I_REPORT_TYPE. */
     public static final int I_REPORT_TYPE = 1;
+    
+    /** The str rsc type. */
     private String strRscType;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#init()
+     */
     @Override
     public void init() {
         Resource base = getResourceBase();
@@ -84,11 +95,13 @@ public class WBADeviceReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
@@ -111,6 +124,15 @@ public class WBADeviceReport extends GenericResource {
         }
     }
     
+    /**
+     * Do render select.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRenderSelect(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
 
@@ -155,6 +177,16 @@ public class WBADeviceReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Render select.
+     * 
+     * @param origList the orig list
+     * @param node the node
+     * @param language the language
+     * @param ret the ret
+     * @param space the space
+     * @param seldevs the seldevs
+     */
     private void renderSelect(ArrayList origList, Device node, String language, StringBuilder ret, String space, String[] seldevs) {
         ArrayList<Device> devs=new ArrayList<Device>();
         Iterator<Device> itDevices = node.listChilds();
@@ -178,6 +210,9 @@ public class WBADeviceReport extends GenericResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
@@ -612,11 +647,13 @@ public class WBADeviceReport extends GenericResource {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do graph.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
@@ -665,11 +702,13 @@ public class WBADeviceReport extends GenericResource {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do rep excel.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     public void doRepExcel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
@@ -718,11 +757,13 @@ public class WBADeviceReport extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do rep xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRepXml(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml;charset=iso-8859-1");        
@@ -828,6 +869,15 @@ public class WBADeviceReport extends GenericResource {
         out.close();
     }
 
+    /**
+     * Do rep pdf.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRepPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
@@ -874,6 +924,15 @@ public class WBADeviceReport extends GenericResource {
         }
     }
     
+    /**
+     * Do rep rtf.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRepRtf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException{
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Content-Disposition", "inline; filename=\"lar.xls\"");
@@ -920,6 +979,15 @@ public class WBADeviceReport extends GenericResource {
         }
     }
 
+    /**
+     * Do histrogram.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doHistrogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         StringBuffer sb_ret = new StringBuffer();
         /*StringBuffer sb_app = new StringBuffer();*/
@@ -971,6 +1039,15 @@ public class WBADeviceReport extends GenericResource {
         response.getWriter().print(sb_ret.toString());
     }
 
+    /**
+     * Gets the histogram.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @return the histogram
+     * @throws SWBResourceException the sWB resource exception
+     */
     public String getHistogram(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException {
         StringBuffer sb_ret = new StringBuffer();
         StringBuffer sb_app = new StringBuffer();
@@ -1149,6 +1226,15 @@ public class WBADeviceReport extends GenericResource {
     }
 
         
+    /**
+     * Builds the filter.
+     * 
+     * @param request the request
+     * @param paramsRequest the params request
+     * @return the wBA filter report bean
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IncompleteFilterException the incomplete filter exception
+     */
     private WBAFilterReportBean buildFilter(HttpServletRequest request, SWBParamRequest paramsRequest) throws SWBResourceException, IncompleteFilterException {
         WBAFilterReportBean filterReportBean = null;
         String websiteId = request.getParameter("wb_site");
@@ -1220,6 +1306,13 @@ public class WBADeviceReport extends GenericResource {
         return filterReportBean;
     }
 
+    /**
+     * List devices.
+     * 
+     * @param websiteId the website id
+     * @param language the language
+     * @return the array list
+     */
     public static ArrayList<String> listDevices(String websiteId, String language) {
         ArrayList devices = new ArrayList();
         WebSite ws = SWBContext.getWebSite(websiteId);

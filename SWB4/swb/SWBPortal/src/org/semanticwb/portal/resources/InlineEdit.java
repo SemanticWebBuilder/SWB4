@@ -47,6 +47,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
 
+// TODO: Auto-generated Javadoc
 /** 
  * InlineEdit se encarga de desplegar y administrar un texto est�tico, este texto
  * se agrega en la administraci�n del recurso, acepta tags de html para cambiar su
@@ -61,16 +62,20 @@ import org.semanticwb.portal.api.SWBResourceURL;
 
 public class InlineEdit extends GenericResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(InlineEdit.class);
 
-    /** Obtiene la vista del recurso.
-     *
+    /**
+     * Obtiene la vista del recurso.
+     * 
      * @param request El servlet container crea un objeto HttpServletRequest y
-     *                      se pasa como argumento al m�todo del servlet.
+     * se pasa como argumento al m�todo del servlet.
      * @param response El servlet container crea un objeto HttpServletResponse y
-     *                      se pasa como argumento al m�todo del servlet.
-     * @param paramsRequest Argumentos de la solicitud del recurso.
-     * @throws IOException
+     * se pasa como argumento al m�todo del servlet.
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      * @exception com.infotec.appfw.exception.AFException Si se origina cualquier error en el recurso al traer el html.
      */
     @Override
@@ -139,6 +144,9 @@ public class InlineEdit extends GenericResource
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -169,6 +177,9 @@ public class InlineEdit extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -234,6 +245,12 @@ public class InlineEdit extends GenericResource
         out.println("</div>");
     }
 
+    /**
+     * User can edit.
+     * 
+     * @param paramrequest the paramrequest
+     * @return true, if successful
+     */
     private boolean userCanEdit(SWBParamRequest paramrequest)
     {
         boolean access = false;

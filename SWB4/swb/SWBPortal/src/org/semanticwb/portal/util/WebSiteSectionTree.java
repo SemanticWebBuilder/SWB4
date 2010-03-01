@@ -38,11 +38,29 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.portal.api.SWBResourceException;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WebSiteSectionTree.
+ */
 public class WebSiteSectionTree {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WebSiteSectionTree.class);
     
+    /** The Constant pathImages. */
     protected static final String pathImages = SWBPlatform.getContextPath() + "/swbadmin/icons/";
     
+    /**
+     * Render xhtml.
+     * 
+     * @param selectedsite the selectedsite
+     * @param request the request
+     * @param user the user
+     * @param url the url
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public String renderXHTML(String selectedsite, HttpServletRequest request, User user, String url) throws SWBResourceException, IOException {
         StringBuilder sb_ret = new StringBuilder();
         StringBuilder params = new StringBuilder("&site="+selectedsite);
@@ -181,6 +199,18 @@ public class WebSiteSectionTree {
         return sb_ret.toString();
     }
 
+    /**
+     * Adds the child.
+     * 
+     * @param request the request
+     * @param tmit the tmit
+     * @param pageroot the pageroot
+     * @param tpid the tpid
+     * @param url the url
+     * @param params the params
+     * @param user the user
+     * @return the string
+     */
     protected String addChild(HttpServletRequest request,WebSite tmit, WebPage pageroot, WebPage tpid, String url, StringBuilder params, User user) {
         StringBuilder sb_ret = new StringBuilder("<ul class=\"treeres\">");
         String style;

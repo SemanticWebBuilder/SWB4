@@ -20,19 +20,28 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GoogleSiteMap.
+ * 
  * @author serch
  */
 public class GoogleSiteMap implements InternalServlet {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(GoogleSiteMap.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
+     */
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing InternalServlet GoogleSiteMap...");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
+     */
     public void doProcess(HttpServletRequest req, HttpServletResponse resp, DistributorParams dparams) throws IOException, ServletException
     {
         String lang = "es";

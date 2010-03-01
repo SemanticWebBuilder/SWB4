@@ -24,8 +24,18 @@
 package org.semanticwb.portal.resources.sem;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Comment.
+ */
 public class Comment extends org.semanticwb.portal.resources.sem.base.CommentBase 
 {
+    
+    /**
+     * Instantiates a new comment.
+     * 
+     * @param base the base
+     */
     public Comment(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

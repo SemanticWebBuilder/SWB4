@@ -51,6 +51,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
+// TODO: Auto-generated Javadoc
 /** Objeto que se encarga de desplegar y administrar Mis Secciones Favoritas de los usuarios finales
  * bajo ciertos criterios(configuraci�n de recurso).
  *
@@ -63,10 +64,17 @@ import org.w3c.dom.NodeList;
 
 public class FavoriteTopics extends GenericAdmResource 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FavoriteTopics.class);
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl; 
+    
+    /** The web work path. */
     String webWorkPath = "/work"; 
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"swbadmin/xsl/FavoriteTopics/";
     
     /**
@@ -76,7 +84,9 @@ public class FavoriteTopics extends GenericAdmResource
     }
     
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */      
     public void setResourceBase(Resource base)
     {
@@ -103,12 +113,13 @@ public class FavoriteTopics extends GenericAdmResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @return <b>Document</b>
-     * @throws AFException
-     * @throws IOException
+     * Adds the elem.
+     * 
+     * @param doc the doc
+     * @param parent the parent
+     * @param elemName the elem name
+     * @param elemValue the elem value
+     * @return 
      */
     /*
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -348,10 +359,12 @@ public class FavoriteTopics extends GenericAdmResource
     }    
 
     /**
-     * @param doc
-     * @param parent
-     * @param elemName
-     * @param elemValue
+     * Adds the elem.
+     * 
+     * @param doc the doc
+     * @param parent the parent
+     * @param elemName the elem name
+     * @param elemValue the elem value
      */     
     private void addElem(org.w3c.dom.Document doc, org.w3c.dom.Element parent, String elemName, String elemValue)
     {

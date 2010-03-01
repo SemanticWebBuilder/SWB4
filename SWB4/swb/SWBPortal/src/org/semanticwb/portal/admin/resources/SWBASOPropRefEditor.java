@@ -39,27 +39,47 @@ import org.semanticwb.model.*;
 import org.semanticwb.platform.*;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBASOPropRefEditor.
+ * 
  * @author juan.fernandez
  */
 public class SWBASOPropRefEditor extends GenericAdmResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBASOPropRefEditor.class);
+    
+    /** The MOD e_ id request. */
     static String MODE_IdREQUEST = "FORMID";
+    
+    /** The US e_ select. */
     static String USE_SELECT = "useselect";
+    
+    /** The US e_ add. */
     static String USE_ADD = "useadd";
+    
+    /** The DE l_ so. */
     static String DEL_SO = "delso";
 
+    /** The Mode_ action. */
     String Mode_Action = "PACTION";
+    
+    /** The base. */
     Resource base = null;
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doIndex(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doIndex(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         //No se indexa...
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -69,6 +89,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         doEdit(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -991,6 +1014,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String id = request.getParameter("suri");
@@ -1418,9 +1444,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     }
 
     /**
-     *
-     * @param dateTime
-     * @param lang
+     * Gets the date format.
+     * 
+     * @param dateTime the date time
+     * @param lang the lang
+     * @return the date format
      * @return
      */
     public String getDateFormat(long dateTime, String lang) {
@@ -1433,9 +1461,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     }
 
     /**
-     *
-     * @param obj
-     * @param lang
+     * Gets the display sem obj.
+     * 
+     * @param obj the obj
+     * @param lang the lang
+     * @return the display sem obj
      * @return
      */
     public String getDisplaySemObj(SemanticObject obj, String lang) {
@@ -1449,9 +1479,11 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     }
 
     /**
-     *
-     * @param obj
-     * @param prop
+     * Gets the value sem prop.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @return the value sem prop
      * @return
      */
     public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
@@ -1481,12 +1513,13 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do form id.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doFormID(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -1520,6 +1553,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         out.println("</div>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals(MODE_IdREQUEST)) {
@@ -1532,12 +1568,13 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     }
 
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doAction(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");

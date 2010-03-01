@@ -31,12 +31,24 @@ import java.util.ArrayList;
 import org.semanticwb.portal.db.SWBRecHits_;
 import org.semanticwb.portal.admin.resources.reports.beans.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SessionDataDetail.
+ */
 public class SessionDataDetail extends SWBDataDetail{
 
+    /**
+     * Instantiates a new session data detail.
+     * 
+     * @param filterReportBean the filter report bean
+     */
     public SessionDataDetail(WBAFilterReportBean filterReportBean) {
         super(filterReportBean);
     }
         
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, java.lang.String)
+     */
     public List doDataList(String repository, String rfilter, int type, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         //if(rfilter.hasNext()) {
@@ -45,6 +57,9 @@ public class SessionDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, java.lang.String)
+     */
     public List doDataList(String repository, String rfilter, int type, int year, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         //if(rfilter.hasNext()) {
@@ -53,6 +68,9 @@ public class SessionDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String repository, String rfilter, int type, int year, int month, int day, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         //if(rfilter.hasNext()) {
@@ -61,6 +79,9 @@ public class SessionDataDetail extends SWBDataDetail{
         return resumeRecHits;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.resources.reports.datadetail.SWBDataDetail#doDataList(java.lang.String, java.lang.String, int, int, int, int, int, int, int, java.lang.String)
+     */
     public List doDataList(String repository, String rfilter, int type, int yearI, int monthI, int dayI, int yearF, int monthF, int dayF, String language) throws IncompleteFilterException {
         List resumeRecHits = new ArrayList();
         //if(rfilter.hasNext()) {

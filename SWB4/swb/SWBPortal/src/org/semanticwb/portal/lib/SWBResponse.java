@@ -37,6 +37,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Clase que implementa HttpServletResponse, la cual se utiliza para remplazar el
  * Response por defecto para se enviado al recurso.
@@ -44,28 +45,48 @@ import org.semanticwb.SWBUtils;
  */
 public class SWBResponse implements HttpServletResponse
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBResponse.class);
     
+    /** The response. */
     private HttpServletResponse response;
+    
+    /** The bout. */
     ByteArrayOutputStream bout = new ByteArrayOutputStream(1024);
+    
+    /** The sout. */
     ServletOutputStream sout=new SWBServletOutputStreamImp(bout);
+    
+    /** The out. */
     PrintWriter out = new PrintWriter(bout);
+    
+    /** The send redirect. */
     private String sendRedirect=null;
 
-    /** Creates a new instance of WBResponse */
+    /**
+     * Creates a new instance of WBResponse.
+     */
     public SWBResponse()
     {
         log.debug("WBResponse:WBResponse()");
         this.response = null;
     }
 
-    /** Creates a new instance of WBResponse */
+    /**
+     * Creates a new instance of WBResponse.
+     * 
+     * @param response the response
+     */
     public SWBResponse(HttpServletResponse response)
     {
         log.debug("WBResponse:WBResponse()");
         this.response = response;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#addCookie(javax.servlet.http.Cookie)
+     */
     public void addCookie(javax.servlet.http.Cookie cookie)
     {
         log.debug("WBResponse:addCookie");
@@ -73,6 +94,9 @@ public class SWBResponse implements HttpServletResponse
             response.addCookie(cookie);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#addDateHeader(java.lang.String, long)
+     */
     public void addDateHeader(String str, long param)
     {
         log.debug("WBResponse:addDateHeader");
@@ -80,6 +104,9 @@ public class SWBResponse implements HttpServletResponse
             response.addDateHeader(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#addHeader(java.lang.String, java.lang.String)
+     */
     public void addHeader(String str, String str1)
     {
         log.debug("WBResponse:addHeader");
@@ -87,6 +114,9 @@ public class SWBResponse implements HttpServletResponse
             response.addHeader(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#addIntHeader(java.lang.String, int)
+     */
     public void addIntHeader(String str, int param)
     {
         log.debug("WBResponse:setStatus");
@@ -94,6 +124,9 @@ public class SWBResponse implements HttpServletResponse
             response.addIntHeader(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#containsHeader(java.lang.String)
+     */
     public boolean containsHeader(String str)
     {
         log.debug("WBResponse:setStatus");
@@ -103,6 +136,9 @@ public class SWBResponse implements HttpServletResponse
             return false;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#encodeRedirectURL(java.lang.String)
+     */
     public String encodeRedirectURL(String str)
     {
         log.debug("WBResponse:encodeRedirectURL");
@@ -111,6 +147,9 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#encodeRedirectUrl(java.lang.String)
+     */
     public String encodeRedirectUrl(String str)
     {
         log.debug("WBResponse:encodeRedirectUrl");
@@ -119,6 +158,9 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#encodeURL(java.lang.String)
+     */
     public String encodeURL(String str)
     {
         log.debug("WBResponse:encodeURL");
@@ -127,6 +169,9 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#encodeUrl(java.lang.String)
+     */
     public String encodeUrl(String str)
     {
         log.debug("WBResponse:encodeUrl");
@@ -135,18 +180,27 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#flushBuffer()
+     */
     public void flushBuffer() throws java.io.IOException
     {
         log.debug("WBResponse:flushBuffer");
         bout.flush();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#getBufferSize()
+     */
     public int getBufferSize()
     {
         log.debug("WBResponse:getBufferSize");
         return bout.size();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#getCharacterEncoding()
+     */
     public String getCharacterEncoding()
     {
         log.debug("WBResponse:getCharacterEncoding");
@@ -155,6 +209,9 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#getLocale()
+     */
     public java.util.Locale getLocale()
     {
         log.debug("WBResponse:getLocale");
@@ -163,6 +220,9 @@ public class SWBResponse implements HttpServletResponse
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#getOutputStream()
+     */
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
         log.debug("WBResponse:getOutputStream");
@@ -170,30 +230,45 @@ public class SWBResponse implements HttpServletResponse
         return sout;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#getWriter()
+     */
     public java.io.PrintWriter getWriter() throws java.io.IOException
     {
         log.debug("WBResponse:getWriter");
         return out;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#isCommitted()
+     */
     public boolean isCommitted()
     {
         log.debug("WBResponse:isCommitted");
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#reset()
+     */
     public void reset()
     {
         log.debug("WBResponse:reset");
         resetBuffer();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#resetBuffer()
+     */
     public void resetBuffer()
     {
         log.debug("WBResponse:resetBuffer");
         bout.reset();
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#sendError(int)
+     */
     public void sendError(int param) throws java.io.IOException
     {
         log.debug("WBResponse:sendError");
@@ -201,6 +276,9 @@ public class SWBResponse implements HttpServletResponse
             response.sendError(param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#sendError(int, java.lang.String)
+     */
     public void sendError(int param, String str) throws java.io.IOException
     {
         log.debug("WBResponse:sendError");
@@ -208,6 +286,9 @@ public class SWBResponse implements HttpServletResponse
             response.sendError(param, str);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#sendRedirect(java.lang.String)
+     */
     public void sendRedirect(String str) throws java.io.IOException
     {
         sendRedirect=str;
@@ -216,21 +297,37 @@ public class SWBResponse implements HttpServletResponse
             response.sendRedirect(str);
     }
     
+    /**
+     * Gets the send redirect.
+     * 
+     * @return the send redirect
+     */
     public String getSendRedirect()
     {
         return sendRedirect;
     }
     
+    /**
+     * Checks if is send redirect.
+     * 
+     * @return true, if is send redirect
+     */
     public boolean isSendRedirect()
     {
         return sendRedirect!=null;
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#setBufferSize(int)
+     */
     public void setBufferSize(int param)
     {
         log.debug("WBResponse:setBufferSize:" + param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#setContentLength(int)
+     */
     public void setContentLength(int param)
     {
         log.debug("WBResponse:setContentLength");
@@ -238,6 +335,9 @@ public class SWBResponse implements HttpServletResponse
             response.setContentLength(param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#setContentType(java.lang.String)
+     */
     public void setContentType(String str)
     {
         log.debug("WBResponse:setContentType");
@@ -245,6 +345,9 @@ public class SWBResponse implements HttpServletResponse
             response.setContentType(str);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#setDateHeader(java.lang.String, long)
+     */
     public void setDateHeader(String str, long param)
     {
         log.debug("WBResponse:setDateHeader");
@@ -252,6 +355,9 @@ public class SWBResponse implements HttpServletResponse
             response.setDateHeader(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#setHeader(java.lang.String, java.lang.String)
+     */
     public void setHeader(String str, String str1)
     {
         log.debug("WBResponse:setHeader");
@@ -259,6 +365,9 @@ public class SWBResponse implements HttpServletResponse
             response.setHeader(str, str1);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#setIntHeader(java.lang.String, int)
+     */
     public void setIntHeader(String str, int param)
     {
         log.debug("WBResponse:setIntHeader");
@@ -266,6 +375,9 @@ public class SWBResponse implements HttpServletResponse
             response.setIntHeader(str, param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.ServletResponse#setLocale(java.util.Locale)
+     */
     public void setLocale(java.util.Locale locale)
     {
         log.debug("WBResponse:setLocale");
@@ -273,6 +385,9 @@ public class SWBResponse implements HttpServletResponse
             response.setLocale(locale);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#setStatus(int)
+     */
     public void setStatus(int param)
     {
         log.debug("WBResponse:setStatus");
@@ -280,6 +395,9 @@ public class SWBResponse implements HttpServletResponse
             response.setStatus(param);
     }
 
+    /* (non-Javadoc)
+     * @see javax.servlet.http.HttpServletResponse#setStatus(int, java.lang.String)
+     */
     public void setStatus(int param, String str)
     {
         log.debug("WBResponse:setStatus");
@@ -287,6 +405,9 @@ public class SWBResponse implements HttpServletResponse
             response.setStatus(param, str);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     public String toString()
     {
         try

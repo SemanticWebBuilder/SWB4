@@ -63,22 +63,40 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.WBFileUpload;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class BlogResource.
+ * 
  * @author victor.lorenzana
  */
 public class BlogResource extends GenericResource
 {
 
+    /** The log. */
     private Logger log=SWBUtils.getLogger(BlogResource.class);
+    
+    /** The Constant defaultFormat. */
     public static final String defaultFormat = "dd 'de' MMMM 'de' yyyy";
+    
+    /** The Constant DELETE_FILE. */
     private static final String DELETE_FILE = "deleteblog.bmp";
+    
+    /** The Constant ADD_FILE. */
     private static final String ADD_FILE = "addpost.bmp";
     
+    /** The Constant EDIT_FILE. */
     private static final String EDIT_FILE = "editpost.bmp";
+    
+    /** The base. */
     Resource base = null;
 
 
+    /**
+     * Install my sql.
+     * 
+     * @param type the type
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void installMySql(ResourceType type) throws SWBResourceException
     {
         uninstallMySql(type);
@@ -118,6 +136,13 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    
+    /**
+     * Install hyper sonic.
+     * 
+     * @param type the type
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void installHyperSonic(ResourceType type) throws SWBResourceException
     {
         uninstallMySql(type);
@@ -169,6 +194,13 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    
+    /**
+     * Uninstall my sql.
+     * 
+     * @param type the type
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void uninstallMySql(ResourceType type) throws SWBResourceException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -203,6 +235,13 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    
+    /**
+     * Uninstall hypersonic.
+     * 
+     * @param type the type
+     * @throws SWBResourceException the sWB resource exception
+     */
     public void uninstallHypersonic(ResourceType type) throws SWBResourceException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -238,6 +277,9 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#install(org.semanticwb.model.ResourceType)
+     */
     @Override
     public void install(ResourceType recobj) throws SWBResourceException {
         String dbname=SWBUtils.DB.getDatabaseName();
@@ -255,6 +297,9 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#uninstall(org.semanticwb.model.ResourceType)
+     */
     @Override
     public void uninstall(ResourceType type) throws SWBResourceException
     {
@@ -273,6 +318,9 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -350,6 +398,11 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Gets the num max of blogs.
+     * 
+     * @return the num max of blogs
+     */
     public int getNumMaxOfBlogs()
     {
         int numofblogs = 5;
@@ -367,6 +420,11 @@ public class BlogResource extends GenericResource
         return numofblogs;
     }
 
+    /**
+     * Gets the num max of comments.
+     * 
+     * @return the num max of comments
+     */
     public int getNumMaxOfComments()
     {
         int numofcomments = 5;
@@ -384,6 +442,12 @@ public class BlogResource extends GenericResource
         return numofcomments;
     }
 
+    /**
+     * Exist blog.
+     * 
+     * @param blogId the blog id
+     * @return true, if successful
+     */
     public boolean existBlog(int blogId)
     {
         boolean existBlog = false;
@@ -423,6 +487,15 @@ public class BlogResource extends GenericResource
         return existBlog;
     }
 
+    /**
+     * Do edit post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
 
@@ -443,6 +516,16 @@ public class BlogResource extends GenericResource
 
     }
 
+    /**
+     * Gets the content post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @param postid the postid
+     * @return the content post
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void getContentPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, int postid) throws IOException
     {
         PrintWriter out = response.getWriter();
@@ -458,6 +541,16 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Gets the title post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @param postid the postid
+     * @return the title post
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void getTitlePost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, int postid) throws IOException
     {
 
@@ -475,6 +568,15 @@ public class BlogResource extends GenericResource
 
     }
 
+    /**
+     * Do change settings.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doChangeSettings(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -613,6 +715,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view template by default comments.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewTemplateByDefaultComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -633,6 +744,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view template by default blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewTemplateByDefaultBlog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -653,6 +773,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view template blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewTemplateBlog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -685,6 +814,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view template comments.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewTemplateComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -718,6 +856,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do asign role.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAsignRole(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
 
@@ -779,6 +926,13 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Gets the level.
+     * 
+     * @param userid the userid
+     * @param isrool the isrool
+     * @return the level
+     */
     public int getLevel(String userid, boolean isrool)
     {
         int level = 0;
@@ -826,6 +980,15 @@ public class BlogResource extends GenericResource
         return level;
     }
 
+    /**
+     * Do asign user.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAsignUser(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         User user = paramRequest.getUser();
@@ -885,6 +1048,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do permissions.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doPermissions(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -897,6 +1069,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do delete blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doDeleteBlog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -964,6 +1145,15 @@ public class BlogResource extends GenericResource
 
     }
 
+    /**
+     * Do asignblog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAsignblog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -1028,6 +1218,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do create blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doCreateBlog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -1038,6 +1237,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view comments xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewCommentsXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -1066,6 +1274,15 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Do view blog xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewBlogXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String pathDeleteBlog = getDeleteImagePath(paramRequest);
@@ -1100,6 +1317,16 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Update post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     * @param postid the postid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void updatePost(HttpServletRequest request, SWBActionResponse response, int blogid, int postid) throws SWBResourceException, IOException
     {
         String title = request.getParameter("title");
@@ -1138,6 +1365,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Adds the post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void addPost(HttpServletRequest request, SWBActionResponse response, int blogid) throws SWBResourceException, IOException
     {
         String title = request.getParameter("title");
@@ -1190,6 +1426,17 @@ public class BlogResource extends GenericResource
 
     }
 
+    /**
+     * Insert comment.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param postid the postid
+     * @param blogid the blogid
+     * @param comment the comment
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public synchronized void insertComment(HttpServletRequest request, SWBActionResponse response, int postid, int blogid, String comment) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1247,6 +1494,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Delete blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public synchronized void deleteBlog(HttpServletRequest request, SWBActionResponse response, int blogid) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1294,6 +1550,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Delete post.
+     * 
+     * @param request the request
+     * @param postid the postid
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public synchronized void deletePost(HttpServletRequest request, int postid, int blogid) throws SWBResourceException, IOException
     {
 
@@ -1328,6 +1593,12 @@ public class BlogResource extends GenericResource
 
     }
 
+    /**
+     * Creates the blog.
+     * 
+     * @param name the name
+     * @param asign the asign
+     */
     public void createBlog(String name,boolean asign)
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1373,6 +1644,15 @@ public class BlogResource extends GenericResource
             }
         }
     }
+    
+    /**
+     * Creates the blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param name the name
+     * @param asign the asign
+     */
     private synchronized void createBlog(HttpServletRequest request, SWBActionResponse response, String name, boolean asign)
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1420,6 +1700,11 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Asign blog.
+     * 
+     * @param blogid the blogid
+     */
     public void asignBlog(int blogid)
     {
         this.getResourceBase().setAttribute("blogid", String.valueOf(blogid));
@@ -1432,6 +1717,14 @@ public class BlogResource extends GenericResource
             log.error(afe);
         }
     }
+    
+    /**
+     * Asign blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     */
     public void asignBlog(HttpServletRequest request, SWBActionResponse response, int blogid)
     {
         this.getResourceBase().setAttribute("blogid", String.valueOf(blogid));
@@ -1446,6 +1739,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Asign role.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void asignRole(HttpServletRequest request, SWBActionResponse response, int blogid) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1540,6 +1842,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Asign role.
+     * 
+     * @param name the name
+     * @param level the level
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void asignRole(String name, int level, int blogid) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1628,6 +1939,15 @@ public class BlogResource extends GenericResource
     }
 
 
+    /**
+     * Asign user.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param blogid the blogid
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void asignUser(HttpServletRequest request, SWBActionResponse response, int blogid) throws SWBResourceException, IOException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();
@@ -1723,6 +2043,15 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Adds the template blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param upload the upload
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void addTemplateBlog(HttpServletRequest request, SWBActionResponse response, WBFileUpload upload) throws SWBResourceException, IOException
     {
         byte[] template = upload.getFileData("templateblog");
@@ -1737,6 +2066,15 @@ public class BlogResource extends GenericResource
         response.setMode(response.Mode_ADMIN);
     }
 
+    /**
+     * Adds the template comments.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param upload the upload
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void addTemplateComments(HttpServletRequest request, SWBActionResponse response, WBFileUpload upload) throws SWBResourceException, IOException
     {
         byte[] template = upload.getFileData("templatecomments");
@@ -1752,6 +2090,9 @@ public class BlogResource extends GenericResource
         response.setMode(response.Mode_ADMIN);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -1938,6 +2279,12 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Gets the delete image path.
+     * 
+     * @param paramRequest the param request
+     * @return the delete image path
+     */
     private String getDeleteImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(DELETE_FILE);
@@ -1963,6 +2310,13 @@ public class BlogResource extends GenericResource
         }
         return pathDeleteBlog;
     }
+    
+    /**
+     * Gets the adds the image path.
+     * 
+     * @param paramRequest the param request
+     * @return the adds the image path
+     */
     private String getAddImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(ADD_FILE);
@@ -1989,6 +2343,12 @@ public class BlogResource extends GenericResource
         return pathDeleteBlog;
     }
 
+    /**
+     * Gets the edits the image path.
+     * 
+     * @param paramRequest the param request
+     * @return the edits the image path
+     */
     private String getEditImagePath(SWBParamRequest paramRequest)
     {
         InputStream indeleteblog = BlogResource.class.getResourceAsStream(EDIT_FILE);
@@ -2015,6 +2375,9 @@ public class BlogResource extends GenericResource
         return pathDeleteBlog;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
    {
@@ -2089,6 +2452,18 @@ public class BlogResource extends GenericResource
         out.close();
     }
 
+    /**
+     * Gets the comments.
+     * 
+     * @param paramRequest the param request
+     * @param blogid the blogid
+     * @param postid the postid
+     * @param urlBlog the url blog
+     * @param showAll the show all
+     * @param urlviewall the urlviewall
+     * @return the comments
+     * @throws SWBException the sWB exception
+     */
     private synchronized Document getComments(SWBParamRequest paramRequest, int blogid, int postid, String urlBlog, boolean showAll, String urlviewall) throws SWBException
     {
         User wbUser=paramRequest.getUser();
@@ -2216,6 +2591,15 @@ public class BlogResource extends GenericResource
         return doc;
     }
 
+    /**
+     * Do view comments.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doViewComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -2292,6 +2676,13 @@ public class BlogResource extends GenericResource
         }
     }
 
+    /**
+     * Creates the form.
+     * 
+     * @param out the out
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     */
     private void createForm(PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException
     {
         out.println("<script type=\"text/javascript\">");
@@ -2315,6 +2706,15 @@ public class BlogResource extends GenericResource
         out.println("</td></tr><tr><td colspan='2' ><a href='" + urlback + "'>"+ paramRequest.getLocaleString("back") +"</a></td></tr></table></fieldset></form></div>");
     }
 
+    /**
+     * Do change template blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doChangeTemplateBlog(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -2330,6 +2730,12 @@ public class BlogResource extends GenericResource
         out.println("</fieldset></form></div>");
     }
 
+    /**
+     * Checks if is multipart.
+     * 
+     * @param request the request
+     * @return true, if is multipart
+     */
     private static boolean isMultipart(HttpServletRequest request)
     {
         boolean isMultipart = false;
@@ -2343,6 +2749,15 @@ public class BlogResource extends GenericResource
         return isMultipart;
     }
 
+    /**
+     * Do change template comments.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doChangeTemplateComments(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out = response.getWriter();
@@ -2358,6 +2773,12 @@ public class BlogResource extends GenericResource
         out.println("</fieldset></form></div>");
     }
 
+    /**
+     * Gets the script.
+     * 
+     * @param paramRequest the param request
+     * @return the script
+     */
     private String getScript(SWBParamRequest paramRequest)
     {
         StringBuffer ret = new StringBuffer("");
@@ -2380,12 +2801,13 @@ public class BlogResource extends GenericResource
     }
 
     /**
-     * Asigna un blog � crea un blog
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws com.infotec.appfw.exception.SWBException
-     * @throws java.io.IOException
+     * Asigna un blog � crea un blog.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {

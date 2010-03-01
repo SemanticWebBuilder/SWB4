@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CompanySite.
+ */
 public class CompanySite extends org.semanticwb.model.comm.base.CompanySiteBase 
 {
+    
+    /**
+     * Instantiates a new company site.
+     * 
+     * @param base the base
+     */
     public CompanySite(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

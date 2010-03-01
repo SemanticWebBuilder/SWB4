@@ -23,12 +23,20 @@
  
 package org.semanticwb.portal.resources.sem.events;
 
+// TODO: Auto-generated Javadoc
 /**
- * Event Object used in the resource Events
+ * Event Object used in the resource Events.
+ * 
  * @author jorge.jimenez
  */
 public class Event extends org.semanticwb.portal.resources.sem.events.base.EventBase 
 {
+    
+    /**
+     * Instantiates a new event.
+     * 
+     * @param base the base
+     */
     public Event(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

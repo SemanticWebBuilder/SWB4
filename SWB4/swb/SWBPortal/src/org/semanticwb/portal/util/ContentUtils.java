@@ -45,37 +45,82 @@ import org.semanticwb.model.WebPage;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ContentUtils.
+ * 
  * @author Jorge Jiménez
  */
 public class ContentUtils {
 
+    /** The norm_font. */
     String norm_font = null;
+    
+    /** The norm_size. */
     String norm_size = null;
+    
+    /** The norm_color. */
     String norm_color = null;
+    
+    /** The tit1_font. */
     String tit1_font = null;
+    
+    /** The tit1_size. */
     String tit1_size = null;
+    
+    /** The tit1_color. */
     String tit1_color = null;
+    
+    /** The tit2_font. */
     String tit2_font = null;
+    
+    /** The tit2_size. */
     String tit2_size = null;
+    
+    /** The tit2_color. */
     String tit2_color = null;
+    
+    /** The tit3_font. */
     String tit3_font = null;
+    
+    /** The tit3_size. */
     String tit3_size = null;
+    
+    /** The tit3_color. */
     String tit3_color = null;
+    
+    /** The css size. */
     static String cssSize = null;
+    
+    /** The remove links. */
     static boolean removeLinks = false;
+    
+    /** The flag. */
     static boolean flag = false;
+    
+    /** The h style objs. */
     HashMap hStyleObjs = null;
+    
+    /** The h t mh style objs. */
     static HashMap hTMhStyleObjs = new HashMap();
+    
+    /** The h tm change styles. */
     static HashMap hTMChangeStyles = new HashMap();
+    
+    /** The schange styles. */
     String schangeStyles = null;
+    
+    /** The recproperties. */
     static Properties recproperties = null;
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ContentUtils.class);
 
     /**
-     * Metodo que regresa el número de páginas con las que cuenta el contenido
+     * Metodo que regresa el número de páginas con las que cuenta el contenido.
+     * 
+     * @param content the content
+     * @return the ms content pages number
      */
     private int getMsContentPagesNumber(String content) {
         int pos = content.lastIndexOf("div.Section");
@@ -89,7 +134,20 @@ public class ContentUtils {
 
     //regresa string html de contenido páginado
     /**
-     * Metodo que regresa el contenido por página
+     * Metodo que regresa el contenido por página.
+     * 
+     * @param content the content
+     * @param totPages the tot pages
+     * @param npage the npage
+     * @param webpage the webpage
+     * @param base the base
+     * @param contentType the content type
+     * @param snpages the snpages
+     * @param stxtant the stxtant
+     * @param stxtsig the stxtsig
+     * @param stfont the stfont
+     * @param position the position
+     * @return the content by page
      */
     private String getContentByPage(String content, int totPages, int npage, WebPage webpage, Resource base, String contentType, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         StringBuffer strb = new StringBuffer();
@@ -162,6 +220,20 @@ public class ContentUtils {
         return strb.toString();
     }
 
+    /**
+     * Pagination ms word.
+     * 
+     * @param htmlOut the html out
+     * @param page the page
+     * @param npage the npage
+     * @param base the base
+     * @param snpages the snpages
+     * @param stxtant the stxtant
+     * @param stxtsig the stxtsig
+     * @param stfont the stfont
+     * @param position the position
+     * @return the string
+     */
     public String paginationMsWord(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getMsContentPagesNumber(htmlOut);
         if (totPages > 1) {
@@ -177,7 +249,11 @@ public class ContentUtils {
     }
 
     /**
-     * Remueve estilos en las ligas del contenido
+     * Remueve estilos en las ligas del contenido.
+     * 
+     * @param content the content
+     * @param cadena the cadena
+     * @return the string
      */
     public String removeLinks(String content, String cadena) {
         int in = 0;
@@ -198,8 +274,11 @@ public class ContentUtils {
     }
 
     /**
-     * @param datos
-     * @param ruta
+     * Gets the content by page.
+     * 
+     * @param datos the datos
+     * @param page the page
+     * @return the content by page
      */
     private String getContentByPage(String datos, int page) {
         HtmlTag tag = new HtmlTag();
@@ -279,6 +358,14 @@ public class ContentUtils {
     }
 
 
+    /**
+     * Predefined styles.
+     * 
+     * @param content the content
+     * @param base the base
+     * @param isTpred the is tpred
+     * @return the string
+     */
     public String predefinedStyles(String content, Resource base, boolean isTpred) {
         String sTmchangeStyles = (String) hTMChangeStyles.get(base.getWebSiteId());
         if ((schangeStyles != null && schangeStyles.equals("true")) || (sTmchangeStyles != null && sTmchangeStyles.equals("true"))) {
@@ -303,7 +390,10 @@ public class ContentUtils {
     }
 
     /**
-     * Inicializa la clase creando objetos de configuración del recurso
+     * Inicializa la clase creando objetos de configuración del recurso.
+     * 
+     * @param base the base
+     * @param className the class name
      */
     public void setResourceBase(Resource base, String className) {
         try {
@@ -462,6 +552,8 @@ public class ContentUtils {
      * Crea objetos de para estilos de letra que no son de defecto de word, cuando los documentos son de tipo word
      * se puede modificar esta de acuerdo a los estilos definidos en el archivo
      * Content.properties
+     * 
+     * @param dom the dom
      */
     private void createStyleObjs(Document dom) {
         NodeList nlistStyles = dom.getChildNodes().item(0).getChildNodes();
@@ -504,7 +596,21 @@ public class ContentUtils {
                 //////////METODOS PARA MANEJO DE OPEN OFFICE////////////////////////////
 
 
-    public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+    /**
+                 * Pagination open office.
+                 * 
+                 * @param htmlOut the html out
+                 * @param page the page
+                 * @param npage the npage
+                 * @param base the base
+                 * @param snpages the snpages
+                 * @param stxtant the stxtant
+                 * @param stxtsig the stxtsig
+                 * @param stfont the stfont
+                 * @param position the position
+                 * @return the string
+                 */
+                public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         String toFind="<P STYLE=\"page-break-before: always\">";
         int totPages = getOpenOfficeContentPagesNumber(htmlOut, toFind);
         if (totPages > 1) {
@@ -524,6 +630,12 @@ public class ContentUtils {
         return htmlOut;
     }
 
+     /**
+      * Gets the headers.
+      * 
+      * @param html the html
+      * @return the headers
+      */
      private String getHeaders(String html) {
          if(html!=null && html.trim().length()>0){
             return html.substring(0, html.indexOf("<BODY"));
@@ -533,8 +645,12 @@ public class ContentUtils {
 
 
      /**
-     * Metodo que regresa el número de páginas con las que cuenta el contenido
-     */
+      * Metodo que regresa el número de páginas con las que cuenta el contenido.
+      * 
+      * @param content the content
+      * @param toFind the to find
+      * @return the open office content pages number
+      */
     private int getOpenOfficeContentPagesNumber(String content, String toFind) {
         int ipages=1;
         int off = 0;
@@ -550,9 +666,12 @@ public class ContentUtils {
     }
 
      /**
-     * @param datos
-     * @param ruta
-     */
+      * Gets the content open office by page.
+      * 
+      * @param datos the datos
+      * @param page2ret the page2ret
+      * @return the content open office by page
+      */
     private String getContentOpenOfficeByPage(String datos, int page2ret) {
         HtmlTag tag = new HtmlTag();
         StringBuffer ret = new StringBuffer();
@@ -605,7 +724,21 @@ public class ContentUtils {
     //////////METODOS PARA MANEJO DE HTMLCONTENT////////////////////////////
 
 
-     public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+     /**
+     * Pagination html content.
+     * 
+     * @param htmlOut the html out
+     * @param page the page
+     * @param npage the npage
+     * @param base the base
+     * @param snpages the snpages
+     * @param stxtant the stxtant
+     * @param stxtsig the stxtsig
+     * @param stfont the stfont
+     * @param position the position
+     * @return the string
+     */
+    public String paginationHtmlContent(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         int totPages = getHtmlContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
@@ -620,8 +753,11 @@ public class ContentUtils {
     }
 
       /**
-     * Metodo que regresa el número de páginas con las que cuenta el contenido
-     */
+       * Metodo que regresa el número de páginas con las que cuenta el contenido.
+       * 
+       * @param content the content
+       * @return the html content pages number
+       */
     private int getHtmlContentPagesNumber(String content) {
         Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always\">");
         int size = 1;
@@ -634,6 +770,13 @@ public class ContentUtils {
         return size;
     }
 
+    /**
+     * Gets the html content by page.
+     * 
+     * @param datos the datos
+     * @param page the page
+     * @return the html content by page
+     */
     private String getHtmlContentByPage(String datos, int page){
         int off = 0;
         int cont = 0;

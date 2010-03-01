@@ -40,19 +40,35 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GMap.
+ */
 public class GMap extends GenericAdmResource
 {
+
+/** The log. */
 private static Logger log = SWBUtils.getLogger(GMap.class);
+    
+    /**
+     * Instantiates a new g map.
+     */
     public GMap()
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest httpservletrequest, SWBActionResponse wbactionresponse)
         throws SWBResourceException, IOException
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest)
         throws SWBResourceException, IOException

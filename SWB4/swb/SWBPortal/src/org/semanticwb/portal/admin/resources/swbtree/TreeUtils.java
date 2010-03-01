@@ -32,14 +32,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.SWBPlatform;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class TreeUtils.
+ * 
  * @author javier.solis
  */
 public class TreeUtils
 {
+    
+    /** The nullnode. */
     private static int nullnode=0;
 
+    /**
+     * Gets the action.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param target the target
+     * @return the action
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getAction(String name, String value, String target) throws JSONException
     {
         JSONObject obj=new JSONObject();
@@ -50,6 +63,14 @@ public class TreeUtils
         return obj;
     }
 
+    /**
+     * Gets the event.
+     * 
+     * @param name the name
+     * @param action the action
+     * @return the event
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getEvent(String name, JSONObject action) throws JSONException
     {
         JSONObject obj=new JSONObject();
@@ -59,6 +80,15 @@ public class TreeUtils
         return obj;
     }
 
+    /**
+     * Gets the menu item.
+     * 
+     * @param title the title
+     * @param icon the icon
+     * @param action the action
+     * @return the menu item
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getMenuItem(String title, String icon, JSONObject action) throws JSONException
     {
         JSONObject obj=new JSONObject();
@@ -69,11 +99,31 @@ public class TreeUtils
         return obj;
     }
 
+    /**
+     * Gets the d node.
+     * 
+     * @param id the id
+     * @param title the title
+     * @param type the type
+     * @param icon the icon
+     * @return the d node
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getDNode(String id, String title, String type, String icon) throws JSONException
     {
         return getNode(id+"|"+(nullnode++), title, type, icon);
     }
     
+    /**
+     * Gets the node.
+     * 
+     * @param id the id
+     * @param title the title
+     * @param type the type
+     * @param icon the icon
+     * @return the node
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getNode(String id, String title, String type, String icon) throws JSONException
     {
         if(title==null)title="Topic";
@@ -85,21 +135,45 @@ public class TreeUtils
         return obj;
     }
 
+    /**
+     * Gets the reload action.
+     * 
+     * @return the reload action
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getReloadAction() throws JSONException
     {
         return getAction("reload",null,null);
     }
 
+    /**
+     * Gets the new tab action.
+     * 
+     * @return the new tab action
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getNewTabAction() throws JSONException
     {
         return getAction("newTab",SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp",null);
     }
 
+    /**
+     * Gets the menu separator.
+     * 
+     * @return the menu separator
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getMenuSeparator() throws JSONException
     {
         return getMenuItem("_",null, null);
     }
 
+    /**
+     * Gets the dummy.
+     * 
+     * @return the dummy
+     * @throws JSONException the jSON exception
+     */
     static public JSONObject getDummy() throws JSONException
     {
         return getNode("_NOID_" + (nullnode++), "DUMMY", "DUMMY", "DUMMY");

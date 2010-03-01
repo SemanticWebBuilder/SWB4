@@ -48,6 +48,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
  * Recurso para la administraci�n de WebBuilder que llama al applet para que
  * muestre los t�picos que componen al mapa de t�picos seleccionado.
@@ -58,17 +59,23 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class SWBATMView extends SWBATMAdmin
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBATMView.class);
 
-    /** Creates a new instance of WBTree */
+    /**
+     * Creates a new instance of WBTree.
+     */
     public SWBATMView()
     {
     }
     
     /**
-     *   Servicio 180
-     * @param user
-     * @param src
+     * Servicio 180.
+     * 
+     * @param user the user
+     * @param src the src
+     * @return the topic map4 adm
      * @return
      */
     @Override
@@ -225,11 +232,13 @@ public class SWBATMView extends SWBATMAdmin
     }    
     
     /**
-     *
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException

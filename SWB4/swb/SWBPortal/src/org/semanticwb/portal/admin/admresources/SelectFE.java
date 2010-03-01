@@ -34,6 +34,7 @@ import java.sql.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * Objeto que administra un elemento html de tipo Select.
  * <p>
@@ -43,74 +44,158 @@ import org.semanticwb.SWBUtils;
 
 public class SelectFE extends WBContainerFE
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SelectFE.class);
     
+    /** The accesskey. */
     private String accesskey=null;
+    
+    /** The align. */
     private String align=null;
+    
+    /** The isdisabled. */
     private boolean isdisabled=false;
+    
+    /** The ismultiple. */
     private boolean ismultiple=false;
+    
+    /** The size. */
     private int size=-1;
+    
+    /** The width. */
     private int width=-1;
+    
+    /** The isselected. */
     private boolean isselected=false;
+    
+    /** The xmltag. */
     private String xmltag=null;
+    
+    /** The tag. */
     protected Node tag=null;
+    
+    /** The query. */
     private String query=null;
+    
+    /** The dbconnload. */
     private String dbconnload=null;
+    
+    /** The keyload. */
     private String keyload=null;
+    
+    /** The titleload. */
     private String titleload=null;
+    
+    /** The fromload. */
     private String fromload=null;
+    
+    /** The whereload. */
     private String whereload=null;
+    
+    /** The onchange. */
     private String onchange=null;
 
+    /** The invalid message. */
     protected String invalidMessage=null;
    
-    /** Creates a new instance of SelectFE */
+    /**
+     * Creates a new instance of SelectFE.
+     * 
+     * @param name the name
+     */
     public SelectFE(String name) {
         this.name=name;
     }
     
-    /** Creates a new instwance with the default parameters */
+    /**
+     * Creates a new instwance with the default parameters.
+     * 
+     * @param tag the tag
+     */
     public SelectFE(Node tag){
         this.tag=tag;
         setAttributes();
     }
     
     //sets
+    /**
+     * Sets the access key.
+     * 
+     * @param accesskey the new access key
+     */
     public void setAccessKey(String accesskey){
         this.accesskey=accesskey;
     }
    
+    /**
+     * Sets the align.
+     * 
+     * @param align the new align
+     */
     public void setAlign(String align){
         this.align=align;
     }
     
+    /**
+     * Sets the disabled.
+     * 
+     * @param isdisabled the new disabled
+     */
     public void setDisabled(boolean isdisabled){
         this.isdisabled=isdisabled;
     }
     
+    /**
+     * Sets the multiple.
+     * 
+     * @param ismultiple the new multiple
+     */
     public void setMultiple(boolean ismultiple){
         this.ismultiple=ismultiple;
     }
     
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     public void setSize(int size){
         this.size=size;
     }
     
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width){
         this.width=width;
     }
     
-    /**determines de xml tag name the form element will be added in a resource.*/
+    /**
+     * determines de xml tag name the form element will be added in a resource.
+     * 
+     * @param xmltag the new xml tag
+     */
     public void setXmlTag(String xmltag){
         this.xmltag=xmltag;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBAdmResourceAbs#setAdmDBConnMgr(org.semanticwb.portal.admin.admresources.db.AdmDBConnMgr)
+     */
     public void setAdmDBConnMgr(AdmDBConnMgr dbconnmgr){
        this.dbconnmgr=dbconnmgr;
        this.dbconnload=dbconnmgr.getConName();
        if(this.dbconnmgr!=null) setAdmDBConnMgr2Childs(dbconnmgr);
    }
     
+    /**
+     * Sets the adm db conn mgr2 childs.
+     * 
+     * @param dbconnmgr the new adm db conn mgr2 childs
+     */
     private void setAdmDBConnMgr2Childs(AdmDBConnMgr dbconnmgr){
         Iterator iobj=formelements.iterator();
         while(iobj.hasNext()){
@@ -122,19 +207,47 @@ public class SelectFE extends WBContainerFE
         }
     }
     
+    /**
+     * Sets the dbconnload.
+     * 
+     * @param dbconnload the new dbconnload
+     */
     public void setDbconnload(String dbconnload){
         this.dbconnload=dbconnload;
     }
   
+    /**
+     * Sets the keyload.
+     * 
+     * @param keyload the new keyload
+     */
     public void setKeyload(String keyload){
         this.keyload=keyload;
     }
+    
+    /**
+     * Sets the titleload.
+     * 
+     * @param titleload the new titleload
+     */
     public void setTitleload(String titleload){
         this.titleload=titleload;
     }
+    
+    /**
+     * Sets the fromload.
+     * 
+     * @param fromload the new fromload
+     */
     public void setFromload(String fromload){
         this.fromload=fromload;
     }
+    
+    /**
+     * Sets the whereload.
+     * 
+     * @param whereload the new whereload
+     */
     public void setWhereload(String whereload){
         this.whereload=whereload;
     }
@@ -142,57 +255,127 @@ public class SelectFE extends WBContainerFE
     
     //gets
     
+    /**
+     * Gets the access key.
+     * 
+     * @return the access key
+     */
     public String getAccessKey(){
         return accesskey;
     }
     
+    /**
+     * Gets the align.
+     * 
+     * @return the align
+     */
     public String getAlign(){
         return align;
     }
     
+    /**
+     * Gets the disabled.
+     * 
+     * @return the disabled
+     */
     public boolean getDisabled(){
         return isdisabled;
     }
     
+    /**
+     * Gets the multiple.
+     * 
+     * @return the multiple
+     */
     public boolean getMultiple(){
         return ismultiple;
     }
     
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public int getSize(){
         return size;
     }
     
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth(){
         return width;
     }
     
-     /**determines de xml tag name the form element will be added in a resource.*/
+     /**
+      * determines de xml tag name the form element will be added in a resource.
+      * 
+      * @return the xml tag
+      */
     public String getXmlTag(){
         return xmltag;
     }
     
+    /**
+     * Gets the dbconnload.
+     * 
+     * @return the dbconnload
+     */
     public String getDbconnload(){
         return dbconnload;
     }
   
+    /**
+     * Gets the keyload.
+     * 
+     * @return the keyload
+     */
     public String getKeyload(){
         return keyload;
     }
+    
+    /**
+     * Gets the titleload.
+     * 
+     * @return the titleload
+     */
     public String getTitleload(){
         return titleload;
     }
+    
+    /**
+     * Gets the fromload.
+     * 
+     * @return the fromload
+     */
     public String getFromload(){
         return fromload;
     }
+    
+    /**
+     * Gets the whereload.
+     * 
+     * @return the whereload
+     */
     public String getWhereload(){
         return whereload;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.admin.admresources.lib.WBContainerFE#add(java.lang.Object)
+     */
     public void add(Object obj){
        super.add(obj);
        setSelectFEName(obj);
     }
     
+    /**
+     * Sets the select fe name.
+     * 
+     * @param obj the new select fe name
+     */
     private void setSelectFEName(Object obj){
        if(obj instanceof OptionSelectFE){
            OptionSelectFE objselfe=(OptionSelectFE)obj;
@@ -202,9 +385,11 @@ public class SelectFE extends WBContainerFE
     
    
     /**
-    * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
-    * obtains the final xml element to show in the resource admin
-    */
+     * Obtiene el html(xml) final del elemento para mostrar en la admin del recurso
+     * obtains the final xml element to show in the resource admin.
+     * 
+     * @return the html
+     */
     public String getHtml(){
         StringBuffer ret=new StringBuffer("");
         String xml="";
@@ -253,8 +438,8 @@ public class SelectFE extends WBContainerFE
     
     
     /**
-    * Set attributes to class according with the xml tag element
-    */ 
+     * Set attributes to class according with the xml tag element.
+     */ 
     public void setAttributes(){
         if(tag!=null){
             NamedNodeMap nnodemap=tag.getAttributes();
@@ -291,6 +476,11 @@ public class SelectFE extends WBContainerFE
     }
     
     
+       /**
+        * Gets the options.
+        * 
+        * @return the options
+        */
        private void getOptions(){
         Connection con=null;
         Statement st=null;
@@ -356,6 +546,12 @@ public class SelectFE extends WBContainerFE
     }
     
        
+    /**
+     * Cadena values.
+     * 
+     * @param cadena the cadena
+     * @return the iterator
+     */
     private Iterator cadenaValues(String cadena){
         ArrayList acoincide=new ArrayList();
         StringTokenizer st = new StringTokenizer(cadena,",");
@@ -370,8 +566,9 @@ public class SelectFE extends WBContainerFE
     }
     
     /**
-     * Manejo de Frameworks de JavaScript
-     * @param child
+     * Manejo de Frameworks de JavaScript.
+     * 
+     * @param child the new js framework attributes
      */
     private void setJsFrameworkAttributes(Element child){
             String jsFramework=getFormFE().getJsFrameWork();

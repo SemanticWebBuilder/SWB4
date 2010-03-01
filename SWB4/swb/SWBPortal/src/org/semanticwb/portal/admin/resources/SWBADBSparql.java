@@ -40,30 +40,37 @@ import org.semanticwb.SWBPlatform;
 
 
 
+// TODO: Auto-generated Javadoc
 /**
- * Resource to perform a SPARQL query
+ * Resource to perform a SPARQL query.
+ * 
  * @author juan.fernandez
  */
 public class SWBADBSparql extends GenericResource {
 
+    /** The log. */
     private Logger log=SWBUtils.getLogger(SWBADBSparql.class);
-    /**
-     *
-     */
+    
+    /** The Constant NL. */
     static public final String NL = System.getProperty("line.separator") ;
     
-    /** Creates a new instance of SWBADBSparql */
+    /**
+     * Creates a new instance of SWBADBSparql.
+     */
     public SWBADBSparql()
     {
     }
 
     /**
-     * Shows a form to place a SparQL query and get the result of this request
-     * @param request, parameters, input data
-     * @param response, an answer to the user request
-     * @param paramsRequest, a list of objects (Action, user, WebPage, ...)
+     * Shows a form to place a SparQL query and get the result of this request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
      * @throws SWBResourceException, a Resource Exception
      * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

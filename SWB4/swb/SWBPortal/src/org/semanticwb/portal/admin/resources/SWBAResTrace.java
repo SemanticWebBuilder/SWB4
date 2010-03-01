@@ -48,6 +48,7 @@ import java.io.*;
 import java.util.*;
 import org.semanticwb.model.User;
 
+// TODO: Auto-generated Javadoc
 /** Muestra el pool de conexiones a la base de datos seleccionada por el usuario
  * administrador.
  *
@@ -57,22 +58,28 @@ import org.semanticwb.model.User;
  */
 public class SWBAResTrace extends GenericResource {
     
-    /** Creates a new instance of WBADBQuery */
+    /**
+     * Creates a new instance of WBADBQuery.
+     */
     public SWBAResTrace() {
     }
     
     /**
-     * @throws SWBResourceException
+     * Inits the.
+     * 
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void init() throws SWBResourceException {
     }
     
     /**
-     * @param request
-     * @param response
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process action.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void processAction(HttpServletRequest request,
@@ -106,11 +113,13 @@ public class SWBAResTrace extends GenericResource {
     }
     
     /**
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,

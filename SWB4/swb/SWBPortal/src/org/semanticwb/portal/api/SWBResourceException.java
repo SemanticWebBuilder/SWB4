@@ -30,18 +30,31 @@ package org.semanticwb.portal.api;
 
 import org.semanticwb.SWBException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBResourceException.
+ * 
  * @author Jei
  */
 public class SWBResourceException extends SWBException
 {
 
+    /**
+     * Instantiates a new sWB resource exception.
+     * 
+     * @param msg the msg
+     */
     public SWBResourceException(String msg)
     {
         super(msg);
     }
 
+    /**
+     * Instantiates a new sWB resource exception.
+     * 
+     * @param msg the msg
+     * @param e the e
+     */
     public SWBResourceException(String msg, Exception e)
     {
         super(msg,e);

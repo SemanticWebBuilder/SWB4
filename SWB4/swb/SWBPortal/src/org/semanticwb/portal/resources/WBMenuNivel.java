@@ -47,28 +47,41 @@ import org.w3c.dom.Element;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WBMenuNivel.
+ * 
  * @author jorge.jimenez
  */
 public class WBMenuNivel extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WBMenuNivel.class);
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl;
+    
+    /** The web work path. */
     String webWorkPath = "/work";
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenuNivel/";
+    
+    /** The ancho. */
     private int ancho=10;
     
-    /** Creates a new instance of WBMenu */
+    /**
+     * Creates a new instance of WBMenu.
+     */
     public WBMenuNivel()
     {
     }
     
     /**
      * Asigna la información de la base de datos al recurso.
-     *
-     * @param     base  La información del recurso en memoria.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base)
@@ -101,12 +114,14 @@ public class WBMenuNivel extends GenericAdmResource
     
     
     /**
-     * Obtiene el resultado final del recurso en formato dom
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
@@ -250,6 +265,17 @@ public class WBMenuNivel extends GenericAdmResource
         return null;
     }
     
+    /**
+     * Adds the child.
+     * 
+     * @param dom the dom
+     * @param nodo the nodo
+     * @param topic the topic
+     * @param actual the actual
+     * @param nivel the nivel
+     * @param user the user
+     * @param currenttopic the currenttopic
+     */
     public void addChild(Document dom, Element nodo, WebPage topic, int actual, int nivel, User user, WebPage currenttopic)
     {
         if(nivel>=actual)
@@ -285,12 +311,13 @@ public class WBMenuNivel extends GenericAdmResource
     
     
     /**
-     * Obtiene el resultado final del recurso en formato xml
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el resultado final del recurso en formato xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
@@ -307,12 +334,13 @@ public class WBMenuNivel extends GenericAdmResource
     }
     
     /**
-     * Obtiene el formato final del recurso en formato html
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Obtiene el formato final del recurso en formato html.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 

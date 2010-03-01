@@ -24,8 +24,18 @@
 package org.semanticwb.model.comm;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Hotel.
+ */
 public class Hotel extends org.semanticwb.model.comm.base.HotelBase 
 {
+    
+    /**
+     * Instantiates a new hotel.
+     * 
+     * @param base the base
+     */
     public Hotel(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

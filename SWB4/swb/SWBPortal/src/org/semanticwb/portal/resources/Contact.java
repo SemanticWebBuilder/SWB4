@@ -39,13 +39,22 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Contact.
+ */
 public class Contact extends GenericAdmResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Banner.class);
 
+    /** The web work path. */
     private String webWorkPath= "/work";
 
     /**
-     * @param base
+     * Sets the resource base.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base) {
@@ -57,6 +66,9 @@ public class Contact extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         if(paramsRequest.getMode().equalsIgnoreCase("sendEmail")) {
@@ -66,6 +78,15 @@ public class Contact extends GenericAdmResource {
         }
     }
 
+    /**
+     * Do send email.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doSendEmail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
@@ -173,7 +194,10 @@ public class Contact extends GenericAdmResource {
 //        }
 //    }
 
-    @Override
+    /* (non-Javadoc)
+ * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
+ */
+@Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();

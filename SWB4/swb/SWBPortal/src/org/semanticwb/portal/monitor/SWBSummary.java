@@ -30,24 +30,48 @@ import java.lang.management.*;
 import java.util.*;
 import javax.management.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBSummary.
+ * 
  * @author serch
  */
 public class SWBSummary
 {
 
+    /** The class loading m bean. */
     private ClassLoadingMXBean classLoadingMBean = null;
+    
+    /** The compilation m bean. */
     private CompilationMXBean compilationMBean = null;
+    
+    /** The memory m bean. */
     private MemoryMXBean memoryMBean = null;
+    
+    /** The operating system m bean. */
     private OperatingSystemMXBean operatingSystemMBean = null;
+    
+    /** The runtime m bean. */
     private RuntimeMXBean runtimeMBean = null;
+    
+    /** The thread m bean. */
     private ThreadMXBean threadMBean = null;
+    
+    /** The sun operating system mx bean. */
     private com.sun.management.OperatingSystemMXBean sunOperatingSystemMXBean = null;
+    
+    /** The memory pool proxies. */
     private List<SWBLocalMemoryPool> memoryPoolProxies = null;
+    
+    /** The garbage collector m beans. */
     private List<GarbageCollectorMXBean> garbageCollectorMBeans = null;
+    
+    /** The prev process cpu time. */
     private long prevUpTime, prevProcessCpuTime;
 
+    /**
+     * Instantiates a new sWB summary.
+     */
     public SWBSummary()
     {
         classLoadingMBean = getClassLoadingMXBean();
@@ -68,6 +92,12 @@ public class SWBSummary
         }
     }
 
+    /**
+     * Gets the memory pool proxies.
+     * 
+     * @return the memory pool proxies
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Collection<SWBLocalMemoryPool> getMemoryPoolProxies()
             throws IOException
     {
@@ -100,6 +130,11 @@ public class SWBSummary
         return memoryPoolProxies;
     }
 
+    /**
+     * Gets the sample.
+     * 
+     * @return the sample
+     */
     public SWBSummaryData getSample()
     {
         SWBSummaryData ret = new SWBSummaryData();
@@ -161,6 +196,12 @@ public class SWBSummary
         return ret;
     }
 
+    /**
+     * Update cpu info.
+     * 
+     * @param data the data
+     * @return the float
+     */
     public float updateCPUInfo(SWBSummaryData data) {
         float cpuUsage = Float.MIN_VALUE;
 	    if (prevUpTime > 0L && data.upTime > prevUpTime) {
