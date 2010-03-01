@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DisplayObject.
+ */
 public class DisplayObject extends org.semanticwb.model.base.DisplayObjectBase {
+    
+    /**
+     * Instantiates a new display object.
+     * 
+     * @param base the base
+     */
     public DisplayObject(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

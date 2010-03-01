@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Language.
+ */
 public class Language extends LanguageBase {
+    
+    /**
+     * Instantiates a new language.
+     * 
+     * @param base the base
+     */
     public Language(SemanticObject base) {
         super(base);
     }

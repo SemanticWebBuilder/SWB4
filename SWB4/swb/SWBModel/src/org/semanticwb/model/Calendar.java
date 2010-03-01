@@ -39,19 +39,44 @@ import org.w3c.dom.NodeList;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Calendar.
+ */
 public class Calendar extends CalendarBase {
+    
+    /** The log. */
     private static Logger log    = SWBUtils.getLogger(Calendar.class);
+    
+    /** The m_dom. */
     private Document      m_dom  = null;
+    
+    /** The m_node. */
     private NodeList      m_node = null;
 
+    /**
+     * Instantiates a new calendar.
+     * 
+     * @param base the base
+     */
     public Calendar(SemanticObject base) {
         super(base);
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @return the dom
+     */
     public Document getDom() {
         return getSemanticObject().getDomProperty(swb_xml);
     }
 
+    /**
+     * Gets the node list.
+     * 
+     * @return the node list
+     */
     private NodeList getNodeList() {
         Document aux = getDom();
 
@@ -72,6 +97,11 @@ public class Calendar extends CalendarBase {
         return m_node;
     }
 
+    /**
+     * Checks if is on schedule.
+     * 
+     * @return true, if is on schedule
+     */
     public boolean isOnSchedule() {
         boolean  ret   = false;
         Date     today = new Date();
@@ -100,6 +130,14 @@ public class Calendar extends CalendarBase {
         return ret;
     }
 
+    /**
+     * Eval.
+     * 
+     * @param today the today
+     * @param interval the interval
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     private boolean eval(Date today, Node interval) throws Exception {
         boolean ret     = true;
         Date    inidate = null;
@@ -213,10 +251,13 @@ public class Calendar extends CalendarBase {
     }
 
     /**
-     * @param inidate
-     * @param today
-     * @param iteration
-     * @throws java.lang.Exception
+     * Eval iteration.
+     * 
+     * @param inidate the inidate
+     * @param today the today
+     * @param iteration the iteration
+     * @return true, if successful
+     * @throws Exception the exception
      * @return
      */
     private boolean evalIteration(Date inidate, Date today, Node iteration) throws Exception {
@@ -247,10 +288,13 @@ public class Calendar extends CalendarBase {
     }
 
     /**
-     * @param inidate
-     * @param today
-     * @param element
-     * @throws java.lang.Exception
+     * Eval element.
+     * 
+     * @param inidate the inidate
+     * @param today the today
+     * @param element the element
+     * @return true, if successful
+     * @throws Exception the exception
      * @return
      */
     private boolean evalElement(Date inidate, Date today, Node element) throws Exception {

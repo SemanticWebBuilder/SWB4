@@ -30,12 +30,24 @@ import org.semanticwb.platform.SemanticProperty;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Label.
+ */
 public class Label extends org.semanticwb.model.base.LabelBase {
 
+    /**
+     * Instantiates a new label.
+     * 
+     * @param base the base
+     */
     public Label(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
             String mode, String lang) {

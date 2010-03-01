@@ -38,23 +38,46 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FormView.
+ */
 public class FormView extends FormViewBase {
+    
+    /** The Constant MODE_CREATE. */
     public static final String MODE_CREATE  = "create";
+    
+    /** The Constant MODE_EDIT. */
     public static final String MODE_EDIT    = "edit";
+    
+    /** The Constant MODE_VIEW. */
     public static final String MODE_VIEW    = "view";
+    
+    /** The ont. */
     private SemanticOntology   ont          = SWBPlatform.getSemanticMgr().getOntology();
+    
+    /** The property mode. */
     private SemanticProperty   propertyMode =
         new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI + "propertyMode"));
+    
+    /** The property ref. */
     private SemanticProperty propertyRef = new SemanticProperty(ont.getRDFOntModel().getProperty(SemanticVocabulary.URI
                                                + "propertyRef"));
 
+    /**
+     * Instantiates a new form view.
+     * 
+     * @param base the base
+     */
     public FormView(SemanticObject base) {
         super(base);
     }
 
     /**
-     * Regrasa Mapa con las propiedades como llave y el modo relacionado como valor
+     * Regrasa Mapa con las propiedades como llave y el modo relacionado como valor.
+     * 
      * @param mode (modo por default de la vista)
+     * @return the property map
      * @return
      */
     public Map<SemanticProperty, String> getPropertyMap(String mode) {

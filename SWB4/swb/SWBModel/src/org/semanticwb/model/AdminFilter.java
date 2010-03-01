@@ -33,27 +33,64 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AdminFilter.
+ */
 public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
 
+    /** The ACTIO n_ add. */
     public static String ACTION_ADD = "add";
+    
+    /** The ACTIO n_ delete. */
     public static String ACTION_DELETE = "delete";
+    
+    /** The ACTIO n_ edit. */
     public static String ACTION_EDIT = "edit";
+    
+    /** The ACTIO n_ active. */
     public static String ACTION_ACTIVE = "active";
+    
+    /** The pages. */
     private ArrayList<WebPage> pages = null;
+    
+    /** The vpages. */
     private ArrayList<WebPage> vpages = null;
+    
+    /** The classes. */
     private HashMap<SemanticClass, ArrayList> classes = null;
+    
+    /** The sobjects. */
     private ArrayList<String> sobjects = null;
+    
+    /** The vsobjects. */
     private ArrayList<String> vsobjects = null;
+    
+    /** The hnodes. */
     private HashMap<String, ArrayList<HerarquicalNode>> hnodes = null;
+    
+    /** The sobject classes. */
     private ArrayList<SemanticClass> sobjectClasses = null;
+    
+    /** The all classes. */
     private boolean allClasses = false;
+    
+    /** The all sites. */
     private boolean allSites = false;
 
+    /**
+     * Instantiates a new admin filter.
+     * 
+     * @param base the base
+     */
     public AdminFilter(org.semanticwb.platform.SemanticObject base) {
         super(base);
         init();
     }
 
+    /**
+     * Inits the.
+     */
     public void init() {
         allClasses = false;
         allSites = false;
@@ -246,6 +283,11 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
 
     }
 
+    /**
+     * Adds the menu.
+     * 
+     * @param page the page
+     */
     private void addMenu(WebPage page) {
         if (page != null && !vpages.contains(page)) {
             vpages.add(page);
@@ -253,6 +295,13 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         }
     }
 
+    /**
+     * Have access to herarquical node.
+     * 
+     * @param modelUri the model uri
+     * @param node the node
+     * @return true, if successful
+     */
     public boolean haveAccessToHerarquicalNode(String modelUri, HerarquicalNode node) {
         boolean ret = false;
         if (!allSites) {
@@ -260,6 +309,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                 ret = true;
             } else if (!vsobjects.contains(modelUri)) {
                 //no esta seleccionado
+                ret=false;
             } else {
                 ArrayList<HerarquicalNode> arr = hnodes.get(modelUri);
                 if (arr != null) {
@@ -272,6 +322,12 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /**
+     * Adds the object class.
+     * 
+     * @param cls the cls
+     * @return true, if successful
+     */
     private boolean addObjectClass(SemanticClass cls) {
         boolean ret = false;
         if (!sobjectClasses.contains(cls)) {
@@ -288,6 +344,12 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /**
+     * Have access to semantic object parent.
+     * 
+     * @param obj the obj
+     * @return true, if successful
+     */
     private boolean haveAccessToSemanticObjectParent(SemanticObject obj) {
         boolean ret = false;
         Iterator<SemanticObject> it = obj.listHerarquicalParents();
@@ -311,6 +373,12 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /**
+     * Have access to semantic object.
+     * 
+     * @param obj the obj
+     * @return true, if successful
+     */
     public boolean haveAccessToSemanticObject(SemanticObject obj) {
         boolean ret = false;
         if (!allSites) {
@@ -319,6 +387,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                 ret = true;
             } else if (!vsobjects.contains(model.getURI())) {
                 //no esta seleccionado
+                ret=false;
             } else if (sobjects.contains(obj.getURI())) {
                 ret = true;
             } else if (vsobjects.contains(obj.getURI())) {
@@ -334,6 +403,13 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /**
+     * Have class action.
+     * 
+     * @param cls the cls
+     * @param act the act
+     * @return true, if successful
+     */
     public boolean haveClassAction(SemanticClass cls, String act) {
         boolean ret = false;
         if (!allClasses) {
@@ -351,6 +427,12 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /**
+     * Have access to web page.
+     * 
+     * @param page the page
+     * @return true, if successful
+     */
     public boolean haveAccessToWebPage(WebPage page) {
         boolean ret = false;
         //System.out.print("haveAccessToWebPage:"+page);
@@ -377,12 +459,20 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.AdminFilterBase#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String value) {
         super.setXml(value);
         init();
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @return the dom
+     */
     public Document getDom() {
         return getSemanticObject().getDomProperty(swb_xml);
     }

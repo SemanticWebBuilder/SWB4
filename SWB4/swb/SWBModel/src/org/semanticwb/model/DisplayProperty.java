@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DisplayProperty.
+ */
 public class DisplayProperty extends DisplayPropertyBase {
+    
+    /**
+     * Instantiates a new display property.
+     * 
+     * @param base the base
+     */
     public DisplayProperty(SemanticObject base) {
         super(base);
     }

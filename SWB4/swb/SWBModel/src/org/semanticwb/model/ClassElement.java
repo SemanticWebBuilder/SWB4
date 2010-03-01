@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -23,25 +22,33 @@
  */
 package org.semanticwb.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ClassElement.
+ */
 public class ClassElement extends org.semanticwb.model.base.ClassElementBase
-{
+{    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ClassElement.class);
 
+    /**
+     * Instantiates a new class element.
+     * 
+     * @param base the base
+     */
     public ClassElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.Text#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -56,6 +63,9 @@ public class ClassElement extends org.semanticwb.model.base.ClassElementBase
         return super.renderElement(request, obj, prop, type, mode, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
             throws FormValidateException {

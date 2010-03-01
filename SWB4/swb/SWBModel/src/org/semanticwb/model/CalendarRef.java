@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CalendarRef.
+ */
 public class CalendarRef extends org.semanticwb.model.base.CalendarRefBase {
+    
+    /**
+     * Instantiates a new calendar ref.
+     * 
+     * @param base the base
+     */
     public CalendarRef(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }

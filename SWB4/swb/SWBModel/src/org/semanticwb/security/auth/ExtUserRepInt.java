@@ -25,17 +25,51 @@ package org.semanticwb.security.auth;
 
 import org.semanticwb.model.User;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ExtUserRepInt.
+ * 
  * @author serch
  */
 public abstract class ExtUserRepInt {
+    
+    /**
+     * Sync users.
+     */
     public abstract void syncUsers();
+    
+    /**
+     * Validate credential.
+     * 
+     * @param login the login
+     * @param credential the credential
+     * @return true, if successful
+     */
     public abstract boolean validateCredential(String login, Object credential);
+    
+    /**
+     * Sync user.
+     * 
+     * @param login the login
+     * @param user the user
+     * @return true, if successful
+     */
     public abstract boolean syncUser(String login, User user);
+    
+    /**
+     * Do redirect.
+     * 
+     * @return true, if successful
+     */
     public boolean doRedirect(){
         return false;
     }
+    
+    /**
+     * Gets the redirect url.
+     * 
+     * @return the redirect url
+     */
     public String getRedirectURL(){
         return null;
     }

@@ -28,13 +28,29 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Rule.
+ */
 public class Rule extends RuleBase {
+    
+    /** The rulemgr. */
     private static SWBRuleMgr rulemgr = null;
 
+    /**
+     * Instantiates a new rule.
+     * 
+     * @param base the base
+     */
     public Rule(SemanticObject base) {
         super(base);
     }
 
+    /**
+     * Gets the rule mgr.
+     * 
+     * @return the rule mgr
+     */
     public static SWBRuleMgr getRuleMgr() {
         if (rulemgr == null) {
             rulemgr = new SWBRuleMgr();
@@ -44,6 +60,9 @@ public class Rule extends RuleBase {
         return rulemgr;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.RuleBase#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         super.setXml(xml);
