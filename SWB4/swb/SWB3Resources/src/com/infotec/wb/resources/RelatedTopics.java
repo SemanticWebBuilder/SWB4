@@ -73,6 +73,7 @@ public class RelatedTopics extends GenericAdmResource
      * @param base La informaciÛn del recurso en memoria.
      * @throws AFException
      */
+    @Override
     public void setResourceBase(Resource base)
     {
         try  { super.setResourceBase(base); }
@@ -81,7 +82,8 @@ public class RelatedTopics extends GenericAdmResource
         {
             try
             {
-                tpl = SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())));
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                //tpl = SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim())));
                 path=SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
             }
             catch(Exception e) { log.error("Error while loading resource template: "+base.getId(), e); }
@@ -234,7 +236,7 @@ public class RelatedTopics extends GenericAdmResource
         try
         {
             Document dom =getDom(request, response, reqParams);
-            //System.out.println(AFUtils.getInstance().DomtoXml(dom));
+            System.out.println(SWBUtils.XML.domToXml(dom));
             if(dom != null)  response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
         }
         catch(Exception e) { log.error(e); }
