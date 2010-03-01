@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 
 /**
  * @author victor.lorenzana
@@ -78,11 +79,11 @@ public class GraphElement extends CustomNode
     public function mouseClicked( e: MouseEvent )
     {
         //println("onMouseClicked node:{e}");
-        if(e.clickCount >= 2)
+        /*if(e.clickCount >= 2 and e.button==MouseButton.PRIMARY)
         {
             //println("starEditing");
-            text.startEditing();
-        }
+            //text.startEditing();
+        }*/
     }
 
 

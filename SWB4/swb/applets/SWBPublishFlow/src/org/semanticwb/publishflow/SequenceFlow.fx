@@ -5,6 +5,8 @@
  */
 
 package org.semanticwb.publishflow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.MouseButton;
 
 /**
  * @author victor.lorenzana
@@ -13,4 +15,13 @@ package org.semanticwb.publishflow;
 public class SequenceFlow extends ConnectionObject
 {
 
+
+    public override function mousePressed(e: MouseEvent) : Void
+    {
+        //println("onMouseClicked node:{e}");
+        if(e.clickCount >= 2 and e.button==MouseButton.PRIMARY)
+        {
+               
+        }
+    }
 }

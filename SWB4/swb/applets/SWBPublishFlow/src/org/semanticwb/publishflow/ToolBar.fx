@@ -16,13 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
-import applets.commons.JSONObject;
-import applets.commons.JSONArray;
-import javafx.stage.AppletStageExtension;
-import javafx.stage.Alert;
 import javafx.stage.Stage;
 import applets.commons.WBConnection;
-import applets.commons.WBXMLParser;
 
 public var counter: Integer;
 public var conn: WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(), FX.getArgument(WBConnection.PRM_CGIPATH).toString(), FX.getProperty("javafx.application.codebase"));
