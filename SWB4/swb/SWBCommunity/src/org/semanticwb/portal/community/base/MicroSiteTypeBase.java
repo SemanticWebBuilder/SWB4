@@ -1,103 +1,109 @@
 package org.semanticwb.portal.community.base;
 
 
-public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Templateable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Templateable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteUtil");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasMicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasMicroSiteUtil");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_microSiteClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#microSiteClass");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteType");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteType");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteUtil");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasMicroSiteUtil=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasMicroSiteUtil");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_microSiteClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#microSiteClass");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_MicroSiteType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteType");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#MicroSiteType");
+
     public static class ClassMgr
     {
 
-       public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypes(org.semanticwb.model.SWBModel model)
-       {
-           java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypes(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType>(it, true);
+        }
 
-       public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypes()
-       {
-           java.util.Iterator it=sclass.listInstances();
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypes()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType>(it, true);
+        }
 
-       public static org.semanticwb.portal.community.MicroSiteType getMicroSiteType(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.portal.community.MicroSiteType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-       }
+        public static org.semanticwb.portal.community.MicroSiteType getMicroSiteType(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.portal.community.MicroSiteType)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
 
-       public static org.semanticwb.portal.community.MicroSiteType createMicroSiteType(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.portal.community.MicroSiteType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-       }
+        public static org.semanticwb.portal.community.MicroSiteType createMicroSiteType(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.portal.community.MicroSiteType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        }
 
-       public static void removeMicroSiteType(String id, org.semanticwb.model.SWBModel model)
-       {
-           model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
-       }
+        public static void removeMicroSiteType(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
 
-       public static boolean hasMicroSiteType(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (getMicroSiteType(id, model)!=null);
-       }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByTemplate(org.semanticwb.model.Template hastemplate,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasTemplate, hastemplate.getSemanticObject()));
-       return it;
-   }
+        public static boolean hasMicroSiteType(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getMicroSiteType(id, model)!=null);
+        }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByTemplate(org.semanticwb.model.Template hastemplate)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(hastemplate.getSemanticObject().getModel().listSubjects(swb_hasTemplate,hastemplate.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil hasmicrositeutil,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasMicroSiteUtil, hasmicrositeutil.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByTemplate(org.semanticwb.model.Template hastemplate,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_hasTemplate, hastemplate.getSemanticObject()));
+            return it;
+        }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil hasmicrositeutil)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(hasmicrositeutil.getSemanticObject().getModel().listSubjects(swbcomm_hasMicroSiteUtil,hasmicrositeutil.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByTemplate(org.semanticwb.model.Template hastemplate)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(hastemplate.getSemanticObject().getModel().listSubjects(swb_hasTemplate,hastemplate.getSemanticObject()));
+            return it;
+        }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByModifiedBy(org.semanticwb.model.User modifiedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteClass(org.semanticwb.portal.community.MicroSiteClass micrositeclass,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_microSiteClass, micrositeclass.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil hasmicrositeutil,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_hasMicroSiteUtil, hasmicrositeutil.getSemanticObject()));
+            return it;
+        }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteClass(org.semanticwb.portal.community.MicroSiteClass micrositeclass)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(micrositeclass.getSemanticObject().getModel().listSubjects(swbcomm_microSiteClass,micrositeclass.getSemanticObject()));
-       return it;
-   }
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil hasmicrositeutil)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(hasmicrositeutil.getSemanticObject().getModel().listSubjects(swbcomm_hasMicroSiteUtil,hasmicrositeutil.getSemanticObject()));
+            return it;
+        }
 
-   public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByCreator(org.semanticwb.model.User creator)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByModifiedBy(org.semanticwb.model.User modifiedby)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteClass(org.semanticwb.portal.community.MicroSiteClass micrositeclass,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swbcomm_microSiteClass, micrositeclass.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByMicroSiteClass(org.semanticwb.portal.community.MicroSiteClass micrositeclass)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(micrositeclass.getSemanticObject().getModel().listSubjects(swbcomm_microSiteClass,micrositeclass.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.community.MicroSiteType> listMicroSiteTypeByCreator(org.semanticwb.model.User creator)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.community.MicroSiteType> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
+            return it;
+        }
     }
 
     public MicroSiteTypeBase(org.semanticwb.platform.SemanticObject base)
@@ -112,8 +118,12 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
 
     public boolean hasTemplate(org.semanticwb.model.Template template)
     {
-        if(template==null)return false;
-        return getSemanticObject().hasObjectProperty(swb_hasTemplate,template.getSemanticObject());
+        boolean ret=false;
+        if(template!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasTemplate,template.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addTemplate(org.semanticwb.model.Template value)
@@ -130,7 +140,6 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().removeObjectProperty(swb_hasTemplate,template.getSemanticObject());
     }
-
 
     public org.semanticwb.model.Template getTemplate()
     {
@@ -160,8 +169,12 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
 
     public boolean hasMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil micrositeutil)
     {
-        if(micrositeutil==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasMicroSiteUtil,micrositeutil.getSemanticObject());
+        boolean ret=false;
+        if(micrositeutil!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasMicroSiteUtil,micrositeutil.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addMicroSiteUtil(org.semanticwb.portal.community.MicroSiteUtil value)
@@ -178,7 +191,6 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasMicroSiteUtil,micrositeutil.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.MicroSiteUtil getMicroSiteUtil()
     {
@@ -210,7 +222,6 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
-
 
     public org.semanticwb.model.User getModifiedBy()
     {
@@ -268,7 +279,6 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
         getSemanticObject().removeProperty(swbcomm_microSiteClass);
     }
 
-
     public org.semanticwb.portal.community.MicroSiteClass getMicroSiteClass()
     {
          org.semanticwb.portal.community.MicroSiteClass ret=null;
@@ -289,7 +299,6 @@ public abstract class MicroSiteTypeBase extends org.semanticwb.model.SWBClass im
     {
         getSemanticObject().removeProperty(swb_creator);
     }
-
 
     public org.semanticwb.model.User getCreator()
     {

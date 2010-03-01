@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class EventResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class EventResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_EventElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasEvent");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_EventResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_EventElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasEvent");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_EventResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#EventResource");
 
     public EventResourceBase()
     {
@@ -24,8 +24,12 @@ public class EventResourceBase extends org.semanticwb.portal.community.Community
 
     public boolean hasEvent(org.semanticwb.portal.community.EventElement eventelement)
     {
-        if(eventelement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
+        boolean ret=false;
+        if(eventelement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addEvent(org.semanticwb.portal.community.EventElement value)
@@ -42,7 +46,6 @@ public class EventResourceBase extends org.semanticwb.portal.community.Community
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasEvent,eventelement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.EventElement getEvent()
     {

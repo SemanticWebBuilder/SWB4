@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class VideoResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class VideoResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_VideoElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasVideo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasVideo");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_VideoResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_VideoElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasVideo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasVideo");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_VideoResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#VideoResource");
 
     public VideoResourceBase()
     {
@@ -24,8 +24,12 @@ public class VideoResourceBase extends org.semanticwb.portal.community.Community
 
     public boolean hasVideo(org.semanticwb.portal.community.VideoElement videoelement)
     {
-        if(videoelement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasVideo,videoelement.getSemanticObject());
+        boolean ret=false;
+        if(videoelement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasVideo,videoelement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addVideo(org.semanticwb.portal.community.VideoElement value)
@@ -42,7 +46,6 @@ public class VideoResourceBase extends org.semanticwb.portal.community.Community
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasVideo,videoelement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.VideoElement getVideo()
     {

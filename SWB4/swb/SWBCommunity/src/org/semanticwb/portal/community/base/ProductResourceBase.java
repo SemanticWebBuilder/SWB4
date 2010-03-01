@@ -1,12 +1,12 @@
 package org.semanticwb.portal.community.base;
 
 
-public class ProductResourceBase extends org.semanticwb.portal.community.CommunityResource 
+public abstract class ProductResourceBase extends org.semanticwb.portal.community.CommunityResource 
 {
-       public static final org.semanticwb.platform.SemanticClass swbcomm_ProductElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductElement");
-       public static final org.semanticwb.platform.SemanticProperty swbcomm_hasProduct=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasProduct");
-       public static final org.semanticwb.platform.SemanticClass swbcomm_ProductResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductResource");
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductResource");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_ProductElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductElement");
+    public static final org.semanticwb.platform.SemanticProperty swbcomm_hasProduct=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/community#hasProduct");
+    public static final org.semanticwb.platform.SemanticClass swbcomm_ProductResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductResource");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/community#ProductResource");
 
     public ProductResourceBase()
     {
@@ -24,8 +24,12 @@ public class ProductResourceBase extends org.semanticwb.portal.community.Communi
 
     public boolean hasProduct(org.semanticwb.portal.community.ProductElement productelement)
     {
-        if(productelement==null)return false;
-        return getSemanticObject().hasObjectProperty(swbcomm_hasProduct,productelement.getSemanticObject());
+        boolean ret=false;
+        if(productelement!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swbcomm_hasProduct,productelement.getSemanticObject());
+        }
+        return ret;
     }
 
     public void addProduct(org.semanticwb.portal.community.ProductElement value)
@@ -42,7 +46,6 @@ public class ProductResourceBase extends org.semanticwb.portal.community.Communi
     {
         getSemanticObject().removeObjectProperty(swbcomm_hasProduct,productelement.getSemanticObject());
     }
-
 
     public org.semanticwb.portal.community.ProductElement getProduct()
     {
