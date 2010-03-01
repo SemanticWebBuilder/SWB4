@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VersionInfo.
+ */
 public class VersionInfo extends VersionInfoBase {
+    
+    /**
+     * Instantiates a new version info.
+     * 
+     * @param base the base
+     */
     public VersionInfo(SemanticObject base) {
         super(base);
     }
