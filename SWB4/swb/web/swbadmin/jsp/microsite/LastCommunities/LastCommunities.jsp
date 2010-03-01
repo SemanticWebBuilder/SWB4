@@ -10,7 +10,6 @@
             WebSite site = webpage.getWebSite();
             TreeSet<SemanticObject> setVals = new TreeSet<SemanticObject>(new Comparator()
             {
-
                 public int compare(Object arg0, Object arg1)
                 {
                     if (arg0 != null && arg1 != null)
@@ -18,7 +17,7 @@
 
                         SemanticObject obj0 = (SemanticObject) arg0;
                         SemanticObject obj1 = (SemanticObject) arg1;
-                        return obj1.getProperty(org.semanticwb.model.comm.MicroSite.swb_created).compareTo(obj0.getProperty(org.semanticwb.model.comm.MicroSite.swb_created));
+                        return obj1.getProperty(MicroSite.swb_created).compareTo(obj0.getProperty(MicroSite.swb_created));
                     }
                     else
                     {
