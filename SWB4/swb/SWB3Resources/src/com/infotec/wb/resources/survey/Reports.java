@@ -611,7 +611,7 @@ public class Reports
             java.sql.Timestamp tempIni = new java.sql.Timestamp(System.currentTimeMillis());
             java.sql.Timestamp tempFin = tempIni;
             
-            if(request.getParameter("fecha_ini").length()>0)
+            if(request.getParameter("fecha_ini").trim().length()>0)
             {
                 String fecha_ini = request.getParameter("fecha_ini");
                 int year_i;
@@ -635,7 +635,7 @@ public class Reports
                 
             }
             
-            if(null!=request.getParameter("fecha_fin")&&request.getParameter("fecha_fin").length()>0)
+            if(null!=request.getParameter("fecha_fin")&&request.getParameter("fecha_fin").trim().length()>0)
             {
                 strFecha_fin = " and created <= ? ";
                 String fecha_fin = request.getParameter("fecha_fin");
@@ -1473,6 +1473,9 @@ public class Reports
                             tempReview +
                             strFecha_ini +
                             strFecha_fin);
+
+                    System.out.println(strSQL3);
+
                     conn3 = SWBUtils.DB.getDefaultConnection();
                     pst3 = conn3.prepareStatement(strSQL3);
                     pst3.setLong(1,Long.parseLong(request.getParameter("surveyid")));
