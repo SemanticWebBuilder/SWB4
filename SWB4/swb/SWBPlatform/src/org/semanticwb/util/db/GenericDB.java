@@ -40,46 +40,88 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GenericDB.
+ * 
  * @author juan.fernandez
  */
 public class GenericDB {
 
+    /** The log. */
     static Logger log=SWBUtils.getLogger(GenericDB.class);
+    
+    /** The Constant DB_MYSQL. */
     static final String DB_MYSQL = "MYSQL";
+    
+    /** The Constant DB_ORACLE. */
     static final String DB_ORACLE = "ORACLE";
+    
+    /** The Constant DB_INFORMIX. */
     static final String DB_INFORMIX = "INFORMIX";
+    
+    /** The Constant DB_SQLSERVER. */
     static final String DB_SQLSERVER = "SQLSERVER";
+    
+    /** The Constant DB_POSTGRESSQL. */
     static final String DB_POSTGRESSQL = "POSTGRESSQL";
+    
+    /** The Constant DB_HSSQL. */
     static final String DB_HSSQL = "HSQL";
+    
+    /** The Constant DB_POINTBASE. */
     static final String DB_POINTBASE = "POINTBASE";
+    
+    /** The Constant DB_SYBASE. */
     static final String DB_SYBASE = "SYBASE"; //
+    
+    /** The Constant DB_DB2. */
     static final String DB_DB2 = "DB2";
     
     //static final String SQL_ARRAY = "ARRAY";
     //static final String SQL_TEXT = "TEXT";
+    /** The Constant SQL_CHAR. */
     static final String SQL_CHAR = "CHAR";
+    
+    /** The Constant SQL_VARCHAR. */
     static final String SQL_VARCHAR = "VARCHAR";
     //static final String SQL_LONGVARCHAR = "LONGVARCHAR";
+    /** The Constant SQL_NUMERIC. */
     static final String SQL_NUMERIC = "NUMERIC";
     //static final String SQL_DECIMAL = "DECIMAL";
+    /** The Constant SQL_BIT. */
     static final String SQL_BIT = "BIT";
+    
+    /** The Constant SQL_BLOB. */
     static final String SQL_BLOB = "BLOB";
     //static final String SQL_TINYINT = "TINYINT";
+    /** The Constant SQL_SMALLINT. */
     static final String SQL_SMALLINT = "SMALLINT";
+    
+    /** The Constant SQL_INTEGER. */
     static final String SQL_INTEGER = "INTEGER";
+    
+    /** The Constant SQL_BIGINT. */
     static final String SQL_BIGINT = "BIGINT";
     //static final String SQL_REAL = "REAL";
+    /** The Constant SQL_FLOAT. */
     static final String SQL_FLOAT = "FLOAT";
+    
+    /** The Constant SQL_DOUBLE. */
     static final String SQL_DOUBLE = "DOUBLE";
     //static final String SQL_BINARY = "BINARY";
     //static final String SQL_VARBINARY = "VARBINARY";
     //static final String SQL_LONGVARBINARY = "LONGVARBINARY";
+    /** The Constant SQL_DATE. */
     static final String SQL_DATE = "DATE";
+    
+    /** The Constant SQL_TIME. */
     static final String SQL_TIME = "TIME";
+    
+    /** The Constant SQL_TIMESTAMP. */
     static final String SQL_TIMESTAMP = "TIMESTAMP";
     //static final String SQL_BOOLEAN = "BOOLEAN";
+    /** The Constant SQL_CLOB. */
     static final String SQL_CLOB = "CLOB";
     //static final String SQL_DATALINK = "DATALINK";
     //static final String SQL_DISTINCT = "DISTINCT";
@@ -89,22 +131,51 @@ public class GenericDB {
     //static final String SQL_REF = "REF";
     //static final String SQL_STRUCT = "STRUCT";
     
+    /** The Constant PK. */
     private static final String PK = "PRIMARYKEY_INI";
+    
+    /** The Constant COLUMN. */
     private static final String COLUMN = "COLUMN";
+    
+    /** The Constant INDTYPE. */
     private static final String INDTYPE = "INDEX_TYPE";
+    
+    /** The Constant INDORDER. */
     private static final String INDORDER = "INDEX_ORDER";
+    
+    /** The Constant PRIMARYKEY. */
     private static final String PRIMARYKEY = "#COLUMN_NAME#";
+    
+    /** The Constant FK. */
     private static final String FK = "ALTER TABLE #TABLE_NAME# ADD CONSTRAINT #CNAME# ";
+    
+    /** The Constant FOREIGNKEY. */
     private static final String FOREIGNKEY = "FOREIGN KEY ( ";
+    
+    /** The Constant FK_COLUMN. */
     private static final String FK_COLUMN = "#COLUMN_NAME#";
+    
+    /** The Constant FK_REFERENCE. */
     private static final String FK_REFERENCE = "REFERENCES #TABLE_NAME# ( ";
+    
+    /** The Constant INDEX_INI. */
     private static final String INDEX_INI = "CREATE #INDEX_TYPE# INDEX #INDEX_NAME# ON #TABLE_NAME# ( ";
+    
+    /** The Constant INDEX. */
     private static final String INDEX = "#COLUMN_NAME# #ORDER#";
     
+    /** The hm dialect. */
     private HashMap hmDialect=null;
+    
+    /** The hm sql type. */
     private HashMap hmSQLType=null;
+    
+    /** The hm syntax. */
     private HashMap hmSyntax=null;
 
+    /**
+     * Instantiates a new generic db.
+     */
     public GenericDB() {
         if (null == hmDialect) {
             loadDialects();
@@ -117,6 +188,14 @@ public class GenericDB {
         }
     }
 
+    /**
+     * Gets the sQL script.
+     * 
+     * @param XML the xML
+     * @param dbname the dbname
+     * @return the sQL script
+     * @throws SQLException the sQL exception
+     */
     public String getSQLScript(String XML, String dbname) throws SQLException {
         String retSQL = null;
         Document dom = null;
@@ -164,6 +243,15 @@ public class GenericDB {
         return retSQL;
     }
 
+    /**
+     * Execute sql script.
+     * 
+     * @param XML the xML
+     * @param dbname the dbname
+     * @param poolname the poolname
+     * @return true, if successful
+     * @throws SQLException the sQL exception
+     */
     public boolean executeSQLScript(String XML, String dbname, String poolname) throws SQLException {
 
         Connection conn = null;
@@ -220,6 +308,13 @@ public class GenericDB {
         return true;
     }
     
+    /**
+     * Gets the column syntax.
+     * 
+     * @param dbtype the dbtype
+     * @param attr the attr
+     * @return the column syntax
+     */
     public String getColumnSyntax(String dbtype, String attr) 
     {
         if(null==hmSyntax)
@@ -229,6 +324,12 @@ public class GenericDB {
         return (String) ((HashMap) hmSyntax.get(dbtype.toUpperCase())).get(attr);
     }
 
+    /**
+     * Gets the sQL type.
+     * 
+     * @param coltype the coltype
+     * @return the sQL type
+     */
     public int getSQLType(String coltype) {
         if(null==hmSQLType)
         {
@@ -237,6 +338,12 @@ public class GenericDB {
         return hmSQLType.get(coltype) != null ? Integer.parseInt((String) hmSQLType.get(coltype)) : -1;
     }
 
+    /**
+     * Gets the dB dialect.
+     * 
+     * @param DBName the dB name
+     * @return the dB dialect
+     */
     public String getDBDialect(String DBName) {
         if(null==hmDialect)
         {
@@ -245,6 +352,12 @@ public class GenericDB {
         return (String) hmDialect.get(DBName.toUpperCase());
     }
     
+    /**
+     * Validate xml.
+     * 
+     * @param xml the xml
+     * @return true, if successful
+     */
     private boolean validateXML(String xml)
     {
         boolean bOk=false;
@@ -259,6 +372,14 @@ public class GenericDB {
         return bOk;
     }
     
+    /**
+     * Gets the schema.
+     * 
+     * @param strXML the str xml
+     * @param DBName the dB name
+     * @return the schema
+     * @throws Exception the exception
+     */
     public String getSchema(String strXML, String DBName) throws Exception {
         StringBuffer strBuff = new StringBuffer();
         String LFCR = " ";
@@ -757,6 +878,11 @@ public class GenericDB {
         return strBuff.toString();
     }
 
+    /**
+     * Gets the dialects.
+     * 
+     * @return the dialects
+     */
     public HashMap getDialects()
     {
         if(hmDialect==null)
@@ -766,6 +892,9 @@ public class GenericDB {
         return hmDialect;
     }
     
+    /**
+     * Load dialects.
+     */
     private void loadDialects()
     {
         hmDialect = new HashMap();
@@ -781,6 +910,9 @@ public class GenericDB {
         hmDialect.put(DB_DB2, "org.hibernate.dialect.DB2Dialect");
     }
     
+    /**
+     * Load sql types.
+     */
     private void loadSQLTypes()
     {
         hmSQLType = new HashMap();
@@ -818,6 +950,9 @@ public class GenericDB {
         hmSQLType.put(SQL_VARCHAR, Integer.toString(java.sql.Types.VARCHAR));
     }
     
+    /**
+     * Load syntax.
+     */
     private void loadSyntax() {
         hmSyntax = new HashMap();
 

@@ -30,20 +30,35 @@ import java.util.Enumeration;
 import java.util.Properties;
 import org.semanticwb.base.SWBAppObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBStartup.
+ * 
  * @author serch
  */
 public class SWBStartup {
+
+/** The objs. */
 private ArrayList objs = null;
+
+/** The log. */
 private static Logger log=SWBUtils.getLogger(SWBStartup.class);
 
-    /** Creates a new instance of WBStartup */
+    /**
+     * Creates a new instance of WBStartup.
+     * 
+     * @param objs the objs
+     */
     public SWBStartup(ArrayList objs)
     {
         this.objs = objs;
     }
 
+    /**
+     * Load.
+     * 
+     * @param name the name
+     */
     public void load(String name)
     {
         Properties startup = new Properties();

@@ -29,13 +29,26 @@ import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ObjectDecoder.
+ */
 public class ObjectDecoder {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ObjectDecoder.class);
     
+    /** The name. */
     private String name=null;
+    
+    /** The list. */
     private ArrayList list=new ArrayList();    
     
-    /** Creates a new instance of ObjectDecoder */
+    /**
+     * Creates a new instance of ObjectDecoder.
+     * 
+     * @param str the str
+     */
     public ObjectDecoder(String str)
     {
         StringBuffer aux=new StringBuffer();
@@ -78,11 +91,22 @@ public class ObjectDecoder {
         }
     }
     
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
     
+    /**
+     * Replace string chars.
+     * 
+     * @param str the str
+     * @return the string
+     */
     public String replaceStringChars(String str)
     {
         if(str.equals("_NULL_"))return null;
@@ -114,11 +138,23 @@ public class ObjectDecoder {
         return ret.toString();
     }    
     
+    /**
+     * Gets the int.
+     * 
+     * @param pos the pos
+     * @return the int
+     */
     public int getInt(int pos)
     {
         return Integer.parseInt((String)list.get(pos));
     }
     
+    /**
+     * Gets the string.
+     * 
+     * @param pos the pos
+     * @return the string
+     */
     public String getString(int pos)
     {
         try
@@ -130,11 +166,23 @@ public class ObjectDecoder {
         return null;
     }
     
+    /**
+     * Gets the long.
+     * 
+     * @param pos the pos
+     * @return the long
+     */
     public long getLong(int pos)
     {
         return Long.parseLong((String)list.get(pos));
     }
     
+    /**
+     * Gets the time stamp.
+     * 
+     * @param pos the pos
+     * @return the time stamp
+     */
     public java.sql.Timestamp getTimeStamp(int pos)
     {
         String aux=(String)list.get(pos);
@@ -147,6 +195,11 @@ public class ObjectDecoder {
         }
     }
     
+    /**
+     * Gets the size.
+     * 
+     * @return the size
+     */
     public int getSize()
     {
         return list.size();

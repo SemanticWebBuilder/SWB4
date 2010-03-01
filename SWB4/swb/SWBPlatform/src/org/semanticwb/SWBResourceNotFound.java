@@ -28,22 +28,39 @@
 
 package org.semanticwb;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBResourceNotFound.
+ * 
  * @author Jei
  */
 public class SWBResourceNotFound extends SWBRuntimeException
 {
+    
+    /**
+     * Instantiates a new sWB resource not found.
+     */
     public SWBResourceNotFound()
     {
         super();
     }
     
+    /**
+     * Instantiates a new sWB resource not found.
+     * 
+     * @param msg the msg
+     */
     public SWBResourceNotFound(String msg)
     {
         super(msg);
     }
 
+    /**
+     * Instantiates a new sWB resource not found.
+     * 
+     * @param msg the msg
+     * @param e the e
+     */
     public SWBResourceNotFound(String msg, Exception e)
     {
         super(msg,e);

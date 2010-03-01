@@ -34,20 +34,28 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_Oracle_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_Oracle_SWB extends Driver_Oracle {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Driver_Oracle_SWB.class);
 
+    /**
+     * Instantiates a new driver_ oracle_ swb.
+     */
     public Driver_Oracle_SWB() {
         super();
     }
 
     /**
-     * Set the database connection
+     * Set the database connection.
+     * 
+     * @param dbcon the new connection
      */
     @Override
     public void setConnection(IDBConnection dbcon) {

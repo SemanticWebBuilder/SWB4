@@ -34,18 +34,32 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFOutput.
+ * 
  * @author  jorge.jimenez
  */
 public class XFOutput extends XformsBaseImp
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFOutput.class);
     
+    /** The value. */
     protected String value=null;
+    
+    /** The mediatype. */
     protected String mediatype=null;    
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
     
+    /**
+     * Instantiates a new xF output.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFOutput(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -53,24 +67,47 @@ public class XFOutput extends XformsBaseImp
     
     // Sets
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
+    /**
+     * Sets the media type.
+     * 
+     * @param mediatype the new media type
+     */
     public void setMediaType(String mediatype){
         this.mediatype=mediatype;
     }
     
     // Gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Gets the media type.
+     * 
+     * @return the media type
+     */
     public String getMediaType(){
        return mediatype;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -89,6 +126,9 @@ public class XFOutput extends XformsBaseImp
         }
     }
    
+   /* (non-Javadoc)
+    * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+    */
    @Override
    public String getXmlBind() 
     {
@@ -104,6 +144,9 @@ public class XFOutput extends XformsBaseImp
         return strbXml.toString();
     }    
     
+   /* (non-Javadoc)
+    * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+    */
    @Override
     public String getXml() 
     {
@@ -126,6 +169,9 @@ public class XFOutput extends XformsBaseImp
         return strbXml.toString();
     }
     
+   /* (non-Javadoc)
+    * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+    */
    @Override
     public void setXml(String xml) {
         this.xml=xml;

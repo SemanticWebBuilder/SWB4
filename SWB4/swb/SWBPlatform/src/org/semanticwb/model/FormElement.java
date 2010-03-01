@@ -33,31 +33,118 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface FormElement.
+ * 
  * @author Jei
  */
 public interface FormElement extends GenericObject
 {
+    
+    /**
+     * Render label.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
+    /**
+     * Render element.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
+     */
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
+    /**
+     * Validate.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @throws FormValidateException the form validate exception
+     */
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException;
 
+    /**
+     * Process.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     */
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop);
 
+    /**
+     * Sets the attribute.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public void setAttribute(String name, String value);
 
+    /**
+     * Gets the render url.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the render url
+     */
     public FormElementURL getRenderURL(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang);
 
+    /**
+     * Gets the validate url.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @return the validate url
+     */
     public FormElementURL getValidateURL(SemanticObject obj, SemanticProperty prop);
 
+    /**
+     * Gets the process url.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @return the process url
+     */
     public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop);
 
+    /**
+     * Gets the locale string.
+     * 
+     * @param key the key
+     * @param lang the lang
+     * @return the locale string
+     */
     public String getLocaleString(String key, String lang);
 
+    /**
+     * Gets the model.
+     * 
+     * @return the model
+     */
     public SemanticModel getModel();
 
+    /**
+     * Sets the model.
+     * 
+     * @param model the new model
+     */
     public void setModel(SemanticModel model);
 }

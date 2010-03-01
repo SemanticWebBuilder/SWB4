@@ -36,24 +36,45 @@ import org.semanticwb.xforms.ui.container.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFCaseSwitch.
+ * 
  * @author  jorge.jimenez
  */
 public class XFCaseSwitch extends WBXformsContainer {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFCaseSwitch.class);
     
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
+    
+    /** The value. */
     protected String value=null;
+    
+    /** The isselected. */
     protected boolean isselected=false;
+    
+    /** The instance elements. */
     HashMap instanceElements=new HashMap();
     
+    /**
+     * Instantiates a new xF case switch.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFCaseSwitch(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF case switch.
+     * 
+     * @param rdfElement the rdf element
+     * @param instanceElements the instance elements
+     */
     public XFCaseSwitch(RDFElement rdfElement,HashMap instanceElements){
         this.rdfElement=rdfElement;
         this.instanceElements=instanceElements;
@@ -62,17 +83,30 @@ public class XFCaseSwitch extends WBXformsContainer {
     
     // Sets
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -98,6 +132,9 @@ public class XFCaseSwitch extends WBXformsContainer {
         
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -117,11 +154,17 @@ public class XFCaseSwitch extends WBXformsContainer {
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

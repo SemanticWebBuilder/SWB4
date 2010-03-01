@@ -28,16 +28,31 @@
 
 package org.semanticwb.codegen;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CodeGeneratorException.
+ * 
  * @author victor.lorenzana
  */
 public class CodeGeneratorException extends Exception
 {
+    
+    /**
+     * Instantiates a new code generator exception.
+     * 
+     * @param message the message
+     */
     public CodeGeneratorException(String message)
     {
         super(message);
     }
+    
+    /**
+     * Instantiates a new code generator exception.
+     * 
+     * @param message the message
+     * @param cause the cause
+     */
     public CodeGeneratorException(String message,Throwable cause)
     {
         super(message,cause);

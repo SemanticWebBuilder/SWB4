@@ -51,43 +51,81 @@ import com.hp.hpl.jena.sdb.graph.TransactionHandlerSDB;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /*
  * An SDBConnection is the abstraction of the link between client
  * application and the database.
  *  There can be many Store's per connection.
  */  
 
+/**
+ * The Class SDBConnection_SWB.
+ */
 public class SDBConnection_SWB extends SDBConnection
 {
+    
+    /** The log. */
     static private Logger log = SWBUtils.getLogger(SDBConnection_SWB.class) ;
+    
+    /** The gen. */
     static private Generator gen = Gensym.create("connection-") ;
 
+    /** The sql connection. */
     private Connection sqlConnection = null ;
+    
+    /** The transaction handler. */
     TransactionHandler transactionHandler = null ;
+    
+    /** The label. */
     String label = gen.next() ;
+    
+    /** The jdbc url. */
     String jdbcURL = "unset" ;
     
     // Defaults 
+    /** The log sql exceptions. */
     public static boolean logSQLExceptions = true ;
+    
+    /** The log sql statements. */
     public static boolean logSQLStatements = false ;
+    
+    /** The log sql queries. */
     public static boolean logSQLQueries    = false ;
     
+    /** The this log sql exceptions. */
     private boolean thisLogSQLExceptions = logSQLExceptions ;
+    
+    /** The this log sql statements. */
     private boolean thisLogSQLStatements = logSQLStatements ;
+    
+    /** The this log sql queries. */
     private boolean thisLogSQLQueries    = logSQLQueries ;
 
+    /**
+     * Instantiates a new sDB connection_ swb.
+     */
     public SDBConnection_SWB()
     {
         this(SWBUtils.DB.getDefaultConnection());
         //this((Connection)null);
     }
 
+    /**
+     * Instantiates a new sDB connection_ swb.
+     * 
+     * @param poolname the poolname
+     */
     public SDBConnection_SWB(String poolname)
     {
         this(SWBUtils.DB.getConnection(poolname));
         //this((Connection)null);
     }
 
+    /**
+     * Instantiates a new sDB connection_ swb.
+     * 
+     * @param con the con
+     */
     public SDBConnection_SWB(Connection con)
     {
         super(con);
@@ -121,11 +159,19 @@ public class SDBConnection_SWB extends SDBConnection
     }
      */
 
+    /**
+     * None.
+     * 
+     * @return the sDB connection
+     */
     public static SDBConnection none()
     {
         return new SDBConnection(JDBC.jdbcNone, null, null) ;
     }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#hasSQLConnection()
+     */
     @Override
     public boolean hasSQLConnection() 
     {
@@ -133,13 +179,22 @@ public class SDBConnection_SWB extends SDBConnection
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getTransactionHandler()
+     */
     @Override
     public TransactionHandler getTransactionHandler() { return transactionHandler ; } 
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execQuery(java.lang.String)
+     */
     @Override
     public ResultSetJDBC execQuery(String sqlString) throws SQLException
     { return execQuery(sqlString, SDBConstants.jdbcFetchSizeOff) ; }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execQuery(java.lang.String, int)
+     */
     @Override
     public ResultSetJDBC execQuery(String sqlString, int fetchSize) throws SQLException
     {
@@ -184,9 +239,15 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#executeInTransaction(com.hp.hpl.jena.shared.Command)
+     */
     @Override
     public Object executeInTransaction(Command c) { return getTransactionHandler().executeInTransaction(c) ; }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#executeSQL(com.hp.hpl.jena.sdb.sql.SQLCommand)
+     */
     @Override
     public Object executeSQL(final SQLCommand c)
     {
@@ -212,6 +273,9 @@ public class SDBConnection_SWB extends SDBConnection
     }
 
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execUpdate(java.lang.String)
+     */
     @Override
     public int execUpdate(String sqlString) throws SQLException
     {
@@ -238,7 +302,13 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
 
-    /** Execute a statement, return the result set if there was one, else null */
+    /**
+     * Execute a statement, return the result set if there was one, else null.
+     * 
+     * @param sqlString the sql string
+     * @return the result set jdbc
+     * @throws SQLException the sQL exception
+     */
     @Override
     public ResultSetJDBC exec(String sqlString) throws SQLException
     {
@@ -274,7 +344,12 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
 
-    /** Execute a statement, return the result set if there was one, else null.  */
+    /**
+     * Execute a statement, return the result set if there was one, else null.
+     * 
+     * @param sqlString the sql string
+     * @return the result set jdbc
+     */
     @Override
     public ResultSetJDBC execSilent(String sqlString)
     {
@@ -306,7 +381,13 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
     
-    /** Prepare a statement **/
+    /**
+     * Prepare a statement *.
+     * 
+     * @param sqlString the sql string
+     * @return the prepared statement
+     * @throws SQLException the sQL exception
+     */
     @Override
     public PreparedStatement prepareStatement(String sqlString) throws SQLException {
     	if ( loggingSQLStatements() )
@@ -329,7 +410,12 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
     
-    /** Close a prepared statement **/
+    /**
+     * Close a prepared statement *.
+     * 
+     * @param ps the ps
+     * @throws SQLException the sQL exception
+     */
     @Override
     public void closePreparedStatement(PreparedStatement ps) throws SQLException {
         if ( loggingSQLStatements() )
@@ -344,7 +430,11 @@ public class SDBConnection_SWB extends SDBConnection
         }
     }
     
-    /** Get the names of the application tables */
+    /**
+     * Get the names of the application tables.
+     * 
+     * @return the table names
+     */
     @Override
     public List<String> getTableNames()
     {
@@ -376,19 +466,30 @@ public class SDBConnection_SWB extends SDBConnection
 //        }
 //    }
     
-    @Override
+    /* (non-Javadoc)
+ * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getSqlConnection()
+ */
+@Override
     public Connection getSqlConnection()
     {
         // Potential pool point.
         return sqlConnection ;
     }
 
+    /**
+     * Gets the pool connection.
+     * 
+     * @return the pool connection
+     */
     public Connection getPoolConnection()
     {
         return SWBUtils.DB.getDefaultConnection();
     }
 
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#close()
+     */
     @Override
     public void close()
     {
@@ -402,73 +503,125 @@ public class SDBConnection_SWB extends SDBConnection
     }
 
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#toString()
+     */
     @Override
     public String toString() { return getLabel() ; }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLExceptions()
+     */
     @Override
     public boolean loggingSQLExceptions() { return thisLogSQLExceptions ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLExceptions(boolean)
+     */
     @Override
     public void setLogSQLExceptions(boolean thisLogSQLExceptions)
     {
         this.thisLogSQLExceptions = thisLogSQLExceptions ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLQueries()
+     */
     @Override
     public boolean loggingSQLQueries() { return thisLogSQLQueries ; }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLQueries(boolean)
+     */
     @Override
     public void setLogSQLQueries(boolean thisLogSQLQueries)
     {
         this.thisLogSQLQueries = thisLogSQLQueries ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLStatements()
+     */
     @Override
     public boolean loggingSQLStatements() { return thisLogSQLStatements ; }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLStatements(boolean)
+     */
     @Override
     public void setLogSQLStatements(boolean thisLogSQLStatements)
     {
         this.thisLogSQLStatements = thisLogSQLStatements ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getLabel()
+     */
     @Override
     public String getLabel()
     {
         return label ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLabel(java.lang.String)
+     */
     @Override
     public void setLabel(String label)
     {
         this.label = label ;
     }
     
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getJdbcURL()
+     */
     @Override
     public String getJdbcURL()
     {
         return jdbcURL ;
     }
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setJdbcURL(java.lang.String)
+     */
     @Override
     public void setJdbcURL(String jdbcURL)
     {
         this.jdbcURL = jdbcURL ;
     }
 
+    /**
+     * Exception.
+     * 
+     * @param who the who
+     * @param ex the ex
+     * @param sqlString the sql string
+     */
     private void exception(String who, SQLException ex, String sqlString)
     {
         if ( this.loggingSQLExceptions() )
             log.warn(who+": SQLException\n"+ex.getMessage()+"\n"+sqlString+"\n") ;
     }
 
+    /**
+     * Exception.
+     * 
+     * @param who the who
+     * @param ex the ex
+     */
     private void exception(String who, SQLException ex)
     {
         if ( this.loggingSQLExceptions() )
             log.warn(who+": SQLException\n"+ex.getMessage()) ;
     }
     
+    /**
+     * Write log.
+     * 
+     * @param who the who
+     * @param sqlString the sql string
+     */
     private void writeLog(String who, String sqlString)
     {
             log.info(who+"\n\n"+sqlString+"\n") ;

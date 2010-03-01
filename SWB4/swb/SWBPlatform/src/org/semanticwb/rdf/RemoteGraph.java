@@ -39,17 +39,24 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class RemoteGraph.
+ * 
  * @author javier.solis
  */
 public class RemoteGraph extends GraphBase implements Graph
 {
+    
+    /** The uri. */
     private String uri;
+    
+    /** The query all. */
     private boolean queryAll=false;
 
     /**
-     * Cronstruct a Remote Graph
+     * Cronstruct a Remote Graph.
+     * 
      * @param uri for the Remote Sparql endpoint
      */
     public RemoteGraph(String uri)
@@ -58,7 +65,8 @@ public class RemoteGraph extends GraphBase implements Graph
     }
 
     /**
-     * Cronstruct a Remote Graph
+     * Cronstruct a Remote Graph.
+     * 
      * @param uri for the Remote Sparql endpoint
      * @param queryAll support for query all triples (default false)
      */
@@ -68,6 +76,12 @@ public class RemoteGraph extends GraphBase implements Graph
         this.queryAll=queryAll;
     }
 
+    /**
+     * Gets the node string.
+     * 
+     * @param n the n
+     * @return the node string
+     */
     private String getNodeString(Node n)
     {
         String ret=null;
@@ -79,9 +93,12 @@ public class RemoteGraph extends GraphBase implements Graph
 
 
     /**
-        Answer an iterator over all the triples held in this graph's non-reified triple store
-        that match <code>m</code>. 
-    */
+     * Answer an iterator over all the triples held in this graph's non-reified triple store
+     * that match <code>m</code>.
+     * 
+     * @param m the m
+     * @return the extended iterator
+     */
     @Override
     protected ExtendedIterator graphBaseFind(TripleMatch m)
     {
@@ -110,6 +127,11 @@ public class RemoteGraph extends GraphBase implements Graph
         //return null;
     }
 
+    /**
+     * Gets the uri.
+     * 
+     * @return the uri
+     */
     public String getUri() {
         return uri;
     }

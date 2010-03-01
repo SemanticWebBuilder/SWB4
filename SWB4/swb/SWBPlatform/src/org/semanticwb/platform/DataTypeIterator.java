@@ -29,32 +29,56 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class DataTypeIterator.
+ * 
+ * @param <T> the generic type
  * @author victor.lorenzana
  */
 public class DataTypeIterator<T> implements Iterator
 {
+    
+    /** The cls. */
     private Class cls;
+    
+    /** The iterator. */
     private Iterator iterator;
+    
+    /** The invert. */
     private boolean invert=false;
             
+    /**
+     * Instantiates a new data type iterator.
+     * 
+     * @param cls the cls
+     * @param iterator the iterator
+     */
     public DataTypeIterator(Class cls,Iterator iterator)
     {
         this.cls=cls;
         this.iterator=iterator;
     }    
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         iterator.remove();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return iterator.hasNext();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public T next() 
     {        
         Object obj=iterator.next();

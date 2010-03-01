@@ -36,23 +36,43 @@ import org.semanticwb.xforms.ui.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFGroup.
+ * 
  * @author  jorge.jimenez
  */
 public class XFGroup extends WBXformsContainer 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFGroup.class);
     
+    /** The appearance. */
     protected String appearance=null;
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
+    
+    /** The instance elements. */
     HashMap instanceElements=new HashMap();
     
+    /**
+     * Instantiates a new xF group.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFGroup(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF group.
+     * 
+     * @param rdfElement the rdf element
+     * @param instanceElements the instance elements
+     */
     public XFGroup(RDFElement rdfElement,HashMap instanceElements){
         this.rdfElement=rdfElement;
         this.instanceElements=instanceElements;
@@ -61,16 +81,29 @@ public class XFGroup extends WBXformsContainer
     
     // Sets
     
+    /**
+     * Sets the appearance.
+     * 
+     * @param appearance the new appearance
+     */
     public void setAppearance(String appearance) {
         this.appearance=appearance;
     }
     
     // Gets
     
+    /**
+     * Gets the appearance.
+     * 
+     * @return the appearance
+     */
     public String getAppearance() {
         return appearance;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -127,6 +160,9 @@ public class XFGroup extends WBXformsContainer
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -157,11 +193,17 @@ public class XFGroup extends WBXformsContainer
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

@@ -31,15 +31,26 @@ package org.semanticwb.platform;
 import java.security.Principal;
 import java.util.HashMap;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SessionUser.
+ * 
  * @author Jei
  */
 public class SessionUser {
 
+    /** The req. */
     private static long req=0;
+    
+    /** The usrs. */
     private HashMap<String, Principal> usrs=new HashMap();
 
+    /**
+     * Instantiates a new session user.
+     * 
+     * @param user the user
+     * @param usrrep the usrrep
+     */
     public SessionUser(Principal user, String usrrep)
     {
         usrs.put(usrrep, user);
@@ -47,11 +58,23 @@ public class SessionUser {
         req++;
     }
 
+    /**
+     * Gets the user.
+     * 
+     * @param usrrep the usrrep
+     * @return the user
+     */
     public Principal getUser(String usrrep)
     {
         return usrs.get(usrrep);
     }
 
+    /**
+     * Sets the user.
+     * 
+     * @param user the user
+     * @param usrrep the usrrep
+     */
     public void setUser(Principal user, String usrrep)
     {
         //System.out.println("setUser:"+user.getName());
@@ -60,6 +83,11 @@ public class SessionUser {
         req++;
     }
 
+    /**
+     * Ge request id.
+     * 
+     * @return the long
+     */
     public long geRequestID()
     {
         return req;

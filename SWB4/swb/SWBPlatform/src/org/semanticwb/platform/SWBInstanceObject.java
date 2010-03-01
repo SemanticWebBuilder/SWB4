@@ -28,11 +28,17 @@
 
 package org.semanticwb.platform;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface SWBInstanceObject.
+ * 
  * @author Jei
  */
 public interface SWBInstanceObject 
 {
+    
+    /**
+     * Inits the.
+     */
     public void init();
 }

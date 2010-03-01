@@ -74,50 +74,98 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
 import org.semanticwb.rdf.RemoteGraph;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticMgr.
+ * 
  * @author Jei
  */
 public class SemanticMgr implements SWBInstanceObject
 {
+    
+    /**
+     * The Enum ModelSchema.
+     */
     public enum ModelSchema
     {
 
-        OWL_MEM_TRANS_INF, OWL_LITE_MEM_RDFS_INF, OWL_MEM_MINI_RULE_INF, RDFS_MEM_RDFS_INF,
-        DAML_MEM_RDFS_INF, OWL_DL_MEM_RDFS_INF;
+        /** The OW l_ me m_ tran s_ inf. */
+        OWL_MEM_TRANS_INF, /** The OW l_ lit e_ me m_ rdf s_ inf. */
+ OWL_LITE_MEM_RDFS_INF, /** The OW l_ me m_ min i_ rul e_ inf. */
+ OWL_MEM_MINI_RULE_INF, /** The RDF s_ me m_ rdf s_ inf. */
+ RDFS_MEM_RDFS_INF,
+        
+        /** The DAM l_ me m_ rdf s_ inf. */
+        DAML_MEM_RDFS_INF, 
+ /** The OW l_ d l_ me m_ rdf s_ inf. */
+ OWL_DL_MEM_RDFS_INF;
     }
+    
+    /** The model schema. */
     private static ModelSchema modelSchema = ModelSchema.OWL_MEM_TRANS_INF;
 
+    /**
+     * Sets the schema model.
+     * 
+     * @param modelSchema the new schema model
+     */
     public static void setSchemaModel(ModelSchema modelSchema)
     {
         SemanticMgr.modelSchema = modelSchema;
     }
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticMgr.class);
 
+    /** The Constant SWBSystem. */
     public final static String SWBSystem="SWBSystem";
+    
+    /** The Constant SWBAdmin. */
     public final static String SWBAdmin="SWBAdmin";
+    
+    /** The Constant SWBOntEdit. */
     public final static String SWBOntEdit="SWBOntEdit";
     
+    /** The m_ontology. */
     private SemanticOntology m_ontology;
 //    private SemanticModel m_system;
     //private HashMap<String,SemanticModel> m_schemas;
-    private SemanticOntology m_schema;
+    /** The m_schema. */
+private SemanticOntology m_schema;
+    
+    /** The m_models. */
     private HashMap<String,SemanticModel>m_models=null;
+    
+    /** The m_nsmodels. */
     private HashMap<String,SemanticModel>m_nsmodels=null;
+    
+    /** The m_imodels. */
     private HashMap<Model,SemanticModel>m_imodels=null;
 
+    /** The conn. */
     private IDBConnection conn;
+    
+    /** The maker. */
     private ModelMaker maker;
+    
+    /** The store. */
     private Store store;
     
+    /** The vocabulary. */
     private SemanticVocabulary vocabulary;
 
+    /** The m_observers. */
     private ArrayList<SemanticObserver> m_observers=null;
 
+    /** The codepkg. */
     private CodePackage codepkg=null;
 
+    /** The timer. */
     private Timer timer;                        //Commiter
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.platform.SWBInstanceObject#init()
+     */
     public void init() 
     {
         log.event("Initializing SemanticMgr...");
@@ -173,6 +221,9 @@ public class SemanticMgr implements SWBInstanceObject
         m_imodels.put(ontSchemaModel.getRDFModel(), ontSchemaModel);
     }
 
+    /**
+     * Initialize db.
+     */
     public void initializeDB()
     {
         DBConnectionPool pool=SWBUtils.DB.getDefaultPool();
@@ -234,6 +285,12 @@ public class SemanticMgr implements SWBInstanceObject
         //System.out.println("End initializeDB");
     }
 
+    /**
+     * Adds the base ontology.
+     * 
+     * @param owlPath the owl path
+     * @return the semantic model
+     */
     public SemanticModel addBaseOntology(String owlPath)
     {
         Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(owlPath);
@@ -257,6 +314,9 @@ public class SemanticMgr implements SWBInstanceObject
         return smodel;
     }
 
+    /**
+     * Load base vocabulary.
+     */
     public void loadBaseVocabulary()
     {
         //Create Vocabulary
@@ -270,6 +330,12 @@ public class SemanticMgr implements SWBInstanceObject
         vocabulary.init();
     }
 
+    /**
+     * Load rdf remote model.
+     * 
+     * @param uri the uri
+     * @return the model
+     */
     public Model loadRDFRemoteModel(String uri)
     {
         Model model=null;
@@ -289,7 +355,8 @@ public class SemanticMgr implements SWBInstanceObject
 
 
     /**
-     * Read remote RDFa Model from webpage
+     * Read remote RDFa Model from webpage.
+     * 
      * @param url = url of remote HTML webpage
      * @return RDF Model
      */
@@ -297,8 +364,10 @@ public class SemanticMgr implements SWBInstanceObject
     {
         return loadRDFaRemoteModel(url, "HTML");
     }
+    
     /**
-     * Read remote RDFa Model from webpage
+     * Read remote RDFa Model from webpage.
+     * 
      * @param url = url of remote webpage
      * @param lang = "HTML" or "XHTML", default HTML
      * @return RDF Model
@@ -320,6 +389,15 @@ public class SemanticMgr implements SWBInstanceObject
         return model;
     }
 
+    /**
+     * Load remote model.
+     * 
+     * @param name the name
+     * @param uri the uri
+     * @param baseNS the base ns
+     * @param add2Ontology the add2 ontology
+     * @return the semantic model
+     */
     public SemanticModel loadRemoteModel(String name, String uri, String baseNS, boolean add2Ontology)
     {
         SemanticModel m=null;
@@ -339,6 +417,15 @@ public class SemanticMgr implements SWBInstanceObject
         return m;
     }
 
+    /**
+     * Load remote rd fa model.
+     * 
+     * @param name the name
+     * @param url the url
+     * @param lang the lang
+     * @param add2Ontology the add2 ontology
+     * @return the semantic model
+     */
     public SemanticModel loadRemoteRDFaModel(String name, String url, String lang, boolean add2Ontology)
     {
         SemanticModel m=null;
@@ -359,16 +446,36 @@ public class SemanticMgr implements SWBInstanceObject
         return m;
     }
     
+    /**
+     * Load rdf file model.
+     * 
+     * @param path the path
+     * @return the model
+     */
     public Model loadRDFFileModel(String path)
     {
         return FileManager.get().loadModel(path);
     }
 
+    /**
+     * Load rdf file model.
+     * 
+     * @param path the path
+     * @param baseUri the base uri
+     * @return the model
+     */
     public Model loadRDFFileModel(String path, String baseUri)
     {
         return FileManager.get().loadModel(path,baseUri,null);
     }
 
+    /**
+     * Read rdf file.
+     * 
+     * @param name the name
+     * @param path the path
+     * @return the semantic model
+     */
     public SemanticModel readRDFFile(String name, String path)
     {
         SemanticModel ret=null;
@@ -380,6 +487,12 @@ public class SemanticMgr implements SWBInstanceObject
         return ret;
     }
     
+    /**
+     * Load rdfdb model.
+     * 
+     * @param name the name
+     * @return the model
+     */
     private Model loadRDFDBModel(String name)
     {
         Model ret=null;
@@ -448,7 +561,10 @@ public class SemanticMgr implements SWBInstanceObject
     
     
     
-    @Override
+    /* (non-Javadoc)
+ * @see java.lang.Object#finalize()
+ */
+@Override
     public void finalize()
     {
         log.event("SemanticMgr stoped...");
@@ -462,26 +578,52 @@ public class SemanticMgr implements SWBInstanceObject
         }
     }
     
+    /**
+     * Gets the models.
+     * 
+     * @return the models
+     */
     public Set<Entry<String, SemanticModel>> getModels()
     {
         return m_models.entrySet();
     }
     
+    /**
+     * Gets the model.
+     * 
+     * @param name the name
+     * @return the model
+     */
     public SemanticModel getModel(String name)
     {
         return m_models.get(name);
     }
 
+    /**
+     * Gets the model by ns.
+     * 
+     * @param nameSpace the name space
+     * @return the model by ns
+     */
     public SemanticModel getModelByNS(String nameSpace)
     {
         return m_nsmodels.get(nameSpace);
     }
 
+    /**
+     * Gets the model.
+     * 
+     * @param model the model
+     * @return the model
+     */
     public SemanticModel getModel(Model model)
     {
         return m_imodels.get(model);
     }
     
+    /**
+     * Load db models.
+     */
     public void loadDBModels()
     {
         log.debug("loadDBModels");
@@ -522,8 +664,10 @@ public class SemanticMgr implements SWBInstanceObject
     }
     
     /**
-     * Load a Model, if the model don't exist, it will be created 
-     * @param name
+     * Load a Model, if the model don't exist, it will be created.
+     * 
+     * @param name the name
+     * @return the semantic model
      * @return
      */
     private SemanticModel loadDBModel(String name)
@@ -632,6 +776,13 @@ public class SemanticMgr implements SWBInstanceObject
         return m;
     }    
     
+    /**
+     * Creates the model.
+     * 
+     * @param name the name
+     * @param nameSpace the name space
+     * @return the semantic model
+     */
     public SemanticModel createModel(String name, String nameSpace)
     {
         //System.out.println("createModel:"+name+" "+nameSpace);
@@ -644,11 +795,28 @@ public class SemanticMgr implements SWBInstanceObject
         return ret;
     }
 
+    /**
+     * Creates the model by rdf.
+     * 
+     * @param name the name
+     * @param namespace the namespace
+     * @param in the in
+     * @return the semantic model
+     */
     public SemanticModel createModelByRDF(String name, String namespace, InputStream in)
     {
         return createModelByRDF(name, namespace, in, null);
     }
 
+    /**
+     * Creates the model by rdf.
+     * 
+     * @param name the name
+     * @param namespace the namespace
+     * @param in the in
+     * @param lang the lang
+     * @return the semantic model
+     */
     public SemanticModel createModelByRDF(String name, String namespace, InputStream in,String lang)
     {
         SemanticModel ret=createModel(name, namespace);
@@ -683,6 +851,11 @@ public class SemanticMgr implements SWBInstanceObject
         return ret;
     }
      
+    /**
+     * Removes the model.
+     * 
+     * @param name the name
+     */
     public void removeModel(String name)
     {
         SemanticModel model=m_models.get(name);
@@ -703,11 +876,21 @@ public class SemanticMgr implements SWBInstanceObject
         }
     }
             
+    /**
+     * Gets the ontology.
+     * 
+     * @return the ontology
+     */
     public SemanticOntology getOntology() 
     {
         return m_ontology;
     }
     
+    /**
+     * Gets the schema.
+     * 
+     * @return the schema
+     */
     public SemanticOntology getSchema()
     {
         return m_schema;
@@ -728,20 +911,42 @@ public class SemanticMgr implements SWBInstanceObject
 //        return m_ontology.getRDFOntModel().getOntClass(uri);
 //    }
     
-    public SemanticVocabulary getVocabulary() {
+    /**
+ * Gets the vocabulary.
+ * 
+ * @return the vocabulary
+ */
+public SemanticVocabulary getVocabulary() {
         return vocabulary;
     }
 
+    /**
+     * Register observer.
+     * 
+     * @param obs the obs
+     */
     public void registerObserver(SemanticObserver obs)
     {
         m_observers.add(obs);
     }
 
+    /**
+     * Removes the observer.
+     * 
+     * @param obs the obs
+     */
     public void removeObserver(SemanticObserver obs)
     {
         m_observers.remove(obs);
     }
 
+    /**
+     * Notify change.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param action the action
+     */
     public void notifyChange(SemanticObject obj, Object prop, String action)
     {
         log.trace("obj:"+obj+" prop:"+prop+" "+action);
@@ -764,7 +969,9 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
     /**
-     *
+     * Gets the code package.
+     * 
+     * @return the code package
      * @return
      */
     public CodePackage getCodePackage()
@@ -773,7 +980,7 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
     /**
-     * Commit all models
+     * Commit all models.
      */
     public void commit()
     {
@@ -791,7 +998,7 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
     /**
-     * Close all models
+     * Close all models.
      */
     public void close()
     {
@@ -805,14 +1012,16 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
     /**
-     * Destroy method for this filter
-     *
+     * Destroy method for this filter.
      */
     public void destroy()
     {
         close();
     }
 
+    /**
+     * Creates the key pair.
+     */
     public void createKeyPair(){
         SemanticModel model = getModel(SWBAdmin);
         String [] llaves = SWBUtils.CryptoWrapper.storableKP();

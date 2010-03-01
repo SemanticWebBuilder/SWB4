@@ -34,24 +34,47 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFUpload.
+ * 
  * @author  jorge.jimenez
  */
 public class XFUpload extends XformsBaseImp
 {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFUpload.class);
+    
+    /** The value. */
     protected String value=null;
+    
+    /** The size. */
     protected int size=-1;
+    
+    /** The maxlength. */
     protected int maxlength=-1;
+    
+    /** The width. */
     protected int width=-1;
+    
+    /** The height. */
     protected int height=-1;
+    
+    /** The alert. */
     protected String alert=null;
+    
+    /** The constraint. */
     protected String constraint=null;
     
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
    
+    /**
+     * Instantiates a new xF upload.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFUpload(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -59,26 +82,56 @@ public class XFUpload extends XformsBaseImp
     
     // Sets
     
+    /**
+     * Sets the size.
+     * 
+     * @param size the new size
+     */
     public void setSize(int size){
         this.size=size;
     }
     
+    /**
+     * Sets the max length.
+     * 
+     * @param maxlength the new max length
+     */
     public void setMaxLength(int maxlength){
         this.maxlength=maxlength;
     }
     
+    /**
+     * Sets the width.
+     * 
+     * @param width the new width
+     */
     public void setWidth(int width){
         this.width=width;
     }
     
+    /**
+     * Sets the height.
+     * 
+     * @param height the new height
+     */
     public void setHeight(int height){
         this.height=height;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
+    /**
+     * Sets the constraint.
+     * 
+     * @param constraint the new constraint
+     */
     public void setConstraint(String constraint)
     {
         this.constraint=constraint;
@@ -86,31 +139,65 @@ public class XFUpload extends XformsBaseImp
     
     // Gets
     
+    /**
+     * Gets the size.
+     * 
+     * @param size the size
+     * @return the size
+     */
     public int getSize(int size){
         return size;
     }
     
+    /**
+     * Gets the max length.
+     * 
+     * @return the max length
+     */
     public int getMaxLength(){
         return maxlength;
     }
     
+    /**
+     * Gets the width.
+     * 
+     * @return the width
+     */
     public int getWidth(){
         return width;
     }
     
+    /**
+     * Gets the height.
+     * 
+     * @return the height
+     */
     public int getHeight(){
         return height;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Gets the constraint.
+     * 
+     * @return the constraint
+     */
     public String getConstraint()
     {
         return constraint;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -143,6 +230,9 @@ public class XFUpload extends XformsBaseImp
         }
     }
    
+   /* (non-Javadoc)
+    * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+    */
    @Override
    public String getXmlBind() 
     {
@@ -161,6 +251,9 @@ public class XFUpload extends XformsBaseImp
         return strbXml.toString();
     }    
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() 
     {
@@ -192,6 +285,9 @@ public class XFUpload extends XformsBaseImp
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

@@ -34,8 +34,10 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFInsert.
+ * 
  * @author  jorge.jimenez
  */
 //TODO: Esta clase es para el manejo del componente repeat,x estos momentos voy a dejar pendientes todos los componentes de repeat 
@@ -45,25 +47,48 @@ import org.semanticwb.Logger;
 public class XFInsert extends XformsBaseImp 
 {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFInsert.class);
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
+    
+    /** The value. */
     protected String value=null;
     
+    /**
+     * Instantiates a new xF insert.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFInsert(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
     }
     
     // Sets
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets    
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -71,6 +96,9 @@ public class XFInsert extends XformsBaseImp
         
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -91,6 +119,9 @@ public class XFInsert extends XformsBaseImp
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

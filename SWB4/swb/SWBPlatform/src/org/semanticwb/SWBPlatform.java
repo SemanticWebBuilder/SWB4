@@ -45,47 +45,78 @@ import org.semanticwb.platform.IDGenerator;
 import org.semanticwb.platform.SemanticVocabulary;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBPlatform.
+ * 
  * @author  Javier Solis Gonzalez (jsolis@infotec.com.mx)
  */
 
 public class SWBPlatform 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBPlatform.class);
+    
+    /** The instance. */
     private static SWBPlatform instance=null;
 
+    /** The props. */
     private static Properties props=null;
 
+    /** The context path. */
     private static String contextPath = "";
+    
+    /** The work path. */
     private static String workPath = "";
+    
+    /** The statements cache. */
     private static boolean statementsCache=true;
 
+    /** The admin dev. */
     private static boolean adminDev=false;
+    
+    /** The admin file. */
     private static String adminFile="/swbadmin/rdf/SWBAdmin.nt";
+    
+    /** The ont edit file. */
     private static String ontEditFile="/swbadmin/rdf/SWBOntEdit.nt";
 
+    /** The Constant PRESIST_TYPE_DEFAULT. */
     public final static String PRESIST_TYPE_DEFAULT="default";
+    
+    /** The Constant PRESIST_TYPE_SDB. */
     public final static String PRESIST_TYPE_SDB="sdb";
+    
+    /** The Constant PRESIST_TYPE_TDB. */
     public final static String PRESIST_TYPE_TDB="tdb";
 
+    /** The persistence type. */
     private static String persistenceType=PRESIST_TYPE_DEFAULT;
 
+    /** The idgen. */
     private static IDGenerator idgen=null;
 
+    /** The semantic mgr. */
     private static SemanticMgr semanticMgr=null;
 
-    /**
-     * 
-     */
+    /** The Constant version. */
     protected static final String version = "4.0.1.1";
     
+    /**
+     * Instantiates a new sWB platform.
+     */
     private SWBPlatform()
     {
         log.event("Initializing SemanticWebBuilder Platform...");
         init();
     }
 
+    /**
+     * Creates the instance.
+     * 
+     * @return the sWB platform
+     */
     static public synchronized SWBPlatform createInstance() {
         if (instance == null) {
             instance = new SWBPlatform();
@@ -94,6 +125,9 @@ public class SWBPlatform
     }
     
     //Initialize context
+    /**
+     * Inits the.
+     */
     private void init()
     {
         log.event("-->SemanticWebBuilder Version: " + version);
@@ -112,13 +146,21 @@ public class SWBPlatform
         idgen=new IDGenerator();
     }
     
+    /**
+     * Sets the properties.
+     * 
+     * @param props the new properties
+     */
     public void setProperties(Properties props)
     {
         SWBPlatform.props=props;
     }
 
-    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+    /**
+     * Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+     * 
      * @param name String nombre de la variable
+     * @return the env
      * @return
      */
     public static String getEnv(String name)
@@ -126,9 +168,12 @@ public class SWBPlatform
         return getEnv(name, null);
     }
 
-    /** Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+    /**
+     * Obtiene valor de variable de ambiente declarada en web.xml o web.properties.
+     * 
      * @param name String nombre de la variable
      * @param defect String valor por defecto
+     * @return the env
      * @return
      */
     public static String getEnv(String name, String defect)
@@ -145,59 +190,121 @@ public class SWBPlatform
         return obj;
     }
 
+    /**
+     * Gets the iD generator.
+     * 
+     * @return the iD generator
+     */
     public static IDGenerator getIDGenerator()
     {
         return idgen;
     }
     
+    /**
+     * Gets the semantic mgr.
+     * 
+     * @return the semantic mgr
+     */
     public static SemanticMgr getSemanticMgr()
     {
         return semanticMgr;
     }
 
+    /**
+     * Gets the version.
+     * 
+     * @return the version
+     */
     public static String getVersion() {
         return version;
     }
 
+    /**
+     * Gets the context path.
+     * 
+     * @return the context path
+     */
     public static String getContextPath()
     {
         return contextPath;
     }
 
+    /**
+     * Sets the context path.
+     * 
+     * @param contextPath the new context path
+     */
     public void setContextPath(String contextPath)
     {
         SWBPlatform.contextPath=contextPath;
     }
 
 
+    /**
+     * Gets the platform work path.
+     * 
+     * @return the platform work path
+     */
     public String getPlatformWorkPath()
     {
         return workPath;
     }
 
+    /**
+     * Sets the platform work path.
+     * 
+     * @param workPath the new platform work path
+     */
     public void setPlatformWorkPath(String workPath)
     {
         SWBPlatform.workPath=workPath;
     }
     
+    /**
+     * Gets the statements cache.
+     * 
+     * @return the statements cache
+     */
     public boolean getStatementsCache()
     {
         return statementsCache;
     }
 
+    /**
+     * Sets the statements cache.
+     * 
+     * @param statementsCache the new statements cache
+     */
     public void setStatementsCache(boolean statementsCache)
     {
         SWBPlatform.statementsCache=statementsCache;
     }
 
+    /**
+     * Gets the persistence type.
+     * 
+     * @return the persistence type
+     */
     public String getPersistenceType() {
         return persistenceType;
     }
 
+    /**
+     * Sets the persistence type.
+     * 
+     * @param persistenceType the new persistence type
+     */
     public void setPersistenceType(String persistenceType) {
         SWBPlatform.persistenceType = persistenceType;
     }
 
+    /**
+     * Write file to platform work path.
+     * 
+     * @param path the path
+     * @param in the in
+     * @throws SWBException the sWB exception
+     */
     public void writeFileToPlatformWorkPath(String path, InputStream in) throws SWBException {
         //System.out.println("writeFileToWorkPath:"+path);
         //TOTO:Impementar Replicacion de archivos
@@ -231,6 +338,11 @@ public class SWBPlatform
     }
 
 
+    /**
+     * Removes the file from platform work path.
+     * 
+     * @param path the path
+     */
     public void removeFileFromPlatformWorkPath(String path)
     {
         //TOTO:Impementar Replicacion de archivos
@@ -239,9 +351,13 @@ public class SWBPlatform
     }
 
     /**
-     * @param path
-     * @throws AFException
-     * @return  */
+     * Gets the file from platform work path.
+     * 
+     * @param path the path
+     * @return the file from platform work path
+     * @throws SWBException the sWB exception
+     * @return
+     */
     public InputStream getFileFromPlatformWorkPath(String path) throws SWBException {
         InputStream ret = null;
         //TOTO:Impementar Replicacion de archivos
@@ -269,41 +385,86 @@ public class SWBPlatform
     }
 
     /**
-     * @param path
-     * @throws AFException
-     * @return  */
+     * Read file from platform work path.
+     * 
+     * @param path the path
+     * @return the string
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBException the sWB exception
+     * @return
+     */
     public String readFileFromPlatformWorkPath(String path) throws IOException, SWBException {
         return SWBUtils.IO.readInputStream(getFileFromPlatformWorkPath(path));
     }
 
+    /**
+     * Checks if is admin dev.
+     * 
+     * @return true, if is admin dev
+     */
     public boolean isAdminDev() {
         return adminDev;
     }
 
+    /**
+     * Sets the admin dev.
+     * 
+     * @param adminDev the new admin dev
+     */
     public void setAdminDev(boolean adminDev) {
         SWBPlatform.adminDev = adminDev;
     }
 
+    /**
+     * Gets the admin file.
+     * 
+     * @return the admin file
+     */
     public String getAdminFile() {
         return adminFile;
     }
 
+    /**
+     * Sets the admin file.
+     * 
+     * @param adminFile the new admin file
+     */
     public void setAdminFile(String adminFile) {
         SWBPlatform.adminFile = adminFile;
     }
 
+    /**
+     * Gets the ont edit file.
+     * 
+     * @return the ont edit file
+     */
     public String getOntEditFile() {
         return ontEditFile;
     }
 
+    /**
+     * Sets the ont edit file.
+     * 
+     * @param ontEditFile the new ont edit file
+     */
     public void setOntEditFile(String ontEditFile) {
         SWBPlatform.ontEditFile = ontEditFile;
     }
 
+    /**
+     * The Class JENA_UTIL.
+     */
     public static class JENA_UTIL
     {
         //public static String PATH_VIEW=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
 
+        /**
+         * Gets the text localed.
+         * 
+         * @param res the res
+         * @param label the label
+         * @return the text localed
+         */
         public static String getTextLocaled(Resource res, Property label)
         {
             String ret="";
@@ -318,6 +479,12 @@ public class SWBPlatform
             return ret;
         }
 
+        /**
+         * Gets the id.
+         * 
+         * @param res the res
+         * @return the id
+         */
         public static String getId(Resource res)
         {
             String ret="";
@@ -327,11 +494,26 @@ public class SWBPlatform
             return ret;
         }
 
+        /**
+         * Gets the link.
+         * 
+         * @param res the res
+         * @param pathView the path view
+         * @return the link
+         */
         public static String getLink(Resource res, String pathView)
         {
             return getLink(res,null, pathView);
         }
 
+        /**
+         * Gets the link.
+         * 
+         * @param res the res
+         * @param text the text
+         * @param pathView the path view
+         * @return the link
+         */
         public static String getLink(Resource res, String text, String pathView)
         {
             String val=text;
@@ -339,6 +521,14 @@ public class SWBPlatform
             return "<a href=\"#\" onClick=\"addNewTab('"+res.getURI()+"', '"+pathView+"', '"+val+"');\">"+val+"</a>";
         }
 
+        /**
+         * Gets the object id.
+         * 
+         * @param res the res
+         * @param ptype the ptype
+         * @param model the model
+         * @return the object id
+         */
         public static String getObjectId(Resource res, Property ptype, Model model)
         {
             String type="";
@@ -350,11 +540,30 @@ public class SWBPlatform
             return type;
         }
 
+        /**
+         * Gets the object link.
+         * 
+         * @param res the res
+         * @param ptype the ptype
+         * @param model the model
+         * @param pathView the path view
+         * @return the object link
+         */
         public static String getObjectLink(Resource res, Property ptype, Model model, String pathView)
         {
             return getObjectLink(res, ptype, model, null, pathView);
         }
 
+        /**
+         * Gets the object link.
+         * 
+         * @param res the res
+         * @param ptype the ptype
+         * @param model the model
+         * @param text the text
+         * @param pathView the path view
+         * @return the object link
+         */
         public static String getObjectLink(Resource res, Property ptype, Model model, String text, String pathView)
         {
             String val=text;
@@ -368,12 +577,25 @@ public class SWBPlatform
             return val;
         }
 
+        /**
+         * Checks if is in base model.
+         * 
+         * @param res the res
+         * @param ont the ont
+         * @return true, if is in base model
+         */
         public static boolean isInBaseModel(Resource res, OntModel ont)
         {
             Property type=ont.getProperty(SemanticVocabulary.RDF_TYPE);
             return ont.getBaseModel().contains(res, type);
         }
 
+        /**
+         * Adds the filtered class.
+         * 
+         * @param cls the cls
+         * @param arr the arr
+         */
         public static void addFilteredClass(OntClass cls, ArrayList arr)
         {
             boolean filtered=false;
@@ -401,6 +623,13 @@ public class SWBPlatform
             }
         }
 
+        /**
+         * Gets the class properties.
+         * 
+         * @param res the res
+         * @param model the model
+         * @return the class properties
+         */
         public static Iterator<Property> getClassProperties(Resource res, OntModel model)
         {
             OntResource ores=model.getOntResource(res);
@@ -481,6 +710,13 @@ public class SWBPlatform
             return arr.iterator();
         }
 
+        /**
+         * Gets the base model resource.
+         * 
+         * @param uri the uri
+         * @param ont the ont
+         * @return the base model resource
+         */
         public static Resource getBaseModelResource(String uri, OntModel ont)
         {
             Resource res=ont.getResource(uri);

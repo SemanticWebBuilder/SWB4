@@ -36,85 +36,209 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticVocabulary.
+ * 
  * @author Jei
  */
 public class SemanticVocabulary
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticVocabulary.class);
     //RDF
+    /** The Constant RDF_URI. */
     public static final String RDF_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    
+    /** The Constant RDF_TYPE. */
     public static final String RDF_TYPE = RDF_URI + "type";
+    
+    /** The Constant RDF_PROPERTY. */
     public static final String RDF_PROPERTY = RDF_URI + "Property";
+    
+    /** The Constant RDF_XMLLITERAL. */
     public static final String RDF_XMLLITERAL = RDF_URI + "XMLLiteral";
+    
+    /** The Constant RDFS_URI. */
     public static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
+    
+    /** The Constant RDFS_LABEL. */
     public static final String RDFS_LABEL = RDFS_URI + "label";
+    
+    /** The Constant RDFS_COMMENT. */
     public static final String RDFS_COMMENT = RDFS_URI + "comment";
+    
+    /** The Constant RDFS_DOMAIN. */
     public static final String RDFS_DOMAIN = RDFS_URI + "domain";
+    
+    /** The Constant RDFS_RANGE. */
     public static final String RDFS_RANGE = RDFS_URI + "range";
+    
+    /** The Constant RDFS_SUBPROPERTYOF. */
     public static final String RDFS_SUBPROPERTYOF = RDFS_URI + "subPropertyOf";
+    
+    /** The Constant RDFS_SUBCLASSOF. */
     public static final String RDFS_SUBCLASSOF = RDFS_URI + "subClassOf";
+    
+    /** The Constant XMLS_URI. */
     public static final String XMLS_URI = "http://www.w3.org/2001/XMLSchema#";
+    
+    /** The Constant XMLS_DATETIME. */
     public static final String XMLS_DATETIME = XMLS_URI + "dateTime";
+    
+    /** The Constant XMLS_DATE. */
     public static final String XMLS_DATE = XMLS_URI + "date";
+    
+    /** The Constant XMLS_BOOLEAN. */
     public static final String XMLS_BOOLEAN = XMLS_URI + "boolean";
+    
+    /** The Constant XMLS_STRING. */
     public static final String XMLS_STRING = XMLS_URI + "string";
+    
+    /** The Constant XMLS_INT. */
     public static final String XMLS_INT = XMLS_URI + "int";
+    
+    /** The Constant XMLS_FLOAT. */
     public static final String XMLS_FLOAT = XMLS_URI + "float";
+    
+    /** The Constant XMLS_DOUBLE. */
     public static final String XMLS_DOUBLE = XMLS_URI + "double";
+    
+    /** The Constant XMLS_LONG. */
     public static final String XMLS_LONG = XMLS_URI + "long";
+    
+    /** The Constant XMLS_SHORT. */
     public static final String XMLS_SHORT = XMLS_URI + "short";
+    
+    /** The Constant XMLS_BYTE. */
     public static final String XMLS_BYTE = XMLS_URI + "byte";
+    
+    /** The Constant XMLS_BASE64BINARY. */
     public static final String XMLS_BASE64BINARY = XMLS_URI + "base64Binary";
+    
+    /** The Constant OWL_URI. */
     public static final String OWL_URI = "http://www.w3.org/2002/07/owl#";
+    
+    /** The Constant OWL_CLASS. */
     public static final String OWL_CLASS = OWL_URI + "Class";
+    
+    /** The Constant OWL_DATATYPEPROPERTY. */
     public static final String OWL_DATATYPEPROPERTY = OWL_URI + "DatatypeProperty";
+    
+    /** The Constant OWL_OBJECTPROPERTY. */
     public static final String OWL_OBJECTPROPERTY = OWL_URI + "ObjectProperty";
     //General
+    /** The Constant URI. */
     public static final String URI = "http://www.semanticwebbuilder.org/swb4/ontology#";
+    
+    /** The Constant SWBXF_URI. */
     public static final String SWBXF_URI = "http://www.semanticwebbuilder.org/swb4/xforms/ontology#";
+    
+    /** The Constant SWB_SWBCLASS. */
     public static final String SWB_SWBCLASS = URI + "SWBClass";
+    
+    /** The Constant SWB_CLASS. */
     public static final String SWB_CLASS = URI + "Class";
+    
+    /** The Constant SWB_INTERFACE. */
     public static final String SWB_INTERFACE = URI + "Interface";
+    
+    /** The Constant SWB_MODEL. */
     public static final String SWB_MODEL = URI + "Model";
+    
+    /** The Constant SWB_FORMELEMENT. */
     public static final String SWB_FORMELEMENT = URI + "FormElement";
+    
+    /** The Constant SWB_SEMANTICRESOURCE. */
     public static final String SWB_SEMANTICRESOURCE = URI + "SemanticResource";
+    
+    /** The Constant SWB_PROP_VALUE. */
     public static final String SWB_PROP_VALUE = URI + "value";
+    
+    /** The Constant SWB_PROP_HASCLASS. */
     public static final String SWB_PROP_HASCLASS = URI + "hasClass";
+    
+    /** The Constant SWB_PROP_LOCALEABLE. */
     public static final String SWB_PROP_LOCALEABLE = URI + "localeable";
+    
+    /** The Constant SWB_PROP_REQUIRED. */
     public static final String SWB_PROP_REQUIRED = URI + "required";
+    
+    /** The Constant SWB_PROP_DEFAULTVALUE. */
     public static final String SWB_PROP_DEFAULTVALUE = URI + "defaultValue";
+    
+    /** The Constant SWB_PROP_DISPLAYPROPERTY. */
     public static final String SWB_PROP_DISPLAYPROPERTY = URI + "displayProperty";
+    
+    /** The Constant SWB_PROP_DISPLAYOBJECT. */
     public static final String SWB_PROP_DISPLAYOBJECT = URI + "displayObject";
     //public static final String SWB_PROP_DISPLAYCLASS=URI+"displayClass";
+    /** The Constant SWB_PROP_EXTERNALINVOCATION. */
     public static final String SWB_PROP_EXTERNALINVOCATION = URI + "externalInvocation";
+    
+    /** The Constant SWB_PROP_HERARQUICALRELATION. */
     public static final String SWB_PROP_HERARQUICALRELATION = URI + "herarquicalRelation";
+    
+    /** The Constant SWB_PROP_REMOVEDEPENDENCY. */
     public static final String SWB_PROP_REMOVEDEPENDENCY = URI + "removeDependency";
+    
+    /** The Constant SWB_PROP_CLONEDEPENDENCY. */
     public static final String SWB_PROP_CLONEDEPENDENCY = URI + "cloneDependency";
+    
+    /** The Constant SWB_PROP_HASHERARQUICALNODE. */
     public static final String SWB_PROP_HASHERARQUICALNODE = URI + "hasHerarquicalNode";
 //    public static final String SWB_PROP_DRAGSUPPORT=URI+"dragSupport";
-    public static final String SWB_PROP_NOTOBSERVABLE = URI + "notObservable";
+    /** The Constant SWB_PROP_NOTOBSERVABLE. */
+public static final String SWB_PROP_NOTOBSERVABLE = URI + "notObservable";
+    
+    /** The Constant SWB_PROP_NOTCODEGENERATION. */
     public static final String SWB_PROP_NOTCODEGENERATION = URI + "notCodeGeneration";
+    
+    /** The Constant SWB_PROP_INHERITPROPERTY. */
     public static final String SWB_PROP_INHERITPROPERTY = URI + "inheritProperty";
 //    public static final String SWB_PROP_PROPGROUP=URI+"propGroup";
 //    public static final String SWB_PROP_PROPINDEX=URI+"propIndex";
     //public static final String SWB_ANNOT_CLASSNAME=URI+"className";
-    public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName";
+    /** The Constant SWB_ANNOT_PROPERTYCODENAME. */
+public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName";
+    
+    /** The Constant SWB_ANNOT_CLASSCODENAME. */
     public static final String SWB_ANNOT_CLASSCODENAME = URI + "classCodeName";
+    
+    /** The Constant SWB_ANNOT_CLASSCODEPACKAGE. */
     public static final String SWB_ANNOT_CLASSCODEPACKAGE = URI + "classCodePackage";
+    
+    /** The Constant SWB_ANNOT_AUTOGENID. */
     public static final String SWB_ANNOT_AUTOGENID = URI + "autogenId";
+    
+    /** The Constant SWB_ANNOT_CANUSEDASNAME. */
     public static final String SWB_ANNOT_CANUSEDASNAME = URI + "canUsedAsName";
+    
+    /** The Constant SWB_PROP_CLASSGROUPID. */
     public static final String SWB_PROP_CLASSGROUPID = URI + "classGroupId";
+    
+    /** The Constant SWB_PROP_PREFIX. */
     public static final String SWB_PROP_PREFIX = URI + "prefix";
+    
+    /** The Constant SWB_PROP_PACKAGE. */
     public static final String SWB_PROP_PACKAGE = URI + "package";
     //public static final String SWB_NS="swbns";
+    /** The classes. */
     public HashMap<String, SemanticClass> classes;
+    
+    /** The properties. */
     public HashMap<String, SemanticProperty> properties;
+    
+    /** The clsbyid. */
     public HashMap<String, SemanticClass> clsbyid;
+    
+    /** The clsbyname. */
     public HashMap<String, SemanticClass> clsbyname;
 
+    /**
+     * Instantiates a new semantic vocabulary.
+     */
     public SemanticVocabulary()
     {
         classes = new HashMap();
@@ -123,6 +247,9 @@ public class SemanticVocabulary
         properties = new HashMap();
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
         //SWBClass=getSemanticClass(URI+"SWBClass");
@@ -130,6 +257,11 @@ public class SemanticVocabulary
         //filterProperties();
     }
 
+    /**
+     * Filter properties.
+     * 
+     * @param tpc the tpc
+     */
     private void filterProperties(SemanticClass tpc)
     {
         //System.out.println("filterProperties");
@@ -153,6 +285,11 @@ public class SemanticVocabulary
 //        }
     }
 
+    /**
+     * Adds the semantic class.
+     * 
+     * @param tpc the tpc
+     */
     void addSemanticClass(SemanticClass tpc)
     {
         classes.put(tpc.getURI(), tpc);
@@ -168,11 +305,21 @@ public class SemanticVocabulary
         }
     }
 
+    /**
+     * List semantic classes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSemanticClasses()
     {
         return new ArrayList(classes.values()).iterator();
     }
 
+    /**
+     * List semantic classes as semantic objects.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSemanticClassesAsSemanticObjects()
     {
         ArrayList arr = new ArrayList();
@@ -184,6 +331,12 @@ public class SemanticVocabulary
         return arr.iterator();
     }
 
+    /**
+     * Gets the semantic class.
+     * 
+     * @param uri the uri
+     * @return the semantic class
+     */
     public SemanticClass getSemanticClass(String uri)
     {
         if (uri == null)
@@ -211,16 +364,33 @@ public class SemanticVocabulary
         return cls;
     }
 
+    /**
+     * Gets the semantic class by id.
+     * 
+     * @param classId the class id
+     * @return the semantic class by id
+     */
     public SemanticClass getSemanticClassById(String classId)
     {
         return clsbyid.get(classId);
     }
 
+    /**
+     * Gets the semantic class by java name.
+     * 
+     * @param className the class name
+     * @return the semantic class by java name
+     */
     public SemanticClass getSemanticClassByJavaName(String className)
     {
         return clsbyname.get(className);
     }
 
+    /**
+     * Adds the semantic property.
+     * 
+     * @param tpp the tpp
+     */
     void addSemanticProperty(SemanticProperty tpp)
     {
         if (!properties.containsKey(tpp.getURI()))
@@ -229,17 +399,34 @@ public class SemanticVocabulary
         }
     }
 
+    /**
+     * List semantic properties.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listSemanticProperties()
     {
         return properties.values().iterator();
     }
 
+    /**
+     * Gets the semantic property by id.
+     * 
+     * @param propId the prop id
+     * @return the semantic property by id
+     */
     public SemanticProperty getSemanticPropertyById(String propId)
     {
         //TODO
         return null;
     }
 
+    /**
+     * Gets the semantic property.
+     * 
+     * @param property the property
+     * @return the semantic property
+     */
     public SemanticProperty getSemanticProperty(Property property)
     {
         SemanticProperty prop = properties.get(property.getURI());
@@ -251,6 +438,11 @@ public class SemanticVocabulary
         return prop;
     }
 
+    /**
+     * Gets the ns prefix map.
+     * 
+     * @return the ns prefix map
+     */
     public HashMap<String,String> getNsPrefixMap()
     {
         HashMap<String,String> getNamespaces=new HashMap<String, String>();
@@ -262,6 +454,12 @@ public class SemanticVocabulary
         return getNamespaces;
     }
 
+    /**
+     * Gets the semantic property.
+     * 
+     * @param uri the uri
+     * @return the semantic property
+     */
     public SemanticProperty getSemanticProperty(String uri)
     {
         SemanticProperty prop = properties.get(uri);
@@ -286,6 +484,11 @@ public class SemanticVocabulary
         return prop;
     }
 
+    /**
+     * Register class.
+     * 
+     * @param cls the cls
+     */
     public void registerClass(SemanticClass cls)
     {
         if (!classes.containsKey(cls.getURI()))

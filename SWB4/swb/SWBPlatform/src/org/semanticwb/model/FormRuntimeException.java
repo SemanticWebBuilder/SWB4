@@ -29,23 +29,39 @@ package org.semanticwb.model;
 
 import org.semanticwb.SWBRuntimeException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FormRuntimeException.
+ * 
  * @author serch
  */
 public class FormRuntimeException extends SWBRuntimeException
 {
 
+    /**
+     * Instantiates a new form runtime exception.
+     */
     public FormRuntimeException()
     {
         super();
     }
 
+    /**
+     * Instantiates a new form runtime exception.
+     * 
+     * @param msg the msg
+     */
     public FormRuntimeException(String msg)
     {
         super(msg);
     }
 
+    /**
+     * Instantiates a new form runtime exception.
+     * 
+     * @param msg the msg
+     * @param e the e
+     */
     public FormRuntimeException(String msg, Exception e)
     {
         super(msg, e);

@@ -30,32 +30,42 @@ package org.semanticwb.model;
 
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface GenericObject.
+ * 
  * @author Jei
  */
 public interface GenericObject 
 {
+    
     /**
-     * Regresa uri del objeto
+     * Regresa uri del objeto.
+     * 
+     * @return the uRI
      * @return
      */
     public String getURI();
 
     /**
-     * Regresa Identificador del objeto
+     * Regresa Identificador del objeto.
+     * 
+     * @return the id
      * @return
      */
     public String getId();
 
     /**
-     * Segresa el objeto semantico que contiene la informacion delobjeto
+     * Segresa el objeto semantico que contiene la informacion delobjeto.
+     * 
+     * @return the semantic object
      * @return
      */
     public SemanticObject getSemanticObject();    
     
     /**
-     * Asigna la propiedad con el valor especificado
+     * Asigna la propiedad con el valor especificado.
+     * 
      * @param prop Propiedad a modificar
      * @param value Valor a asignar
      * @return SemanticObject para cascada
@@ -63,8 +73,10 @@ public interface GenericObject
     public GenericObject setProperty(String prop, String value);
 
     /**
-     * Elimina una propiedad del objeto
-     * @param prop
+     * Elimina una propiedad del objeto.
+     * 
+     * @param prop the prop
+     * @return the generic object
      * @return
      */
     public GenericObject removeProperty(String prop);
@@ -72,14 +84,14 @@ public interface GenericObject
     /**
      * Regresa ruta de trabajo del objeto relativa al directorio work
      * ejemplo: /sep/Template/1
-     *          /dominio/Objeto/id
+     * /dominio/Objeto/id.
      * 
      * @return String con la ruta relativa al directorio work
      */    
     public String getWorkPath();
 
     /**
-     * Se invoca cuando la instancia del objeto es eliminado de cache
+     * Se invoca cuando la instancia del objeto es eliminado de cache.
      */
     public void dispose();
 

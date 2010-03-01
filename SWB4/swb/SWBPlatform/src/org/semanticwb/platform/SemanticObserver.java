@@ -28,11 +28,24 @@
 
 package org.semanticwb.platform;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * An asynchronous update interface for receiving notifications
+ * about Semantic information as the Semantic is constructed.
+ * 
  * @author javier.solis
  */
 public interface SemanticObserver
 {
+    
+    /**
+     * This method is called when information about an Semantic
+     * which was previously requested using an asynchronous
+     * interface becomes available.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param action the action
+     */
     public void notify(SemanticObject obj, Object prop, String action);
 }

@@ -36,19 +36,32 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFStaticText.
+ * 
  * @author  jorge.jimenez
  */
 public class XFStaticText extends XformsBaseImp
 {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFStaticText.class);
+    
+    /** The value. */
     protected String value=null;
+    
+    /** The is inhead. */
     protected boolean isInhead=false;
     
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
    
+    /**
+     * Instantiates a new xF static text.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFStaticText(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -56,26 +69,49 @@ public class XFStaticText extends XformsBaseImp
     
     // Sets
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value)
     {
         this.value=value;
     }
     
+    /**
+     * Sets the checks if is inhead.
+     * 
+     * @param isInhead the new checks if is inhead
+     */
     public void setisInhead(boolean isInhead){
         this.isInhead=isInhead;
     }
     
     // Gets
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue()
     {
         return value;
     }
     
+    /**
+     * Checks if is inhead.
+     * 
+     * @return true, if is inhead
+     */
     public boolean isInhead(){
         return isInhead;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getValue()!=null) {
             value=rdfElement.getValue();            
@@ -83,6 +119,9 @@ public class XFStaticText extends XformsBaseImp
         isInhead=rdfElement.isInhead();
     }
   
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() 
     {
@@ -98,6 +137,9 @@ public class XFStaticText extends XformsBaseImp
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

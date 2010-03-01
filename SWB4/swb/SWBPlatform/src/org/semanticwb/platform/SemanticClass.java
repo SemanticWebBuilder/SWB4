@@ -48,46 +48,101 @@ import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticClass.
+ * 
  * @author Jei
  */
 public class SemanticClass
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SemanticClass.class);
 
+    /** The m_class. */
     private OntClass m_class;                           //clase ontologia schema
+    
+    /** The m_ontclass. */
     private OntClass m_ontclass;                        //clase ontologia global
+    
+    /** The m_props. */
     private HashMap<String,SemanticProperty> m_props;
+    
+    /** The m_is swb class. */
     private Boolean m_isSWBClass=null;
+    
+    /** The m_is swb interface. */
     private Boolean m_isSWBInterface=null;
+    
+    /** The m_is swb model. */
     private Boolean m_isSWBModel=null;
+    
+    /** The m_is swb form element. */
     private Boolean m_isSWBFormElement=null;
+    
+    /** The m_is swb semantic resource. */
     private Boolean m_isSWBSemanticResource=null;
+    
+    /** The m_class code name. */
     private String m_classCodeName=null;
+    
+    /** The m_class code package. */
     private String m_classCodePackage=null;
+    
+    /** The m_autogen id. */
     private Boolean m_autogenId=null;
+    
+    /** The m_cls. */
     private Class m_cls=null;
+    
+    /** The m_constructor. */
     private Constructor m_constructor=null;
+    
+    /** The display name property. */
     private SemanticProperty displayNameProperty;
+    
+    /** The herarquical props. */
     List<SemanticProperty> herarquicalProps;
+    
+    /** The inverse herarquical props. */
     List<SemanticProperty> inverseHerarquicalProps;
+    
+    /** The m_class group id. */
     private String m_classGroupId=null;
+    
+    /** The m_is class group id check. */
     private boolean m_isClassGroupIdCheck=false;
 
 //    private Boolean isdragSupport=null;
 
-    private boolean dispObject=false;
+    /** The disp object. */
+private boolean dispObject=false;
+    
+    /** The display object. */
     private SemanticObject displayObject=null;
+    
+    /** The m_class name. */
     private String m_className=null;
 
 
+    /**
+     * Instantiates a new semantic class.
+     * 
+     * @param oclass the oclass
+     */
     public SemanticClass(OntClass oclass)
     {
         this.m_class=oclass;
         init();
     }
 
+    /**
+     * Instantiates a new semantic class.
+     * 
+     * @param classuri the classuri
+     * @throws SWBException the sWB exception
+     */
     public SemanticClass(String classuri) throws SWBException
     {
         this.m_class=SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getOntClass(classuri);
@@ -95,11 +150,19 @@ public class SemanticClass
         init();
     }
 
+    /**
+     * Gets the semantic object.
+     * 
+     * @return the semantic object
+     */
     public SemanticObject getSemanticObject()
     {
         return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
     }
 
+    /**
+     * Inits the.
+     */
     private void init()
     {
         m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
@@ -129,7 +192,9 @@ public class SemanticClass
     }
 
     /**
-     * regresa nombre local de la clase
+     * regresa nombre local de la clase.
+     * 
+     * @return the name
      * @return
      */
     public String getName()
@@ -138,7 +203,9 @@ public class SemanticClass
     }
 
     /**
-     * Regresa Prefijo de la clase en base al NS de la ontologia
+     * Regresa Prefijo de la clase en base al NS de la ontologia.
+     * 
+     * @return the prefix
      */
     public String getPrefix()
     {
@@ -146,7 +213,9 @@ public class SemanticClass
     }
 
     /**
-     * Regresa nombre de la clase con paquete, siempre y cuendo sea del tipo swb:Class
+     * Regresa nombre de la clase con paquete, siempre y cuendo sea del tipo swb:Class.
+     * 
+     * @return the class name
      * @return
      */
     public String getClassName()
@@ -180,7 +249,9 @@ public class SemanticClass
     }
 
     /**
-     * Regresa paquete de la clase generica java definido den la ontologia
+     * Regresa paquete de la clase generica java definido den la ontologia.
+     * 
+     * @return the code package
      * @return
      */
     public String getCodePackage()
@@ -201,7 +272,9 @@ public class SemanticClass
 
     /**
      * Regresa nombre de la clase definida por la ontologia
-     * Nombre de la clase sin paquete
+     * Nombre de la clase sin paquete.
+     * 
+     * @return the class code name
      * @return
      */
     public String getClassCodeName()
@@ -228,6 +301,11 @@ public class SemanticClass
         return m_classCodeName;
     }
 
+    /**
+     * Checks if is autogen id.
+     * 
+     * @return true, if is autogen id
+     */
     public boolean isAutogenId()
     {
         if(m_autogenId==null)
@@ -265,16 +343,21 @@ public class SemanticClass
 //    }
 
     /**
-     * Regresa prefix:name
-     * @return
-     */
+ * Regresa prefix:name.
+ * 
+ * @return the class id
+ * @return
+ */
     public String getClassId()
     {
         return getPrefix()+":"+getName();
     }
 
-    /** Usado para generar el identificador (uri) de las instancias de la clase,
-     * asi como de sus subclases, tambien se usa para identificar al objeto en el URL (webpage:home)
+    /**
+     * Usado para generar el identificador (uri) de las instancias de la clase,
+     * asi como de sus subclases, tambien se usa para identificar al objeto en el URL (webpage:home).
+     * 
+     * @return the class group id
      * @return
      */
     public String getClassGroupId()
@@ -308,6 +391,12 @@ public class SemanticClass
         return m_classGroupId;
     }
 
+    /**
+     * Gets the required property.
+     * 
+     * @param prop the prop
+     * @return the required property
+     */
     public SemanticLiteral getRequiredProperty(SemanticProperty prop)
     {
         SemanticLiteral ret=null;
@@ -319,6 +408,12 @@ public class SemanticClass
         return ret;
     }
 
+    /**
+     * List required properties.
+     * 
+     * @param prop the prop
+     * @return the iterator
+     */
     public Iterator<SemanticLiteral> listRequiredProperties(SemanticProperty prop)
     {
         ArrayList<SemanticLiteral> literals=new ArrayList<SemanticLiteral>();
@@ -335,6 +430,12 @@ public class SemanticClass
         return literals.iterator();
     }
 
+    /**
+     * List object required properties.
+     * 
+     * @param prop the prop
+     * @return the iterator
+     */
     public Iterator<SemanticObject> listObjectRequiredProperties(SemanticProperty prop)
     {
         ArrayList<SemanticObject> objects=new ArrayList<SemanticObject>();
@@ -359,7 +460,8 @@ public class SemanticClass
 
     /**
      * Lista las clases relacionadas a esta clase del tipo modelo con la propiedad hasClass
-     * Solo si isSWBModel = true
+     * Solo si isSWBModel = true.
+     * 
      * @return clases relacionadas a esta clase del tipo modelo con la propiedad hasClass
      */
     public Iterator<SemanticClass> listModelClasses()
@@ -374,7 +476,9 @@ public class SemanticClass
     }
 
     /**
-     * Lista los nodos a mostrar en el arbol de SWB
+     * Lista los nodos a mostrar en el arbol de SWB.
+     * 
+     * @return the iterator
      */
     public Iterator<SemanticObject> listHerarquicalNodes()
     {
@@ -388,6 +492,11 @@ public class SemanticClass
     }
 
 
+    /**
+     * List owner models.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listOwnerModels()
     {
         ArrayList ret=new ArrayList();
@@ -406,6 +515,11 @@ public class SemanticClass
     }
 
 
+    /**
+     * Gets the constructor.
+     * 
+     * @return the constructor
+     */
     public Constructor getConstructor()
     {
         if(m_constructor==null)
@@ -424,29 +538,55 @@ public class SemanticClass
 
     }
 
+    /**
+     * New instance.
+     * 
+     * @param uri the uri
+     * @return the semantic object
+     */
     public SemanticObject newInstance(String uri)
     {
         return SemanticObject.createSemanticObject(uri);
     }
 
+    /**
+     * New instance.
+     * 
+     * @param res the res
+     * @return the semantic object
+     */
     public SemanticObject newInstance(Resource res)
     {
         return SemanticObject.createSemanticObject(res);
     }
 
+    /**
+     * New generic instance.
+     * 
+     * @param res the res
+     * @return the generic object
+     */
     public GenericObject newGenericInstance(Resource res)
     {
         return SemanticObject.createSemanticObject(res).createGenericInstance();
     }
 
+    /**
+     * New generic instance.
+     * 
+     * @param obj the obj
+     * @return the generic object
+     */
     public GenericObject newGenericInstance(SemanticObject obj)
     {
         return obj.createGenericInstance();
     }
 
     /**
-     * Crea una nueva instancia del Objeto Generico (no cache)
-     * @param obj
+     * Crea una nueva instancia del Objeto Generico (no cache).
+     * 
+     * @param obj the obj
+     * @return the generic object
      * @return
      */
     GenericObject construcGenericInstance(SemanticObject obj)
@@ -465,6 +605,11 @@ public class SemanticClass
     }
 
 
+    /**
+     * Gets the object class.
+     * 
+     * @return the object class
+     */
     public Class getObjectClass()
     {
         if(m_cls==null)
@@ -478,13 +623,19 @@ public class SemanticClass
         return m_cls;
     }
 
+    /**
+     * Gets the uRI.
+     * 
+     * @return the uRI
+     */
     public String getURI()
     {
         return m_class.getURI();
     }
 
     /**
-     * Regresa URI codificado para utilizar en ligas de html
+     * Regresa URI codificado para utilizar en ligas de html.
+     * 
      * @return URI Codificado
      */
     public String getEncodedURI()
@@ -492,11 +643,23 @@ public class SemanticClass
         return URLEncoder.encode(getURI());
     }
 
+    /**
+     * Gets the label.
+     * 
+     * @param lang the lang
+     * @return the label
+     */
     public String getLabel(String lang)
     {
         return m_class.getLabel(lang);
     }
 
+    /**
+     * Gets the display name.
+     * 
+     * @param lang the lang
+     * @return the display name
+     */
     public String getDisplayName(String lang)
     {
         String ret=null;
@@ -515,6 +678,11 @@ public class SemanticClass
         return ret;
     }
     
+    /**
+     * Gets the display object.
+     * 
+     * @return the display object
+     */
     public SemanticObject getDisplayObject()
     {
         if(!dispObject)
@@ -540,11 +708,22 @@ public class SemanticClass
 //        return m_class.hasSubClass(cls.getOntClass(),false);
 //    }
 
-    public Iterator<SemanticObject> listInstances()
+    /**
+ * List instances.
+ * 
+ * @return the iterator
+ */
+public Iterator<SemanticObject> listInstances()
     {
         return listInstances(false);
     }
 
+    /**
+     * List instances.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator<SemanticObject> listInstances(boolean direct)
     {
         //return SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(this);
@@ -557,71 +736,152 @@ public class SemanticClass
         }
     }
 
+    /**
+     * List schema instances.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticObject> listSchemaInstances()
     {
         return listSchemaInstances(false);
     }
 
+    /**
+     * List schema instances.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator<SemanticObject> listSchemaInstances(boolean direct)
     {
         return new SemanticObjectIterator(m_class.listInstances(direct));
     }
 
+    /**
+     * List generic instances.
+     * 
+     * @return the iterator
+     */
     public Iterator listGenericInstances()
     {
         return listGenericInstances(false);
     }
 
+    /**
+     * List generic instances.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator listGenericInstances(boolean direct)
     {
         return new GenericIterator(listInstances(direct));
     }
 
+    /**
+     * List schema generic instances.
+     * 
+     * @return the iterator
+     */
     public Iterator listSchemaGenericInstances()
     {
         return listSchemaGenericInstances(false);
     }
 
+    /**
+     * List schema generic instances.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator listSchemaGenericInstances(boolean direct)
     {
         return new GenericIterator(listSchemaInstances(direct));
     }
 
+    /**
+     * Gets the property.
+     * 
+     * @param name the name
+     * @return the property
+     */
     public SemanticProperty getProperty(String name)
     {
         return m_props.get(name);
     }
 
+    /**
+     * Checks for property.
+     * 
+     * @param name the name
+     * @return true, if successful
+     */
     public boolean hasProperty(String name)
     {
         return m_props.containsKey(name);
     }
 
+    /**
+     * List properties.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listProperties()
     {
         return m_props.values().iterator();
     }
 
+    /**
+     * Gets the ont class.
+     * 
+     * @return the ont class
+     */
     public OntClass getOntClass()
     {
         return m_class;
     }
 
+    /**
+     * Checks if is super class.
+     * 
+     * @param cls the cls
+     * @return true, if is super class
+     */
     public boolean isSuperClass(SemanticClass cls)
     {
         return isSuperClass(cls, false);
     }
 
+    /**
+     * Checks if is super class.
+     * 
+     * @param cls the cls
+     * @param direct the direct
+     * @return true, if is super class
+     */
     public boolean isSuperClass(SemanticClass cls, boolean direct)
     {
         return cls.isSubClass(this, direct);
     }
 
+    /**
+     * Checks if is sub class.
+     * 
+     * @param cls the cls
+     * @return true, if is sub class
+     */
     public boolean isSubClass(SemanticClass cls)
     {
         return isSubClass(cls, false);
     }
 
+    /**
+     * Checks if is sub class.
+     * 
+     * @param cls the cls
+     * @param direct the direct
+     * @return true, if is sub class
+     */
     public boolean isSubClass(SemanticClass cls, boolean direct)
     {
         boolean ret=false;
@@ -638,38 +898,69 @@ public class SemanticClass
         return ret;
     }
 
+    /**
+     * List sub classes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSubClasses()
     {
         return listSubClasses(false);
     }
 
+    /**
+     * List sub classes.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSubClasses(boolean direct)
     {
         return new SemanticClassIterator(m_class.listSubClasses(direct));
     }
 
+    /**
+     * List super classes.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSuperClasses()
     {
         return listSuperClasses(false);
     }
 
+    /**
+     * List super classes.
+     * 
+     * @param direct the direct
+     * @return the iterator
+     */
     public Iterator<SemanticClass> listSuperClasses(boolean direct)
     {
         return new SemanticClassIterator(m_class.listSuperClasses(direct));
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
         return m_class.toString();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
         return m_class.hashCode();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -681,6 +972,9 @@ public class SemanticClass
         return ret;
     }
 
+    /**
+     * Check type.
+     */
     private void checkType()
     {
         m_isSWBClass=false;
@@ -716,6 +1010,11 @@ public class SemanticClass
         }
     }
 
+    /**
+     * Checks if is sWB class.
+     * 
+     * @return true, if is sWB class
+     */
     public boolean isSWBClass()
     {
         if(m_isSWBClass==null)
@@ -725,6 +1024,11 @@ public class SemanticClass
         return m_isSWBClass.booleanValue();
     }
 
+    /**
+     * Checks if is sWB interface.
+     * 
+     * @return true, if is sWB interface
+     */
     public boolean isSWBInterface()
     {
         if(m_isSWBInterface==null)
@@ -734,6 +1038,11 @@ public class SemanticClass
         return m_isSWBInterface.booleanValue();
     }
 
+    /**
+     * Checks if is sWB model.
+     * 
+     * @return true, if is sWB model
+     */
     public boolean isSWBModel()
     {
         if(m_isSWBModel==null)
@@ -743,6 +1052,11 @@ public class SemanticClass
         return m_isSWBModel.booleanValue();
     }
 
+    /**
+     * Checks if is sWB form element.
+     * 
+     * @return true, if is sWB form element
+     */
     public boolean isSWBFormElement()
     {
         if(m_isSWBFormElement==null)
@@ -752,6 +1066,11 @@ public class SemanticClass
         return m_isSWBFormElement.booleanValue();
     }
 
+    /**
+     * Checks if is sWB semantic resource.
+     * 
+     * @return true, if is sWB semantic resource
+     */
     public boolean isSWBSemanticResource()
     {
         if(m_isSWBSemanticResource==null)
@@ -761,30 +1080,60 @@ public class SemanticClass
         return m_isSWBSemanticResource.booleanValue();
     }
 
+    /**
+     * Gets the display name property.
+     * 
+     * @return the display name property
+     */
     public SemanticProperty getDisplayNameProperty() {
         return displayNameProperty;
     }
 
+    /**
+     * Checks for herarquical properties.
+     * 
+     * @return true, if successful
+     */
     public boolean hasHerarquicalProperties()
     {
         return !herarquicalProps.isEmpty();
     }
 
+    /**
+     * List herarquical properties.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listHerarquicalProperties()
     {
         return herarquicalProps.iterator();
     }
 
+    /**
+     * Checks for inverse herarquical properties.
+     * 
+     * @return true, if successful
+     */
     public boolean hasInverseHerarquicalProperties()
     {
         return !inverseHerarquicalProps.isEmpty();
     }
 
+    /**
+     * List inverse herarquical properties.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listInverseHerarquicalProperties()
     {
         return inverseHerarquicalProps.iterator();
     }
 
+    /**
+     * Adds the super class.
+     * 
+     * @param cls the cls
+     */
     public void addSuperClass(SemanticClass cls)
     {
         SemanticObject obj=SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
@@ -792,11 +1141,21 @@ public class SemanticClass
         res.addProperty(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.RDFS_SUBCLASSOF).getRDFProperty(), cls.getOntClass());
     }
 
+    /**
+     * Checks if is sWB.
+     * 
+     * @return true, if is sWB
+     */
     public boolean isSWB()
     {
         return isSWBClass() || isSWBModel() || isSWBFormElement() || isSWBInterface() || isSWBSemanticResource();
     }
 
+    /**
+     * Gets the root class.
+     * 
+     * @return the root class
+     */
     public SemanticClass getRootClass()
     {
         SemanticClass ret=this;

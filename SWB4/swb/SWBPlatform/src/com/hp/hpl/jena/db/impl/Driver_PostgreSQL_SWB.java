@@ -31,20 +31,28 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_PostgreSQL_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_PostgreSQL_SWB extends Driver_MySQL {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Driver_PostgreSQL_SWB.class);
 
+    /**
+     * Instantiates a new driver_ postgre sq l_ swb.
+     */
     public Driver_PostgreSQL_SWB() {
         super();
     }
 
     /**
-     * Set the database connection
+     * Set the database connection.
+     * 
+     * @param dbcon the new connection
      */
     @Override
     public void setConnection(IDBConnection dbcon) {

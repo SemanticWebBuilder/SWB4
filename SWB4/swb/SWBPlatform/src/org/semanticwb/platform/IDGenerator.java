@@ -33,13 +33,20 @@ package org.semanticwb.platform;
 
 import org.semanticwb.SWBUtils;
 
-/** objeto: generador de identificadores unicos para objetos de topicmaps
+// TODO: Auto-generated Javadoc
+/**
+ * objeto: generador de identificadores unicos para objetos de topicmaps.
+ * 
  * @author Javier Solis Gonzalez
  * @version 1.1
  */
 public class IDGenerator
 {
+    
+    /** The base id. */
     protected String baseID;
+    
+    /** The counter. */
     protected long counter;
 
     /**
@@ -57,22 +64,44 @@ public class IDGenerator
      * the base identifier created in the object constructor
      * followed by a dash (-) and then a simple, incrementing
      * counter value (encoded in hexadecimal).
+     * 
+     * @return the iD
      */
     public String getID()
     {
         return baseID + "-" + Long.toString(counter++, 16);
     }
 
+    /**
+     * Gets the counter.
+     * 
+     * @return the counter
+     */
     public String getCounter()
     {
         return Long.toString(counter++, 16);
     }
 
+    /**
+     * Gets the iD.
+     * 
+     * @param titulo the titulo
+     * @param mapid the mapid
+     * @return the iD
+     */
     public String getID(String titulo, String mapid)
     {
         return getID(titulo, mapid, true);
     }
 
+    /**
+     * Gets the iD.
+     * 
+     * @param titulo the titulo
+     * @param mapid the mapid
+     * @param contador the contador
+     * @return the iD
+     */
     public String getID(String titulo, String mapid, boolean contador)
     {
         StringBuffer ret = new StringBuffer();

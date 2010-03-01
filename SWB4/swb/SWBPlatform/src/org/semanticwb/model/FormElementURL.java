@@ -35,26 +35,59 @@ import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FormElementURL.
+ * 
  * @author javier.solis
  */
 public class FormElementURL
 {
+    
+    /** The Constant URLTYPE_RENDER. */
     public static final String URLTYPE_RENDER="render";
+    
+    /** The Constant URLTYPE_PROCESS. */
     public static final String URLTYPE_PROCESS="process";
+    
+    /** The Constant URLTYPE_VALIDATE. */
     public static final String URLTYPE_VALIDATE="validate";
 
+    /** The frmele. */
     private FormElement frmele;
+    
+    /** The obj. */
     private SemanticObject obj;
+    
+    /** The prop. */
     private SemanticProperty prop;
+    
+    /** The codetype. */
     private String codetype;
+    
+    /** The urltype. */
     private String urltype;
+    
+    /** The mode. */
     private String mode;
+    
+    /** The lang. */
     private String lang;
 
+    /** The params. */
     private HashMap<String,String> params;
 
+    /**
+     * Instantiates a new form element url.
+     * 
+     * @param frmele the frmele
+     * @param obj the obj
+     * @param prop the prop
+     * @param urltype the urltype
+     * @param codetype the codetype
+     * @param mode the mode
+     * @param lang the lang
+     */
     public FormElementURL(FormElement frmele, SemanticObject obj, SemanticProperty prop, String urltype, String codetype, String mode, String lang)
     {
         params=new HashMap();
@@ -67,17 +100,33 @@ public class FormElementURL
         this.lang=lang;
     }
 
+    /**
+     * Sets the parameter.
+     * 
+     * @param key the key
+     * @param value the value
+     * @return the form element url
+     */
     public FormElementURL setParameter(String key, String value)
     {
         params.put(key, value);
         return this;
     }
 
+    /**
+     * Gets the parameter.
+     * 
+     * @param key the key
+     * @return the parameter
+     */
     public String getParameter(String key)
     {
         return params.get(key);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {

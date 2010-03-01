@@ -33,12 +33,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBObjectFilter.
+ * 
  * @author javier.solis
  */
 public class SWBObjectFilter
 {
+    
+    /**
+     * Filter.
+     * 
+     * @param objects the objects
+     * @param filter the filter
+     * @return the iterator
+     */
     public static Iterator<SemanticObject> filter(Iterator<SemanticObject>objects, String filter)
     {
         if(filter!=null)
@@ -58,7 +68,8 @@ public class SWBObjectFilter
 
 
     /**
-     *
+     * Filter.
+     * 
      * @param obj SemanticObject a filtrar
      * @param filter String con filtro
      * @return boolean si clumple o no con el filtro

@@ -32,34 +32,57 @@ import com.hp.hpl.jena.rdf.model.Property;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticPropertyIterator.
+ * 
  * @author Jei
  */
 public class SemanticPropertyIterator implements Iterator
 {
+    
+    /** The it. */
     Iterator it;
     
+    /**
+     * Instantiates a new semantic property iterator.
+     * 
+     * @param it the it
+     */
     public SemanticPropertyIterator(Iterator it)
     {
         this.it=it;
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return it.hasNext();
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public Object next()
     {
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty((Property)it.next());
     }
     
+    /**
+     * Next semantic property.
+     * 
+     * @return the semantic property
+     */
     public SemanticProperty nextSemanticProperty() 
     {
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty((Property)it.next());
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         it.remove();

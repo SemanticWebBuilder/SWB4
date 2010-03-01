@@ -34,16 +34,25 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFButton.
+ * 
  * @author  jorge.jimenez
  */
 public class XFButton extends XformsBaseImp {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFButton.class);
     
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
     
+    /**
+     * Instantiates a new xF button.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFButton(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -55,6 +64,9 @@ public class XFButton extends XformsBaseImp {
     // Gets
     
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -64,6 +76,9 @@ public class XFButton extends XformsBaseImp {
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();

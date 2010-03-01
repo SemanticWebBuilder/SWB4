@@ -35,34 +35,64 @@ import java.sql.Timestamp;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticLiteral.
+ * 
  * @author Jei
  */
 public class SemanticLiteral 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SemanticLiteral.class);
 
+    /** The literal. */
     Literal literal;
+    
+    /** The m_lang. */
     String m_lang=null;
+    
+    /** The m_obj. */
     Object m_obj=null;
             
+    /**
+     * Instantiates a new semantic literal.
+     * 
+     * @param stmt the stmt
+     */
     public SemanticLiteral(Statement stmt)
     {
         literal=stmt.getLiteral();
     }
     
+    /**
+     * Instantiates a new semantic literal.
+     * 
+     * @param literal the literal
+     */
     public SemanticLiteral(Literal literal)
     {
         this.literal=literal;
     }    
 
+    /**
+     * Instantiates a new semantic literal.
+     * 
+     * @param value the value
+     */
     public SemanticLiteral(Object value)
     {
         //System.out.println("SemanticLiteral:"+value);
         m_obj=value;
     }
 
+    /**
+     * Instantiates a new semantic literal.
+     * 
+     * @param value the value
+     * @param lang the lang
+     */
     public SemanticLiteral(Object value, String lang)
     {
         //System.out.println("Val:"+value+" lang:"+lang);
@@ -70,6 +100,13 @@ public class SemanticLiteral
         m_lang=lang;
     }
 
+    /**
+     * Value of.
+     * 
+     * @param prop the prop
+     * @param value the value
+     * @return the semantic literal
+     */
     public static SemanticLiteral valueOf(SemanticProperty prop, String value)
     {
         SemanticLiteral ret=null;
@@ -102,6 +139,11 @@ public class SemanticLiteral
         return ret;
     }
 
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public Object getValue()
     {
         Object ret=null;
@@ -115,6 +157,11 @@ public class SemanticLiteral
         return ret;
     }
     
+    /**
+     * Gets the boolean.
+     * 
+     * @return the boolean
+     */
     public boolean getBoolean()
     {
         Boolean ret=null;
@@ -129,6 +176,11 @@ public class SemanticLiteral
         return ret;
     }
     
+    /**
+     * Gets the string.
+     * 
+     * @return the string
+     */
     public String getString()
     {
         String ret=null;
@@ -142,6 +194,11 @@ public class SemanticLiteral
         return ret;
     }    
 
+    /**
+     * Gets the byte.
+     * 
+     * @return the byte
+     */
     public byte getByte()
     {
         Byte ret=null;
@@ -156,6 +213,11 @@ public class SemanticLiteral
         return ret;
     }    
     
+    /**
+     * Gets the char.
+     * 
+     * @return the char
+     */
     public char getChar()
     {
         Character ret=null;
@@ -170,6 +232,11 @@ public class SemanticLiteral
         return ret;
     }    
     
+    /**
+     * Gets the double.
+     * 
+     * @return the double
+     */
     public double getDouble()
     {
         Double ret=null;
@@ -184,6 +251,11 @@ public class SemanticLiteral
         return ret;
     }    
     
+    /**
+     * Gets the float.
+     * 
+     * @return the float
+     */
     public float getFloat()
     {
         Float ret=null;
@@ -198,6 +270,11 @@ public class SemanticLiteral
         return ret;
     }    
 
+    /**
+     * Gets the int.
+     * 
+     * @return the int
+     */
     public int getInt()
     {
         Integer ret=null;
@@ -215,6 +292,11 @@ public class SemanticLiteral
         return ret;
     }    
     
+    /**
+     * Gets the short.
+     * 
+     * @return the short
+     */
     public short getShort()
     {
         Short ret=null;
@@ -229,6 +311,11 @@ public class SemanticLiteral
         return ret;
     }    
     
+    /**
+     * Gets the language.
+     * 
+     * @return the language
+     */
     public String getLanguage()
     {
         String ret=null;
@@ -242,6 +329,11 @@ public class SemanticLiteral
         return ret;
     }     
     
+    /**
+     * Gets the long.
+     * 
+     * @return the long
+     */
     public long getLong()
     {
         Long ret=null;
@@ -256,6 +348,11 @@ public class SemanticLiteral
         return ret;
     }      
 
+    /**
+     * Gets the date.
+     * 
+     * @return the date
+     */
     public Date getDate()
     {
         Object obj=getValue();
@@ -277,6 +374,11 @@ public class SemanticLiteral
         return ret;
     }
 
+    /**
+     * Gets the date time.
+     * 
+     * @return the date time
+     */
     public Timestamp getDateTime()
     {
         Object obj=getValue();
