@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FrozenNode.
+ */
 public class FrozenNode extends org.semanticwb.repository.base.FrozenNodeBase 
 {
+    
+    /**
+     * Instantiates a new frozen node.
+     * 
+     * @param base the base
+     */
     public FrozenNode(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

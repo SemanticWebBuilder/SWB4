@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HierarchyNode.
+ */
 public class HierarchyNode extends org.semanticwb.repository.base.HierarchyNodeBase 
 {
+    
+    /**
+     * Instantiates a new hierarchy node.
+     * 
+     * @param base the base
+     */
     public HierarchyNode(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

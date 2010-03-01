@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Folder.
+ */
 public class Folder extends org.semanticwb.repository.base.FolderBase 
 {
+    
+    /**
+     * Instantiates a new folder.
+     * 
+     * @param base the base
+     */
     public Folder(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

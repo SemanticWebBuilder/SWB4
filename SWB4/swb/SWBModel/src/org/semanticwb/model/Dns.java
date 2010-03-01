@@ -33,13 +33,27 @@ import org.semanticwb.platform.SemanticObject;
 import java.util.HashMap;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Dns.
+ */
 public class Dns extends DnsBase {
+    
+    /** The names. */
     private static HashMap<String, Dns> names = null;
 
+    /**
+     * Instantiates a new dns.
+     * 
+     * @param base the base
+     */
     public Dns(SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DnsBase#setDefault(boolean)
+     */
     @Override
     public void setDefault(boolean dnsDefault) {
         super.setDefault(dnsDefault);
@@ -55,6 +69,9 @@ public class Dns extends DnsBase {
         }
     }
 
+    /**
+     * Refresh.
+     */
     synchronized public static void refresh() {
         names = new HashMap();
 
@@ -67,6 +84,12 @@ public class Dns extends DnsBase {
         }
     }
 
+    /**
+     * Gets the dns.
+     * 
+     * @param serverName the server name
+     * @return the dns
+     */
     public static Dns getDns(String serverName) {
         if (names == null) {
             refresh();

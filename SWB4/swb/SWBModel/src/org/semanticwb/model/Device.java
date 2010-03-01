@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Device.
+ */
 public class Device extends DeviceBase {
+    
+    /**
+     * Instantiates a new device.
+     * 
+     * @param base the base
+     */
     public Device(SemanticObject base) {
         super(base);
     }

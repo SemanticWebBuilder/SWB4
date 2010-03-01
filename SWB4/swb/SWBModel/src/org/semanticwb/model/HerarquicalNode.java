@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HerarquicalNode.
+ */
 public class HerarquicalNode extends HerarquicalNodeBase {
+    
+    /**
+     * Instantiates a new herarquical node.
+     * 
+     * @param base the base
+     */
     public HerarquicalNode(SemanticObject base) {
         super(base);
     }

@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class IPFilter.
+ */
 public class IPFilter extends IPFilterBase {
+    
+    /**
+     * Instantiates a new iP filter.
+     * 
+     * @param base the base
+     */
     public IPFilter(SemanticObject base) {
         super(base);
     }

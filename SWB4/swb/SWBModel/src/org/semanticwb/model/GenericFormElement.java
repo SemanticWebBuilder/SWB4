@@ -29,15 +29,31 @@ import org.semanticwb.platform.SemanticProperty;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GenericFormElement.
+ */
 public class GenericFormElement extends FormElementBase {
+    
+    /**
+     * Instantiates a new generic form element.
+     */
     public GenericFormElement() {
         super(new SemanticObject());
     }
 
+    /**
+     * Instantiates a new generic form element.
+     * 
+     * @param obj the obj
+     */
     public GenericFormElement(SemanticObject obj) {
         super(obj);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {

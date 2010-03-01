@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -23,12 +22,20 @@
  */
 package org.semanticwb.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Camp.
+ */
 public class Camp extends CampBase {
+    
+    /**
+     * Instantiates a new camp.
+     * 
+     * @param base the base
+     */
     public Camp(SemanticObject base) {
         super(base);
     }

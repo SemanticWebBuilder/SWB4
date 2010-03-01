@@ -38,14 +38,30 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DateElement.
+ */
 public class DateElement extends org.semanticwb.model.base.DateElementBase {
+    
+    /** The log. */
     private static Logger           log    = SWBUtils.getLogger(DateElement.class);
+    
+    /** The format. */
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+    /**
+     * Instantiates a new date element.
+     * 
+     * @param base the base
+     */
     public DateElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
@@ -155,6 +171,9 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
         return ret.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
 
@@ -180,6 +199,9 @@ public class DateElement extends org.semanticwb.model.base.DateElementBase {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DateElementBase#getConstraints()
+     */
     @Override
     public String getConstraints() {
         String ret = super.getConstraints();

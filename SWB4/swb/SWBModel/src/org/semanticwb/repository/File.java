@@ -24,8 +24,18 @@
 package org.semanticwb.repository;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class File.
+ */
 public class File extends org.semanticwb.repository.base.FileBase 
 {
+    
+    /**
+     * Instantiates a new file.
+     * 
+     * @param base the base
+     */
     public File(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

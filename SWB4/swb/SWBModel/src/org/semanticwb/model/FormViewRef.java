@@ -28,7 +28,17 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FormViewRef.
+ */
 public class FormViewRef extends FormViewRefBase {
+    
+    /**
+     * Instantiates a new form view ref.
+     * 
+     * @param base the base
+     */
     public FormViewRef(SemanticObject base) {
         super(base);
     }
