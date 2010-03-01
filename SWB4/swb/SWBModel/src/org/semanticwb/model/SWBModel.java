@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SWBModel.
+ */
 public class SWBModel extends org.semanticwb.model.base.SWBModelBase {
+    
+    /**
+     * Instantiates a new sWB model.
+     * 
+     * @param base the base
+     */
     public SWBModel(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
