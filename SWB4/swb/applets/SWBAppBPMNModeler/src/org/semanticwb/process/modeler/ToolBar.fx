@@ -151,7 +151,6 @@ public class ToolBar extends CustomNode
     {
         loadProcess();
 
-
         var startEvent=SubMenu
         {
             modeler: modeler
@@ -176,21 +175,6 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Rule Start Event"
-                    image: "images/start_cond1.png"
-                    imageOver: "images/start_cond2.png"
-                    action: function():Void {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
-                        {
-                            modeler:modeler
-                            title:"Rule Start Event"
-                            uri:"new:startevent:{counter++}"
-                            type: Event.RULE;
-                        }
-                    }
-                },
-                ImgButton {
                     text:"Message Start Event"
                     image: "images/start_msj1.png"
                     imageOver: "images/start_msj2.png"
@@ -201,39 +185,7 @@ public class ToolBar extends CustomNode
                             modeler:modeler
                             title:"Message Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.MESSAGE;
-                        }
-                    }
-                },
-                ImgButton {
-                    text:"Multiple Start Event"
-                    image: "images/start_multi1.png"
-                    imageOver: "images/start_multi2.png"
-                    action: function():Void
-                    {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
-                        {
-                            modeler:modeler
-                            title:"Multiple Start Event"
-                            uri:"new:startevent:{counter++}"
-                            type: Event.MULTIPLE;
-                        }
-                    }
-                },
-                ImgButton {
-                    text:"Signal Start Event"
-                    image: "images/start_senal1.png"
-                    imageOver: "images/start_senal2.png"
-                    action: function():Void
-                    {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
-                        {
-                            modeler:modeler
-                            title:"Signal Start Event"
-                            uri:"new:startevent:{counter++}"
-                            type: Event.MULTIPLE;
+                            type: Event.W_MESSAGE;
                         }
                     }
                 },
@@ -249,13 +201,631 @@ public class ToolBar extends CustomNode
                             modeler:modeler
                             title:"Timer Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.TIMER;
+                            type: Event.W_TIMER;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Conditional Start Event"
+                    image: "images/start_cond1.png"
+                    imageOver: "images/start_cond2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Conditional Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_CONDITINAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Signal Start Event"
+                    image: "images/start_senal1.png"
+                    imageOver: "images/start_senal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Signal Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_SIGNAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple Start Event"
+                    image: "images/start_multi1.png"
+                    imageOver: "images/start_multi2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Multiple Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Parallel Start Event"
+                    image: "images/start_paralelo1.png"
+                    imageOver: "images/start_paralelo2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Parallel Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_PARALLEL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Escalation Start Event"
+                    image: "images/start_escala1.png"
+                    imageOver: "images/start_escala2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Escalation Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_SCALATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Error Start Event"
+                    image: "images/start_error1.png"
+                    imageOver: "images/start_error2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Error Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_ERROR;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Compensation Start Event"
+                    image: "images/start_compensa1.png"
+                    imageOver: "images/start_compensa2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=StartEvent
+                        {
+                            modeler:modeler
+                            title:"Compensation Start Event"
+                            uri:"new:startevent:{counter++}"
+                            type: Event.W_COMPENSATION;
                         }
                     }
                 }
             ]
         };
 
+        var interEvent=SubMenu
+        {
+            modeler: modeler
+            text:"Inter Event"
+            image:"images/inter_1.png"
+            imageOver:"images/inter_2.png"
+            imageClicked: "images/inter_3.png"
+            buttons: [
+                ImgButton {
+                    text:"Inter Event"
+                    image: "images/inter_normal1.png"
+                    imageOver: "images/inter_normal2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            //type: Event.RULE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Message Inter Event"
+                    image: "images/inter_msj_b_1.png"
+                    imageOver: "images/inter_msj_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Message Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_MESSAGE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Message Inter Event"
+                    image: "images/inter_msj_n_1.png"
+                    imageOver: "images/inter_msj_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Message Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_MESSAGE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Timer Inter Event"
+                    image: "images/inter_tmp1.png"
+                    imageOver: "images/inter_tmp2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Timer Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_TIMER;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Error Inter Event"
+                    image: "images/inter_error1.png"
+                    imageOver: "images/inter_error2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Error Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_ERROR;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Cancelation Inter Event"
+                    image: "images/inter_cancel_1.png"
+                    imageOver: "images/inter_cancel_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Cancelation Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_CANCELATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Compensation Inter Event"
+                    image: "images/inter_compensa_b_1.png"
+                    imageOver: "images/inter_compensa_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Compensation Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_COMPENSATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Compensation Inter Event"
+                    image: "images/inter_compensa_n_1.png"
+                    imageOver: "images/inter_compensa_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Compensation Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_COMPENSATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Conditional Inter Event"
+                    image: "images/inter_cond1.png"
+                    imageOver: "images/inter_cond2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Conditional Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_CONDITINAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Link Inter Event"
+                    image: "images/inter_enlace_b_1.png"
+                    imageOver: "images/inter_enlace_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Link Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_LINK;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Link Inter Event"
+                    image: "images/inter_enlace_n_1.png"
+                    imageOver: "images/inter_enlace_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Link Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_LINK;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Signal Inter Event"
+                    image: "images/inter_senal_b_1.png"
+                    imageOver: "images/inter_senal_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Signal Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_SIGNAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Signal Inter Event"
+                    image: "images/inter_senal_n_1.png"
+                    imageOver: "images/inter_senal_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Signal Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_SIGNAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple Inter Event"
+                    image: "images/inter_multi_b_1.png"
+                    imageOver: "images/inter_multi_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Multiple Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Multiple Inter Event"
+                    image: "images/inter_multi_n_1.png"
+                    imageOver: "images/inter_multi_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Multiple Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Scalation Inter Event"
+                    image: "images/inter_escala_b_1.png"
+                    imageOver: "images/inter_escala_b_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Scalation Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_SCALATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Throwing Scalation Inter Event"
+                    image: "images/inter_escala_n_1.png"
+                    imageOver: "images/inter_escala_n_2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Throwing Scalation Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.B_SCALATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Parallel Inter Event"
+                    image: "images/inter_paralelo1.png"
+                    imageOver: "images/inter_paralelo2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=InterEvent
+                        {
+                            modeler:modeler
+                            title:"Parallel Inter Event"
+                            uri:"new:interevent:{counter++}"
+                            type: Event.W_PARALLEL;
+                        }
+                    }
+                }
+            ]
+        };
+
+        var endEvent=SubMenu
+        {
+            modeler: modeler
+            text:"End Event"
+            image: "images/end_1.png"
+            imageOver: "images/end_2.png"
+            imageClicked: "images/end_3.png"
+            buttons: [
+                ImgButton {
+                    text:"End Event"
+                    image: "images/end_normal1.png"
+                    imageOver: "images/end_normal2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"End Event"
+                            uri:"new:endevent:{counter++}"
+                            //type: Event.RULE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Message End Event"
+                    image: "images/end_msj1.png"
+                    imageOver: "images/end_msj1.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Message End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_MESSAGE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Error End Event"
+                    image: "images/end_error1.png"
+                    imageOver: "images/end_error2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Error End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_ERROR;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Cancelation End Event"
+                    image: "images/end_cancel1.png"
+                    imageOver: "images/end_cancel2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Cancelation End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_CANCELATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Compensation End Event"
+                    image: "images/end_compensa1.png"
+                    imageOver: "images/end_compensa2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Compensation End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_COMPENSATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Signal End Event"
+                    image: "images/end_senal1.png"
+                    imageOver: "images/end_senal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Signal End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_SIGNAL;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple End Event"
+                    image: "images/end_multi1.png"
+                    imageOver: "images/end_multi2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Multiple End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_MULTIPLE;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Escalation End Event"
+                    image: "images/end_escala1.png"
+                    imageOver: "images/end_escala2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Escalation End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_SCALATION;
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Termination End Event"
+                    image: "images/end_termina1.png"
+                    imageOver: "images/end_termina2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EndEvent
+                        {
+                            modeler:modeler
+                            title:"Termination End Event"
+                            uri:"new:endevent:{counter++}"
+                            type: Event.B_TERMINATION;
+                        }
+                    }
+                }         
+            ]
+        };
+
+        var gateWay=SubMenu
+        {
+            modeler: modeler
+            text:"GateWay"
+            image: "images/if_1.png"
+            imageOver: "images/if_2.png"
+            imageClicked: "images/if_3.png"
+            buttons: [
+                ImgButton {
+                    text:"GateWay"
+                    image: "images/gate_normal1.png"
+                    imageOver: "images/gate_normal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=GateWay
+                        {
+                            modeler:modeler
+                            title:"GateWay"
+                            uri:"new:gateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"GateWay"
+                    image: "images/gate_normal1.png"
+                    imageOver: "images/gate_normal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=GateWay
+                        {
+                            modeler:modeler
+                            title:"GateWay"
+                            uri:"new:gateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"XOR GateWay"
+                    image: "images/gate_datos1.png"
+                    imageOver: "images/gate_datos2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=GateWay
+                        {
+                            modeler:modeler
+                            title:"XOR GateWay"
+                            uri:"new:gateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"XOR GateWay"
+                    image: "images/gate_datos1.png"
+                    imageOver: "images/gate_datos2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=GateWay
+                        {
+                            modeler:modeler
+                            title:"XOR GateWay"
+                            uri:"new:gateway:{counter++}"
+                        }
+                    }
+                },   
+            ]
+        }
 
 
         var lane=ImgButton
@@ -428,51 +998,9 @@ public class ToolBar extends CustomNode
                             }
                         },
                         startEvent,
-                        ImgButton {
-                            text:"Inter Event"
-                            image:"images/inter_1.png"
-                            imageOver:"images/inter_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=InterEvent
-                                {
-                                    modeler:modeler
-                                    title:"Inter Event"
-                                    uri:"new:interevent:{counter++}"
-                                    //type: Event.RULE;
-                                }
-                            }
-                        },
-                        ImgButton {
-                            text:"End Event"
-                            image:"images/end_1.png"
-                            imageOver:"images/end_2.png"
-                            action: function():Void
-                            {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=EndEvent
-                                {
-                                    modeler:modeler
-                                    title:"End Event"
-                                    uri:"new:endevent:{counter++}"
-                                    type: Event.RULE;
-                                }
-                            }
-                        },
-                        ImgButton {
-                            text:"Gateway"
-                            image: "images/if_1.png"
-                            imageOver: "images/if_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=GateWay
-                                {
-                                    modeler:modeler
-                                    title:"Gateway"
-                                    uri:"new:gateway:{counter++}"
-                                }
-                            }
-                        },
+                        interEvent,
+                        endEvent,
+                        gateWay,
                         ImgButton {
                             text:"OR Gateway"
                             image: "images/if_1.png"
@@ -579,7 +1107,10 @@ public class ToolBar extends CustomNode
                         }
                     ]
                 },
-                startEvent.subBar
+                startEvent.subBar,
+                interEvent.subBar,
+                endEvent.subBar,
+                gateWay.subBar
              ]
              cursor:Cursor.HAND;
         };
