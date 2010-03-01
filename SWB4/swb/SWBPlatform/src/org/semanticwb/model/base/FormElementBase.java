@@ -44,29 +44,49 @@ import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FormElementBase.
+ * 
  * @author Jei
  */
 public class FormElementBase extends GenericObjectBase implements FormElement, GenericObject
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(FormElementBase.class);
 
+    /** The attributes. */
     protected HashMap attributes=null;
+    
+    /** The model. */
     private SemanticModel model=null;
+    
+    /** The filter html tags. */
     private boolean filterHTMLTags=true;
 
+    /**
+     * Instantiates a new form element base.
+     * 
+     * @param obj the obj
+     */
     public FormElementBase(SemanticObject obj)
     {
         super(obj);
         attributes=new HashMap();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) throws FormValidateException
     {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
         String smode=request.getParameter("smode");
@@ -146,6 +166,9 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#renderLabel(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     public String renderLabel(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         String ret="";
@@ -161,11 +184,17 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#setAttribute(java.lang.String, java.lang.String)
+     */
     public void setAttribute(String name, String value)
     {
         if(value!=null)
@@ -177,6 +206,11 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         }
     }
 
+    /**
+     * Gets the attributes.
+     * 
+     * @return the attributes
+     */
     public String getAttributes()
     {
         StringBuffer ret=new StringBuffer();
@@ -190,21 +224,33 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
         return ret.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#getRenderURL(org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     public FormElementURL getRenderURL(SemanticObject obj, SemanticProperty prop, String type, String mode, String lang)
     {
         return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_RENDER,type, mode, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#getValidateURL(org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     public FormElementURL getValidateURL(SemanticObject obj, SemanticProperty prop)
     {
         return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_VALIDATE,null, null, null);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#getProcessURL(org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
+     */
     public FormElementURL getProcessURL(SemanticObject obj, SemanticProperty prop)
     {
         return new FormElementURL(this,obj, prop, FormElementURL.URLTYPE_PROCESS,null, null, null);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.FormElement#getLocaleString(java.lang.String, java.lang.String)
+     */
     public String getLocaleString(String key, String lang)
     {
         String ret=null;
@@ -216,6 +262,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     }
 
     /**
+     * Gets the model.
+     * 
      * @return the model
      */
     public SemanticModel getModel() {
@@ -223,6 +271,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     }
 
     /**
+     * Sets the model.
+     * 
      * @param model the model to set
      */
     public void setModel(SemanticModel model) {
@@ -230,6 +280,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     }
 
     /**
+     * Checks if is filter html tags.
+     * 
      * @return the filterHTMLTags
      */
     public boolean isFilterHTMLTags() {
@@ -237,6 +289,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     }
 
     /**
+     * Sets the filter html tags.
+     * 
      * @param filterHTMLTags the filterHTMLTags to set
      */
     public void setFilterHTMLTags(boolean filterHTMLTags) {

@@ -32,20 +32,31 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticObjectIterator.
+ * 
  * @author Jei
  */
 public class SemanticObjectIterator implements Iterator
 {
+    
+    /** The it. */
     Iterator it;
     
+    /**
+     * Instantiates a new semantic object iterator.
+     * 
+     * @param it the it
+     */
     public SemanticObjectIterator(Iterator it)
     {
         this.it=it;
     }
 
     /**
+     * The main method.
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) 
@@ -53,11 +64,17 @@ public class SemanticObjectIterator implements Iterator
         // TODO code application logic here
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return it.hasNext();
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public Object next()
     {
         Object obj=it.next();
@@ -71,11 +88,19 @@ public class SemanticObjectIterator implements Iterator
         throw new AssertionError("No type found...:"+obj.getClass());
     }
     
+    /**
+     * Next semantic object.
+     * 
+     * @return the semantic object
+     */
     public SemanticObject nextSemanticObject() 
     {
         return (SemanticObject)next();
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         it.remove();

@@ -35,21 +35,40 @@ import java.util.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFAction.
+ * 
  * @author  jorge.jimenez
  */
 public class XFAction extends WBXformsContainer
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFAction.class);
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
+    
+    /** The instance elements. */
     protected HashMap instanceElements=new HashMap();
     
+    /**
+     * Instantiates a new xF action.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFAction(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF action.
+     * 
+     * @param rdfElement the rdf element
+     * @param instanceElements the instance elements
+     */
     public XFAction(RDFElement rdfElement,HashMap instanceElements){
         this.rdfElement=rdfElement;
         this.instanceElements=instanceElements;
@@ -62,6 +81,9 @@ public class XFAction extends WBXformsContainer
     // Gets   
    
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -85,6 +107,9 @@ public class XFAction extends WBXformsContainer
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() 
     {
@@ -106,6 +131,9 @@ public class XFAction extends WBXformsContainer
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

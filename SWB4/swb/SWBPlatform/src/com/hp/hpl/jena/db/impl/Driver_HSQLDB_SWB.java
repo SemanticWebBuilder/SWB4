@@ -26,12 +26,18 @@
  */
 package com.hp.hpl.jena.db.impl;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_HSQLDB_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_HSQLDB_SWB extends Driver_HSQL_SWB
 {
+    
+    /**
+     * Instantiates a new driver_ hsqld b_ swb.
+     */
     public Driver_HSQLDB_SWB()
     {
         super() ;

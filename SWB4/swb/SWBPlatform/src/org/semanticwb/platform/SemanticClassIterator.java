@@ -33,24 +33,45 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Iterator;
 import org.semanticwb.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticClassIterator.
+ * 
+ * @param <T> the generic type
  * @author Jei
  */
 public class SemanticClassIterator<T extends SemanticClass> implements Iterator
 {
+    
+    /** The m_it. */
     private Iterator<SemanticClass> m_it;
+    
+    /** The create. */
     private boolean create=false;
+    
+    /** The tmp. */
     private SemanticClass tmp=null;
+    
+    /** The next. */
     private boolean next=false;
+    
+    /** The retnext. */
     private boolean retnext=false;
     
     
+    /**
+     * Instantiates a new semantic class iterator.
+     * 
+     * @param it the it
+     */
     public SemanticClassIterator(Iterator it)
     {
         this.m_it=it;
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         if(!next)
@@ -67,6 +88,11 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         return retnext;
     }
     
+    /**
+     * _next.
+     * 
+     * @return the semantic class
+     */
     private SemanticClass _next()
     {
         Object obj=m_it.next();
@@ -83,6 +109,9 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         return cls;
     }
 
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public T next()
     {
         if(!next)
@@ -93,6 +122,9 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
         return (T)tmp;
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         m_it.remove();

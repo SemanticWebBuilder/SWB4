@@ -26,38 +26,76 @@ package org.semanticwb.util;
 
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ObjectEncoder.
+ */
 public class ObjectEncoder
 {
+    
+    /** The name. */
     private String name=null;
+    
+    /** The list. */
     private ArrayList list=new ArrayList();
     
-    /** Creates a new instance of ObjectEncoder */
+    /**
+     * Creates a new instance of ObjectEncoder.
+     * 
+     * @param name the name
+     */
     public ObjectEncoder(String name)
     {
         this.name=name;
     }
     
+    /**
+     * Adds the int.
+     * 
+     * @param val the val
+     */
     public void addInt(int val)
     {
         list.add(""+val);
     }
     
+    /**
+     * Adds the string.
+     * 
+     * @param val the val
+     */
     public void addString(String val)
     {
         list.add(replaceStringChars(val));
     }
     
+    /**
+     * Adds the long.
+     * 
+     * @param val the val
+     */
     public void addLong(long val)
     {
         list.add(""+val);
     }
     
+    /**
+     * Adds the timestamp.
+     * 
+     * @param ts the ts
+     */
     public void addTimestamp(java.sql.Timestamp ts)
     {
         if(ts==null)list.add("_NULL_"); 
         else list.add(""+ts);
     }
    
+    /**
+     * Replace string chars.
+     * 
+     * @param str the str
+     * @return the string
+     */
     public String replaceStringChars(String str)
     {
         if(str==null)return "_NULL_"; 
@@ -85,6 +123,9 @@ public class ObjectEncoder
         return ret.toString();
     }
     
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {

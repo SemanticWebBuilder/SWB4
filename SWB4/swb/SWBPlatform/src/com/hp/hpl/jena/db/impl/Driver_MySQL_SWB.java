@@ -31,14 +31,20 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_MySQL_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_MySQL_SWB extends Driver_MySQL {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Driver_MySQL_SWB.class);
 
+    /**
+     * Instantiates a new driver_ my sq l_ swb.
+     */
     public Driver_MySQL_SWB() {
         super();
         INDEX_KEY_LENGTH_MAX = INDEX_KEY_LENGTH = 250;
@@ -46,7 +52,9 @@ public class Driver_MySQL_SWB extends Driver_MySQL {
     }
 
     /**
-     * Set the database connection
+     * Set the database connection.
+     * 
+     * @param dbcon the new connection
      */
     @Override
     public void setConnection(IDBConnection dbcon) {

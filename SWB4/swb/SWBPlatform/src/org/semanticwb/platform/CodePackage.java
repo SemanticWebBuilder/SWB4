@@ -34,19 +34,32 @@ import java.util.HashMap;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CodePackage.
+ * 
  * @author javier.solis
  */
 public class CodePackage
 {
+    
+    /** The map. */
     private HashMap<String, String> map;
             
+    /**
+     * Instantiates a new code package.
+     */
     public CodePackage()
     {
         map=new HashMap();
     }
 
+    /**
+     * Gets the package.
+     * 
+     * @param prefix the prefix
+     * @return the package
+     */
     public String getPackage(String prefix)
     {
         String spkg=map.get(prefix);

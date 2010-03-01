@@ -32,20 +32,28 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_MsSQL_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_MsSQL_SWB extends Driver_MsSQL {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Driver_MsSQL_SWB.class);
 
+    /**
+     * Instantiates a new driver_ ms sq l_ swb.
+     */
     public Driver_MsSQL_SWB() {
         super();
     }
 
     /**
-     * Set the database connection
+     * Set the database connection.
+     * 
+     * @param dbcon the new connection
      */
     @Override
     public void setConnection(IDBConnection dbcon) {

@@ -31,38 +31,66 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticIterator.
+ * 
+ * @param <T> the generic type
  * @author victor.lorenzana
  */
 public class SemanticIterator<T extends SemanticObject> implements Iterator
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SemanticIterator.class);
 
+    /** The iterator. */
     private Iterator iterator;
+    
+    /** The invert. */
     private boolean invert=false;
             
+    /**
+     * Instantiates a new semantic iterator.
+     * 
+     * @param iterator the iterator
+     */
     public SemanticIterator(Iterator iterator)
     {
         this(iterator,false);
     }
 
+    /**
+     * Instantiates a new semantic iterator.
+     * 
+     * @param iterator the iterator
+     * @param invert the invert
+     */
     public SemanticIterator(Iterator iterator, boolean invert)
     {
         this.iterator=iterator;
         this.invert=invert;
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         iterator.remove();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return iterator.hasNext();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public T next() 
     {        
         Object obj=iterator.next();

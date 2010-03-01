@@ -40,19 +40,25 @@ import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SQLCache_SWB.
+ * 
  * @author javier.solis
  */
 public class SQLCache_SWB extends SQLCache
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SQLCache_SWB.class);
 
+    /** The arr. */
     private ArrayList arr=new ArrayList();
 
     /**
      * Constructor. Creates a new cache sql statements for interfacing to
      * a specific database.
+     * 
      * @param sqlFile the name of the file of sql statements to load, this is
      * loaded from the classpath.
      * @param defaultOps Properties table which provides the default
@@ -60,6 +66,7 @@ public class SQLCache_SWB extends SQLCache
      * will override the default.
      * @param connection the jdbc connection to the database itself
      * @param idType the sql string to use for id types (substitutes for $id in files)
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public SQLCache_SWB(String sqlFile, Properties defaultOps, IDBConnection connection, String idType) throws IOException {
         super(sqlFile, defaultOps, connection, idType);
@@ -68,12 +75,14 @@ public class SQLCache_SWB extends SQLCache
 
 	/**
 	 * Prepare a SQL statement for the given statement string.
-	 *
+	 * 
 	 * <p>Only works for single statements, not compound statements.
-	 * @param stmt the sql statement to prepare.
+	 * 
+	 * @param sql the sql
 	 * @return a prepared SQL statement appropriate for the JDBC connection
 	 * used when this SQLCache was constructed or null if there is no such
 	 * connection.
+	 * @throws SQLException the sQL exception
 	 */
 	private synchronized PreparedStatement doPrepareSQLStatement(String sql) throws SQLException {
 		if (m_connection == null) return null;
@@ -89,12 +98,14 @@ public class SQLCache_SWB extends SQLCache
 	/**
 	 * Return a prepared SQL statement for the given statement string.
 	 * The statement should either be closed after use.
-	 *
+	 * 
 	 * <p>Only works for single statements, not compound statements.
-	 * @param stmt the sql statement to prepare.
+	 * 
+	 * @param sql the sql
 	 * @return a prepared SQL statement appropriate for the JDBC connection
 	 * used when this SQLCache was constructed or null if there is no such
 	 * connection.
+	 * @throws SQLException the sQL exception
 	 */
     @Override
 	public synchronized PreparedStatement prepareSQLStatement(String sql) throws SQLException {
@@ -102,6 +113,9 @@ public class SQLCache_SWB extends SQLCache
 		return doPrepareSQLStatement(sql);
 	}
 
+    /* (non-Javadoc)
+     * @see com.hp.hpl.jena.db.impl.SQLCache#getPreparedSQLStatement(java.lang.String, java.lang.String[])
+     */
     @Override
 	public synchronized PreparedStatement getPreparedSQLStatement(String opname, String [] attr) throws SQLException {
 		/* TODO extended calling format or statement format to support different
@@ -146,9 +160,13 @@ public class SQLCache_SWB extends SQLCache
 	 * Run a group of sql statements - normally used for db formating and clean up.
 	 * All statements are executed even if one raises an error then the error is
 	 * reported at the end.
-	 *
+	 * 
 	 * Attribute version -- substitute the ${a} attribute macro
 	 * for the current attribute
+	 * 
+	 * @param opname the opname
+	 * @param attr the attr
+	 * @throws SQLException the sQL exception
 	 */
     @Override
 	public void runSQLGroup(String opname, String [] attr) throws SQLException {
@@ -195,6 +213,8 @@ public class SQLCache_SWB extends SQLCache
      * another caller. Any close problems logged rather than raising exception
      * so that iterator close() operations can be silent so that they can meet
      * the ClosableIterator signature.
+     * 
+     * @param ps the ps
      */
     @Override
     public synchronized void returnPreparedSQLStatement(PreparedStatement ps) {
@@ -229,10 +249,16 @@ public class SQLCache_SWB extends SQLCache
 
 
         /**
-     * Execute the given statement, return null if the statement appears to be
-     * just an update or return an iterator for the result set if the statement appears
-     * to be a query
-     */
+         * Execute the given statement, return null if the statement appears to be
+         * just an update or return an iterator for the result set if the statement appears
+         * to be a query.
+         * 
+         * @param ps the ps
+         * @param opname the opname
+         * @param iterator the iterator
+         * @return the result set iterator
+         * @throws SQLException the sQL exception
+         */
     @Override
     protected ResultSetIterator executeSQL(PreparedStatement ps, String opname, ResultSetIterator iterator) throws SQLException {
         try

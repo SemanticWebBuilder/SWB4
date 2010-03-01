@@ -31,12 +31,20 @@ package org.semanticwb.xforms;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class RDFXformsTransformer.
+ * 
  * @author jorge.jimenez
  */
 public class RDFXformsTransformer {
 
+    /**
+     * Sets the instance.
+     * 
+     * @param tpc the tpc
+     * @param tpi the tpi
+     */
     public void setInstance(SemanticClass tpc, SemanticObject tpi)
     {
         

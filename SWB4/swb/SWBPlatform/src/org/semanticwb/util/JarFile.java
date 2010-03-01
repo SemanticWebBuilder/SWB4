@@ -28,24 +28,54 @@ import java.io.*;
 import java.util.zip.*;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class JarFile.
+ */
 public class JarFile
 {
+    
+    /** The path. */
     private String path;
 
+    /** The exists. */
     private boolean exists;
+    
+    /** The is dir. */
     private boolean isDir;
+    
+    /** The length. */
     private long length;
+    
+    /** The last modified. */
     private long lastModified;
+    
+    /** The in. */
     private InputStream in=null;
+    
+    /** The f. */
     private File f=null;
+    
+    /** The zip path. */
     private String zipPath=null;
 
 
+    /**
+     * Instantiates a new jar file.
+     * 
+     * @param path the path
+     */
     public JarFile(String path)
     {
         this.setPath(path);
     }    
 
+    /**
+     * Instantiates a new jar file.
+     * 
+     * @param f the f
+     * @param zipPath the zip path
+     */
     public JarFile(ZipEntry f, String zipPath)
     {
         this.zipPath=zipPath;
@@ -65,6 +95,11 @@ public class JarFile
         }            
     }
 
+    /**
+     * Gets the input stream.
+     * 
+     * @return the input stream
+     */
     public InputStream getInputStream()
     {
         try
@@ -85,31 +120,61 @@ public class JarFile
         }
     }
 
+    /**
+     * Exists.
+     * 
+     * @return true, if successful
+     */
     public boolean exists()
     {
         return exists;
     }
 
+    /**
+     * Checks if is directory.
+     * 
+     * @return true, if is directory
+     */
     public boolean isDirectory()
     {
         return isDir;
     }    
 
+    /**
+     * Gets the path.
+     * 
+     * @return the path
+     */
     public String getPath()
     {
         return path;
     }
 
+    /**
+     * Length.
+     * 
+     * @return the long
+     */
     public long length()
     {
         return length;
     }
 
+    /**
+     * Last modified.
+     * 
+     * @return the long
+     */
     public long lastModified()
     {
         return lastModified;
     }    
 
+    /**
+     * Sets the path.
+     * 
+     * @param p the new path
+     */
     public void setPath(String p)
     {
         this.path = p;

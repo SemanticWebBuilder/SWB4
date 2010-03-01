@@ -34,16 +34,28 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFToggle.
+ * 
  * @author  jorge.jimenez
  */
 public class XFToggle extends XformsBaseImp {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFToggle.class);
+    
+    /** The action case. */
     protected String actionCase=null;
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
     
+    /**
+     * Instantiates a new xF toggle.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFToggle(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -53,6 +65,9 @@ public class XFToggle extends XformsBaseImp {
     
     // Gets    
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -62,6 +77,9 @@ public class XFToggle extends XformsBaseImp {
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -83,6 +101,9 @@ public class XFToggle extends XformsBaseImp {
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

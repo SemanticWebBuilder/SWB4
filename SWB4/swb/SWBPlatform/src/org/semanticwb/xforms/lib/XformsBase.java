@@ -29,42 +29,124 @@
 
 package org.semanticwb.xforms.lib;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Interface XformsBase.
+ * 
  * @author  jorge.jimenez
  */
 public interface XformsBase {
     
+    /**
+     * Sets the lable.
+     * 
+     * @param label the new lable
+     */
     public void setLable(String label);
     
+    /**
+     * Gets the label.
+     * 
+     * @return the label
+     */
     public String getLabel();
     
+    /**
+     * Sets the id.
+     * 
+     * @param id the new id
+     */
     public void setId(String id);
     
+    /**
+     * Gets the id.
+     * 
+     * @return the id
+     */
     public String getId();
     
+    /**
+     * Sets the sub type.
+     * 
+     * @param subType the new sub type
+     */
     public void setSubType(String subType);
     
+    /**
+     * Gets the sub type.
+     * 
+     * @return the sub type
+     */
     public String getSubType();
     
+    /**
+     * Sets the required.
+     * 
+     * @param isrequired the new required
+     */
     public void setRequired(boolean isrequired);
     
+    /**
+     * Checks if is required.
+     * 
+     * @return true, if is required
+     */
     public boolean isRequired();
     
+    /**
+     * Sets the xml.
+     * 
+     * @param xml the new xml
+     */
     public void setXml(String xml);
     
+    /**
+     * Gets the xml.
+     * 
+     * @return the xml
+     */
     public String getXml();
     
+    /**
+     * Sets the xml bind.
+     * 
+     * @param xmlBind the new xml bind
+     */
     public void setXmlBind(String xmlBind);
     
+    /**
+     * Gets the xml bind.
+     * 
+     * @return the xml bind
+     */
     public String getXmlBind();
     
+    /**
+     * Sets the help.
+     * 
+     * @param help the new help
+     */
     public void setHelp(String help);
     
+    /**
+     * Gets the help.
+     * 
+     * @return the help
+     */
     public String getHelp();
     
+    /**
+     * Sets the hint.
+     * 
+     * @param hint the new hint
+     */
     public void setHint(String hint);
     
+    /**
+     * Gets the hint.
+     * 
+     * @return the hint
+     */
     public String getHint();
     
   

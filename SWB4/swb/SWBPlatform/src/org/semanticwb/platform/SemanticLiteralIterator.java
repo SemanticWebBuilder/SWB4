@@ -29,29 +29,48 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import java.lang.reflect.Constructor;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticLiteralIterator.
+ * 
+ * @param <T> the generic type
  * @author victor.lorenzana
  */
 public class SemanticLiteralIterator<T extends SemanticLiteral> implements Iterator
 {
+    
+    /** The iterator. */
     private Iterator iterator;
             
+    /**
+     * Instantiates a new semantic literal iterator.
+     * 
+     * @param iterator the iterator
+     */
     public SemanticLiteralIterator(Iterator iterator)
     {
         this.iterator=iterator;
     }    
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         iterator.remove();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return iterator.hasNext();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public T next() 
     {        
         Object obj=iterator.next();

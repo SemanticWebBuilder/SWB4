@@ -45,19 +45,34 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticOntology.
+ * 
  * @author Jei
  */
 public class SemanticOntology
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SemanticOntology.class);
 
 
+    /** The m_ontology. */
     private OntModel m_ontology;
+    
+    /** The m_name. */
     private String m_name;
+    
+    /** The sub models. */
     private ArrayList<SemanticModel> subModels=new ArrayList();
 
+    /**
+     * Instantiates a new semantic ontology.
+     * 
+     * @param name the name
+     * @param ontology the ontology
+     */
     public SemanticOntology(String name, OntModel ontology)
     {
         this.m_ontology=ontology;
@@ -65,43 +80,82 @@ public class SemanticOntology
         init();
     }    
     
+    /**
+     * Inits the.
+     */
     private void init()
     {
         
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName() {
         return m_name;
     }
     
+    /**
+     * Gets the rDF ont model.
+     * 
+     * @return the rDF ont model
+     */
     public OntModel getRDFOntModel()
     {
         return m_ontology;
     }
     
+    /**
+     * Adds the sub model.
+     * 
+     * @param model the model
+     * @param rebind the rebind
+     */
     public void addSubModel(SemanticModel model, boolean rebind)
     {
         subModels.add(model);
         m_ontology.addSubModel(model.getRDFModel(),rebind);
     }
 
+    /**
+     * Removes the sub model.
+     * 
+     * @param model the model
+     * @param rebind the rebind
+     */
     public void removeSubModel(SemanticModel model, boolean rebind)
     {
         subModels.remove(model);
         m_ontology.removeSubModel(model.getRDFModel(),rebind);
     }
 
+    /**
+     * List sub models.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticModel> listSubModels()
     {
         return subModels.iterator();
     }
     
+    /**
+     * Rebind.
+     */
     public void rebind()
     {
         m_ontology.rebind();
     }
 
     //TODO: Mejorar performance
+    /**
+     * Gets the resource.
+     * 
+     * @param uri the uri
+     * @return the resource
+     */
     public Resource getResource(String uri)
     {
         log.debug("getResource:"+uri);
@@ -181,13 +235,25 @@ public class SemanticOntology
 //        return null;
 //    }
     
-    public SemanticObject getSemanticObject(String uri)
+    /**
+ * Gets the semantic object.
+ * 
+ * @param uri the uri
+ * @return the semantic object
+ */
+public SemanticObject getSemanticObject(String uri)
     {
         SemanticObject ret=SemanticObject.createSemanticObject(uri);
         return ret;        
     }
 
     
+    /**
+     * Gets the generic object.
+     * 
+     * @param uri the uri
+     * @return the generic object
+     */
     public GenericObject getGenericObject(String uri)
     {
         GenericObject ret=null;
@@ -198,6 +264,13 @@ public class SemanticOntology
         //return cls.newGenericInstance(sobj);
     }    
     
+    /**
+     * Gets the generic object.
+     * 
+     * @param uri the uri
+     * @param cls the cls
+     * @return the generic object
+     */
     public GenericObject getGenericObject(String uri, SemanticClass cls)
     {
         GenericObject ret=null;
@@ -214,7 +287,13 @@ public class SemanticOntology
 //        return new SemanticClass(ontcls);
 //    }
 
-    public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
+    /**
+ * List instances of class.
+ * 
+ * @param cls the cls
+ * @return the iterator
+ */
+public Iterator<SemanticObject> listInstancesOfClass(SemanticClass cls)
     {
         Property rdf=m_ontology.getProperty(SemanticVocabulary.RDF_TYPE);
         StmtIterator stit=m_ontology.listStatements(null, rdf, cls.getOntClass());
@@ -222,6 +301,12 @@ public class SemanticOntology
     }
 
 
+    /**
+     * Gets the semantic property.
+     * 
+     * @param uri the uri
+     * @return the semantic property
+     */
     public SemanticProperty getSemanticProperty(String uri)
     {
         return SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);

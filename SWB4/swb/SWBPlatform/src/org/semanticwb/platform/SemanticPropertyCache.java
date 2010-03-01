@@ -36,40 +36,81 @@ import java.util.HashMap;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticPropertyCache.
+ * 
  * @author Jei
  */
 public class SemanticPropertyCache 
 {
+    
+    /** The m_prop. */
     private SemanticProperty m_prop;
+    
+    /** The map. */
     private HashMap map=new HashMap();
     
+    /**
+     * Instantiates a new semantic property cache.
+     * 
+     * @param prop the prop
+     */
     public SemanticPropertyCache(SemanticProperty prop)
     {
         this.m_prop=prop;
     }
     
+    /**
+     * Checks for chache property.
+     * 
+     * @param name the name
+     * @return true, if successful
+     */
     public boolean hasChacheProperty(String name)
     {
         return map.containsKey(name);
     }
     
+    /**
+     * Adds the string property.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public void addStringProperty(String name, String value)
     {
         map.put(name, value);
     }
     
+    /**
+     * Gets the string property.
+     * 
+     * @param name the name
+     * @return the string property
+     */
     public String getStringProperty(String name)
     {
         return (String)map.get(name);
     }
     
+    /**
+     * Adds the boolean property.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public void addBooleanProperty(String name, boolean value)
     {
         map.put(name, Boolean.valueOf(value));
     }
     
+    /**
+     * Gets the boolean property.
+     * 
+     * @param name the name
+     * @return the boolean property
+     */
     public boolean getBooleanProperty(String name)
     {
         return (Boolean)map.get(name);

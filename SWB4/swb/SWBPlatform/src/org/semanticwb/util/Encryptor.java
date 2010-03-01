@@ -27,6 +27,7 @@ package org.semanticwb.util;
 
 import java.math.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * TEA Encryption Algoritm.
  * <P>
@@ -97,8 +98,14 @@ import java.math.*;
 
 public class Encryptor
 {
+    
+    /** The _key. */
     private int _key[];	// The 128 bit key.
+    
+    /** The _key bytes. */
     private byte _keyBytes[];	// original key as found
+    
+    /** The _padding. */
     private int _padding;		// amount of padding added in byte --> integer conversion.
 
     /**
@@ -109,6 +116,8 @@ public class Encryptor
 
     /**
      * Encodes and decodes "Hello world!" for your personal pleasure.
+     * 
+     * @param args the arguments
      */
     public static void main(String args[])
     {
@@ -131,10 +140,9 @@ public class Encryptor
 
     /**
      * Accepts key for enciphering/deciphering.
-     *
-     * @throws ArrayIndexOutOfBoundsException if the key isn't the correct length.
-     *
+     * 
      * @param key 128 bit (16 byte) key.
+     * @throws ArrayIndexOutOfBoundsException if the key isn't the correct length.
      */
     public Encryptor(byte[] key)
     {
@@ -152,6 +160,11 @@ public class Encryptor
         _keyBytes = key;	// save for toString.
     }
 
+    /**
+     * Instantiates a new encryptor.
+     * 
+     * @param key the key
+     */
     public Encryptor(int[] key)
     {
         _key = key;
@@ -181,10 +194,9 @@ public String toString()
      * v[1] = (ba[j+4] << 24 ) | (((ba[j+5])&0xff) << 16) | (((ba[j+6])&0xff) << 8) | ((ba[j+7])&0xff);
      * v = encipher(v);
      * </PRE>
-     *
+     * 
      * @param v two <code>int</code> array as input.
-     *
-     * @return array of two <code>int</code>s, enciphered.
+     * @return array of two s, enciphered.
      */
     private int[] encipher(int v[])
     {
@@ -226,10 +238,9 @@ public String toString()
      * outb[j+6] = (byte)(x[1] >>> 8);
      * outb[j+7] = (byte)(x[1]);
      * </PRE>
-     *
+     * 
      * @param v <code>int</code> array of 2
-     *
-     * @return deciphered <code>int</code> array of 2
+     * @return deciphered  array of 2
      */
     private int[] decipher(int v[])
     {
@@ -285,13 +296,10 @@ public String toString()
      * Byte wrapper for encoding.
      * Converts bytes to ints.
      * Padding will be added if required.
-     *
+     * 
      * @param b incoming <code>byte</code> array
-     *
-     * @param byte count
-     *
+     * @param count the count
      * @return integer conversion array, possibly with padding.
-     *
      * @see #padding
      */
     public int[] encode(byte b[], int count)
@@ -327,15 +335,15 @@ public String toString()
 
     /**
      * Report how much padding was done in the last encode.
-     *
+     * 
+     * @param hexStr the hex str
      * @return bytes of padding added
-     *
      * @see #encode
-     *
-     private int padding()
-     {
-     return _padding;
-     }
+     * 
+     * private int padding()
+     * {
+     * return _padding;
+     * }
      */
 
     /**
@@ -358,11 +366,10 @@ public String toString()
      * Convert a byte array to ints and then decode.
      * There may be some padding at the end of the byte array from
      * the previous encode operation.
-     *
+     * 
      * @param b bytes to decode
      * @param count number of bytes in the array to decode
-     *
-     * @return <code>byte</code> array of decoded bytes.
+     * @return  array of decoded bytes.
      */
     public byte[] decode(byte b[], int count)
     {
@@ -382,10 +389,9 @@ public String toString()
      * Decode an integer array.
      * There may be some padding at the end of the byte array from
      * the previous encode operation.
-     *
+     * 
      * @param b bytes to decode
-     *
-     * @return <code>byte</code> array of decoded bytes.
+     * @return  array of decoded bytes.
      */
     private byte[] decode(int b[])
     {
@@ -558,6 +564,12 @@ public String toString()
 
     // Display some bytes in HEX.
     //
+    /**
+     * Gets the hex.
+     * 
+     * @param b the b
+     * @return the hex
+     */
     public String getHex(byte b[])
     {
         StringBuffer r = new StringBuffer();
@@ -601,6 +613,12 @@ private String padPlaintext(String str)
 }
     */
 
+    /**
+     * Gets the checksum.
+     * 
+     * @param str the str
+     * @return the checksum
+     */
     public long getChecksum(String str)
     {
         java.util.zip.CRC32 crc = new java.util.zip.CRC32();

@@ -36,24 +36,46 @@ import org.semanticwb.xforms.ui.*;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFSwitch.
+ * 
  * @author  jorge.jimenez
  */
 public class XFSwitch extends WBXformsContainer 
 {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFSwitch.class);
+    
+    /** The appearance. */
     protected String appearance=null;
+    
+    /** The cssclass. */
     protected String cssclass=null;
+    
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
+    
+    /** The instance elements. */
     HashMap instanceElements=new HashMap();
     
+    /**
+     * Instantiates a new xF switch.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFSwitch(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
     }
     
+    /**
+     * Instantiates a new xF switch.
+     * 
+     * @param rdfElement the rdf element
+     * @param instanceElements the instance elements
+     */
     public XFSwitch(RDFElement rdfElement,HashMap instanceElements){
         this.rdfElement=rdfElement;
         this.instanceElements=instanceElements;
@@ -62,24 +84,47 @@ public class XFSwitch extends WBXformsContainer
     
     // Sets
     
+    /**
+     * Sets the appearance.
+     * 
+     * @param appearance the new appearance
+     */
     public void setAppearance(String appearance) {
         this.appearance=appearance;
     }
     
+    /**
+     * Sets the css class.
+     * 
+     * @param cssclass the new css class
+     */
     public void setCssClass(String cssclass) {
         this.cssclass=cssclass;
     }
     
     // Gets
     
+    /**
+     * Gets the appearance.
+     * 
+     * @return the appearance
+     */
     public String getAppearance() {
         return appearance;
     }
     
+    /**
+     * Gets the css class.
+     * 
+     * @return the css class
+     */
     public String getCssClass() {
         return cssclass;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -113,6 +158,9 @@ public class XFSwitch extends WBXformsContainer
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -148,11 +196,17 @@ public class XFSwitch extends WBXformsContainer
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

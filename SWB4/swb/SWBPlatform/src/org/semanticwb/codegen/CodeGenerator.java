@@ -40,30 +40,67 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticMgr;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CodeGenerator.
+ * 
  * @author Victor Lorenzana
  */
 public class CodeGenerator
 {
 
+    /** The Constant GLOBAL_CLASS_NAME. */
     private static final String GLOBAL_CLASS_NAME = "ClassMgr";
+    
+    /** The Constant CLOSE_BLOCK. */
     private static final String CLOSE_BLOCK = "    }";
+    
+    /** The Constant END_OF_METHOD. */
     private static final String END_OF_METHOD = "();";
+    
+    /** The Constant ENTER. */
     private static final String ENTER = "\r\n";
+    
+    /** The Constant OPEN_BLOCK. */
     private static final String OPEN_BLOCK = "    {";
+    
+    /** The Constant PUBLIC. */
     private static final String PUBLIC = "    public ";
+    
+    /** The Constant TYPE_BOOLEAN. */
     private static final String TYPE_BOOLEAN = "boolean";
+    
+    /** The Constant TYPE_BYTE. */
     private static final String TYPE_BYTE = "byte";
+    
+    /** The Constant TYPE_DATE_TIME. */
     private static final String TYPE_DATE_TIME = "dateTime";
+    
+    /** The Constant TYPE_BINARY. */
     private static final String TYPE_BINARY = "base64Binary";
+    
+    /** The Constant TYPE_DATE. */
     private static final String TYPE_DATE = "date";
+    
+    /** The Constant TYPE_DOUBLE. */
     private static final String TYPE_DOUBLE = "double";
+    
+    /** The Constant TYPE_FLOAT. */
     private static final String TYPE_FLOAT = "float";
+    
+    /** The Constant TYPE_INT. */
     private static final String TYPE_INT = "int";
+    
+    /** The Constant TYPE_LONG. */
     private static final String TYPE_LONG = "long";
+    
+    /** The Constant TYPE_SHORT. */
     private static final String TYPE_SHORT = "short";
+    
+    /** The Constant TYPE_VOID. */
     private static final String TYPE_VOID = "void";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
 
@@ -72,10 +109,21 @@ public class CodeGenerator
     this(pDirectory);
     this.m_Package = pPackage;
     }*/
+    /**
+     * Instantiates a new code generator.
+     */
     public CodeGenerator()
     {
     }
 
+    /**
+     * Creates the package.
+     * 
+     * @param spackage the spackage
+     * @param pDirectory the directory
+     * @return the file
+     * @throws CodeGeneratorException the code generator exception
+     */
     private File createPackage(String spackage, File pDirectory) throws CodeGeneratorException
     {
         File createPackage = pDirectory;
@@ -91,6 +139,13 @@ public class CodeGenerator
         return createPackage;
     }
 
+    /**
+     * Save file.
+     * 
+     * @param file the file
+     * @param code the code
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void saveFile(File file, String code) throws CodeGeneratorException
     {
         try
@@ -105,12 +160,26 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * To upper case.
+     * 
+     * @param data the data
+     * @return the string
+     */
     private static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
         return letter.toUpperCase() + data.substring(1);
     }
 
+    /**
+     * Generate code by namespace.
+     * 
+     * @param namespace the namespace
+     * @param createSWBcontent the create sw bcontent
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     public void generateCodeByNamespace(String namespace, boolean createSWBcontent, File pDirectory) throws CodeGeneratorException
     {
         String prefix = null;
@@ -246,6 +315,14 @@ public class CodeGenerator
     createSWBContext("", pDirectory);
     }
     }*/
+    /**
+     * Generate code.
+     * 
+     * @param prefix the prefix
+     * @param createSWBContext the create swb context
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     public void generateCode(String prefix, boolean createSWBContext, File pDirectory) throws CodeGeneratorException
     {
 
@@ -300,6 +377,12 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Gets the interfaces.
+     * 
+     * @param tpc the tpc
+     * @return the interfaces
+     */
     private HashSet<SemanticClass> getInterfaces(SemanticClass tpc)
     {
         HashSet<SemanticClass> interfaces = new HashSet<SemanticClass>();
@@ -315,6 +398,13 @@ public class CodeGenerator
         return interfaces;
     }
 
+    /**
+     * Gets the interfaces as string.
+     * 
+     * @param tpc the tpc
+     * @param isextends the isextends
+     * @return the interfaces as string
+     */
     private String getInterfacesAsString(SemanticClass tpc, boolean isextends)
     {
         StringBuilder interfaces = new StringBuilder();
@@ -342,6 +432,12 @@ public class CodeGenerator
         return interfaces.toString();
     }
 
+    /**
+     * List interfaces.
+     * 
+     * @param tpc the tpc
+     * @return the hash set
+     */
     private static HashSet<SemanticClass> listInterfaces(SemanticClass tpc)
     {
         HashSet<SemanticClass> interfaces = new HashSet<SemanticClass>();
@@ -357,6 +453,13 @@ public class CodeGenerator
         return interfaces;
     }
 
+    /**
+     * Creates the swb context.
+     * 
+     * @param prefix the prefix
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createSWBContext(String prefix, File pDirectory) throws CodeGeneratorException
     {
         // si existe no debe reemplazarlo
@@ -402,6 +505,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Creates the swb context base.
+     * 
+     * @param prefix the prefix
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createSWBContextBase(String prefix, File pDirectory) throws CodeGeneratorException
     {
         // Debe reemplazarlo siempre
@@ -466,6 +576,13 @@ public class CodeGenerator
         saveFile(fileClass, javaClassContent.toString());
     }
 
+    /**
+     * Creates the semantic resource.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createSemanticResource(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
 
@@ -516,6 +633,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Creates the semantic resource base.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createSemanticResourceBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
         String exts = "org.semanticwb.portal.api.GenericSemResource";
@@ -634,6 +758,13 @@ public class CodeGenerator
         createSemanticResource(tpc, pDirectory);
     }
 
+    /**
+     * Creates the class base.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createClassBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
 
@@ -953,6 +1084,14 @@ public class CodeGenerator
         createClass(tpc, parent, pDirectory);
     }
 
+    /**
+     * Creates the class.
+     * 
+     * @param tpc the tpc
+     * @param parent the parent
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createClass(SemanticClass tpc, SemanticClass parent, File pDirectory) throws CodeGeneratorException
     {
         String sPackage = tpc.getCodePackage();
@@ -983,6 +1122,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Creates the interface.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createInterface(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
         File dir = createPackage(tpc.getCodePackage(), pDirectory);
@@ -1010,6 +1156,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Creates the interface base.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void createInterfaceBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
     {
         File dir = createPackage(tpc.getCodePackage() + ".base", pDirectory);
@@ -1098,6 +1251,12 @@ public class CodeGenerator
         createInterface(tpc, pDirectory);
     }
 
+    /**
+     * Insert properties to interface.
+     * 
+     * @param tpc the tpc
+     * @param javaClassContent the java class content
+     */
     private void insertPropertiesToInterface(SemanticClass tpc, StringBuilder javaClassContent)
     {
         Iterator<SemanticProperty> tppit = tpc.listProperties();
@@ -1424,6 +1583,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Insert link to class4 model.
+     * 
+     * @param tpcls the tpcls
+     * @param javaClassContent the java class content
+     * @param parent the parent
+     */
     private void insertLinkToClass4Model(SemanticClass tpcls, StringBuilder javaClassContent, SemanticClass parent)
     {
         //if ( parent == null ) // Already exists this method in the parent class
@@ -1441,6 +1607,12 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Gets the name in plural.
+     * 
+     * @param name the name
+     * @return the name in plural
+     */
     private String getNameInPlural(String name)
     {
         if (name.endsWith("y") && !(name.endsWith("ay") || name.endsWith("ey") || name.endsWith("iy") || name.endsWith("oy") || name.endsWith("uy")))
@@ -1474,6 +1646,12 @@ public class CodeGenerator
         return name;
     }
 
+    /**
+     * Insert properties to model.
+     * 
+     * @param tpcls the tpcls
+     * @param javaClassContent the java class content
+     */
     private void insertPropertiesToModel(SemanticClass tpcls, StringBuilder javaClassContent)
     {
 
@@ -1527,6 +1705,13 @@ public class CodeGenerator
 
     }
 
+    /**
+     * Checks if is property of parent.
+     * 
+     * @param tpp the tpp
+     * @param parent the parent
+     * @return true, if is property of parent
+     */
     private boolean isPropertyOfParent(SemanticProperty tpp, SemanticClass parent)
     {
         boolean isPropertyOfParent = false;
@@ -1546,6 +1731,12 @@ public class CodeGenerator
         return isPropertyOfParent;
     }
 
+    /**
+     * Gets the name of property.
+     * 
+     * @param tpp the tpp
+     * @return the name of property
+     */
     private String getNameOfProperty(SemanticProperty tpp)
     {
         String objectName = tpp.getPropertyCodeName();//tpp.getLabel();
@@ -1556,6 +1747,14 @@ public class CodeGenerator
         return objectName;
     }
 
+    /**
+     * Insert data type property.
+     * 
+     * @param tpc the tpc
+     * @param tpp the tpp
+     * @param javaClassContent the java class content
+     * @param semanticObject the semantic object
+     */
     private void insertDataTypeProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
         String objectName = tpp.getPropertyCodeName();
@@ -1836,6 +2035,14 @@ public class CodeGenerator
 
     }
 
+    /**
+     * Insert object property.
+     * 
+     * @param tpc the tpc
+     * @param tpp the tpp
+     * @param javaClassContent the java class content
+     * @param semanticObject the semantic object
+     */
     private void insertObjectProperty(SemanticClass tpc, SemanticProperty tpp, StringBuilder javaClassContent, String semanticObject)
     {
         SemanticClass cls = tpp.getRangeClass();
@@ -2001,11 +2208,26 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Insert properties to class.
+     * 
+     * @param tpc the tpc
+     * @param javaClassContent the java class content
+     * @param parent the parent
+     */
     private void insertPropertiesToClass(SemanticClass tpc, StringBuilder javaClassContent, SemanticClass parent)
     {
         insertPropertiesToClass(tpc, javaClassContent, parent, null);
     }
 
+    /**
+     * Insert properties to class.
+     * 
+     * @param tpc the tpc
+     * @param javaClassContent the java class content
+     * @param parent the parent
+     * @param semanticObject the semantic object
+     */
     private void insertPropertiesToClass(SemanticClass tpc, StringBuilder javaClassContent, SemanticClass parent, String semanticObject)
     {
         if (semanticObject == null)
@@ -2030,6 +2252,13 @@ public class CodeGenerator
         }
     }
 
+    /**
+     * Creates the vocabulary.
+     * 
+     * @param pPackage the package
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
     public void createVocabulary(String pPackage, File pDirectory) throws CodeGeneratorException
     {
         StringBuilder javaClassContent = new StringBuilder();

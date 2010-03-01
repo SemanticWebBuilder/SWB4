@@ -34,20 +34,37 @@ import org.semanticwb.xforms.drop.RDFElement;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XFRange.
+ * 
  * @author  jorge.jimenez
  */
 public class XFRange extends XformsBaseImp {
     
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFRange.class);
+    
+    /** The start. */
     protected int start=0;
+    
+    /** The end. */
     protected int end=0;
+    
+    /** The step. */
     protected int step=0;
+    
+    /** The value. */
     protected String value=null;
     
+    /** The rdf element. */
     protected RDFElement rdfElement=null;
     
+    /**
+     * Instantiates a new xF range.
+     * 
+     * @param rdfElement the rdf element
+     */
     public XFRange(RDFElement rdfElement){
         this.rdfElement=rdfElement;
         setRDFAttributes();
@@ -55,40 +72,83 @@ public class XFRange extends XformsBaseImp {
     
     // Sets
     
+    /**
+     * Sets the start.
+     * 
+     * @param start the new start
+     */
     public void setStart(int start){
         this.start=start;
     }
     
+    /**
+     * Sets the end.
+     * 
+     * @param end the new end
+     */
     public void setEnd(int end){
         this.end=end;
     }
     
+    /**
+     * Sets the step.
+     * 
+     * @param step the new step
+     */
     public void setStep(int step){
         this.step=step;
     }
     
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
     public void setValue(String value){
         this.value=value;
     }
     
     // Gets
     
+    /**
+     * Gets the start.
+     * 
+     * @return the start
+     */
     public int getStart(){
         return start;
     }
     
+    /**
+     * Gets the end.
+     * 
+     * @return the end
+     */
     public int getEnd(){
         return end;
     }
     
+    /**
+     * Gets the step.
+     * 
+     * @return the step
+     */
     public int getStep(){
         return step;
     }
     
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
     public String getValue(){
         return value;
     }
     
+    /**
+     * Sets the rdf attributes.
+     */
     public void setRDFAttributes(){
         if(rdfElement.getId()!=null) {
             id=rdfElement.getId();
@@ -113,6 +173,9 @@ public class XFRange extends XformsBaseImp {
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -141,6 +204,9 @@ public class XFRange extends XformsBaseImp {
         return strbXml.toString();
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
     @Override
     public void setXml(String xml) {
         this.xml=xml;

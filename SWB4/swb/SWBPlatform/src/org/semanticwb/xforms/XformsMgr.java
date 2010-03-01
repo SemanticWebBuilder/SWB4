@@ -41,37 +41,69 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.Logger;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class XformsMgr.
+ * 
  * @author  jorge.jimenez
  */
 public class XformsMgr extends WBXformsContainer 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(XFText.class);
     
+    /** The rdf elements. */
     ArrayList rdfElements;
+    
+    /** The RDF element. */
     Object RDFElement;
+    
+    /** The xml init. */
     String xmlInit;
+    
+    /** The instance elements. */
     HashMap instanceElements;
+    
+    /** The head. */
     protected String head=null;
     
-    /** Creates a new instance of XformsMgr */
+    /**
+     * Creates a new instance of XformsMgr.
+     */
     public XformsMgr() {
         instanceElements=new HashMap();
         rdfElements=new ArrayList();
     }
     
+    /**
+     * Sets the obj.
+     * 
+     * @param rdfElements the new obj
+     */
     public void setObj(ArrayList rdfElements) {
         this.rdfElements=rdfElements;
         createXformDoc();
     }
     
+    /**
+     * Gets the xform doc.
+     * 
+     * @return the xform doc
+     */
     public Document getXformDoc() {
         String xml=show();
         String xmlBinds=showBinds();
         return finalXmlForm(xml,xmlBinds);
     }
     
+    /**
+     * Final xml form.
+     * 
+     * @param xmlElements the xml elements
+     * @param xmlBinds the xml binds
+     * @return the document
+     */
     private Document finalXmlForm(String xmlElements,String xmlBinds) {
         Document dom=null;
         try {
@@ -129,6 +161,12 @@ public class XformsMgr extends WBXformsContainer
         return dom;
     }
     
+    /**
+     * Put prefix2.
+     * 
+     * @param dom the dom
+     * @return the document
+     */
     private Document putPrefix2(Document dom) {
         String xml=SWBUtils.XML.domToXml(dom);
         
@@ -220,6 +258,12 @@ public class XformsMgr extends WBXformsContainer
         return dom;
     }
     
+    /**
+     * Add2 node.
+     * 
+     * @param node the node
+     * @param dom the dom
+     */
     private void add2Node(Node node,Document dom) {
         try {
             NodeList nNodes=dom.getFirstChild().getChildNodes();
@@ -231,6 +275,12 @@ public class XformsMgr extends WBXformsContainer
         }
     }
     
+    /**
+     * Creates the instance elements.
+     * 
+     * @param dom the dom
+     * @param dataChild the data child
+     */
     private void createInstanceElements(Document dom,Node dataChild) {
         Iterator itElements=instanceElements.keySet().iterator();
         while(itElements.hasNext()){
@@ -244,6 +294,9 @@ public class XformsMgr extends WBXformsContainer
         }
     }
     
+    /**
+     * Creates the xform doc.
+     */
     private void createXformDoc() {
         XFForm XFform=new XFForm();
         Iterator itElements=rdfElements.iterator();

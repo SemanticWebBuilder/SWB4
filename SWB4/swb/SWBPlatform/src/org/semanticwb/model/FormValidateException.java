@@ -30,12 +30,20 @@ package org.semanticwb.model;
 
 import org.semanticwb.SWBException;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class FormValidateException.
+ * 
  * @author Jei
  */
 public class FormValidateException extends SWBException
 {
+    
+    /**
+     * Instantiates a new form validate exception.
+     * 
+     * @param msg the msg
+     */
     public FormValidateException(String msg) 
     {
         super(msg);

@@ -39,40 +39,98 @@ import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.base.util.URLEncoder;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SemanticProperty.
+ * 
  * @author Jei
  */
 public class SemanticProperty
 {
 
+    /** The m_prop. */
     private Property m_prop;
+    
+    /** The m_inverse. */
     private SemanticProperty m_inverse;
+    
+    /** The is object property. */
     private Boolean isObjectProperty = null;
+    
+    /** The is data type property. */
     private Boolean isDataTypeProperty = null;
+    
+    /** The has inverse. */
     private Boolean hasInverse = null;
+    
+    /** The is inverse. */
     private boolean isInverse = false;
+    
+    /** The is external invocation. */
     private Boolean isExternalInvocation = null;
+    
+    /** The is inherit property. */
     private Boolean isInheritProperty = null;
+    
+    /** The is not observable. */
     private Boolean isNotObservable = null;
+    
+    /** The is not code generation. */
     private Boolean isNotCodeGeneration = null;
+    
+    /** The is remove dependency. */
     private Boolean isRemoveDependency = null;
+    
+    /** The is clone dependency. */
     private Boolean isCloneDependency = null;
+    
+    /** The is heraquical relation. */
     private Boolean isHeraquicalRelation = null;
+    
+    /** The is required. */
     private Boolean isRequired = null;
+    
+    /** The is used as name. */
     private Boolean isUsedAsName = null;
+    
+    /** The is localeable. */
     private Boolean isLocaleable = null;
+    
+    /** The m_property code name. */
     private String m_propertyCodeName = null;
+    
+    /** The m_default value. */
     private String m_defaultValue = null;
+    
+    /** The display property. */
     private SemanticObject displayProperty = null;
+    
+    /** The disp property. */
     private boolean dispProperty = false;
+    
+    /** The cardinality. */
     private int cardinality = 0;
+    
+    /** The cardinality check. */
     private boolean cardinalityCheck = false;
+    
+    /** The range check. */
     private boolean rangeCheck = false;
+    
+    /** The range. */
     private Resource range = null;
+    
+    /** The restrictions. */
     private HashMap<String, ArrayList<Restriction>> restrictions = null;
+    
+    /** The allvalues. */
     private HashMap<String, SemanticClass> allvalues = null;
 
+    /**
+     * Instantiates a new semantic property.
+     * 
+     * @param prop the prop
+     */
     public SemanticProperty(Property prop)
     {
         this.m_prop = prop;
@@ -109,36 +167,72 @@ public class SemanticProperty
         }
     }
 
+    /**
+     * Gets the semantic object.
+     * 
+     * @return the semantic object
+     */
     public SemanticObject getSemanticObject()
     {
         return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
     }
 
+    /**
+     * Gets the rDF property.
+     * 
+     * @return the rDF property
+     */
     public Property getRDFProperty()
     {
         return m_prop;
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return m_prop.getLocalName();
     }
 
+    /**
+     * Gets the prefix.
+     * 
+     * @return the prefix
+     */
     public String getPrefix()
     {
         return m_prop.getModel().getNsURIPrefix(m_prop.getNameSpace());
     }
 
+    /**
+     * Gets the prop id.
+     * 
+     * @return the prop id
+     */
     public String getPropId()
     {
         return getPrefix() + ":" + getName();
     }
 
+    /**
+     * Gets the label.
+     * 
+     * @return the label
+     */
     public String getLabel()
     {
         return getLabel(null);
     }
 
+    /**
+     * Gets the label.
+     * 
+     * @param lang the lang
+     * @return the label
+     */
     public String getLabel(String lang)
     {
         String ret = null;
@@ -149,6 +243,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Gets the property code name.
+     * 
+     * @return the property code name
+     */
     public String getPropertyCodeName()
     {
         if (m_propertyCodeName == null)
@@ -173,6 +272,11 @@ public class SemanticProperty
         return m_propertyCodeName;
     }
 
+    /**
+     * Gets the default value.
+     * 
+     * @return the default value
+     */
     public String getDefaultValue()
     {
         if (m_defaultValue == null)
@@ -187,13 +291,19 @@ public class SemanticProperty
         return m_defaultValue;
     }
 
+    /**
+     * Gets the uRI.
+     * 
+     * @return the uRI
+     */
     public String getURI()
     {
         return m_prop.getURI();
     }
 
     /**
-     * Regresa URI codificado para utilizar en ligas de html
+     * Regresa URI codificado para utilizar en ligas de html.
+     * 
      * @return URI Codificado
      */
     public String getEncodedURI()
@@ -201,6 +311,12 @@ public class SemanticProperty
         return URLEncoder.encode(getURI());
     }
 
+    /**
+     * Gets the required property.
+     * 
+     * @param prop the prop
+     * @return the required property
+     */
     public SemanticLiteral getRequiredProperty(SemanticProperty prop)
     {
         SemanticLiteral ret = null;
@@ -212,6 +328,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is localeable.
+     * 
+     * @return true, if is localeable
+     */
     public boolean isLocaleable()
     {
         if (isLocaleable == null)
@@ -226,6 +347,11 @@ public class SemanticProperty
         return isLocaleable;
     }
 
+    /**
+     * Checks if is used as name.
+     * 
+     * @return true, if is used as name
+     */
     public boolean isUsedAsName()
     {
         if (isUsedAsName == null)
@@ -240,6 +366,11 @@ public class SemanticProperty
         return isUsedAsName;
     }
 
+    /**
+     * Checks if is required.
+     * 
+     * @return true, if is required
+     */
     public boolean isRequired()
     {
         if (isRequired == null)
@@ -255,7 +386,9 @@ public class SemanticProperty
     }
 
     /**
-     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion
+     * Si esta propiedad se utiliza para definir la relacio padre-hijo en el arbol de navegacion.
+     * 
+     * @return true, if is heraquical relation
      * @return
      */
     public boolean isHeraquicalRelation()
@@ -273,7 +406,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad se utiliza para eliminar el objeto relacionado, si el objeto de dominio se elimina
+     * Esta propiedad se utiliza para eliminar el objeto relacionado, si el objeto de dominio se elimina.
+     * 
+     * @return true, if is removes the dependency
      * @return
      */
     public boolean isRemoveDependency()
@@ -291,7 +426,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad se utiliza para clonar el objeto relacionado, si el objeto de dominio se clona
+     * Esta propiedad se utiliza para clonar el objeto relacionado, si el objeto de dominio se clona.
+     * 
+     * @return true, if is clone dependency
      * @return
      */
     public boolean isCloneDependency()
@@ -309,7 +446,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad se utiliza para desabilitar el log de cambios de la propiedad
+     * Esta propiedad se utiliza para desabilitar el log de cambios de la propiedad.
+     * 
+     * @return true, if is not observable
      * @return
      */
     public boolean isNotObservable()
@@ -327,7 +466,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad se utiliza para desabilitar la generacion de código de la propiedad
+     * Esta propiedad se utiliza para desabilitar la generacion de código de la propiedad.
+     * 
+     * @return true, if is not code generation
      * @return
      */
     public boolean isNotCodeGeneration()
@@ -345,7 +486,9 @@ public class SemanticProperty
     }
 
     /**
-     * Define si la apropiedad es heredable a los hijos
+     * Define si la apropiedad es heredable a los hijos.
+     * 
+     * @return true, if is inherit property
      * @return
      */
     public boolean isInheritProperty()
@@ -363,7 +506,9 @@ public class SemanticProperty
     }
 
     /**
-     * Si esta propiedad se utiliza para definir la relacio hijo-padre en el arbol de navegacion
+     * Si esta propiedad se utiliza para definir la relacio hijo-padre en el arbol de navegacion.
+     * 
+     * @return true, if is inverse heraquical relation
      * @return
      */
     public boolean isInverseHeraquicalRelation()
@@ -377,6 +522,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is external invocation.
+     * 
+     * @return true, if is external invocation
+     */
     public boolean isExternalInvocation()
     {
         if (isExternalInvocation == null)
@@ -391,6 +541,11 @@ public class SemanticProperty
         return isExternalInvocation;
     }
 
+    /**
+     * Gets the display property.
+     * 
+     * @return the display property
+     */
     public SemanticObject getDisplayProperty()
     {
         if (!dispProperty)
@@ -405,11 +560,22 @@ public class SemanticProperty
         return displayProperty;
     }
 
+    /**
+     * Gets the display name.
+     * 
+     * @return the display name
+     */
     public String getDisplayName()
     {
         return getDisplayName(null);
     }
 
+    /**
+     * Gets the display name.
+     * 
+     * @param lang the lang
+     * @return the display name
+     */
     public String getDisplayName(String lang)
     {
         String ret = null;
@@ -467,24 +633,38 @@ public class SemanticProperty
 //        return ret;
 //    }    
 
-    @Override
+    /* (non-Javadoc)
+ * @see java.lang.Object#toString()
+ */
+@Override
     public String toString()
     {
         return m_prop.toString();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
         return m_prop.hashCode();
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
         return hashCode() == obj.hashCode();
     }
 
+    /**
+     * Gets the domain class.
+     * 
+     * @return the domain class
+     */
     public SemanticClass getDomainClass()
     {
         if (hasInverse())
@@ -511,6 +691,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Gets the range class.
+     * 
+     * @return the range class
+     */
     public SemanticClass getRangeClass()
     {
         if (hasInverse())
@@ -526,6 +711,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Gets the range.
+     * 
+     * @return the range
+     */
     public Resource getRange()
     {
         if (!rangeCheck)
@@ -541,6 +731,11 @@ public class SemanticProperty
         return range;
     }
 
+    /**
+     * Gets the cardinality.
+     * 
+     * @return the cardinality
+     */
     public int getCardinality()
     {
         if (!cardinalityCheck)
@@ -563,6 +758,11 @@ public class SemanticProperty
         return cardinality;
     }
 
+    /**
+     * Checks if is object property.
+     * 
+     * @return true, if is object property
+     */
     public boolean isObjectProperty()
     {
         if (isObjectProperty == null)
@@ -585,6 +785,11 @@ public class SemanticProperty
         return isObjectProperty;
     }
 
+    /**
+     * Checks if is data type property.
+     * 
+     * @return true, if is data type property
+     */
     public boolean isDataTypeProperty()
     {
         if (isDataTypeProperty == null)
@@ -608,7 +813,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad es la inversa de otra (no genera statements)
+     * Esta propiedad es la inversa de otra (no genera statements).
+     * 
+     * @return true, if successful
      * @return
      */
     public boolean hasInverse()
@@ -625,7 +832,9 @@ public class SemanticProperty
     }
 
     /**
-     * Esta propiedad es normal pero tiene una inversa
+     * Esta propiedad es normal pero tiene una inversa.
+     * 
+     * @return true, if is inverse of
      * @return
      */
     public boolean isInverseOf()
@@ -633,11 +842,21 @@ public class SemanticProperty
         return isInverse;
     }
 
+    /**
+     * Gets the inverse.
+     * 
+     * @return the inverse
+     */
     public SemanticProperty getInverse()
     {
         return m_inverse;
     }
 
+    /**
+     * Checks if is boolean.
+     * 
+     * @return true, if is boolean
+     */
     public boolean isBoolean()
     {
         boolean ret = false;
@@ -649,6 +868,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is int.
+     * 
+     * @return true, if is int
+     */
     public boolean isInt()
     {
         boolean ret = false;
@@ -660,6 +884,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is binary.
+     * 
+     * @return true, if is binary
+     */
     public boolean isBinary()
     {
         boolean ret = false;
@@ -671,6 +900,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is long.
+     * 
+     * @return true, if is long
+     */
     public boolean isLong()
     {
         boolean ret = false;
@@ -682,6 +916,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is date.
+     * 
+     * @return true, if is date
+     */
     public boolean isDate()
     {
         boolean ret = false;
@@ -693,6 +932,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is date time.
+     * 
+     * @return true, if is date time
+     */
     public boolean isDateTime()
     {
         boolean ret = false;
@@ -704,6 +948,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is string.
+     * 
+     * @return true, if is string
+     */
     public boolean isString()
     {
         boolean ret = false;
@@ -715,6 +964,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is float.
+     * 
+     * @return true, if is float
+     */
     public boolean isFloat()
     {
         boolean ret = false;
@@ -726,6 +980,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is xML.
+     * 
+     * @return true, if is xML
+     */
     public boolean isXML()
     {
         boolean ret = false;
@@ -737,6 +996,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is double.
+     * 
+     * @return true, if is double
+     */
     public boolean isDouble()
     {
         boolean ret = false;
@@ -748,6 +1012,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is byte.
+     * 
+     * @return true, if is byte
+     */
     public boolean isByte()
     {
         boolean ret = false;
@@ -759,6 +1028,11 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is short.
+     * 
+     * @return true, if is short
+     */
     public boolean isShort()
     {
         boolean ret = false;
@@ -770,11 +1044,22 @@ public class SemanticProperty
         return ret;
     }
 
+    /**
+     * Checks if is numeric.
+     * 
+     * @return true, if is numeric
+     */
     public boolean isNumeric()
     {
         return isInt() || isLong() || isByte() || isDouble() || isFloat() || isShort();
     }
 
+    /**
+     * Gets the all values from restriction class.
+     * 
+     * @param cls the cls
+     * @return the all values from restriction class
+     */
     public SemanticClass getAllValuesFromRestrictionClass(SemanticClass cls)
     {
         SemanticClass rcls = allvalues.get(cls.getURI());

@@ -29,36 +29,63 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import java.util.Iterator;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GenericIterator.
+ * 
+ * @param <T> the generic type
  * @author victor.lorenzana
  */
 public class GenericIterator<T extends GenericObject> implements Iterator
 {
+    
+    /** The iterator. */
     private Iterator iterator;
+    
+    /** The invert. */
     private boolean invert=false;
             
+    /**
+     * Instantiates a new generic iterator.
+     * 
+     * @param iterator the iterator
+     */
     public GenericIterator(Iterator iterator)
     {
         this(iterator,false);
     }
     
+    /**
+     * Instantiates a new generic iterator.
+     * 
+     * @param iterator the iterator
+     * @param invert the invert
+     */
     public GenericIterator(Iterator iterator, boolean invert)
     {
         this.iterator=iterator;
         this.invert=invert;
     }    
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#remove()
+     */
     public void remove()
     {
         iterator.remove();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#hasNext()
+     */
     public boolean hasNext() 
     {
         return iterator.hasNext();
     }
     
+    /* (non-Javadoc)
+     * @see java.util.Iterator#next()
+     */
     public T next() 
     {        
         Object obj=iterator.next();

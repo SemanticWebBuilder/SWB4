@@ -33,6 +33,7 @@ package org.semanticwb.util;
 
 import java.text.*;
 
+// TODO: Auto-generated Javadoc
 /**
  * Busca una cadena en un string no importando caracteres especiales.
  * @author Javier Solis Gonzalez
@@ -42,19 +43,34 @@ public class StringSearch
 {
 
     // Member variables for storing precomputed pattern data
+    /** The pat len. */
     private int patLen;
+    
+    /** The pat elem. */
     private int[] patElem;
+    
+    /** The shifts. */
     private int[] shifts;
+    
+    /** The weight. */
     int weight = Collator.PRIMARY;
 
+    /** The iter. */
     private CollationElementIterator iter;
 
-    /** Creates new StringSearch2 */
+    /**
+     * Creates new StringSearch2.
+     */
     public StringSearch()
     {
 
     }
 
+    /**
+     * The main method.
+     * 
+     * @param args the arguments
+     */
     static public void main(String[] args)
     {
         String text = "Javier Solís";
@@ -64,6 +80,13 @@ public class StringSearch
         System.out.println(s.compare(text, pattern));
     }
 
+    /**
+     * Compare.
+     * 
+     * @param text the text
+     * @param pattern the pattern
+     * @return true, if successful
+     */
     public boolean compare(String text, String pattern)
     {
         RuleBasedCollator c = (RuleBasedCollator) Collator.getInstance();
@@ -83,12 +106,24 @@ public class StringSearch
     }
 
     // Map a collation element to an array index
+    /**
+     * Hash.
+     * 
+     * @param order the order
+     * @return the int
+     */
     int hash(int order)
     {
         return CollationElementIterator.primaryOrder(order) % 256;
     }
 
     // Initialize the Boyer-Moore shift tables
+    /**
+     * Initialize.
+     * 
+     * @param c the c
+     * @param pat the pat
+     */
     void initialize(RuleBasedCollator c, String pat)
     {
         // First find out how many elements we're dealing with
@@ -119,6 +154,13 @@ public class StringSearch
         }
     }
 
+    /**
+     * Find.
+     * 
+     * @param text the text
+     * @param pattern the pattern
+     * @return the int
+     */
     public int find(String text, String pattern)
     {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance();
@@ -179,6 +221,12 @@ public class StringSearch
     }
 
     // Return a mask for the part of the order we're interested in
+    /**
+     * Gets the mask.
+     * 
+     * @param weight the weight
+     * @return the mask
+     */
     public int getMask(int weight)
     {
         switch (weight)
@@ -192,6 +240,13 @@ public class StringSearch
         }
     }
 
+    /**
+     * Match.
+     * 
+     * @param text the text
+     * @param pattern the pattern
+     * @return true, if successful
+     */
     public boolean match(CollationElementIterator text, CollationElementIterator pattern)
     {
         int mask = getMask(weight);

@@ -31,20 +31,28 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Driver_HSQL_SWB.
+ * 
  * @author javier.solis
  */
 public class Driver_HSQL_SWB extends Driver_HSQL {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Driver_HSQL_SWB.class);
 
+    /**
+     * Instantiates a new driver_ hsq l_ swb.
+     */
     public Driver_HSQL_SWB() {
         super();
     }
 
     /**
-     * Set the database connection
+     * Set the database connection.
+     * 
+     * @param dbcon the new connection
      */
     @Override
     public void setConnection(IDBConnection dbcon) {
