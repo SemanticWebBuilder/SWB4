@@ -168,7 +168,7 @@ public class GeneralReport
             java.sql.Timestamp tempIni = new java.sql.Timestamp(new java.util.Date().getTime());
             java.sql.Timestamp tempFin = tempIni;
             
-            if(request.getParameter("fecha_ini").length()>0)
+            if(request.getParameter("fecha_ini").trim().length()>0)
             {
                 String fecha_ini = request.getParameter("fecha_ini");
                 //System.out.println("Fecha inicial:"+fecha_ini);
@@ -187,7 +187,7 @@ public class GeneralReport
                 strSql =strSql+(" and sr_responseuser.created >= ? ");
             }
             
-            if(request.getParameter("fecha_fin").length()>0)
+            if(request.getParameter("fecha_fin").trim().length()>0)
             {
                 String fecha_fin = request.getParameter("fecha_fin");
                 //System.out.println("Fecha final:"+fecha_fin);
@@ -214,12 +214,12 @@ public class GeneralReport
                 st.setInt(i_param,i_review);
                 i_param++;
             }
-            if(request.getParameter("fecha_ini").length()>0)
+            if(request.getParameter("fecha_ini").trim().length()>0)
             {
              st.setTimestamp(i_param,tempIni);
              i_param++;
             }
-            if(request.getParameter("fecha_fin").length()>0)
+            if(request.getParameter("fecha_fin").trim().length()>0)
             {
                 st.setTimestamp(i_param,tempFin);
             }
@@ -330,13 +330,16 @@ public class GeneralReport
                     ret.append("	    <td aling=center><b><font color=\""+color+"\">"+rs.getString("score")+"</font></b></td>");
                 }
                 ret.append("	  </tr>	");
-                ret.append("\n</table>");
-                ret.append("\n</fieldset>");
-                ret.append("\n</div>");
+//                ret.append("\n</table>");
+//                ret.append("\n</fieldset>");
+//                ret.append("\n</div>");
             }
             if(rs!=null)rs.close();
             if(st!=null)st.close();
             if(con!=null)con.close();
+            ret.append("\n</table>");
+            ret.append("\n</fieldset>");
+            ret.append("\n</div>");
         }
         catch(Exception e)
         {
@@ -352,6 +355,7 @@ public class GeneralReport
             st=null;
             con=null;
         }
+        //System.out.println("reporte general .... "+ret.toString());
         return ret.toString();
         
     }

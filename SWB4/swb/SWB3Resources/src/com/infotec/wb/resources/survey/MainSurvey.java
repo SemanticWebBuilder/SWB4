@@ -452,7 +452,7 @@ public class MainSurvey extends GenericResource
                     // Displays the survey and check if exists a responseid
                     if(s_responseid == null)
                     {
-                        if(null!=user && !user.getId().substring(0,1).equals("0"))
+                        if(null!=user && !user.getId().equals("0")) //!user.getId().substring(0,1).equals("0")
                         {
                             // Gets a pending survey from this user
                             l_responseid = util.getPendingSurvey(user.getId(),base,objSur);
@@ -2846,7 +2846,7 @@ public class MainSurvey extends GenericResource
                 rs = st.executeQuery();
                 if(rs.next())
                 {
-                    xmlans = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+                    xmlans = rs.getString("stringxml");//SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
                 }
                 if(rs != null) rs.close();
                 if(st != null) st.close();
