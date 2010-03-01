@@ -23,7 +23,17 @@
  */
 package org.semanticwb.model;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ResourceRef.
+ */
 public class ResourceRef extends org.semanticwb.model.base.ResourceRefBase {
+    
+    /**
+     * Instantiates a new resource ref.
+     * 
+     * @param base the base
+     */
     public ResourceRef(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
