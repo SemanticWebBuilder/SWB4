@@ -238,9 +238,7 @@ public class TestUserTypes {
             if (usr.hasUserType("estudiante")) {
                 usr.setExtendedAttribute("grado", grados[(int) Math.floor(Math.random() * 5)]);
                 usr.setExtendedAttribute("escuela", escuela[(int) Math.floor(Math.random() * 5)]);
-                usr.setExtendedAttribute("inscrtito", new Boolean(((int) Math.floor(Math.random() * 5) == 0)
-                        ? false
-                        : true));
+                usr.setExtendedAttribute("inscrtito", Boolean.valueOf(((int) Math.floor(Math.random() * 5) == 0)? false: true));
             }
         }
     }

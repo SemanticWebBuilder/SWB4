@@ -28,11 +28,26 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TemplateRef.
+ */
 public class TemplateRef extends TemplateRefBase {
+    
+    /** The Constant INHERIT_ACTUAL. */
     public static final int INHERIT_ACTUAL          = 2;
+    
+    /** The Constant INHERIT_ACTUALANDCHILDS. */
     public static final int INHERIT_ACTUALANDCHILDS = 1;
+    
+    /** The Constant INHERIT_CHILDS. */
     public static final int INHERIT_CHILDS          = 3;
 
+    /**
+     * Instantiates a new template ref.
+     * 
+     * @param base the base
+     */
     public TemplateRef(SemanticObject base) {
         super(base);
     }

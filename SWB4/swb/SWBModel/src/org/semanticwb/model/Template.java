@@ -30,12 +30,19 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Template.
+ */
 public class Template extends TemplateBase 
 {
+    
+    /** The siteid. */
     private String siteid=null;
     
 //    private ArrayList parts;
-    private HashMap objects = new HashMap();
+    /** The objects. */
+private HashMap objects = new HashMap();
 
 //    private String actPath;
     
@@ -45,7 +52,8 @@ public class Template extends TemplateBase
     //Para que se muestre funcionalidad de facebook como el boton, agregar las siguientes 2 líneas a los templates (Jorge)
     //<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     //<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
-    public static String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
+    /** The DEFAU l_ html. */
+public static String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
                            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n" +
                            "<html>\n" +
                            "<head>\n" +
@@ -83,6 +91,11 @@ public class Template extends TemplateBase
                             "</html>";
 
     
+    /**
+     * Instantiates a new template.
+     * 
+     * @param base the base
+     */
     public Template(SemanticObject base)
     {
         super(base);
@@ -95,6 +108,11 @@ public class Template extends TemplateBase
 //        objects.put("distpath", SWBPortal.getDistributorPath());
     }
     
+    /**
+     * Gets the web site id.
+     * 
+     * @return the web site id
+     */
     public String getWebSiteId()
     {
         if(siteid==null)
@@ -1579,11 +1597,20 @@ public class Template extends TemplateBase
 //        return "<";        
 //    }        
     
-    public void reload()
+    /**
+ * Reload.
+ */
+public void reload()
     {
         
     }
 
+    /**
+     * Gets the file name.
+     * 
+     * @param version the version
+     * @return the file name
+     */
     public String getFileName(int version)
     {
         String ret=null;

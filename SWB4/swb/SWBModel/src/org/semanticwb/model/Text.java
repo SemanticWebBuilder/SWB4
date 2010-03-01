@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -23,22 +22,30 @@
  */
 package org.semanticwb.model;
 
-//~--- non-JDK imports --------------------------------------------------------
-
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.servlet.http.HttpServletRequest;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Text.
+ */
 public class Text extends TextBase {
+    
+    /**
+     * Instantiates a new text.
+     * 
+     * @param base the base
+     */
     public Text(SemanticObject base) {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) {
