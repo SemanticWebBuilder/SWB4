@@ -43,6 +43,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.w3c.dom.*;
 
 
+// TODO: Auto-generated Javadoc
 /** Objeto: Manejador de las Reglas en memoria.
  *
  * Object: Manager of the rules in memory.
@@ -52,24 +53,44 @@ import org.w3c.dom.*;
  */
 public class SWBRuleMgr
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRuleMgr.class);
 
+    /** The Constant TAG_INT_RULE. */
     public static final String TAG_INT_RULE ="SWBRule";
+    
+    /** The Constant TAG_INT_ROLE. */
     public static final String TAG_INT_ROLE ="SWBRole";
+    
+    /** The Constant TAG_INT_USERGROUP. */
     public static final String TAG_INT_USERGROUP ="SWBUserGroup";
+    
+    /** The Constant TAG_INT_ISREGISTERED. */
     public static final String TAG_INT_ISREGISTERED ="SWBIsRegistered";
+    
+    /** The Constant TAG_INT_ISSIGNED. */
     public static final String TAG_INT_ISSIGNED ="SWBIsSigned";
+    
+    /** The Constant TAG_INT_DEVICE. */
     public static final String TAG_INT_DEVICE ="SWBDevice";
+    
+    /** The Constant TAG_REQUEST_PARAM. */
     public static final String TAG_REQUEST_PARAM="SWBReqParam";
+    
+    /** The Constant TAG_SESSION_ATT. */
     public static final String TAG_SESSION_ATT="SWBSessAtt";
     
+    /** The doms. */
     private HashMap<String,Document> doms;
     
 //    //eval Inner Rules in occurrences
 //    private HashMap occDoms;
 //    private HashMap occUpds;
 
-    /** Creates new DBUser */
+    /**
+ * Creates new DBUser.
+ */
     public SWBRuleMgr()
     {
         log.event("SWBRuleMgr Initialized...");
@@ -81,6 +102,9 @@ public class SWBRuleMgr
     }
 
     
+    /**
+     * Inits the.
+     */
     public void init()
     {
         Iterator<Rule> it = Rule.ClassMgr.listRules();
@@ -159,9 +183,13 @@ public class SWBRuleMgr
 //    }
 
     /**
-     * @param user
-     * @param rule
-     * @return  */
+ * Eval.
+ * 
+ * @param user the user
+ * @param rule_uri the rule_uri
+ * @return true, if successful
+ * @return
+ */
     public boolean eval(User user, String rule_uri)
     {
         //System.out.println("rule:"+rule+" site:"+topicmap);
@@ -182,9 +210,13 @@ public class SWBRuleMgr
     }
 
     /**
-     * @param node
-     * @param usr
-     * @return  */
+     * And.
+     * 
+     * @param node the node
+     * @param user the user
+     * @return true, if successful
+     * @return
+     */
     public boolean and(Node node, User user)
     {
         boolean ret=true;
@@ -218,9 +250,13 @@ public class SWBRuleMgr
     }
 
     /**
-     * @param node
-     * @param usr
-     * @return  */
+     * Or.
+     * 
+     * @param node the node
+     * @param user the user
+     * @return true, if successful
+     * @return
+     */
     public boolean or(Node node, User user)
     {
         boolean ret=false;
@@ -252,9 +288,13 @@ public class SWBRuleMgr
     }
 
     /**
+     * Exp.
+     * 
+     * @param node the node
+     * @param user the user
+     * @return true, if successful
      * @return
-     * @param node
-     * @param usr  */
+     */
     public boolean exp(Node node, User user)
     {
         boolean ret = false;
@@ -390,11 +430,19 @@ public class SWBRuleMgr
         return ret;
     }
 
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         log.event("SWBRuleMgr Destroyed...");
     }
 
+    /**
+     * Reload rule.
+     * 
+     * @param rule the rule
+     */
     public void reloadRule(Rule rule)
     {
         try

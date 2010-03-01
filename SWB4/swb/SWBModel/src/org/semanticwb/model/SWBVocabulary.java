@@ -28,291 +28,845 @@ import org.semanticwb.platform.SemanticVocabulary;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import java.util.Hashtable;
+// TODO: Auto-generated Javadoc
+
+/**
+ * The Class SWBVocabulary.
+ */
 public class SWBVocabulary
 {
 
 
     //Classes
+    /** The swb_ interface. */
     public final SemanticClass swb_Interface;
+    
+    /** The swb_ user. */
     public final SemanticClass swb_User;
+    
+    /** The swb_ calendar. */
     public final SemanticClass swb_Calendar;
+    
+    /** The swb_ community. */
     public final SemanticClass swb_Community;
+    
+    /** The nt_file. */
     public final SemanticClass nt_file;
+    
+    /** The swb_ iconable. */
     public final SemanticClass swb_Iconable;
+    
+    /** The swbxf_ form view ref. */
     public final SemanticClass swbxf_FormViewRef;
+    
+    /** The swb_ deleteable. */
     public final SemanticClass swb_Deleteable;
+    
+    /** The swb_ reference. */
     public final SemanticClass swb_Reference;
+    
+    /** The swbrep_ nameable. */
     public final SemanticClass swbrep_Nameable;
+    
+    /** The swb_ roleable. */
     public final SemanticClass swb_Roleable;
+    
+    /** The swb_ p flow refable. */
     public final SemanticClass swb_PFlowRefable;
+    
+    /** The blog_ category. */
     public final SemanticClass blog_Category;
+    
+    /** The nt_ frozen node. */
     public final SemanticClass nt_FrozenNode;
+    
+    /** The blog_ blog. */
     public final SemanticClass blog_Blog;
+    
+    /** The swb_ ruleable. */
     public final SemanticClass swb_Ruleable;
+    
+    /** The nt_ unstructured. */
     public final SemanticClass nt_Unstructured;
+    
+    /** The swb_ swb model. */
     public final SemanticClass swb_SWBModel;
+    
+    /** The nt_ base node. */
     public final SemanticClass nt_BaseNode;
+    
+    /** The swb_ valueable. */
     public final SemanticClass swb_Valueable;
+    
+    /** The swbrep_ swb node. */
     public final SemanticClass swbrep_SWBNode;
+    
+    /** The swb_ calendarable. */
     public final SemanticClass swb_Calendarable;
+    
+    /** The swbrep_ traceable. */
     public final SemanticClass swbrep_Traceable;
+    
+    /** The swb_ permission. */
     public final SemanticClass swb_Permission;
+    
+    /** The swbxf_ object behavior. */
     public final SemanticClass swbxf_ObjectBehavior;
+    
+    /** The swbxf_ password update. */
     public final SemanticClass swbxf_PasswordUpdate;
+    
+    /** The swbrep_ class definition. */
     public final SemanticClass swbrep_ClassDefinition;
+    
+    /** The swbrep_ common propertiesfor definition. */
     public final SemanticClass swbrep_CommonPropertiesforDefinition;
+    
+    /** The blog_ post. */
     public final SemanticClass blog_Post;
+    
+    /** The swb_ template group. */
     public final SemanticClass swb_TemplateGroup;
+    
+    /** The swb_ portletable. */
     public final SemanticClass swb_Portletable;
+    
+    /** The cm_ office content. */
     public final SemanticClass cm_OfficeContent;
+    
+    /** The swb_ template. */
     public final SemanticClass swb_Template;
+    
+    /** The cm_ descriptiveable. */
     public final SemanticClass cm_Descriptiveable;
+    
+    /** The swb_ editable. */
     public final SemanticClass swb_Editable;
+    
+    /** The swb_ priorityable. */
     public final SemanticClass swb_Priorityable;
+    
+    /** The swb_ role. */
     public final SemanticClass swb_Role;
+    
+    /** The swb_ version info. */
     public final SemanticClass swb_VersionInfo;
+    
+    /** The swbxf_ property group. */
     public final SemanticClass swbxf_PropertyGroup;
+    
+    /** The mix_ lockable. */
     public final SemanticClass mix_Lockable;
+    
+    /** The swbxf_ resource parameter. */
     public final SemanticClass swbxf_ResourceParameter;
+    
+    /** The nt_hierarchy node. */
     public final SemanticClass nt_hierarchyNode;
+    
+    /** The swb_ swb class. */
     public final SemanticClass swb_SWBClass;
+    
+    /** The swb_ xm lable. */
     public final SemanticClass swb_XMLable;
+    
+    /** The nt_property definition. */
     public final SemanticClass nt_propertyDefinition;
+    
+    /** The swbxf_ display property. */
     public final SemanticClass swbxf_DisplayProperty;
+    
+    /** The swb_ rule. */
     public final SemanticClass swb_Rule;
+    
+    /** The swb_ web pageable. */
     public final SemanticClass swb_WebPageable;
+    
+    /** The swb_ web site. */
     public final SemanticClass swb_WebSite;
+    
+    /** The swb_ language. */
     public final SemanticClass swb_Language;
+    
+    /** The swb_ swb interface. */
     public final SemanticClass swb_SWBInterface;
+    
+    /** The swb_ portlet ref. */
     public final SemanticClass swb_PortletRef;
+    
+    /** The swbrep_ child node definition. */
     public final SemanticClass swbrep_ChildNodeDefinition;
+    
+    /** The swb_ portlet type. */
     public final SemanticClass swb_PortletType;
+    
+    /** The blog_ descriptiveable. */
     public final SemanticClass blog_Descriptiveable;
+    
+    /** The swb_ viewable. */
     public final SemanticClass swb_Viewable;
+    
+    /** The swbxf_ text. */
     public final SemanticClass swbxf_Text;
+    
+    /** The swb_ portlet sub type. */
     public final SemanticClass swb_PortletSubType;
+    
+    /** The swb_ inheritable. */
     public final SemanticClass swb_Inheritable;
+    
+    /** The swb_ template ref. */
     public final SemanticClass swb_TemplateRef;
+    
+    /** The swb_ templateable. */
     public final SemanticClass swb_Templateable;
+    
+    /** The swb_ sortable. */
     public final SemanticClass swb_Sortable;
+    
+    /** The swb_ traceable. */
     public final SemanticClass swb_Traceable;
+    
+    /** The nt_version labels. */
     public final SemanticClass nt_versionLabels;
+    
+    /** The swb_ role refable. */
     public final SemanticClass swb_RoleRefable;
+    
+    /** The swbxf_ text area. */
     public final SemanticClass swbxf_TextArea;
+    
+    /** The swb_ p flow. */
     public final SemanticClass swb_PFlow;
+    
+    /** The swb_ ip filter. */
     public final SemanticClass swb_IPFilter;
+    
+    /** The swb_ rule refable. */
     public final SemanticClass swb_RuleRefable;
+    
+    /** The nt_ version history. */
     public final SemanticClass nt_VersionHistory;
+    
+    /** The swb_ user group. */
     public final SemanticClass swb_UserGroup;
+    
+    /** The swb_ portlet refable. */
     public final SemanticClass swb_PortletRefable;
+    
+    /** The mix_ versionable. */
     public final SemanticClass mix_Versionable;
+    
+    /** The swb_ template refable. */
     public final SemanticClass swb_TemplateRefable;
+    
+    /** The swb_ p flow ref. */
     public final SemanticClass swb_PFlowRef;
+    
+    /** The swb_ rule ref. */
     public final SemanticClass swb_RuleRef;
+    
+    /** The nt_resource. */
     public final SemanticClass nt_resource;
+    
+    /** The cm_ office category. */
     public final SemanticClass cm_OfficeCategory;
+    
+    /** The swbxf_ form view. */
     public final SemanticClass swbxf_FormView;
+    
+    /** The swb_ referensable. */
     public final SemanticClass swb_Referensable;
+    
+    /** The swb_ hiddenable. */
     public final SemanticClass swb_Hiddenable;
+    
+    /** The swb_ device. */
     public final SemanticClass swb_Device;
+    
+    /** The swb_ localeable. */
     public final SemanticClass swb_Localeable;
+    
+    /** The swb_ camp. */
     public final SemanticClass swb_Camp;
+    
+    /** The swb_ dns. */
     public final SemanticClass swb_Dns;
+    
+    /** The swb_ user repository. */
     public final SemanticClass swb_UserRepository;
+    
+    /** The swbrep_ property definition. */
     public final SemanticClass swbrep_PropertyDefinition;
+    
+    /** The swbxf_ herarquical node. */
     public final SemanticClass swbxf_HerarquicalNode;
+    
+    /** The swb_ activeable. */
     public final SemanticClass swb_Activeable;
+    
+    /** The swb_ portlet. */
     public final SemanticClass swb_Portlet;
+    
+    /** The swb_ descriptiveable. */
     public final SemanticClass swb_Descriptiveable;
+    
+    /** The nt_child node definition. */
     public final SemanticClass nt_childNodeDefinition;
+    
+    /** The nt_folder. */
     public final SemanticClass nt_folder;
+    
+    /** The swb_ versionable. */
     public final SemanticClass swb_Versionable;
+    
+    /** The swb_ role ref. */
     public final SemanticClass swb_RoleRef;
+    
+    /** The swbxf_ object action. */
     public final SemanticClass swbxf_ObjectAction;
+    
+    /** The nt_ version. */
     public final SemanticClass nt_Version;
+    
+    /** The swb_ swb form element. */
     public final SemanticClass swb_SWBFormElement;
+    
+    /** The swb_ xml confable. */
     public final SemanticClass swb_XMLConfable;
+    
+    /** The mix_ referenceable. */
     public final SemanticClass mix_Referenceable;
+    
+    /** The swb_ class. */
     public final SemanticClass swb_Class;
+    
+    /** The swb_ web page. */
     public final SemanticClass swb_WebPage;
+    
+    /** The swb_ indexable. */
     public final SemanticClass swb_Indexable;
+    
+    /** The swbxf_ select one. */
     public final SemanticClass swbxf_SelectOne;
+    
+    /** The swbrep_ workspace. */
     public final SemanticClass swbrep_Workspace;
 
 
 
     //Properties
+    /** The swb_has grouped user. */
     public final SemanticProperty swb_hasGroupedUser;
+    
+    /** The swb_has web page child. */
     public final SemanticProperty swb_hasWebPageChild;
+    
+    /** The swb_has pt sub type. */
     public final SemanticProperty swb_hasPTSubType;
+    
+    /** The swb_has pst portlets. */
     public final SemanticProperty swb_hasPSTPortlets;
+    
+    /** The swb_has web page virtual child. */
     public final SemanticProperty swb_hasWebPageVirtualChild;
+    
+    /** The swb_class name. */
     public final SemanticProperty swb_className;
+    
+    /** The swbrep_has nodes. */
     public final SemanticProperty swbrep_hasNodes;
+    
+    /** The swb_has pt portlet. */
     public final SemanticProperty swb_hasPTPortlet;
+    
+    /** The swbxf_frm text area rows. */
     public final SemanticProperty swbxf_frmTextAreaRows;
+    
+    /** The swb_has reference. */
     public final SemanticProperty swb_hasReference;
+    
+    /** The swb_has grouped template. */
     public final SemanticProperty swb_hasGroupedTemplate;
+    
+    /** The swb_created. */
     public final SemanticProperty swb_created;
+    
+    /** The swb_modified by. */
     public final SemanticProperty swb_modifiedBy;
+    
+    /** The swb_usr second last name. */
     public final SemanticProperty swb_usrSecondLastName;
+    
+    /** The swb_usr email. */
     public final SemanticProperty swb_usrEmail;
+    
+    /** The swb_user group. */
     public final SemanticProperty swb_userGroup;
+    
+    /** The swb_updated. */
     public final SemanticProperty swb_updated;
+    
+    /** The swb_usr first name. */
     public final SemanticProperty swb_usrFirstName;
+    
+    /** The swb_usr language. */
     public final SemanticProperty swb_usrLanguage;
+    
+    /** The swb_has calendar. */
     public final SemanticProperty swb_hasCalendar;
+    
+    /** The swb_usr password changed. */
     public final SemanticProperty swb_usrPasswordChanged;
+    
+    /** The swb_usr last name. */
     public final SemanticProperty swb_usrLastName;
+    
+    /** The swb_active. */
     public final SemanticProperty swb_active;
+    
+    /** The swb_usr last login. */
     public final SemanticProperty swb_usrLastLogin;
+    
+    /** The swb_creator. */
     public final SemanticProperty swb_creator;
+    
+    /** The swb_usr login. */
     public final SemanticProperty swb_usrLogin;
+    
+    /** The swb_usr password. */
     public final SemanticProperty swb_usrPassword;
+    
+    /** The swb_has role. */
     public final SemanticProperty swb_hasRole;
+    
+    /** The swb_usr security question. */
     public final SemanticProperty swb_usrSecurityQuestion;
+    
+    /** The swb_usr security answer. */
     public final SemanticProperty swb_usrSecurityAnswer;
+    
+    /** The swb_title. */
     public final SemanticProperty swb_title;
+    
+    /** The swb_xml. */
     public final SemanticProperty swb_xml;
+    
+    /** The swb_description. */
     public final SemanticProperty swb_description;
+    
+    /** The jcr_created. */
     public final SemanticProperty jcr_created;
+    
+    /** The swbrep_parent node. */
     public final SemanticProperty swbrep_parentNode;
+    
+    /** The jcr_primary type. */
     public final SemanticProperty jcr_primaryType;
+    
+    /** The jcr_mixin types. */
     public final SemanticProperty jcr_mixinTypes;
+    
+    /** The swbrep_path. */
     public final SemanticProperty swbrep_path;
+    
+    /** The swbrep_name. */
     public final SemanticProperty swbrep_name;
+    
+    /** The swb_icon class. */
     public final SemanticProperty swb_iconClass;
+    
+    /** The swb_form mode. */
     public final SemanticProperty swb_formMode;
+    
+    /** The swb_form view. */
     public final SemanticProperty swb_formView;
+    
+    /** The swb_deleted. */
     public final SemanticProperty swb_deleted;
+    
+    /** The jcr_name. */
     public final SemanticProperty jcr_name;
+    
+    /** The swb_has p flow ref. */
     public final SemanticProperty swb_hasPFlowRef;
+    
+    /** The jcr_frozen primary type. */
     public final SemanticProperty jcr_frozenPrimaryType;
+    
+    /** The jcr_frozen mixin types. */
     public final SemanticProperty jcr_frozenMixinTypes;
+    
+    /** The jcr_frozen uuid. */
     public final SemanticProperty jcr_frozenUuid;
+    
+    /** The blog_url. */
     public final SemanticProperty blog_url;
+    
+    /** The swb_has rule. */
     public final SemanticProperty swb_hasRule;
+    
+    /** The swb_value. */
     public final SemanticProperty swb_value;
+    
+    /** The swb_index. */
     public final SemanticProperty swb_index;
+    
+    /** The swb_hits. */
     public final SemanticProperty swb_hits;
+    
+    /** The swbxf_behavior refresh on show. */
     public final SemanticProperty swbxf_behaviorRefreshOnShow;
+    
+    /** The swb_hidden. */
     public final SemanticProperty swb_hidden;
+    
+    /** The swbxf_interface. */
     public final SemanticProperty swbxf_interface;
+    
+    /** The swb_indexable. */
     public final SemanticProperty swb_indexable;
+    
+    /** The swb_web page sort name. */
     public final SemanticProperty swb_webPageSortName;
+    
+    /** The swbxf_behavior url. */
     public final SemanticProperty swbxf_behaviorURL;
+    
+    /** The swb_web page url type. */
     public final SemanticProperty swb_webPageURLType;
+    
+    /** The swbxf_has resource param. */
     public final SemanticProperty swbxf_hasResourceParam;
+    
+    /** The swb_web page disk usage. */
     public final SemanticProperty swb_webPageDiskUsage;
+    
+    /** The swb_has role ref. */
     public final SemanticProperty swb_hasRoleRef;
+    
+    /** The swb_has web page virtual parent. */
     public final SemanticProperty swb_hasWebPageVirtualParent;
+    
+    /** The swb_views. */
     public final SemanticProperty swb_views;
+    
+    /** The swb_has portlet. */
     public final SemanticProperty swb_hasPortlet;
+    
+    /** The swb_has template ref. */
     public final SemanticProperty swb_hasTemplateRef;
+    
+    /** The swb_web page url. */
     public final SemanticProperty swb_webPageURL;
+    
+    /** The swb_has rule ref. */
     public final SemanticProperty swb_hasRuleRef;
+    
+    /** The swb_web page parent. */
     public final SemanticProperty swb_webPageParent;
+    
+    /** The swb_pass upd verify. */
     public final SemanticProperty swb_passUpdVerify;
+    
+    /** The mix_mixin. */
     public final SemanticProperty mix_mixin;
+    
+    /** The jcr_primary item name. */
     public final SemanticProperty jcr_primaryItemName;
+    
+    /** The jcr_child node definition. */
     public final SemanticProperty jcr_childNodeDefinition;
+    
+    /** The jcr_property definition. */
     public final SemanticProperty jcr_propertyDefinition;
+    
+    /** The jcr_supertypes. */
     public final SemanticProperty jcr_supertypes;
+    
+    /** The jcr_orderable child nodes. */
     public final SemanticProperty jcr_orderableChildNodes;
+    
+    /** The jcr_on parent version. */
     public final SemanticProperty jcr_onParentVersion;
+    
+    /** The jcr_auto created. */
     public final SemanticProperty jcr_autoCreated;
+    
+    /** The jcr_mandatory. */
     public final SemanticProperty jcr_mandatory;
+    
+    /** The jcr_protected. */
     public final SemanticProperty jcr_protected;
+    
+    /** The blog_category. */
     public final SemanticProperty blog_category;
+    
+    /** The cm_user. */
     public final SemanticProperty cm_user;
+    
+    /** The cm_title. */
     public final SemanticProperty cm_title;
+    
+    /** The cm_file. */
     public final SemanticProperty cm_file;
+    
+    /** The cm_officetype. */
     public final SemanticProperty cm_officetype;
+    
+    /** The cm_description. */
     public final SemanticProperty cm_description;
+    
+    /** The swb_template group. */
     public final SemanticProperty swb_templateGroup;
+    
+    /** The swb_actual version. */
     public final SemanticProperty swb_actualVersion;
+    
+    /** The swb_last version. */
     public final SemanticProperty swb_lastVersion;
+    
+    /** The swb_language. */
     public final SemanticProperty swb_language;
+    
+    /** The swb_priority. */
     public final SemanticProperty swb_priority;
+    
+    /** The swb_has permission. */
     public final SemanticProperty swb_hasPermission;
+    
+    /** The swb_previous version. */
     public final SemanticProperty swb_previousVersion;
+    
+    /** The swb_version locked by. */
     public final SemanticProperty swb_versionLockedBy;
+    
+    /** The swb_version file. */
     public final SemanticProperty swb_versionFile;
+    
+    /** The swb_version comment. */
     public final SemanticProperty swb_versionComment;
+    
+    /** The swb_next version. */
     public final SemanticProperty swb_nextVersion;
+    
+    /** The swb_version number. */
     public final SemanticProperty swb_versionNumber;
+    
+    /** The jcr_lock owner. */
     public final SemanticProperty jcr_lockOwner;
+    
+    /** The jcr_lock is deep. */
     public final SemanticProperty jcr_lockIsDeep;
+    
+    /** The swbxf_res param value. */
     public final SemanticProperty swbxf_resParamValue;
+    
+    /** The swbxf_res param name. */
     public final SemanticProperty swbxf_resParamName;
+    
+    /** The jcr_value constraints. */
     public final SemanticProperty jcr_valueConstraints;
+    
+    /** The jcr_required type. */
     public final SemanticProperty jcr_requiredType;
+    
+    /** The jcr_multiple. */
     public final SemanticProperty jcr_multiple;
+    
+    /** The jcr_default values. */
     public final SemanticProperty jcr_defaultValues;
+    
+    /** The swbrep_internal. */
     public final SemanticProperty swbrep_internal;
+    
+    /** The swbxf_prop select values. */
     public final SemanticProperty swbxf_propSelectValues;
+    
+    /** The swbxf_prop group. */
     public final SemanticProperty swbxf_propGroup;
+    
+    /** The swbxf_prop hidden. */
     public final SemanticProperty swbxf_propHidden;
+    
+    /** The swbxf_prop prompt message. */
     public final SemanticProperty swbxf_propPromptMessage;
+    
+    /** The swbxf_prop invalid message. */
     public final SemanticProperty swbxf_propInvalidMessage;
+    
+    /** The swbxf_form element. */
     public final SemanticProperty swbxf_formElement;
+    
+    /** The swbxf_prop editable. */
     public final SemanticProperty swbxf_propEditable;
+    
+    /** The swb_web page. */
     public final SemanticProperty swb_webPage;
+    
+    /** The swb_home page. */
     public final SemanticProperty swb_homePage;
+    
+    /** The swb_user repository. */
     public final SemanticProperty swb_userRepository;
+    
+    /** The swb_portlet. */
     public final SemanticProperty swb_portlet;
+    
+    /** The jcr_default primary type. */
     public final SemanticProperty jcr_defaultPrimaryType;
+    
+    /** The jcr_required primary types. */
     public final SemanticProperty jcr_requiredPrimaryTypes;
+    
+    /** The jcr_same name siblings. */
     public final SemanticProperty jcr_sameNameSiblings;
+    
+    /** The swb_portlet bundle. */
     public final SemanticProperty swb_portletBundle;
+    
+    /** The swb_portlet cache. */
     public final SemanticProperty swb_portletCache;
+    
+    /** The swb_portlet class name. */
     public final SemanticProperty swb_portletClassName;
+    
+    /** The swb_portlet mode. */
     public final SemanticProperty swb_portletMode;
+    
+    /** The blog_description. */
     public final SemanticProperty blog_description;
+    
+    /** The blog_name. */
     public final SemanticProperty blog_name;
+    
+    /** The swb_ pst type. */
     public final SemanticProperty swb_PSTType;
+    
+    /** The swb_inherita. */
     public final SemanticProperty swb_inherita;
+    
+    /** The swb_template. */
     public final SemanticProperty swb_template;
+    
+    /** The swb_has template. */
     public final SemanticProperty swb_hasTemplate;
+    
+    /** The swbxf_text area rows. */
     public final SemanticProperty swbxf_textAreaRows;
+    
+    /** The swbxf_text area cols. */
     public final SemanticProperty swbxf_textAreaCols;
+    
+    /** The swb_ip filter action. */
     public final SemanticProperty swb_ipFilterAction;
+    
+    /** The swb_ip filter number. */
     public final SemanticProperty swb_ipFilterNumber;
+    
+    /** The jcr_versionable uuid. */
     public final SemanticProperty jcr_versionableUuid;
+    
+    /** The swb_has portlet ref. */
     public final SemanticProperty swb_hasPortletRef;
+    
+    /** The jcr_version history. */
     public final SemanticProperty jcr_versionHistory;
+    
+    /** The jcr_is checked out. */
     public final SemanticProperty jcr_isCheckedOut;
+    
+    /** The jcr_base version. */
     public final SemanticProperty jcr_baseVersion;
+    
+    /** The jcr_merge failed. */
     public final SemanticProperty jcr_mergeFailed;
+    
+    /** The jcr_uuid. */
     public final SemanticProperty jcr_uuid;
+    
+    /** The swb_pflow. */
     public final SemanticProperty swb_pflow;
+    
+    /** The swb_rule. */
     public final SemanticProperty swb_rule;
+    
+    /** The jcr_mime type. */
     public final SemanticProperty jcr_mimeType;
+    
+    /** The jcr_encoding. */
     public final SemanticProperty jcr_encoding;
+    
+    /** The jcr_data. */
     public final SemanticProperty jcr_data;
+    
+    /** The jcr_last modified. */
     public final SemanticProperty jcr_lastModified;
+    
+    /** The swbxf_has create property. */
     public final SemanticProperty swbxf_hasCreateProperty;
+    
+    /** The swbxf_has view property. */
     public final SemanticProperty swbxf_hasViewProperty;
+    
+    /** The swbxf_has edit property. */
     public final SemanticProperty swbxf_hasEditProperty;
+    
+    /** The swb_dns default. */
     public final SemanticProperty swb_dnsDefault;
+    
+    /** The swbxf_he model. */
     public final SemanticProperty swbxf_heModel;
+    
+    /** The swbxf_he class. */
     public final SemanticProperty swbxf_heClass;
+    
+    /** The swb_camp. */
     public final SemanticProperty swb_camp;
+    
+    /** The swb_portlet window. */
     public final SemanticProperty swb_portletWindow;
+    
+    /** The swb_xml conf. */
     public final SemanticProperty swb_xmlConf;
+    
+    /** The swb_portlet sub type. */
     public final SemanticProperty swb_portletSubType;
+    
+    /** The swb_portlet type. */
     public final SemanticProperty swb_portletType;
+    
+    /** The swb_role. */
     public final SemanticProperty swb_role;
+    
+    /** The swbxf_act group. */
     public final SemanticProperty swbxf_actGroup;
+    
+    /** The swbxf_action url. */
     public final SemanticProperty swbxf_actionURL;
+    
+    /** The jcr_successors. */
     public final SemanticProperty jcr_successors;
+    
+    /** The jcr_predecessors. */
     public final SemanticProperty jcr_predecessors;
+    
+    /** The swb_autogen id. */
     public final SemanticProperty swb_autogenId;
+    
+    /** The swbxf_so_blank suport. */
     public final SemanticProperty swbxf_so_blankSuport;
+    
+    /** The swbxf_so_global scope. */
     public final SemanticProperty swbxf_so_globalScope;
+    
+    /** The jcr_root. */
     public final SemanticProperty jcr_root;
 
 
+    /**
+     * Instantiates a new sWB vocabulary.
+     */
     public SWBVocabulary()
     {
 
@@ -601,7 +1155,12 @@ public class SWBVocabulary
 
 
         //ListUris
-              public Hashtable<String,String> listUris()
+              /**
+         * List uris.
+         * 
+         * @return the hashtable
+         */
+        public Hashtable<String,String> listUris()
               {
                      Hashtable<String,String> namespaces=new Hashtable<String, String>();
                  namespaces.put("jcr","http://www.jcp.org/jcr/1.0#");
