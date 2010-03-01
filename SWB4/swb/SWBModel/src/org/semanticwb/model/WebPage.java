@@ -35,16 +35,32 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WebPage.
+ */
 public class WebPage extends WebPageBase 
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(WebPage.class);
 
+    /** The siteid. */
     private String siteid=null;
+    
+    /** The realurl. */
     private String realurl=null;
 
+    /** The views. */
     private long views=-1;
+    
+    /** The timer. */
     private long timer;                     //valores de sincronizacion de views, hits
+    
+    /** The time. */
     private static long time;                      //tiempo en milisegundos por cada actualizacion
+    
+    /** The viewed. */
     private boolean viewed = false;
 
     static
@@ -59,12 +75,22 @@ public class WebPage extends WebPageBase
         }
     }
 
+    /**
+     * Instantiates a new web page.
+     * 
+     * @param base the base
+     */
     public WebPage(SemanticObject base)
     {
         super(base);
         timer = System.currentTimeMillis();
     }
     
+    /**
+     * Gets the web site id.
+     * 
+     * @return the web site id
+     */
     public String getWebSiteId()
     {
         if(siteid==null)
@@ -74,8 +100,10 @@ public class WebPage extends WebPageBase
         return siteid;
     }
 
-    /**  Regresa el Url de la pagina
-     *  Ejemplo: /wb2/jei/home
+    /**
+     * Regresa el Url de la pagina
+     * Ejemplo: /wb2/jei/home.
+     * 
      * @return String
      */
     public String getRealUrl()
@@ -92,8 +120,11 @@ public class WebPage extends WebPageBase
         return ret;
     }
 
-    /**  Regresa el Url de la pagina
-     *  Ejemplo: /wb2/jei/home
+    /**
+     * Regresa el Url de la pagina
+     * Ejemplo: /wb2/jei/home.
+     * 
+     * @param lang the lang
      * @return String
      */
     public String getRealUrl(String lang)
@@ -107,7 +138,8 @@ public class WebPage extends WebPageBase
 
     /**
      * Regresa el Url de la pagina
-     * Ejemplo: /swb/jei/home
+     * Ejemplo: /swb/jei/home.
+     * 
      * @return String
      */
     public String getUrl()
@@ -115,9 +147,11 @@ public class WebPage extends WebPageBase
         return getUrl((String)null);
     }
     
-    /**  
+    /**
      * Regresa el Url de la pagina
-     * Ejemplo: /swb/jei/home
+     * Ejemplo: /swb/jei/home.
+     * 
+     * @param lang the lang
      * @return String
      */
     public String getUrl(String lang)
@@ -307,6 +341,11 @@ public class WebPage extends WebPageBase
         return ret.toString();
     }    
     
+    /**
+     * Checks if is visible.
+     * 
+     * @return true, if is visible
+     */
     public boolean isVisible()
     {
         return isValid() && !isHidden();
@@ -314,7 +353,9 @@ public class WebPage extends WebPageBase
     
     /**
      * Regresa el Url de la pagina
-     * Ejemplo: /swb/jei/home
+     * Ejemplo: /swb/jei/home.
+     * 
+     * @param virtualtopic the virtualtopic
      * @return String
      */
     public String getUrl(WebPage virtualtopic)
@@ -358,8 +399,10 @@ public class WebPage extends WebPageBase
         return ret;
     }    
     
-    /** indica si el topico es hijo de otro topico.
-     * @param topic Topic
+    /**
+     * indica si el topico es hijo de otro topico.
+     * 
+     * @param page the page
      * @return boolean
      */
     public boolean isChildof(WebPage page)
@@ -384,8 +427,10 @@ public class WebPage extends WebPageBase
         return ret;
     }
 
-    /** indica si el topico es padre de otro topico.
-     * @param topic Topci
+    /**
+     * indica si el topico es padre de otro topico.
+     * 
+     * @param page the page
      * @return bollean
      */
     public boolean isParentof(WebPage page)
@@ -394,7 +439,9 @@ public class WebPage extends WebPageBase
     }
 
     /**
-     * Indica si la pagina tienen alguna regla, rol o grupo de usuarios asignado o heredado
+     * Indica si la pagina tienen alguna regla, rol o grupo de usuarios asignado o heredado.
+     * 
+     * @return true, if is filtered
      * @return
      */
     public boolean isFiltered()
@@ -420,8 +467,10 @@ public class WebPage extends WebPageBase
         return getDisplayName((String)null);
     }    
     
-    /** Regresa el nombre por defecto, en base a un idioma.
-     * @param String Idioma
+    /**
+     * Regresa el nombre por defecto, en base a un idioma.
+     * 
+     * @param lang the lang
      * @return String
      */
     public String getDisplayName(String lang)
@@ -429,21 +478,23 @@ public class WebPage extends WebPageBase
         return getSemanticObject().getLocaleProperty(Descriptiveable.swb_title, lang);
     }
 
-    /** Regresa el nombre por defecto, en base a un idioma que recibe como parametro
+    /**
+     * Regresa el nombre por defecto, en base a un idioma que recibe como parametro
      * con identificador "<B>language</B>".
-     *
+     * 
      * Ejemplo:
-     *    HashMap arg=new HashMap();
-     *    args.pur("language","es");
-     *    String name=topic.getDisplayName(args);
-     *
+     * HashMap arg=new HashMap();
+     * args.pur("language","es");
+     * String name=topic.getDisplayName(args);
+     * 
      * Este metodo normalmente se utiliza en templates.
      * parametros:
-     *      -   languege: idioma de despliege (ejemplo es, en, fr).
-     * @return String
+     * -   languege: idioma de despliege (ejemplo es, en, fr).
+     * 
      * @param args HashMap, con paraetros del template
      * ejemplo:
-     *    language=es
+     * language=es
+     * @return String
      */
     public String getDisplayName(HashMap args)
     {
@@ -460,33 +511,35 @@ public class WebPage extends WebPageBase
     }    
     
     /**
-     * Lista templates activos y no borrados, si no existen en la pagina regresa las del padre
+     * Lista templates activos y no borrados, si no existen en la pagina regresa las del padre.
+     * 
+     * @return true, if is on schedule
      * @return
-     *
-    public Iterator<TemplateRef> listConfigTemplateRefs()
-    {
-        boolean inherit=true;
-        ArrayList<TemplateRef> ret=new ArrayList();
-        Iterator<TemplateRef> it=listTemplateRefs();
-        while(it.hasNext())
-        {
-            TemplateRef ref=it.next();
-            if(ref.isActive())
-            {
-                ret.add(ref);
-            }
-        }
-        if(inherit && ret.size()==0)
-        {
-            WebPage parent=getParent();
-            if(parent!=null)
-            {
-                return parent.listConfigTemplateRefs();
-            }
-        }
-        return ret.iterator();
-    }
-    */
+     * 
+     * public Iterator<TemplateRef> listConfigTemplateRefs()
+     * {
+     * boolean inherit=true;
+     * ArrayList<TemplateRef> ret=new ArrayList();
+     * Iterator<TemplateRef> it=listTemplateRefs();
+     * while(it.hasNext())
+     * {
+     * TemplateRef ref=it.next();
+     * if(ref.isActive())
+     * {
+     * ret.add(ref);
+     * }
+     * }
+     * if(inherit && ret.size()==0)
+     * {
+     * WebPage parent=getParent();
+     * if(parent!=null)
+     * {
+     * return parent.listConfigTemplateRefs();
+     * }
+     * }
+     * return ret.iterator();
+     * }
+     */
 
     public boolean isOnSchedule()
     {
@@ -505,6 +558,12 @@ public class WebPage extends WebPageBase
         return ret;
     }
     
+    /**
+     * List visible childs.
+     * 
+     * @param sortLang the sort lang
+     * @return the iterator
+     */
     public Iterator<WebPage> listVisibleChilds(String sortLang)
     {
         TreeSet set= new TreeSet(new SWBComparator(sortLang));
@@ -529,11 +588,32 @@ public class WebPage extends WebPageBase
         return set.iterator();
     }
 
+    /**
+     * List childs.
+     * 
+     * @param sortLang the sort lang
+     * @param active the active
+     * @param deleted the deleted
+     * @param hidden the hidden
+     * @param onSchedule the on schedule
+     * @return the iterator
+     */
     public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean onSchedule)
     {
         return listChilds(sortLang, active, deleted, hidden, onSchedule, true);
     }
     
+    /**
+     * List childs.
+     * 
+     * @param sortLang the sort lang
+     * @param active the active
+     * @param deleted the deleted
+     * @param hidden the hidden
+     * @param onSchedule the on schedule
+     * @param incVirChilds the inc vir childs
+     * @return the iterator
+     */
     public Iterator<WebPage> listChilds(String sortLang, Boolean active, Boolean deleted, Boolean hidden, Boolean onSchedule, boolean incVirChilds)
     {
         TreeSet set= new TreeSet(new SWBComparator(sortLang));
@@ -593,7 +673,10 @@ public class WebPage extends WebPageBase
 //        //TODO:
 //    }
     
-    @Override
+    /* (non-Javadoc)
+ * @see org.semanticwb.model.base.WebPageBase#getDiskUsage()
+ */
+@Override
     public long getDiskUsage()
     {
         long ret=0;
@@ -607,6 +690,9 @@ public class WebPage extends WebPageBase
         return ret/1000;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.WebPageBase#getViews()
+     */
     @Override
     public long getViews()
     {
@@ -617,6 +703,11 @@ public class WebPage extends WebPageBase
         return views;
     }
 
+    /**
+     * Inc views.
+     * 
+     * @return true, if successful
+     */
     public boolean incViews()
     {
         viewed = true;
@@ -633,6 +724,9 @@ public class WebPage extends WebPageBase
         return false;
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.WebPageBase#setViews(long)
+     */
     @Override
     public void setViews(long views)
     {
@@ -640,6 +734,9 @@ public class WebPage extends WebPageBase
         this.views=views;
     }
 
+    /**
+     * Update views.
+     */
     public void updateViews()
     {
         if(viewed)
@@ -650,11 +747,23 @@ public class WebPage extends WebPageBase
         }
     }
 
+    /**
+     * Gets the contents last update.
+     * 
+     * @return the contents last update
+     */
     public String getContentsLastUpdate()
     {
         return getContentsLastUpdate(null,null);
     }
 
+    /**
+     * Gets the contents last update.
+     * 
+     * @param lang the lang
+     * @param format the format
+     * @return the contents last update
+     */
     public String getContentsLastUpdate(String lang, String format){
         String ret = "";
         java.sql.Timestamp auxt = null;
@@ -690,6 +799,12 @@ public class WebPage extends WebPageBase
         return ret;
     }
 
+    /**
+     * Gets the contents last update.
+     * 
+     * @param args the args
+     * @return the contents last update
+     */
     public String getContentsLastUpdate(HashMap args)
     {
         String lang = (String) args.get("language");

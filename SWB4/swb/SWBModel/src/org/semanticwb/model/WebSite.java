@@ -1,4 +1,3 @@
-
 /**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
@@ -28,9 +27,20 @@ import org.semanticwb.platform.SemanticObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class WebSite.
+ */
 public class WebSite extends WebSiteBase {
+    
+    /** The ipfilters. */
     private ArrayList<IPFilter> ipfilters = null;
 
+    /**
+     * Instantiates a new web site.
+     * 
+     * @param base the base
+     */
     public WebSite(SemanticObject base) {
         super(base);
     }
@@ -45,6 +55,10 @@ public class WebSite extends WebSiteBase {
 //  {
 //      return (Dns)getSemanticObject().getModel().getGenericObject(id,Dns.swb_Dns);
 //  }
+
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.WebSiteBase#getDns(java.lang.String)
+     */
     public Dns getDns(String dns) {
         Dns ret = null;
 
@@ -61,6 +75,11 @@ public class WebSite extends WebSiteBase {
         return ret;
     }
 
+    /**
+     * Gets the default dns.
+     * 
+     * @return the default dns
+     */
     public Dns getDefaultDns() {
         Dns           dns = null;
         Iterator<Dns> it  = listDnses();
@@ -125,10 +144,18 @@ public class WebSite extends WebSiteBase {
 //      }
 //      return ret;
 //  }
+    /**
+     * Gets the name space.
+     *
+     * @return the name space
+     */
     public String getNameSpace() {
         return getSemanticObject().getModel().getNameSpace();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.WebSiteBase#listIPFilters()
+     */
     @Override
     public Iterator<IPFilter> listIPFilters() {
         if (ipfilters == null) {
@@ -146,44 +173,94 @@ public class WebSite extends WebSiteBase {
         return ipfilters.iterator();
     }
 
+    /**
+     * Clear cache.
+     */
     public void clearCache() {
 
         // TODO: revisar e invocar desde servicios cuando se crean ipfilters
         ipfilters = null;
     }
 
+    /**
+     * Gets the search categories.
+     * 
+     * @return the search categories
+     */
     public String getSearchCategories() {
         return null;
     }
 
+    /**
+     * Gets the search url.
+     * 
+     * @return the search url
+     */
     public String getSearchURL() {
         return null;
     }
 
+    /**
+     * Gets the search data.
+     * 
+     * @return the search data
+     */
     public String getSearchData() {
         return getSemanticObject().getPropertyIndexData(swb_description);
     }
 
+    /**
+     * Gets the search display summary.
+     * 
+     * @param lang the lang
+     * @return the search display summary
+     */
     public String getSearchDisplaySummary(String lang) {
         return getDisplayDescription(lang);
     }
 
+    /**
+     * Can search index.
+     * 
+     * @return true, if successful
+     */
     public boolean canSearchIndex() {
         return false;
     }
 
+    /**
+     * Gets the search title.
+     * 
+     * @return the search title
+     */
     public String getSearchTitle() {
         return getSemanticObject().getPropertyIndexData(swb_title);
     }
 
+    /**
+     * Gets the search display title.
+     * 
+     * @param lang the lang
+     * @return the search display title
+     */
     public String getSearchDisplayTitle(String lang) {
         return getDisplayTitle(lang);
     }
 
+    /**
+     * Gets the search tags.
+     * 
+     * @return the search tags
+     */
     public String getSearchTags() {
         return null;
     }
 
+    /**
+     * Gets the search display image.
+     * 
+     * @return the search display image
+     */
     public String getSearchDisplayImage() {
         return null;
     }
