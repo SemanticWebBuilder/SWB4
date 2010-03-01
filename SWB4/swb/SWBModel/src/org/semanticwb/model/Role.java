@@ -26,9 +26,18 @@ package org.semanticwb.model;
 import org.semanticwb.model.base.*;
 import org.semanticwb.platform.SemanticObject;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Role.
+ */
 public class Role extends RoleBase
 {
 
+    /**
+     * Instantiates a new role.
+     * 
+     * @param base the base
+     */
     public Role(SemanticObject base) {
         super(base);
     }
