@@ -797,14 +797,18 @@ public class Utils {
            if(!presponseid.equalsIgnoreCase("0"))
            {
                 conn = SWBUtils.DB.getDefaultConnection();
-                st = conn.prepareStatement("select stringxml from sr_answer where questionid=? and responseid =? and idtm=?");
+                st = conn.prepareStatement("select stringxml from sr_answer where questionid=? and responseid =? and idtm=? and stringxml NOT NULL");
                 st.setString(1,pquestionid);
                 st.setString(2,presponseid);
                 st.setString(3, idtm);
                 rs = st.executeQuery();
+                //System.out.println("select stringxml from sr_answer where questionid="+pquestionid+" and responseid ="+presponseid+" and idtm="+idtm);
                 if(rs.next())
                 {
-                    xmlans = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+//                    String temp = rs.getString("stringxml");
+//                    if(null!=temp)
+                        xmlans = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+                    //System.out.println("Valor: .... "+temp+" ---- "+xmlans);
                 }
                 if(rs != null) rs.close();
                 if(st != null) st.close();

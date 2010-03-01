@@ -229,7 +229,11 @@ public class RecAnswer {
             if(rs.next()){
                 questionid = rs.getLong("questionid");
                 responseid = rs.getLong("responseid");
-                stringxml = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+                
+                String temp = rs.getString("stringxml");
+                if(null!=temp)
+                  stringxml = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+
                 score = rs.getFloat("score");
                 mark = rs.getInt("mark");
                 secuentialid = rs.getInt("secuentialid");
