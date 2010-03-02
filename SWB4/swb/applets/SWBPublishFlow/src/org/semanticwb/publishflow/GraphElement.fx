@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 
 /**
  * @author victor.lorenzana
@@ -25,6 +24,7 @@ public class GraphElement extends CustomNode
     public var x : Number;
     public var y : Number;
     public var w : Number;
+
     public var h : Number;
 
     public var title : String;
@@ -56,6 +56,7 @@ public class GraphElement extends CustomNode
             shape.stroke=stroke;
         }
     }
+    
 
     public override function create(): Node
     {

@@ -37,6 +37,10 @@ public-read var style_gateway="fill: {color_fill}; stroke: {color_gateway}; stro
 public-read var style_message="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
 public-read var style_simbol="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 4;";
 public-read var style_event="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
+
+public-read var style_connection="stroke: {color}; strokeWidth: 2;";
+public-read var style_connection_row="stroke: {color}; strokeWidth: 2;";
+
 public-read var style_connection_authorize="stroke: {color_authorize}; strokeWidth: 2;";
 public-read var style_connection_arrow_authorize="stroke: {color_authorize}; strokeWidth: 2;";
 

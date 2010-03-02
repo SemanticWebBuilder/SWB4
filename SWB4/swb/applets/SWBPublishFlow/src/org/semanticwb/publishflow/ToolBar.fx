@@ -151,6 +151,30 @@ public class ToolBar extends CustomNode {
                                         }
                                     }
                                 },
+                                ImgButton {
+                                    text: "SequenceFlow"
+                                    image: "images/flow_1.png"
+                                    imageOver: "images/flow_2.png"
+                                    action: function (): Void {
+                                        modeler.disablePannable = true;
+                                        modeler.tempNode = AuthorizeLink {
+                                            modeler: modeler
+                                            uri: "new:sequenceflow:{counter++}"
+                                        }
+                                    }
+                                },
+                                ImgButton {
+                                    text: "SequenceFlow"
+                                    image: "images/flow_1.png"
+                                    imageOver: "images/flow_2.png"
+                                    action: function (): Void {
+                                        modeler.disablePannable = true;
+                                        modeler.tempNode = NoAuthorizeLink {
+                                            modeler: modeler
+                                            uri: "new:sequenceflow:{counter++}"
+                                        }
+                                    }
+                                },
                                 ImageView {
                                     image: Image {
                                         url: "{__DIR__}images/barra_bottom.png"

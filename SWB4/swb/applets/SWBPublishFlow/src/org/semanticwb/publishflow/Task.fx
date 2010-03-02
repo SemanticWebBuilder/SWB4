@@ -21,6 +21,7 @@ public class Task extends FlowObject {
     var users: String[];
     var roles: String[];
     public override function create(): Node {
+            super.create();
         cursor = Cursor.HAND;
         w = 100;
         h = 60;
@@ -52,6 +53,7 @@ public class Task extends FlowObject {
                 };
     }
 
+    
     public override function mouseClicked(e: MouseEvent)
       {
         super.mouseClicked(e);
@@ -61,6 +63,14 @@ public class Task extends FlowObject {
             dialog.setVisible(true);
 
         }
+    }
+
+    override public function canIniLink(link: ConnectionObject): Boolean {
+        if(link instanceof AuthorizeLink or link instanceof NoAuthorizeLink)
+        {
+            return true;
+        }
+        return false;
     }
 
     override public function canEndLink(link: ConnectionObject): Boolean {
