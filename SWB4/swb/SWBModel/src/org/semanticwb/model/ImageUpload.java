@@ -7,4 +7,6 @@ public class ImageUpload extends org.semanticwb.model.base.ImageUploadBase
     {
         super(base);
     }
+
+
 }
