@@ -32,4 +32,10 @@ public class StartEvent extends Event
     {
         return false;
     }
+    public function getXml() : String
+    {
+            modeler.organizeMap();
+        return "";
+    }
+
 }

@@ -225,4 +225,17 @@ public class Modeler extends CustomNode
         return null;
     }
 
+    public function hasAnElementWith(uri:String):Boolean
+    {
+        for(node in contents)
+        {
+            if(node instanceof GraphElement)
+            {
+                var ge=node as GraphElement;
+                if(ge.uri.startsWith(uri))return true;
+            }
+        }
+        return false;
+    }
+
 }
