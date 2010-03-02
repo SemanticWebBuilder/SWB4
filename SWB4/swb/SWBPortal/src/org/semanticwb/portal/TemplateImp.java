@@ -43,7 +43,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
@@ -578,6 +577,7 @@ public class TemplateImp extends Template
                                 }
                                 auxpart.append("\" ");
                             }
+                            if(tag.isEmpty())auxpart.append("/");
                             auxpart.append(">");
                         } else
                             auxpart.append(tok.getRawString());
@@ -626,6 +626,7 @@ public class TemplateImp extends Template
                                     }
                                     auxpart.append("\" ");
                                 }
+                                if(tag.isEmpty())auxpart.append("/");
                                 auxpart.append(">");
 
                             } else
