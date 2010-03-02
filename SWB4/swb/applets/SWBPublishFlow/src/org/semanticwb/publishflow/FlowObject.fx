@@ -16,6 +16,7 @@ import java.lang.Math;
 public class FlowObject extends GraphElement
 {
     public-read  var connectionPoints : ConnectionPoint[];
+    public var connections: ConnectionObject[];
     //public var pool : Pool;
     public var dpx : Number;                        //diferencia de pool
     public var dpy : Number;                        //diferencia de pool
@@ -55,6 +56,36 @@ public class FlowObject extends GraphElement
         return text;
 
     }
+    public function addConnectionObject(connectionObject : ConnectionObject) : Void
+    {
+        insert connectionObject into connections;
+    }
+    public function hasConnectionX(x : Float) : Boolean
+    {
+        for(con  in connections)
+        {
+            if(con.points[0].x==x)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+    public function hasConnectionY(y : Float) : Boolean
+    {
+        for(con  in connections)
+        {
+            if(con.points[0].y==y)
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
     public function getAvailablePoint(point : Point) : ConnectionPoint
     {
         var pointToReturn : ConnectionPoint;

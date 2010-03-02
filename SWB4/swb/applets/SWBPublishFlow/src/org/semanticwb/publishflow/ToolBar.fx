@@ -103,11 +103,12 @@ public class ToolBar extends CustomNode {
                                     imageOver: "images/task_2.png"
                                     action: function (): Void {
                                         println("click");
+                                        counter++;
                                         modeler.disablePannable = true;
                                         modeler.tempNode = Task {
-                                            modeler: modeler
-                                            title: "Task"
-                                            uri: "new:task:{counter++}"
+                                            modeler: modeler                                            
+                                            title: "Task {counter}"
+                                            uri: "new:task:{counter}"
                                         }
                                     }
                                 },
@@ -116,6 +117,11 @@ public class ToolBar extends CustomNode {
                                     image: "images/start_1.png"
                                     imageOver: "images/start_2.png"
                                     action: function (): Void {
+                                        if(modeler.hasAnElementWith("new:startevent:"))
+                                        {
+                                            return;
+                                        }
+                                            
                                         modeler.disablePannable = true;
                                         modeler.tempNode = StartEvent {
                                             modeler: modeler
@@ -130,6 +136,12 @@ public class ToolBar extends CustomNode {
                                     image: "images/end_1.png"
                                     imageOver: "images/end_2.png"
                                     action: function (): Void {
+                                        if(modeler.hasAnElementWith("new:endevent:"))
+                                        {
+                                            return;
+                                        }
+
+
                                         modeler.disablePannable = true;
                                         modeler.tempNode = EndEvent {
                                             modeler: modeler

@@ -12,6 +12,10 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.MouseButton;
 import org.semanticwb.publishflow.DialogEditActivity;
+import org.semanticwb.publishflow.AuthorizeLink;
+import org.semanticwb.publishflow.NoAuthorizeLink;
+import org.semanticwb.publishflow.StartEvent;
+import org.semanticwb.publishflow.EndEvent;
 
 /**
  * @author victor.lorenzana
@@ -70,12 +74,48 @@ public class Task extends FlowObject {
         {
             return true;
         }
-        return false;
+        else
+        {
+                if(link.end==null)
+                {
+                    return true;
+                }
+
+            if(link.end instanceof EndEvent)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+
+        }
     }
 
     override public function canEndLink(link: ConnectionObject): Boolean {
-        var ret = super.canEndLink(link);
-        return ret;
+        if(link instanceof AuthorizeLink or link instanceof NoAuthorizeLink)
+        {
+            return true;
+        }
+        else
+        {
+            if(link.ini instanceof StartEvent)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+
+        }
+
     }
+
+    
+
 
 }
