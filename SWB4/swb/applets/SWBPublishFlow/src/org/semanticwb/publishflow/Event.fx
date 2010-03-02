@@ -44,6 +44,7 @@ public class Event extends FlowObject
 
     public override function create(): Node
     {
+            super.create();
         cursor=Cursor.HAND;
         w=30;
         h=30;

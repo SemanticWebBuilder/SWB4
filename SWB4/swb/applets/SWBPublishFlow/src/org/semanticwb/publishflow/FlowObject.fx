@@ -8,12 +8,14 @@ package org.semanticwb.publishflow;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import java.lang.Math;
 /**
  * @author victor.lorenzana
  */
 
 public class FlowObject extends GraphElement
 {
+    public-read  var connectionPoints : ConnectionPoint[];
     //public var pool : Pool;
     public var dpx : Number;                        //diferencia de pool
     public var dpy : Number;                        //diferencia de pool
@@ -27,8 +29,63 @@ public class FlowObject extends GraphElement
             width: bind w;
             height: bind h;
         }
+        connectionPoints=[
+                ConnectionPoint
+                {
+                    x: bind {x}+w/2;
+                    y:bind {y};
+                },
+                ConnectionPoint
+                {
+                    x:bind {x}-w/2;
+                    y:bind {y};
+                    
+                },
+                ConnectionPoint
+                {
+                    x: bind {x};
+                    y:bind {y}+h/2;
+                },
+                ConnectionPoint
+                {
+                    x:bind {x};
+                    y:bind {y}-h/2;
+                }
+                ];
         return text;
+
     }
+    public function getConnectionPoint(point : FlowObject) : ConnectionPoint
+    {
+        var pointToReturn : ConnectionPoint;
+        for(cpoint in connectionPoints)
+        {
+            if(cpoint.connectionObject==null)
+            {
+                if(pointToReturn==null)
+                {
+                    pointToReturn=cpoint;
+                }
+                else
+                {
+                    var d1:Number;
+                    var d2:Number;
+                    d1=Math.sqrt(Math.pow(point.x-cpoint.x, 2)+Math.pow(point.y-cpoint.y, 2));
+                    d2=Math.sqrt(Math.pow(point.x-pointToReturn.x, 2)+Math.pow(point.y-pointToReturn.y, 2));
+                    if(d1<d2)
+                    {
+                        pointToReturn=cpoint;
+                    }
+                }
+            }
+        }
+        return pointToReturn;
+
+    }
+
+    
+
+    
 
     /*var px = bind pool.x on replace
     {

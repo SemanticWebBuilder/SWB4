@@ -21,6 +21,13 @@ public class StartEvent extends Event
          return ret;
     }
 
+    override public function canIniLink(link: ConnectionObject): Boolean {
+        if(link instanceof AuthorizeLink or link instanceof NoAuthorizeLink)
+        {
+            return false;
+        }
+        return true;
+    }
     override public function canEndLink(link:ConnectionObject) : Boolean
     {
         return false;

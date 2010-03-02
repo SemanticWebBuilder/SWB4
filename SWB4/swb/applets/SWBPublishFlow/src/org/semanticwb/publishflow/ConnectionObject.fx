@@ -17,31 +17,29 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.input.MouseButton;
 import org.semanticwb.publishflow.Styles;
-import org.semanticwb.publishflow.DialogChangeTransition;
+import javafx.scene.paint.Color;
+import org.semanticwb.publishflow.ConnectionPoint;
 
 /**
  * @author victor.lorenzana
  */
 public class ConnectionObject extends CustomNode {
 
-    public var authorize: Boolean;
     public var modeler: Modeler;
-    public var ini: GraphElement;
-    public var end: GraphElement;
+    public var ini: FlowObject;
+    public var end: FlowObject;
     public var title: String;
     public var action: String = bind title;
     public var uri: String;
     public var text: EditableText;
-    var color = Styles.style_connection_authorize;
-    var color_row = Styles.style_connection_arrow_authorize;
+    public var color = Styles.style_connection;
+    public var color_row = Styles.style_connection_row;
     public var points: Point[];
     var path: Path;
     var o: Number = 0.8;                   //opacity
 
     public override function create(): Node {
-        authorize = true;
         cursor = Cursor.HAND;
         //                HLineTo { x: 70 },
         //                QuadCurveTo { x: 120  y: 60  controlX: 100  controlY: 0 },
@@ -49,8 +47,27 @@ public class ConnectionObject extends CustomNode {
 
         var pini = Point { x: bind getConnectionX(ini, end) y: bind getConnectionY(ini, end) };
         var pend = Point { x: bind getConnectionX(end, ini) y: bind getConnectionY(end, ini) };
+
+        var pointini: Point= getConnection(ini,end);
+        if(pointini instanceof ConnectionPoint)
+        {
+            var cpoini: ConnectionPoint=pointini as ConnectionPoint;
+            cpoini.connectionObject= this;
+        }
+
+        var pointend: Point= getConnection(end,ini);
+        if(pointend instanceof ConnectionPoint)
+        {
+            var cpoend: ConnectionPoint=pointend as ConnectionPoint;
+            cpoend.connectionObject= this;
+        }
+
+        //pend= getConnection(end,ini);
+        
+
         var pinter1 = Point { x: bind getInter1ConnectionX(ini, end, pini, pend) y: bind getInter1ConnectionY(ini, end, pini, pend) };
         var pinter2 = Point { x: bind getInter2ConnectionX(ini, end, pini, pend) y: bind getInter2ConnectionY(ini, end, pini, pend) };
+
         points = [pini, pinter1, pinter2, pend];
         text = EditableText {
             text: bind title with inverse
@@ -126,177 +143,114 @@ public class ConnectionObject extends CustomNode {
                 if (modeler.clickedNode == this) {
                     modeler.clickedNode = null;
                 }
-                if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
-                    if (ini instanceof Task and end instanceof Task) {
-                        var dialog: DialogChangeTransition;
-                        dialog = new DialogChangeTransition(authorize);
-                        dialog.setVisible(true);
-                        authorize = dialog.mode;
-                        if (authorize) {
-                            color = Styles.style_connection_authorize;
-                            color_row = Styles.style_connection_arrow_authorize;
-                        } else {
-                            color = Styles.style_connection_not_authorize;
-                            color_row = Styles.style_connection_arrow_not_authorize
-                        }
-                    }
-
-
-                }
             }
+
+    public function mouseExited(e: MouseEvent): Void {
+        if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = false;
+        path.stroke = Color.web(Styles.color);
+        path.strokeWidth = 2;
+    }
+
     override var onMouseEntered = function (e) {
                 if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = true;
-                //path.stroke=Color.web(Styles.color_over);
+                path.stroke = Color.web(Styles.color_over);
                 color = Styles.style_connection_over;
                 color_row = Styles.style_connection_row_over;
                 path.strokeWidth = 3;
             }
     override var onMouseExited = function (e) {
-                if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = false;
-                //path.stroke=Color.web(Styles.color);
-                if (authorize) {
-                    color = Styles.style_connection_authorize;
-                    color_row = Styles.style_connection_arrow_authorize;
-                } else {
-                    color = Styles.style_connection_not_authorize;
-                    color_row = Styles.style_connection_arrow_not_authorize
-                }
-                path.strokeWidth = 2;
+                mouseExited(e);
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
+bound function getConnection(ini: FlowObject, end: FlowObject): Point
+{
+    if(ini!=null)
+        {
+            if(end!=null)
+            {
+                var point : ConnectionPoint=ini.getConnectionPoint(end);                
+
+            }else
+            {
+                var dx=modeler.mousex-ini.x;
+                var dy=modeler.mousey-ini.y;
+                if(Math.abs(dx)>=Math.abs(dy))
+                {
+                    if(dx>0)
+                    {
+                            Point
+                            {
+                                x: bind ini.x+ini.w/2+2;
+                                y: bind ini.y+ini.h/2+2;
+                            }
+
+
+                    }else
+                    {
+                            Point
+                            {
+                                x: bind ini.x-ini.w/2-2;
+                                y: bind ini.y-ini.h/2-2;
+                            }
+                    }
+                }else
+                {
+                        Point
+                        {
+                            x: bind ini.x;
+                            y: bind ini.y;
+                        }
+                }
+            }
+        }else
+        {
+            var dx=end.x-modeler.mousex;
+            var dy=end.y-modeler.mousey;
+            if(Math.abs(dx)>=Math.abs(dy))
+            {
+                if(dx>0)
+                {
+                        Point
+                        {
+                            x: bind modeler.mousex+10/2+2;
+                            y: bind modeler.mousey+10/2+2;
+                        }
+                }else
+                {
+                        Point
+                        {
+                           x: bind  modeler.mousex-10/2-2;
+                           y: bind  modeler.mousey-10/2-2;
+                        }
+                }
+            }else
+            {
+                    Point
+                    {
+                        x: bind modeler.mousex;
+                        y: bind modeler.mousey;
+                    }
+
+                
+            }
+        }
+}
+
+bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
     {
+            
+
+
+        
         if(ini!=null)
         {
             if(end!=null)
             {
-                var dx=end.x-ini.x;
+                var point : ConnectionPoint=ini.getConnectionPoint(end);                
+                point.x;
+
+                /*var dx=end.x-ini.x;
                 var dy=end.y-ini.y;
                 if(Math.abs(dx)>=Math.abs(dy))
                 {
@@ -310,7 +264,7 @@ bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
                 }else
                 {
                     ini.x;
-                }
+                }*/
             }else
             {
                 var dx=modeler.mousex-ini.x;
@@ -349,13 +303,17 @@ bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
         }
     }
 
-    bound function getConnectionY(ini: GraphElement, end: GraphElement): Number
+    bound function getConnectionY(ini: FlowObject, end: FlowObject): Number
     {
+            
+            
+
         if(ini!=null)
         {
             if(end!=null)
             {
-                var dx=end.x-ini.x;
+                    ini.getConnectionPoint(end).y;
+                /*var dx=end.x-ini.x;
                 var dy=end.y-ini.y;
                 if(Math.abs(dy)>Math.abs(dx))
                 {
@@ -369,7 +327,7 @@ bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
                 }else
                 {
                     ini.y;
-                }
+                }*/
             }else
             {
                 var dx=modeler.mousex-ini.x;
@@ -423,7 +381,6 @@ bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
         {
             pini.x;
         }
-
     }
 
     bound function getInter1ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number

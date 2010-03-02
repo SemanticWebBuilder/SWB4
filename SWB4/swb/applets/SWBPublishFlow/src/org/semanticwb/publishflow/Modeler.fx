@@ -68,9 +68,9 @@ public class Modeler extends CustomNode
                         if(clickedNode instanceof GraphElement)
                         {
                             var ge=clickedNode as GraphElement;
-                            if(ge.canIniLink(a))
+                            if(ge.canIniLink(a) and ge instanceof FlowObject)
                             {
-                                a.ini=ge;
+                                a.ini=ge as FlowObject;
                                 add(tempNode);
                             }
                             close=false;
@@ -97,9 +97,9 @@ public class Modeler extends CustomNode
                     if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
-                        if(overNode!=null)
+                        if(overNode!=null and overNode instanceof FlowObject)
                         {
-                            if(overNode.canEndLink(a))a.end=overNode;
+                            if(overNode.canEndLink(a))a.end=overNode as FlowObject;
                         }else
                         {
                             a.end=null;

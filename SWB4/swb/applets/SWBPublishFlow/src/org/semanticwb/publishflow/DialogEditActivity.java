@@ -46,7 +46,7 @@ public class DialogEditActivity extends javax.swing.JDialog {
         }
         
         this.con=con;
-        if(con.getApplet().getParameter("locale")!=null && !con.getApplet().getParameter("locale").trim().equals(""))
+        if(con!=null && con.getApplet()!=null && con.getApplet().getParameter("locale")!=null && !con.getApplet().getParameter("locale").trim().equals(""))
         {
             this.locale = new Locale(con.getApplet().getParameter("locale"));
         }
@@ -57,7 +57,7 @@ public class DialogEditActivity extends javax.swing.JDialog {
         this.setModal(true);
         this.jTextFieldName.grabFocus();
         this.name=name;
-        loadRoles();
+        //loadRoles();
     }
 
     
