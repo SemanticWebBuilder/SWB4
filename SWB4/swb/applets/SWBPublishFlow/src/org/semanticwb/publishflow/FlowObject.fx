@@ -55,7 +55,7 @@ public class FlowObject extends GraphElement
         return text;
 
     }
-    public function getConnectionPoint(point : FlowObject) : ConnectionPoint
+    public function getAvailablePoint(point : Point) : ConnectionPoint
     {
         var pointToReturn : ConnectionPoint;
         for(cpoint in connectionPoints)
@@ -72,6 +72,33 @@ public class FlowObject extends GraphElement
                     var d2:Number;
                     d1=Math.sqrt(Math.pow(point.x-cpoint.x, 2)+Math.pow(point.y-cpoint.y, 2));
                     d2=Math.sqrt(Math.pow(point.x-pointToReturn.x, 2)+Math.pow(point.y-pointToReturn.y, 2));
+                    if(d1<d2)
+                    {
+                        pointToReturn=cpoint;
+                    }
+                }
+            }
+        }
+        return pointToReturn;
+    }
+
+    public function getConnectionPoint(point : FlowObject) : ConnectionPoint
+    {
+        var pointToReturn : ConnectionPoint;
+        for(cpoint in connectionPoints)
+        {
+            if(cpoint.connectionObject==null)
+            {
+                if(pointToReturn==null)
+                {
+                    pointToReturn=cpoint;
+                }
+                else
+                {
+                    var d1:Number;
+                    var d2:Number;
+                    d1=cpoint.getDistance(point);
+                    d2=pointToReturn.getDistance(point);
                     if(d1<d2)
                     {
                         pointToReturn=cpoint;
