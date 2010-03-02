@@ -630,6 +630,8 @@ public class Comment extends GenericResource {
                 ? request.getParameter("com_act").trim()
                 : (reqParams.getCallMethod() == SWBParamRequest.Call_CONTENT) ? "com_step2" : "com_step1");
         Logger log = SWBUtils.getLogger(Comment.class);
+
+        response.setContentType("text/html");
         
         if ("com_step1".equals(action)) {
             // Objeto (imagen/botón) para invocar la nueva ventana con formulario
