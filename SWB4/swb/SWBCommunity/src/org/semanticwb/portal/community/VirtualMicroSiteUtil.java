@@ -43,6 +43,7 @@ public class VirtualMicroSiteUtil extends GenericResource
                         //SWBParamRequestImp pr=new SWBParamRequestImp(request,res,paramRequest.getWebPage(),paramRequest.getUser());
                         ((SWBParamRequestImp)paramRequest).setResourceBase(res);
                         ((SWBParamRequestImp)paramRequest).setVirtualResource(base);
+                        ((SWBParamRequestImp)paramRequest).setCallMethod(SWBParamRequest.Call_CONTENT);
                         swbres.render(request, response, paramRequest);
                     }
                 }
