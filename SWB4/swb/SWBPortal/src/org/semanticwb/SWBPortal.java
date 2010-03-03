@@ -2302,7 +2302,7 @@ public class SWBPortal
          *         and if {@code size} is less than zero an exception will be thrown.
          * @throws NegativeArraySizeException if the {@code size} argument is less than zero.
          */
-        private String getRandString(int size)
+        public String getRandString(int size)
         {
             StringBuilder sb = new StringBuilder(size);
             for (int i = 0; i < size; i++)
