@@ -125,7 +125,7 @@ public class Topic
         dbdata.setIdtm(parent.getId());
     }
 
-    /** M�todo que crea un t�pico en base a un objeto <B>RecTopic</B>
+    /** M�todo que crea un tópico en base a un objeto <B>RecTopic</B>
      * @param rec RecTopic
      * @throws UnsupportedEncodingException Error de codificacion del XML
      * @throws SAXException Error al Transformar XML
@@ -148,7 +148,7 @@ public class Topic
         return tp;
     }
 
-    /** M�todo que actualiza el t�pico en base a un objeto <B>RecTopic</B>
+    /** M�todo que actualiza el tópico en base a un objeto <B>RecTopic</B>
      * @param rec RecTopic
      * @throws Exception Error de al actualizar topico.
      */
@@ -299,7 +299,7 @@ public class Topic
         return (getId().compareTo(other.getId()) == 0);
     }
 
-    /** Regresa un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del t�pico.
+    /** Regresa un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tópico.
      * @return ArrayList de objetos <B>BaseName</B>
      */
     public ArrayList getBaseNames()
@@ -307,8 +307,8 @@ public class Topic
         return m_basenames;
     }
 
-    /** Assigna un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del t�pico.
-     * @param basenames ArrayList de objetos BaseName que representan los nombres del t�pico.
+    /** Assigna un <B>ArrayList</B> de objetos <B>BaseName</B> que representan los nombres del tópico.
+     * @param basenames ArrayList de objetos BaseName que representan los nombres del tópico.
      */
     public void setBaseNames(ArrayList basenames)
     {
@@ -338,7 +338,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>Occurrence</B> que representan las ocurrencias o
-     * elementos del t�pico.
+     * elementos del tópico.
      * @return ArrayList
      */
     public ArrayList getOccurrences()
@@ -347,7 +347,7 @@ public class Topic
     }
 
     /** asigna un <B>ArrayList</B> de objetos <B>Occurrence</B> que representan las ocurrencias o
-     * elementos del t�pico.
+     * elementos del tópico.
      * @param occurs New value of property m_occurs.
      */
     public void setOccurrences(ArrayList occurs)
@@ -356,7 +356,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>Association</B> que representan las
-     * asociaciones del t�pico con otros topicos.
+     * asociaciones del tópico con otros topicos.
      * @return ArrayList
      */
     public ArrayList getAssociations()
@@ -365,7 +365,7 @@ public class Topic
     }
 
     /** Asigna un <B>ArrayList</B> de objetos <B>Association</B> que representan las
-     * asociaciones del t�pico con otros topicos.
+     * asociaciones del tópico con otros topicos.
      * @param associations ArrayList
      */
     public void setAssociations(ArrayList associations)
@@ -374,7 +374,7 @@ public class Topic
     }
 
     /** regresa un <B>ArrayList</B> de objetos <B>InstanceOf</B> que representan los
-     * tipos o padres del t�pico.
+     * tipos o padres del tópico.
      * @return ArrayList
      */
     public ArrayList getInstanceOf()
@@ -383,7 +383,7 @@ public class Topic
     }
 
     /** Asigna un <B>ArrayList</B> de objetos <B>InstanceOf</B> que representan los
-     * tipos o padres del t�pico.
+     * tipos o padres del tópico.
      * @param instanceOf ArrayList
      */
     public void setInstanceOf(ArrayList instanceOf)
@@ -391,7 +391,7 @@ public class Topic
         this.m_instanceof = instanceOf;
     }
 
-    /** regresa objeto <B>SubjectIdentity</B> del t�pico.
+    /** regresa objeto <B>SubjectIdentity</B> del tópico.
      * @return Subjectidentity
      */
     public com.infotec.topicmaps.SubjectIdentity getSubjectIdentity()
@@ -399,7 +399,7 @@ public class Topic
         return m_subjectidentity;
     }
 
-    /** Asigna objeto <B>SubjectIdentity</B> del t�pico.
+    /** Asigna objeto <B>SubjectIdentity</B> del tópico.
      * @param subjectidentity SubjectIdentity
      */
     public void setSubjectIdentity(com.infotec.topicmaps.SubjectIdentity subjectidentity)
@@ -408,11 +408,21 @@ public class Topic
         if (isDBSyncronized()) getMap().changes.add("ut:" + getId());
     }
 
-    /** regresa un <B>ArrayList</B> de objetos <B>Topic</B> que representan todos los hijos inmediatos del t�pico, no importando si est�n activos o borrados.
+    /** regresa un <B>ArrayList</B> de objetos <B>Topic</B> que representan todos los hijos inmediatos del tópico, no importando si est�n activos o borrados.
      * @return ArrayList
      */
     public ArrayList getChild()
     {
+        if(m_child==null)
+        {
+            m_child=new ArrayList();
+            Iterator<WebPage> it=getNative().listChilds();
+            while (it.hasNext())
+            {
+                WebPage webPage = it.next();
+                m_child.add(new Topic(webPage));
+            }
+        }
         return m_child;
     }
 
