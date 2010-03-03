@@ -70,6 +70,7 @@ public class Topic
     public Topic(org.semanticwb.model.WebPage webpage)
     {
         wp = webpage;
+        dbdata = new RecTopic(webpage);
     }
 
     public org.semanticwb.model.WebPage getNative()
