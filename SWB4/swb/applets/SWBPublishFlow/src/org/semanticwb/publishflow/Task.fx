@@ -70,6 +70,23 @@ public class Task extends FlowObject {
     }
 
     override public function canIniLink(link: ConnectionObject): Boolean {
+        if(sizeof connections>=2)
+        {
+            return false;
+        }
+        if(sizeof connections==1)
+        {
+            var con:ConnectionObject=connections[0];
+            if(link instanceof AuthorizeLink and con instanceof AuthorizeLink)
+            {
+                return false;
+            }
+            if(link instanceof NoAuthorizeLink and con instanceof NoAuthorizeLink)
+            {
+                return false;
+            }
+        }
+
         if(link instanceof AuthorizeLink or link instanceof NoAuthorizeLink)
         {
             return true;

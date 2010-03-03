@@ -96,12 +96,17 @@ public class Modeler extends CustomNode
                     mousey=e.y+clipView.clipY;
                     if(tempNode instanceof ConnectionObject)
                     {
-                        var a=tempNode as ConnectionObject;
+                        var a: ConnectionObject=tempNode as ConnectionObject;
                         if(overNode!=null and overNode instanceof FlowObject)
                         {
-                            if(overNode.canEndLink(a))a.end=overNode as FlowObject;
+                            if(overNode.canEndLink(a))
+                            {
+                               a.end=overNode as FlowObject;
+                            }
                         }else
                         {
+                            var fo : FlowObject=a.ini;
+                            delete a from fo.connections;
                             a.end=null;
                         }
                     }
@@ -109,7 +114,9 @@ public class Modeler extends CustomNode
                 else if(clickedNode instanceof ConnectionObject)
                 {
                     tempNode=clickedNode;
-                    var a=tempNode as ConnectionObject;
+                    var a: ConnectionObject=tempNode as ConnectionObject;
+                    var fo : FlowObject=a.ini;
+                    delete a from fo.connections;
                     a.end=null;
                 }
              }

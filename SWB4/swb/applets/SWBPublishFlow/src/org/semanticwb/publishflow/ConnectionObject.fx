@@ -19,8 +19,6 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
 import org.semanticwb.publishflow.Styles;
 import javafx.scene.paint.Color;
-import org.semanticwb.publishflow.AuthorizeLink;
-import org.semanticwb.publishflow.NoAuthorizeLink;
 
 /**
  * @author victor.lorenzana
@@ -52,7 +50,11 @@ public class ConnectionObject extends CustomNode {
         if(ini!=null)
         {
             println("ini.x: {ini.x}");
+            println("adding {this.uri}");
             ini.addConnectionObject(this);
+            println("ini.uri {ini.uri}");
+            println("ini.connections {sizeof ini.connections}");
+
         }
     }
     public function replaceEnd() : Void
@@ -87,38 +89,9 @@ public class ConnectionObject extends CustomNode {
             height: 20
         }
 
-        if(pini.y==pend.y and this instanceof AuthorizeLink)
-        {
-            path = Path {
-                elements: [
-                    MoveTo { x: bind pini.x, y: bind pini.y },
-                    LineTo { x: bind pinter1.x, y: bind pinter1.y-20 },
-                    LineTo { x: bind pinter2.x, y: bind pinter2.y-20 },
-                    LineTo { x: bind pend.x, y: bind pend.y }
-                ]
-                style: bind color with inverse;
-                smooth: true;
-                strokeLineCap: StrokeLineCap.ROUND
-                strokeLineJoin: StrokeLineJoin.ROUND
-            };
-        }        
-        else if(pini.y==pend.y and this instanceof NoAuthorizeLink)
-        {
-            path = Path {
-                elements: [
-                    MoveTo { x: bind pini.x, y: bind pini.y },
-                    LineTo { x: bind pinter1.x, y: bind pinter1.y+20 },
-                    LineTo { x: bind pinter2.x, y: bind pinter2.y+20 },
-                    LineTo { x: bind pend.x, y: bind pend.y }
-                ]
-                style: bind color with inverse;
-                smooth: true;
-                strokeLineCap: StrokeLineCap.ROUND
-                strokeLineJoin: StrokeLineJoin.ROUND
-            };
-        }
-        else
-        {
+        
+        
+        
             path = Path {
                 elements: [
                     MoveTo { x: bind pini.x, y: bind pini.y },
@@ -131,7 +104,7 @@ public class ConnectionObject extends CustomNode {
                 strokeLineCap: StrokeLineCap.ROUND
                 strokeLineJoin: StrokeLineJoin.ROUND
             };
-        }
+        
 
         return Group {
                     content: [
@@ -199,65 +172,7 @@ public class ConnectionObject extends CustomNode {
                 mouseExited(e);
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-public bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
+    bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
     {
 
         if(ini!=null)
@@ -265,12 +180,12 @@ public bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
 
             if(end!=null)
             {
-                if(ini instanceof Task and end instanceof Task)
-                {
-                    ini.x
-                }
-                else
-                {
+                    var l:Float=sizeof ini.connections;
+                    var offset:Number=0;
+                    if(l>0)
+                    {
+                        offset=10;
+                    }
 
                     var dx=end.x-ini.x;
                     var dy=end.y-ini.y;
@@ -278,17 +193,17 @@ public bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
                     {
                         if(dx>0)
                         {
-                            ini.x+ini.w/2+2;
+                            ini.x+ini.w/2+2+offset;
                         }else
                         {
-                            ini.x-ini.w/2-2;
+                            ini.x-ini.w/2-2+offset;
 
                         }
                     }else
                     {
                         ini.x;
                     }
-                }
+                
             }else
             {
                 var dx=modeler.mousex-ini.x;
@@ -335,16 +250,7 @@ public bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
         {
             if(end!=null)
             {
-                if(this instanceof AuthorizeLink)
-                {
-                    ini.y-ini.h/2-2;
-                }
-                else if(this instanceof NoAuthorizeLink)
-                {
-                    ini.y+ini.h/2+2;
-                }
-                else
-                {
+                
                 var dx=end.x-ini.x;
                 var dy=end.y-ini.y;
                 if(Math.abs(dy)>Math.abs(dx))
@@ -360,7 +266,7 @@ public bound function getConnectionX(ini: FlowObject, end: FlowObject): Number
                 {
                     ini.y;
                 }
-                }
+                
             }else
             {
                 var dx=modeler.mousex-ini.x;
