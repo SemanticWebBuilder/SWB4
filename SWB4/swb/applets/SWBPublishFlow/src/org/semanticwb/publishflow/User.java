@@ -62,6 +62,7 @@ public class User {
     {
         this.checked=checked;
     }
+    @Override
     public boolean equals(Object obj)
     {
         if(obj instanceof User)
@@ -73,6 +74,14 @@ public class User {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
     
     

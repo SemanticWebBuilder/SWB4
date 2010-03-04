@@ -68,17 +68,27 @@ public class Role {
     {
         return checked;
     }
+    @Override
     public boolean equals(Object obj)
     {
         if(obj instanceof Role)
         {
             Role role=(Role)obj;
-            if(role.getID().equals(this.getID()))
+            if(role.getID().equals(this.getID()) && role.repository.equals(repository))
             {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 5;
+        hash = 61 * hash + (this.id != null ? this.id.hashCode() : 0);
+        hash = 61 * hash + (this.repository != null ? this.repository.hashCode() : 0);
+        return hash;
     }
     
 }

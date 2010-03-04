@@ -24,6 +24,7 @@ public class Task extends FlowObject {
 
     var users: String[];
     var roles: String[];
+    var description:String="";
     public override function create(): Node {
             super.create();
         cursor = Cursor.HAND;
@@ -63,8 +64,15 @@ public class Task extends FlowObject {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
             var dialog: DialogEditActivity;            
-            dialog = new DialogEditActivity(title,ToolBar.conn);
+            dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
             dialog.setVisible(true);
+            if(not dialog.cancel)
+            {
+                title=dialog.name;
+                description=dialog.description;
+                users=dialog.users;
+                roles=dialog.roles;
+            }
 
         }
     }
