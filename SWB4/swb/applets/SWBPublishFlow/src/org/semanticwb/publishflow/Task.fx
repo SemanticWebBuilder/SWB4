@@ -22,9 +22,12 @@ import org.semanticwb.publishflow.EndEvent;
  */
 public class Task extends FlowObject {
 
-    var users: String[];
-    var roles: String[];
-    var description:String="";
+    public var users: String[];
+    public var roles: String[];
+    public var description:String="";
+    public var days:Integer;
+    public var hours:Integer;
+
     public override function create(): Node {
             super.create();
         cursor = Cursor.HAND;

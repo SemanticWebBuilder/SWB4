@@ -11,6 +11,10 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
+import applets.commons.WBTreeNode;
+import applets.commons.WBXMLParser;
+import org.semanticwb.publishflow.EndEvent;
+import org.semanticwb.publishflow.FlowObject;
 
 /**
  * @author victor.lorenzana
@@ -30,6 +34,11 @@ public class Modeler extends CustomNode
     public var mousex:Number;
     public var mousey:Number;
     public var clipView:ClipView;
+    var version:String;
+    var canEdit:Boolean;
+    var id_workflow:String;
+    var name:String;
+    var description:String;
     //public var overPool: Pool;                          //Nodo temporal por toolbar
 
     public override function create(): Node
@@ -191,6 +200,161 @@ public class Modeler extends CustomNode
         */
         //addRelation("home","padre1","Hijo","Padre");
     }
+
+    public function save() : Void
+    {
+        var  parse : WBXMLParser = new WBXMLParser();
+        var  node: WBTreeNode = parse.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        var wf:WBTreeNode = node.addNode();
+        wf.setName("workflow");
+        wf.addAttribute("version", version);
+        wf.addAttribute("canEdit", canEdit.toString());
+        if (id != null)
+        {
+            wf.addAttribute("id", id_workflow);
+        }
+        wf.addAttribute("name", name);
+        var desc: WBTreeNode = wf.addNode();
+        desc.setName("description");
+        desc.setText(description.trim());
+        for(content in contents)
+        {
+            if(content instanceof FlowObject)
+            {
+                var activity:FlowObject=content as FlowObject;
+                var eactivity : WBTreeNode = wf.addNode();
+                eactivity.setName("activity");
+                eactivity.addAttribute("name", activity.title);
+                if (activity instanceof EndEvent)
+                {
+                    eactivity.addAttribute("name", "EndActivity");
+                    eactivity.addAttribute("type", "EndActivity");
+                }
+                else if (activity instanceof AuthorActivity)
+                {
+                    eactivity.addAttribute("name", "AuthorActivity");
+                    eactivity.addAttribute("type", "AuthorActivity");
+                }
+                else if (activity instanceof Task)
+                {
+                    var task:Task=activity as Task;
+                    eactivity.addAttribute("type", "Activity");
+                    eactivity.addAttribute("days", String.valueOf(task.days));
+                    eactivity.addAttribute("hours", String.valueOf(task.hours));
+                    var edesc : WBTreeNode = eactivity.addNode();
+                    edesc.setName("description");
+                    edesc.setText(task.description);
+                    for(svalue in task.roles)
+                    {
+                        var values:String[]=svalue.split("@");
+                        var erole : WBTreeNode = eactivity.addNode();
+                        erole.setName("role");
+                        erole.addAttribute("id", values[0]);
+                        erole.addAttribute("name", values[2]);
+                        erole.addAttribute("repository",values[1]);
+                    }
+                    for(svalue in task.users)
+                    {
+                        var values:String[]=svalue.split("@");
+                        var euser: WBTreeNode = eactivity.addNode();
+                        euser.setName("user");
+                        euser.addAttribute("id", values[0]);
+                        euser.addAttribute("name", values[1]);
+                    }
+                }
+            }
+        }
+        for(content in contents)
+        {
+            if(content instanceof LinkConnection)
+            {
+                var link:LinkConnection=content as LinkConnection;
+                var elink :WBTreeNode = wf.addNode();
+                elink.setName("link");
+
+
+                for(svalue in link.users)
+                {
+                    var values:String[]=svalue.split("@");
+                    var notifica : WBTreeNode = elink.addNode();
+                    notifica.setName("notification");
+                    notifica.addAttribute("to", values[0]);
+                    notifica.addAttribute("type", "user");
+                }
+
+                for(svalue in link.roles)
+                {
+                    var values:String[]=svalue.split("@");
+                    var notifica : WBTreeNode = elink.addNode();
+                    notifica.setName("notification");
+                    notifica.addAttribute("to", values[0]);
+                    notifica.addAttribute("repository", values[1]);
+                    notifica.addAttribute("type", "role");
+                }
+
+                elink.addAttribute("from", link.ini.title);
+                elink.addAttribute("to", link.end.title);
+                elink.addAttribute("type", link.type);
+                elink.addAttribute("publish", String.valueOf(link.published));
+                elink.addAttribute("authorized", String.valueOf(link.authorized));
+                var eservicemail : WBTreeNode = elink.addNode();
+                eservicemail.setName("service");
+                eservicemail.setText("mail");
+                var activityTo:FlowObject=link.end;
+                if (link.end instanceof AuthorActivity)
+                {
+                    if (link.authorized)
+                    {
+                        var eservice : WBTreeNode= elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("authorize");
+                    }
+                    else
+                    {
+                        var eservice : WBTreeNode = elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("noauthorize");
+                    }
+                }                
+                else if (activityTo instanceof EndEvent)
+                {
+                    if (link.published)
+                    {
+                        var eservice : WBTreeNode= elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("publish");
+                    }
+                    if (link.authorized)
+                    {
+                        var eservice : WBTreeNode = elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("authorize");
+                    }
+                    else
+                    {
+                        var eservice : WBTreeNode = elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("noauthorize");
+                    }
+                }
+                else
+                {
+                    if (not link.type.equalsIgnoreCase("authorized"))
+                    {
+                        var eservice : WBTreeNode= elink.addNode();
+                        eservice.setName("service");
+                        eservice.setText("noauthorize");
+                    }
+                }
+
+            }
+
+        }
+
+
+        
+    }
+
 
     public function organizeMap()
     {
