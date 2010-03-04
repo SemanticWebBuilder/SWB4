@@ -35,7 +35,7 @@ public class DialogEditLink extends javax.swing.JDialog
     private Locale locale = new Locale("es");
     boolean published;
     /** Creates new form DialogEditLink */
-    public DialogEditLink(boolean showPublicar, boolean published, WBConnection con, Sequence<String> users, Sequence<String> roles)
+    public DialogEditLink(Boolean showPublicar, Boolean published, WBConnection con, Sequence<String> users, Sequence<String> roles)
     {
         super((Frame) null, true);
         try
