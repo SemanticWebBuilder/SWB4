@@ -55,7 +55,7 @@ public class WBMenuMap extends GenericAdmResource
     private static Logger log = SWBUtils.getLogger(WBMenuMap.class);
     javax.xml.transform.Templates tpl;
     String webWorkPath = "/work";
-    String path = SWBPlatform.getContextPath() + "swbadmin/xsl/WBMenuMap/";
+    String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/WBMenuMap/";
     private int ancho = 10;
     private int nsup = 0;
     private int ninf = 0;
@@ -276,18 +276,8 @@ public class WBMenuMap extends GenericAdmResource
     {
         try {
             Document dom = getDom(request, response, paramRequest);
-//            System.out.println(AFUtils.getInstance().DomtoXml(dom));
-//            if(dom != null)
-//            {
-//                System.out.println(AFUtils.getInstance().DomtoXml(dom));
-//                System.out.println(AFUtils.getInstance().transformDom(tpl, dom));
-//            }
-
             if (dom != null) {
-                PrintWriter out = response.getWriter();
-                //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
-                out.print(SWBUtils.XML.transformDom(tpl, dom));
-                out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+                response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
             }
         } catch (Exception e) {
             log.error(e);
