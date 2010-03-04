@@ -69,28 +69,240 @@ public class Task extends FlowObject {
         }
     }
 
+    public function hasinitAuthorizeLink() : Boolean
+    {
+
+    }
+
+
     override public function canIniLink(link: ConnectionObject): Boolean {
         if(not super.canIniLink(link))
         {
             return false;
         }
 
-        if(getAvailablePoints()==2)
+        if(link instanceof AuthorizeLink and  hasinitAuthorizeLink)
         {
-            return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
         }
-        if(getAvailablePoints()==3)
-        {
-            var con:ConnectionObject=getConnectionObject(0);
-            if(link instanceof AuthorizeLink and con instanceof AuthorizeLink)
-            {
-                return false;
-            }
-            if(link instanceof NoAuthorizeLink and con instanceof NoAuthorizeLink)
-            {
-                return false;
-            }
-        }
+
 
         if(link instanceof AuthorizeLink or link instanceof NoAuthorizeLink)
         {
