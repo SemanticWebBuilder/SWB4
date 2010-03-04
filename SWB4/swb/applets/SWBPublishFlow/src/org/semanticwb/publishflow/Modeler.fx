@@ -136,7 +136,7 @@ public class Modeler extends CustomNode
                                     println("cp.connectionObject {cp.connectionObject}");
                                 }
                             }
-                            println("con.ini.getAvailablePoints() {sizeof con.ini.getAvailablePoints()}");
+                            println("con.ini.getAvailablePoints() {con.ini.getAvailablePoints()}");
                             remove(tempNode);
                             
                             
