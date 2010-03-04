@@ -126,16 +126,7 @@ public class Modeler extends CustomNode
                          var con=tempNode as ConnectionObject;
                          if(con.end==null)
                          {                            
-                            for(cp in con.ini.connectionPoints)
-                            {
-                                if(cp.connectionObject!=null and cp.connectionObject.uri.equals(con.uri))
-                                {
-                                    println("removing connectionObject {cp.connectionObject.uri}@cp.id: {cp.id}");
-                                    cp.connectionObject=null;                                    
-                                }
-                            }                            
-                            remove(tempNode);
-                            println("con.ini.getAvailablePoints() {con.ini.getAvailablePoints()}@{con.ini.uri}");
+                            remove(tempNode);                            
                          }
                          tempNode=null;
                          disablePannable=false;
@@ -222,6 +213,32 @@ public class Modeler extends CustomNode
     public function remove(obj:Node)
     {
         delete obj from contents;
+        if(obj instanceof ConnectionObject)
+        {
+            var con=obj as ConnectionObject;
+            if(con.ini!=null)
+            {
+                for(cp in con.ini.connectionPoints)
+                {
+                    if(cp.connectionObject!=null and cp.connectionObject.uri.equals(con.uri))
+                    {
+                        cp.connectionObject=null;
+                    }
+                }
+            }
+            if(con.end!=null)
+            {
+                for(cp in con.end.connectionPoints)
+                {
+                    if(cp.connectionObject!=null and cp.connectionObject.uri.equals(con.uri))
+                    {
+                        cp.connectionObject=null;
+                    }
+                }
+            }
+             
+        }
+
     }
 
     public function getGraphElementByURI(uri:String):GraphElement
