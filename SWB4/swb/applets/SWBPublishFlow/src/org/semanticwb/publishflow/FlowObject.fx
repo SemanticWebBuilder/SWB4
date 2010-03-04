@@ -63,7 +63,7 @@ public class FlowObject extends GraphElement
     }
     
     public function getAvailablePoints() : Integer
-    {
+    {        
         var count:Integer=0;
         for(cpoint in connectionPoints)
         {
@@ -71,12 +71,8 @@ public class FlowObject extends GraphElement
             {
                 count++;
             }
-            else
-            {
-                println("cpoint.connectionObject.uri: {cpoint.connectionObject.uri}")
-            }
-
         }
+        
         return count;
 
     }

@@ -104,8 +104,7 @@ public class Modeler extends CustomNode
                                co.end=overNode as FlowObject;
                             }
                         }else
-                        {
-                            var fo : FlowObject=co.ini;                            
+                        {                            
                             co.end=null;
                         }
                     }
@@ -126,21 +125,17 @@ public class Modeler extends CustomNode
                      {
                          var con=tempNode as ConnectionObject;
                          if(con.end==null)
-                         {                              
+                         {                            
                             for(cp in con.ini.connectionPoints)
                             {
                                 if(cp.connectionObject!=null and cp.connectionObject.uri.equals(con.uri))
                                 {
-                                    println("Removing {cp.connectionObject.uri}");
-                                    cp.connectionObject=null;
-                                    println("cp.connectionObject {cp.connectionObject}");
+                                    println("removing connectionObject {cp.connectionObject.uri}@cp.id: {cp.id}");
+                                    cp.connectionObject=null;                                    
                                 }
-                            }
-                            println("con.ini.getAvailablePoints() {con.ini.getAvailablePoints()}");
+                            }                            
                             remove(tempNode);
-                            
-                            
-                            
+                            println("con.ini.getAvailablePoints() {con.ini.getAvailablePoints()}@{con.ini.uri}");
                          }
                          tempNode=null;
                          disablePannable=false;
