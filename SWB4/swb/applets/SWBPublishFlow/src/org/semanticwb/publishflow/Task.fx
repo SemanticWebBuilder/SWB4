@@ -70,6 +70,11 @@ public class Task extends FlowObject {
     }
 
     override public function canIniLink(link: ConnectionObject): Boolean {
+        if(not super.canIniLink(link))
+        {
+            return false;
+        }
+
         if(sizeof connections>=2)
         {
             return false;
@@ -93,10 +98,10 @@ public class Task extends FlowObject {
         }
         else
         {
-                if(link.end==null)
-                {
-                    return true;
-                }
+            if(link.end==null)
+            {
+                return true;
+            }
 
             if(link.end instanceof EndEvent)
             {
@@ -108,7 +113,7 @@ public class Task extends FlowObject {
             }
 
 
-        }
+        }        
     }
 
     override public function canEndLink(link: ConnectionObject): Boolean {
