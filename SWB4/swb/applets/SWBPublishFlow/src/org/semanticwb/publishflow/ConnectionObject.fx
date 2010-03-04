@@ -29,120 +29,92 @@ public class ConnectionObject extends CustomNode {
     public var modeler: Modeler;
     public var ini: FlowObject;
     public var end: FlowObject;
-    public  var title: String;
-    public  var action: String = bind title;
+    public var title: String;
+    public var action: String = bind title;
     public var uri: String;
     public var text: EditableText;
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
-    public var points: Point[];    
+    public var points: Point[];
     var path: Path;
     var o: Number = 0.8;                   //opacity
-    public var pini:Point=bind getIniConnection(ini) on replace olvalue
-    {
-        replaceIni(olvalue);
-    };
-    public var pend:Point= bind getEndConnection(end) on replace olvalue
-    {
-        replaceEnd(olvalue);
-    };
+    public var pini: Point = bind getIniConnection(ini) on replace olvalue {
+                replaceIni(olvalue);
+            };
+    public var pend: Point = bind getEndConnection(end) on replace olvalue {
+                replaceEnd(olvalue);
+            };
+    var pinter1: Point = bind getInter1Connection(ini, end, pini, pend);
+    var pinter2: Point = bind getInter2Connection(ini, end, pini, pend);
 
-    var pinter1 : Point= bind getInter1Connection(ini,end,pini,pend);
-    var pinter2 : Point=bind getInter2Connection(ini,end,pini,pend);
-    public function replaceIni(olvalue : Point) : Void
-    {
-        if(olvalue==pini)
-        {
-            if(pini instanceof ConnectionPoint)
-            {
-                var cp:ConnectionPoint=pini as ConnectionPoint;
-                if(cp.connectionObject==null)
-                {
-                    var index: Integer=javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if(index>=0)
-                    {                        
-                        cp.connectionObject=this;
+    public function replaceIni(olvalue: Point): Void {
+
+        if (olvalue == pini) {
+            if (pini instanceof ConnectionPoint) {
+                var cp: ConnectionPoint = pini as ConnectionPoint;
+                if (cp.connectionObject == null) {
+                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
+                    if (index >= 0) {
+                        cp.connectionObject = this;
                     }
                 }
 
             }
 
-        }
-        else
-        {
-            if(olvalue instanceof ConnectionPoint)
-            {
-                var con:ConnectionPoint=olvalue as ConnectionPoint;
-                if(con.connectionObject!=null)
-                {
-                    con.connectionObject=null;
+        } else {
+            if (olvalue instanceof ConnectionPoint) {
+                var con: ConnectionPoint = olvalue as ConnectionPoint;
+                if (con.connectionObject != null) {
+                    con.connectionObject = null;
                 }
             }
-            if(pini instanceof ConnectionPoint)
-            {
-                var cp:ConnectionPoint=pini as ConnectionPoint;
-                if(cp.connectionObject==null)
-                {
-                    var index: Integer=javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if(index>=0)
-                    {                        
-                        cp.connectionObject=this;
+            if (pini instanceof ConnectionPoint) {
+                var cp: ConnectionPoint = pini as ConnectionPoint;
+                if (cp.connectionObject == null) {
+                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
+                    if (index >= 0) {
+                        cp.connectionObject = this;
                     }
                 }
             }
         }
     }
-    public function replaceEnd(olvalue : Point) : Void
-    {
-        if(olvalue==pend)
-        {
-            if(pend instanceof ConnectionPoint)
-            {
-                var cp:ConnectionPoint=pend as ConnectionPoint;
-                if(cp.connectionObject==null)
-                {
-                    var index: Integer=javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if(index>=0)
-                    {
-                        cp.connectionObject=this;
+
+    public function replaceEnd(olvalue: Point): Void {
+        if (olvalue == pend) {
+            if (pend instanceof ConnectionPoint) {
+                var cp: ConnectionPoint = pend as ConnectionPoint;
+                if (cp.connectionObject == null) {
+                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
+                    if (index >= 0) {
+                        cp.connectionObject = this;
                     }
                 }
 
             }
 
-        }
-        else
-        {
-            if(olvalue instanceof ConnectionPoint)
-            {
-                var con:ConnectionPoint=olvalue as ConnectionPoint;
-                if(con.connectionObject!=null)
-                {
-                    con.connectionObject=null;
+        } else {
+            if (olvalue instanceof ConnectionPoint) {
+                var con: ConnectionPoint = olvalue as ConnectionPoint;
+                if (con.connectionObject != null) {
+                    con.connectionObject = null;
                 }
             }
-            if(pend instanceof ConnectionPoint)
-            {
-                var cp:ConnectionPoint=pend as ConnectionPoint;
-                if(cp.connectionObject==null)
-                {
-                    var index: Integer=javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if(index>=0)
-                    {
-                        cp.connectionObject=this;
+            if (pend instanceof ConnectionPoint) {
+                var cp: ConnectionPoint = pend as ConnectionPoint;
+                if (cp.connectionObject == null) {
+                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
+                    if (index >= 0) {
+                        cp.connectionObject = this;
                     }
                 }
             }
         }
-
     }
-
-    
 
     public override function create(): Node {
         cursor = Cursor.HAND;
-
-       points=[pini,pinter1,pinter2,pend];
+        points = [pini, pinter1, pinter2, pend];
         path = Path {
             elements: [
                 MoveTo { x: bind pini.x, y: bind pini.y },
@@ -154,30 +126,29 @@ public class ConnectionObject extends CustomNode {
             smooth: true;
             strokeLineCap: StrokeLineCap.ROUND
             strokeLineJoin: StrokeLineJoin.ROUND
-        };        
+        };
         return Group {
                     content: [
-                        path
-                    ,Line {
-                    startX: bind pend.x;
-                    startY: bind pend.y;
-                    endX: bind pend.x + 6 * Math.cos(getArrow(points, -45));
-                    endY: bind pend.y - 6 * Math.sin(getArrow(points, -45));
-                    style: bind color_row with inverse;
-                    stroke: bind path.stroke;
-                    strokeLineCap: StrokeLineCap.ROUND
-                    smooth: true;
-                    },
-                    Line {
-                    startX: bind pend.x;
-                    startY: bind pend.y;
-                    endX: bind pend.x + 6 * Math.cos(getArrow(points, 45));
-                    endY: bind pend.y - 6 * Math.sin(getArrow(points, 45));
-                    style: bind color_row with inverse;
-                    stroke: bind path.stroke;
-                    strokeLineCap: StrokeLineCap.ROUND
-                    smooth: true;
-                    }
+                        path, Line {
+                            startX: bind pend.x;
+                            startY: bind pend.y;
+                            endX: bind pend.x + 6 * Math.cos(getArrow(points, -45));
+                            endY: bind pend.y - 6 * Math.sin(getArrow(points, -45));
+                            style: bind color_row with inverse;
+                            stroke: bind path.stroke;
+                            strokeLineCap: StrokeLineCap.ROUND
+                            smooth: true;
+                        },
+                        Line {
+                            startX: bind pend.x;
+                            startY: bind pend.y;
+                            endX: bind pend.x + 6 * Math.cos(getArrow(points, 45));
+                            endY: bind pend.y - 6 * Math.sin(getArrow(points, 45));
+                            style: bind color_row with inverse;
+                            stroke: bind path.stroke;
+                            strokeLineCap: StrokeLineCap.ROUND
+                            smooth: true;
+                        }
                     ]
                     opacity: bind o;
                     effect: Styles.dropShadow
@@ -216,10 +187,10 @@ public class ConnectionObject extends CustomNode {
                 color = Styles.style_connection_over;
                 color_row = Styles.style_connection_row_over;
                 path.strokeWidth = 3;
-            }
+            };
     override var onMouseExited = function (e) {
                 mouseExited(e);
-            }
+            };
 
 
 
@@ -227,7 +198,60 @@ public class ConnectionObject extends CustomNode {
 
 
 
-bound function getEndConnection(end: FlowObject): Point
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public bound function getEndConnection(end: FlowObject): Point
 {
     if(end==null)
     {
@@ -252,7 +276,7 @@ bound function getEndConnection(end: FlowObject): Point
 
 }
 
-    bound function getIniConnection(ini: FlowObject): Point
+    public bound function getIniConnection(ini: FlowObject): Point
     {
         if(ini==null)
         {
@@ -295,20 +319,18 @@ bound function getEndConnection(end: FlowObject): Point
 
         if(end!=null)
         {
-            if(ini!=null)
-            {
-                if(pend.x==pini.x and id.equals("1"))
-                {
-                    Point{
-                            x:pini.x;
-                            y:pini.y-20;
-                        }
-                }
-                else if(pend.x==pini.x and id.equals("3"))
+                if(pend.y==pini.y and pend.y>end.y)
                 {
                     Point{
                             x:pini.x;
                             y:pini.y+20;
+                        }
+                }
+                else if(pend.y==pini.y and pend.y<end.y)
+                {
+                    Point{
+                            x:pini.x;
+                            y:pini.y-20;
                         }
                 }
                 else if(ini.y!=pini.y)
@@ -325,27 +347,6 @@ bound function getEndConnection(end: FlowObject): Point
                         }
 
                 }
-            }
-            else
-            {
-                if(ini.y!=pini.y)
-                {
-                        Point{
-                            x:pini.x;
-                            y:pini.y+(pend.y-pini.y)/2;
-                        }
-                }else
-                {
-                        Point{
-                            x:pini.x+(pend.x-pini.x)/2;
-                            y:pini.y;
-                        }
-
-                }
-            }
-
-
-            
         }
         else
         {
@@ -360,18 +361,18 @@ bound function getEndConnection(end: FlowObject): Point
     {
         if(end!=null)
         {
-            if(end.x==pend.x and id.equals("1"))
-            {
-                Point{
-                        x:pend.x;
-                        y:pend.y-20;
-                    }
-            }
-            else if(end.x==pend.x and id.equals("3"))
+            if(pini.y==pend.y and  pend.y>end.y)
             {
                 Point{
                         x:pend.x;
                         y:pend.y+20;
+                    }
+            }
+            else if(pini.y==pend.y and  pend.y<end.y)
+            {
+                Point{
+                        x:pend.x;
+                        y:pend.y-20;
                     }
             }
             else if(end.y!=pend.y)
