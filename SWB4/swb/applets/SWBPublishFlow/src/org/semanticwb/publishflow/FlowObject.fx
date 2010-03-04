@@ -99,14 +99,35 @@ public class FlowObject extends GraphElement
                 }
                 else
                 {
-                    var d1:Number;
+                    /*var d1:Number;
                     var d2:Number;
                     d1=Math.sqrt(Math.pow(point.x-cpoint.x, 2)+Math.pow(point.y-cpoint.y, 2));
                     d2=Math.sqrt(Math.pow(point.x-pointToReturn.x, 2)+Math.pow(point.y-pointToReturn.y, 2));
                     if(d1<d2)
                     {
                         pointToReturn=cpoint;
+                    }*/
+                    var dx:Number =Math.abs(point.x-cpoint.x);
+                    var dy:Number =Math.abs(point.y-cpoint.y);
+                    if(dx<dy)
+                    {
+                        var d2x:Number =Math.abs(point.x-pointToReturn.x);
+                        if(d2x<dx)
+                        {
+                            pointToReturn=cpoint;
+                        }
+
                     }
+                    else
+                    {
+                        var d2y:Number =Math.abs(point.y-pointToReturn.y);
+                        if(dy<d2y)
+                        {
+                            pointToReturn=cpoint;
+                        }
+                    }
+
+
                 }
             }
         }
