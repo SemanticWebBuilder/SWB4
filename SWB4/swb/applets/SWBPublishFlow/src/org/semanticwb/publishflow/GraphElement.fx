@@ -79,12 +79,7 @@ public class GraphElement extends CustomNode
 
     public function mouseClicked( e: MouseEvent )
     {
-        //println("onMouseClicked node:{e}");
-        /*if(e.clickCount >= 2 and e.button==MouseButton.PRIMARY)
-        {
-            //println("starEditing");
-            //text.startEditing();
-        }*/
+        
     }
 
 
