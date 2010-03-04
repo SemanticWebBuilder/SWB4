@@ -48,7 +48,7 @@ import org.w3c.dom.Element;
  * resource configuration, uses and XSL file. Is a content resource and comes from version 2 of
  * WebBuilder.
  *
- * @author :Jorge Alberto Jim�nez Sandoval (JAJS)
+ * @author :Jorge Alberto Jimenez Sandoval (JAJS)
  */
 public class TematicIndexXSL extends GenericAdmResource 
 {
@@ -57,7 +57,7 @@ public class TematicIndexXSL extends GenericAdmResource
     javax.xml.transform.Templates tpl; 
     String workpath = "/work";
     String webpath = (String) SWBPlatform.getContextPath();
-    String path =  webpath +"swbadmin/xsl/TematicIndexXSL/";
+    String path =  webpath +"/swbadmin/xsl/TematicIndexXSL/";
 
     /**
      * Crea un nuevo objeto IndiceTematicoXSL.
