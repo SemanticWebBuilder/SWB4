@@ -96,28 +96,44 @@ public class Modeler extends CustomNode
                     mousey=e.y+clipView.clipY;
                     if(tempNode instanceof ConnectionObject)
                     {
-                        var a: ConnectionObject=tempNode as ConnectionObject;
+                        var co: ConnectionObject=tempNode as ConnectionObject;
                         if(overNode!=null and overNode instanceof FlowObject)
                         {
-                            if(overNode.canEndLink(a))
+                            if(overNode.canEndLink(co))
                             {
-                               a.end=overNode as FlowObject;
+                               co.end=overNode as FlowObject;
                             }
                         }else
                         {
-                            var fo : FlowObject=a.ini;
-                            delete a from fo.connections;
-                            a.end=null;
+                            var fo : FlowObject=co.ini;
+                            delete co from fo.connections;
+                            /*for(cp in fo.connectionPoints)
+                            {
+                                if(cp.connectionObject==co)
+                                {
+                                    cp.connectionObject=null;
+                                }
+                            }*/
+
+
+                            co.end=null;
                         }
                     }
                 }
                 else if(clickedNode instanceof ConnectionObject)
                 {
                     tempNode=clickedNode;
-                    var a: ConnectionObject=tempNode as ConnectionObject;
-                    var fo : FlowObject=a.ini;
-                    delete a from fo.connections;
-                    a.end=null;
+                    var co: ConnectionObject=tempNode as ConnectionObject;
+                    var fo : FlowObject=co.ini;
+                    delete co from fo.connections;
+                    /*for(cp in fo.connectionPoints)
+                    {
+                        if(cp.connectionObject==co)
+                        {
+                            cp.connectionObject=null;
+                        }
+                    }*/
+                    co.end=null;
                 }
              }
              onMouseReleased: function( e: MouseEvent ):Void

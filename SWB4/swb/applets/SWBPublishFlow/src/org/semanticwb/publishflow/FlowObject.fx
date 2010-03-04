@@ -113,32 +113,16 @@ public class FlowObject extends GraphElement
         return pointToReturn;
     }
 
-    public function getConnectionPoint(point : FlowObject) : ConnectionPoint
-    {
-        var pointToReturn : ConnectionPoint;
+    public function getConnectionPoint(point : Point,connectionObject : ConnectionObject) : ConnectionPoint
+    {        
         for(cpoint in connectionPoints)
         {
-            if(cpoint.connectionObject==null)
+            if(cpoint.connectionObject==connectionObject)
             {
-                if(pointToReturn==null)
-                {
-                    pointToReturn=cpoint;
-                }
-                else
-                {
-                    var d1:Number;
-                    var d2:Number;
-                    d1=cpoint.getDistance(point);
-                    d2=pointToReturn.getDistance(point);
-                    if(d1<d2)
-                    {
-                        pointToReturn=cpoint;
-                    }
-                }
+                return cpoint;
             }
         }
-        return pointToReturn;
-
+        return getAvailablePoint(point);       
     }
 
     
@@ -183,4 +167,12 @@ public class FlowObject extends GraphElement
     {
         super.remove();
     }
+    override public function canIniLink(link: ConnectionObject): Boolean {
+        if(sizeof connections==sizeof connectionPoints)
+        {
+            return false;
+        }
+        return super.canIniLink(link);
+    }
+
 }
