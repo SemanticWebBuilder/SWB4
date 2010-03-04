@@ -410,4 +410,15 @@ public bound function getEndConnection(end: FlowObject): Point
             2*Math.PI-Math.atan((pend.y-pinter2.y)/(pend.x-pinter2.x))+(grad*Math.PI)/180;
         }
     }
+    override var onMouseClicked = function ( e: MouseEvent ) : Void
+    {
+        if(modeler.focusedNode==this)
+        {
+            mouseClicked(e);
+        }
+    }
+    public function mouseClicked( e: MouseEvent )
+    {
+
+    }
 }
