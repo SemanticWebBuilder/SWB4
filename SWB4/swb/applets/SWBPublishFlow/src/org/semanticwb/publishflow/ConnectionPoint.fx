@@ -13,6 +13,7 @@ import javafx.util.Math;
 
 public class ConnectionPoint extends Point {
     public var connectionObject:ConnectionObject;
+    public var id:String;
     public function getDistance(point : FlowObject) : Number
     {
         return Math.sqrt(Math.pow(point.x-x, 2)+Math.pow(point.y-y, 2));

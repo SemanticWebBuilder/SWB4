@@ -16,7 +16,7 @@ import java.lang.Math;
 public class FlowObject extends GraphElement
 {
     public-read  var connectionPoints : ConnectionPoint[];
-    public var connections: ConnectionObject[];
+    
     //public var pool : Pool;
     public var dpx : Number;                        //diferencia de pool
     public var dpy : Number;                        //diferencia de pool
@@ -33,55 +33,66 @@ public class FlowObject extends GraphElement
         connectionPoints=[
                 ConnectionPoint
                 {
+                    x:bind {x};
+                    y:bind {y}-h/2;
+                    id:"1";
+                }
+                ,
+                ConnectionPoint
+                {
                     x: bind {x}+w/2;
                     y:bind {y};
+                    id:"2";
                 },
                 ConnectionPoint
                 {
                     x:bind {x}-w/2;
                     y:bind {y};
+                    id:"4";
                     
                 },
                 ConnectionPoint
                 {
                     x: bind {x};
                     y:bind {y}+h/2;
-                },
-                ConnectionPoint
-                {
-                    x:bind {x};
-                    y:bind {y}-h/2;
-                }
-                ];
+                    id:"3";
+                }]
+                ;
         return text;
 
     }
-    public function addConnectionObject(connectionObject : ConnectionObject) : Void
+    
+    public function getAvailablePoints() : Integer
     {
-        insert connectionObject into connections;
-    }
-    public function hasConnectionX(x : Float) : Boolean
-    {
-        for(con  in connections)
+        var count:Integer=0;
+        for(cpoint in connectionPoints)
         {
-            if(con.points[0].x==x)
+            if(cpoint.connectionObject==null)
             {
-                return true;
+                count++;
             }
         }
-        return false;
+        return count;
 
     }
-    public function hasConnectionY(y : Float) : Boolean
-    {
-        for(con  in connections)
+
+
+    public function getConnectionObject(index:Integer) : ConnectionObject
+    {        
+        var i:Integer=0;
+        for(cpoint in connectionPoints)
         {
-            if(con.points[0].y==y)
+            if(cpoint.connectionObject!=null)
             {
-                return true;
+                if(i==index)
+                {
+                    return cpoint.connectionObject;
+                }
+
+                i++;
             }
         }
-        return false;
+        return null;
 
     }
 
@@ -99,38 +110,18 @@ public class FlowObject extends GraphElement
                 }
                 else
                 {
-                    /*var d1:Number;
+                    var d1:Number;
                     var d2:Number;
                     d1=Math.sqrt(Math.pow(point.x-cpoint.x, 2)+Math.pow(point.y-cpoint.y, 2));
                     d2=Math.sqrt(Math.pow(point.x-pointToReturn.x, 2)+Math.pow(point.y-pointToReturn.y, 2));
                     if(d1<d2)
                     {
                         pointToReturn=cpoint;
-                    }*/
-                    var dx:Number =Math.abs(point.x-cpoint.x);
-                    var dy:Number =Math.abs(point.y-cpoint.y);
-                    if(dx<dy)
-                    {
-                        var d2x:Number =Math.abs(point.x-pointToReturn.x);
-                        if(d2x<dx)
-                        {
-                            pointToReturn=cpoint;
-                        }
-
                     }
-                    else
-                    {
-                        var d2y:Number =Math.abs(point.y-pointToReturn.y);
-                        if(dy<d2y)
-                        {
-                            pointToReturn=cpoint;
-                        }
-                    }
-
-
                 }
             }
         }
+        
         return pointToReturn;
     }
 
@@ -189,7 +180,7 @@ public class FlowObject extends GraphElement
         super.remove();
     }
     override public function canIniLink(link: ConnectionObject): Boolean {
-        if(sizeof connections==sizeof connectionPoints)
+        if(getAvailablePoints()==0)
         {
             return false;
         }

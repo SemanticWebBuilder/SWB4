@@ -52,8 +52,7 @@ public class ConnectionObject extends CustomNode {
     public function replaceIni() : Void
     {
        if(pini instanceof ConnectionPoint)
-        {
-            println("pini is ConnectionPoint");
+        {            
             var con:ConnectionPoint=pini as ConnectionPoint;
             con.connectionObject=this;
 
@@ -62,8 +61,7 @@ public class ConnectionObject extends CustomNode {
     public function replaceEnd() : Void
     {
         if(pend instanceof ConnectionPoint)
-        {
-            println("pend is ConnectionPoint");
+        {            
             var con:ConnectionPoint=pend as ConnectionPoint;
             con.connectionObject=this;
         }
@@ -75,7 +73,7 @@ public class ConnectionObject extends CustomNode {
     public override function create(): Node {
         cursor = Cursor.HAND;
 
-       
+       points=[pini,pinter1,pinter2,pend];
         path = Path {
             elements: [
                 MoveTo { x: bind pini.x, y: bind pini.y },
@@ -182,7 +180,7 @@ bound function getEndConnection(end: FlowObject): Point
 
 }
 
-bound function getIniConnection(ini: FlowObject): Point
+    bound function getIniConnection(ini: FlowObject): Point
     {
         if(ini==null)
         {
@@ -195,11 +193,25 @@ bound function getIniConnection(ini: FlowObject): Point
         else
         {
             
-            ini.getConnectionPoint(Point
+            var cp: ConnectionPoint=ini.getConnectionPoint(Point
                 {
                     x: modeler.mousex;
                     y: modeler.mousey;
                 },this);
+                if(cp==null)
+                {
+                    Point
+                    {
+                       x: modeler.mousex;
+                       y: modeler.mousey;
+                    }
+                }
+                else
+                {
+                    cp
+                }
+
+
         }
     }
 
@@ -210,21 +222,36 @@ bound function getIniConnection(ini: FlowObject): Point
 
         if(end!=null)
         {
-            if(ini.y!=pini.y)
+            if(ini.x==pini.x and id.equals("1"))
+            {
+                Point{
+                        x:pini.x;
+                        y:pini.y-20;
+                    }
+            }
+            else if(ini.x==pini.x and id.equals("3"))
+            {
+                Point{
+                        x:pini.x;
+                        y:pini.y+20;
+                    }
+            }
+            else if(ini.y!=pini.y)
             {
                     Point{
                         x:pini.x;
-                    y:pini.y+(pend.y-pini.y)/2;
+                        y:pini.y+(pend.y-pini.y)/2;
                     }
             }else
             {
                     Point{
                         x:pini.x+(pend.x-pini.x)/2;
-                    y:pini.y;
+                        y:pini.y;
                     }
                 
             }
-        }else
+        }
+        else
         {
             Point{
             x:pini.x;
@@ -237,7 +264,21 @@ bound function getInter2Connection(ini: FlowObject, end: FlowObject, pini: Point
     {
         if(end!=null)
         {
-            if(end.y!=pend.y)
+            if(end.x==pend.x and id.equals("1"))
+            {
+                Point{
+                        x:pend.x;
+                        y:pend.y-20;
+                    }
+            }
+            else if(end.x==pend.x and id.equals("3"))
+            {
+                Point{
+                        x:pend.x;
+                        y:pend.y+20;
+                    }
+            }
+            else if(end.y!=pend.y)
             {
                     Point
                     {
