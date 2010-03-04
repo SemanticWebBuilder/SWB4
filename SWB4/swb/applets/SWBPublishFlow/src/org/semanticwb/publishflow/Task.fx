@@ -75,13 +75,13 @@ public class Task extends FlowObject {
             return false;
         }
 
-        if(sizeof connections>=2)
+        if(getAvailablePoints()==2)
         {
             return false;
         }
-        if(sizeof connections==1)
+        if(getAvailablePoints()==3)
         {
-            var con:ConnectionObject=connections[0];
+            var con:ConnectionObject=getConnectionObject(0);
             if(link instanceof AuthorizeLink and con instanceof AuthorizeLink)
             {
                 return false;

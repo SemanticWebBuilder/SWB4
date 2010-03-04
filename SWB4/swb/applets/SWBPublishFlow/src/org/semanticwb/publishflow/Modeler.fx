@@ -48,7 +48,7 @@ public class Modeler extends CustomNode
              //translateX:40;
              onMousePressed: function( e: MouseEvent ):Void
              {
-                println("onMousePressed modeler:{e}");
+                //println("onMousePressed modeler:{e}");
                 mousex=e.x+clipView.clipX;
                 mousey=e.y+clipView.clipY;
                 if(tempNode!=null)
@@ -105,17 +105,7 @@ public class Modeler extends CustomNode
                             }
                         }else
                         {
-                            var fo : FlowObject=co.ini;
-                            delete co from fo.connections;
-                            /*for(cp in fo.connectionPoints)
-                            {
-                                if(cp.connectionObject==co)
-                                {
-                                    cp.connectionObject=null;
-                                }
-                            }*/
-
-
+                            var fo : FlowObject=co.ini;                            
                             co.end=null;
                         }
                     }
@@ -123,30 +113,34 @@ public class Modeler extends CustomNode
                 else if(clickedNode instanceof ConnectionObject)
                 {
                     tempNode=clickedNode;
-                    var co: ConnectionObject=tempNode as ConnectionObject;
-                    var fo : FlowObject=co.ini;
-                    delete co from fo.connections;
-                    /*for(cp in fo.connectionPoints)
-                    {
-                        if(cp.connectionObject==co)
-                        {
-                            cp.connectionObject=null;
-                        }
-                    }*/
+                    var co: ConnectionObject=tempNode as ConnectionObject;                                        
                     co.end=null;
                 }
              }
              onMouseReleased: function( e: MouseEvent ):Void
              {
-                 println("onMouseReleased modeler:{e}");
+                 //println("onMouseReleased modeler:{e}");
                  if(tempNode!=null)
                  {
                      if(tempNode instanceof ConnectionObject)
                      {
                          var con=tempNode as ConnectionObject;
                          if(con.end==null)
-                         {
-                             remove(tempNode);
+                         {                              
+                            for(cp in con.ini.connectionPoints)
+                            {
+                                if(cp.connectionObject!=null and cp.connectionObject.uri.equals(con.uri))
+                                {
+                                    println("Removing {cp.connectionObject.uri}");
+                                    cp.connectionObject=null;
+                                    println("cp.connectionObject {cp.connectionObject}");
+                                }
+                            }
+                            println("con.ini.getAvailablePoints() {sizeof con.ini.getAvailablePoints()}");
+                            remove(tempNode);
+                            
+                            
+                            
                          }
                          tempNode=null;
                          disablePannable=false;
