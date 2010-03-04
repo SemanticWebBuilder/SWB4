@@ -71,6 +71,11 @@ public class FlowObject extends GraphElement
             {
                 count++;
             }
+            else
+            {
+                println("cpoint.connectionObject.uri: {cpoint.connectionObject.uri}")
+            }
+
         }
         return count;
 
@@ -130,10 +135,10 @@ public class FlowObject extends GraphElement
         for(cpoint in connectionPoints)
         {
             if(cpoint.connectionObject==connectionObject)
-            {
+            {                
                 return cpoint;
             }
-        }
+        }        
         return getAvailablePoint(point);       
     }
 

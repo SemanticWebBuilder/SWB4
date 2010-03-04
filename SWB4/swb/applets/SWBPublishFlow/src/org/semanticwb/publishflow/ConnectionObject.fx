@@ -38,32 +38,69 @@ public class ConnectionObject extends CustomNode {
     public var points: Point[];    
     var path: Path;
     var o: Number = 0.8;                   //opacity
-    var pini:Point=bind getIniConnection(ini) on replace
+    var pini:Point=bind getIniConnection(ini) on replace olvalue
     {
-        replaceIni();
+        replaceIni(olvalue);
     };
-    var pend:Point= bind getEndConnection(end) on replace
+    var pend:Point= bind getEndConnection(end) on replace olvalue
     {
-        replaceEnd();
+        replaceEnd(olvalue);
     };
 
     var pinter1 : Point= bind getInter1Connection(ini,end,pini,pend);
     var pinter2 : Point=bind getInter2Connection(ini,end,pini,pend);
-    public function replaceIni() : Void
+    public function replaceIni(olvalue : Point) : Void
     {
-       if(pini instanceof ConnectionPoint)
+        if(pini instanceof ConnectionPoint)
         {            
             var con:ConnectionPoint=pini as ConnectionPoint;
-            con.connectionObject=this;
-
+            con.connectionObject=this;            
         }
+        if(olvalue instanceof ConnectionPoint)
+        {
+            var con:ConnectionPoint=olvalue as ConnectionPoint;            
+            if(pini instanceof ConnectionPoint)
+            {
+                var newcon:ConnectionPoint=pini as ConnectionPoint;
+                if(not newcon.id.equals(con.id))
+                {
+                    con.connectionObject=null;
+                }
+
+            }
+            else
+            {
+                con.connectionObject=null;
+            }
+
+
+            
+        }
+
     }
-    public function replaceEnd() : Void
+    public function replaceEnd(olvalue : Point) : Void
     {
         if(pend instanceof ConnectionPoint)
         {            
             var con:ConnectionPoint=pend as ConnectionPoint;
             con.connectionObject=this;
+        }
+        if(olvalue instanceof ConnectionPoint)
+        {
+            var con:ConnectionPoint=olvalue as ConnectionPoint;            
+            if(pend instanceof ConnectionPoint)
+            {
+                var newcon:ConnectionPoint=pend as ConnectionPoint;
+                if(not newcon.id.equals(con.id))
+                {
+                    con.connectionObject=null;
+                }
+
+            }
+            else
+            {
+                con.connectionObject=null;
+            }
         }
 
     }
@@ -198,6 +235,7 @@ bound function getEndConnection(end: FlowObject): Point
                     x: modeler.mousex;
                     y: modeler.mousey;
                 },this);
+
                 if(cp==null)
                 {
                     Point
@@ -207,11 +245,9 @@ bound function getEndConnection(end: FlowObject): Point
                     }
                 }
                 else
-                {
+                {   
                     cp
                 }
-
-
         }
     }
 

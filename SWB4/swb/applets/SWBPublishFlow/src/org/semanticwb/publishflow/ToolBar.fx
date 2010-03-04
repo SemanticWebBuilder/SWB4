@@ -102,7 +102,7 @@ public class ToolBar extends CustomNode {
                                     image: "images/task_1.png"
                                     imageOver: "images/task_2.png"
                                     action: function (): Void {
-                                        println("click");
+                                        //println("click");
                                         counter++;
                                         modeler.disablePannable = true;
                                         modeler.tempNode = Task {
