@@ -35,7 +35,7 @@ public class ConnectionObject extends CustomNode {
     public var text: EditableText;
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
-    public var points: Point[];
+    
     var path: Path;
     var o: Number = 0.8;                   //opacity
     public var pini: Point = bind getIniConnection(ini) on replace olvalue {
@@ -113,8 +113,7 @@ public class ConnectionObject extends CustomNode {
     }
 
     public override function create(): Node {
-        cursor = Cursor.HAND;
-        points = [pini, pinter1, pinter2, pend];
+        cursor = Cursor.HAND;        
         path = Path {
             elements: [
                 MoveTo { x: bind pini.x, y: bind pini.y },
@@ -132,8 +131,8 @@ public class ConnectionObject extends CustomNode {
                         path, Line {
                             startX: bind pend.x;
                             startY: bind pend.y;
-                            endX: bind pend.x + 6 * Math.cos(getArrow(points, -45));
-                            endY: bind pend.y - 6 * Math.sin(getArrow(points, -45));
+                            endX: bind pend.x + 6 * Math.cos(getArrow(-45));
+                            endY: bind pend.y - 6 * Math.sin(getArrow(-45));
                             style: bind color_row with inverse;
                             stroke: bind path.stroke;
                             strokeLineCap: StrokeLineCap.ROUND
@@ -142,8 +141,8 @@ public class ConnectionObject extends CustomNode {
                         Line {
                             startX: bind pend.x;
                             startY: bind pend.y;
-                            endX: bind pend.x + 6 * Math.cos(getArrow(points, 45));
-                            endY: bind pend.y - 6 * Math.sin(getArrow(points, 45));
+                            endX: bind pend.x + 6 * Math.cos(getArrow(45));
+                            endY: bind pend.y - 6 * Math.sin(getArrow(45));
                             style: bind color_row with inverse;
                             stroke: bind path.stroke;
                             strokeLineCap: StrokeLineCap.ROUND
@@ -400,17 +399,15 @@ public bound function getEndConnection(end: FlowObject): Point
 
     
 
-    bound function getArrow(points:Point[], grad: Number) : Number
-    {
-        var pini:Point=points[(sizeof points)-2];
-        var pend:Point=points[(sizeof points)-1];
+    bound function getArrow(grad: Number) : Number
+    {        
 
-        if(pend.x >= pini.x)
+        if(pend.x >= pinter2.x)
         {
-            Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
+            Math.PI-Math.atan((pend.y-pinter2.y)/(pend.x-pinter2.x))+(grad*Math.PI)/180;
         }else
         {
-            2*Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
+            2*Math.PI-Math.atan((pend.y-pinter2.y)/(pend.x-pinter2.x))+(grad*Math.PI)/180;
         }
     }
 }

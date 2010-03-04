@@ -14,7 +14,10 @@ package org.semanticwb.publishflow;
 import applets.commons.WBConnection;
 import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;
+import com.sun.javafx.runtime.TypeInfo;
+import com.sun.javafx.runtime.sequence.Sequence;
 import java.awt.Frame;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -27,13 +30,15 @@ import javax.swing.UIManager;
  */
 public class DialogEditActivity extends javax.swing.JDialog {
 
-    String name;
+    boolean cancel;
+    String name,description;
     Locale locale=new Locale("es");
     WBConnection con;
-    String[] roles;
-    String[] users;
+    Sequence roles;
+    Sequence users;
+
     /** Creates new form DialogEditActivity */
-    public DialogEditActivity(String name,WBConnection con) {
+    public DialogEditActivity(String name,String description,WBConnection con,Sequence<String> users,Sequence<String> roles) {
         super((Frame) null, true);
         try
         {
@@ -43,8 +48,14 @@ public class DialogEditActivity extends javax.swing.JDialog {
         {
             // No debe hacer nada
             System.out.println(ue.getMessage());
-        }
-        
+        }        
+        this.users=users;
+        this.roles=roles;
+
+
+        this.jTextFieldName.setText(name);
+        this.jTextAreaDescription.setText(description);
+
         this.con=con;
         if(con!=null && con.getApplet()!=null && con.getApplet().getParameter("locale")!=null && !con.getApplet().getParameter("locale").trim().equals(""))
         {
@@ -57,10 +68,74 @@ public class DialogEditActivity extends javax.swing.JDialog {
         this.setModal(true);
         this.jTextFieldName.grabFocus();
         this.name=name;
-        //loadRoles();
+        loadRoles();
+        loadUsers();
+
+
+        jTableRolesModel rolemodel=(jTableRolesModel)this.jTableRoles.getModel();
+        for(String srole : roles)
+        {
+            String[] values=srole.split("@");
+
+            if(values.length==3)
+            {
+                Role tempRole=new Role(values[0], values[2], values[1]);
+                int irows=rolemodel.getRowCount();
+                for(int i=0;i<irows;i++)
+                {
+                    Role role=rolemodel.getRole(i);
+                    if(role.equals(tempRole))
+                    {
+                        role.setChecked(true);
+                    }
+                }
+            }
+        }
+
+
+        jTableUserModel usermodel=(jTableUserModel)this.jTableUsuarios.getModel();
+        for(String srole : users)
+        {
+            String[] values=srole.split("@");
+
+            if(values.length==2)
+            {
+                User tempUser=new User(values[0], values[1]);
+                int irows=usermodel.getRowCount();
+                for(int i=0;i<irows;i++)
+                {
+                    User user=usermodel.getUser(i);
+                    if(user.equals(tempUser))
+                    {
+                        user.setChecked(true);
+                    }
+                }
+            }
+        }
+
     }
 
-    
+
+    public void loadUsers()
+    {
+        jTableUserModel model=new jTableUserModel(locale);
+        this.jTableUsuarios.setModel(model);
+        String tm=con.getApplet().getParameter("tm");
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>"+ tm+"</tm></req>";
+        xml=con.getData(xml);
+        WBXMLParser parser=new WBXMLParser();
+        WBTreeNode exml=parser.parse(xml);
+        Iterator eusers=exml.getFirstNode().getNodesbyName("user");
+        while(eusers.hasNext())
+        {
+            WBTreeNode wuser=(WBTreeNode)eusers.next();
+            String id=wuser.getAttribute("id");
+            String oname=wuser.getAttribute("name");
+            User user=new User(id,oname);
+            model.addUser(user);
+        }
+
+    }
     public void loadRoles()
     {
         jTableRolesModel model=new jTableRolesModel(locale);
@@ -258,11 +333,8 @@ public class DialogEditActivity extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("DialogEditActivity",locale).getString("Favor_de_indicar_la_descripcion_dela_actividad"),this.getTitle(),JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        
-
-
-
+        name=this.jTextFieldName.getText();
+        description=this.jTextAreaDescription.getText();
         jTableRolesModel rolemodel=(jTableRolesModel)this.jTableRoles.getModel();
         jTableUserModel usermodel=(jTableUserModel)this.jTableUsuarios.getModel();
 
@@ -335,56 +407,44 @@ public class DialogEditActivity extends javax.swing.JDialog {
 
 
 
-        /*this.activity.getRoleModel().clear();
-        this.activity.getUserModel().clear();*/
+        
+        HashSet<String> oroles=new HashSet<String>();
 
-
-
-        /*int iroles=rolemodel.getRowCount();
+        int iroles=rolemodel.getRowCount();
         for(int i=0;i<iroles;i++)
         {
             Role role=rolemodel.getRole(i);
             if(role.isChecked())
             {
-                this.activity.getRoleModel().addRole(role);
+                oroles.add(role.id+"@"+role.repository+"@"+role.name);
             }
         }
+        TypeInfo t=TypeInfo.getTypeInfo(String.class);
+        roles=com.sun.javafx.runtime.sequence.Sequences.fromCollection(t, oroles);
 
-        this.activity.setName(this.jTextFieldName.getText().trim());
-        this.activity.setDescription(this.jTextAreaDescription.getText().trim());
+
+        HashSet<String> ousers=new HashSet<String>();
 
         for(int i=0;i<usermodel.getRowCount();i++)
         {
             User user=(User)usermodel.getUser(i);
             if(user.isChecked())
             {
-                this.activity.getUserModel().addUser(user);
+                ousers.add(user.id+"@"+user.name);
             }
         }
-        System.out.println(add);
-        if(add)
-        {
-            this.model.addActivity(this.activity);
-            if(this.jRadioButtonSi.isSelected())
-            {
-                this.model.addFirstActivity(this.activity);
-            }
-            else
-            {
-                this.model.addActivity(this.activity);
-            }
-        }*/
-
+        users=com.sun.javafx.runtime.sequence.Sequences.fromCollection(t, ousers);
         setVisible(false);
         this.dispose();
 }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelarActionPerformed
     {//GEN-HEADEREND:event_jButtonCancelarActionPerformed
-        // Add your handling code here:
+        cancel=true;
         setVisible(false);
         this.dispose();
 }//GEN-LAST:event_jButtonCancelarActionPerformed
+
 
     private void jTextFieldDiasKeyPressed(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jTextFieldDiasKeyPressed
     {//GEN-HEADEREND:event_jTextFieldDiasKeyPressed
