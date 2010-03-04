@@ -24,6 +24,7 @@ public-read var color_fill="#f5f5ff";
 public-read var color_fill_pool="#d5d5ff";
 
 public-read var color_endEvent="#660000";
+public-read var color_authorEvent="#CC6600";
 public-read var color_iniEvent="#3c8e3c";
 public-read var color_interEvent="#5e7a9e";
 

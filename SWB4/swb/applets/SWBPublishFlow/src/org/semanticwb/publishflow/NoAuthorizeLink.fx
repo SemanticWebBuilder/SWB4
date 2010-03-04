@@ -11,11 +11,14 @@ import javafx.scene.input.MouseEvent;
 /**
  * @author victor.lorenzana
  */
-public class NoAuthorizeLink extends ConnectionObject {
+public class NoAuthorizeLink extends LinkConnection {
 
     public override function create(): Node {
         color = Styles.style_connection_not_authorize;
         color_row = Styles.style_connection_arrow_not_authorize;
+        authorized=false;
+        published=false;
+        type="unauthorized";
         return super.create();
     }
 
