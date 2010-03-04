@@ -69,9 +69,27 @@ public class Task extends FlowObject {
         }
     }
 
-    public function hasinitAuthorizeLink() : Boolean
+    public function hasIniAuthorizeLink() : Boolean
     {
-
+        for(point in connectionPoints)
+        {
+            if(point.connectionObject!=null and point.connectionObject instanceof AuthorizeLink and point.connectionObject.ini==this)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public function hasIniNoAuthorizeLink() : Boolean
+    {
+        for(point in connectionPoints)
+        {
+            if(point.connectionObject!=null and point.connectionObject instanceof NoAuthorizeLink and point.connectionObject.ini==this)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -81,226 +99,13 @@ public class Task extends FlowObject {
             return false;
         }
 
-        if(link instanceof AuthorizeLink and  hasinitAuthorizeLink)
+        if(link instanceof AuthorizeLink and  hasIniAuthorizeLink())
         {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
+            return false;
+        }
+        if(link instanceof NoAuthorizeLink and  hasIniNoAuthorizeLink())
+        {
+            return false;
         }
 
 
