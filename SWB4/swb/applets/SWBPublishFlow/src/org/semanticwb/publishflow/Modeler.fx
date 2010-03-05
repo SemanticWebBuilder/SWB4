@@ -225,6 +225,7 @@ public class Modeler extends CustomNode
 
     public function save() : Void
     {
+        var endEvent:EndEvent;
         var startEvent:StartEvent;
         for(content in contents)
         {
@@ -234,6 +235,7 @@ public class Modeler extends CustomNode
                 break;
             }
         }
+
         if(startEvent==null)
         {
             JOptionPane.showMessageDialog(null, "Debe indicar un nodo de inicio", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
@@ -244,6 +246,46 @@ public class Modeler extends CustomNode
             JOptionPane.showMessageDialog(null, "Debe inidicar cual es la actividad inicial", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
             startEvent.requestFocus();
             return;
+        }
+
+        for(content in contents)
+        {
+            if(content instanceof EndEvent)
+            {
+                endEvent=content as EndEvent;
+                break;
+            }
+        }
+        if(endEvent==null)
+        {
+            JOptionPane.showMessageDialog(null, "Debe indicar un nodo final", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(endEvent.getBusyPoints()==0)
+        {
+            JOptionPane.showMessageDialog(null, "El nodo final no tiene una conexión", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        for(content in contents)
+        {
+            if(content instanceof Task)
+            {
+                var task=content as Task;
+                if(not task.hasIniAuthorizeLink())
+                {
+                    JOptionPane.showMessageDialog(null, "La tarea {task.title} no tiene conexión en caso de autorización", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(not task.hasIniNoAuthorizeLink())
+                {
+                    JOptionPane.showMessageDialog(null, "La tarea {task.title} no tiene conexión en caso de no autorización", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                break;
+            }
         }
 
         var iniActivity:Task=startEvent.getConnectionObject(0).end as Task;
@@ -301,7 +343,7 @@ public class Modeler extends CustomNode
                 var activity:FlowObject=content as FlowObject;
                 eactivity = wf.addNode();
                 eactivity.setName("activity");
-                eactivity.addAttribute("name", activity.title);
+                eactivity.addAttribute("name", activity.uri);
                 if (activity instanceof EndEvent)
                 {
                     eactivity.addAttribute("name", "EndActivity");
@@ -315,6 +357,7 @@ public class Modeler extends CustomNode
                 else if (activity instanceof Task)
                 {
                     var task:Task=activity as Task;
+                    eactivity.addAttribute("title", task.title);
                     eactivity.addAttribute("type", "Activity");
                     eactivity.addAttribute("days", String.valueOf(task.days));
                     eactivity.addAttribute("hours", String.valueOf(task.hours));
@@ -429,7 +472,7 @@ public class Modeler extends CustomNode
 
         }
         
-        println(node.toString());
+        println(node.getXML());
 
         
     }
