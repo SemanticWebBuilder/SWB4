@@ -18,8 +18,6 @@ import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import applets.commons.WBConnection;
-import applets.commons.WBTreeNode;
-import applets.commons.WBXMLParser;
 
 public var counter: Integer;
 public var conn: WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(), FX.getArgument(WBConnection.PRM_CGIPATH).toString(), FX.getProperty("javafx.application.codebase"));
@@ -67,9 +65,9 @@ public class ToolBar extends CustomNode {
                         }
                     },
                     ImgButton {
-                        text: "SequenceFlow"
-                        image: "images/flow_1.png"
-                        imageOver: "images/flow_2.png"
+                        text: "AuthorizeFlow"
+                        image: "images/flow_a_1.png"
+                        imageOver: "images/flow_a_2.png"
                         action: function (): Void {
                             modeler.disablePannable = true;
                             modeler.tempNode = AuthorizeLink {
@@ -79,9 +77,9 @@ public class ToolBar extends CustomNode {
                         }
                     },
                     ImgButton {
-                        text: "SequenceFlow"
-                        image: "images/flow_1.png"
-                        imageOver: "images/flow_2.png"
+                        text: "UnAuthorizeFlow"
+                        image: "images/flow_u_1.png"
+                        imageOver: "images/flow_u_2.png"
                         action: function (): Void {
                             modeler.disablePannable = true;
                             modeler.tempNode = NoAuthorizeLink {
@@ -213,7 +211,8 @@ public class ToolBar extends CustomNode {
                                     }
                                 }
                             ]
-                        }
+                        },
+                        submenuLines.subBar
                     ]
                     cursor: Cursor.HAND;
                 };
