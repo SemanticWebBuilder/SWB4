@@ -11,8 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
 import org.semanticwb.publishflow.FlowObject;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;

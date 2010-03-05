@@ -31,6 +31,7 @@ public class Task extends FlowObject {
 
     public override function create(): Node {
             super.create();
+            tooltip="ffffddd";
         cursor = Cursor.HAND;
         w = 100;
         h = 60;

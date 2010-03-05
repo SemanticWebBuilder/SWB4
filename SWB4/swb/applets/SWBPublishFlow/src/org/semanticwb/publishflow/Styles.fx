@@ -31,6 +31,9 @@ public-read var color_interEvent="#5e7a9e";
 public-read var color_gateway="#cc9900";
 
 public-read var style_infoWorkflow="fill: #F8F8F8  ; stroke: #404040; strokeWidth: 2; arcWidth: 5; arcHeight: 5;";
+
+public-read var style_tooltip="fill: #FFFF66; stroke: #000000; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
+
 public-read var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
 public-read var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000;font-weight: bold;";
 public-read var style_label_name_workflow="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; focus-fill:transparent; shadow-fill:transparent";
