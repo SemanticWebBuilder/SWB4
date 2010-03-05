@@ -44,8 +44,8 @@ public class jTableRolesModel extends AbstractTableModel{
     /** Creates a new instance of jTableActivities */
      public jTableRolesModel(Locale locale)
      {
-         columnNames[0]=java.util.ResourceBundle.getBundle("jTableRolesModel",locale).getString("Rol");
-         columnNames[1]=java.util.ResourceBundle.getBundle("jTableRolesModel",locale).getString("Utilizar");
+         columnNames[0]=java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/jTableRolesModel",locale).getString("Rol");
+         columnNames[1]=java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/jTableRolesModel",locale).getString("Utilizar");
     }
     public void addRole(Role role)
     {

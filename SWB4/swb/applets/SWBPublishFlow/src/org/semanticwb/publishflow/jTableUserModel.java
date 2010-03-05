@@ -46,8 +46,8 @@ public class jTableUserModel extends AbstractTableModel{
     /** Creates a new instance of jTableActivities */
      public jTableUserModel(Locale locale)
      {
-         columnNames[0]=java.util.ResourceBundle.getBundle("jTableUserModel",locale).getString("User");
-         columnNames[1]=java.util.ResourceBundle.getBundle("jTableUserModel",locale).getString("Utilizar");
+         columnNames[0]=java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/jTableUserModel",locale).getString("User");
+         columnNames[1]=java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/jTableUserModel",locale).getString("Utilizar");
      }
      public void clear()
      {
