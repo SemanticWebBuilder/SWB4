@@ -34,11 +34,11 @@ public class DialogEditActivity extends javax.swing.JDialog {
     String name,description;
     Locale locale=new Locale("es");
     WBConnection con;
-    Sequence roles;
-    Sequence users;
+    Sequence<? extends java.lang.String> roles;
+    Sequence<? extends java.lang.String> users;
 
     /** Creates new form DialogEditActivity */
-    public DialogEditActivity(String name,String description,WBConnection con,Sequence<String> users,Sequence<String> roles) {
+    public DialogEditActivity() {
         super((Frame) null, true);
         try
         {
@@ -48,30 +48,22 @@ public class DialogEditActivity extends javax.swing.JDialog {
         {
             // No debe hacer nada
             System.out.println(ue.getMessage());
-        }        
-        this.users=users;
-        this.roles=roles;
-
-
+        }
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.setModal(true);
+    }
+    public void init()
+    {
         this.jTextFieldName.setText(name);
         this.jTextAreaDescription.setText(description);
-
-        this.con=con;
         if(con!=null && con.getApplet()!=null && con.getApplet().getParameter("locale")!=null && !con.getApplet().getParameter("locale").trim().equals(""))
         {
             this.locale = new Locale(con.getApplet().getParameter("locale"));
         }
-        
-
-        initComponents();
-        this.setLocationRelativeTo(null);
-        this.setModal(true);
         this.jTextFieldName.grabFocus();
-        this.name=name;
         loadRoles();
         loadUsers();
-
-
         jTableRolesModel rolemodel=(jTableRolesModel)this.jTableRoles.getModel();
         for(String srole : roles)
         {
@@ -112,6 +104,34 @@ public class DialogEditActivity extends javax.swing.JDialog {
                 }
             }
         }
+    }
+    public DialogEditActivity(String name,String description,WBConnection con,Sequence<String> users,Sequence<String> roles) {
+        super((Frame) null, true);
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ue)
+        {
+            // No debe hacer nada
+            System.out.println(ue.getMessage());
+        }        
+        this.users=users;
+        this.roles=roles;
+
+
+        
+
+        this.con=con;
+        
+
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.setModal(true);
+        init();
+
+
+        
 
     }
 

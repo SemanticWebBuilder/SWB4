@@ -120,7 +120,7 @@
                 <Component class="javax.swing.JCheckBox" name="jCheckBoxPublicar">
                   <Properties>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-                      <ResourceString bundle="applets/workflowadmin/AddEditActivitySecuence.properties" key="publicar" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;,locale).getString(&quot;{key}&quot;)"/>
+                      <ResourceString bundle="org/semanticwb/publishflow/DialogEditLink_es.properties" key="publicar" replaceFormat="java.util.ResourceBundle.getBundle(&quot;{bundleNameSlashes}&quot;,locale).getString(&quot;{key}&quot;)"/>
                     </Property>
                   </Properties>
                   <Constraints>

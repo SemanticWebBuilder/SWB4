@@ -34,14 +34,19 @@ public class AuthorizeLink extends LinkConnection {
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
             
             var dialogEditLink: DialogEditLink;
-            /*dialogEditLink=new DialogEditLink(true,this.published,ToolBar.conn,users,roles);
+            dialogEditLink=new DialogEditLink();
+            dialogEditLink.published=published;
+            dialogEditLink.roles=roles;
+            dialogEditLink.users=users;
+            dialogEditLink.showPublicar=true;
+            dialogEditLink.init();
             dialogEditLink.setVisible(true);
             if(not dialogEditLink.cancel)
             {
                 this.published=published;
                 this.users=users;
                 this.roles=roles;
-            }*/
+            }
 
         }
     }
