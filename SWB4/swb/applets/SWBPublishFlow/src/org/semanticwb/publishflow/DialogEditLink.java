@@ -35,6 +35,7 @@ public class DialogEditLink extends javax.swing.JDialog
     private Locale locale = new Locale("es");
     boolean published;
     boolean showPublicar;
+
     /** Creates new form DialogEditLink */
     public DialogEditLink()
     {
@@ -52,6 +53,7 @@ public class DialogEditLink extends javax.swing.JDialog
         init();
 
     }
+
     public void init()
     {
         this.jCheckBoxPublicar.setSelected(published);
@@ -107,6 +109,7 @@ public class DialogEditLink extends javax.swing.JDialog
             }
         }
     }
+
     public DialogEditLink(Boolean showPublicar, Boolean published, WBConnection con, Sequence<String> users, Sequence<String> roles)
     {
         super((Frame) null, true);
@@ -120,7 +123,7 @@ public class DialogEditLink extends javax.swing.JDialog
             System.out.println(ue.getMessage());
         }
         initComponents();
-        this.published=published;
+        this.published = published;
         this.users = users;
         this.roles = roles;
 
@@ -132,18 +135,21 @@ public class DialogEditLink extends javax.swing.JDialog
         jTableUserModel model = new jTableUserModel(locale);
         this.jTableUsuarios.setModel(model);
         String tm = con.getApplet().getParameter("tm");
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>" + tm + "</tm></req>";
-        xml = con.getData(xml);
-        WBXMLParser parser = new WBXMLParser();
-        WBTreeNode exml = parser.parse(xml);
-        Iterator eusers = exml.getFirstNode().getNodesbyName("user");
-        while (eusers.hasNext())
+        if (tm != null)
         {
-            WBTreeNode wuser = (WBTreeNode) eusers.next();
-            String id = wuser.getAttribute("id");
-            String oname = wuser.getAttribute("name");
-            User user = new User(id, oname);
-            model.addUser(user);
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>" + tm + "</tm></req>";
+            xml = con.getData(xml);
+            WBXMLParser parser = new WBXMLParser();
+            WBTreeNode exml = parser.parse(xml);
+            Iterator eusers = exml.getFirstNode().getNodesbyName("user");
+            while (eusers.hasNext())
+            {
+                WBTreeNode wuser = (WBTreeNode) eusers.next();
+                String id = wuser.getAttribute("id");
+                String oname = wuser.getAttribute("name");
+                User user = new User(id, oname);
+                model.addUser(user);
+            }
         }
 
     }
@@ -153,19 +159,22 @@ public class DialogEditLink extends javax.swing.JDialog
         jTableRolesModel model = new jTableRolesModel(locale);
         this.jTableRoles.setModel(model);
         String tm = con.getApplet().getParameter("tm");
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";
-        xml = con.getData(xml);
-        WBXMLParser parser = new WBXMLParser();
-        WBTreeNode exml = parser.parse(xml);
-        Iterator eusers = exml.getFirstNode().getNodesbyName("role");
-        while (eusers.hasNext())
+        if (tm != null)
         {
-            WBTreeNode wuser = (WBTreeNode) eusers.next();
-            String id = wuser.getAttribute("id");
-            String oname = wuser.getAttribute("name");
-            String repository = wuser.getAttribute("repository");
-            Role role = new Role(id, oname, repository);
-            model.addRole(role);
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";
+            xml = con.getData(xml);
+            WBXMLParser parser = new WBXMLParser();
+            WBTreeNode exml = parser.parse(xml);
+            Iterator eusers = exml.getFirstNode().getNodesbyName("role");
+            while (eusers.hasNext())
+            {
+                WBTreeNode wuser = (WBTreeNode) eusers.next();
+                String id = wuser.getAttribute("id");
+                String oname = wuser.getAttribute("name");
+                String repository = wuser.getAttribute("repository");
+                Role role = new Role(id, oname, repository);
+                model.addRole(role);
+            }
         }
     }
 
@@ -314,7 +323,7 @@ public class DialogEditLink extends javax.swing.JDialog
     private void jButtonokActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonokActionPerformed
     {//GEN-HEADEREND:event_jButtonokActionPerformed
 
-        this.published=this.jCheckBoxPublicar.isSelected();
+        this.published = this.jCheckBoxPublicar.isSelected();
         jTableRolesModel rolemodel = (jTableRolesModel) this.jTableRoles.getModel();
         jTableUserModel usermodel = (jTableUserModel) this.jTableUsuarios.getModel();
         HashSet<String> oroles = new HashSet<String>();
