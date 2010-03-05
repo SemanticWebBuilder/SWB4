@@ -15,7 +15,7 @@ import java.lang.Math;
 
 public class FlowObject extends GraphElement
 {
-    public-read  var connectionPoints : ConnectionPoint[];
+    protected   var connectionPoints : ConnectionPoint[];
     
     //public var pool : Pool;
     public var dpx : Number;                        //diferencia de pool
