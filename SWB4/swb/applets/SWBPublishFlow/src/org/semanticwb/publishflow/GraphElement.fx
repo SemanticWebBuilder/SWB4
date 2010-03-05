@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
+import org.semanticwb.publishflow.ConnectionObject;
 
 /**
  * @author victor.lorenzana
@@ -129,6 +130,18 @@ public class GraphElement extends CustomNode
         }
     }
 
+
+
+    public function getSequence() : ConnectionObject
+    {
+        SequenceFlow
+        {
+            modeler:modeler
+            uri:"new:flowlink:{ToolBar.counter++}"
+        }
+    }
+
+
     public function mousePressed( e: MouseEvent )
     {
         modeler.focusedNode=this;
@@ -142,11 +155,7 @@ public class GraphElement extends CustomNode
 
         if(e.secondaryButtonDown)
         {
-            var link=SequenceFlow
-            {
-                modeler:modeler
-                uri:"new:flowlink:{ToolBar.counter++}"
-            }
+            var link=getSequence();
             if(canIniLink(link))modeler.tempNode=link;
         }
     }

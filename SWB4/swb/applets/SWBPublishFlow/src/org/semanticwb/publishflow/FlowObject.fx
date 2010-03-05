@@ -194,6 +194,15 @@ public class FlowObject extends GraphElement
     {
         super.remove();
     }
+    override public function canEndLink(link: ConnectionObject): Boolean {
+        if(this==link.ini and this==link.end)
+        {
+            return false;
+        }
+        return true;
+
+    }
+
     override public function canIniLink(link: ConnectionObject): Boolean {
         if(getAvailablePoints()==0)
         {
