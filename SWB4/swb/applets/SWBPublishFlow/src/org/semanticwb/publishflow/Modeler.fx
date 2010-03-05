@@ -16,6 +16,8 @@ import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;
 import org.semanticwb.publishflow.StartEvent;
 import javax.swing.JOptionPane;
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 
 /**
@@ -24,6 +26,7 @@ import javax.swing.JOptionPane;
 
 public class Modeler extends CustomNode
 {
+    var locale:Locale;
     public var width:Number;
     public var height:Number;
     public var contents: Node[];
@@ -288,6 +291,22 @@ public class Modeler extends CustomNode
             }
         }
 
+        if (info.id_workflow != null)
+        {
+            var ask:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("ask1");
+            var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("msg2");
+            var status:Integer = JOptionPane.showConfirmDialog(
+                    null,"{ask}\r\n{msg}",
+                    ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"),
+                    JOptionPane.YES_NO_OPTION+
+                    JOptionPane.QUESTION_MESSAGE);
+            if (status == JOptionPane.NO_OPTION)
+            {
+                return;
+            }
+
+        }
+
         var iniActivity:Task=startEvent.getConnectionObject(0).end as Task;
 
 
@@ -300,7 +319,7 @@ public class Modeler extends CustomNode
         wf.setName("workflow");
         wf.addAttribute("version", info.version);
         wf.addAttribute("canEdit", info.canEdit.toString());
-        if (id != null)
+        if (info.id_workflow != null)
         {
             wf.addAttribute("id", info.id_workflow);
         }
