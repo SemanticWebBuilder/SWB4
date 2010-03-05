@@ -45,6 +45,53 @@ public class ToolBar extends CustomNode {
 
     public override function create(): Node {
         loadProcess();
+        var submenuLines=SubMenu
+        {
+            modeler: modeler
+            text:"SequenceFlow"
+            image: "images/flow_1.png"
+            imageOver: "images/flow_2.png"
+            imageClicked: "images/flow_1.png"
+             buttons: [
+                     ImgButton
+                    {
+                        text: "SequenceFlow"
+                        image: "images/flow_1.png"
+                        imageOver: "images/flow_2.png"
+                        action: function (): Void {
+                            modeler.disablePannable = true;
+                            modeler.tempNode = SequenceFlow {
+                                modeler: modeler
+                                uri: "new:sequenceflow:{counter++}"
+                            }
+                        }
+                    },
+                    ImgButton {
+                        text: "SequenceFlow"
+                        image: "images/flow_1.png"
+                        imageOver: "images/flow_2.png"
+                        action: function (): Void {
+                            modeler.disablePannable = true;
+                            modeler.tempNode = AuthorizeLink {
+                                modeler: modeler
+                                uri: "new:sequenceflow:{counter++}"
+                            }
+                        }
+                    },
+                    ImgButton {
+                        text: "SequenceFlow"
+                        image: "images/flow_1.png"
+                        imageOver: "images/flow_2.png"
+                        action: function (): Void {
+                            modeler.disablePannable = true;
+                            modeler.tempNode = NoAuthorizeLink {
+                                modeler: modeler
+                                uri: "new:sequenceflow:{counter++}"
+                            }
+                        }
+                        }]
+        };
+
         var ret = Group {
                     translateX: bind x
                     translateY: bind y
@@ -158,42 +205,8 @@ public class ToolBar extends CustomNode {
                                         }
                                     }
                                 },
-                                ImgButton {
-                                    text: "SequenceFlow"
-                                    image: "images/flow_1.png"
-                                    imageOver: "images/flow_2.png"
-                                    action: function (): Void {
-                                        modeler.disablePannable = true;
-                                        modeler.tempNode = SequenceFlow {
-                                            modeler: modeler
-                                            uri: "new:sequenceflow:{counter++}"
-                                        }
-                                    }
-                                },
-                                ImgButton {
-                                    text: "SequenceFlow"
-                                    image: "images/flow_1.png"
-                                    imageOver: "images/flow_2.png"
-                                    action: function (): Void {
-                                        modeler.disablePannable = true;
-                                        modeler.tempNode = AuthorizeLink {
-                                            modeler: modeler
-                                            uri: "new:sequenceflow:{counter++}"
-                                        }
-                                    }
-                                },
-                                ImgButton {
-                                    text: "SequenceFlow"
-                                    image: "images/flow_1.png"
-                                    imageOver: "images/flow_2.png"
-                                    action: function (): Void {
-                                        modeler.disablePannable = true;
-                                        modeler.tempNode = NoAuthorizeLink {
-                                            modeler: modeler
-                                            uri: "new:sequenceflow:{counter++}"
-                                        }
-                                    }
-                                },
+                                submenuLines
+                                ,
                                 ImageView {
                                     image: Image {
                                         url: "{__DIR__}images/barra_bottom.png"

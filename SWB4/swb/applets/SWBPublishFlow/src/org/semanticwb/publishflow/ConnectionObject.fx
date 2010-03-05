@@ -36,7 +36,7 @@ public class ConnectionObject extends CustomNode {
     public var text: EditableText;
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
-    
+    public var deleted:Boolean;
     var o: Number = 0.8;                   //opacity
     public var pini: Point = bind getIniConnection(ini) on replace olvalue {
                 replaceIni(olvalue);
@@ -62,8 +62,8 @@ public class ConnectionObject extends CustomNode {
             if (pini instanceof ConnectionPoint) {
                 var cp: ConnectionPoint = pini as ConnectionPoint;
                 if (cp.connectionObject == null) {
-                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if (index >= 0) {
+                    
+                    if (not deleted) {
                         cp.connectionObject = this;
                     }
                 }
@@ -79,9 +79,8 @@ public class ConnectionObject extends CustomNode {
             }
             if (pini instanceof ConnectionPoint) {
                 var cp: ConnectionPoint = pini as ConnectionPoint;
-                if (cp.connectionObject == null) {
-                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if (index >= 0) {
+                if (cp.connectionObject == null) {                    
+                    if (not deleted) {
                         cp.connectionObject = this;
                     }
                 }
@@ -93,9 +92,8 @@ public class ConnectionObject extends CustomNode {
         if (olvalue == pend) {
             if (pend instanceof ConnectionPoint) {
                 var cp: ConnectionPoint = pend as ConnectionPoint;
-                if (cp.connectionObject == null) {
-                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if (index >= 0) {
+                if (cp.connectionObject == null) {                    
+                    if (not deleted) {
                         cp.connectionObject = this;
                     }
                 }
@@ -112,8 +110,8 @@ public class ConnectionObject extends CustomNode {
             if (pend instanceof ConnectionPoint) {
                 var cp: ConnectionPoint = pend as ConnectionPoint;
                 if (cp.connectionObject == null) {
-                    var index: Integer = javafx.util.Sequences.indexOf(modeler.contents, this);
-                    if (index >= 0) {
+                    
+                    if (not deleted) {
                         cp.connectionObject = this;
                     }
                 }
