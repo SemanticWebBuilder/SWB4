@@ -17,6 +17,7 @@ import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.StartEvent;
 import org.semanticwb.publishflow.EndEvent;
 
+
 /**
  * @author victor.lorenzana
  */
@@ -67,7 +68,12 @@ public class Task extends FlowObject {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
             var dialog: DialogEditActivity;            
-            /*dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
+            //dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
+            dialog = new DialogEditActivity();
+            dialog.users=users;
+            dialog.roles=roles;
+            dialog.name=title;
+            dialog.con=ToolBar.conn;
             dialog.setVisible(true);
             if(not dialog.cancel)
             {
@@ -75,7 +81,7 @@ public class Task extends FlowObject {
                 description=dialog.description;
                 users=dialog.users;
                 roles=dialog.roles;
-            }*/
+            }
 
         }
     }

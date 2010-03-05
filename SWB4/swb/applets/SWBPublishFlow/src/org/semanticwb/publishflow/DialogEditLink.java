@@ -30,12 +30,13 @@ public class DialogEditLink extends javax.swing.JDialog
 
     public boolean cancel;
     private WBConnection con;
-    public Sequence<String> users;
-    public Sequence<String> roles;
+    public Sequence<? extends String> users;
+    public Sequence<? extends String> roles;
     private Locale locale = new Locale("es");
     boolean published;
+    boolean showPublicar;
     /** Creates new form DialogEditLink */
-    public DialogEditLink(Boolean showPublicar, Boolean published, WBConnection con, Sequence<String> users, Sequence<String> roles)
+    public DialogEditLink()
     {
         super((Frame) null, true);
         try
@@ -48,7 +49,11 @@ public class DialogEditLink extends javax.swing.JDialog
             System.out.println(ue.getMessage());
         }
         initComponents();
-        this.published=published;
+        init();
+
+    }
+    public void init()
+    {
         this.jCheckBoxPublicar.setSelected(published);
         if (con != null && con.getApplet() != null && con.getApplet().getParameter("locale") != null && !con.getApplet().getParameter("locale").trim().equals(""))
         {
@@ -58,8 +63,7 @@ public class DialogEditLink extends javax.swing.JDialog
         {
             this.jTabbedPane1.remove(this.jPanel9);
         }
-        this.users = users;
-        this.roles = roles;
+
         this.loadRoles();
         this.loadUsers();
         jTableRolesModel rolemodel = (jTableRolesModel) this.jTableRoles.getModel();
@@ -102,6 +106,25 @@ public class DialogEditLink extends javax.swing.JDialog
                 }
             }
         }
+    }
+    public DialogEditLink(Boolean showPublicar, Boolean published, WBConnection con, Sequence<String> users, Sequence<String> roles)
+    {
+        super((Frame) null, true);
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ue)
+        {
+            // No debe hacer nada
+            System.out.println(ue.getMessage());
+        }
+        initComponents();
+        this.published=published;
+        this.users = users;
+        this.roles = roles;
+
+        init();
     }
 
     public void loadUsers()
@@ -219,7 +242,7 @@ public class DialogEditLink extends javax.swing.JDialog
 
         jPanel2.setLayout(null);
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/workflowadmin/AddEditActivitySecuence",locale); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditLink_es",locale); // NOI18N
         jCheckBoxPublicar.setText(bundle.getString("publicar")); // NOI18N
         jPanel2.add(jCheckBoxPublicar);
         jCheckBoxPublicar.setBounds(0, 10, 395, 40);
