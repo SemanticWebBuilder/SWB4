@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 
 public class GraphElement extends CustomNode
 {
+    public var tooltip:String;
     public var modeler:Modeler;
     public var x : Number;
     public var y : Number;
@@ -32,6 +33,8 @@ public class GraphElement extends CustomNode
 
     public var shape : Shape;
     public var text : EditableText;
+
+    var toolobj: Tooltip;
 
     public var stroke=Color.web(Styles.color);
     public var strokeOver=Color.web(Styles.color_over);
@@ -76,6 +79,21 @@ public class GraphElement extends CustomNode
             mouseClicked(e);
         }
     }
+
+    override var onMouseMoved = function ( e: MouseEvent ) : Void
+    {
+        if(modeler.focusedNode==this)
+        {
+            if(toolobj!=null)
+            {
+                toolobj.translateX=modeler.mousex+ e.x;
+                toolobj.translateY=modeler.mousey+ e.y;
+            }
+
+        }
+    }
+
+
 
     public function mouseClicked( e: MouseEvent )
     {
@@ -163,6 +181,17 @@ public class GraphElement extends CustomNode
         modeler.overNode=this;
         shape.stroke=strokeOver;
         shape.strokeWidth=stkwo;
+        
+        if(tooltip!=null)
+        {
+            var toolobj: Tooltip=Tooltip
+            {
+                text:bind tooltip
+                x: 0;
+                y: 0;
+            }
+            insert toolobj into modeler.contents;
+        }
         //overtimer.playFromStart();
         if(modeler.tempNode==null)modeler.disablePannable=true;
     }
@@ -170,6 +199,7 @@ public class GraphElement extends CustomNode
 
     override var onMouseExited = function(e)
     {
+        delete toolobj from modeler.contents;
         mouseExited(e);
     }
 
