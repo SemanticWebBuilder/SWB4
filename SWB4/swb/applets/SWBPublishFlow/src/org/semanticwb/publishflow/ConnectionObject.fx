@@ -37,6 +37,7 @@ public class ConnectionObject extends CustomNode {
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
     public var deleted:Boolean;
+    def offset:Number=10;
     var o: Number = 0.8;                   //opacity
     public var pini: Point = bind getIniConnection(ini) on replace olvalue {
                 replaceIni(olvalue);
@@ -125,24 +126,85 @@ public class ConnectionObject extends CustomNode {
         var mt=MoveTo{x:bind pini.x,y:bind pini.y}
         insert mt into pathElements;
         var lt=LineTo { x: bind pinter1.x, y: bind pinter1.y };
-        insert lt into pathElements;
+        insert lt into pathElements;              
         
-        
-        
-        
-        if(Math.abs(pinter1.y-pinter2.y)==0 or Math.abs(pinter1.x-pinter2.x)==0) 
+        if(Math.abs(pinter1.y-pinter2.y)==0 or Math.abs(pinter1.x-pinter2.x)==0)  // entan alineados
         {
-            if(Math.abs(pinter1.y-pinter2.y)==0 and Math.abs(pinter1.x-pinter2.x)!=0)
+            if(Math.abs(pinter1.y-pinter2.y)==0) // debería ser una linea horizontal
+            {
+                if(pinter2.x-pinter1.x!=0)
+                {
+                    var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);
+                    if(landa>0 and landa<1) // a traviesa en centro de inicio
+                    {
+                        //println("landa y: a traviesa en centro de inicio");
+                        lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+offset };
+                        insert lt into pathElements;
+
+
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter1.y+offset };
+                        insert lt into pathElements;
+
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                        insert lt into pathElements;
+                    }
+                    else
+                    {
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                        insert lt into pathElements;
+                    }
+                }
+                else
+                {
+                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                    insert lt into pathElements;
+                }
+
+
+
+            }
+            else
+            {
+                if(pinter2.y-pinter1.y!=0)
+                {
+                    var landa:Number=(ini.y-pinter1.y)/(pinter2.y-pinter1.y);
+                    if(landa>0 and landa<1) // a traviesa en centro de inicio
+                    {
+                        //println("landa x: a traviesa en centro de inicio");
+                        lt=LineTo { x: bind pinter1.x+offset, y: bind pinter1.y };
+                        insert lt into pathElements;
+
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                        insert lt into pathElements;
+                    }
+                    else
+                    {
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                        insert lt into pathElements;
+                    }
+                }
+                else
+                {
+                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                    insert lt into pathElements;
+                }
+
+
+            }
+
+
+
+            /*if(Math.abs(pinter1.y-pinter2.y)==0 and Math.abs(pinter1.x-pinter2.x)!=0)
             {
                     var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);                    
                     if(landa>0 and landa<1) // a traviesa en centro de inicio
                     {
                         //println("landa y: a traviesa en centro de inicio");
-                        lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+20 };
+                        lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+offset };
                         insert lt into pathElements;
 
 
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter1.y+20 };
+                        lt=LineTo { x: bind pinter2.x, y: bind pinter1.y+offset };
                         insert lt into pathElements;
 
                         lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
@@ -164,7 +226,7 @@ public class ConnectionObject extends CustomNode {
                 if(landa>0 and landa<1) // a traviesa en centro de inicio
                 {
                     //println("landa x: a traviesa en centro de inicio");
-                    lt=LineTo { x: bind pinter1.x+20, y: bind pinter1.y };
+                    lt=LineTo { x: bind pinter1.x+offset, y: bind pinter1.y };
                     insert lt into pathElements;
 
                     lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
@@ -180,11 +242,7 @@ public class ConnectionObject extends CustomNode {
             {
                  lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                  insert lt into pathElements;
-            }
-
-
-
-            
+            }*/
         }
         else
         {
@@ -365,7 +423,7 @@ public bound function getEndConnection(end: FlowObject): Point
                 {
                     Point
                     {
-                        x: pini.x+20;
+                        x: pini.x+offset;
                         y: pini.y
                     }
                 }
@@ -376,7 +434,7 @@ public bound function getEndConnection(end: FlowObject): Point
                             Point
                             {
                                 x: pini.x;
-                                y: pini.y+20
+                                y: pini.y+offset
                             }
                         }
                         else // punto 1
@@ -384,7 +442,7 @@ public bound function getEndConnection(end: FlowObject): Point
                             Point
                             {
                                 x: pini.x;
-                                y: pini.y-20
+                                y: pini.y-offset
                             }
                         }
 
@@ -394,40 +452,10 @@ public bound function getEndConnection(end: FlowObject): Point
                 {
                     Point
                     {
-                        x: pini.x-20;
+                        x: pini.x-offset;
                         y: pini.y
                     }
                 }
-
-
-                /*if(pend.y==pini.y and pend.y>end.y)
-                {
-                    Point{
-                            x:pini.x;
-                            y:pini.y+20;
-                        }
-                }
-                else if(pend.y==pini.y and pend.y<end.y)
-                {
-                    Point{
-                            x:pini.x;
-                            y:pini.y-20;
-                        }
-                }
-                else if(ini.y!=pini.y)
-                {
-                        Point{
-                            x:pini.x;
-                            y:pini.y+(pend.y-pini.y)/2;
-                        }
-                }else
-                {
-                        Point{
-                            x:pini.x+(pend.x-pini.x)/2;
-                            y:pini.y;
-                        }
-
-                }*/
         }
         else
         {
@@ -446,7 +474,7 @@ public bound function getEndConnection(end: FlowObject): Point
                 {
                     Point
                     {
-                        x: pend.x+20;
+                        x: pend.x+offset;
                         y: pend.y
                     }
                 }
@@ -457,7 +485,7 @@ public bound function getEndConnection(end: FlowObject): Point
                             Point
                             {
                                 x: pend.x;
-                                y: pend.y+20
+                                y: pend.y+offset
                             }
                         }
                         else // punto 1
@@ -465,7 +493,7 @@ public bound function getEndConnection(end: FlowObject): Point
                             Point
                             {
                                 x: pend.x;
-                                y: pend.y-20
+                                y: pend.y-offset;
                             }
                         }
 
@@ -475,7 +503,7 @@ public bound function getEndConnection(end: FlowObject): Point
                 {
                     Point
                     {
-                        x: pend.x-20;
+                        x: pend.x-offset;
                         y: pend.y
                     }
                 }            

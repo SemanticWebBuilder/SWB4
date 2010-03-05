@@ -14,6 +14,8 @@ import org.semanticwb.publishflow.FlowObject;
 import javafx.scene.Group;
 import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;
+import org.semanticwb.publishflow.StartEvent;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -223,6 +225,33 @@ public class Modeler extends CustomNode
 
     public function save() : Void
     {
+        var startEvent:StartEvent;
+        for(content in contents)
+        {
+            if(content instanceof StartEvent)
+            {
+                startEvent=content as StartEvent;
+                break;
+            }
+        }
+        if(startEvent==null)
+        {
+            JOptionPane.showMessageDialog(null, "Debe indicar un nodo de inicio", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(startEvent.getBusyPoints()==0)
+        {
+            JOptionPane.showMessageDialog(null, "Debe inidicar cual es la actividad inicial", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+            startEvent.requestFocus();
+            return;
+        }
+
+        var iniActivity:Task=startEvent.getConnectionObject(0).end as Task;
+
+
+
+
+
         var  parse : WBXMLParser = new WBXMLParser();
         var  node: WBTreeNode = parse.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         var wf:WBTreeNode = node.addNode();
@@ -237,12 +266,40 @@ public class Modeler extends CustomNode
         var desc: WBTreeNode = wf.addNode();
         desc.setName("description");
         desc.setText(info.description.trim());
+        var eactivity : WBTreeNode = wf.addNode();
+        eactivity.setName("activity");
+        eactivity.addAttribute("name", iniActivity.title);
+        eactivity.addAttribute("type", "Activity");
+        eactivity.addAttribute("days", String.valueOf(iniActivity.days));
+        eactivity.addAttribute("hours", String.valueOf(iniActivity.hours));
+        var edesc : WBTreeNode = eactivity.addNode();
+        edesc.setName("description");
+        edesc.setText(iniActivity.description);
+        for(svalue in iniActivity.roles)
+        {
+            var values:String[]=svalue.split("@");
+            var erole : WBTreeNode = eactivity.addNode();
+            erole.setName("role");
+            erole.addAttribute("id", values[0]);
+            erole.addAttribute("name", values[2]);
+            erole.addAttribute("repository",values[1]);
+        }
+        for(svalue in iniActivity.users)
+        {
+            var values:String[]=svalue.split("@");
+            var euser: WBTreeNode = eactivity.addNode();
+            euser.setName("user");
+            euser.addAttribute("id", values[0]);
+            euser.addAttribute("name", values[1]);
+        }
         for(content in contents)
         {
             if(content instanceof FlowObject)
             {
+                if(iniActivity!=content)
+                {
                 var activity:FlowObject=content as FlowObject;
-                var eactivity : WBTreeNode = wf.addNode();
+                eactivity = wf.addNode();
                 eactivity.setName("activity");
                 eactivity.addAttribute("name", activity.title);
                 if (activity instanceof EndEvent)
@@ -261,7 +318,7 @@ public class Modeler extends CustomNode
                     eactivity.addAttribute("type", "Activity");
                     eactivity.addAttribute("days", String.valueOf(task.days));
                     eactivity.addAttribute("hours", String.valueOf(task.hours));
-                    var edesc : WBTreeNode = eactivity.addNode();
+                    edesc = eactivity.addNode();
                     edesc.setName("description");
                     edesc.setText(task.description);
                     for(svalue in task.roles)
@@ -281,6 +338,7 @@ public class Modeler extends CustomNode
                         euser.addAttribute("id", values[0]);
                         euser.addAttribute("name", values[1]);
                     }
+                }
                 }
             }
         }
@@ -370,7 +428,8 @@ public class Modeler extends CustomNode
             }
 
         }
-
+        
+        println(node.toString());
 
         
     }

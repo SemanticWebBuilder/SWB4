@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.text.Text;
 
 /**
  * @author victor.lorenzana
@@ -79,8 +78,7 @@ public class GraphElement extends CustomNode
     }
 
     public function mouseMoved( e: MouseEvent )
-    {
-            println("mouse moved");
+    {            
         if(toolobj!=null)
         {
             toolobj.x=e.x;
@@ -187,7 +185,7 @@ public class GraphElement extends CustomNode
         shape.stroke=strokeOver;
         shape.strokeWidth=stkwo;
         
-        if(toolobj==null)
+        if(toolobj==null and tooltip!=null)
         {
             toolobj=Tooltip
             {
