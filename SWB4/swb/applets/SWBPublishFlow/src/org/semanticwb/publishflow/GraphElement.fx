@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
 
 /**
  * @author victor.lorenzana
@@ -69,9 +70,24 @@ public class GraphElement extends CustomNode
             width: bind w;
             height: bind h;
         }
+        this.onMouseMoved=function ( e: MouseEvent ) : Void
+        {
+            mouseMoved(e);
+        }
+
         return text;
     }
 
+    public function mouseMoved( e: MouseEvent )
+    {
+            println("mouse moved");
+        if(toolobj!=null)
+        {
+            toolobj.x=e.x;
+            toolobj.y=e.y;
+        }
+
+    }
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
         if(modeler.focusedNode==this)
@@ -80,18 +96,7 @@ public class GraphElement extends CustomNode
         }
     }
 
-    override var onMouseMoved = function ( e: MouseEvent ) : Void
-    {
-        if(modeler.focusedNode==this)
-        {
-            if(toolobj!=null)
-            {
-                toolobj.translateX=modeler.mousex+ e.x;
-                toolobj.translateY=modeler.mousey+ e.y;
-            }
-
-        }
-    }
+    
 
 
 
@@ -182,16 +187,16 @@ public class GraphElement extends CustomNode
         shape.stroke=strokeOver;
         shape.strokeWidth=stkwo;
         
-        if(tooltip!=null)
+        if(toolobj==null)
         {
-            var toolobj: Tooltip=Tooltip
+            toolobj=Tooltip
             {
-                text:bind tooltip
-                x: 0;
-                y: 0;
-            }
-            insert toolobj into modeler.contents;
+                text: tooltip
+                x: modeler.mousex;
+                y: modeler.mousey;
+            }            
         }
+        insert toolobj into modeler.contents;
         //overtimer.playFromStart();
         if(modeler.tempNode==null)modeler.disablePannable=true;
     }
@@ -199,7 +204,10 @@ public class GraphElement extends CustomNode
 
     override var onMouseExited = function(e)
     {
-        delete toolobj from modeler.contents;
+        if(toolobj!=null)
+        {
+            delete toolobj from modeler.contents;
+        }
         mouseExited(e);
     }
 

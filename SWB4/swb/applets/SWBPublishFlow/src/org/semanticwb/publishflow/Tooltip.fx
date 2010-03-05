@@ -8,48 +8,47 @@ package org.semanticwb.publishflow;
 import javafx.scene.CustomNode;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.scene.layout.Stack;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * @author victor.lorenzana
  */
 
-public class Tooltip extends CustomNode{
-
-    public var text : String;
-    public var x : Number;
-    public var y : Number;
-    public var w : Number=100;
-    public var h : Number=15;
-    public override function create(): Node
-    {
-        var group:Group;
-         var shape : Rectangle = Rectangle {
-            x: bind x
-            y: bind y
-            width: w
-            height: h
-            style: Styles.style_tooltip
-            opacity: 0.5
-            smooth: true;
-        };
-        var labelname: Text=Text
-        {
-            content:bind text;
-            x:bind x;
-            y: bind y;
-        }
-        group=Group
-        {
-            content: [Stack
-            {
-                content: [shape,labelname]
-            }]
+public class Tooltip extends CustomNode {
+    public var x:Number;
+    public var y:Number;
+    public-init var text:String;
+    var _root: Group;
+    var t:Text;
+    var r:Rectangle;    
+    function initializeCustomNode():Void {
+        _root = Group {
+            content: [
+                r=Rectangle {
+                    style:Styles.style_tooltip
+                    x: bind x+13
+                    y: bind y+6
+                //Bind the rectangle width with the Text width.
+                    width: bind t.boundsInParent.width+5
+                    height: bind t.boundsInParent.height+5
+                },
+                t = Text {
+                    x:bind r.x+3;
+                    y:bind r.y+10;
+                    content:text
+                    font: Font {size:10 name:"Verdana"}
+                }
+            ]
         }
 
-        return group;
+    }
+    protected override function create() : Node {
+        if (_root == null) {
+            initializeCustomNode();
+        }
+        return _root;
     }
 }

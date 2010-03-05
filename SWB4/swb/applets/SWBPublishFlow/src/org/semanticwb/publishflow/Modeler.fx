@@ -156,10 +156,15 @@ public class Modeler extends CustomNode
                      }
                  }
              }
-//             onKeyTyped: function( e: KeyEvent ):Void
-//             {
-//                 println(e);
-//             }
+             onMouseMoved:function( e: MouseEvent ):Void
+             {
+                 if(overNode!=null)
+                 {
+                     overNode.mouseMoved(e);
+                 }
+
+             }
+
          };
 
          return clipView;
