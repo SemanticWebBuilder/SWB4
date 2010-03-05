@@ -47,11 +47,8 @@ public class ConnectionObject extends CustomNode {
     var pinter1: Point = bind getInterFirstConnection(pini,pend);
     var pinter2: Point = bind getInterLastConnection(pini,pend);
 
-    var elements:PathElement[] =bind getPoints(pini,pend,pinter1,pinter2) on replace oldvalue
-            {
-                    println("elements path {sizeof elements}");
-
-            };
+    var elements:PathElement[] =bind getPoints(pini,pend,pinter1,pinter2);
+    
     var path: Path= Path {
             elements: bind {elements}
             style: bind color with inverse;
@@ -139,11 +136,10 @@ public class ConnectionObject extends CustomNode {
         {
             if(Math.abs(pinter1.y-pinter2.y)==0 and Math.abs(pinter1.x-pinter2.x)!=0)
             {
-                    var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);
-                    println("landa y : {landa}");
+                    var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);                    
                     if(landa>0 and landa<1) // a traviesa en centro de inicio
                     {
-                        println("landa y: a traviesa en centro de inicio");
+                        //println("landa y: a traviesa en centro de inicio");
                         lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+20 };
                         insert lt into pathElements;
 
@@ -166,10 +162,10 @@ public class ConnectionObject extends CustomNode {
             else if( Math.abs(pinter1.x-pinter2.x)==0 and Math.abs(pinter1.y-pinter2.y)!=0)
             {
                 var landa:Number=(ini.y-pinter1.y)/(pinter2.y-pinter1.y);
-                println("landa x: {landa}");
+                //println("landa x: {landa}");
                 if(landa>0 and landa<1) // a traviesa en centro de inicio
                 {
-                    println("landa x: a traviesa en centro de inicio");
+                    //println("landa x: a traviesa en centro de inicio");
                     lt=LineTo { x: bind pinter1.x+20, y: bind pinter1.y };
                     insert lt into pathElements;
 
