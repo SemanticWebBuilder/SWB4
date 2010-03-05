@@ -8,13 +8,15 @@ package org.semanticwb.publishflow;
 
 import javafx.scene.CustomNode;
 import javafx.scene.Node;
-import javafx.scene.Group;
 import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.publishflow.FlowObject;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import applets.commons.WBTreeNode;
 import applets.commons.WBXMLParser;
-import org.semanticwb.publishflow.EndEvent;
-import org.semanticwb.publishflow.FlowObject;
+
 
 /**
  * @author victor.lorenzana
@@ -33,21 +35,35 @@ public class Modeler extends CustomNode
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
-    public var clipView:ClipView;
-    var version:String;
+    public var clipView:ClipView;   
+    
+    var version:String="1.0";
     var canEdit:Boolean;
     var id_workflow:String;
-    var name:String;
-    var description:String;
-    //public var overPool: Pool;                          //Nodo temporal por toolbar
+    var name:String="workflow";
+    var description:String="workflow";
+    
 
+
+    
     public override function create(): Node
     {
+        var info:Rectangle=Rectangle
+        {
+                height:100;
+                width:300;
+                x:bind {width-300-10};
+                y:bind {height-100-10}
+                cursor:Cursor.HAND
+                style:Styles.style_pool
+        }
+        
+        insert info into contents;
+
          clipView=ClipView
          //var ret=ScrollPane
          {
-             node:Group
-             //content:Group
+             node:Group             
              {
                  content: bind contents
              }
@@ -55,6 +71,7 @@ public class Modeler extends CustomNode
              height:bind height
              pannable: bind pannable and not disablePannable
              //translateX:40;
+            
              onMousePressed: function( e: MouseEvent ):Void
              {
                 //println("onMousePressed modeler:{e}");
@@ -90,9 +107,7 @@ public class Modeler extends CustomNode
                     if(close)
                     {
                         tempNode=null;
-                        disablePannable=false;
-                        //println(e);
-                        //println(tempNode);
+                        disablePannable=false;                        
                     }
                 }
              }
@@ -147,6 +162,7 @@ public class Modeler extends CustomNode
 //                 println(e);
 //             }
          };
+
          return clipView;
     }
 

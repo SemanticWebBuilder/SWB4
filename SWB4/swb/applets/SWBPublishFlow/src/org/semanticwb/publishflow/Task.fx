@@ -67,7 +67,7 @@ public class Task extends FlowObject {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
             var dialog: DialogEditActivity;            
-            dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
+            /*dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
             dialog.setVisible(true);
             if(not dialog.cancel)
             {
@@ -75,7 +75,7 @@ public class Task extends FlowObject {
                 description=dialog.description;
                 users=dialog.users;
                 roles=dialog.roles;
-            }
+            }*/
 
         }
     }
