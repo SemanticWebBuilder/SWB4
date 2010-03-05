@@ -44,7 +44,10 @@ import org.semanticwb.model.SWBModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SWBIndexMgr.
+ * Manager for the {@link SWBIndexer}s used by Semantic WebBuilder.
+ * <p>
+ * Administrador para los indexadores ({@link SWBIndexers}) usados por
+ * Semantic WebBuilder.
  * 
  * @author Javier Solis Gonzalez
  */
@@ -71,7 +74,9 @@ public class SWBIndexMgr implements SWBAppObject
 
     
     /**
-     * Creates a new instance of WBIndexMgr.
+     * Creates a new instance of SWBIndexMgr.
+     * <p>
+     * Crea una nueva instancia de SWBIndexMgr.
      */
     public SWBIndexMgr()
     {
@@ -293,8 +298,12 @@ public class SWBIndexMgr implements SWBAppObject
     }
     
     /**
-     * Getter for property indexers.
-     * @return Value of property indexers.
+     * Gets all the {@link SWBIndexer}s registered in the Manager.
+     * <p>
+     * Obtiene todos los indexadores registrados en el administrador.
+     *
+     * @return  Map with the registered {@link SWBIndexer}s. Mapa con los
+     *          {@link SWBIndexer}s registrados.
      */
     public java.util.HashMap getIndexers()
     {
@@ -302,10 +311,13 @@ public class SWBIndexMgr implements SWBAppObject
     }
     
     /**
-     * Gets the indexer.
+     * Gets a specific {@link SWBIndexer} with the given name.
+     * <p>
+     * Obtiene un {@link SWBIndexer} con el nombre especificado.
      * 
-     * @param name the name
-     * @return the indexer
+     * @param name  the name of the requested {@link SWBIndexer}. Nombre del
+     *              {@link SWBIndexer} requerido.
+     * @return      the {@link SWBIndexer}.
      */
     public SWBIndexer getIndexer(String name)
     {
@@ -313,10 +325,12 @@ public class SWBIndexMgr implements SWBAppObject
     }    
     
     /**
-     * Gets the model indexer.
+     * Gets the {@link SWBIndexer} for the specified {@link SWBModel}.
+     * <p>
+     * Obtiene el {@link SWBIndexer} para el modelo especificado.
      * 
-     * @param model the model
-     * @return the model indexer
+     * @param   model the model.
+     * @return  the model indexer.
      */
     public SWBIndexer getModelIndexer(SWBModel model)
     {
@@ -339,9 +353,12 @@ public class SWBIndexMgr implements SWBAppObject
     }        
 
     /**
-     * Gets the default indexer.
+     * Gets the default {@link SWBIndexer} for Semantic WebBuilder.
+     * <p>
+     * Obtiene el {@link SWBIndexer} definido como indexador predeterminado para
+     * Semantic WebBuilder.
      * 
-     * @return the default indexer
+     * @return the default indexer.
      */
     public SWBIndexer getDefaultIndexer()
     {
