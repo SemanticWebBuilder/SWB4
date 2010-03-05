@@ -36,27 +36,28 @@ public class Modeler extends CustomNode
     public var mousex:Number;
     public var mousey:Number;
     public var clipView:ClipView;   
+
+    public var info:WorkFlowInfo=WorkFlowInfo
+    {
+        w:200
+        h:100
+        x:bind width-205;
+        y:bind height-105;
+        canEdit:false;
+        description:"workflow 1.0"
+        name:"workflow 1.0"
+        id_workflow:"1";
+        version:"1.0"
+    }
+
+
     
-    var version:String="1.0";
-    var canEdit:Boolean;
-    var id_workflow:String;
-    var name:String="workflow";
-    var description:String="workflow";
     
 
 
     
     public override function create(): Node
     {
-        var info:Rectangle=Rectangle
-        {
-                height:100;
-                width:300;
-                x:bind {width-300-10};
-                y:bind {height-100-10}
-                cursor:Cursor.HAND
-                style:Styles.style_pool
-        }
         
         insert info into contents;
 
@@ -223,16 +224,16 @@ public class Modeler extends CustomNode
         var  node: WBTreeNode = parse.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         var wf:WBTreeNode = node.addNode();
         wf.setName("workflow");
-        wf.addAttribute("version", version);
-        wf.addAttribute("canEdit", canEdit.toString());
+        wf.addAttribute("version", info.version);
+        wf.addAttribute("canEdit", info.canEdit.toString());
         if (id != null)
         {
-            wf.addAttribute("id", id_workflow);
+            wf.addAttribute("id", info.id_workflow);
         }
-        wf.addAttribute("name", name);
+        wf.addAttribute("name", info.name);
         var desc: WBTreeNode = wf.addNode();
         desc.setName("description");
-        desc.setText(description.trim());
+        desc.setText(info.description.trim());
         for(content in contents)
         {
             if(content instanceof FlowObject)
