@@ -397,6 +397,7 @@ public class Modeler extends CustomNode
         if(obj instanceof ConnectionObject)
         {
             var con=obj as ConnectionObject;
+            con.deleted=true;
             if(con.ini!=null)
             {
                 for(cp in con.ini.connectionPoints)
