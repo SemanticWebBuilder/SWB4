@@ -102,7 +102,29 @@ public class Task extends FlowObject {
                 };
     }
 
-    
+    public override function getSequence() : ConnectionObject
+    {
+        if(not hasIniAuthorizeLink())
+        {
+            AuthorizeLink
+            {
+                modeler:modeler;
+                uri:"new:flowlink:{ToolBar.counter++}"
+            }
+
+        }
+        else
+        {
+            NoAuthorizeLink
+            {
+                modeler:modeler;
+                uri:"new:flowlink:{ToolBar.counter++}"
+            }
+        }
+
+
+    }
+
     public override function mouseClicked(e: MouseEvent)
       {
         super.mouseClicked(e);
