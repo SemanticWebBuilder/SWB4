@@ -29,12 +29,14 @@ public class Task extends FlowObject {
     public var days:Integer;
     public var hours:Integer;
 
+    
     public override function create(): Node {
             super.create();
-            tooltip="ffffddd";
+            
         cursor = Cursor.HAND;
         w = 100;
         h = 60;
+        tooltip=title;
         text = EditableText {
             text: bind title with inverse
             x: bind x
