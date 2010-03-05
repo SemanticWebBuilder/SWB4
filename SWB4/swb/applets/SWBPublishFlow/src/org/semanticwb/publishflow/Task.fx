@@ -16,6 +16,7 @@ import org.semanticwb.publishflow.AuthorizeLink;
 import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.StartEvent;
 import org.semanticwb.publishflow.EndEvent;
+import org.semanticwb.publishflow.ConnectionPoint;
 
 
 /**
@@ -54,6 +55,42 @@ public class Task extends FlowObject {
             style: Styles.style_task
             smooth: true;
         };
+        // add connectionPoints
+
+        var cp:ConnectionPoint=ConnectionPoint
+        {
+            id:"5"
+            x:bind {x}-w/2;
+            y:bind {y}-h/2;
+        };
+        insert cp into connectionPoints;
+
+
+        cp=ConnectionPoint
+        {
+            id:"6"
+            x:bind {x}+w/2;
+            y:bind {y}-h/2;
+        };
+        insert cp into connectionPoints;
+
+        cp=ConnectionPoint
+        {
+            id:"7"
+            x:bind {x}-w/2;
+            y:bind {y}+h/2;
+        };
+        insert cp into connectionPoints;
+
+
+        cp=ConnectionPoint
+        {
+            id:"8"
+            x:bind {x}+w/2;
+            y:bind {y}+h/2;
+        };
+        insert cp into connectionPoints;
+
         return Group {
                     content: [
                         shape, text
