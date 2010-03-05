@@ -26,6 +26,11 @@ public class StartEvent extends Event
         {
             return false;
         }
+        if(getAvailablePoints()==3)
+        {
+            return false;
+        }
+
         return true;
     }
     override public function canEndLink(link:ConnectionObject) : Boolean
