@@ -26,7 +26,7 @@ public class StartEvent extends Event
         {
             return false;
         }
-        if(getAvailablePoints()==3)
+        if(getBusyPoints()==1)
         {
             return false;
         }

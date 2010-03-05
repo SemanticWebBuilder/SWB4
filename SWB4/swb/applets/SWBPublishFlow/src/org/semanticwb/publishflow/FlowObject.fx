@@ -76,6 +76,20 @@ public class FlowObject extends GraphElement
         return count;
 
     }
+    public function getBusyPoints() : Integer
+    {
+        var count:Integer=0;
+        for(cpoint in connectionPoints)
+        {
+            if(cpoint.connectionObject!=null)
+            {
+                count++;
+            }
+        }
+
+        return count;
+
+    }
 
 
     public function getConnectionObject(index:Integer) : ConnectionObject
