@@ -39,12 +39,12 @@ public class Modeler extends CustomNode
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
-    public var clipView:ClipView;   
-
+    public var clipView:ClipView;
+    public var tm:String;
     public var info:WorkFlowInfo=WorkFlowInfo
     {
         w:200
-        h:100
+        h:110
         x:bind width-205;
         y:bind height-105;
         canEdit:false;
@@ -179,83 +179,49 @@ public class Modeler extends CustomNode
          return clipView;
     }
 
-    public function load(home: String)
+     public function loadWorkflow(id : String) : Void
     {
-        /*
-        var t1= Task {
-            x : 50, y : 100
-            title : "Tarea 1"
-            uri : "task1"
-            //cursor:Cursor.CROSSHAIR;
-        };
-
-        var t2= SubProcess {
-            x : 100, y : 100
-            title : "Javier Solis Gonzalez"
-            uri : "task2"
-        };
-
-        var se= StartEvent {
-            x : 200, y : 100
-            title : "Inicio"
-            uri : "ini1"
-        };
-
-        var ee= EndEvent {
-            x : 250, y : 100
-            title : "Inicio"
-            uri : "end1"
-        };
-
-        var p1= Pool {
-            x : 400, y : 300
-            title : "Pool"
-            uri : "pool"
-        };
-        add(p1);
-
-        add(ANDGateWay {
-            x : 300, y : 100
-            uri : "gateway1"
-        });
-
-        t1.pool=p1;
-
-
-        add(t1);
-        add(t2);
-        add(se);
-        add(ee);
-        */
-        //addRelation("home","padre1","Hijo","Padre");
-    }
-    /*public function checkAisled(object: FlowObject): FlowObject
-    {
-        for(cp in object.connectionPoints)
+        var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id}</id><tm>{tm}</tm></req>";
+        var respxml : String= ToolBar.conn.getData(xml);
+        var parser : WBXMLParser= new WBXMLParser();
+        var exml:WBTreeNode = parser.parse(respxml);
+        if (exml.getFirstNode() != null and exml.getFirstNode().getFirstNode() != null)
         {
-            if(cp.connectionObject!=null)
+            var eworkflow:WBTreeNode = exml.getFirstNode().getFirstNode();
+            if (eworkflow.getName().equals("workflow"))
             {
-                var co:ConnectionObject=cp.connectionObject as ConnectionObject;
-                if(co.end==object and co.ini!=null and (co.ini instanceof Task or co.ini instanceof StartEvent))
+                info.name=eworkflow.getAttribute("name");
+                info.version=eworkflow.getAttribute("version");
+                if(eworkflow.getAttribute("canEdit")!=null and not eworkflow.getAttribute("canEdit").equals("") and eworkflow.getAttribute("canEdit").equals("true"))
                 {
-                    if(co.ini instanceof Task)
-                    {
-                        var ret:FlowObject= checkAisled(co.ini);
-                        JOptionPane.showMessageDialog(null, "La actividad {co.ini} no tiene", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
-                        return;
-                        return ret;
-                    }
-                    else
-                    {
-                        return co.ini;
-                    }
+                    info.canEdit=true;
                 }
+                var edescription:WBTreeNode=eworkflow.getNodebyName("description");
+                if(edescription!=null)
+                {
+                    info.description=edescription.getFirstNode().getText();
+                }
+                /*Iterator it = this.workflow.getResourcesModel().iterator();
+                while (it.hasNext())
+                {
+                    ResourceType res = (ResourceType) it.next();
+                    jTableResourceTypeModel resmodel = (jTableResourceTypeModel) this.jTableTipos_Recursos.getModel();
+                    Iterator recursos = resmodel.iterator();
+                    while (recursos.hasNext())
+                    {
+                        ResourceType rescat = (ResourceType) recursos.next();
+                        if (rescat.equals(res))
+                        {
+                            rescat.setSelected(true);
+                        }
+                    }
+
+                }*/
+
             }
-
         }
-        return null;
-
-    }*/
+    }
+    
 
     public function save() : Void
     {
