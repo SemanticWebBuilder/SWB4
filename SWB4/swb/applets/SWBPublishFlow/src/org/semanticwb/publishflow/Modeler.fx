@@ -18,6 +18,7 @@ import org.semanticwb.publishflow.StartEvent;
 import javax.swing.JOptionPane;
 import java.util.ResourceBundle;
 import java.util.Locale;
+import org.semanticwb.publishflow.ConnectionObject;
 
 
 /**
@@ -129,7 +130,10 @@ public class Modeler extends CustomNode
                         {
                             if(overNode.canEndLink(co))
                             {
-                               co.end=overNode as FlowObject;
+                               if(co.ini!=null and co.ini!=overNode)
+                               {
+                                    co.end=overNode as FlowObject;
+                               }
                             }
                         }else
                         {                            
@@ -225,6 +229,33 @@ public class Modeler extends CustomNode
         */
         //addRelation("home","padre1","Hijo","Padre");
     }
+    /*public function checkAisled(object: FlowObject): FlowObject
+    {
+        for(cp in object.connectionPoints)
+        {
+            if(cp.connectionObject!=null)
+            {
+                var co:ConnectionObject=cp.connectionObject as ConnectionObject;
+                if(co.end==object and co.ini!=null and (co.ini instanceof Task or co.ini instanceof StartEvent))
+                {
+                    if(co.ini instanceof Task)
+                    {
+                        var ret:FlowObject= checkAisled(co.ini);
+                        JOptionPane.showMessageDialog(null, "La actividad {co.ini} no tiene", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
+                        return;
+                        return ret;
+                    }
+                    else
+                    {
+                        return co.ini;
+                    }
+                }
+            }
+
+        }
+        return null;
+
+    }*/
 
     public function save() : Void
     {
@@ -290,6 +321,11 @@ public class Modeler extends CustomNode
                 break;
             }
         }
+
+        
+
+
+
 
         if (info.id_workflow != null)
         {

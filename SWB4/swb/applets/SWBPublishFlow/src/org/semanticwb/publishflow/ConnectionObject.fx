@@ -128,73 +128,10 @@ public class ConnectionObject extends CustomNode {
         var lt=LineTo { x: bind pinter1.x, y: bind pinter1.y };
         insert lt into pathElements;              
         
-        if(Math.abs(pinter1.y-pinter2.y)==0 or Math.abs(pinter1.x-pinter2.x)==0)  // entan alineados
+        if(Math.abs(pinter1.y-pinter2.y)==0 or Math.abs(pinter2.x-pinter1.x)==0)  // entan alineados
         {
-            if(Math.abs(pinter1.y-pinter2.y)==0) // debería ser una linea horizontal
-            {
-                if(pinter2.x-pinter1.x!=0)
-                {
-                    var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);
-                    if(landa>0 and landa<1) // a traviesa en centro de inicio
-                    {
-                        //println("landa y: a traviesa en centro de inicio");
-                        lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+offset };
-                        insert lt into pathElements;
 
-
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter1.y+offset };
-                        insert lt into pathElements;
-
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                        insert lt into pathElements;
-                    }
-                    else
-                    {
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                        insert lt into pathElements;
-                    }
-                }
-                else
-                {
-                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                    insert lt into pathElements;
-                }
-
-
-
-            }
-            else
-            {
-                if(pinter2.y-pinter1.y!=0)
-                {
-                    var landa:Number=(ini.y-pinter1.y)/(pinter2.y-pinter1.y);
-                    if(landa>0 and landa<1) // a traviesa en centro de inicio
-                    {
-                        //println("landa x: a traviesa en centro de inicio");
-                        lt=LineTo { x: bind pinter1.x+offset, y: bind pinter1.y };
-                        insert lt into pathElements;
-
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                        insert lt into pathElements;
-                    }
-                    else
-                    {
-                        lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                        insert lt into pathElements;
-                    }
-                }
-                else
-                {
-                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                    insert lt into pathElements;
-                }
-
-
-            }
-
-
-
-            /*if(Math.abs(pinter1.y-pinter2.y)==0 and Math.abs(pinter1.x-pinter2.x)!=0)
+            if(Math.abs(pinter1.y-pinter2.y)==0 and Math.abs(pinter2.x-pinter1.x)!=0)
             {
                     var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);                    
                     if(landa>0 and landa<1) // a traviesa en centro de inicio
@@ -219,7 +156,7 @@ public class ConnectionObject extends CustomNode {
 
                 
             }
-            else if( Math.abs(pinter1.x-pinter2.x)==0 and Math.abs(pinter1.y-pinter2.y)!=0)
+            else if( Math.abs(pinter1.x-pinter2.x)==0 and Math.abs(pinter2.y-pinter1.y)!=0)
             {
                 var landa:Number=(ini.y-pinter1.y)/(pinter2.y-pinter1.y);
                 //println("landa x: {landa}");
@@ -242,7 +179,7 @@ public class ConnectionObject extends CustomNode {
             {
                  lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                  insert lt into pathElements;
-            }*/
+            }
         }
         else
         {
