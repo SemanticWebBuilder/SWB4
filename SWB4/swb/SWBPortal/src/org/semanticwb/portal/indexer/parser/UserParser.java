@@ -31,7 +31,10 @@ import org.semanticwb.portal.indexer.IndexTerm;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class UserParser.
+ * Parser for {@link Searchable} users.
+ * <p>
+ * Parser de indexación para usuarios de tipo {@link Searchable}.
+ * @see org.semanticwb.portal.indexer.parser.GenericParser
  * 
  * @author Hasdai pacheco {haxdai@gmail.com}
  */
@@ -40,14 +43,24 @@ public class UserParser extends GenericParser {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(UserParser.class);
 
-    /** The Constant ATT_NAME. */
+    /** Constant for the user's name. */
     public static final String ATT_NAME = "name";
     
-    /** The Constant ATT_EMAIL. */
+    /** Constant for the user's e-mail. */
     public static final String ATT_EMAIL = "email";
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.indexer.parser.GenericParser#getIndexTerms(org.semanticwb.model.Searchable)
+    /**
+     * Gets a Map of {@link IndexTerm}s for a {@link Searchable} object.
+     * <p>
+     * Obtiene un objeto Map con los términos de indexación ({@link IndexTerm})
+     * para un objeto {@link Searchable}.
+     *
+     * @param gen   the {@link Searchable} object to get {@link IndexTerm}s from.
+     *              El objeto {@link Searchable} del cual se obtienen los
+     *              {@link IndexTerm}s.
+     * @return      Map of {@link IndexTerm}s for the {@link Searchable} object.
+     *              Objeto Map con los {@link IndexTerm}s del objeto {@link Searchable}.
+     * @see         org.semanticwb.portal.indexer.parser.GenericParser#getIndexTerms(org.semanticwb.model.Searchable)
      */
     @Override
     public Map<String, IndexTerm> getIndexTerms(Searchable gen) {
@@ -60,21 +73,29 @@ public class UserParser extends GenericParser {
        return map;
     }
 
+    //************ Métodos que no afectan la información del índice ************
+
     /**
-     * Gets the name.
+     * Gets the name of the {@link User}.
+     * <p>
+     * Obtiene el nombre del usuario ({@link User}).
      * 
-     * @param user the user
-     * @return the name
+     * @param   user the {@link User} to get the name from. Usuario del cual se
+     *          obtendrá el nombre.
+     * @return  the name of the {@link User}. Nombre del usuario.
      */
     public String getName(User user) {
         return user.getFullName();
     }
 
     /**
-     * Gets the email.
+     * Gets the e-mail of the {@link User}.
+     * <p>
+     * Obtiene el e-mail del usuario.
      * 
-     * @param user the user
-     * @return the email
+     * @param   user the {@link User} to get e-mail from. Usuario del cual se
+     *          obtendrá el e-mail.
+     * @return  the e-mail of the {@link User}. E-mail del usuario.
      */
     public String getEmail (User user) {
         return user.getEmail();
