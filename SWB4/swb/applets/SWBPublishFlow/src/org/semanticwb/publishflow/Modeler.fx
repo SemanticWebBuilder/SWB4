@@ -215,6 +215,7 @@ public class Modeler extends CustomNode
                     x:100
                     y:100
                     modeler:this
+                    uri:"new:startevent:{ToolBar.counter++}"
                 }
                 add(startEvent);
 
@@ -227,15 +228,14 @@ public class Modeler extends CustomNode
                     var eactivity: WBTreeNode=activities.next() as WBTreeNode;
                     var type:String=eactivity.getAttribute("type");
                     if(type.equals("EndActivity"))
-                    {
-                        //this.modelactivities.addActivity(new EndActivity(locale));
+                    {                        
                         var end:EndEvent=EndEvent
                         {
                             x:100
                             y:100
                             type:{type};
                             modeler:this
-                            uri:"new:EndEvent({ToolBar.counter++})"
+                            uri:"new:endtevent:{ToolBar.counter++}"
                         }
                         //insert end into contents
                         add(end);
@@ -249,7 +249,7 @@ public class Modeler extends CustomNode
                             y:100
                             type:{type};
                             modeler:this
-                            uri:"new:AuthorActivity({ToolBar.counter++})"
+                            uri:"new:authoractivity:{ToolBar.counter++}:"
                         }
                         add(act);
                     }
@@ -278,7 +278,7 @@ public class Modeler extends CustomNode
                             description:{desc}
                             title:title
                             modeler:this
-                            uri:"new:Task({ToolBar.counter++})"
+                            uri:"new:task:{ToolBar.counter++}"
 
                         }
                         add(activity);
@@ -286,11 +286,12 @@ public class Modeler extends CustomNode
                         {
                             var co:ConnectionObject=ConnectionObject
                             {
-                                ini:{startEvent};
-                                end:activity;
+                                ini:startEvent;
+                                end:activity;                                
                                 modeler:{this};
                             }
                             initActivity=not initActivity;
+                            add(co);
                         }
                         
                         var days:Integer=0;
@@ -345,13 +346,16 @@ public class Modeler extends CustomNode
                     var type:String=elink.getAttribute("type");
                     var nameto:String=elink.getAttribute("to");
                     var namefrom:String=elink.getAttribute("from");
-                    var activityto:Task;
-                    var activityfrom:Task;
+                    var activityto:FlowObject;
+                    var activityfrom:FlowObject;
                     for(node in this.contents)
                     {
-                        if(node instanceof Task)
+                        if(node instanceof FlowObject)
                         {
-                            var activity:Task=node as Task;
+                            var activity:FlowObject=node as FlowObject;
+                            println("activity.title: {activity.title}");
+                            println("nameto: {nameto}");
+                            println("namefrom: {namefrom}");
                             if(activity.title.equals(nameto))
                             {
                                 activityto=activity;
@@ -363,19 +367,16 @@ public class Modeler extends CustomNode
                         }
 
                         if(activityto!=null and activityfrom!=null)
-                        {
-                            //String linktype=elink.getAttribute("type");
-                            //var link:Link=new Link(activityto, activityfrom,linktype);
-                            var link:LinkConnection;
+                        {                            
+                            var link:LinkConnection;                            
                             if(type.equals("authorized"))
                             {
                                 link=AuthorizeLink
                                 {
                                     ini: activityfrom
-                                    end: activityto
-                                    pini:bind activityfrom.connectionPoints[0];
-                                    pend:bind activityto.connectionPoints[1];
+                                    end: activityto                                    
                                     modeler:this;
+                                    uri:"new:sequenceflow:{ToolBar.counter++}"
                                 }
                             }
                             else
@@ -383,9 +384,8 @@ public class Modeler extends CustomNode
                                 link=NoAuthorizeLink
                                 {
                                     ini: activityfrom
-                                    end: activityto
-                                    pini:bind activityfrom.connectionPoints[0];
-                                    pend:bind activityto.connectionPoints[1];
+                                    end: activityto                                    
+                                    uri:"new:sequenceflow:{ToolBar.counter++}"
                                     modeler:this;
                                 }
                             }
@@ -410,6 +410,7 @@ public class Modeler extends CustomNode
                             }
                             link.authorized=Boolean.valueOf(elink.getAttribute("authorized"));
                             link.published=(Boolean.valueOf(elink.getAttribute("publish")).booleanValue());
+                            break;
                         }
                     }
                 }
