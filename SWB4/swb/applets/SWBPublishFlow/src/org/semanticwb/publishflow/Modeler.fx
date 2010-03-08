@@ -218,6 +218,7 @@ public class Modeler extends CustomNode
                     y:100
                     modeler:this
                     uri:"new:startevent:{ToolBar.counter++}"
+
                 }
                 add(startEvent);
                 
