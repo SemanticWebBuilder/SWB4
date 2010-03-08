@@ -38,7 +38,7 @@ var modeler:Modeler = Modeler
     pannable:true
     cursor:Cursor.CROSSHAIR
 }
-//modeler.load("home");
+modeler.loadWorkflow("");
 modeler.organizeMap();
 
 var toolbar:ToolBar = ToolBar
