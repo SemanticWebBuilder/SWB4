@@ -88,7 +88,7 @@ public class GenericParser
      * Subclasses must override this method to add extra information to the
      * index.
      * <p>
-     * Obtiene ub objeto Map con los términos de indexación ({@link IndexTerm})
+     * Obtiene un objeto Map con los términos de indexación ({@link IndexTerm})
      * para un objeto {@link Searchable}. Las subclases de la clase GenericParser
      * deben sobreescribir este método para agregar términos adicionales al índice.
      * 
