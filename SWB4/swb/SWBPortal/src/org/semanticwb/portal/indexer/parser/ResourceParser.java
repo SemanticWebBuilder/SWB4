@@ -86,32 +86,6 @@ public class ResourceParser extends GenericParser {
     }
 
     /**
-     * Gets the {@link WebPage} asociated to the {@link Resource} to be indexed.
-     * <p>
-     * Obtiene la página web ({@link WebPage}) asociada al recurso ({@link Resource})
-     * que se indexará.
-     * 
-     * @param   res the {@link Resource} (it must be a sub-class of
-     *              {@link Searchable}). El objeto {@link Resource} (debe ser una
-     *              sub-clase de {@link Searchable}).
-     * @return  the {@link WebPage}. La página web asociada al objeto {@link Resource}.
-     */
-    private WebPage getWebPage(Resource res) {
-        WebPage ret = null;
-        if (res.getResourceType() != null && res.getResourceType().getResourceMode() == ResourceType.MODE_CONTENT) {
-            Iterator<Resourceable> it = res.listResourceables();
-            while (it.hasNext()) {
-                Resourceable ob = it.next();
-                if (ob instanceof WebPage) {
-                    ret = (WebPage) ob;
-                    break;
-                }
-            }
-        }
-        return ret;
-    }
-
-    /**
      * Gets a Map of {@link IndexTerm}s for a {@link Searchable} object.
      * <p>
      * Obtiene un objeto Map con los términos de indexación ({@link IndexTerm})
@@ -265,6 +239,34 @@ public class ResourceParser extends GenericParser {
         WebPage page = getWebPage((Resource) gen);
         if (page != null) {
             ret = super.getPath(page, lang);
+        }
+        return ret;
+    }
+
+//************ Métodos que no afectan la información del índice ************
+
+    /**
+     * Gets the {@link WebPage} asociated to the {@link Resource} to be indexed.
+     * <p>
+     * Obtiene la página web ({@link WebPage}) asociada al recurso ({@link Resource})
+     * que se indexará.
+     *
+     * @param   res the {@link Resource} (it must be a sub-class of
+     *              {@link Searchable}). El objeto {@link Resource} (debe ser una
+     *              sub-clase de {@link Searchable}).
+     * @return  the {@link WebPage}. La página web asociada al objeto {@link Resource}.
+     */
+    private WebPage getWebPage(Resource res) {
+        WebPage ret = null;
+        if (res.getResourceType() != null && res.getResourceType().getResourceMode() == ResourceType.MODE_CONTENT) {
+            Iterator<Resourceable> it = res.listResourceables();
+            while (it.hasNext()) {
+                Resourceable ob = it.next();
+                if (ob instanceof WebPage) {
+                    ret = (WebPage) ob;
+                    break;
+                }
+            }
         }
         return ret;
     }
