@@ -433,6 +433,7 @@ public class Modeler extends CustomNode
 
             }
         }
+        organizeMap();
     }
     
 
@@ -714,11 +715,36 @@ public class Modeler extends CustomNode
 
     public function organizeMap()
     {
+            var newy:Number=50;
+            var newx:Number=80;
+            def spacingx:Number=30;
+            def spacingy:Number=50;
+            for(node in this.contents)
+            {
+                if(node instanceof FlowObject)
+                {
+                    var fo:FlowObject=node as FlowObject;
+                    var testx:Number=newx+fo.w/2;
+                    if(testx+fo.w/2>=width)
+                    {
+                        testx=80;
+                        newy+=newy;
+                    }
+                    else
+                    {
+                        newx=testx;
+                    }
+
+                    fo.x=testx;
+                    fo.y=newy;
+                    newx+=fo.w+spacingx;
+                }
+
+            }
+
     }
 
-//    public function addRelation(tpuri1:String, tpuri2:String, tpr1:String, tpr2:String)
-//    {
-//    }
+
 
     public function add(obj:Node)
     {
