@@ -19,6 +19,7 @@ public class AuthorActivity extends Event{
          var ret=super.create();
          stroke=Color.web(Styles.color_authorEvent);
          shape.strokeWidth=4;
+         title="Generador de contenido";
          stkw=4;
          stkwo=5;
          return ret;
