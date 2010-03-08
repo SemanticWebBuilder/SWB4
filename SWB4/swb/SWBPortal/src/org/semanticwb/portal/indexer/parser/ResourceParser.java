@@ -182,66 +182,7 @@ public class ResourceParser extends GenericParser {
         }
 
         return ret;
-    }
-
-    /**
-     * Gets the URL of the {@link WebPage} associated to the given {@link Searchable}
-     * object.
-     * <p>
-     * Obtiene la URL de la página web ({@link WebPage}) relacionada con el objeto
-     * {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @return  URL of the associated {@link Searchable} object's {@link WebPage}.
-     *          URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
-     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getUrl(org.semanticwb.model.Searchable)
-     */
-    @Override
-    public String getUrl(Searchable gen) {
-        String ret = null;
-        WebPage page = getWebPage((Resource) gen);
-        if (page != null) {
-            ret = super.getUrl(page);
-        }
-        return ret;
-    }
-
-    /**
-     * Gets the String type of the {@link Searchable} object.
-     * <p>
-     * Obtiene la cadena del tipo de objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @return  String type of the {@link Searchable} object. String con el tipo
-     *          del objeto {@link Searchable}.
-     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
-     */
-    @Override
-    public String getType(Searchable gen) {
-        return "Resource";
-    }
-
-    /**
-     * Gets the navigation path to the {@link Searchable} object.
-     * <p>
-     * Obtiene la ruta de navegación hacia el objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
-     * @return  Navigation path to the {@link Searchable} object in the given
-     *          language. Ruta de navegación hacia el objeto {@link Searchable}
-     *          en el idioma especificado.
-     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getPath(org.semanticwb.model.Searchable, java.lang.String)
-     */
-    @Override
-    public String getPath(Searchable gen, String lang) {
-        String ret = null;
-        WebPage page = getWebPage((Resource) gen);
-        if (page != null) {
-            ret = super.getPath(page, lang);
-        }
-        return ret;
-    }
+    }    
 
 //************ Métodos que no afectan la información del índice ************
 
@@ -270,4 +211,63 @@ public class ResourceParser extends GenericParser {
         }
         return ret;
     }
+
+    /**
+     * Gets the URL of the {@link WebPage} associated to the given {@link Searchable}
+     * object.
+     * <p>
+     * Obtiene la URL de la página web ({@link WebPage}) relacionada con el objeto
+     * {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return  URL of the associated {@link Searchable} object's {@link WebPage}.
+     *          URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getUrl(org.semanticwb.model.Searchable)
+     */
+    @Override
+    public String getUrl(Searchable gen) {
+        String ret = null;
+        WebPage page = getWebPage((Resource) gen);
+        if (page != null) {
+            ret = super.getUrl(page);
+        }
+        return ret;
+    }
+
+    /**
+     * Gets the navigation path to the {@link Searchable} object.
+     * <p>
+     * Obtiene la ruta de navegación hacia el objeto {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param   lang the user's language. El idioma del usuario.
+     * @return  Navigation path to the {@link Searchable} object in the given
+     *          language. Ruta de navegación hacia el objeto {@link Searchable}
+     *          en el idioma especificado.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getPath(org.semanticwb.model.Searchable, java.lang.String)
+     */
+    @Override
+    public String getPath(Searchable gen, String lang) {
+        String ret = null;
+        WebPage page = getWebPage((Resource) gen);
+        if (page != null) {
+            ret = super.getPath(page, lang);
+        }
+        return ret;
+    }
+
+    /**
+     * Gets the String type of the {@link Searchable} object.
+     * <p>
+     * Obtiene la cadena del tipo de objeto {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return  String type of the {@link Searchable} object. String con el tipo
+     *          del objeto {@link Searchable}.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
+     */
+    @Override
+    public String getType(Searchable gen) {
+        return "Resource";
+    }    
 }
