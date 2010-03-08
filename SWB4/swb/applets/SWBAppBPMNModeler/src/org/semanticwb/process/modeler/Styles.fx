@@ -18,7 +18,7 @@ public-read var stylesheets = "{__DIR__}style.css";
 //public-read var color="#6060FF";
 public-read var color="#03689a";
 public-read var color_over="#FF6060";
-public-read var color_focused="#FF8080";
+public-read var color_focused="#00FF00";
 public-read var color_fill="#f5f5ff";
 public-read var color_fill_pool="#d5d5ff";
 
