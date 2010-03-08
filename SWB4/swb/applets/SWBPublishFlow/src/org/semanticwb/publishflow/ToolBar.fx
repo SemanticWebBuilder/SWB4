@@ -43,13 +43,79 @@ public class ToolBar extends CustomNode {
 
     public override function create(): Node {
         loadProcess();
+        var submenuEvents=SubMenu
+        {
+            modeler: modeler
+            text:"Start Event"
+            image: "images/start_1.png"
+            imageOver: "images/start_2.png"
+            imageClicked: "images/start_2.png"
+            buttons: [
+                    ImgButton
+                    {
+                        text: "Start Event"
+                        image: "images/start_1.png"
+                        imageOver: "images/start_2.png"
+                        action: function (): Void {
+                            if(modeler.hasAnElementWith("new:startevent:"))
+                            {
+                                return;
+                            }
+
+                            modeler.disablePannable = true;
+                            modeler.tempNode = StartEvent {
+                                modeler: modeler
+                                title: "Start Event"
+                                uri: "new:startevent:{counter++}"                            
+                            }
+                        }
+                    },
+                    ImgButton {
+                        text: "End Event"
+                        image: "images/end_1.png"
+                        imageOver: "images/end_2.png"
+                        action: function (): Void {
+                            if(modeler.hasAnElementWith("new:endevent:"))
+                            {
+                                return;
+                            }
+
+
+                            modeler.disablePannable = true;
+                            modeler.tempNode = EndEvent {
+                                modeler: modeler                                
+                                uri: "new:endevent:{counter++}"
+                                type: Event.RULE;
+                            }
+                        }
+                    },
+                    ImgButton {
+                        text: "Author Event"
+                        image: "images/author_1.png"
+                        imageOver: "images/author_2.png"
+                        action: function (): Void {
+                            if(modeler.hasAnElementWith("new:authoractivity:"))
+                            {
+                                return;
+                            }
+                            modeler.disablePannable = true;
+                            modeler.tempNode = EndEvent {
+                                modeler: modeler
+                                uri: "new:authoractivity:{counter++}"
+                                type: Event.RULE;
+                            }
+                        }
+                    }
+                    ]
+        }
+
         var submenuLines=SubMenu
         {
             modeler: modeler
             text:"SequenceFlow"
             image: "images/flow_1.png"
             imageOver: "images/flow_2.png"
-            imageClicked: "images/flow_1.png"
+            imageClicked: "images/flow_2.png"
              buttons: [
                      ImgButton
                     {
@@ -164,45 +230,7 @@ public class ToolBar extends CustomNode {
                                         }
                                     }
                                 },
-                                ImgButton {
-                                    text: "Start Event"
-                                    image: "images/start_1.png"
-                                    imageOver: "images/start_2.png"
-                                    action: function (): Void {
-                                        if(modeler.hasAnElementWith("new:startevent:"))
-                                        {
-                                            return;
-                                        }
-                                            
-                                        modeler.disablePannable = true;
-                                        modeler.tempNode = StartEvent {
-                                            modeler: modeler
-                                            title: "Start Event"
-                                            uri: "new:startevent:{counter++}"
-                                        //type: Event.RULE;
-                                        }
-                                    }
-                                },
-                                ImgButton {
-                                    text: "End Event"
-                                    image: "images/end_1.png"
-                                    imageOver: "images/end_2.png"
-                                    action: function (): Void {
-                                        if(modeler.hasAnElementWith("new:endevent:"))
-                                        {
-                                            return;
-                                        }
-
-
-                                        modeler.disablePannable = true;
-                                        modeler.tempNode = EndEvent {
-                                            modeler: modeler
-                                            title: "End Event"
-                                            uri: "new:endevent:{counter++}"
-                                            type: Event.RULE;
-                                        }
-                                    }
-                                },
+                                submenuEvents,
                                 submenuLines
                                 ,
                                 ImageView {
@@ -212,7 +240,8 @@ public class ToolBar extends CustomNode {
                                 }
                             ]
                         },
-                        submenuLines.subBar
+                        submenuLines.subBar,
+                        submenuEvents.subBar
                     ]
                     cursor: Cursor.HAND;
                 };

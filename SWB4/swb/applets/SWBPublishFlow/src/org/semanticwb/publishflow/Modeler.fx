@@ -210,7 +210,9 @@ public class Modeler extends CustomNode
                 {
                     info.description=edescription.getFirstNode().getText();
                 }
-                var startEvent:StartEvent=StartEvent
+                var startEvent:StartEvent;
+                
+                startEvent=StartEvent
                 {
                     x:100
                     y:100
@@ -218,6 +220,8 @@ public class Modeler extends CustomNode
                     uri:"new:startevent:{ToolBar.counter++}"
                 }
                 add(startEvent);
+                
+
 
                 var initActivity=true;
                 var activities: Iterator=eworkflow.getNodesbyName("activity");
@@ -228,30 +232,35 @@ public class Modeler extends CustomNode
                     var eactivity: WBTreeNode=activities.next() as WBTreeNode;
                     var type:String=eactivity.getAttribute("type");
                     if(type.equals("EndActivity"))
-                    {                        
-                        var end:EndEvent=EndEvent
+                    {
+                        if(not hasAnElementWith("new:endevent:"))
                         {
-                            x:100
-                            y:100
-                            type:{type};
-                            modeler:this
-                            uri:"new:endtevent:{ToolBar.counter++}"
+                            var end:EndEvent=EndEvent
+                            {
+                                x:100
+                                y:100
+                                type:{type};
+                                modeler:this
+                                uri:"new:endevent:{ToolBar.counter++}"
+                            }
+                            add(end);
                         }
-                        //insert end into contents
-                        add(end);
 
                     }
                     else if(type.equals("AuthorActivity"))
                     {
-                        var act:AuthorActivity=AuthorActivity
+                        if(not hasAnElementWith("new:authoractivity:"))
                         {
-                            x:100
-                            y:100
-                            type:{type};
-                            modeler:this
-                            uri:"new:authoractivity:{ToolBar.counter++}:"
+                            var act:AuthorActivity=AuthorActivity
+                            {
+                                x:100
+                                y:100
+                                type:{type};
+                                modeler:this
+                                uri:"new:authoractivity:{ToolBar.counter++}:"
+                            }
+                            add(act);
                         }
-                        add(act);
                     }
                     else
                     {
@@ -352,10 +361,7 @@ public class Modeler extends CustomNode
                     {
                         if(node instanceof FlowObject)
                         {
-                            var activity:FlowObject=node as FlowObject;
-                            println("activity.title: {activity.title}");
-                            println("nameto: {nameto}");
-                            println("namefrom: {namefrom}");
+                            var activity:FlowObject=node as FlowObject;                            
                             if(activity.title.equals(nameto))
                             {
                                 activityto=activity;
