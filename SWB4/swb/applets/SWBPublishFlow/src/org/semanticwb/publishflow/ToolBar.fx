@@ -18,6 +18,7 @@ import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import applets.commons.WBConnection;
+import org.semanticwb.publishflow.AuthorActivity;
 
 public var counter: Integer;
 public var conn: WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(), FX.getArgument(WBConnection.PRM_CGIPATH).toString(), FX.getProperty("javafx.application.codebase"));
@@ -99,7 +100,7 @@ public class ToolBar extends CustomNode {
                                 return;
                             }
                             modeler.disablePannable = true;
-                            modeler.tempNode = EndEvent {
+                            modeler.tempNode = AuthorActivity {
                                 modeler: modeler
                                 uri: "new:authoractivity:{counter++}"
                                 type: Event.RULE;
