@@ -29,54 +29,54 @@ import org.semanticwb.platform.SemanticObject;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class SearchDocument.
+ * Generic indexed document recovered by a search query. A search document contains
+ * key information of the real object satisfying the search query and specifies
+ * a score to measure the quality of the result.
+ * <p>
+ * Documento genérico indexado recuperado al ejecutar una búsqueda. El documento
+ * contiene la información relevante del objeto real que satisface la búsqueda y
+ * especifica una puntuación que mide la calidad del resultado.
  * 
  * @author javier.solis
  */
-public class SearchDocument implements Comparable
-{
+public class SearchDocument implements Comparable {
     
-    /** The m_uri. */
+    /** The URI of the {@link Searchable} object contained in the document. */
     private String m_uri;
     
-    /** The m_summary. */
+    /** The summary of the {@link Searchable} object contained in the document. */
     private String m_summary;
     
-    /** The m_score. */
+    /** The score of the {@link Searchable} object contained in the documend. */
     private float m_score;
     
-    /** The m_sdoc. */
+    /** The {@link Searchable} object contained in the document. */
     private Searchable m_sdoc=null;
 
     /**
      * Instantiates a new search document.
      * 
-     * @param uri the uri
-     * @param summary the summary
-     * @param score the score
+     * @param uri       the URI of the {@link Searchable} object contained.
+     * @param summary   the summary of the {@link Searchable} object contained.
+     * @param score     the score of the {@link Searchable} contained.
      */
-    public SearchDocument(String uri, String summary, float score)
-    {
+    public SearchDocument(String uri, String summary, float score) {
         this.m_score=score;
         this.m_uri=uri;
         this.m_summary=summary;
     }
 
     /**
-     * Gets the searchable.
+     * Gets the {@link Searchable} object contained in the document.
      * 
-     * @return the searchable
+     * @return the {@link Searchable} object.
      */
-    public Searchable getSearchable()
-    {
-        if(m_sdoc==null)
-        {
+    public Searchable getSearchable() {
+        if(m_sdoc==null) {
             SemanticObject sobj=SemanticObject.createSemanticObject(m_uri);
-            if(sobj!=null)
-            {
+            if(sobj!=null) {
                 GenericObject inst=sobj.createGenericInstance();
-                if(inst instanceof Searchable)
-                {
+                if(inst instanceof Searchable) {
                     m_sdoc=(Searchable)inst;
                 }
             }
@@ -85,36 +85,36 @@ public class SearchDocument implements Comparable
     }
 
     /**
-     * Gets the uRI.
+     * Gets the URI of the {@link Searchable} object contained in the document.
      * 
-     * @return the uri
+     * @return the URI of the {@link Searchable} object.
      */
     public String getURI() {
         return m_uri;
     }
 
     /**
-     * Sets the uRI.
+     * Sets the URI of the {@link Searchable} object contained in the document.
      * 
-     * @param uri the uri to set
+     * @param uri the URI to set.
      */
     public void setURI(String uri) {
         this.m_uri = uri;
     }
 
     /**
-     * Gets the summary.
+     * Gets the summary of the document.
      * 
-     * @return the summary
+     * @return the summary.
      */
     public String getSummary() {
         return m_summary;
     }
 
     /**
-     * Sets the summary.
+     * Sets the summary of the document.
      * 
-     * @param summary the summary to set
+     * @param summary the summary to set.
      */
     public void setSummary(String summary) {
         this.m_summary = summary;
@@ -122,18 +122,18 @@ public class SearchDocument implements Comparable
 
 
     /**
-     * Gets the score.
+     * Gets the score of the document.
      * 
-     * @return the score
+     * @return the score.
      */
     public float getScore() {
         return m_score;
     }
 
     /**
-     * Sets the score.
+     * Sets the score of the document.
      * 
-     * @param score the score to set
+     * @param score the score to set.
      */
     public void setScore(float score) {
         this.m_score = score;
