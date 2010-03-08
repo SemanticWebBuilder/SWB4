@@ -18,6 +18,7 @@ public class EndEvent extends Event
     public override function create(): Node
     {
          var ret=super.create();
+         title="Terminar flujo";
          stroke=Color.web(Styles.color_endEvent);
          shape.strokeWidth=4;
          stkw=4;
