@@ -717,8 +717,7 @@ public class Modeler extends CustomNode
     {
             var newy:Number=50;
             var newx:Number=80;
-            def spacingx:Number=30;
-            def spacingy:Number=50;
+            def spacingx:Number=30;            
             for(node in this.contents)
             {
                 if(node instanceof FlowObject)
