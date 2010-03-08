@@ -55,10 +55,13 @@ public class SearchDocument implements Comparable {
 
     /**
      * Instantiates a new search document.
+     * <p>
+     * Crea una nueva instancia de un documento de búsqueda.
      * 
-     * @param uri       the URI of the {@link Searchable} object contained.
-     * @param summary   the summary of the {@link Searchable} object contained.
-     * @param score     the score of the {@link Searchable} contained.
+     * @param uri       the URI of the {@link Searchable} object contained. La
+     *                  URI del objeto {@link Searchable} contenido en el documento.
+     * @param summary   the summary of the document. El resumen del documento.
+     * @param score     the score of the document. La puntuación del documento.
      */
     public SearchDocument(String uri, String summary, float score) {
         this.m_score=score;
@@ -68,8 +71,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Gets the {@link Searchable} object contained in the document.
+     * <p>
+     * Obtiene el objeto {@link Searchable} contenido en el documento.
      * 
-     * @return the {@link Searchable} object.
+     * @return the {@link Searchable} object. El objeto {@link Searchable}.
      */
     public Searchable getSearchable() {
         if(m_sdoc==null) {
@@ -86,8 +91,11 @@ public class SearchDocument implements Comparable {
 
     /**
      * Gets the URI of the {@link Searchable} object contained in the document.
+     * <p>
+     * Obtiene el URI del objeto {@link Searchable} contenido en el documento.
      * 
-     * @return the URI of the {@link Searchable} object.
+     * @return  the URI of the {@link Searchable} object. La URI del objeto
+     *          {@link Searchable}
      */
     public String getURI() {
         return m_uri;
@@ -95,8 +103,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Sets the URI of the {@link Searchable} object contained in the document.
+     * <p>
+     * Establece la URI del objeto {@link Searchable} contenido en el documento.
      * 
-     * @param uri the URI to set.
+     * @param uri the URI to set. La URI.
      */
     public void setURI(String uri) {
         this.m_uri = uri;
@@ -104,8 +114,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Gets the summary of the document.
+     * <p>
+     * Obtiene el resumen del documento.
      * 
-     * @return the summary.
+     * @return the summary. El resumen.
      */
     public String getSummary() {
         return m_summary;
@@ -113,8 +125,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Sets the summary of the document.
+     * <p>
+     * Establece el resumen del documento.
      * 
-     * @param summary the summary to set.
+     * @param summary the summary to set. El resumen.
      */
     public void setSummary(String summary) {
         this.m_summary = summary;
@@ -123,8 +137,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Gets the score of the document.
+     * <p>
+     * Obtiene la puntuación del documento.
      * 
-     * @return the score.
+     * @return the score. La puntuación.
      */
     public float getScore() {
         return m_score;
@@ -132,8 +148,10 @@ public class SearchDocument implements Comparable {
 
     /**
      * Sets the score of the document.
+     * <p>
+     * Establece la puntuación del documento.
      * 
-     * @param score the score to set.
+     * @param score the score to set. La puntiación.
      */
     public void setScore(float score) {
         this.m_score = score;
