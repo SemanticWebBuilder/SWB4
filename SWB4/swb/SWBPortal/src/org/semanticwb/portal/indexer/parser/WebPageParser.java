@@ -30,7 +30,10 @@ import org.semanticwb.model.WebPage;
 
 // TODO: Auto-generated Javadoc
 /**
- * Parser for searchable web pages.
+ * Parser for {@link Searchable} web pages.
+ * <p>
+ * Parser para páginas web de tipo {@link Searchable}.
+ * @see org.semanticwb.portal.indexer.parser.GenericParser
  * 
  * @author javier.solis
  */
@@ -39,8 +42,16 @@ public class WebPageParser extends GenericParser {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(WebPageParser.class);
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.indexer.parser.GenericParser#canIndex(org.semanticwb.model.Searchable)
+    /**
+     * Checks wheter a {@link Searchable} object can be indexed.
+     * <p>
+     * Verifica si un objeto {@link Searchable} puede ser indexado.
+     *
+     * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return      {@code true} if the {@link Searchable} object can be indexed,
+     *              {@code false} otherwise. {@code true} si el objeto puede
+     *              indexarse, {@code false} de otro modo.
+     * @see         org.semanticwb.portal.indexer.parser.GenericParser#canIndex(org.semanticwb.model.Searchable)
      */
     @Override
     public boolean canIndex(Searchable gen) {
@@ -54,8 +65,18 @@ public class WebPageParser extends GenericParser {
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.indexer.parser.GenericParser#getSummary(org.semanticwb.model.Searchable, java.lang.String)
+    //************ Métodos que no afectan la información del índice ************
+
+    /**
+     * Gets the summary of the {@link Searchable} object.
+     * <p>
+     * Obtiene el resúmen del objeto {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param   lang the user's language. El idioma del usuario.
+     * @return  Summary of the {@link Searchable} object in the given language.
+     *          Resumen del objeto {@link Searchable} en el idioma del usuario.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getSummary(org.semanticwb.model.Searchable, java.lang.String)
      */
     @Override
     public String getSummary(Searchable gen, String lang) {
@@ -71,8 +92,15 @@ public class WebPageParser extends GenericParser {
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
+    /**
+     * Gets the String type of the {@link Searchable} object.
+     * <p>
+     * Obtiene la cadena del tipo de objeto {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return  String type of the {@link Searchable} object. String con el tipo
+     *          del objeto {@link Searchable}.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
      */
     @Override
     public String getType(Searchable gen) {
