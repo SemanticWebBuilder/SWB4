@@ -19,6 +19,13 @@ import javax.swing.JOptionPane;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import org.semanticwb.publishflow.ConnectionObject;
+import java.lang.String;
+import java.lang.System;
+import java.util.Iterator;
+import org.semanticwb.publishflow.EndEvent;
+import java.lang.Exception;
+import org.semanticwb.publishflow.NoAuthorizeLink;
+import org.semanticwb.publishflow.AuthorizeLink;
 
 
 /**
@@ -182,7 +189,9 @@ public class Modeler extends CustomNode
      public function loadWorkflow(id : String) : Void
     {
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id}</id><tm>{tm}</tm></req>";
-        var respxml : String= ToolBar.conn.getData(xml);
+        //var respxml : String= ToolBar.conn.getData(xml);
+        var respxml :String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><workflows><workflow id=\"1_infotec\" name=\"newsletter - a\" version=\"4.0\"><description>Secciones revisadas por Ana Laura GarcÃƒÂ­a</description><activity days=\"0\" hours=\"0\" name=\"RevisiÃƒÂ³n\" type=\"Activity:\"><description>Primer filtro de estilo, diseÃƒÂ±o y contenido</description><user id=\"443164462_wb\" name=\"Ana Laura GarcÃƒÂ­a\"/></activity><activity name=\"Generador de contenido\" type=\"AuthorActivity\"/><activity name=\"Terminar flujo\" type=\"EndActivity\"/><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"Generador de contenido\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"true\" to=\"Terminar flujo\" type=\"authorized\"><service>mail</service><service>publish</service><service>noauthorize</service></link><resourceType id=\"110\" name=\"ExcelContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"9\" name=\"LocalContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"109\" name=\"PPTContent\" topicmap=\"WBAGlobal\"/></workflow><workflow id=\"1_infotec\" name=\"newsletter - a\" version=\"3.0\"><description>Secciones revisadas por Ana Laura GarcÃƒÂ­a</description><activity days=\"0\" hours=\"0\" name=\"RevisiÃƒÂ³n\" type=\"Activity\"><description>Primer filtro de estilo, diseÃƒÂ±o y contenido</description><user id=\"443164462_wb\" name=\"Ana Laura GarcÃƒÂ­a\"/></activity><activity days=\"0\" hours=\"0\" name=\"AutorizaciÃƒÂ³n\" type=\"Activity\"><description>RevisiÃƒÂ³n y liberaciÃƒÂ³n del artÃƒÂ­culo</description><user id=\"443164311_wb\" name=\"Jose Luis Rodriguez\"/></activity><activity name=\"Generador de contenido\" type=\"AuthorActivity\"/><activity name=\"Terminar flujo\" type=\"EndActivity\"/><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"Generador de contenido\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"AutorizaciÃƒÂ³n\" type=\"authorized\"><service>mail</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"false\" to=\"Generador de contenido\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"true\" to=\"Terminar flujo\" type=\"authorized\"><service>mail</service><service>publish</service><service>noauthorize</service></link><resourceType id=\"110\" name=\"ExcelContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"9\" name=\"LocalContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"109\" name=\"PPTContent\" topicmap=\"WBAGlobal\"/></workflow><workflow id=\"1_infotec\" name=\"newsletter - a\" version=\"2.0\"><description>Secciones revisadas por Ana Laura GarcÃƒÂ­a</description><activity days=\"0\" hours=\"0\" name=\"RevisiÃƒÂ³n\" type=\"Activity\"><description>Primer filtro de estilo, diseÃƒÂ±o y contenido</description><user id=\"443164462_wb\" name=\"Ana Laura GarcÃƒÂ­a\"/></activity><activity days=\"0\" hours=\"0\" name=\"AutorizaciÃƒÂ³n\" type=\"Activity\"><description>RevisiÃƒÂ³n y liberaciÃƒÂ³n del artÃƒÂ­culo</description><user id=\"443164311_wb\" name=\"Jose Luis Rodriguez\"/></activity><activity name=\"Generador de contenido\" type=\"AuthorActivity\"/><activity name=\"Terminar flujo\" type=\"EndActivity\"/><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"Generador de contenido\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"AutorizaciÃƒÂ³n\" type=\"authorized\"><service>mail</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"false\" to=\"RevisiÃƒÂ³n\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"true\" to=\"Terminar flujo\" type=\"authorized\"><service>mail</service><service>publish</service><service>noauthorize</service></link><resourceType id=\"110\" name=\"ExcelContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"9\" name=\"LocalContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"109\" name=\"PPTContent\" topicmap=\"WBAGlobal\"/></workflow><workflow id=\"1_infotec\" name=\"newsletter - a\" version=\"1.0\"><description>Secciones revisadas por Ana Laura GarcÃƒÂ­a</description><activity days=\"0\" hours=\"0\" name=\"RevisiÃƒÂ³n\" type=\"Activity\"><description>Primer filtro de estilo, diseÃƒÂ±o y contenido</description><user id=\"443164246_wb\" name=\"Aurora Alejandra Flores\"/></activity><activity days=\"0\" hours=\"0\" name=\"AutorizaciÃƒÂ³n\" type=\"Activity\"><description>RevisiÃƒÂ³n y liberaciÃƒÂ³n del artÃƒÂ­culo</description><user id=\"443164311_wb\" name=\"Jose Luis Rodriguez\"/></activity><activity name=\"Generador de contenido\" type=\"AuthorActivity\"/><activity name=\"Terminar flujo\" type=\"EndActivity\"/><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"AutorizaciÃƒÂ³n\" type=\"authorized\"><service>mail</service></link><link authorized=\"false\" from=\"RevisiÃƒÂ³n\" publish=\"false\" to=\"Generador de contenido\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"true\" to=\"Terminar flujo\" type=\"authorized\"><service>mail</service><service>publish</service><service>noauthorize</service></link><link authorized=\"false\" from=\"AutorizaciÃƒÂ³n\" publish=\"false\" to=\"RevisiÃƒÂ³n\" type=\"unauthorized\"><service>mail</service><service>noauthorize</service></link><resourceType id=\"110\" name=\"ExcelContent\" topicmap=\"WBAGlobal\"/><resourceType id=\"9\" name=\"LocalContent\" topicmap=\"WBAGlobal\"/></workflow></workflows>";
+
         var parser : WBXMLParser= new WBXMLParser();
         var exml:WBTreeNode = parser.parse(respxml);
         if (exml.getFirstNode() != null and exml.getFirstNode().getFirstNode() != null)
@@ -200,6 +209,209 @@ public class Modeler extends CustomNode
                 if(edescription!=null)
                 {
                     info.description=edescription.getFirstNode().getText();
+                }
+                var startEvent:StartEvent=StartEvent
+                {
+                    x:100
+                    y:100
+                    modeler:this
+                }
+                add(startEvent);
+
+                var initActivity=true;
+                var activities: Iterator=eworkflow.getNodesbyName("activity");
+                while(activities.hasNext())
+                {
+
+
+                    var eactivity: WBTreeNode=activities.next() as WBTreeNode;
+                    var type:String=eactivity.getAttribute("type");
+                    if(type.equals("EndActivity"))
+                    {
+                        //this.modelactivities.addActivity(new EndActivity(locale));
+                        var end:EndEvent=EndEvent
+                        {
+                            x:100
+                            y:100
+                            type:{type};
+                            modeler:this
+                            uri:"new:EndEvent({ToolBar.counter++})"
+                        }
+                        //insert end into contents
+                        add(end);
+
+                    }
+                    else if(type.equals("AuthorActivity"))
+                    {
+                        var act:AuthorActivity=AuthorActivity
+                        {
+                            x:100
+                            y:100
+                            type:{type};
+                            modeler:this
+                            uri:"new:AuthorActivity({ToolBar.counter++})"
+                        }
+                        add(act);
+                    }
+                    else
+                    {
+
+                        var desc: String="";
+
+                        var edesc : WBTreeNode=eactivity.getNodebyName("description");
+
+                        if(edesc!=null)
+                        {
+                            desc=edesc.getFirstNode().getText();
+                        }
+                        var name:String=eactivity.getAttribute("name");
+                        var title:String=name;
+                        if(eactivity.getAttribute("title")!=null and not eactivity.getAttribute("title").equals(""))
+                        {
+                            title=eactivity.getAttribute("title");
+                        }
+
+                        var activity: Task =Task
+                        {
+                            x:100
+                            y:100
+                            description:{desc}
+                            title:title
+                            modeler:this
+                            uri:"new:Task({ToolBar.counter++})"
+
+                        }
+                        add(activity);
+                        if(initActivity)
+                        {
+                            var co:ConnectionObject=ConnectionObject
+                            {
+                                ini:{startEvent};
+                                end:activity;
+                                modeler:{this};
+                            }
+                            initActivity=not initActivity;
+                        }
+                        
+                        var days:Integer=0;
+                        var minutes:Integer=0;
+                        var seconds:Integer =0;
+                        var hours:Integer=0;
+                        try
+                        {
+                            days=Integer.parseInt(eactivity.getAttribute("days"));
+                            if(eactivity.getAttribute("hours")!=null and not eactivity.getAttribute("hours").equals(""))
+                            {
+                                hours=Integer.parseInt(eactivity.getAttribute("hours"));
+                            }
+                        }
+                        catch( e: Exception)
+                        {
+                            e.printStackTrace(System.out);
+                        }
+                        //activity.setDuraction(days,hours);
+                        activity.days=days;
+                        activity.hours=hours;
+                        var roles: Iterator=eactivity.getNodesbyName("role");
+                        while(roles.hasNext())
+                        {
+
+                            var erole: WBTreeNode=roles.next() as WBTreeNode;
+                            //var role: Role=new Role(erole.getAttribute("id"),erole.getAttribute("name"),erole.getAttribute("repository"));
+                            var rolid:String =erole.getAttribute("id");
+                            var rolname:String=erole.getAttribute("name");
+                            var rep:String=erole.getAttribute("repository");
+                            var srole:String="{rolid}@{rep}@{rolname}";
+                            insert srole into activity.roles;
+                        }
+                        var users: Iterator=eactivity.getNodesbyName("user");
+                        while(users.hasNext())
+                        {
+                            var euser: WBTreeNode=users.next() as WBTreeNode;
+                            //User user=new User(,);
+                            var userid:String=euser.getAttribute("id");
+                            var username:String=euser.getAttribute("name");
+                            var srole:String="{id}@{username}";
+                            //activity.getUserModel().addUser(user);
+                            insert srole into activity.users;
+                        }
+                    }
+                }
+
+                var links: Iterator=eworkflow.getNodesbyName("link");
+                while(links.hasNext())
+                {
+                    var elink : WBTreeNode=links.next() as WBTreeNode;
+                    var type:String=elink.getAttribute("type");
+                    var nameto:String=elink.getAttribute("to");
+                    var namefrom:String=elink.getAttribute("from");
+                    var activityto:Task;
+                    var activityfrom:Task;
+                    for(node in this.contents)
+                    {
+                        if(node instanceof Task)
+                        {
+                            var activity:Task=node as Task;
+                            if(activity.title.equals(nameto))
+                            {
+                                activityto=activity;
+                            }
+                            if(activity.title.equals(namefrom))
+                            {
+                                activityfrom=activity;
+                            }
+                        }
+
+                        if(activityto!=null and activityfrom!=null)
+                        {
+                            //String linktype=elink.getAttribute("type");
+                            //var link:Link=new Link(activityto, activityfrom,linktype);
+                            var link:LinkConnection;
+                            if(type.equals("authorized"))
+                            {
+                                link=AuthorizeLink
+                                {
+                                    ini: activityfrom
+                                    end: activityto
+                                    pini:bind activityfrom.connectionPoints[0];
+                                    pend:bind activityto.connectionPoints[1];
+                                    modeler:this;
+                                }
+                            }
+                            else
+                            {
+                                link=NoAuthorizeLink
+                                {
+                                    ini: activityfrom
+                                    end: activityto
+                                    pini:bind activityfrom.connectionPoints[0];
+                                    pend:bind activityto.connectionPoints[1];
+                                    modeler:this;
+                                }
+                            }
+                            add(link);
+                            var itNotifications : Iterator=elink.getNodesbyName("notification");
+                            while(itNotifications.hasNext())
+                            {
+                                var eNotification: WBTreeNode=itNotifications.next() as WBTreeNode;
+                                if(eNotification.getAttribute("type").equals("user"))
+                                {
+                                    var userid:String=eNotification.getAttribute("to");
+                                    var user:String="{userid}@";
+                                    insert user into link.users;
+                                }
+                                else
+                                {
+                                    var roleID:String=eNotification.getAttribute("to");
+                                    var repository:String=eNotification.getAttribute("repository");
+                                    var role:String="{roleID}@{repository}";
+                                    insert role into link.roles;
+                                }
+                            }
+                            link.authorized=Boolean.valueOf(elink.getAttribute("authorized"));
+                            link.published=(Boolean.valueOf(elink.getAttribute("publish")).booleanValue());
+                        }
+                    }
                 }
                 /*Iterator it = this.workflow.getResourcesModel().iterator();
                 while (it.hasNext())
