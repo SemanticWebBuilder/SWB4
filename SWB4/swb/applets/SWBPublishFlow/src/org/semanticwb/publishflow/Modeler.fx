@@ -52,9 +52,9 @@ public class Modeler extends CustomNode
     public var info:WorkFlowInfo=WorkFlowInfo
     {
         w:200
-        h:110
-        x:bind width-205;
-        y:bind height-105;
+        h:150
+        x:bind width-info.w;
+        y:bind height-info.h;
         canEdit:false;
         description:"workflow 1.0"
         name:"workflow 1.0"
