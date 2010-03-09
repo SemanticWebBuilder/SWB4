@@ -188,9 +188,11 @@ public abstract class SWBIndexer
     protected abstract void removeSearchableObj(String uri);
     
     /**
-     * Write searchable obj.
+     * Writes a {@link Searchable} object to the search index.
+     * <p>
+     * Escribe un objeto {@link Searchable} al índice de búsqueda.
      * 
-     * @param obj the obj
+     * @param obj the {@link Searchable} object. El objeto {@link Searchable}.
      */
     protected abstract void writeSearchableObj(Searchable obj);
 
