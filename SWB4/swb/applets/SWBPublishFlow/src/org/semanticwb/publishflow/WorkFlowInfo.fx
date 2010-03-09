@@ -39,6 +39,8 @@ public class WorkFlowInfo extends CustomNode{
     public var description:String="workflow 1";
     public var description_text:EditableText;
     var chbox:CheckBox;
+    public var resourceTypes:String[];
+    
     public override function create(): Node
     {
         var group:Group;
