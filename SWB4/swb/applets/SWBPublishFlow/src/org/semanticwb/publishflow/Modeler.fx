@@ -49,29 +49,16 @@ public class Modeler extends CustomNode
     public var mousey:Number;
     public var clipView:ClipView;
     public var tm:String;
-    public var info:WorkFlowInfo=WorkFlowInfo
-    {
-        w:200
-        h:150
-        x:bind width-info.w;
-        y:bind height-info.h;
-        canEdit:false;
-        description:"workflow 1.0"
-        name:"workflow 1.0"
-        id_workflow:"1";
-        version:"1.0"
-    }
-
-
-    
-    
-
-
-    
+    public var version:String="1.0";
+    public var canEdit:Boolean;
+    public var id_workflow:String;
+    public var name:String="name workflow 1";
+    public var description:String="workflow 1";
+    public var resourceTypes:String[];
     public override function create(): Node
     {
         
-        insert info into contents;
+        
 
          clipView=ClipView
          //var ret=ScrollPane
@@ -187,7 +174,7 @@ public class Modeler extends CustomNode
          return clipView;
     }
 
-     public function loadWorkflow(id : String) : Void
+    public function loadWorkflow(id : String) : Void
     {
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id}</id><tm>{tm}</tm></req>";
         //var respxml : String= ToolBar.conn.getData(xml);
@@ -200,16 +187,16 @@ public class Modeler extends CustomNode
             var eworkflow:WBTreeNode = exml.getFirstNode().getFirstNode();
             if (eworkflow.getName().equals("workflow"))
             {
-                info.name=eworkflow.getAttribute("name");
-                info.version=eworkflow.getAttribute("version");
+                name=eworkflow.getAttribute("name");
+                version=eworkflow.getAttribute("version");
                 if(eworkflow.getAttribute("canEdit")!=null and not eworkflow.getAttribute("canEdit").equals("") and eworkflow.getAttribute("canEdit").equals("true"))
                 {
-                    info.canEdit=true;
+                    canEdit=true;
                 }
                 var edescription:WBTreeNode=eworkflow.getNodebyName("description");
                 if(edescription!=null)
                 {
-                    info.description=edescription.getFirstNode().getText();
+                    description=edescription.getFirstNode().getText();
                 }
                 var startEvent:StartEvent;
                 
@@ -429,7 +416,7 @@ public class Modeler extends CustomNode
                     var idres:String=resourceType.getAttribute("id");
                     var tmr:String=resourceType.getAttribute("topicmap");
                     var res:String="{idres}@{tmr}";
-                    insert res into info.resourceTypes;
+                    insert res into this.resourceTypes;
                 }
 
             }
@@ -440,18 +427,18 @@ public class Modeler extends CustomNode
 
     public function save() : Void
     {
-        if(info.name.trim().equals(""))
+        if(name.trim().equals(""))
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("indicar_titutlo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if(info.description.trim().equals(""))
+        if(description.trim().equals(""))
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Favor_de_indicar_la_descripcion_del_flujo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if(sizeof info.resourceTypes==0)
+        if(sizeof resourceTypes==0)
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
@@ -539,7 +526,7 @@ public class Modeler extends CustomNode
 
 
 
-        if (info.id_workflow != null)
+        if (id_workflow != null)
         {
             var ask:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("ask1");
             var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("msg2");
@@ -565,16 +552,16 @@ public class Modeler extends CustomNode
         var  node: WBTreeNode = parse.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         var wf:WBTreeNode = node.addNode();
         wf.setName("workflow");
-        wf.addAttribute("version", info.version);
-        wf.addAttribute("canEdit", info.canEdit.toString());
-        if (info.id_workflow != null)
+        wf.addAttribute("version", version);
+        wf.addAttribute("canEdit", canEdit.toString());
+        if (id_workflow != null)
         {
-            wf.addAttribute("id", info.id_workflow);
+            wf.addAttribute("id", id_workflow);
         }
-        wf.addAttribute("name", info.name);
+        wf.addAttribute("name", name);
         var desc: WBTreeNode = wf.addNode();
         desc.setName("description");
-        desc.setText(info.description.trim());
+        desc.setText(description.trim());
         var eactivity : WBTreeNode = wf.addNode();
         eactivity.setName("activity");
         eactivity.addAttribute("name", iniActivity.title);
@@ -739,7 +726,7 @@ public class Modeler extends CustomNode
 
         }
 
-        for(svalue in info.resourceTypes)
+        for(svalue in resourceTypes)
         {
                 var values:String[]=svalue.split("@");
                 var etype : WBTreeNode = wf.addNode();
@@ -761,15 +748,15 @@ public class Modeler extends CustomNode
                 var eid : WBTreeNode = respnode.getFirstNode().getFirstNode();
                 if (eid.getName().equals("workflowid"))
                 {
-                    if (info.id_workflow != null)
+                    if (id_workflow != null)
                     {
-                        var iversion : Integer = Double.parseDouble(info.version) as Integer;
+                        var iversion : Integer = Double.parseDouble(this.version) as Integer;
                         iversion++;
-                        info.version="{iversion}.0";
+                        this.version="{iversion}.0";
                         
                     }
                     var version : WBTreeNode = respnode.getFirstNode().getNodebyName("version");                    
-                    info.id_workflow=eid.getFirstNode().getText();
+                    id_workflow=eid.getFirstNode().getText();
 
                     try
                     {
