@@ -767,6 +767,7 @@ public class EditWorkflow extends javax.swing.JApplet
             if (modelres.getResourceType(i).isSelected().booleanValue())
             {
                 resselected = true;
+                break;
             }
         }
         if (!resselected)
