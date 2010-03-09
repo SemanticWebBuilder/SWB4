@@ -176,9 +176,14 @@ public abstract class SWBIndexer
     public abstract SearchResults search(SearchQuery query, User user);
     
     /**
-     * Removes the searchable obj.
+     * Removes the {@link Searchable} object with the specified URI from the
+     * search index.
+     * <p>
+     * Elimina el objeto {@link Searchable} con la URI especificada del índice
+     * de búsqueda.
      * 
-     * @param uri the uri
+     * @param   uri the URI of the {@link Searchable} object to remove from index.
+     *          La URI del objeto {@link Searchable} a eliminar del índice.
      */
     protected abstract void removeSearchableObj(String uri);
     
