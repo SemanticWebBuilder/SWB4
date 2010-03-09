@@ -24,6 +24,8 @@
 package org.semanticwb.repository;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2323,7 +2325,43 @@ public class BaseNode extends BaseNodeBase
             }
             if (!existsProperty)
             {
-                SemanticProperty prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                SemanticProperty prop =null;
+                try
+                {
+                    String className = clazz.getClassName();
+                    Class clazzJava = Class.forName(className);
+                    for (Field field : clazzJava.getFields())
+                    {
+                        if (field.getType().equals(SemanticProperty.class) && Modifier.isPublic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
+                        {
+                            try
+                            {
+                                Object obj = field.get(null);
+                                if (obj != null)
+                                {
+                                    SemanticProperty semanticProperty = (SemanticProperty) obj;
+                                    if(semanticProperty.getName().equals(propertyName))
+                                    {
+                                        prop=semanticProperty;
+                                        break;
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                log.error(e);
+                            }
+                        }
+                    }
+                }
+                catch (ClassNotFoundException cnfe)
+                {
+                    log.error(cnfe);
+                }
+                if(prop==null)
+                {
+                    prop = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                }
                 if (prop != null)
                 {
                     if (prop.isDataTypeProperty())
