@@ -429,7 +429,7 @@ public class Modeler extends CustomNode
                     var idres:String=resourceType.getAttribute("id");
                     var tmr:String=resourceType.getAttribute("topicmap");
                     var res:String="{idres}@{tmr}";
-                    insert info info.resourceTypes;
+                    insert res into info.resourceTypes;
                 }
 
             }
