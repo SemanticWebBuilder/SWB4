@@ -440,6 +440,23 @@ public class Modeler extends CustomNode
 
     public function save() : Void
     {
+        if(info.name.trim().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("indicar_titutlo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if(info.description.trim().equals(""))
+        {
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Favor_de_indicar_la_descripcion_del_flujo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if(sizeof info.resourceTypes==0)
+        {
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("indicar_por_lo_menos_una_actividad"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         var endEvent:EndEvent;
         var startEvent:StartEvent;
         for(content in contents)
@@ -753,7 +770,7 @@ public class Modeler extends CustomNode
                         System.out.println(e.getMessage());
                         e.printStackTrace(System.out);
                     }
-                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("save"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("save"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
                 else
@@ -761,13 +778,13 @@ public class Modeler extends CustomNode
                     var err : WBTreeNode = respnode.getFirstNode().getFirstNode();
                     if (err != null)
                     {
-                        JOptionPane.showMessageDialog(null, err.getFirstNode().getText(), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, err.getFirstNode().getText(), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     else
                     {
 
-                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 }
@@ -775,14 +792,14 @@ public class Modeler extends CustomNode
             }
             else
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
         catch ( e: Exception)
         {
-            var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1");
-            JOptionPane.showMessageDialog(null,   "{msg} : {e.getMessage()}\r\n{resxml}", java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1");
+            JOptionPane.showMessageDialog(null,   "{msg} : {e.getMessage()}\r\n{resxml}", java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             println("resxml: {resxml}");
             e.printStackTrace(System.out);
             return;
