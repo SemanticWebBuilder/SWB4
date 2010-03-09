@@ -54,7 +54,6 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -116,6 +115,7 @@ import org.w3c.dom.NodeList;
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
     private SWBRepositoryManager manager;
+    private OfficeApplication officeApplication = new OfficeApplication();
     private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
     private static final String MIGRATE_WBRESOURCESEXCELCONTENT = "com.infotec.wb.resources.ExcelContent";
     private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
@@ -383,7 +383,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         
         String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
-        OfficeApplication officeApplication = new OfficeApplication();
+        
         officeApplication.setUser(this.user);
         officeApplication.setPassword(this.password);
         String categoryId = officeApplication.createCategory(repositoryName, categoryBydefault, descriptionByDefault);
@@ -2261,8 +2261,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values, String type) throws Exception
     {
-        OfficeManager manager = loader.getOfficeManager(repositoryName);
-        manager.validateContentValues(properties, values, type);
+        OfficeManager officemanager = loader.getOfficeManager(repositoryName);
+        officemanager.validateContentValues(properties, values, type);
     }
 
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
