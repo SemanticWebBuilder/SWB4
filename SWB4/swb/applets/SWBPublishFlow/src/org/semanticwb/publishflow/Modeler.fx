@@ -26,6 +26,7 @@ import org.semanticwb.publishflow.EndEvent;
 import java.lang.Exception;
 import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.AuthorizeLink;
+import java.net.URL;
 
 
 /**
@@ -217,10 +218,10 @@ public class Modeler extends CustomNode
                     x:100
                     y:100
                     modeler:this
-                    uri:"new:startevent:{ToolBar.counter++}"
-
+                    uri:"new:startevent:{ToolBar.counter++}"                                      
                 }
                 add(startEvent);
+                
                 
 
 
@@ -421,22 +422,15 @@ public class Modeler extends CustomNode
                         }
                     }
                 }
-                /*Iterator it = this.workflow.getResourcesModel().iterator();
-                while (it.hasNext())
+                var resourceTypes:Iterator=eworkflow.getNodesbyName("resourceType");
+                while(resourceTypes.hasNext())
                 {
-                    ResourceType res = (ResourceType) it.next();
-                    jTableResourceTypeModel resmodel = (jTableResourceTypeModel) this.jTableTipos_Recursos.getModel();
-                    Iterator recursos = resmodel.iterator();
-                    while (recursos.hasNext())
-                    {
-                        ResourceType rescat = (ResourceType) recursos.next();
-                        if (rescat.equals(res))
-                        {
-                            rescat.setSelected(true);
-                        }
-                    }
-
-                }*/
+                    var resourceType: WBTreeNode=resourceTypes.next() as WBTreeNode;
+                    var idres:String=resourceType.getAttribute("id");
+                    var tmr:String=resourceType.getAttribute("topicmap");
+                    var res:String="{idres}@{tmr}";
+                    insert info info.resourceTypes;
+                }
 
             }
         }
@@ -713,8 +707,87 @@ public class Modeler extends CustomNode
             }
 
         }
-        
+
+        for(svalue in info.resourceTypes)
+        {
+                var values:String[]=svalue.split("@");
+                var etype : WBTreeNode = wf.addNode();
+                etype.setName("resourceType");
+                etype.addAttribute("name", values[0]);
+                etype.addAttribute("id", values[0]);
+                etype.addAttribute("topicmap", values[1]);
+
+        }
+        var xml : String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>update</cmd><tm>{tm}</tm>{node.getFirstNode().getXML()}</req>";
         println(node.getXML());
+        var resxml: String = ToolBar.conn.getData(xml);
+        try
+        {
+            var parser : WBXMLParser = new WBXMLParser();
+            var respnode : WBTreeNode= parser.parse(resxml);
+            if (respnode.getFirstNode() != null and respnode.getFirstNode().getFirstNode() != null)
+            {
+                var eid : WBTreeNode = respnode.getFirstNode().getFirstNode();
+                if (eid.getName().equals("workflowid"))
+                {
+                    if (info.id_workflow != null)
+                    {
+                        var iversion : Integer = Double.parseDouble(info.version) as Integer;
+                        iversion++;
+                        info.version="{iversion}.0";
+                        
+                    }
+                    var version : WBTreeNode = respnode.getFirstNode().getNodebyName("version");                    
+                    info.id_workflow=eid.getFirstNode().getText();
+
+                    try
+                    {
+                        var url_script:String=ToolBar.conn.getApplet().getParameter("script");
+
+                        var newurl : String= "{url_script}tm={tm}&id={eid.getFirstNode().getText()}";
+                        var _url : URL= new URL(ToolBar.conn.getApplet().getCodeBase().getProtocol(), ToolBar.conn.getApplet().getCodeBase().getHost(), ToolBar.conn.getApplet().getCodeBase().getPort(), newurl);
+                        ToolBar.conn.getApplet().getAppletContext().showDocument(_url, "status");
+                    }
+                    catch (e: Exception)
+                    {
+                        System.out.println(e.getMessage());
+                        e.printStackTrace(System.out);
+                    }
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("save"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                else
+                {
+                    var err : WBTreeNode = respnode.getFirstNode().getFirstNode();
+                    if (err != null)
+                    {
+                        JOptionPane.showMessageDialog(null, err.getFirstNode().getText(), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    else
+                    {
+
+                        JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        catch ( e: Exception)
+        {
+            var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("err1");
+            JOptionPane.showMessageDialog(null,   "{msg} : {e.getMessage()}\r\n{resxml}", java.util.ResourceBundle.getBundle("org/semanticwb/publishflowEditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            println("resxml: {resxml}");
+            e.printStackTrace(System.out);
+            return;
+        }
+        
 
         
     }

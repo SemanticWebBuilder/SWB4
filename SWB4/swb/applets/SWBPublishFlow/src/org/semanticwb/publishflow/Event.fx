@@ -55,7 +55,7 @@ public class Event extends FlowObject
             centerY: bind y
             radius: bind w/2
             //styleClass: "event"
-            style: Styles.style_event
+            style: bind Styles.style_event
             smooth:true;
         };
 
