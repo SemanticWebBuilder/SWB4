@@ -113,7 +113,7 @@ import org.w3c.dom.NodeList;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-
+    private SWBRepositoryManager manager = new SWBRepositoryManager();
     private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
     private static final String MIGRATE_WBRESOURCESEXCELCONTENT = "com.infotec.wb.resources.ExcelContent";
     private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
@@ -370,7 +370,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      */
     private Resource migrateResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
-        SWBRepositoryManager manager = new SWBRepositoryManager();
+        
         String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
         OfficeApplication officeApplication = new OfficeApplication();
         officeApplication.setUser(this.user);
