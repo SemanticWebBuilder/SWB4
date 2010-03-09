@@ -211,6 +211,25 @@ public class ToolBar extends CustomNode {
                                         save();
                                     }
                                 },
+                                 ImgButton {
+                                    text: "Save"
+                                    image: "images/edit_flujo_1.png"
+                                    imageOver: "images/edit_flujo_2.png"
+                                    action: function (): Void {
+                                        var dialog:EditWorkflow;
+                                        dialog=new EditWorkflow();
+                                        dialog.resourceTypes=modeler.resourceTypes;
+                                        dialog.name=modeler.name;
+                                        dialog.description=modeler.description;
+                                        dialog.init();
+                                        dialog.setVisible(true);
+                                        if(not dialog.cancel)
+                                        {
+                                            modeler.resourceTypes=dialog.resourceTypes;
+                                        }
+
+                                    }
+                                },
                                 ImageView {
                                     image: Image {
                                         url: "{__DIR__}images/barra_division.png"

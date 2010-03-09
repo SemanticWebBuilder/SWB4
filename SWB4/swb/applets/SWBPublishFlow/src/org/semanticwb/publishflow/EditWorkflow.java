@@ -9,16 +9,13 @@ import java.awt.*;
 
 
 import applets.commons.*;
+import com.sun.javafx.runtime.sequence.Sequence;
 
 
-/**
- * Formulario para editar un flujo der publicaci�n, contiene tres pesta�as, la de
- * propiedades, la de actividades y la de dise�o.
- * @author Victor Lorenzana
- */
+
 public class EditWorkflow extends javax.swing.JDialog
 {
-
+    public boolean cancel;
     private final String PRM_JSESS = "jsess";
     private final String PRM_CGIPATH = "cgipath";
     private final String PRM_TOPICMAP = "tm";
@@ -27,9 +24,13 @@ public class EditWorkflow extends javax.swing.JDialog
     public static String tm = "";
     public String url_script;    
     private static URL url = null;
-    /** Initializes the applet EditWorkflow */
+    public Sequence<? extends String> resourceTypes;
+    WBConnection con;
+    String name;
+    String description;
     
-    Locale locale;
+    
+    Locale locale=new Locale("es");
 
    public EditWorkflow()
     {
@@ -44,76 +45,36 @@ public class EditWorkflow extends javax.swing.JDialog
             System.out.println(ue.getMessage());
         }
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setModal(true);
+        pack();
+        loadResources();
    }
 
-    
     public void init()
     {
-        /*try
+        if(resourceTypes!=null)
         {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception ue)
-        {
-            // No debe hacer nada
-            System.out.println(ue.getMessage());
-        }
-        locale = Locale.getDefault();
-        if (this.getParameter("locale") != null && !this.getParameter("locale").equals(""))
-        {
-            try
+            for(String res : resourceTypes)
             {
-
-                locale = new Locale(this.getParameter("locale"));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace(System.out);
+                String[] values=res.split("@");
+                String id=values[0];
+                String tmres=values[1];
+                jTableResourceTypeModel model=(jTableResourceTypeModel)jTableTipos_Recursos.getModel();
+                for(int i=0;i<model.getRowCount();i++)
+                {
+                    ResourceType type=model.getResourceType(i);
+                    if(type.getID().equals(id) && type.getTopicMap().equals(tmres))
+                    {
+                        type.setSelected(true);
+                    }
+                }
             }
         }
-        workflow = new Workflow(locale);
-        initComponents();
-        jsess = this.getParameter(PRM_JSESS);
-        cgiPath = this.getParameter(PRM_CGIPATH);
-        tm = this.getParameter(PRM_TOPICMAP);
-        String id = this.getParameter("idworkflow");
-        url_script = this.getParameter("script");
-
-        try
-        {
-            url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), cgiPath);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-        loadResources();
-        if (id != null && !id.equals(""))
-        {
-            loadWorkflow(id);
-        }
-        this.setJMenuBar(this.jMenuBar1);
-
-        this.jTextFieldName.grabFocus();
-        jPanelDesign = new JActivityFlowPanel(workflow.getActivitiesModel(), this.jTableActivitiesG, locale);
-        this.jScrollPaneDesign.setViewportView(this.jPanelDesign);
-        workflow.getActivitiesModel().setTable(this.jTableActividades);
-        this.jTableActividades.setModel(workflow.getActivitiesModel());
-        workflow.getActivitiesModel().setTable(this.jTableActividades);
-        DefaultListSelectionModel selectionmodel = new DefaultListSelectionModel();
-        this.jTableActividades.setSelectionModel(selectionmodel);
-        SelectActivities select = new SelectActivities(this.jPopupMenu1);
-        this.jTableActividades.addMouseListener(select);
-        this.jScrollPaneActividades.addMouseListener(select);
-        this.jTextFieldVersion.setText(workflow.getVersion());
-        
-        this.jLabelDescription.setVisible(false);
-        this.jTextAreaDescription.setVisible(false);
-        this.jLabelName.setVisible(false);
-        this.jTextFieldName.setVisible(false);
-        this.jScrollPaneAreaDescription.setVisible(false);
-        this.jCheckBoxEdit.setVisible(false);*/
+        this.jTextFieldName.setText(name);
+        this.jTextAreaDescription.setText(description);
     }
+    
 
    
 
@@ -122,24 +83,27 @@ public class EditWorkflow extends javax.swing.JDialog
 
         jTableResourceTypeModel model = new jTableResourceTypeModel(locale);
         this.jTableTipos_Recursos.setModel(model);
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getResourceTypeCat</cmd><tm>" + tm + "</tm></req>";
-        xml = EditWorkflow.getData(xml, this);
-        WBXMLParser parser = new WBXMLParser();
-        WBTreeNode exml = parser.parse(xml);
-        if (exml.getFirstNode() != null)
+        if(tm!=null && con!=null)
         {
-            Vector nodes = exml.getFirstNode().getNodes();
-            for (int i = 0; i < nodes.size(); i++)
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getResourceTypeCat</cmd><tm>" + tm + "</tm></req>";
+            xml = con.getData(xml);
+            WBXMLParser parser = new WBXMLParser();
+            WBTreeNode exml = parser.parse(xml);
+            if (exml.getFirstNode() != null)
             {
-                WBTreeNode node = (WBTreeNode) nodes.elementAt(i);
-                if (node.getName().equalsIgnoreCase("resourceType"))
+                Vector nodes = exml.getFirstNode().getNodes();
+                for (int i = 0; i < nodes.size(); i++)
                 {
-                    WBTreeNode ereosurce = (WBTreeNode) node;
-                    String description = ereosurce.getFirstNode().getFirstNode().getText();
-                    ResourceType type = new ResourceType(ereosurce.getAttribute("id"), ereosurce.getAttribute("name"), description, ereosurce.getAttribute("topicmap"), ereosurce.getAttribute("topicmapname"));
-                    model.addResourceType(type);
-                }
+                    WBTreeNode node = (WBTreeNode) nodes.elementAt(i);
+                    if (node.getName().equalsIgnoreCase("resourceType"))
+                    {
+                        WBTreeNode ereosurce = (WBTreeNode) node;
+                        String sdescription = ereosurce.getFirstNode().getFirstNode().getText();
+                        ResourceType type = new ResourceType(ereosurce.getAttribute("id"), ereosurce.getAttribute("name"), sdescription, ereosurce.getAttribute("topicmap"), ereosurce.getAttribute("topicmapname"));
+                        model.addResourceType(type);
+                    }
 
+                }
             }
         }
     /*Iterator eresources=exml.getFirstNode().getNodesbyName("resourceType");
@@ -174,42 +138,47 @@ public class EditWorkflow extends javax.swing.JDialog
         jPanelTiposRecursos = new javax.swing.JPanel();
         jScrollPaneTiposRescursos = new javax.swing.JScrollPane();
         jTableTipos_Recursos = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jButtonOk = new javax.swing.JButton();
+        jButtonCancel = new javax.swing.JButton();
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow"); // NOI18N
+        setTitle(bundle.getString("title")); // NOI18N
 
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12));
         jPanelPropiedades.setLayout(null);
 
         jLabelName.setLabelFor(jTextFieldName);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow",locale); // NOI18N
-        jLabelName.setText(bundle.getString("nombre")); // NOI18N
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow",locale); // NOI18N
+        jLabelName.setText(bundle1.getString("nombre")); // NOI18N
         jPanelPropiedades.add(jLabelName);
-        jLabelName.setBounds(20, 90, 52, 14);
+        jLabelName.setBounds(10, 60, 52, 14);
 
         jTextFieldName.setEditable(false);
         jPanelPropiedades.add(jTextFieldName);
-        jTextFieldName.setBounds(90, 90, 290, 19);
+        jTextFieldName.setBounds(90, 60, 290, 19);
 
         jLabelDescription.setLabelFor(jTextAreaDescription);
-        jLabelDescription.setText(bundle.getString("Description")); // NOI18N
+        jLabelDescription.setText(bundle1.getString("Description")); // NOI18N
         jPanelPropiedades.add(jLabelDescription);
-        jLabelDescription.setBounds(20, 130, 58, 14);
+        jLabelDescription.setBounds(10, 110, 58, 14);
 
-        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12));
         jLabelVersion.setLabelFor(jTextFieldVersion);
-        jLabelVersion.setText(bundle.getString("version")); // NOI18N
+        jLabelVersion.setText(bundle1.getString("version")); // NOI18N
         jPanelPropiedades.add(jLabelVersion);
         jLabelVersion.setBounds(10, 20, 47, 15);
 
         jTextFieldVersion.setEditable(false);
         jTextFieldVersion.setText("1.0");
         jPanelPropiedades.add(jTextFieldVersion);
-        jTextFieldVersion.setBounds(70, 20, 27, 19);
+        jTextFieldVersion.setBounds(90, 20, 27, 19);
 
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow"); // NOI18N
-        jCheckBoxEdit.setText(bundle1.getString("modificarContenido")); // NOI18N
+        jCheckBoxEdit.setText(bundle.getString("modificarContenido")); // NOI18N
         jPanelPropiedades.add(jCheckBoxEdit);
-        jCheckBoxEdit.setBounds(20, 50, 235, 23);
+        jCheckBoxEdit.setBounds(10, 220, 235, 23);
 
         jTextAreaDescription.setEditable(false);
         jTextAreaDescription.setLineWrap(true);
@@ -217,9 +186,9 @@ public class EditWorkflow extends javax.swing.JDialog
         jScrollPaneAreaDescription.setViewportView(jTextAreaDescription);
 
         jPanelPropiedades.add(jScrollPaneAreaDescription);
-        jScrollPaneAreaDescription.setBounds(90, 130, 102, 100);
+        jScrollPaneAreaDescription.setBounds(90, 110, 102, 100);
 
-        jTabbedPane1.addTab(bundle.getString("propiedades"), jPanelPropiedades); // NOI18N
+        jTabbedPane1.addTab(bundle1.getString("propiedades"), jPanelPropiedades); // NOI18N
 
         jPanelTiposRecursos.setLayout(new java.awt.BorderLayout());
 
@@ -235,60 +204,85 @@ public class EditWorkflow extends javax.swing.JDialog
 
         jPanelTiposRecursos.add(jScrollPaneTiposRescursos, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab(bundle.getString("Tipos_de_rescursos"), jPanelTiposRecursos); // NOI18N
+        jTabbedPane1.addTab(bundle1.getString("Tipos_de_rescursos"), jPanelTiposRecursos); // NOI18N
 
-        jPanel2.add(jTabbedPane1, java.awt.BorderLayout.PAGE_START);
+        jPanel2.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 30));
+        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        jButtonOk.setText("Aceptar");
+        jButtonOk.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOkActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonOk);
+
+        jButtonCancel.setText("Cancelar");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonCancel);
+
+        jPanel2.add(jPanel1, java.awt.BorderLayout.SOUTH);
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-    public static String getData(String xml, Component cmp)
-    {
 
-        StringBuffer ret = new StringBuffer();
-        try
+    private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonOkActionPerformed
+    {//GEN-HEADEREND:event_jButtonOkActionPerformed
+        if (this.jTextFieldName.getText().trim().equals(""))
         {
-
-            URLConnection urlconn = url.openConnection();
-            urlconn.setUseCaches(false);
-            if (jsess != null)
-            {
-                urlconn.setRequestProperty("Cookie", "JSESSIONID=" + jsess);
-            }
-            urlconn.setRequestProperty("Content-Type", "application/xml");
-            urlconn.setDoOutput(true);
-            PrintWriter pout = new PrintWriter(urlconn.getOutputStream());
-            pout.println(xml);
-            pout.close();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlconn.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-            {
-                ret.append(inputLine);
-                ret.append("\n");
-            }
-            in.close();
+            this.jTabbedPane1.setSelectedIndex(0);
+            this.jTextFieldName.grabFocus();
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("indicar_titutlo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        catch (Exception e)
+        if (this.jTextAreaDescription.getText().trim().equals(""))
         {
-            JOptionPane.showMessageDialog(cmp, e.getMessage(), "INFOTEC WebBuilder 3.0", JOptionPane.ERROR_MESSAGE);
-            System.out.println(java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow").getString("Error_to_open_service...") + e);
+            this.jTabbedPane1.setSelectedIndex(0);
+            this.jTextAreaDescription.grabFocus();
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Favor_de_indicar_la_descripcion_del_flujo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        return ret.toString();
-    }
+        boolean resselected = false;
+        jTableResourceTypeModel modelres = (jTableResourceTypeModel) this.jTableTipos_Recursos.getModel();
+        for (int i = 0; i < modelres.getRowCount(); i++)
+        {
+            if (modelres.getResourceType(i).isSelected().booleanValue())
+            {
+                resselected = true;
+                break;
+            }
+        }
+        if (!resselected)
+        {
+            this.jTabbedPane1.setSelectedIndex(1);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        cancel=true;
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonOkActionPerformed
 
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonCancelActionPerformed
+    {//GEN-HEADEREND:event_jButtonCancelActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonCancelActionPerformed
     
-
-    
-
-    
-
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonOk;
     private javax.swing.JCheckBox jCheckBoxEdit;
     private javax.swing.JLabel jLabelDescription;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelVersion;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelPropiedades;
     private javax.swing.JPanel jPanelTiposRecursos;
