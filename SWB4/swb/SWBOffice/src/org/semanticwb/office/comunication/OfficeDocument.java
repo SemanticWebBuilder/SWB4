@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -53,6 +54,7 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -113,7 +115,7 @@ import org.w3c.dom.NodeList;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
-    private SWBRepositoryManager manager = new SWBRepositoryManager();
+    private SWBRepositoryManager manager;
     private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
     private static final String MIGRATE_WBRESOURCESEXCELCONTENT = "com.infotec.wb.resources.ExcelContent";
     private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
@@ -146,10 +148,19 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public OfficeDocument()
     {
+        try
+        {
+            manager = new SWBRepositoryManager();
+        }
+        catch (Exception ex)
+        {
+            log.error(ex);
+        }
     }
 
     public OfficeDocument(String user, String password)
     {
+        this();
         this.user = user;
         this.password = password;
     }
