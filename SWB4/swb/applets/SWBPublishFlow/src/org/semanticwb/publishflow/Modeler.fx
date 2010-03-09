@@ -453,8 +453,22 @@ public class Modeler extends CustomNode
 
         if(sizeof info.resourceTypes==0)
         {
-            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("indicar_por_lo_menos_una_actividad"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
+        }
+
+        for(content in contents)
+        {
+            if(content instanceof Task)
+            {
+                var task: Task=content as Task;
+                if(sizeof task.users==0 and sizeof task.roles==0)
+                {
+                    JOptionPane.showMessageDialog(null, "La tarea: {task.title}, no tiene indicado que usuarios o que roles tienen permisos de autorizacion", java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+            }
         }
 
         var endEvent:EndEvent;
