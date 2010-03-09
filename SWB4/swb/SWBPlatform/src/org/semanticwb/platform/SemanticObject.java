@@ -184,7 +184,21 @@ public class SemanticObject
         GenericObject gen=getGenericInstance();
         if(gen==null)
         {
-            gen=getSemanticClass().construcGenericInstance(this);
+            SemanticClass clazz=getSemanticClass();
+            if(getSemanticClass().isSWBInterface())
+            {
+                Iterator<SemanticClass> classes=listSemanticClasses();
+                while(classes.hasNext())
+                {
+                    SemanticClass tempClazz=classes.next();
+                    if(tempClazz.isSWBClass())
+                    {
+                        clazz=tempClazz;
+                        break;
+                    }
+                }
+            }
+            gen=clazz.construcGenericInstance(this);
             setGenericInstance(gen);
         }
         return gen;
