@@ -46,11 +46,21 @@ import org.semanticwb.model.User;
 public final class SWBRepositoryManager implements RepositoryManager
 {    
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
-    private SWBRepository repository;
+    private static SWBRepository repository;
     private OfficeManager officeManager;
-    public SWBRepositoryManager() throws SWBException,RepositoryException
+    static
     {
-        repository=new SWBRepository();
+        try
+        {
+            repository=new SWBRepository();
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+        }
+    }
+    public SWBRepositoryManager() throws SWBException,RepositoryException
+    {        
         officeManager=new SWBOfficeManager(this);
     }
 
