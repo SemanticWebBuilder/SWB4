@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.jcr283.implementation;
 
 import java.security.Principal;
@@ -25,57 +24,92 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 
-
 /**
  *
  * @author victor.lorenzana
  */
-public final class SWBRepository implements Repository {
+public final class SWBRepository implements Repository
+{
+
     public static final String DEFAULT_URI_WORKSPACES = "http://www.semanticwb.org.mx/jcr283/workspace#";
-    
     private static Logger log = SWBUtils.getLogger(SWBRepository.class);
     private static Hashtable<String, Value[]> descriptors = new Hashtable<String, Value[]>();
-    public static final String DEFAULT_WORKSPACE="default";
+    public static final String DEFAULT_WORKSPACE = "default";
     private static NodeTypeManagerImp NodeTypeManagerImp;
-    private static final NamespaceRegistryImp namespaceRegistryImp=new NamespaceRegistryImp();
+    private static final NamespaceRegistryImp namespaceRegistryImp = new NamespaceRegistryImp();
+
     static
     {
 
         log.event("Initializing SWBRepository ...");
         new NodeTypeManagerImp();
-        descriptors.put(OPTION_VERSIONING_SUPPORTED, new Value[]{new ValueImp(false)});
-        descriptors.put(SPEC_VERSION_DESC, new Value[]{new ValueImp("2.0")});
-        descriptors.put(SPEC_NAME_DESC, new Value[]{new ValueImp("Content Repository for Java Technology API")});
-        descriptors.put(REP_VENDOR_DESC, new Value[]{new ValueImp("Semantic INFOTEC WebBuilder 4.0")});
-        descriptors.put(REP_VENDOR_URL_DESC, new Value[]{new ValueImp("http://www.webbuilder.org.mx")});
-        descriptors.put(REP_NAME_DESC, new Value[]{new ValueImp("Semantic INFOTEC WebBuilder 4.0 Repository")});
-        descriptors.put(REP_VERSION_DESC, new Value[]{new ValueImp("1.0.0.0")});
-        descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, new Value[]{new ValueImp(false)});
-        descriptors.put(OPTION_OBSERVATION_SUPPORTED, new Value[]{new ValueImp(false)});
-        descriptors.put(OPTION_LOCKING_SUPPORTED, new Value[]{new ValueImp(true)});
+        descriptors.put(OPTION_VERSIONING_SUPPORTED, new Value[]
+                {
+                    new ValueImp(false)
+                });
+        descriptors.put(SPEC_VERSION_DESC, new Value[]
+                {
+                    new ValueImp("2.0")
+                });
+        descriptors.put(SPEC_NAME_DESC, new Value[]
+                {
+                    new ValueImp("Content Repository for Java Technology API")
+                });
+        descriptors.put(REP_VENDOR_DESC, new Value[]
+                {
+                    new ValueImp("Semantic INFOTEC WebBuilder 4.0")
+                });
+        descriptors.put(REP_VENDOR_URL_DESC, new Value[]
+                {
+                    new ValueImp("http://www.webbuilder.org.mx")
+                });
+        descriptors.put(REP_NAME_DESC, new Value[]
+                {
+                    new ValueImp("Semantic INFOTEC WebBuilder 4.0 Repository")
+                });
+        descriptors.put(REP_VERSION_DESC, new Value[]
+                {
+                    new ValueImp("1.0.0.0")
+                });
+        descriptors.put(OPTION_TRANSACTIONS_SUPPORTED, new Value[]
+                {
+                    new ValueImp(false)
+                });
+        descriptors.put(OPTION_OBSERVATION_SUPPORTED, new Value[]
+                {
+                    new ValueImp(false)
+                });
+        descriptors.put(OPTION_LOCKING_SUPPORTED, new Value[]
+                {
+                    new ValueImp(true)
+                });
         checkDefaultWorkspace();
     }
+
     public static NamespaceRegistryImp getNamespaceRegistryImp()
     {
         return namespaceRegistryImp;
     }
+
     public static NodeTypeManagerImp getNodeTypeManagerImp()
     {
-        if(NodeTypeManagerImp==null)
+        if (NodeTypeManagerImp == null)
         {
-            NodeTypeManagerImp=new NodeTypeManagerImp();
+            NodeTypeManagerImp = new NodeTypeManagerImp();
         }
         return NodeTypeManagerImp;
     }
+
     private static void checkDefaultWorkspace()
     {
-        org.semanticwb.jcr283.repository.model.Workspace ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(DEFAULT_WORKSPACE);
-        if(ws==null)
+        org.semanticwb.jcr283.repository.model.Workspace ws = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.getWorkspace(DEFAULT_WORKSPACE);
+        if (ws == null)
         {
-            ws=org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, DEFAULT_URI_WORKSPACES);
+            ws = org.semanticwb.jcr283.repository.model.Workspace.ClassMgr.createWorkspace(DEFAULT_WORKSPACE, DEFAULT_URI_WORKSPACES);
             ws.setName(DEFAULT_WORKSPACE);
-        }        
+        }
     }
+
     public String[] getDescriptorKeys()
     {
         return descriptors.keySet().toArray(new String[descriptors.keySet().size()]);
@@ -107,8 +141,9 @@ public final class SWBRepository implements Repository {
         {
             return descriptors.get(key)[0].getString();
         }
-        catch(Exception e){
-            return null;        
+        catch (Exception e)
+        {
+            return null;
         }
     }
 
@@ -145,39 +180,40 @@ public final class SWBRepository implements Repository {
         }
         return null;
     }
+
     public Session login(Credentials credentials, String workspaceName) throws LoginException, NoSuchWorkspaceException, RepositoryException
     {
-        if(workspaceName==null)
+        if (workspaceName == null)
         {
-            workspaceName=DEFAULT_WORKSPACE;
+            workspaceName = DEFAULT_WORKSPACE;
         }
-        Workspace ws=Workspace.ClassMgr.getWorkspace(workspaceName);
-        if(ws==null)
+        Workspace ws = Workspace.ClassMgr.getWorkspace(workspaceName);
+        if (ws == null)
         {
-            throw new NoSuchWorkspaceException("The workspace "+workspaceName+" was not found");
-        }        
-        SessionImp session=null;
+            throw new NoSuchWorkspaceException("The workspace " + workspaceName + " was not found");
+        }
+        SessionImp session = null;
         if (credentials instanceof SimpleCredentials)
+        {
+            SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+            Principal principal = authenticate(simpleCredentials.getUserID(), new String(simpleCredentials.getPassword()));
+            if (principal == null)
             {
-                SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
-                Principal principal = authenticate(simpleCredentials.getUserID(), new String(simpleCredentials.getPassword()));
-                if (principal == null)
-                {
-                    throw new LoginException("The user can not be authenticated");
-                }
-                session=new SessionImp(this, principal);
+                throw new LoginException("The user can not be authenticated");
             }
-            else if (credentials instanceof SWBCredentials)
-            {
-                session= new SessionImp(this,((SWBCredentials) credentials).getPrincipal());
-            }
-            else
-            {
-                throw new LoginException("The credentials are not valid");
-            }
-        
-    
-        WorkspaceImp workspaceImp=new WorkspaceImp(session,ws);
+            session = new SessionImp(this, principal);
+        }
+        else if (credentials instanceof SWBCredentials)
+        {
+            session = new SessionImp(this, ((SWBCredentials) credentials).getPrincipal());
+        }
+        else
+        {
+            throw new LoginException("The credentials are not valid");
+        }
+
+
+        WorkspaceImp workspaceImp = new WorkspaceImp(session, ws);
         session.setWorkspace(workspaceImp);
         return session;
     }
@@ -194,7 +230,6 @@ public final class SWBRepository implements Repository {
 
     public Session login() throws LoginException, RepositoryException
     {
-        return login(null,null);
+        return login(null, null);
     }
-    
 }
