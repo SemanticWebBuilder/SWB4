@@ -129,10 +129,10 @@ public class Task extends FlowObject {
       {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
-            var dialog: DialogEditActivity;            
-            //dialog = new DialogEditActivity(title,description,ToolBar.conn,users,roles);
+            var dialog: DialogEditActivity;                        
             dialog = new DialogEditActivity();
             dialog.users=users;
+            dialog.locale=modeler.locale;
             dialog.roles=roles;
             dialog.name=title;
             dialog.con=ToolBar.conn;

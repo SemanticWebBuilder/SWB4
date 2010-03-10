@@ -35,7 +35,7 @@ import java.net.URL;
 
 public class Modeler extends CustomNode
 {
-    var locale:Locale;
+    public var locale:Locale;
     public var width:Number;
     public var height:Number;
     public var contents: Node[];
@@ -58,8 +58,19 @@ public class Modeler extends CustomNode
     public override function create(): Node
     {
         
-        
+        locale=new Locale("es");
+        if (ToolBar.conn.getApplet().getParameter("locale") != null and not ToolBar.conn.getApplet().getParameter("locale").equals(""))
+        {
+            try
+            {
 
+                locale = new Locale(ToolBar.conn.getApplet().getParameter("locale"));
+            }
+            catch (e: Exception)
+            {
+                e.printStackTrace(System.out);
+            }
+        }
          clipView=ClipView
          //var ret=ScrollPane
          {
@@ -424,6 +435,21 @@ public class Modeler extends CustomNode
         organizeMap();
     }
     
+    public function editProps() : Void
+    {
+        var dialog:EditWorkflow;
+        dialog=new EditWorkflow();
+        dialog.resourceTypes=resourceTypes;
+        dialog.name=name;
+        dialog.locale=locale;
+        dialog.description=description;
+        dialog.init();
+        dialog.setVisible(true);
+        if(not dialog.cancel)
+        {
+            resourceTypes=dialog.resourceTypes;
+        }
+    }
 
     public function save() : Void
     {
@@ -441,6 +467,7 @@ public class Modeler extends CustomNode
         if(sizeof resourceTypes==0)
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            editProps();
             return;
         }
 
