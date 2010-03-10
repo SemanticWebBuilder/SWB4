@@ -186,13 +186,14 @@ public class Modeler extends CustomNode
          return clipView;
     }
 
-    public function loadWorkflow(id : String) : Void
+    public function loadWorkflow() : Void
     {
         if(ToolBar.conn==null or ToolBar.conn.getApplet()==null)
         {
             return
         }
-        var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id}</id><tm>{tm}</tm></req>";
+        id_workflow = ToolBar.conn.getApplet().getParameter("idworkflow");
+        var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id_workflow}</id><tm>{tm}</tm></req>";
         var respxml : String= ToolBar.conn.getData(xml);        
 
         var parser : WBXMLParser= new WBXMLParser();
