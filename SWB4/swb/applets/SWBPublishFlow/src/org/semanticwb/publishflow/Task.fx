@@ -125,25 +125,31 @@ public class Task extends FlowObject {
 
     }
 
+    public function editTask() : Void
+    {
+        var dialog: DialogEditActivity;
+        dialog = new DialogEditActivity();
+        dialog.users=users;
+        dialog.locale=modeler.locale;
+        dialog.roles=roles;
+        dialog.name=title;
+        dialog.con=ToolBar.conn;
+        dialog.setVisible(true);
+        if(not dialog.cancel)
+        {
+            title=dialog.name;
+            description=dialog.description;
+            users=dialog.users;
+            roles=dialog.roles;
+        }
+    }
+
+
     public override function mouseClicked(e: MouseEvent)
       {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
-            var dialog: DialogEditActivity;                        
-            dialog = new DialogEditActivity();
-            dialog.users=users;
-            dialog.locale=modeler.locale;
-            dialog.roles=roles;
-            dialog.name=title;
-            dialog.con=ToolBar.conn;
-            dialog.setVisible(true);
-            if(not dialog.cancel)
-            {
-                title=dialog.name;
-                description=dialog.description;
-                users=dialog.users;
-                roles=dialog.roles;
-            }
+            editTask();
 
         }
     }
