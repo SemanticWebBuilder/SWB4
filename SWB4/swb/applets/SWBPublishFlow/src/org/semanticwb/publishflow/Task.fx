@@ -17,6 +17,8 @@ import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.StartEvent;
 import org.semanticwb.publishflow.EndEvent;
 import org.semanticwb.publishflow.ConnectionPoint;
+import java.lang.Void;
+import java.lang.Void;
 
 
 /**
@@ -29,7 +31,7 @@ public class Task extends FlowObject {
     public var description:String="";
     public var days:Integer;
     public var hours:Integer;
-
+    public var button:ImgButton;
     
     public override function create(): Node {
             super.create();
@@ -55,6 +57,33 @@ public class Task extends FlowObject {
             style: Styles.style_task
             smooth: true;
         };
+
+        button=ImgButton
+        {
+            text: "Edit"
+            image: "images/edit_task_1.png"
+            imageOver: "images/edit_task_1.png"
+            scaleX:0.5
+            scaleY:0.5
+            translateX:bind x+12
+            translateY:bind y-5
+            opacity:0.8
+            /*onMouseEntered:function(e:MouseEvent):Void
+            {
+                opacity=1
+            }
+            onMouseExited:function(e:MouseEvent):Void
+            {
+                opacity=0.5
+            }*/
+
+            action:function(): Void
+            {
+                editTask();
+            }
+
+        }
+
         // add connectionPoints
 
         var cp:ConnectionPoint=ConnectionPoint
@@ -93,7 +122,7 @@ public class Task extends FlowObject {
 
         return Group {
                     content: [
-                        shape, text
+                        shape, text,button
                     ]
                     scaleX: bind s;
                     scaleY: bind s;
@@ -149,7 +178,7 @@ public class Task extends FlowObject {
       {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
-            editTask();
+            //editTask();
 
         }
     }

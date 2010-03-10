@@ -183,13 +183,25 @@ public class ConnectionObject extends CustomNode {
         }
         else
         {
+                
             // estan desalineados
             if(pini.x==pinter1.x) 
             {
-                lt=LineTo { x: bind pinter2.x, y: bind pinter1.y };
-                insert lt into pathElements;
-                lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
-                insert lt into pathElements;
+                    
+                if(pinter2.y<pend.y and pinter1.y>pend.y)
+                {   
+                    lt=LineTo { x: bind pinter1.x, y: bind pinter2.y };
+                    insert lt into pathElements;
+                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                    insert lt into pathElements;
+                }
+                else
+                {                    
+                    lt=LineTo { x: bind pinter2.x, y: bind pinter1.y };
+                    insert lt into pathElements;
+                    lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
+                    insert lt into pathElements;
+                }
             }
             else
             {
@@ -197,6 +209,7 @@ public class ConnectionObject extends CustomNode {
                 insert lt into pathElements;
                 lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                 insert lt into pathElements;
+    
             }
 
         }

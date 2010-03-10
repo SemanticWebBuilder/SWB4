@@ -36,7 +36,7 @@ public class ImgButton extends CustomNode
                ImageView {
 	         image: Image {
 		   url: "{__DIR__}{image}"
-	         }
+	         }                 
                  visible: bind not over
                },
                ImageView {
