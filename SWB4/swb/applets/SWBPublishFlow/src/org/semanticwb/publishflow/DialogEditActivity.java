@@ -151,7 +151,7 @@ public class DialogEditActivity extends javax.swing.JDialog
     {
         jTableUserModel model = new jTableUserModel(locale);
         this.jTableUsuarios.setModel(model);
-        if (con != null)
+        if (con != null &&  con.getApplet()!=null && con.getApplet().getParameter("tm")!=null)
         {
             String tm = con.getApplet().getParameter("tm");
             if (tm != null)
@@ -178,7 +178,7 @@ public class DialogEditActivity extends javax.swing.JDialog
     {
         jTableRolesModel model = new jTableRolesModel(locale);
         this.jTableRoles.setModel(model);
-        if (con != null)
+        if (con != null && con.getApplet()!=null && con.getApplet().getParameter("tm")!=null)
         {
             String tm = con.getApplet().getParameter("tm");
             if (tm != null)

@@ -17,8 +17,12 @@ import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.StartEvent;
 import org.semanticwb.publishflow.EndEvent;
 import org.semanticwb.publishflow.ConnectionPoint;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import java.lang.Void;
 import java.lang.Void;
+
+
 
 
 /**
@@ -28,10 +32,11 @@ public class Task extends FlowObject {
 
     public var users: String[];
     public var roles: String[];
-    public var description:String="";
+    public var description:String="Sin descripción";
     public var days:Integer;
     public var hours:Integer;
     public var button:ImgButton;
+    public var alert:ImageView;
     
     public override function create(): Node {
             super.create();
@@ -57,6 +62,17 @@ public class Task extends FlowObject {
             style: Styles.style_task
             smooth: true;
         };
+        alert=ImageView
+        {
+                image:Image
+                {
+                    url: "{__DIR__}images/alerta.png"
+                }
+                visible:bind hasErros()
+                x:bind {x}-w/2
+                y:bind {x}-h/2
+            
+        }
 
         button=ImgButton
         {
@@ -68,15 +84,6 @@ public class Task extends FlowObject {
             translateX:bind x+12
             translateY:bind y-5
             opacity:0.8
-            /*onMouseEntered:function(e:MouseEvent):Void
-            {
-                opacity=1
-            }
-            onMouseExited:function(e:MouseEvent):Void
-            {
-                opacity=0.5
-            }*/
-
             action:function(): Void
             {
                 editTask();
@@ -115,20 +122,35 @@ public class Task extends FlowObject {
         cp=ConnectionPoint
         {
             id:"8"
-            x:bind {x}+w/2;
-            y:bind {y}+h/2;
+            x:bind {x}-w/2;
+            y:bind {y}-h/2;
         };
         insert cp into connectionPoints;
 
         return Group {
                     content: [
-                        shape, text,button
+                        shape, text,button,alert
                     ]
                     scaleX: bind s;
                     scaleY: bind s;
                     opacity: bind o;
                     effect: Styles.dropShadow;
                 };
+    }
+
+
+    bound public function hasErros() :Boolean
+    {
+        if(sizeof users==0 or sizeof roles==0)
+        {
+            true
+        }
+        else
+        {
+            false
+        }
+
+
     }
 
     public override function getSequence() : ConnectionObject
@@ -160,9 +182,11 @@ public class Task extends FlowObject {
         dialog = new DialogEditActivity();
         dialog.users=users;
         dialog.locale=modeler.locale;
+        dialog.description=description;
         dialog.roles=roles;
         dialog.name=title;
         dialog.con=ToolBar.conn;
+        dialog.init();
         dialog.setVisible(true);
         if(not dialog.cancel)
         {
