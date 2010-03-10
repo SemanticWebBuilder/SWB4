@@ -1,26 +1,25 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.servlet.internal;
 
 import java.io.IOException;
@@ -53,14 +52,12 @@ public class Login implements InternalServlet
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Login.class);
-   // private static String VALSESS = "swb4-auto";
-   // private static String CALLBACK = "swb4-callback";
+    // private static String VALSESS = "swb4-auto";
+    // private static String CALLBACK = "swb4-callback";
     /** The _realm. */
-   private static String _realm = "Semantic Web Builder";
-    
+    private static String _realm = "Semantic Web Builder";
     /** The _name. */
     private String _name = "login";
-    
     /** The handle error. */
     private boolean handleError = false;
     //Constantes para primer implementación
@@ -71,7 +68,7 @@ public class Login implements InternalServlet
     public void init(ServletContext config)
     {
         log.event("Initializing InternalServlet Login...");
-    //TODO: preparar los aspectos configurables de la autenticación
+        //TODO: preparar los aspectos configurables de la autenticación
     }
 
     /**
@@ -90,7 +87,8 @@ public class Login implements InternalServlet
      * @param request the request
      * @param usr the usr
      */
-    public static void sendLoginLog(HttpServletRequest request, User usr) {
+    public static void sendLoginLog(HttpServletRequest request, User usr)
+    {
         //User session log
         {
             StringBuffer logbuf = new StringBuffer();
@@ -101,11 +99,14 @@ public class Login implements InternalServlet
             logbuf.append("|");
             logbuf.append(usr.getSemanticObject().getModel().getName());
             logbuf.append("|");
-            String lg=usr.getLogin();
-            if(lg==null)lg="_";
+            String lg = usr.getLogin();
+            if (lg == null)
+            {
+                lg = "_";
+            }
             logbuf.append(lg);
             logbuf.append("|");
-            logbuf.append(""+request.getSession(true).hashCode());
+            logbuf.append("" + request.getSession(true).hashCode());
             SWBPortal.getMessageCenter().sendMessage(logbuf.toString());
         }
     }
@@ -141,13 +142,13 @@ public class Login implements InternalServlet
                 lc.logout();
                 request.getSession(true).invalidate();
                 String url = request.getParameter("wb_goto");
-                if ((url == null || url.equals("/")))
+                if ((url == null))
                 {
                     url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
-                    log.debug("LOGOUT (Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
-                    sendRedirect(response, url);
-                    return;
                 }
+                log.debug("LOGOUT (Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
+                sendRedirect(response, url);
+                return;
             } catch (Exception elo)
             {
                 log.error("LoggingOut " + subject, elo);
@@ -176,23 +177,11 @@ public class Login implements InternalServlet
                 response.sendError(500, "Authentication System failure!!!");
                 return;
             }
-            LoginContext lc;
             try
             {
-                log.trace("Sending calback:"+callbackHandler+" "+context+" "+ur.getId());
-               // request.getSession(true).invalidate();
-                lc = new LoginContext(context, subject, callbackHandler);
-                lc.login();
+                doLogin(callbackHandler, context, subject, request);
 
-                it = subject.getPrincipals().iterator();
-                if (it.hasNext())
-                {
-                    user = (User) it.next();
-                    log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
-                }
-                sendLoginLog(request, user);
-
-            }catch (LoginException ex)
+            } catch (LoginException ex)
             {
                 log.debug("Can't log User", ex);
                 doResponse(request, response, dparams, "User non existent", authMethod);
@@ -204,7 +193,8 @@ public class Login implements InternalServlet
 
         //
         String url = request.getParameter("wb_goto");
-        if (user.getUserRepository().isExternal()){
+        if (user.getUserRepository().isExternal())
+        {
             if ((url == null || url.equals("/")) && user.getUserRepository().getBridge().doRedirect())
             {
                 url = user.getUserRepository().getBridge().getRedirectURL();
@@ -220,191 +210,191 @@ public class Login implements InternalServlet
         sendRedirect(response, url);
     }
 
-/**
- * public void doProcessxx(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
- * {
- * if (null == dparams.getWebPage())
- * {
- * return;
- * }
- * UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
- * String authMethod = ur.getAuthMethod();
- * //String authMethod = ur.getProperty(UserRepository.SWBUR_AuthMethod);
- * String context = ur.getLoginContext();
- * //String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
- * String CBHClassName = ur.getCallBackHandlerClassName();
- * //String CBHClassName = ur.getProperty(UserRepository.SWBUR_CallBackHandlerClassName);
- * Subject subject = SWBPortal.getUserMgr().getSubject(request);
- * HttpSession session = request.getSession(true);
- * String enAuto = (String) session.getAttribute(VALSESS);
- * String uri = request.getRequestURI();
- * String path = SWBPlatform.getContextPath();
- * User user = null;
- * Iterator it = subject.getPrincipals().iterator();
- * if (it.hasNext())
- * {
- * user = (User) it.next();
- * }
- * if (request.getParameter("wb_logout") != null)
- * {
- * LoginContext lc;
- * try
- * {
- * lc = new LoginContext(context, subject);
- * lc.logout();
- * request.getSession(true).invalidate();
- * String url = request.getParameter("wb_goto");
- * if ((url == null || url.equals("/")))
- * {
- * url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
- * log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
- * sendRedirect(response, url);
- * return;
- * }
- * } catch (Exception elo)
- * {
- * log.error("LoggingOut " + subject, elo);
- * }
- * }
- * 
- * if (uri != null)
- * {
- * path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
- * }
- * if (handleError || user == null || !user.isSigned())
- * {
- * CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
- * if (null == callbackHandler)
- * {
- * if (null != request.getParameter("wb_username"))
- * {
- * enAuto = "Working";
- * }
- * try
- * {
- * log.debug("New callbackHandler...");
- * Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
- * int method = 0;
- * for (int i = 0; i < constructor.length; i++)
- * {
- * if (constructor[i].getParameterTypes().length == 4)
- * {
- * method = i;
- * }
- * }
- * callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
- * //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
- * session.setAttribute(CALLBACK, callbackHandler);
- * } catch (Exception ex)
- * {
- * log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId()+"\n"+CBHClassName, ex);
- * response.sendError(500, "Authentication System failure!!!");
- * return;
- * }
- * } else
- * {
- * if (null == request.getParameter("wb_username"))
- * {
- * log.debug("Request a new username...");
- * doResponse(request, response, dparams, null, authMethod);
- * session.setAttribute(VALSESS, "Working");
- * return;
- * }
- * ((SWB4CallbackHandler) callbackHandler).setRequest(request);
- * ((SWB4CallbackHandler) callbackHandler).setResponse(response);
- * }
- * if (null == enAuto)
- * {
- * log.debug("Starts new Authentication process...");
- * doResponse(request, response, dparams, null, authMethod);
- * session.setAttribute(VALSESS, "Working");
- * return;
- * }
- * LoginContext lc;
- * try
- * {
- * log.trace("1er callback "+callbackHandler);
- * request.getSession(true).invalidate();
- * subject = SWBPortal.getUserMgr().getSubject(request);
- * log.trace("es null??? "+((SWB4CallbackHandler) callbackHandler).getRequest()+" y es SWB4 " + (callbackHandler instanceof SWB4CallbackHandler));
- * if (callbackHandler instanceof SWB4CallbackHandler && null == ((SWB4CallbackHandler) callbackHandler).getRequest())
- * {
- * log.trace("intentando...");
- * ((SWB4CallbackHandler) callbackHandler).setRequest(request);
- * ((SWB4CallbackHandler) callbackHandler).setResponse(response);
- * 
- * }
- * try
- * {
- * log.trace("testing for null: "+
- * ((SWB4CallbackHandler) callbackHandler).getRequest());
- * } catch (NullPointerException npe)
- * {
- * try
- * {
- * log.trace("re Build callbackHandler...");
- * Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
- * int method = 0;
- * for (int i = 0; i < constructor.length; i++)
- * {
- * if (constructor[i].getParameterTypes().length == 4)
- * {
- * method = i;
- * }
- * }
- * callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
- * //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
- * session.setAttribute(CALLBACK, callbackHandler);
- * } catch (Exception ex)
- * {
- * log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId(), ex);
- * response.sendError(500, "Authentication System failure!!!");
- * return;
- * }
- * }
- * log.trace("2o callback "+callbackHandler);
- * lc = new LoginContext(context, subject, callbackHandler);
- * lc.login();
- * // Obtener el principal asociado (el principal se modifica en el login)
- * it = subject.getPrincipals().iterator();
- * if (it.hasNext())
- * {
- * user = (User) it.next();
- * log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
- * }
- * sendLoginLog(request, user);
- * // session.removeAttribute(VALSESS);
- * // session.removeAttribute(CALLBACK);
- * //   System.out.println(subject.toString());
- * //   System.out.println(lc.getSubject().toString());
- * //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
- * } catch (LoginException ex)
- * {
- * log.debug("Can't log User", ex);
- * doResponse(request, response, dparams, "User non existent", authMethod);
- * return;
- * }
- * }
- * 
- * String url = request.getParameter("wb_goto");
- * if ((url == null || url.equals("/")))
- * {
- * log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
- * url =
- * SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
- * }
- * 
- * sendRedirect(response, url);
- * //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
- * }
- * 
- * @param request the request
- * @param response the response
- * @param distributorParams the distributor params
- * @param alert the alert
- * @param authMethod the auth method
- * @throws IOException Signals that an I/O exception has occurred.
- */
+    /**
+     * public void doProcessxx(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
+     * {
+     * if (null == dparams.getWebPage())
+     * {
+     * return;
+     * }
+     * UserRepository ur = dparams.getWebPage().getWebSite().getUserRepository();
+     * String authMethod = ur.getAuthMethod();
+     * //String authMethod = ur.getProperty(UserRepository.SWBUR_AuthMethod);
+     * String context = ur.getLoginContext();
+     * //String context = ur.getProperty(UserRepository.SWBUR_LoginContext);
+     * String CBHClassName = ur.getCallBackHandlerClassName();
+     * //String CBHClassName = ur.getProperty(UserRepository.SWBUR_CallBackHandlerClassName);
+     * Subject subject = SWBPortal.getUserMgr().getSubject(request);
+     * HttpSession session = request.getSession(true);
+     * String enAuto = (String) session.getAttribute(VALSESS);
+     * String uri = request.getRequestURI();
+     * String path = SWBPlatform.getContextPath();
+     * User user = null;
+     * Iterator it = subject.getPrincipals().iterator();
+     * if (it.hasNext())
+     * {
+     * user = (User) it.next();
+     * }
+     * if (request.getParameter("wb_logout") != null)
+     * {
+     * LoginContext lc;
+     * try
+     * {
+     * lc = new LoginContext(context, subject);
+     * lc.logout();
+     * request.getSession(true).invalidate();
+     * String url = request.getParameter("wb_goto");
+     * if ((url == null || url.equals("/")))
+     * {
+     * url = path + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+     * log.debug("LOGOUT3(Path, uri, url): " + path + "   |   " + uri + "    |  " + url);
+     * sendRedirect(response, url);
+     * return;
+     * }
+     * } catch (Exception elo)
+     * {
+     * log.error("LoggingOut " + subject, elo);
+     * }
+     * }
+     *
+     * if (uri != null)
+     * {
+     * path = uri.replaceFirst(_name, SWBPlatform.getEnv("swb/distributor"));
+     * }
+     * if (handleError || user == null || !user.isSigned())
+     * {
+     * CallbackHandler callbackHandler = (CallbackHandler) session.getAttribute(CALLBACK);
+     * if (null == callbackHandler)
+     * {
+     * if (null != request.getParameter("wb_username"))
+     * {
+     * enAuto = "Working";
+     * }
+     * try
+     * {
+     * log.debug("New callbackHandler...");
+     * Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
+     * int method = 0;
+     * for (int i = 0; i < constructor.length; i++)
+     * {
+     * if (constructor[i].getParameterTypes().length == 4)
+     * {
+     * method = i;
+     * }
+     * }
+     * callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
+     * //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
+     * session.setAttribute(CALLBACK, callbackHandler);
+     * } catch (Exception ex)
+     * {
+     * log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId()+"\n"+CBHClassName, ex);
+     * response.sendError(500, "Authentication System failure!!!");
+     * return;
+     * }
+     * } else
+     * {
+     * if (null == request.getParameter("wb_username"))
+     * {
+     * log.debug("Request a new username...");
+     * doResponse(request, response, dparams, null, authMethod);
+     * session.setAttribute(VALSESS, "Working");
+     * return;
+     * }
+     * ((SWB4CallbackHandler) callbackHandler).setRequest(request);
+     * ((SWB4CallbackHandler) callbackHandler).setResponse(response);
+     * }
+     * if (null == enAuto)
+     * {
+     * log.debug("Starts new Authentication process...");
+     * doResponse(request, response, dparams, null, authMethod);
+     * session.setAttribute(VALSESS, "Working");
+     * return;
+     * }
+     * LoginContext lc;
+     * try
+     * {
+     * log.trace("1er callback "+callbackHandler);
+     * request.getSession(true).invalidate();
+     * subject = SWBPortal.getUserMgr().getSubject(request);
+     * log.trace("es null??? "+((SWB4CallbackHandler) callbackHandler).getRequest()+" y es SWB4 " + (callbackHandler instanceof SWB4CallbackHandler));
+     * if (callbackHandler instanceof SWB4CallbackHandler && null == ((SWB4CallbackHandler) callbackHandler).getRequest())
+     * {
+     * log.trace("intentando...");
+     * ((SWB4CallbackHandler) callbackHandler).setRequest(request);
+     * ((SWB4CallbackHandler) callbackHandler).setResponse(response);
+     *
+     * }
+     * try
+     * {
+     * log.trace("testing for null: "+
+     * ((SWB4CallbackHandler) callbackHandler).getRequest());
+     * } catch (NullPointerException npe)
+     * {
+     * try
+     * {
+     * log.trace("re Build callbackHandler...");
+     * Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
+     * int method = 0;
+     * for (int i = 0; i < constructor.length; i++)
+     * {
+     * if (constructor[i].getParameterTypes().length == 4)
+     * {
+     * method = i;
+     * }
+     * }
+     * callbackHandler = (CallbackHandler) constructor[method].newInstance(request, response, authMethod, dparams);
+     * //callbackHandler = new SWB4CallbackHandlerLoginPasswordImp(request, response, authMethod, dparams); //TODO proveer otros métodos
+     * session.setAttribute(CALLBACK, callbackHandler);
+     * } catch (Exception ex)
+     * {
+     * log.error("Can't Instanciate a CallBackHandler for UserRepository " + ur.getId(), ex);
+     * response.sendError(500, "Authentication System failure!!!");
+     * return;
+     * }
+     * }
+     * log.trace("2o callback "+callbackHandler);
+     * lc = new LoginContext(context, subject, callbackHandler);
+     * lc.login();
+     * // Obtener el principal asociado (el principal se modifica en el login)
+     * it = subject.getPrincipals().iterator();
+     * if (it.hasNext())
+     * {
+     * user = (User) it.next();
+     * log.trace("user checked?:"+user.hashCode()+":"+user.isSigned());
+     * }
+     * sendLoginLog(request, user);
+     * // session.removeAttribute(VALSESS);
+     * // session.removeAttribute(CALLBACK);
+     * //   System.out.println(subject.toString());
+     * //   System.out.println(lc.getSubject().toString());
+     * //   System.out.println(((User)lc.getSubject().getPrincipals().iterator().next()).isSigned());
+     * } catch (LoginException ex)
+     * {
+     * log.debug("Can't log User", ex);
+     * doResponse(request, response, dparams, "User non existent", authMethod);
+     * return;
+     * }
+     * }
+     *
+     * String url = request.getParameter("wb_goto");
+     * if ((url == null || url.equals("/")))
+     * {
+     * log.debug("PATHs: Path:" + path + " - " + dparams.getWebPage().getWebSiteId() + " - " + dparams.getWebPage().getId());
+     * url =
+     * SWBPlatform.getContextPath() + "/" + SWBPlatform.getEnv("swb/distributor") + "/" + dparams.getWebPage().getWebSiteId() + "/" + dparams.getWebPage().getId() + "/_lang/" + dparams.getUser().getLanguage();
+     * }
+     *
+     * sendRedirect(response, url);
+     * //response.getWriter().print("Hello Login, Authenticated User: "+subject.getPrincipals().iterator().next().getName());
+     * }
+     *
+     * @param request the request
+     * @param response the response
+     * @param distributorParams the distributor params
+     * @param alert the alert
+     * @param authMethod the auth method
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void doResponse(HttpServletRequest request, HttpServletResponse response, DistributorParams distributorParams, String alert, String authMethod) throws IOException
     {
         if ("BASIC".equals(authMethod))
@@ -529,7 +519,7 @@ public class Login implements InternalServlet
             PrintWriter out = response.getWriter();
             out.println("<html><head><meta http-equiv=\"Refresh\" CONTENT=\"0; URL=" + url + "\" /><script>window.location='" + url + "';</script></head></html>");
             out.flush();
-        //out.close();
+            //out.close();
         } catch (IOException e)
         {
             log.error("Redirecting user", e);
@@ -550,7 +540,7 @@ public class Login implements InternalServlet
      * @throws InstantiationException the instantiation exception
      * @throws IllegalAccessException the illegal access exception
      */
-    private CallbackHandler getHandler(String CBHClassName, HttpServletRequest request, HttpServletResponse response, String authType, String website) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException
+    public static CallbackHandler getHandler(String CBHClassName, HttpServletRequest request, HttpServletResponse response, String authType, String website) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException
     {
         Constructor[] constructor = Class.forName(CBHClassName).getConstructors();
         int method = 0;
@@ -578,8 +568,29 @@ public class Login implements InternalServlet
     {
         String altURL = distributorParams.getWebPage().getWebSite().getUserRepository().getAlternateLoginURL();
         if (null == altURL)
+        {
             formChallenge(request, response, distributorParams, alert);
-        else
+        } else
+        {
             sendRedirect(response, altURL);
+        }
+    }
+
+    public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request) throws LoginException
+    {
+        LoginContext lc;
+        User user=null;
+        log.trace("Sending calback:" + callbackHandler + " " + context);
+        // request.getSession(true).invalidate();
+        lc = new LoginContext(context, subject, callbackHandler);
+        lc.login();
+
+        Iterator it = subject.getPrincipals().iterator();
+        if (it.hasNext())
+        {
+            user = (User) it.next();
+            log.trace("user checked?:" + user.hashCode() + ":" + user.isSigned());
+        }
+        sendLoginLog(request, user);
     }
 }

@@ -1,35 +1,32 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -37,9 +34,12 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.base.util.SFBase64;
+import org.semanticwb.model.UserRepository;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,16 +52,14 @@ public class Login extends GenericAdmResource
 
     /** The log. */
     static Logger log = SWBUtils.getLogger(Login.class);
-    
     /** The Constant FRM_LOGIN. */
     private static final String FRM_LOGIN = "frmlogin";
-    
     /** The Constant FRM_LOGOUT. */
     private static final String FRM_LOGOUT = "frmlogout";
-    
+    /** The Constant INPLACE. */
+    private static final String INPLACE = "inPlace";
     /** The Constant TXT_login. */
     private static final String TXT_login = "<fieldset><form action=\"{?loginurl}\" method=\"post\">\n<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />\n<label>Contrase&ntilde;a:</label><input type=\"password\" id=\"wb_password\" name=\"wb_password\" /><br />\n<input type=\"submit\" value=\"Enviar\" /></form></fieldset>\n";
-    
     /** The Constant TXT_logout. */
     private static final String TXT_logout = "<a href=\"{?logouturl}?wb_logout=true\" >Logout</a>";
 
@@ -74,6 +72,12 @@ public class Login extends GenericAdmResource
         PrintWriter out = response.getWriter();
         String frmlogin = getResourceBase().getAttribute(FRM_LOGIN);
         String frmlogout = getResourceBase().getAttribute(FRM_LOGOUT);
+        boolean inPlace = Boolean.parseBoolean(getResourceBase().getAttribute(INPLACE, "false"));
+        if ("ok".equals(request.getParameter("ErrorMgs")) && null != request.getSession(true).getAttribute("ErrorMsg"))
+        {
+            out.println("\n<script> alert('" + request.getSession(true).getAttribute("ErrorMsg") + "');</script>\n");
+            request.getSession(true).removeAttribute("ErrorMsg");
+        }
         if (null == frmlogin)
         {
             frmlogin = TXT_login;
@@ -83,9 +87,19 @@ public class Login extends GenericAdmResource
             frmlogout = TXT_logout;
         }
 
-        String url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getWebPage().getWebSiteId() + "/" + paramsRequest.getWebPage().getId();
+        String url = null;
+
         if (!paramsRequest.getUser().isSigned())
         {
+            if (inPlace)
+            {
+                SWBResourceURL aurl = paramsRequest.getActionUrl();
+                aurl.setCallMethod(SWBResourceURL.Call_DIRECT);
+                url = aurl.toString();
+            } else
+            {
+                url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getWebPage().getWebSiteId() + "/" + paramsRequest.getWebPage().getId();
+            }
             out.println(replaceTags(frmlogin, request, paramsRequest, url));
 //                out.println("<fieldset><form action=\"" + url + "\" method=\"post\">");
 //                out.println("<label>Usuario:</label><input type=\"text\" id=\"wb_username\" name=\"wb_username\" /><br />");
@@ -93,9 +107,9 @@ public class Login extends GenericAdmResource
 //                out.println("<input type=\"submit\" value=\"Enviar\" /></form></fieldset>");
         } else
         {
-
+            url = SWBPlatform.getContextPath() + "/login/" + paramsRequest.getWebPage().getWebSiteId() + "/" + paramsRequest.getWebPage().getId();
             out.println(replaceTags(frmlogout, request, paramsRequest, url + "?wb_logout=true"));
-        //out.println("<a href=\"" + url + "?wb_logout=true\" >Logout</a>");
+            //out.println("<a href=\"" + url + "?wb_logout=true\" >Logout</a>");
         }
 
     }
@@ -109,6 +123,7 @@ public class Login extends GenericAdmResource
         PrintWriter out = response.getWriter();
         String frmlogin = getResourceBase().getAttribute(FRM_LOGIN);
         String frmlogout = getResourceBase().getAttribute(FRM_LOGOUT);
+        boolean inPlace = Boolean.parseBoolean(getResourceBase().getAttribute(INPLACE, "false"));
         if (null == frmlogin)
         {
             frmlogin = TXT_login;
@@ -124,6 +139,8 @@ public class Login extends GenericAdmResource
             getResourceBase().setAttribute(FRM_LOGIN, frmlogin);
             frmlogout = request.getParameter(FRM_LOGOUT);
             getResourceBase().setAttribute(FRM_LOGOUT, frmlogout);
+            getResourceBase().setAttribute(INPLACE, request.getParameter(INPLACE));
+            inPlace = Boolean.parseBoolean(getResourceBase().getAttribute(INPLACE, "false"));
             try
             {
                 getResourceBase().updateAttributesToDB();
@@ -136,6 +153,7 @@ public class Login extends GenericAdmResource
         out.println("<script type=\"text/javascript\">");
         out.println("  dojo.require(\"dijit.form.Form\");");
         out.println("  dojo.require(\"dijit.form.Button\");");
+        out.println("  dojo.require(\"dijit.form.CheckBox\");");
         out.println("</script>");
 
         out.println("<div class=\"swbform\">");
@@ -156,6 +174,11 @@ public class Login extends GenericAdmResource
         out.print("<textarea name=\"" + FRM_LOGOUT + "\" rows=10 cols=80>");
         out.print(frmlogout);
         out.println("</textarea>");
+        out.println("<br/>Autenticar en sitio:");
+        out.println("<br/>");
+        String chk = inPlace ? "checked=\"checked\"" : "";
+        out.println("<input id=\"" + INPLACE + "\" dojotype=\"dijit.form.CheckBox\" name=\""
+                + INPLACE + "\" " + chk + " value=\"true\" type=\"checkbox\" />");
         out.println("<br/>");
         out.println("<font style=\"color: #428AD4; font-family: Verdana; font-size: 10px;\">");
         out.println("		<b>Tags:</b><br/>");
@@ -245,12 +268,35 @@ public class Login extends GenericAdmResource
         str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
         str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
         str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
-        str=SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
-        str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        str = SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+        str = SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+        str = SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+        str = SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+        str = SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
         //System.out.println(str);
         return str;
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    {
+        UserRepository ur = response.getWebPage().getWebSite().getUserRepository();
+        String authMethod = ur.getAuthMethod();
+        String context = ur.getLoginContext();
+        String CBHClassName = ur.getCallBackHandlerClassName();
+        Subject subject = SWBPortal.getUserMgr().getSubject(request, response.getWebPage().getWebSiteId());
+        try
+        {
+            CallbackHandler cbh = org.semanticwb.servlet.internal.Login.getHandler(
+                    CBHClassName, request, null, authMethod, response.getWebPage().getWebSiteId());
+            org.semanticwb.servlet.internal.Login.doLogin(cbh, context, subject, request);
+        } catch (Exception e)
+        {
+            request.getSession(true).setAttribute("ErrorMsg", "No se pudo autenticar, datos incorrectos.");
+            response.setRenderParameter("ErrorMgs", "ok");
+            response.setCallMethod(SWBResourceURL.Call_CONTENT);
+            return;
+        }
+        response.sendRedirect(response.getWebPage().getRealUrl());
     }
 }
