@@ -48,6 +48,12 @@ public class EditWorkflow extends javax.swing.JDialog
         pack();
         this.setLocationRelativeTo(null);
         this.setModal(true);
+        this.jLabelDescription.setVisible(false);
+        this.jTextAreaDescription.setVisible(false);
+        this.jLabelName.setVisible(false);
+        this.jTextFieldName.setVisible(false);
+        this.jScrollPaneAreaDescription.setVisible(false);
+        this.jCheckBoxEdit.setVisible(false);
         loadResources();
    }
 
