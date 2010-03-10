@@ -69,8 +69,8 @@ public class Task extends FlowObject {
                     url: "{__DIR__}images/alerta.png"
                 }
                 visible:bind hasErros()
-                x:bind {x}-w/2
-                y:bind {x}-h/2
+                x:bind {x}-(w/2)-10
+                y:bind {y}-(h/2)-10
             
         }
 
@@ -122,8 +122,8 @@ public class Task extends FlowObject {
         cp=ConnectionPoint
         {
             id:"8"
-            x:bind {x}-w/2;
-            y:bind {y}-h/2;
+            x:bind {x}+w/2;
+            y:bind {y}+h/2;
         };
         insert cp into connectionPoints;
 
@@ -147,7 +147,14 @@ public class Task extends FlowObject {
         }
         else
         {
-            false
+            if(getBusyPoints()<2)
+            {
+                true
+            }
+            else
+            {
+                false
+            }
         }
 
 
