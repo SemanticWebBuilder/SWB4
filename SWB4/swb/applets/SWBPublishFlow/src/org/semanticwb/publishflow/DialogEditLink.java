@@ -32,7 +32,7 @@ public class DialogEditLink extends javax.swing.JDialog
     private WBConnection con;
     public Sequence<? extends String> users;
     public Sequence<? extends String> roles;
-    private Locale locale = new Locale("es");
+    public Locale locale = new Locale("es");
     boolean published;
     boolean showPublicar;
 

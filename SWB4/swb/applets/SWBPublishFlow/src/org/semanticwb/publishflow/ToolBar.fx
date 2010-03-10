@@ -212,21 +212,11 @@ public class ToolBar extends CustomNode {
                                     }
                                 },
                                  ImgButton {
-                                    text: "Save"
+                                    text: "Editar Propiedades"
                                     image: "images/edit_flujo_1.png"
                                     imageOver: "images/edit_flujo_2.png"
                                     action: function (): Void {
-                                        var dialog:EditWorkflow;
-                                        dialog=new EditWorkflow();
-                                        dialog.resourceTypes=modeler.resourceTypes;
-                                        dialog.name=modeler.name;
-                                        dialog.description=modeler.description;
-                                        dialog.init();
-                                        dialog.setVisible(true);
-                                        if(not dialog.cancel)
-                                        {
-                                            modeler.resourceTypes=dialog.resourceTypes;
-                                        }
+                                        modeler.editProps();
 
                                     }
                                 },

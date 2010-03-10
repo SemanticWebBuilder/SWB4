@@ -39,6 +39,7 @@ public class NoAuthorizeLink extends LinkConnection {
             dialogEditLink=new DialogEditLink();
             dialogEditLink.published=published;
             dialogEditLink.roles=roles;
+            dialogEditLink.locale=modeler.locale;
             dialogEditLink.users=users;
             dialogEditLink.showPublicar=false;
             dialogEditLink.init();
