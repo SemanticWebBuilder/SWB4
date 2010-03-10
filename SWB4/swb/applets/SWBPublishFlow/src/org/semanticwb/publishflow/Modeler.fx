@@ -122,11 +122,7 @@ public class Modeler extends CustomNode
                         tempNode=null;
                         disablePannable=false;                        
                     }
-                }
-                if(e.button==MouseButton.PRIMARY and e.clickCount==2)
-                {
-                    organizeMap();
-                }
+                }                
              }
              onMouseDragged: function( e: MouseEvent ):Void
              {                
@@ -851,8 +847,7 @@ public class Modeler extends CustomNode
 
 
     public function organizeMap()
-    {
-            println("organizando map");
+    {            
             var newy:Number=80;
             var newx:Number=80;
             def spacingx:Number=30;            
