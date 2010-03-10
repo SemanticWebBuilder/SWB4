@@ -44,10 +44,10 @@ public class EditWorkflow extends javax.swing.JDialog
             // No debe hacer nada
             System.out.println(ue.getMessage());
         }
-        initComponents();
+        initComponents();        
+        pack();
         this.setLocationRelativeTo(null);
         this.setModal(true);
-        pack();
         loadResources();
    }
 
@@ -145,6 +145,7 @@ public class EditWorkflow extends javax.swing.JDialog
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow"); // NOI18N
         setTitle(bundle.getString("title")); // NOI18N
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(400, 300));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
         jPanelPropiedades.setFont(new java.awt.Font("Arial", 0, 12));
@@ -163,7 +164,7 @@ public class EditWorkflow extends javax.swing.JDialog
         jLabelDescription.setLabelFor(jTextAreaDescription);
         jLabelDescription.setText(bundle1.getString("Description")); // NOI18N
         jPanelPropiedades.add(jLabelDescription);
-        jLabelDescription.setBounds(10, 110, 58, 14);
+        jLabelDescription.setBounds(10, 100, 58, 14);
 
         jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12));
         jLabelVersion.setLabelFor(jTextFieldVersion);
@@ -178,15 +179,16 @@ public class EditWorkflow extends javax.swing.JDialog
 
         jCheckBoxEdit.setText(bundle.getString("modificarContenido")); // NOI18N
         jPanelPropiedades.add(jCheckBoxEdit);
-        jCheckBoxEdit.setBounds(10, 220, 235, 23);
+        jCheckBoxEdit.setBounds(0, 210, 235, 23);
 
         jTextAreaDescription.setEditable(false);
         jTextAreaDescription.setLineWrap(true);
         jTextAreaDescription.setWrapStyleWord(true);
+        jTextAreaDescription.setPreferredSize(new java.awt.Dimension(290, 20));
         jScrollPaneAreaDescription.setViewportView(jTextAreaDescription);
 
         jPanelPropiedades.add(jScrollPaneAreaDescription);
-        jScrollPaneAreaDescription.setBounds(90, 110, 102, 100);
+        jScrollPaneAreaDescription.setBounds(90, 100, 292, 100);
 
         jTabbedPane1.addTab(bundle1.getString("propiedades"), jPanelPropiedades); // NOI18N
 
