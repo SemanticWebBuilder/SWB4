@@ -87,10 +87,12 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
         String model = null;
         User   cu    = null;
 
-        if (obj.instanceOf(User.sclass)) {
+        if (obj.instanceOf(User.sclass))
+        {
             cu    = new User(obj);
             model = cu.getUserRepository().getId();
-        } else if (obj.instanceOf(UserRepository.sclass)) {
+        } else if (obj.instanceOf(UserRepository.sclass))
+        {
             UserRepository ur = new UserRepository(obj);
 
             model = ur.getId();
@@ -98,24 +100,28 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
 
         // String model=request.getParameter("model");
         // System.out.println("login:"+login+" model:"+model);
-        if ((login == null) || (login.length() == 0) || (login.indexOf(' ') > -1) || (model == null)) {
+        if ((login == null) || (login.length() == 0) || (login.indexOf(' ') > -1) || (model == null))
+        {
             throw new FormValidateException(getLocaleString("errEmpty", "Login vacío o con espacios"));
 
             // System.out.println("false");
-        } else {
+        } else
+        {
             if (isValidId(login))
             {
                 if (!((cu != null) && cu.getLogin().equalsIgnoreCase(login)))
                 {
                     User tmpobj = SWBContext.getUserRepository(model).getUserByLogin(login);
 
-                    if (tmpobj != null) {
+                    if (tmpobj != null)
+                    {
                         throw new FormValidateException(getLocaleString("errBusy", "Login ya ocupado"));
 
                         // System.out.println("false");
                     }
                 }
-            } else {
+            } else
+            {
                 throw new FormValidateException(getLocaleString("errInvalid", "Login con caracteres inválidos"));
                 // System.out.println("false");
             }
@@ -132,12 +138,12 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
     {
         boolean ret = true;
 
-        if (id != null) {
+        if (id != null && id.length()>=3) {
             for (int x = 0; x < id.length(); x++) {
                 char ch = id.charAt(x);
 
                 if (!(((ch >= '0') && (ch <= '9')) || ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'))
-                        || (ch == '_'))) {
+                        || (ch == '_') || (ch == '.') || (ch == '@'))) {
                     ret = false;
 
                     break;
