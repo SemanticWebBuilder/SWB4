@@ -33,20 +33,17 @@ import java.lang.reflect.Method;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBResourceNotFound;
-import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
 import org.w3c.dom.Document;
@@ -129,7 +126,10 @@ public class SemanticObject
      */
     private SemanticObject(Resource res)
     {
-        if(res==null)throw new NullPointerException("Resource is Null...");
+        if(res==null)
+        {
+            throw new NullPointerException("Resource is Null...");
+        }
         m_cacheprops=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         m_cachepropsrel=new ConcurrentHashMap(); //MAPS74 //Collections.synchronizedMap(new HashMap());
         this.m_res = res;
