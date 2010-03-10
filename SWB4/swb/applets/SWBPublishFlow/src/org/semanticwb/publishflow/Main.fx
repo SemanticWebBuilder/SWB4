@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.effect.Lighting;
 import javafx.scene.effect.light.DistantLight;
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.AppletStageExtension;
 
 /**
  * @author victor.lorenzana
@@ -38,7 +40,7 @@ var modeler:Modeler = Modeler
     pannable:true
     cursor:Cursor.CROSSHAIR
 }
-modeler.loadWorkflow("");
+modeler.loadWorkflow();
 modeler.organizeMap();
 
 var toolbar:ToolBar = ToolBar
@@ -63,6 +65,13 @@ var stage : Stage = Stage {
     title: "Publish Flow Modeler"
     resizable: true
     scene: scene
+    extensions: AppletStageExtension
+        {
+            shouldDragStart: function(e: MouseEvent): Boolean
+            {
+                e.primaryButtonDown;
+             }
+        }
     //style: StageStyle.TRANSPARENT //StageStyle.UNDECORATED
 }
 
