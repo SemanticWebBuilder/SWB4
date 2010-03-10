@@ -60,7 +60,7 @@ public class DialogSeeLicense extends javax.swing.JDialog
             int read = in.read(bcont);
             while (read != -1)
             {
-                text.append(new String(bcont,0,read));
+                text.append(new String(bcont,0,read,"utf-8"));
                 read = in.read(bcont);
             }
         }
