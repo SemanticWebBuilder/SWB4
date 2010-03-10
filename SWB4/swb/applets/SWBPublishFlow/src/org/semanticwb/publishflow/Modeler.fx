@@ -27,6 +27,7 @@ import java.lang.Exception;
 import org.semanticwb.publishflow.NoAuthorizeLink;
 import org.semanticwb.publishflow.AuthorizeLink;
 import java.net.URL;
+import javafx.scene.input.MouseButton;
 
 
 /**
@@ -74,7 +75,7 @@ public class Modeler extends CustomNode
          clipView=ClipView
          //var ret=ScrollPane
          {
-             node:Group             
+            node:Group             
              {
                  content: bind contents
              }
@@ -85,7 +86,8 @@ public class Modeler extends CustomNode
             
              onMousePressed: function( e: MouseEvent ):Void
              {
-                //println("onMousePressed modeler:{e}");
+
+
                 mousex=e.x+clipView.clipX;
                 mousey=e.y+clipView.clipY;
                 if(tempNode!=null)
@@ -121,10 +123,13 @@ public class Modeler extends CustomNode
                         disablePannable=false;                        
                     }
                 }
+                if(e.button==MouseButton.PRIMARY and e.clickCount==2)
+                {
+                    organizeMap();
+                }
              }
              onMouseDragged: function( e: MouseEvent ):Void
-             {
-                //println("onMouseDragged modeler:{e}");
+             {                
                 if(tempNode!=null)
                 {
                     mousex=e.x+clipView.clipX;
@@ -155,8 +160,7 @@ public class Modeler extends CustomNode
                 }
              }
              onMouseReleased: function( e: MouseEvent ):Void
-             {
-                 //println("onMouseReleased modeler:{e}");
+             {                 
                  if(tempNode!=null)
                  {
                      if(tempNode instanceof ConnectionObject)
@@ -179,6 +183,7 @@ public class Modeler extends CustomNode
                  }
 
              }
+             
 
          };
 
@@ -463,8 +468,7 @@ public class Modeler extends CustomNode
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Favor_de_indicar_la_descripcion_del_flujo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
         }
-        var count:Integer=sizeof resourceTypes;
-        println("{count}");
+        var count:Integer=sizeof resourceTypes;        
         if(count==0)
         {
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
@@ -766,7 +770,7 @@ public class Modeler extends CustomNode
 
         }
         var xml : String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>update</cmd><tm>{tm}</tm>{node.getFirstNode().getXML()}</req>";
-        println("xml a enviar: {node.getXML()}");
+        
         if(ToolBar.conn==null or ToolBar.conn.getApplet()==null)
         {
             var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1");
@@ -774,7 +778,7 @@ public class Modeler extends CustomNode
             return;
         }
         var resxml: String = ToolBar.conn.getData(xml);
-        println("xml recibido: {resxml}");
+        
         try
         {
             var parser : WBXMLParser = new WBXMLParser();
@@ -836,8 +840,7 @@ public class Modeler extends CustomNode
         catch ( e: Exception)
         {
             var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1");
-            JOptionPane.showMessageDialog(null,   "{msg} : {e.getMessage()}\r\n{resxml}", java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
-            println("resxml: {resxml}");
+            JOptionPane.showMessageDialog(null,   "{msg} : {e.getMessage()}\r\n{resxml}", java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);            
             e.printStackTrace(System.out);
             return;
         }
@@ -849,19 +852,21 @@ public class Modeler extends CustomNode
 
     public function organizeMap()
     {
-            var newy:Number=50;
+            println("organizando map");
+            var newy:Number=80;
             var newx:Number=80;
             def spacingx:Number=30;            
             for(node in this.contents)
             {
                 if(node instanceof FlowObject)
-                {
+                {                    
                     var fo:FlowObject=node as FlowObject;
                     var testx:Number=newx+fo.w/2;
                     if(testx+fo.w/2>=width)
                     {
                         testx=80;
-                        newy+=newy;
+                        newy+=80;
+                        newx=80;
                     }
                     else
                     {
