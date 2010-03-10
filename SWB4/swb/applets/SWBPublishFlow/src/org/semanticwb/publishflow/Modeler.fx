@@ -463,10 +463,11 @@ public class Modeler extends CustomNode
             JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Favor_de_indicar_la_descripcion_del_flujo"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        if(sizeof resourceTypes==0)
+        var count:Integer=sizeof resourceTypes;
+        println("{count}");
+        if(count==0)
         {
-            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             editProps();
             return;
         }
@@ -478,7 +479,8 @@ public class Modeler extends CustomNode
                 var task: Task=content as Task;
                 if(sizeof task.users==0 and sizeof task.roles==0)
                 {
-                    JOptionPane.showMessageDialog(null, "La tarea: {task.title}, no tiene indicado que usuarios o que roles tienen permisos de autorizacion", java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "La tarea: {task.title}, no tiene indicado que usuarios o que roles tienen permisos de autorizacion", java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+                    task.editTask();
                     return;
                 }
 
@@ -764,8 +766,15 @@ public class Modeler extends CustomNode
 
         }
         var xml : String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>update</cmd><tm>{tm}</tm>{node.getFirstNode().getXML()}</req>";
-        println(node.getXML());
+        println("xml a enviar: {node.getXML()}");
+        if(ToolBar.conn==null or ToolBar.conn.getApplet()==null)
+        {
+            var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1");
+            JOptionPane.showMessageDialog(null,   msg, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         var resxml: String = ToolBar.conn.getData(xml);
+        println("xml recibido: {resxml}");
         try
         {
             var parser : WBXMLParser = new WBXMLParser();
