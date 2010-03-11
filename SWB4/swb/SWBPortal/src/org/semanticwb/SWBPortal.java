@@ -2302,7 +2302,7 @@ public class SWBPortal
          *         and if {@code size} is less than zero an exception will be thrown.
          * @throws NegativeArraySizeException if the {@code size} argument is less than zero.
          */
-        public String getRandString(int size)
+        public static String getRandString(int size)
         {
             StringBuilder sb = new StringBuilder(size);
             for (int i = 0; i < size; i++)
@@ -2331,7 +2331,7 @@ public class SWBPortal
          * @throws IOException Signals that an I/O exception has occurred.
          * {@code swb_valCad} y con valor igual a la string representada por la imagen.</p>
          */
-        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException
+        public static void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException
         {
             String cadena = null;
             if (null == cad)
@@ -2404,7 +2404,7 @@ public class SWBPortal
          * @throws IOException Signals that an I/O exception has occurred.
          * {@code attributeName} y su valor es igual a la cadena representada en la imagen.</p>
          */
-        public void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException
+        public static void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException
         {
             final int width = 150;
             final int height = 60;
