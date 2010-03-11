@@ -19,6 +19,12 @@ public class StartEvent extends Event
     {
          var ret=super.create();
          stroke=Color.web(Styles.color_iniEvent);
+
+         colorAdjust.hue=0.52;
+         colorAdjust.brightness=-0.19;
+         colorAdjust.contrast=0.25;
+         colorAdjust.saturation=1;
+
          return ret;
     }
 

@@ -41,11 +41,43 @@ public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
 public-read var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
 public-read var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
 
-public-read var msg_timer=Image{url: "{__DIR__}images/ico_reloj.png"}
-public-read var msg_message=Image{url: "{__DIR__}images/ico_sobre.png"}
-public-read var msg_rule=Image{url: "{__DIR__}images/ico_algo.png"}
-public-read var msg_link=Image{url: "{__DIR__}images/ico_flecha.png"}
-public-read var msg_multiple=Image{url: "{__DIR__}images/ico_pentagono.png"}
+public-read var ICO_SUBPROCESS_ADHOC=Image{url: "{__DIR__}images/n_adhoc2.png"}
+public-read var ICO_SUBPROCESS_CICLE=Image{url: "{__DIR__}images/n_ciclo2.png"}
+public-read var ICO_SUBPROCESS_COMPENSATION=Image{url: "{__DIR__}images/n_compensa2-38.png"}
+public-read var ICO_SUBPROCESS_COMPENSATION2=Image{url: "{__DIR__}images/n_compensa.png"}
+public-read var ICO_TASK_ADHOC=Image{url: "{__DIR__}images/n_adhoc.png"}
+public-read var ICO_TASK_CICLE=Image{url: "{__DIR__}images/n_ciclo.png"}
+public-read var ICO_TASK_MANUAL=Image{url: "{__DIR__}images/n_manual.png"}
+public-read var ICO_TASK_MULTIPLE=Image{url: "{__DIR__}images/n_objeto.png"}
+public-read var ICO_TASK_SCRIPT=Image{url: "{__DIR__}images/n_script.png"}
+public-read var ICO_TASK_SERVICE=Image{url: "{__DIR__}images/n_servicio.png"}
+public-read var ICO_TASK_USER=Image{url: "{__DIR__}images/n_usr.png"}
+public-read var ICO_GATEWAY_ORMULTIPLE=Image{url: "{__DIR__}images/n_excl_eventos_str.png"}
+public-read var ICO_GATEWAY_ORMULTIPLE_INT=Image{url: "{__DIR__}images/n_excl_eventos_int.png"}
+public-read var ICO_GATEWAY_COMPLEX=Image{url: "{__DIR__}images/n_compleja.png"}
+
+public-read var ICO_EVENT_W_TIMER=Image{url: "{__DIR__}images/n_tmp.png"}
+public-read var ICO_EVENT_W_MESSAGE=Image{url: "{__DIR__}images/n_msj_b.png"}
+public-read var ICO_EVENT_W_CONDITINAL=Image{url: "{__DIR__}images/n_cond.png"}
+public-read var ICO_EVENT_W_LINK=Image{url: "{__DIR__}images/n_enlace_b.png"}
+public-read var ICO_EVENT_W_MULTIPLE=Image{url: "{__DIR__}images/n_multi_b.png"}
+public-read var ICO_EVENT_W_SIGNAL=Image{url: "{__DIR__}images/n_senal_b.png"}
+public-read var ICO_EVENT_W_PARALLEL=Image{url: "{__DIR__}images/n_paralelo_b.png"}
+public-read var ICO_EVENT_W_SCALATION=Image{url: "{__DIR__}images/n_escala_b.png"}
+public-read var ICO_EVENT_W_ERROR=Image{url: "{__DIR__}images/n_error_b.png"}
+public-read var ICO_EVENT_W_COMPENSATION=Image{url: "{__DIR__}images/n_compensa_b.png"}
+public-read var ICO_EVENT_W_CANCELATION=Image{url: "{__DIR__}images/n_cancela_b.png"}
+
+public-read var ICO_EVENT_B_MESSAGE=Image{url: "{__DIR__}images/n_msj_n.png"}
+public-read var ICO_EVENT_B_ERROR=Image{url: "{__DIR__}images/n_error_n.png"}
+public-read var ICO_EVENT_B_CANCELATION=Image{url: "{__DIR__}images/n_cancela_n.png"}
+public-read var ICO_EVENT_B_COMPENSATION=Image{url: "{__DIR__}images/n_compensa_n.png"}
+public-read var ICO_EVENT_B_SIGNAL=Image{url: "{__DIR__}images/n_senal_n.png"}
+public-read var ICO_EVENT_B_MULTIPLE=Image{url: "{__DIR__}images/n_multi_n.png"}
+public-read var ICO_EVENT_B_SCALATION=Image{url: "{__DIR__}images/n_escala_n.png"}
+public-read var ICO_EVENT_B_TERMINATION=Image{url: "{__DIR__}images/n_termina.png"}
+public-read var ICO_EVENT_B_LINK=Image{url: "{__DIR__}images/n_enlace_n.png"}
+
 
 public-read var dropShadow = DropShadow {
     offsetX: 3
@@ -53,3 +85,5 @@ public-read var dropShadow = DropShadow {
     radius: 10.0
     color: Color.web("#707070")
 }
+
+public-read var style_tooltip="fill: #FFFF66; stroke: #000000; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
