@@ -75,5 +75,7 @@ var stage : Stage = Stage {
 }
 
 toolbar.stage=stage;
+modeler.loadRoles();
+modeler.loadUsers();
 modeler.loadWorkflow();
 modeler.organizeMap();
