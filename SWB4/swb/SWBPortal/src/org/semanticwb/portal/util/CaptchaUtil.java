@@ -29,9 +29,6 @@ import java.util.Random;
 public class CaptchaUtil
 {
 
-    private static final double YOFFSET = 0.25;
-    private static final double XOFFSET = 0.1;
-    private static final float DEFAULT_STROKE_WIDTH = 0.75f;
     private static final int width = 150;
     private static final int height = 50;
 
@@ -53,8 +50,6 @@ public class CaptchaUtil
         g.clearRect(0, 0, width, height);
         g.setColor(new Color(0, 0, 0));
 
-
-
         AttributedString as = new AttributedString(cadena);
         as.addAttribute(TextAttribute.FONT, font);
 
@@ -62,16 +57,13 @@ public class CaptchaUtil
         AttributedCharacterIterator aci = as.getIterator();
 
         TextLayout tl = new TextLayout(aci, frc);
-        int xBaseline = (int) Math.round(buffer.getWidth() * XOFFSET);
-        int yBaseline = buffer.getHeight() - (int) Math.round(buffer.getHeight() * YOFFSET);
-        Shape shape = tl.getOutline(AffineTransform.getTranslateInstance(xBaseline, yBaseline));
+        Shape shape = tl.getOutline(AffineTransform.getTranslateInstance(15, 37));
 
         g.setColor(Color.BLUE);
 
-
         g.draw(shape);
 
-        g.setStroke(new BasicStroke(DEFAULT_STROKE_WIDTH));
+        g.setStroke(new BasicStroke(0.75f));
 
         for (int i = 0; i <= width; i += 20)
         {
@@ -83,8 +75,6 @@ public class CaptchaUtil
         }
 
         gimp(buffer);
-
-
 
         javax.imageio.ImageIO.write(buffer, "png", out);
 
@@ -142,87 +132,5 @@ public class CaptchaUtil
         }
     }
     
-//        private static void gimp(BufferedImage image) {
-//            int height = image.getHeight();
-//            int width = image.getWidth();
-//
-//            int hstripes = height / 12;
-//            int vstripes = width / 12;
-//
-//            // Calculate space between lines
-//            int hspace = height / (hstripes + 1);
-//            int vspace = width / (vstripes + 1);
-//
-//            Graphics2D graph = (Graphics2D) image.getGraphics();
-////            float dstrk =  DEFAULT_STROKE_WIDTH * (2.0f);
-////            graph.setStroke(new BasicStroke(dstrk));
-////            // Draw the horizontal stripes
-////            for (int i = hspace; i < height; i = i + hspace) {
-////                graph.setColor(Color.BLUE);
-////                graph.drawLine(0, i, width, i);
-////            }
-////
-////            // Draw the vertical stripes
-////            for (int i = vspace; i < width; i = i + vspace) {
-////                graph.setColor(Color.BLUE);
-////                graph.drawLine(i, 0, i, height);
-////            }
-//
-//            // Create a pixel array of the original image.
-//            // we need this later to do the operations on..
-//            int pix[] = new int[height * width];
-//            int j = 0;
-//
-//            for (int j1 = 0; j1 < width; j1++) {
-//                for (int k1 = 0; k1 < height; k1++) {
-//                    pix[j] = image.getRGB(j1, k1);
-//                    j++;
-//                }
-//            }
-//
-//            double distance = ranInt(width / 4, width / 3);
-//
-//            // put the distortion in the (dead) middle
-//            int wMid = image.getWidth() / 2;
-//            int hMid = image.getHeight() / 2;
-//
-//            // again iterate over all pixels..
-//            for (int x = 0; x < image.getWidth(); x++) {
-//                for (int y = 0; y < image.getHeight(); y++) {
-//
-//                    int relX = x - wMid;
-//                    int relY = y - hMid;
-//
-//                    double d1 = Math.sqrt(relX * relX + relY * relY);
-//                    if (d1 < distance) {
-//
-//                        int j2 = wMid
-//                                + (int) (((fishEyeFormula(d1 / distance) * distance) / d1) * (x - wMid));
-//                        int k2 = hMid
-//                                + (int) (((fishEyeFormula(d1 / distance) * distance) / d1) * (y - hMid));
-//                        image.setRGB(x, y, pix[j2 * height + k2]);
-//                    }
-//                }
-//            }
-//
-//            graph.dispose();
-//        }
-//
-//        private static final int ranInt(int i, int j) {
-//            double d = Math.random();
-//            return (int) (i + ((j - i) + 1) * d);
-//        }
-//
-//        private static final double fishEyeFormula(double s) {
-//            // implementation of:
-//            // g(s) = - (3/4)s3 + (3/2)s2 + (1/4)s, with s from 0 to 1.
-//            if (s < 0.0D) {
-//               return 0.0D;
-//           }
-//           if (s > 1.0D) {
-//               return s;
-//           }
-//
-//           return -0.75D * s * s * s + 1.5D * s * s + 0.25D * s;
-//       }
+
 }
