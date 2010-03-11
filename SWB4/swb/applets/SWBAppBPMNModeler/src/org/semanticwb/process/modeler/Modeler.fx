@@ -27,7 +27,7 @@ public class Modeler extends CustomNode
     public var disablePannable: Boolean=false;
     public var tempNode: Node;                          //Nodo temporal por toolbar
     public var focusedNode: Node;                       //Nodo con el foco
-    public var clickedNode: Node;
+    //public var clickedNode: Node;
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
@@ -59,24 +59,30 @@ public class Modeler extends CustomNode
 
                     if(tempNode instanceof GraphElement)
                     {
-                        if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
-                        var a=tempNode as GraphElement;
-                        a.x=e.x+clipView.clipX;
-                        a.y=e.y+clipView.clipY;
-                        a.snapToGrid();
+                        if(ModelerUtils.clickedNode==null)
+                        {
+                            if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                            var a=tempNode as GraphElement;
+                            a.x=e.x+clipView.clipX;
+                            a.y=e.y+clipView.clipY;
+                            a.snapToGrid();
+                        }else //se presiono algun boton del toolbar
+                        {
+                            close=false;
+                        }
                     }else if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
-                        if(clickedNode instanceof GraphElement)
+                        if(ModelerUtils.clickedNode instanceof GraphElement)
                         {
-                            var ge=clickedNode as GraphElement;
+                            var ge=ModelerUtils.clickedNode as GraphElement;
                             if(ge.canIniLink(a))
                             {
                                 a.ini=ge;
                                 add(tempNode);
                             }
                             close=false;
-                            clickedNode=null;
+                            ModelerUtils.clickedNode=null;
                         }
                     }
 
@@ -108,9 +114,9 @@ public class Modeler extends CustomNode
                         }
                     }
                 }
-                else if(clickedNode instanceof ConnectionObject)
+                else if(ModelerUtils.clickedNode instanceof ConnectionObject)
                 {
-                    tempNode=clickedNode;
+                    tempNode=ModelerUtils.clickedNode;
                     var a=tempNode as ConnectionObject;
                     a.end=null;
                 }

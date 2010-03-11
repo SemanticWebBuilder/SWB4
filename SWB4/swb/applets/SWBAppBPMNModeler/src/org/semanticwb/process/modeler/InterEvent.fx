@@ -20,12 +20,19 @@ public class InterEvent extends Event
 {
     public override function create(): Node
     {
+        initializeCustomNode();
         stroke=Color.web(Styles.color_interEvent);
         cursor=Cursor.HAND;
         w=30;
         h=30;
         stkw=2;
         stkwo=2;
+        scaleOff=-0.1;
+
+        colorAdjust.hue=-0.83;
+        colorAdjust.brightness=-0.07;
+        colorAdjust.contrast=0.25;
+        colorAdjust.saturation=1;
 
         shape= Circle
         {
@@ -43,7 +50,7 @@ public class InterEvent extends Event
         {
             content: [
                 shape,
-                text,
+                //text,
                 Circle
                 {
                     centerX: bind x

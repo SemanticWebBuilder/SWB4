@@ -24,9 +24,9 @@ public class ConditionalFlow extends ConnectionObject
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==null)
+        if(ModelerUtils.clickedNode==null)
         {
-            modeler.clickedNode=this;
+            ModelerUtils.clickedNode=this;
             modeler.focusedNode=this;
             if(e.clickCount >= 2)
             {
@@ -38,9 +38,9 @@ public class ConditionalFlow extends ConnectionObject
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
-            modeler.clickedNode=null;
+            ModelerUtils.clickedNode=null;
         }
     }
 

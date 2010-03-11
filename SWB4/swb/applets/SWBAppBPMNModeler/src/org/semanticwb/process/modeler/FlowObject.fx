@@ -22,13 +22,7 @@ public class FlowObject extends GraphElement
     override public function create(): Node
     {
         zindex=2;
-        text=EditableText
-        {
-            text: bind title with inverse
-            width: bind w;
-            height: bind h;
-        }
-        return text;
+        return super.create();
     }
 
     var px = bind pool.x on replace
