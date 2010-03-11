@@ -35,6 +35,7 @@ public class DialogEditLink extends javax.swing.JDialog
     public Locale locale = new Locale("es");
     boolean published;
     boolean showPublicar;
+    public String tm;
 
     /** Creates new form DialogEditLink */
     public DialogEditLink()
@@ -58,11 +59,7 @@ public class DialogEditLink extends javax.swing.JDialog
     {
         this.setLocationRelativeTo(null);
         this.setModal(true);
-        this.jCheckBoxPublicar.setSelected(published);
-        if (con != null && con.getApplet() != null && con.getApplet().getParameter("locale") != null && !con.getApplet().getParameter("locale").trim().equals(""))
-        {
-            this.locale = new Locale(con.getApplet().getParameter("locale"));
-        }
+        this.jCheckBoxPublicar.setSelected(published);        
         if (!showPublicar)
         {
             this.jTabbedPane1.remove(this.jPanel9);
@@ -143,8 +140,7 @@ public class DialogEditLink extends javax.swing.JDialog
         jTableUserModel model = new jTableUserModel(locale);
         this.jTableUsuarios.setModel(model);
         if (con != null)
-        {
-            String tm = con.getApplet().getParameter("tm");
+        {            
             if (tm != null)
             {
                 String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>" + tm + "</tm></req>";
@@ -171,7 +167,7 @@ public class DialogEditLink extends javax.swing.JDialog
         this.jTableRoles.setModel(model);
         if (con != null)
         {
-            String tm = con.getApplet().getParameter("tm");
+            
             if (tm != null)
             {
                 String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";

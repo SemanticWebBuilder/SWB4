@@ -31,7 +31,7 @@ public class DialogEditActivity extends javax.swing.JDialog
 {
 
     boolean cancel;
-    String name, description;
+    String name, description,tm;
     Locale locale = new Locale("es");
     WBConnection con;
     Sequence<? extends java.lang.String> roles;
@@ -60,11 +60,7 @@ public class DialogEditActivity extends javax.swing.JDialog
         this.setLocationRelativeTo(null);
         this.setModal(true);
         this.jTextFieldName.setText(name);
-        this.jTextAreaDescription.setText(description);
-        if (con != null && con.getApplet() != null && con.getApplet().getParameter("locale") != null && !con.getApplet().getParameter("locale").trim().equals(""))
-        {
-            this.locale = new Locale(con.getApplet().getParameter("locale"));
-        }
+        this.jTextAreaDescription.setText(description);        
         this.jTextFieldName.grabFocus();
         loadRoles();
         loadUsers();
@@ -151,9 +147,7 @@ public class DialogEditActivity extends javax.swing.JDialog
     {
         jTableUserModel model = new jTableUserModel(locale);
         this.jTableUsuarios.setModel(model);
-        if (con != null &&  con.getApplet()!=null && con.getApplet().getParameter("tm")!=null)
-        {
-            String tm = con.getApplet().getParameter("tm");
+        
             if (tm != null)
             {
                 String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>" + tm + "</tm></req>";
@@ -170,35 +164,32 @@ public class DialogEditActivity extends javax.swing.JDialog
                     model.addUser(user);
                 }
             }
-        }
+        
 
     }
 
     public void loadRoles()
     {
         jTableRolesModel model = new jTableRolesModel(locale);
-        this.jTableRoles.setModel(model);
-        if (con != null && con.getApplet()!=null && con.getApplet().getParameter("tm")!=null)
+        this.jTableRoles.setModel(model);        
+        if (tm != null)
         {
-            String tm = con.getApplet().getParameter("tm");
-            if (tm != null)
+            String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";
+            xml = con.getData(xml);
+            WBXMLParser parser = new WBXMLParser();
+            WBTreeNode exml = parser.parse(xml);
+            Iterator eusers = exml.getFirstNode().getNodesbyName("role");
+            while (eusers.hasNext())
             {
-                String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";
-                xml = con.getData(xml);
-                WBXMLParser parser = new WBXMLParser();
-                WBTreeNode exml = parser.parse(xml);
-                Iterator eusers = exml.getFirstNode().getNodesbyName("role");
-                while (eusers.hasNext())
-                {
-                    WBTreeNode wuser = (WBTreeNode) eusers.next();
-                    String id = wuser.getAttribute("id");
-                    String oname = wuser.getAttribute("name");
-                    String repository = wuser.getAttribute("repository");
-                    Role role = new Role(id, oname, repository);
-                    model.addRole(role);
-                }
+                WBTreeNode wuser = (WBTreeNode) eusers.next();
+                String id = wuser.getAttribute("id");
+                String oname = wuser.getAttribute("name");
+                String repository = wuser.getAttribute("repository");
+                Role role = new Role(id, oname, repository);
+                model.addRole(role);
             }
         }
+        
     }
 
     /** This method is called from within the constructor to

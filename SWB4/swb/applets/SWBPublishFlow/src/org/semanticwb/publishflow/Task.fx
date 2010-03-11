@@ -188,6 +188,7 @@ public class Task extends FlowObject {
         var dialog: DialogEditActivity;
         dialog = new DialogEditActivity();
         dialog.users=users;
+        dialog.tm=modeler.tm;
         dialog.locale=modeler.locale;
         dialog.description=description;
         dialog.roles=roles;

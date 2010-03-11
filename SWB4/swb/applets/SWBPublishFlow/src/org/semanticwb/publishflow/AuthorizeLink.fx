@@ -38,6 +38,7 @@ public class AuthorizeLink extends LinkConnection {
             dialogEditLink.published=published;
             dialogEditLink.roles=roles;
             dialogEditLink.locale=modeler.locale;
+            dialogEditLink.tm=modeler.tm;
             dialogEditLink.users=users;
             dialogEditLink.showPublicar=true;
             dialogEditLink.init();
