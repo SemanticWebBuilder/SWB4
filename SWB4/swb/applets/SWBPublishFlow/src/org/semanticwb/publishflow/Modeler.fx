@@ -56,6 +56,8 @@ public class Modeler extends CustomNode
     public var name:String="name workflow 1";
     public var description:String="workflow 1";
     public var resourceTypes:String[];
+    public var roles:String[];
+    public var users:String[];
     public override function create(): Node
     {
         if(FX.getArgument("tm")!=null)
@@ -187,6 +189,76 @@ public class Modeler extends CustomNode
          };
 
          return clipView;
+    }
+    public function existsRol(value:String) :Boolean
+    {
+        for(role in roles)
+        {
+            if(role.startsWith(value))
+            {
+                return true
+            }
+
+        }
+        return false;
+
+    }
+    public function existsUser(value:String) :Boolean
+    {
+        for(user in users)
+        {
+            if(user.startsWith(value))
+            {
+                return true
+            }
+
+        }
+        return false;
+
+    }
+    public function loadRoles() :Void
+    {
+
+        if (tm != null)
+        {
+            var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
+            xml = ToolBar.conn.getData(xml);
+            var  parser : WBXMLParser = new WBXMLParser();
+            var exml : WBTreeNode = parser.parse(xml);
+            var eusers : Iterator = exml.getFirstNode().getNodesbyName("role");
+            while (eusers.hasNext())
+            {
+                var wuser : WBTreeNode= eusers.next() as WBTreeNode;
+                var idrole: String = wuser.getAttribute("id");
+                var oname : String= wuser.getAttribute("name");
+                var repository :String = wuser.getAttribute("repository");
+                var role:String="{idrole}@{repository}@{oname}";
+                insert role into roles
+
+            }
+        }
+
+    }
+    public function loadUsers() :Void
+    {
+
+        if (tm != null)
+        {
+            var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
+            xml = ToolBar.conn.getData(xml);
+            var  parser : WBXMLParser = new WBXMLParser();
+            var exml : WBTreeNode = parser.parse(xml);
+            var eusers : Iterator = exml.getFirstNode().getNodesbyName("user");
+            while (eusers.hasNext())
+            {
+                var wuser : WBTreeNode= eusers.next() as WBTreeNode;
+                var iduser: String = wuser.getAttribute("id");
+                var user:String="{iduser}@";
+                insert user into users
+
+            }
+        }
+
     }
 
     public function loadWorkflow() : Void
@@ -346,7 +418,10 @@ public class Modeler extends CustomNode
                             var rep:String=erole.getAttribute("repository");
                             var srole:String="{rolid}@{rep}@{rolname}";
                             System.out.println("agregando rol {srole}");
-                            insert srole into activity.roles;
+                            if(existsRol(srole))
+                            {
+                                insert srole into activity.roles;
+                            }
                         }
                         var users: Iterator=eactivity.getNodesbyName("user");
                         while(users.hasNext())
@@ -356,8 +431,11 @@ public class Modeler extends CustomNode
                             var userid:String=euser.getAttribute("id");
                             var username:String=euser.getAttribute("name");
                             var suser:String="{userid}@{username}";
-                            System.out.println("agregando rol {suser}");
-                            insert suser into activity.users;
+                            System.out.println("agregando user {suser}");
+                            if(existsUser(suser))
+                            {
+                                insert suser into activity.users;
+                            }
                         }
                     }
                 }
@@ -418,14 +496,20 @@ public class Modeler extends CustomNode
                                 {
                                     var userid:String=eNotification.getAttribute("to");
                                     var user:String="{userid}@";
-                                    insert user into link.users;
+                                    if(existsUser(user))
+                                    {
+                                        insert user into link.users;
+                                    }
                                 }
                                 else
                                 {
                                     var roleID:String=eNotification.getAttribute("to");
                                     var repository:String=eNotification.getAttribute("repository");
                                     var role:String="{roleID}@{repository}";
-                                    insert role into link.roles;
+                                    if(existsRol(role))
+                                    {
+                                        insert role into link.roles;
+                                    }
                                 }
                             }
                             link.authorized=Boolean.valueOf(elink.getAttribute("authorized"));
