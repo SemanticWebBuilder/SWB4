@@ -30,10 +30,12 @@ package org.semanticwb.servlet.internal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormElementURL;
@@ -94,13 +96,21 @@ public class FrmProcess implements InternalServlet
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.servlet.internal.DistributorParams)
      */
-    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException
+    public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
-        //System.out.println("frmProcess:"+request.getRequestURI());
-        
+        System.out.println("frmProcess:"+request.getRequestURI());
+        if (request.getRequestURI().endsWith("requestCaptcha")){
+            SWBPortal.UTIL.sendValidateImage(request, response, "captchaCad", 6, null);
+        }else if (request.getRequestURI().endsWith("validCaptcha")){
+            if(((String)request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue"))) {
+                response.getWriter().println("true");
+            }else {
+                response.getWriter().println("false");
+            }
+        }else
         if(request.getRequestURI().endsWith("canCreate"))
         {
             PrintWriter out=response.getWriter();
