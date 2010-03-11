@@ -85,6 +85,6 @@ public class VirtualResource extends GenericAdmResource
         }else {
             out.println(paramRequest.getLocaleString("notfound") + "...");
         }       
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin virtual resource</a>");
+        //out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin virtual resource</a>");
     }
 }

@@ -142,7 +142,7 @@ public class Banner1 extends GenericXformsResource {
         }
         PrintWriter out = response.getWriter();
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        //out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
 
     /**
