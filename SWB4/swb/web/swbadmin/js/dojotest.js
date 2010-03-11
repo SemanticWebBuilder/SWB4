@@ -1,4 +1,712 @@
 /*
+<script src="http://dl.javafx.com/1.2/dtfx.js"></script>
+<script src="/rakeshmenonp/resource/ClipView/ClipView.js"></script>
+<div id="ClipViewApplet" style="text-align: left;"><a href=#"><img src="/rakeshmenonp/resource/ClipView/ClipView.jpg" onclick="showClipViewApplet();"/></a></div>
+*/
+
+
+function showClipViewApplet() {
+    document.getElementById("ClipViewApplet").innerHTML = "<IFRAME alt=ClipView scrolling=no frameborder=0 src=http://blogs.sun.com/rakeshmenonp/resource/ClipView/ClipView.html height=443 width=322 ></IFRAME>";
+}
+
+
+
+
+
+
+
+
+
+var idCounter=0;
+var pingEnable=true;
+var timedPings=10;
+var timedPingsInterval=10;
+var appletIdTime={};
+function dhtmlLoadScript(url)
+{
+    var e=document.createElement("script");
+    e.src=url;
+    e.type="text/javascript";
+    document.getElementsByTagName("head")[0].appendChild(e);
+}
+function takeTimeStamp()
+{
+    if(pingEnable)
+    {
+        var dtId="deployJavaApplet"+(++idCounter);
+        appletIdTime[dtId]=new Date().getTime();
+    }
+    return dtId;
+}
+function processTemplate(errMessage)
+{
+    errMessage=errMessage.replace("MACOS_VERSION",dtfxObject.getMacOSVersion());
+    errMessage=errMessage.replace("JAVA_VERSION",dtfxObject.getJavaVersion());
+    return errMessage;
+}
+function sendPing(dtId,pingType)
+{
+    if(pingEnable&&appletIdTime[dtId]!=0)
+    {
+        var startTime=appletIdTime[dtId];
+        var diffTime=new Date().getTime()-startTime;
+        var href="http://dl.javafx.com/ping.js?t="+pingType+"&id="+dtId+"&v=1.2.3_b36&tm="+startTime+"&d="+diffTime+"&j="+dtfxObject.thisJavaVersion;
+        if(pingType.substr(0,4)=="done")
+        {
+            appletIdTime[dtId]=0;
+        }
+        dhtmlLoadScript(href);
+    }
+}
+function setupPeriodicPing()
+{
+    if(pingEnable&&timedPings>0)
+    {
+        window.setTimeout(sendPeriodicPing,timedPingsInterval*1000);
+        timedPings--;
+    }
+}
+function sendPeriodicPing()
+{
+    if(pingEnable&&timedPings>=0)
+    {
+        var unknownApplets=0;
+        for(var id in appletIdTime)
+        {
+            if(appletIdTime[id]!=0)
+            {
+                sendPing(id,"timed"+timedPings);
+                unknownApplets++;
+            }
+        }
+        if(unknownApplets>0){
+            setupPeriodicPing();
+        }
+    }
+}
+var _DTFX_JS_;
+if(typeof(_DTFX_JS_)=="undefined")
+{
+    _DTFX_JS_="Already Loaded";
+    var dtfxObject={
+        browserIDs:[{
+            id:"MSIE",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["MSIE"]
+        },{
+            id:"Chrome",
+            varsToSearch:[navigator.userAgent,navigator.vendor],
+            stringsToFind:["Chrome","Google"]
+        },{
+            id:"Safari",
+            varsToSearch:[navigator.userAgent,navigator.vendor],
+            stringsToFind:["Safari","Apple Computer"]
+        },{
+            id:"Opera10",
+            varsToSearch:[navigator.userAgent,navigator.userAgent],
+            stringsToFind:["Opera","Version/10"]
+        },{
+            id:"Opera",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["Opera"]
+        },{
+            id:"Netscape Family",
+            varsToSearch:[navigator.appName],
+            stringsToFind:["Netscape"]
+        }],
+        OSIDs:[{
+            id:"Windows",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["Windows"]
+        },{
+            id:"Mac",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["Mac OS X"]
+        },{
+            id:"Linux",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["Linux"]
+        },{
+            id:"SunOS",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["SunOS"]
+        },{
+            id:"UNIX",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["X11"]
+        }],
+        NoJava:[{
+            id:"ChromeMac",
+            varsToSearch:[navigator.userAgent,navigator.userAgent],
+            stringsToFind:["Mac OS X","Chrome"]
+        },{
+            id:"iPhone",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["iPhone"]
+        },{
+            id:"iPod",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["iPod"]
+        }],
+        NoJavaDownload:[{
+            id:"Mac",
+            varsToSearch:[navigator.userAgent],
+            stringsToFind:["Mac OS X"]
+        }],
+        browsersSupportingDirectJavaAccess:["Netscape Family"],
+        browsersSupportingActiveX:["MSIE"],
+        activeXVersionList:["1.8.0","1.7.0","1.6.0","1.5.0","1.4.2"],
+        findEntryInList:function(listToUse){
+            var myID=null;
+            for(var i=0;i<listToUse.length;i++){
+                var match=true;
+                for(var j=0;j<listToUse[i].varsToSearch.length;j++){
+                    if(listToUse[i].varsToSearch[j].indexOf(listToUse[i].stringsToFind[j],0)==-1){
+                        match=false;
+                        break;
+                    }
+                }
+                if(match){
+                    myID=listToUse[i].id;
+                    break;
+                }
+            }
+            return myID;
+        },
+        errorMessages:{
+            ErrorMacJavaUpgradeRequired:null,
+            ErrorMacOSVersionNotSupported:null,
+            ErrorNonMacJavaInstallRequired:null,
+            ErrorOpera10:null,
+            ErrorChrome:null,
+            ErrorJavaNotSupported:null
+        },
+        generateInPlaceErrorDisplay:function(displayMessage){
+            var tagLeadChar="<";
+            var tagEndChar=">";
+            dtfxObject.smallErrorCode=tagLeadChar+'a href="http://java.com/"'+tagEndChar;
+            dtfxObject.smallErrorCode+=tagLeadChar+'img src="http://orgrimmar.russia.sun.com:8080/java-coffee-cup-23x20.png'+'" border="0" width="23" height="20" alt="Java Coffee Cup"'+
+            tagEndChar;
+            var stringOutput=dtfxObject.smallErrorCode;
+            stringOutput+=displayMessage;
+            stringOutput+=tagLeadChar+'/a'+tagEndChar;
+            dtfxObject.smallErrorCode+=tagLeadChar+'/a'+tagEndChar;
+            return stringOutput;
+        },
+        generatePopupErrorDisplay:function(displayMessage,popupMessageToUser){
+            var tagLeadChar="<";
+            var tagEndChar=">";
+            dtfxObject.smallErrorCode=tagLeadChar+'a href="javascript:dtfxObject.explainAndInstall('+"'"+popupMessageToUser+"'"+')"'+
+            tagEndChar;
+            dtfxObject.smallErrorCode+=tagLeadChar+'img src="http://orgrimmar.russia.sun.com:8080/java-coffee-cup-23x20.png'+'" border="0" width="23" height="20" alt="Java Coffee Cup"'+
+            tagEndChar;
+            var stringOutput=dtfxObject.smallErrorCode;
+            stringOutput+=displayMessage;
+            stringOutput+=tagLeadChar+'/a'+tagEndChar;
+            dtfxObject.smallErrorCode+=tagLeadChar+'/a'+tagEndChar;
+            return stringOutput;
+        },
+        initErrorMsg:function(){
+            dtfxObject.errorMessages.ErrorOpera10=dtfxObject.generatePopupErrorDisplay(" The application could not load because your browser does not support Java. Click for more options.","Please user another browser like Mozilla Firefox to view the application.");
+            dtfxObject.errorMessages.ErrorChrome=dtfxObject.generatePopupErrorDisplay(" A newer version of Java is needed to view the application. Click to update Java now.");
+            dtfxObject.errorMessages.ErrorJavaNotSupported=dtfxObject.generateInPlaceErrorDisplay(" The application uses Java, but Java is not supported by your system. Use a computer with another operating system to view this applicaiton.");
+            dtfxObject.errorMessages.ErrorNonMacJavaInstallRequired=dtfxObject.generatePopupErrorDisplay(" A newer version of Java is needed to view the application. Click to update Java.","Click to update Java.");
+            dtfxObject.errorMessages.ErrorMacJavaUpgradeRequired=dtfxObject.generatePopupErrorDisplay(" The application could not load. Click for details.","JavaFX requires Java 5.0 (1.5) or above.  Please use Software Update to upgrade your Java version.");
+            dtfxObject.errorMessages.ErrorMacOSVersionNotSupported=dtfxObject.generatePopupErrorDisplay(" The application could not load. Click for details.","The application requires Mac OS 10.5 or newer. Please upgrade your OS to view the application. JavaFX requires Java 5.0 (1.5) or above.");
+        },
+        thisBrowser:null,
+        getBrowser:function(){
+            if(null===dtfxObject.thisBrowser){
+                dtfxObject.thisBrowser=dtfxObject.findEntryInList(dtfxObject.browserIDs);
+                if(null===dtfxObject.thisBrowser){
+                    dtfxObject.thisBrowser="unknown";
+                }
+            }
+            return dtfxObject.thisBrowser;
+        },
+        thisBrowserCanAccessJava:null,
+        browserCanAccessJava:function(){
+            if(null===dtfxObject.thisBrowserCanAccessJava){
+                var browser=dtfxObject.getBrowser();
+                dtfxObject.thisBrowserCanAccessJava=false;
+                for(var i=0;i<dtfxObject.browsersSupportingDirectJavaAccess.length;++i){
+                    if(browser==dtfxObject.browsersSupportingDirectJavaAccess[i]){
+                        dtfxObject.thisBrowserCanAccessJava=true;
+                        break;
+                    }
+                }
+            }
+            return dtfxObject.thisBrowserCanAccessJava;
+        },
+        thisBrowserHasActiveX:null,
+        browserHasActiveX:function(){
+            if(null===dtfxObject.thisBrowserHasActiveX){
+                var browser=dtfxObject.getBrowser();
+                dtfxObject.thisBrowserHasActiveX=false;
+                if(null!=window.ActiveXObject){
+                    for(var i=0;i<dtfxObject.browsersSupportingActiveX.length;++i){
+                        if(browser==dtfxObject.browsersSupportingActiveX[i]){
+                            dtfxObject.thisBrowserHasActiveX=true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return dtfxObject.thisBrowserHasActiveX;
+        },
+        thisJavaVersion:null,
+        getJavaVersion:function(){
+            if(null===dtfxObject.thisJavaVersion){
+                if((null===dtfxObject.thisJavaVersion)&&(dtfxObject.browserHasActiveX())){
+                    for(var v=0;v<dtfxObject.activeXVersionList.length;v++){
+                        try{
+                            var axo=new ActiveXObject("JavaWebStart.isInstalled."+
+                                dtfxObject.activeXVersionList[v]+".0");
+                            dtfxObject.thisJavaVersion=dtfxObject.activeXVersionList[v];
+                            break;
+                        }catch(ignored){}
+                    }
+                }
+                if(null===dtfxObject.thisJavaVersion){
+                    var bestVersionSeen=null;
+                    for(var i=0;i<navigator.mimeTypes.length;i++){
+                        var s=navigator.mimeTypes[i].type;
+                        var m=s.match(/^application\/x-java-applet;jpi-version=(.*)$/);
+                        if(m!==null){
+                            dtfxObject.thisJavaVersion=m[1];
+                            break;
+                        }
+                        m=s.match(/^application\/x-java-applet;version=(.*)$/);
+                        if(m!==null){
+                            if((null===bestVersionSeen)||(m[1]>bestVersionSeen)){
+                                bestVersionSeen=m[1];
+                            }
+                        }
+                    }
+                    if((null===dtfxObject.thisJavaVersion)&&(null!==bestVersionSeen)){
+                        dtfxObject.thisJavaVersion=bestVersionSeen;
+                    }
+                }
+                if((null===dtfxObject.thisJavaVersion)&&dtfxObject.browserCanAccessJava()&&(typeof java=="object")){
+                    dtfxObject.thisJavaVersion=java.lang.System.getProperty("java.version");
+                }
+                if(null===dtfxObject.thisJavaVersion){
+                    dtfxObject.thisJavaVersion="0 - unknown";
+                }
+            }
+            return dtfxObject.thisJavaVersion;
+        },
+        thisOSName:null,
+        getSystemOS:function(){
+            if(null===dtfxObject.thisOSName){
+                dtfxObject.thisOSName=dtfxObject.findEntryInList(dtfxObject.OSIDs);
+                if(null===dtfxObject.thisOSName){
+                    dtfxObject.thisOSName="unknown";
+                }
+            }
+            return dtfxObject.thisOSName;
+        },
+        thisMacOSVersion:null,
+        getMacOSVersion:function(){
+            if(null===dtfxObject.thisMacOSVersion){
+                if("Mac"!=dtfxObject.getSystemOS()){
+                    dtfxObject.thisMacOSVersion="Not Mac";
+                }
+                else{
+                    if(dtfxObject.browserCanAccessJava()){
+                        dtfxObject.thisMacOSVersion=java.lang.System.getProperty("os.version");
+                    }
+                    if(null===dtfxObject.thisMacOSVersion){
+                        var av=navigator.appVersion;
+                        var m=av.match(/Mac OS X ([0-9_]*);/);
+                        if(null!==m){
+                            dtfxObject.thisMacOSVersion=m[1];
+                            dtfxObject.thisMacOSVersion=dtfxObject.thisMacOSVersion.split("_").join(".");
+                        }
+                    }
+                }
+                if(null===dtfxObject.thisMacOSVersion){
+                    dtfxObject.thisMacOSVersion="unknown";
+                }
+            }
+            return dtfxObject.thisMacOSVersion;
+        },
+        overlayCount:0,
+        nameSeed:0,
+        getBogusJarFileName:function(){
+            if(0===dtfxObject.nameSeed){
+                dtfxObject.nameSeed=(new Date()).getTime();
+            }
+            var uniqueNum=dtfxObject.nameSeed++;
+            return"emptyJarFile-"+uniqueNum;
+        },
+        isVersionAvailable:function(){
+            var ret=true;
+            if(("Safari"==dtfxObject.getBrowser())&&("Mac"==dtfxObject.getSystemOS())&&(dtfxObject.getMacOSVersion().indexOf("10.4",0)===0)){
+                ret=false;
+            }
+            return ret;
+        },
+        javaSupport:null,
+        getJavaSupportExists:function(){
+            if(null===dtfxObject.javaSupport){
+                var noSupportName=dtfxObject.findEntryInList(dtfxObject.NoJava);
+                if(null===noSupportName){
+                    dtfxObject.javaSupport=true;
+                }
+                else{
+                    dtfxObject.javaSupport=false;
+                }
+            }
+            return dtfxObject.javaSupport;
+        },
+        javaDownloadSupport:null,
+        getJavaDownloadSupportExists:function(){
+            if(null===dtfxObject.javaDownloadSupport){
+                var noSupportName=dtfxObject.findEntryInList(dtfxObject.NoJavaDownload);
+                if(null===noSupportName){
+                    dtfxObject.javaDownloadSupport=true;
+                }
+                else{
+                    dtfxObject.javaDownloadSupport=false;
+                }
+            }
+            return dtfxObject.javaDownloadSupport;
+        },
+        errorMessageBoxes:null,
+        errorMessageWidths:null,
+        errorMessageHeights:null,
+        onloadHandlerQueued:false,
+        smallErrorCode:"",
+        onloadCheckErrorDisplay:function(){
+            var boxId;
+            var width;
+            var height;
+            while(dtfxObject.errorMessageBoxes.length>0){
+                boxId=dtfxObject.errorMessageBoxes.pop();
+                width=dtfxObject.errorMessageWidths.pop();
+                height=dtfxObject.errorMessageHeights.pop();
+                var tableForBox=document.getElementById(boxId);
+                if((tableForBox.offsetHeight!=height)||(tableForBox.offsetWidth!=width)){
+                    tableForBox.rows.item(0).cells.item(0).innerHTML=dtfxObject.smallErrorCode;
+                }
+            }
+        },
+        javafxString:function(launchParams,appletParams){
+            var stringOutput="";
+            var errorMessageToUser="";
+            var appletID=takeTimeStamp();
+            if(!dtfxObject.getJavaSupportExists()){
+                errorMessageToUser=dtfxObject.errorMessages.ErrorJavaNotSupported;
+                sendPing(appletID,"done_unsupportedbyjre");
+            }else if("Opera10"===dtfxObject.getBrowser()){
+                errorMessageToUser=dtfxObject.errorMessages.ErrorOpera10;
+                sendPing(appletID,"done_opera10");
+            }
+            else if(dtfxObject.isVersionAvailable()){
+                var javaVersion=dtfxObject.getJavaVersion();
+                sendPing(appletID,"start");
+                if(("V"+javaVersion)<"V1.5"){
+                    if("Mac"==dtfxObject.getSystemOS()){
+                        var osVersion=dtfxObject.getMacOSVersion();
+                        if(("V"+osVersion)<"V10.4"){
+                            errorMessageToUser=dtfxObject.errorMessages.ErrorMacOSVersionNotSupported;
+                            sendPing(appletID,"done_oldmac");
+                        }
+                        else{
+                            errorMessageToUser=dtfxObject.errorMessages.ErrorMacJavaUpgradeRequired;
+                            sendPing(appletID,"done_oldjremac");
+                        }
+                    }
+                    else{
+                        if("Chrome"===dtfxObject.getBrowser()){
+                            errorMessageToUser=dtfxObject.errorMessages.ErrorChrome;
+                        }else{
+                            errorMessageToUser=dtfxObject.errorMessages.ErrorNonMacJavaInstallRequired;
+                        }
+                        if("0 - unknown"==javaVersion){
+                            sendPing(appletID,"done_nojre");
+                        }else{
+                            sendPing(appletID,"done_oldjre");
+                        }
+                    }
+                }
+            }else{
+                sendPing(appletID,"start2");
+            }
+            var standardArchives=["applet-launcher"];
+            switch(dtfxObject.getSystemOS()){
+                case"Mac":
+                    standardArchives.push("javafx-rt-macosx-universal");
+                    break;
+                case"Windows":
+                    standardArchives.push("javafx-rt-windows-i586");
+                    break;
+                case"Linux":
+                    standardArchives.push("javafx-rt-linux-i586");
+                    break;
+                case"SunOS":
+                    standardArchives.push("javafx-rt-solaris-i586");
+                    break;
+            }
+            standardArchives.push(""+dtfxObject.getBogusJarFileName());
+            var versionNumber="1.2.3_b36";
+            var appletPlayer="org.jdesktop.applet.util.JNLPAppletLauncher";
+            var tagLeadChar="<";
+            var tagEndChar=">";
+            var carriageReturn="\n";
+            var appletTagParams={};
+
+            appletTagParams.code=appletPlayer;
+            var params={};
+
+            params.codebase_lookup="false";
+            params["subapplet.classname"]="com.sun.javafx.runtime.adapter.Applet";
+            params.progressbar="false";
+            params.classloader_cache="false";
+            var loading_image_url=null;
+            var loading_image_width=-1;
+            var loading_image_height=-1;
+            var key="";
+            if(typeof launchParams!="string"){
+                for(key in launchParams){
+                    switch(key.toLocaleLowerCase()){
+                        case"jnlp_href":
+                            params.jnlp_href=launchParams[key];
+                            break;
+                        case"version":
+                            versionNumber=launchParams[key];
+                            break;
+                        case"code":
+                            params.MainJavaFXScript=launchParams[key];
+                            break;
+                        case"name":
+                            params["subapplet.displayname"]=launchParams[key];
+                            break;
+                        case"draggable":
+                            params[key]=launchParams[key];
+                            break;
+                        case"displayhtml":
+                            if(launchParams[key]){
+                                tagLeadChar="&lt;";
+                                tagEndChar="&gt;";
+                                carriageReturn="<br>\n";
+                            }
+                            break;
+                        case"loading_image_url":
+                            loading_image_url=launchParams[key];
+                            break;
+                        case"loading_image_width":
+                            loading_image_width=launchParams[key];
+                            break;
+                        case"loading_image_height":
+                            loading_image_height=launchParams[key];
+                            break;
+                        default:
+                            appletTagParams[key]=launchParams[key];
+                            break;
+                    }
+                }
+            }else{
+                appletTagParams.archive=launchParams;
+            }
+            if(errorMessageToUser!=""){
+                var javaSupported=dtfxObject.getJavaSupportExists();
+                if(javaSupported&&!document.getElementById('deployJava')){
+                    var script=document.createElement('script');
+                    script.id='deployJava';
+                    script.type='text/javascript';
+                    script.src='http://java.com/js/deployJava.js';
+                    var head=document.getElementsByTagName("head")[0];
+                    head.appendChild(script);
+                }
+                var errId="errorWithJava"+(++dtfxObject.overlayCount);
+                var w=appletTagParams.width;
+                var h=appletTagParams.height;
+                stringOutput+=tagLeadChar+'div id="JavaLaunchError" style="width:'+w+';height:'+h+';background:white"'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'table id="'+errId+'" width='+w+' height='+
+                h+' border=1 padding=0 margin=0'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'tr'+tagEndChar+tagLeadChar+'td align="center" valign="middle"'+tagEndChar+
+                carriageReturn;
+                stringOutput+=processTemplate(errorMessageToUser);
+                stringOutput+=tagLeadChar+'/td'+tagEndChar+tagLeadChar+'/tr'+
+                tagEndChar+tagLeadChar+'/table'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'/div'+tagEndChar+carriageReturn;
+                dtfxObject.errorMessageBoxes.push(errId);
+                dtfxObject.errorMessageWidths.push(w);
+                dtfxObject.errorMessageHeights.push(h);
+                if(!dtfxObject.onloadHandlerQueued){
+                    if(window.attachEvent){
+                        window.attachEvent("onload",dtfxObject.onloadCheckErrorDisplay);
+                    }
+                    else if(window.addEventListener){
+                        window.addEventListener("load",dtfxObject.onloadCheckErrorDisplay,false);
+                    }
+                    else{
+                        document.addEventListener("load",dtfxObject.onloadCheckErrorDisplay,false);
+                    }
+                }
+                return stringOutput;
+            }
+            params.jnlpNumExtensions=0;
+            if(params.jnlp_href===undefined){
+                var loc=appletTagParams.archive.indexOf(".jar,");
+                if(-1==loc){
+                    loc=appletTagParams.archive.lastIndexOf(".jar");
+                }
+                if(-1!=loc){
+                    params.jnlp_href=appletTagParams.archive.substr(0,loc)+"_browser.jnlp";
+                }
+            }
+            for(var i=0;i<standardArchives.length;i++){
+                appletTagParams.archive+=","+"http://dl.javafx.com/"+standardArchives[i];
+                if(versionNumber!==""){
+                    appletTagParams.archive+="__V"+versionNumber;
+                }
+                appletTagParams.archive+=".jar";
+            }
+            if(dtfxObject.fxOverlayEnabled()){
+                var dtId="deployJavaApplet"+(++dtfxObject.overlayCount);
+                params["deployJavaAppletID"]=dtId;
+                var width=appletTagParams.width;
+                var height=appletTagParams.height;
+                var img;
+                var imgWidth;
+                var imgHeight;
+                window.setTimeout(function(){
+                    fxAppletStarted(dtId);
+                },180*1000);
+                if(loading_image_url!==null&&loading_image_height>0&&loading_image_width>0){
+                    img=loading_image_url;
+                    imgWidth=loading_image_width;
+                    imgHeight=loading_image_height;
+                }else{
+                    img='http://dl.javafx.com/';
+                    if(width>=100&&height>=100){
+                        img+='javafx-loading-100x100.gif';
+                        imgWidth=100;
+                        imgHeight=100;
+                    }else{
+                        img+='javafx-loading-25x25.gif';
+                        imgWidth=25;
+                        imgHeight=25;
+                    }
+                }
+                stringOutput+=tagLeadChar+'div id="'+dtId+'Overlay'+'" style="width:'+width+';height:'+height+';position:absolute;background:white"'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'table width='+width+' height='+
+                height+' border=0 cellpadding=0'+' style="border-width:0px;border-spacing:0px 0px;margin:0px;padding:0px;"'+
+                tagEndChar+carriageReturn;
+                stringOutput+=tagLeadChar+'tr'+tagEndChar+tagLeadChar+'td align="center" valign="middle"'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'img src="'+img+'" width='+
+                imgWidth+' height='+imgHeight+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'/td'+tagEndChar+tagLeadChar+'/tr'+
+                tagEndChar+tagLeadChar+'/table'+tagEndChar+
+                carriageReturn;
+                stringOutput+=tagLeadChar+'/div'+tagEndChar+carriageReturn;
+                stringOutput+=tagLeadChar+'div id="'+dtId+'" style="position:relative;left:-10000px"'+
+                tagEndChar+carriageReturn;
+            }
+            stringOutput+=tagLeadChar+"APPLET MAYSCRIPT"+carriageReturn;
+            for(key in appletTagParams){
+                stringOutput+=key+"=";
+                if(typeof appletTagParams[key]=="number"){
+                    stringOutput+=appletTagParams[key];
+                }else{
+                    stringOutput+="\""+appletTagParams[key]+"\"";
+                }
+                stringOutput+=carriageReturn;
+            }
+            stringOutput+=tagEndChar+carriageReturn;
+            if(appletParams){
+                for(key in appletParams){
+                    params[key]=appletParams[key];
+                }
+            }
+            if(pingEnable){
+                params["pingAppletID"]=appletID;
+                params["fxbuild"]='1.2.3_b36';
+                params["pingTS"]=appletIdTime[appletID];
+            }
+            for(key in params){
+                stringOutput+=tagLeadChar+"param name=\""+key+"\" value=\""+params[key]+"\""+
+                tagEndChar+carriageReturn;
+            }
+            stringOutput+=tagLeadChar+"/APPLET"+tagEndChar+carriageReturn;
+            if(dtfxObject.fxOverlayEnabled()){
+                stringOutput+=tagLeadChar+"/div"+tagEndChar+carriageReturn;
+            }
+            return stringOutput;
+        },
+        fxOverlayEnabled:function(){
+            return(dtfxObject.getBrowser()!="Netscape Family"&&dtfxObject.getBrowser()!="Opera")||dtfxObject.getSystemOS()!="Mac";
+        },
+        explainAndInstall:function(explanation){
+            if(dtfxObject.getJavaDownloadSupportExists()&&dtfxObject.getJavaSupportExists()&&"Opera10"!==dtfxObject.getBrowser()){
+                deployJava.returnPage=document.location;
+                deployJava.installLatestJRE();
+            }
+            else{
+                alert(explanation);
+            }
+        },
+        initDtfx:function(){
+            dtfxObject.errorMessageBoxes=new Array();
+            dtfxObject.errorMessageWidths=new Array();
+            dtfxObject.errorMessageHeights=new Array();
+            window.onunload=function(){
+                appletIdTime={};
+
+            };
+
+            dtfxObject.initErrorMsg();
+        }
+    };
+
+    dtfxObject.initDtfx();
+}
+function javafx(launchParams,appletParams){
+    if(idCounter==0){
+        window.setTimeout(sendPeriodicPing,4000);
+    }
+    var stringOutput=dtfxObject.javafxString(launchParams,appletParams);
+    if(null!=stringOutput){
+        document.write(stringOutput);
+    }
+}
+function javafxString(launchParams,appletParams){
+    return dtfxObject.javafxString(launchParams,appletParams);
+}
+function hideOverlay(id){
+    var olay=document.getElementById(id+"Overlay");
+    if(olay){
+        if(olay.parentNode&&olay.parentNode.removeChild){
+            olay.parentNode.removeChild(olay);
+        }else{
+            olay.style.visibility="hidden";
+        }
+        document.getElementById(id).style.left="0px";
+    }
+}
+function fxAppletStarted(id){
+    hideOverlay(id);
+    sendPing(id,"done_ok");
+}
+function fxAppletFailed(id,reason){
+    hideOverlay(id);
+    sendPing(id,"applet_failed_"+reason);
+}
+
+
+
+
+
+/*
 	Copyright (c) 2004-2008, The Dojo Foundation All Rights Reserved.
 	Available via Academic Free License >= 2.1 OR the modified BSD license.
 	see: http://dojotoolkit.org/license for details
@@ -807,7 +1515,7 @@ if(!dojo._hasResource["dijit.layout.ContentPane"]){
                     this._singleChild.resize({
                         w:cb.w,
                         h:cb.h
-                        });
+                    });
                 }
             }
         },
@@ -835,7 +1543,7 @@ if(!dojo._hasResource["dijit.layout.ContentPane"]){
                 this._singleChild.resize({
                     w:cb.w,
                     h:cb.h
-                    });
+                });
             }
         },
         _prepareLoad:function(_11){
@@ -936,13 +1644,13 @@ if(!dojo._hasResource["dijit.layout.ContentPane"]){
                             console.error("Fatal "+this.id+" could not change content due to "+e.message,e);
                         }
                     })
-                    });
+                });
             }
             var _21=dojo.mixin({
                 cleanContent:this.cleanContent,
                 extractContent:this.extractContent,
                 parseContent:this.parseOnLoad
-                },this._contentSetterParams||{});
+            },this._contentSetterParams||{});
             dojo.mixin(_1e,_21);
             _1e.set((dojo.isObject(_1c)&&_1c.domNode)?_1c.domNode:_1c);
             delete this._contentSetterParams;
@@ -982,7 +1690,7 @@ if(!dojo._hasResource["dijit.layout.ContentPane"]){
         },
         onDownloadEnd:function(){
         }
-        });
+    });
 }
 
 
@@ -1145,7 +1853,7 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
             this._beingDestroyed=true;
             this.inherited(arguments);
         }
-        });
+    });
     dojo.declare("dijit.layout.StackController",[dijit._Widget,dijit._Templated,dijit._Container],{
         templateString:"<span wairole='tablist' dojoAttachEvent='onkeypress' class='dijitStackController'></span>",
         containerId:"",
@@ -1175,7 +1883,7 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
             var _1b=new cls({
                 label:_17.title,
                 closeButton:_17.closable
-                },_19);
+            },_19);
             this.addChild(_1b,_18);
             this.pane2button[_17]=_1b;
             _17.controlButton=_1b;
@@ -1187,10 +1895,10 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
                 var _1e=new dijit.Menu({
                     targetNodeIds:[_1b.id],
                     id:_1b.id+"_Menu"
-                    });
+                });
                 var _1f=new dijit.MenuItem({
                     label:_1d.itemClose
-                    });
+                });
                 _1c.push(dojo.connect(_1f,"onClick",dojo.hitch(this,"onCloseButtonClick",_17)));
                 _1e.addChild(_1f);
                 this.pane2menu[_17]=_1e;
@@ -1319,7 +2027,7 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
             _33.e._djpage=_33.page;
             this.onkeypress(_33.e);
         }
-        });
+    });
     dojo.declare("dijit.layout._StackButton",dijit.form.ToggleButton,{
         tabIndex:"-1",
         postCreate:function(evt){
@@ -1332,7 +2040,7 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
         onClickCloseButton:function(evt){
             evt.stopPropagation();
         }
-        });
+    });
     dojo.extend(dijit._Widget,{
         title:"",
         selected:false,
@@ -1340,7 +2048,7 @@ if(!dojo._hasResource["dijit.layout.StackContainer"]){
         onClose:function(){
             return true;
         }
-        });
+    });
 }
 
 
@@ -1424,7 +2132,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                 this._wipeIn=dojo.fx.wipeIn({
                     node:this.containerNode,
                     duration:dijit.defaultDuration
-                    });
+                });
             }
             this._wipeIn.play();
         },
@@ -1442,7 +2150,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                 this._wipeOut=dojo.fx.wipeOut({
                     node:this.containerNode,
                     duration:dijit.defaultDuration
-                    });
+                });
             }
             this._wipeOut.play();
         },
@@ -1464,7 +2172,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                         tree:_c,
                         isExpandable:_d.mayHaveChildren(_f),
                         label:_c.getLabel(_f)
-                        });
+                    });
                     this.addChild(_12);
                     _c._itemNodeMap[id]=_12;
                     if(this.tree.persist){
@@ -1513,7 +2221,7 @@ if(!dojo._hasResource["dijit.Tree"]){
         _onMouseLeave:function(evt){
             dojo.removeClass(this.contentNode,"dijitTreeNodeHover");
         }
-        });
+    });
     dojo.declare("dijit.Tree",[dijit._Widget,dijit._Templated],{
         store:null,
         model:null,
@@ -1586,7 +2294,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                 store:this.store,
                 query:this.query,
                 childrenAttrs:this.childrenAttr
-                };
+            };
             if(this.params.mayHaveChildren){
                 _24.mayHaveChildren=dojo.hitch(this,"mayHaveChildren");
             }
@@ -1605,7 +2313,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                     tree:this,
                     isExpandable:true,
                     label:this.label||this.getLabel(_28)
-                    });
+                });
                 if(!this.showRoot){
                     rn.rowNode.style.display="none";
                 }
@@ -1644,7 +2352,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                     this._onLetterKeyNav({
                         node:_35,
                         key:key.toLowerCase()
-                        });
+                    });
                     dojo.stopEvent(e);
                 }
             }else{
@@ -1664,7 +2372,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                     this[this._keyHandlerMap[key]]({
                         node:_35,
                         item:_35.item
-                        });
+                    });
                     dojo.stopEvent(e);
                 }
             }
@@ -1673,7 +2381,7 @@ if(!dojo._hasResource["dijit.Tree"]){
             this._publish("execute",{
                 item:_38.item,
                 node:_38.node
-                });
+            });
             this.onClick(_38.item,_38.node);
         },
         _onDownArrow:function(_39){
@@ -1943,7 +2651,7 @@ if(!dojo._hasResource["dijit.Tree"]){
         _createTreeNode:function(_7a){
             return new dijit._TreeNode(_7a);
         }
-        });
+    });
     dojo.declare("dijit.tree.TreeStoreModel",null,{
         store:null,
         childrenAttrs:["children"],
@@ -2032,7 +2740,7 @@ if(!dojo._hasResource["dijit.Tree"]){
             var _92={
                 parent:_91,
                 attribute:this.childrenAttrs[0]
-                };
+            };
             return this.store.newItem(_90,_92);
         },
         pasteItem:function(_93,_94,_95,_96){
@@ -2080,7 +2788,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                 this.onChange(_a5);
             }
         }
-        });
+    });
     dojo.declare("dijit.tree.ForestStoreModel",dijit.tree.TreeStoreModel,{
         rootId:"$root$",
         rootLabel:"ROOT",
@@ -2092,7 +2800,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                 id:_aa.rootId,
                 label:_aa.rootLabel,
                 children:_aa.rootChildren
-                };
+            };
         },
         mayHaveChildren:function(_ab){
             return _ab===this.root||this.inherited(arguments);
@@ -2160,7 +2868,7 @@ if(!dojo._hasResource["dijit.Tree"]){
                         this.onChildrenChange(this.root,_bc);
                     }
                 })
-                });
+            });
         },
         _onNewItem:function(_bf,_c0){
             this._requeryTop();
@@ -2172,7 +2880,7 @@ if(!dojo._hasResource["dijit.Tree"]){
             }
             this.inherited(arguments);
         }
-        });
+    });
 }
 
 
@@ -2204,7 +2912,7 @@ dojo.declare("dijit.tree.model",null,{
     },
     onChildrenChange:function(_e,_f){
     }
-    });
+});
 
 
 
