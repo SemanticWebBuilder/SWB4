@@ -86,7 +86,7 @@ public class FlowObject extends GraphElement
                 count++;
             }
         }
-
+        println("getBusyPoints: {count}");
         return count;
 
     }

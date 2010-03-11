@@ -37,7 +37,8 @@ public class Task extends FlowObject {
     public var hours:Integer;
     public var button:ImgButton;
     public var alert:ImageView;
-    
+
+    public var viewalert:Boolean=bind hasErros(users, roles) and getBusyPoints()<2;
     public override function create(): Node {
             super.create();
             
@@ -68,9 +69,9 @@ public class Task extends FlowObject {
                 {
                     url: "{__DIR__}images/alerta.png"
                 }
-                visible:bind hasErros()
-                x:bind {x}-(w/2)-10
-                y:bind {y}-(h/2)-10
+                visible:bind viewalert;
+                x:bind {x}-(w/2)-7
+                y:bind {y}-(h/2)-7
             
         }
 
@@ -93,16 +94,16 @@ public class Task extends FlowObject {
 
         // add connectionPoints
 
-        var cp:ConnectionPoint=ConnectionPoint
+        /*var cp:ConnectionPoint=ConnectionPoint
         {
             id:"5"
             x:bind {x}-w/2;
             y:bind {y}-h/2;
-        };
-        insert cp into connectionPoints;
+        };*/
+        //insert cp into connectionPoints;
 
 
-        cp=ConnectionPoint
+        var cp:ConnectionPoint=ConnectionPoint
         {
             id:"6"
             x:bind {x}+w/2;
@@ -139,14 +140,40 @@ public class Task extends FlowObject {
     }
 
 
-    bound public function hasErros() :Boolean
+    bound public function hasErros(users: String[],roles: String[]) :Boolean
     {
-        if(sizeof users==0 or sizeof roles==0)
+        var nusers:Integer=sizeof users;
+        var nroles:Integer=sizeof roles;
+        if(nusers==0 and nroles==0)
         {
             true
         }
         else
         {
+            false
+            /*if(getBusyPoints()<2)
+            {
+                true
+            }
+            else
+            {
+                false
+            }*/
+        }
+
+
+    }
+    public function hasErros() :Boolean
+    {
+        var nusers:Integer=sizeof users;
+        var nroles:Integer=sizeof roles;
+        if(nusers==0 and nroles==0)
+        {
+            true
+        }
+        else
+        {
+
             if(getBusyPoints()<2)
             {
                 true
