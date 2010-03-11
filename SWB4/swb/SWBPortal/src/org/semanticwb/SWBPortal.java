@@ -24,11 +24,6 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -71,6 +66,7 @@ import org.semanticwb.portal.access.SWBAccessLog;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
 import org.semanticwb.portal.resources.ImageGallery;
+import org.semanticwb.portal.util.CaptchaUtil;
 import org.semanticwb.portal.util.ContentStyles;
 import org.semanticwb.repository.Workspace;
 import org.semanticwb.util.JarFile;
@@ -1459,7 +1455,7 @@ public class SWBPortal
          * y los 10 d&iacute;gitos del sistema decimal.</p>
          * Used to generate strings with characters selected randomly.
          */
-        private final static String ALPHABETH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        private final static String ALPHABETH = "ABCDEFGHiJKLMNPQRSTUVWXYZ123456789+=?";
 
         /**
          * Looks for relative paths in the attributes of HTML tags and replaces
@@ -2333,54 +2329,10 @@ public class SWBPortal
          */
         public static void sendValidateImage(HttpServletRequest request, HttpServletResponse response, int size, String cad) throws ServletException, IOException
         {
-            String cadena = null;
-            if (null == cad)
-            {
-                cadena = getRandString(size);
-            }
-            else
-            {
-                cadena = cad;
-            }
-            request.getSession(true).setAttribute("swb_valCad", cadena);
-            BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = buffer.createGraphics();
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setBackground(new Color(255, 255, 255));
-            g.clearRect(0, 0, 150, 40);
-            g.setColor(new Color(0, 0, 0));
-            Font f = new Font("Serif", Font.BOLD, 25);
-            //g.setFont(g.getFont().deriveFont(Font.ROMAN_BASELINE, 25.0f));
-            g.setFont(f);
-            g.drawString(cadena, 15, 30);
-
-            for (int i = 0; i <= 150; i += 10)
-            {
-                g.drawLine(i, 0, i, 39);
-            }
-            for (int i = 0; i <= 40; i += 10)
-            {
-                g.drawLine(0, i, 149, i);
-            }
-
-            /*try {
-            org.semanticwb.base.util.GIFEncoder encoder = new org.semanticwb.base.util.GIFEncoder(buffer);
-            response.setContentType("image/gif");
-            encoder.Write(response.getOutputStream());
-            } catch (AWTException e) {
-            log.error(e);
-            }*/
-
-            try
-            {
-                response.setContentType("image/png");
-                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
-            }
-            catch (IOException e)
-            {
-                log.error(e);
-            }
+            sendValidateImage(request, response, null, size, cad);
         }
+
+
 
         /**
          * Generates an image representing a string and embeds it in a {@code HttpServletResponse}.
@@ -2406,8 +2358,6 @@ public class SWBPortal
          */
         public static void sendValidateImage(HttpServletRequest request, HttpServletResponse response, String attributeName, int size, String cad) throws ServletException, IOException
         {
-            final int width = 150;
-            final int height = 60;
 
             String cadena = null;
             if (null == cad)
@@ -2422,37 +2372,13 @@ public class SWBPortal
             {
                 attributeName = "swb_valCad";
             }
+
             request.getSession(true).setAttribute(attributeName, cadena);
-            BufferedImage buffer = new BufferedImage(150, 40, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g = buffer.createGraphics();
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g.setBackground(new Color(255, 255, 255));
-            g.clearRect(0, 0, width, height);
-            g.setColor(new Color(0, 0, 0));
-            Font f = new Font("Serif", Font.BOLD, 25);
-            g.setFont(f);
-            g.drawString(cadena, 15, 30);
-
-            for (int i = 0; i <= width; i += 17)
-            {
-                g.drawLine(i, 0, i, height);
-            }
-            for (int i = 0; i <= height; i += 19)
-            {
-                g.drawLine(0, i, width - 1, i);
-            }
-
-            try
-            {
-                response.setContentType("image/png");
-                javax.imageio.ImageIO.write(buffer, "png", response.getOutputStream());
-            }
-            catch (IOException e)
-            {
-                log.error(e);
-            }
+            response.setContentType("image/png");
+            CaptchaUtil.writeCaptcha(cadena, response.getOutputStream());
         }
 
+      
         /**
          * Render gallery.
          * 
