@@ -4,7 +4,7 @@
         boolean ret=true;
         if(id!=null)
         {
-            if(id.length()<6)
+            if(id.length()<3)
             {
                 ret=false;
             }else
