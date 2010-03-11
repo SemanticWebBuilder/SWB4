@@ -58,7 +58,10 @@ public class Modeler extends CustomNode
     public var resourceTypes:String[];
     public override function create(): Node
     {
-        tm=FX.getArgument("tm").toString();
+        if(FX.getArgument("tm")!=null)
+        {
+            tm=FX.getArgument("tm").toString();
+        }
         locale=new Locale("es");
         if (FX.getArgument("locale")!=null)
         {
@@ -187,21 +190,19 @@ public class Modeler extends CustomNode
     }
 
     public function loadWorkflow() : Void
-    {
-        System.out.println("loading workflow");
-        var demo=FX.getArgument("idworkflow");
-        var otm=FX.getArgument("tm");
-        System.out.println("demo: {demo}");
-        System.out.println("tm: {tm}");
+    {        
 
-        if(ToolBar.conn==null or FX.getArgument("idworkflow")==null)
+        /*if(ToolBar.conn==null or FX.getArgument("idworkflow")==null)
         {
             return
+        }*/
+        if(FX.getArgument("idworkflow")!=null)
+        {
+            id_workflow = FX.getArgument("idworkflow").toString();
         }
-        
-        id_workflow = FX.getArgument("idworkflow").toString();
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id_workflow}</id><tm>{tm}</tm></req>";
-        var respxml : String= ToolBar.conn.getData(xml);        
+        //var respxml : String= ToolBar.conn.getData(xml);
+        var respxml : String= "<res><workflow id=\"http://www.Capacitacion.swb#swb_PFlow:1_Capacitacion\"           name=\"Flujo del Curso\"             version=\"3.0\">      <description>_</description>      <activity days=\"0\" hours=\"3\" name=\"Revision 1\" type=\"Activity\">         <description>Primera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor1\" name=\"Revisor 1\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 2\" type=\"Activity\">         <description>Segunda revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_2\" name=\"Revisor 2\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 3\" type=\"Activity\">        <description>Tercera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_3\" name=\"Revisor 3\" repository=\"uradm\"/>      </activity>      <activity name=\"Generador de contenido\" type=\"AuthorActivity\"/>      <activity name=\"Terminar flujo\" type=\"EndActivity\"/>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\" to=\"Revision 2\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\" to=\"Revision 3\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"true\" from=\"Revision 3\" publish=\"true\" to=\"Terminar flujo\"            type=\"authorized\">         <service>mail</service>         <service>publish</service>         <service>authorize</service>      </link>      <link authorized=\"false\" from=\"Revision 3\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <resourceType id=\"ExcelContent\" name=\"ExcelContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"PPTContent\" name=\"PPTContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"WordContent\" name=\"WordContent\" topicmap=\"Capacitacion\"/>   </workflow></res>";
         System.out.println("respxml: {respxml}");
         var parser : WBXMLParser= new WBXMLParser();
         var exml:WBTreeNode = parser.parse(respxml);
@@ -344,6 +345,7 @@ public class Modeler extends CustomNode
                             var rolname:String=erole.getAttribute("name");
                             var rep:String=erole.getAttribute("repository");
                             var srole:String="{rolid}@{rep}@{rolname}";
+                            System.out.println("agregando rol {srole}");
                             insert srole into activity.roles;
                         }
                         var users: Iterator=eactivity.getNodesbyName("user");
@@ -353,9 +355,9 @@ public class Modeler extends CustomNode
                             //User user=new User(,);
                             var userid:String=euser.getAttribute("id");
                             var username:String=euser.getAttribute("name");
-                            var srole:String="{id}@{username}";
-                            //activity.getUserModel().addUser(user);
-                            insert srole into activity.users;
+                            var suser:String="{userid}@{username}";
+                            System.out.println("agregando rol {suser}");
+                            insert suser into activity.users;
                         }
                     }
                 }
@@ -444,6 +446,16 @@ public class Modeler extends CustomNode
 
             }
         }
+        /*for(node in contents)
+        {
+            if(node instanceof Task)
+            {
+                var task:Task=node as Task;
+                
+            }
+
+        }*/
+
         organizeMap();
     }
     
