@@ -188,7 +188,7 @@ public class WBUrlContent extends GenericAdmResource {
         
         PrintWriter out = response.getWriter();
         out.println(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin wburlcontent</a>");
+        //out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin wburlcontent</a>");
     }
     
     

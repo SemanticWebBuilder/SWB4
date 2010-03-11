@@ -142,6 +142,6 @@ public class FrameContent extends GenericAdmResource
         }
         PrintWriter out=response.getWriter();
         out.print(ret.toString());
-        out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
+        //out.println("<br><a href=\"" + paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN) + "\">admin</a>");
     }
 }
