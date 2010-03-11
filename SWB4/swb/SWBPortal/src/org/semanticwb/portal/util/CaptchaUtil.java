@@ -42,7 +42,6 @@ public class CaptchaUtil
 
         BufferedImage buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffer.createGraphics();
-        int cadSize = g.getFontMetrics(font).stringWidth(cadena);
 
         RenderingHints hints = new RenderingHints(
                 RenderingHints.KEY_ANTIALIASING,
@@ -65,7 +64,6 @@ public class CaptchaUtil
         TextLayout tl = new TextLayout(aci, frc);
         int xBaseline = (int) Math.round(buffer.getWidth() * XOFFSET);
         int yBaseline = buffer.getHeight() - (int) Math.round(buffer.getHeight() * YOFFSET);
-        System.out.println("offset:" + xBaseline + "|" + yBaseline);
         Shape shape = tl.getOutline(AffineTransform.getTranslateInstance(xBaseline, yBaseline));
 
         g.setColor(Color.BLUE);
@@ -74,11 +72,6 @@ public class CaptchaUtil
         g.draw(shape);
 
         g.setStroke(new BasicStroke(DEFAULT_STROKE_WIDTH));
-
-//            Font f = new Font("Serif", Font.BOLD|Font.ITALIC, 25);
-//
-//            g.setFont(f);
-//            g.drawString(cadena, 15, 30);
 
         for (int i = 0; i <= width; i += 20)
         {
@@ -109,12 +102,9 @@ public class CaptchaUtil
     private static void shearX(Graphics2D g, int w1, int h1)
     {
         int period = _gen.nextInt(10) + 5;
-        System.out.println("xPer:" + period);
         boolean borderGap = true;
         int frames = 15;
         int phase = _gen.nextInt(5) + 2;
-        System.out.println("xPhs:" + phase);
-
         for (int i = 0; i < h1; i++)
         {
             double d = (period >> 1)
@@ -133,7 +123,6 @@ public class CaptchaUtil
     private static void shearY(Graphics2D g, int w1, int h1)
     {
         int period = _gen.nextInt(25) + 7; // 50;
-        System.out.println("yPer:" + period);
 
         boolean borderGap = true;
         int frames = 15;
@@ -152,6 +141,7 @@ public class CaptchaUtil
             }
         }
     }
+    
 //        private static void gimp(BufferedImage image) {
 //            int height = image.getHeight();
 //            int width = image.getWidth();
