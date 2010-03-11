@@ -151,9 +151,313 @@ public class ToolBar extends CustomNode
     {
         loadProcess();
 
+
+        var task=SubMenu
+        {
+            modeler: modeler
+            toolBar:this;
+            text:"Task"
+            image: "images/task_1.png"
+            imageOver: "images/task_2.png"
+            imageClicked: "images/task_3.png"
+            buttons: [
+                ImgButton {
+                    text:"Task"
+                    toolBar:this;
+                    image: "images/task_normal1.png"
+                    imageOver: "images/task_normal2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Task"
+                            uri:"new:task:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Adhoc Task"
+                    toolBar:this;
+                    image: "images/subtask_adhoc1.png"
+                    imageOver: "images/subtask_adhoc2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Adhoc Task"
+                            uri:"new:adhoctask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Loop Task"
+                    toolBar:this;
+                    image: "images/subtask_ciclo1.png"
+                    imageOver: "images/subtask_ciclo2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Loop Task"
+                            uri:"new:looptask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Compensation Task"
+                    toolBar:this;
+                    image: "images/subtask_compensa1.png"
+                    imageOver: "images/subtask_compensa2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Compensation Task"
+                            uri:"new:compensationtask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple Task"
+                    toolBar:this;
+                    image: "images/subtask_instancia1.png"
+                    imageOver: "images/subtask_instancia2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Multiple Task"
+                            uri:"new:multipletask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"User Task"
+                    toolBar:this;
+                    image: "images/task_usr1.png"
+                    imageOver: "images/task_usr2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"User Task"
+                            uri:"new:usertask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Service Task"
+                    toolBar:this;
+                    image: "images/task_servicio1.png"
+                    imageOver: "images/task_servicio2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Service Task"
+                            uri:"new:servicetask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Script Task"
+                    toolBar:this;
+                    image: "images/task_script1.png"
+                    imageOver: "images/task_script2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Script Task"
+                            uri:"new:scripttask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Manual Task"
+                    toolBar:this;
+                    image: "images/task_manual1.png"
+                    imageOver: "images/task_manual2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Manual Task"
+                            uri:"new:manualtask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Send Task"
+                    toolBar:this;
+                    image: "images/task_envio1.png"
+                    imageOver: "images/task_envio2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Send Task"
+                            uri:"new:sendtask:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Receive Task"
+                    toolBar:this;
+                    image: "images/task_recive1.png"
+                    imageOver: "images/task_recive2.png"
+                    action: function():Void
+                    {
+                        //println("click");
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Receive Task"
+                            uri:"new:receivetask:{counter++}"
+                        }
+                    }
+                },
+            ]
+        };
+
+        var subtask=SubMenu
+        {
+            modeler: modeler
+            toolBar:this;
+            text:"SubTask"
+            image: "images/subtask_1.png"
+            imageOver: "images/subtask_2.png"
+            imageClicked: "images/subtask_3.png"
+            buttons: [
+                ImgButton {
+                    text:"SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_colapsado1.png"
+                    imageOver: "images/subtask_colapsado2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"SubProcess"
+                            uri:"new:subprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Adhoc SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_adhoc+1.png"
+                    imageOver: "images/subtask_adhoc+2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"Adhoc SubProcess"
+                            uri:"new:adhocsubprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Loop SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_ciclo+1.png"
+                    imageOver: "images/subtask_ciclo+2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"Loop SubProcess"
+                            uri:"new:loopsubprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Compensation SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_compensa+1.png"
+                    imageOver: "images/subtask_compensa+2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"Compensation SubProcess"
+                            uri:"new:compensationsubprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_instancia+1.png"
+                    imageOver: "images/subtask_instancia+2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"Multiple SubProcess"
+                            uri:"new:multiplesubprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Transaction SubProcess"
+                    toolBar:this;
+                    image: "images/subtask_transaccion1.png"
+                    imageOver: "images/subtask_transaccion2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SubProcess
+                        {
+                            modeler:modeler
+                            title:"Transaction SubProcess"
+                            uri:"new:transactionsubprocess:{counter++}"
+                        }
+                    }
+                },
+            ]
+        };
+
+
         var startEvent=SubMenu
         {
             modeler: modeler
+            toolBar:this;
             text:"Start Event"
             image: "images/start_1.png"
             imageOver: "images/start_2.png"
@@ -322,6 +626,7 @@ public class ToolBar extends CustomNode
         var interEvent=SubMenu
         {
             modeler: modeler
+            toolBar:this;
             text:"Inter Event"
             image:"images/inter_1.png"
             imageOver:"images/inter_2.png"
@@ -606,6 +911,7 @@ public class ToolBar extends CustomNode
         var endEvent=SubMenu
         {
             modeler: modeler
+            toolBar:this;
             text:"End Event"
             image: "images/end_1.png"
             imageOver: "images/end_2.png"
@@ -629,7 +935,7 @@ public class ToolBar extends CustomNode
                 ImgButton {
                     text:"Message End Event"
                     image: "images/end_msj1.png"
-                    imageOver: "images/end_msj1.png"
+                    imageOver: "images/end_msj2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
                         modeler.tempNode=EndEvent
@@ -759,13 +1065,14 @@ public class ToolBar extends CustomNode
         var gateWay=SubMenu
         {
             modeler: modeler
+            toolBar:this;
             text:"GateWay"
             image: "images/if_1.png"
             imageOver: "images/if_2.png"
             imageClicked: "images/if_3.png"
             buttons: [
                 ImgButton {
-                    text:"GateWay"
+                    text:"Data XOR GateWay"
                     image: "images/gate_normal1.png"
                     imageOver: "images/gate_normal2.png"
                     action: function():Void
@@ -780,22 +1087,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"GateWay"
-                    image: "images/gate_normal1.png"
-                    imageOver: "images/gate_normal2.png"
-                    action: function():Void
-                    {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=GateWay
-                        {
-                            modeler:modeler
-                            title:"GateWay"
-                            uri:"new:gateway:{counter++}"
-                        }
-                    }
-                },
-                ImgButton {
-                    text:"XOR GateWay"
+                    text:"Data XOR GateWay"
                     image: "images/gate_datos1.png"
                     imageOver: "images/gate_datos2.png"
                     action: function():Void
@@ -805,32 +1097,330 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             title:"XOR GateWay"
-                            uri:"new:gateway:{counter++}"
+                            uri:"new:dataxorgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"XOR GateWay"
-                    image: "images/gate_datos1.png"
-                    imageOver: "images/gate_datos2.png"
+                    text:"OR GateWay"
+                    image: "images/gate_inclusiva_1.png"
+                    imageOver: "images/gate_inclusiva_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ORGateWay
+                        {
+                            modeler:modeler
+                            title:"OR GateWay"
+                            uri:"new:orgateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Initial Event OR GateWay"
+                    image: "images/gate_eventos_str_1.png"
+                    imageOver: "images/gate_eventos_str_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ORGateWay
+                        {
+                            modeler:modeler
+                            title:"Initial Event OR GateWay"
+                            uri:"new:initialeventorgateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Inter Event OR GateWay"
+                    image: "images/gate_eventos_int_1.png"
+                    imageOver: "images/gate_eventos_int_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ORGateWay
+                        {
+                            modeler:modeler
+                            title:"Inter Event OR GateWay"
+                            uri:"new:intereventorgateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"AND GateWay"
+                    image: "images/gate_paralela_n_1.png"
+                    imageOver: "images/gate_paralela_n_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ANDGateWay
+                        {
+                            modeler:modeler
+                            title:"AND GateWay"
+                            uri:"new:andgateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Event AND GateWay"
+                    image: "images/gate_paralela_b_1.png"
+                    imageOver: "images/gate_paralela_b_2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ANDGateWay
+                        {
+                            modeler:modeler
+                            title:"Event AND GateWay"
+                            uri:"new:eventandgateway:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Complex GateWay"
+                    image: "images/gate_compleja_1.png"
+                    imageOver: "images/gate_compleja_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
                         modeler.tempNode=GateWay
                         {
                             modeler:modeler
-                            title:"XOR GateWay"
-                            uri:"new:gateway:{counter++}"
+                            title:"Complex GateWay"
+                            uri:"new:complexgateway:{counter++}"
                         }
                     }
-                },   
+                },
             ]
         }
 
+        var sequence=SubMenu
+        {
+            modeler: modeler
+            toolBar:this;
+            text:"Connection Objects"
+            image:"images/flow_1.png"
+            imageOver:"images/flow_2.png"
+            imageClicked: "images/flow_3.png"
+            buttons: [
+                ImgButton {
+                    text:"Sequence Flow"
+                    toolBar:this;
+                    image: "images/flow_normal1.png"
+                    imageOver: "images/flow_normal2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SequenceFlow
+                        {
+                            modeler:modeler
+                            uri:"new:sequenceflow:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Conditional Flow"
+                    toolBar:this;
+                    image: "images/flow_condicion1.png"
+                    imageOver: "images/flow_condicion2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=ConditionalFlow
+                        {
+                            modeler:modeler
+                            uri:"new:conditionalflow:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Default Flow"
+                    toolBar:this;
+                    image: "images/flow_defecto1.png"
+                    imageOver: "images/flow_defecto2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SequenceFlow
+                        {
+                            modeler:modeler
+                            uri:"new:defaultflow:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Message Flow"
+                    toolBar:this;
+                    image: "images/flow_msj1.png"
+                    imageOver: "images/flow_msj2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SequenceFlow
+                        {
+                            modeler:modeler
+                            uri:"new:messageflow:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Association Flow"
+                    toolBar:this;
+                    image: "images/doc_asocia1.png"
+                    imageOver: "images/doc_asocia2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=SequenceFlow
+                        {
+                            modeler:modeler
+                            uri:"new:associationflow:{counter++}"
+                        }
+                    }
+                },
+            ]
+        }
+
+        var artifacts=SubMenu
+        {
+            modeler: modeler
+            toolBar:this;
+            text:"Artifacts"
+            image:"images/doc_1.png"
+            imageOver:"images/doc_2.png"
+            imageClicked: "images/doc_3.png"
+            buttons: [
+                ImgButton {
+                    text:"Artifact"
+                    toolBar:this;
+                    image: "images/doc_normal1.png"
+                    imageOver: "images/doc_normal2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Artifact"
+                            uri:"new:artifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Multiple Artifact"
+                    toolBar:this;
+                    image: "images/doc_objeto1.png"
+                    imageOver: "images/doc_objeto2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Multiple Artifact"
+                            uri:"new:multipleartifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Input Artifact"
+                    toolBar:this;
+                    image: "images/doc_entrada1.png"
+                    imageOver: "images/doc_entrada2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Input Artifact"
+                            uri:"new:inputartifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Output Artifact"
+                    toolBar:this;
+                    image: "images/doc_salida1.png"
+                    imageOver: "images/doc_salida2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Output Artifact"
+                            uri:"new:outputartifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Data Store Artifact"
+                    toolBar:this;
+                    image: "images/doc_base1.png"
+                    imageOver: "images/doc_base2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Data Store Artifact"
+                            uri:"new:datastoreartifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Annotation Artifact"
+                    toolBar:this;
+                    image: "images/doc_anota1.png"
+                    imageOver: "images/doc_anota2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Annotation Artifact"
+                            uri:"new:annotationartifact:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Group Artifact"
+                    toolBar:this;
+                    image: "images/doc_grupo1.png"
+                    imageOver: "images/doc_grupo2.png"
+                    action: function():Void
+                    {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Task
+                        {
+                            modeler:modeler
+                            title:"Group Artifact"
+                            uri:"new:groupartifact:{counter++}"
+                        }
+                    }
+                },
+            ]
+        }
+
+        var pool=ImgButton
+        {
+            text:"Pool"
+            toolBar:this;
+            image: "images/pool_1.png"
+            imageOver: "images/pool_2.png"
+            action: function():Void {
+                modeler.disablePannable=true;
+                modeler.tempNode=Pool
+                {
+                    modeler:modeler
+                    title:"Pool"
+                    uri:"new:pool:{counter++}"
+                }
+            }
+        };
 
         var lane=ImgButton
         {
             text:"Lane"
+            toolBar:this;
             image: "images/lane_1.png"
             imageOver: "images/lane_2.png"
             action: function():Void {
@@ -844,11 +1434,10 @@ public class ToolBar extends CustomNode
             }
         };
 
-
         var ret=Group
         {
-             translateX:bind x
-             translateY:bind y
+             layoutX:bind x
+             layoutY:bind y
              //scaleX:.5
              //scaleY:.5
              content: [
@@ -863,7 +1452,7 @@ public class ToolBar extends CustomNode
                             cursor:Cursor.MOVE
                             onMousePressed: function (e: MouseEvent): Void
                             {
-                                modeler.clickedNode=this;
+                                ModelerUtils.clickedNode=this;
                                 modeler.disablePannable=true;
                                 dx=x-e.sceneX;
                                 dy=y-e.sceneY;
@@ -875,12 +1464,13 @@ public class ToolBar extends CustomNode
                             }
                             onMouseReleased: function (e: MouseEvent): Void
                             {
-                                modeler.clickedNode=null;
+                                ModelerUtils.clickedNode=null;
                                 modeler.disablePannable=false;
                             }
                         },
                         ImgButton {
                             text:"Hide"
+                            toolBar:this;
                             image: "images/sube_1.png"
                             imageOver: "images/sube_2.png"
                             action: function():Void
@@ -890,6 +1480,7 @@ public class ToolBar extends CustomNode
                         },
                         ImgButton {
                             text:"Maximize"
+                            toolBar:this;
                             image: "images/maxim_1.png"
                             imageOver: "images/maxim_2.png"
                             action: function():Void
@@ -899,6 +1490,7 @@ public class ToolBar extends CustomNode
                         },
                         ImgButton {
                             text:"Save"
+                            toolBar:this;
                             image: "images/save_1.png"
                             imageOver: "images/save_2.png"
                             action: function():Void
@@ -967,138 +1559,30 @@ public class ToolBar extends CustomNode
                                 url: "{__DIR__}images/barra_division.png"
                             }
                         },
-                        ImgButton {
-                            text:"Task"
-                            image: "images/task_1.png"
-                            imageOver: "images/task_2.png"
-                            action: function():Void
-                            {
-                                println("click");
-                                modeler.disablePannable=true;
-                                modeler.tempNode=Task
-                                {
-                                    modeler:modeler
-                                    title:"Task"
-                                    uri:"new:task:{counter++}"
-                                }
-                            }
-                        },
-                        ImgButton {
-                            text:"SubProcess"
-                            image: "images/subtask_1.png"
-                            imageOver: "images/subtask_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=SubProcess
-                                {
-                                    modeler:modeler
-                                    title:"SubProcess"
-                                    uri:"new:subprocess:{counter++}"
-                                }
-                            }
-                        },
+                        task,
+                        subtask,
                         startEvent,
                         interEvent,
                         endEvent,
                         gateWay,
-                        ImgButton {
-                            text:"OR Gateway"
-                            image: "images/if_1.png"
-                            imageOver: "images/if_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=ORGateWay
-                                {
-                                    modeler:modeler
-                                    title:"OR Gateway"
-                                    uri:"new:orgateway:{counter++}"
-                                }
-                            }
-                        },
-                        ImgButton {
-                            text:"AND Gateway"
-                            image: "images/if_1.png"
-                            imageOver: "images/if_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=ANDGateWay
-                                {
-                                    modeler:modeler
-                                    title:"AND Gateway"
-                                    uri:"new:andgateway:{counter++}"
-                                }
-                            }
-                        },
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
                         },
-                        ImgButton {
-                            text:"SequenceFlow"
-                            image: "images/flow_1.png"
-                            imageOver: "images/flow_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=SequenceFlow
-                                {
-                                    modeler:modeler
-                                    uri:"new:sequenceflow:{counter++}"
-                                }
-                            }
-                        },
-                        ImgButton {
-                            text:"Conditional Flow"
-                            image: "images/flow_1.png"
-                            imageOver: "images/flow_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=ConditionalFlow
-                                {
-                                    modeler:modeler
-                                    uri:"new:conditionalflow:{counter++}"
-                                }
-                            }
-                        },
+                        sequence,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
                         },
-                        ImgButton {
-                            text:"Artifact"
-                            image: "images/doc_1.png"
-                            imageOver: "images/doc_2.png"
-                            action: function():Void
-                            {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=Task
-                                {
-                                    modeler:modeler
-                                    title:"Artifact"
-                                    uri:"new:artifact:{counter++}"
-                                }
-                            }
-                        },
+                        artifacts,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
                         },
-                        ImgButton {
-                            text:"Pool"
-                            image: "images/pool_1.png"
-                            imageOver: "images/pool_2.png"
-                            action: function():Void {
-                                modeler.disablePannable=true;
-                                modeler.tempNode=Pool
-                                {
-                                    modeler:modeler
-                                    title:"Pool"
-                                    uri:"new:pool:{counter++}"
-                                }
-                            }
-                        },
+                        pool,
                         lane,
                         ImageView {
                             image: Image {
@@ -1107,13 +1591,18 @@ public class ToolBar extends CustomNode
                         }
                     ]
                 },
+                task.subBar,
+                subtask.subBar,
                 startEvent.subBar,
                 interEvent.subBar,
                 endEvent.subBar,
-                gateWay.subBar
+                gateWay.subBar,
+                sequence.subBar,
+                artifacts.subBar
              ]
              cursor:Cursor.HAND;
         };
+
         return ret;
     }
 }

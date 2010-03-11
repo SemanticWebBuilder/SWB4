@@ -30,6 +30,7 @@ public class SubMenu extends CustomNode
 {
     public var modeler:Modeler;
     public var stage:Stage;
+    public var toolBar:ToolBar;
     public var x:Number;
     public var y:Number;
     public var w:Number;
@@ -74,14 +75,30 @@ public class SubMenu extends CustomNode
             onMouseEntered: function( e: MouseEvent ):Void
             {
                  over=true;
+
+                 if(toolBar!=null)
+                 {
+                     ModelerUtils.startToolTip(text, toolBar.x+layoutX, toolBar.y+layoutY+layoutBounds.height);
+                 }else
+                 {
+                     ModelerUtils.startToolTip(text, layoutX, layoutY+layoutBounds.height);
+                 }
             }
             onMouseExited: function( e: MouseEvent ):Void
             {
                  over=false;
+                 ModelerUtils.stopToolTip();
             }
             onMousePressed: function( e: MouseEvent ):Void
             {
+                 if(modeler.tempNode==null)modeler.disablePannable=true;
+                 ModelerUtils.clickedNode=this;
                  clicked=true;
+            }
+            onMouseReleased: function( e: MouseEvent ):Void
+            {
+                if(modeler.tempNode==null)modeler.disablePannable=false;
+                ModelerUtils.clickedNode=null;
             }
             onKeyTyped: function( e: KeyEvent ):Void
             {
@@ -92,8 +109,8 @@ public class SubMenu extends CustomNode
 
          subBar=Group
          {
-             translateX:bind layoutX + offx
-             translateY:bind layoutY + offy
+             layoutX:bind layoutX + offx
+             layoutY:bind layoutY + offy
              visible: bind clicked
              content: [
                 Flow {
@@ -130,6 +147,7 @@ public class SubMenu extends CustomNode
          for(button in buttons)
          {
             button.subMenu=this;
+            button.toolBar=toolBar;
          }
 
          return content;

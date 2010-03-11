@@ -19,17 +19,11 @@ public class Task extends FlowObject
 {
     public override function create(): Node
     {
+        initializeCustomNode();
+
         cursor=Cursor.HAND;
         w=100;
         h=60;
-        text=EditableText
-        {
-            text: bind title with inverse
-            x:bind x
-            y:bind y
-            width: bind w
-            height: bind h
-        }
 
         shape= Rectangle
         {

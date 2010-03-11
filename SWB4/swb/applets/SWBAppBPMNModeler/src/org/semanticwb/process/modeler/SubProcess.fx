@@ -20,6 +20,7 @@ public class SubProcess extends FlowObject
 {
     public override function create(): Node
     {
+        initializeCustomNode();
         cursor=Cursor.HAND;
         w=100;
         h=60;
