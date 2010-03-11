@@ -40,8 +40,7 @@ var modeler:Modeler = Modeler
     pannable:true
     cursor:Cursor.CROSSHAIR
 }
-modeler.loadWorkflow();
-modeler.organizeMap();
+
 
 var toolbar:ToolBar = ToolBar
 {
@@ -65,14 +64,16 @@ var stage : Stage = Stage {
     title: "Publish Flow Modeler"
     resizable: true
     scene: scene
-    extensions: AppletStageExtension
+    /*extensions: AppletStageExtension
         {
             shouldDragStart: function(e: MouseEvent): Boolean
             {
                 e.primaryButtonDown;
              }
-        }
+        }*/
     //style: StageStyle.TRANSPARENT //StageStyle.UNDECORATED
 }
 
 toolbar.stage=stage;
+modeler.loadWorkflow();
+modeler.organizeMap();

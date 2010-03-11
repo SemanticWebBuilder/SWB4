@@ -58,14 +58,14 @@ public class Modeler extends CustomNode
     public var resourceTypes:String[];
     public override function create(): Node
     {
-        
+        tm=FX.getArgument("tm").toString();
         locale=new Locale("es");
-        if (ToolBar.conn.getApplet().getParameter("locale") != null and not ToolBar.conn.getApplet().getParameter("locale").equals(""))
+        if (FX.getArgument("locale")!=null)
         {
             try
             {
 
-                locale = new Locale(ToolBar.conn.getApplet().getParameter("locale"));
+                locale = new Locale(FX.getArgument("locale").toString());
             }
             catch (e: Exception)
             {
@@ -188,14 +188,21 @@ public class Modeler extends CustomNode
 
     public function loadWorkflow() : Void
     {
-        if(ToolBar.conn==null or ToolBar.conn.getApplet()==null)
+        System.out.println("loading workflow");
+        var demo=FX.getArgument("idworkflow");
+        var otm=FX.getArgument("tm");
+        System.out.println("demo: {demo}");
+        System.out.println("tm: {tm}");
+
+        if(ToolBar.conn==null or FX.getArgument("idworkflow")==null)
         {
             return
         }
-        id_workflow = ToolBar.conn.getApplet().getParameter("idworkflow");
+        
+        id_workflow = FX.getArgument("idworkflow").toString();
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id_workflow}</id><tm>{tm}</tm></req>";
         var respxml : String= ToolBar.conn.getData(xml);        
-
+        System.out.println("respxml: {respxml}");
         var parser : WBXMLParser= new WBXMLParser();
         var exml:WBTreeNode = parser.parse(respxml);
         if (exml.getFirstNode() != null and exml.getFirstNode().getFirstNode() != null)
@@ -773,7 +780,7 @@ public class Modeler extends CustomNode
         }
         var xml : String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>update</cmd><tm>{tm}</tm>{node.getFirstNode().getXML()}</req>";
         
-        if(ToolBar.conn==null or ToolBar.conn.getApplet()==null)
+        if(ToolBar.conn==null)
         {
             var msg:String=ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("err1");
             JOptionPane.showMessageDialog(null,   msg, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
@@ -802,8 +809,7 @@ public class Modeler extends CustomNode
 
                     try
                     {
-                        var url_script:String=ToolBar.conn.getApplet().getParameter("script");
-
+                        var url_script:String=FX.getArgument("script").toString();
                         var newurl : String= "{url_script}tm={tm}&id={eid.getFirstNode().getText()}";
                         var _url : URL= new URL(ToolBar.conn.getApplet().getCodeBase().getProtocol(), ToolBar.conn.getApplet().getCodeBase().getHost(), ToolBar.conn.getApplet().getCodeBase().getPort(), newurl);
                         ToolBar.conn.getApplet().getAppletContext().showDocument(_url, "status");
