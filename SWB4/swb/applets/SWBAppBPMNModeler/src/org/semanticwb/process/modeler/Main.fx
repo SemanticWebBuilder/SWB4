@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.Lighting;
 import javafx.scene.effect.light.DistantLight;
 import javafx.scene.Cursor;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -51,7 +52,8 @@ var toolbar:ToolBar = ToolBar
 var scene : Scene = Scene {
     content: [
             modeler,
-            toolbar
+            toolbar,
+            ModelerUtils.getToolTip()
     ]
     width: 600
     height: 300
@@ -67,3 +69,4 @@ var stage : Stage = Stage {
 }
 
 toolbar.stage=stage;
+

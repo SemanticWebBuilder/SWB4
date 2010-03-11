@@ -21,6 +21,7 @@ public class ANDGateWay extends FlowObject
 {
     public override function create(): Node
     {
+        initializeCustomNode();
         stroke=Color.web(Styles.color_gateway);
         cursor=Cursor.HAND;
         w=50;

@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.Group;
 
 /**
  * @author javier.solis
@@ -27,10 +28,12 @@ public class GraphElement extends CustomNode
     public var h : Number;
 
     public var title : String;
+    public var toolTipText : String;
+
     public var uri : String;
 
-    public var shape : Shape;
-    public var text : EditableText;
+    protected var shape : Shape;
+    protected var text : EditableText;
 
     public var stroke=Color.web(Styles.color);
     public var strokeOver=Color.web(Styles.color_over);
@@ -56,15 +59,28 @@ public class GraphElement extends CustomNode
         }
     }
 
-    public override function create(): Node
+    protected function initializeCustomNode():Void
     {
         text=EditableText
         {
             text: bind title with inverse
-            width: bind w;
-            height: bind h;
+            x:bind x
+            y:bind y
+            width: bind w
+            height: bind h
         }
-        return text;
+    }
+
+
+    public override function create(): Node
+    {
+        initializeCustomNode();
+        return Group
+        {
+            content: [
+                text
+            ]
+        }
     }
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
@@ -88,8 +104,9 @@ public class GraphElement extends CustomNode
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
+            ModelerUtils.stopToolTip();
             mouseDragged(e);
         }
     }
@@ -104,9 +121,9 @@ public class GraphElement extends CustomNode
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==null)
+        if(ModelerUtils.clickedNode==null)
         {
-            modeler.clickedNode=this;
+            ModelerUtils.clickedNode=this;
             mousePressed(e);
         }
     }
@@ -136,9 +153,9 @@ public class GraphElement extends CustomNode
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
-            modeler.clickedNode=null;
+            ModelerUtils.clickedNode=null;
             mouseReleased(e);
         }
     }
@@ -156,8 +173,8 @@ public class GraphElement extends CustomNode
         y=(Math.round(y/25))*25;            //grid
     }
 
-    override var onMouseEntered = function(e)
-    {
+    override var onMouseEntered = function(e)    {
+        ModelerUtils.startToolTip("Hola {toolTipText}", x-w/2-modeler.clipView.clipX, y+h/2-modeler.clipView.clipY+3);
         mouseEntered(e);
     }
 
@@ -173,12 +190,13 @@ public class GraphElement extends CustomNode
 
     override var onMouseExited = function(e)
     {
+        ModelerUtils.stopToolTip();
         mouseExited(e);
     }
 
     public function mouseExited( e: MouseEvent )
     {
-        if(modeler.overNode==this and modeler.clickedNode==null)
+        if(modeler.overNode==this and ModelerUtils.clickedNode==null)
         {
             modeler.overNode=null;
             if(modeler.tempNode==null)modeler.disablePannable=false;
@@ -186,7 +204,6 @@ public class GraphElement extends CustomNode
         if(focused) shape.stroke=strokeFocused
         else shape.stroke=stroke;
         shape.strokeWidth=stkw;
-        //normaltimer.playFromStart();
     }
 
 

@@ -115,7 +115,7 @@ public class ConnectionObject  extends CustomNode
 
 //    override var onMouseDragged = function ( e: MouseEvent ) : Void
 //    {
-//        if(modeler.clickedNode==this)
+//        if(ModelerUtils.clickedNode==this)
 //        {
 ////            x=dx+e.sceneX;
 ////            y=dy+e.sceneY;
@@ -124,31 +124,31 @@ public class ConnectionObject  extends CustomNode
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==null)
+        if(ModelerUtils.clickedNode==null)
         {
-            modeler.clickedNode=this;
+            ModelerUtils.clickedNode=this;
             modeler.focusedNode=this;
         }
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
-            modeler.clickedNode=null;
+            ModelerUtils.clickedNode=null;
         }
     }
 
     override var onMouseEntered = function(e)
     {
-        if(modeler.tempNode==null and modeler.clickedNode==null)modeler.disablePannable=true;
+        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
         path.stroke=Color.web(Styles.color_over);
         path.strokeWidth=3;
     }
 
     override var onMouseExited = function(e)
     {
-        if(modeler.tempNode==null and modeler.clickedNode==null)modeler.disablePannable=false;
+        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false;
         path.stroke=Color.web(Styles.color);
         path.strokeWidth=2;
     }

@@ -20,6 +20,7 @@ public class GateWay extends FlowObject
 {
     public override function create(): Node
     {
+        initializeCustomNode();
         stroke=Color.web(Styles.color_gateway);
         cursor=Cursor.HAND;
         w=50;
@@ -34,14 +35,19 @@ public class GateWay extends FlowObject
         return Group
         {
             content: [
-                shape
+                Group
+                {
+                    content: [
+                        shape
+                    ]
+                    translateX: bind x - w/2
+                    translateY: bind y - w/2
+                    scaleX: bind s;
+                    scaleY: bind s;
+                    opacity: bind o;
+                    effect: Styles.dropShadow
+                }
             ]
-            translateX: bind x - w/2
-            translateY: bind y - w/2
-            scaleX: bind s;
-            scaleY: bind s;
-            opacity: bind o;
-            effect: Styles.dropShadow
         };
     }
 }

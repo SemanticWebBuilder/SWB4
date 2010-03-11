@@ -22,6 +22,12 @@ public class EndEvent extends Event
          shape.strokeWidth=4;
          stkw=4;
          stkwo=5;
+
+         colorAdjust.hue=-0.03;
+         colorAdjust.brightness=-0.33;
+         colorAdjust.contrast=0.25;
+         colorAdjust.saturation=1;
+
          return ret;
     }
 
