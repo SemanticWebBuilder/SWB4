@@ -532,6 +532,10 @@ public class DistributorParams
             if (dns != null)
             {
                 webpage=dns.getWebPage();
+                if(webpage==null)
+                {
+                    webpage=dns.getWebSite().getHomePage();
+                }
             }else
             {
                 Iterator<WebSite> it=SWBContext.listWebSites();
