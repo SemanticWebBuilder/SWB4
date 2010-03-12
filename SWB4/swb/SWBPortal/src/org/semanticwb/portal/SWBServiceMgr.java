@@ -260,10 +260,12 @@ public class SWBServiceMgr implements SemanticObserver {
                 if(obj.instanceOf(Searchable.swb_Searchable))
                 {
                     Searchable searchable=(Searchable)obj.createGenericInstance();
-
                     SWBIndexer indexer=SWBPortal.getIndexMgr().getDefaultIndexer();
-                    indexer.removeSearchable(searchable.getURI());
-                    indexer.indexSerchable(searchable);
+                    if(indexer!=null && searchable!=null)
+                    {
+                        indexer.removeSearchable(searchable.getURI());
+                        indexer.indexSerchable(searchable);
+                    }
                 }
 
             }

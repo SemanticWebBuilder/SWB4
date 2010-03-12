@@ -560,32 +560,38 @@ private SWBResourceCachedMgr cache;
             aux = obj;
         } else
         {
-            try
+            if(SWBPlatform.getEnv("swb/oldResourcesSupport", "false").equals("true"))
             {
-                //Class wbresource = Class.forName("infotec.wb2.lib.WBResource");
-                Class wbresource = Class.forName("com.infotec.wb.lib.WBResource");
-                //System.out.println("convert:"+wbresource+" -> "+wbresource.isInstance(obj));
-                if (wbresource!=null && wbresource.isInstance(obj))
+                try
                 {
-                    //if(base!=null)base.setWb2Resource(true);
-                    Class wbreswrapper = Class.forName("org.semanticwb.api.WBResourceToSWBResourceWrapper");
-                    Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
-                    aux = cons.newInstance(new Object[]{obj});
-                }else
-                {
-                    //version 2
-                    wbresource = Class.forName("infotec.wb2.lib.WBResource");
+                    //Class wbresource = Class.forName("infotec.wb2.lib.WBResource");
+                    Class wbresource = Class.forName("com.infotec.wb.lib.WBResource");
+                    //System.out.println("convert:"+wbresource+" -> "+wbresource.isInstance(obj));
                     if (wbresource!=null && wbresource.isInstance(obj))
                     {
                         //if(base!=null)base.setWb2Resource(true);
-                        Class wbreswrapper = Class.forName("infotec.wb2.lib.WBResourceWrapperNew");
+                        Class wbreswrapper = Class.forName("org.semanticwb.api.WBResourceToSWBResourceWrapper");
                         Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
                         aux = cons.newInstance(new Object[]{obj});
+                    }else
+                    {
+                        //version 2
+                        wbresource = Class.forName("infotec.wb2.lib.WBResource");
+                        if (wbresource!=null && wbresource.isInstance(obj))
+                        {
+                            //if(base!=null)base.setWb2Resource(true);
+                            Class wbreswrapper = Class.forName("infotec.wb2.lib.WBResourceWrapperNew");
+                            Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
+                            aux = cons.newInstance(new Object[]{obj});
+                        }
                     }
+                } catch (Exception e)
+                {
+                    log.error(e);
                 }
-            } catch (Exception e)
+            }else
             {
-                log.error(e);
+                log.warn("Old resource versions is not supported, for configure go to web.properties...");
             }
         }
         return aux;
