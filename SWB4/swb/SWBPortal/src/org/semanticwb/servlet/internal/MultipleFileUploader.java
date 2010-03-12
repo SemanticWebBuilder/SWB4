@@ -77,20 +77,16 @@ public class MultipleFileUploader implements InternalServlet
 //        System.out.println("user: " + dparam.getUser().getFullName() + ":" + dparam.getUser().isSigned());
         if (ServletFileUpload.isMultipartContent(request))
         {
-            System.out.println("En Archivos");
             List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad);
             String subcad = "f" + archivos.size() + cad.substring(4); //si no existe archivos, debemos ignorar el request, el NPE nos facilita salir
-            System.out.println(archivos);
             if (archivos != null)
             {
-                System.out.println("Tengo Referencia");
                 File tmpplace = new File(org.semanticwb.SWBPortal.getWorkPath() + "/tmp/" + cad);
                 if (!tmpplace.exists())
                 {
                     tmpplace.mkdirs();
                     request.getSession(true).setAttribute(cad, new UploadsCleanUp(tmpplace.getCanonicalPath()));
                 }
-                System.out.println("constriu: " + tmpplace.getCanonicalPath() + " " + tmpplace.exists());
                 DiskFileItemFactory factory = new DiskFileItemFactory(3000, tmpplace);
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 upload.setSizeMax(UploaderFileCacheUtils.getRequest(cad).size());
@@ -98,18 +94,20 @@ public class MultipleFileUploader implements InternalServlet
                 {
 
                     List<FileItem> items = upload.parseRequest(request);
-                    System.out.println("Upload Parseado...");
                     for (FileItem item : items)
                     {
                         if (!item.isFormField())
                         {
                             String fieldName = item.getFieldName();
                             String fileName = item.getName();
+                            if (fileName.indexOf("\\")>=0)
+                                    {
+                                fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+                            }
                             String contentType = item.getContentType();
                             boolean isInMemory = item.isInMemory();
                             long sizeInBytes = item.getSize();
                             File uploadedFile = new File(tmpplace, subcad + "_" + fileName + "_");
-                            System.out.println("Procesando... " + fileName);
                             item.write(uploadedFile);
                             archivos.add(new UploadedFile(fileName, uploadedFile.getCanonicalPath(), cad));
                         }
