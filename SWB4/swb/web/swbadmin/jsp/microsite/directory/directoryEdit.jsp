@@ -2,6 +2,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.model.Rankable"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
@@ -31,6 +32,8 @@
                return;
            }
            SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+           mgr.hideProperty(Rankable.swb_rank);
+           mgr.hideProperty(Rankable.swb_reviews);
            String lang = "";
            if (paramRequest.getUser() != null)
            {
