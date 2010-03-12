@@ -2,6 +2,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.WebSite"%>
+<%@page import="org.semanticwb.model.Rankable"%>
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
@@ -26,6 +27,8 @@
         User user = paramRequest.getUser();
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(cls, site.getSemanticObject(), null);
+        mgr.hideProperty(Rankable.swb_rank);
+        mgr.hideProperty(Rankable.swb_reviews);
         mgr.setFilterRequired(false);
         String lang="";
         if (paramRequest.getUser() != null) {
