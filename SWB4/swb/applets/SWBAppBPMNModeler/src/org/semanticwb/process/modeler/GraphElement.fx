@@ -173,8 +173,11 @@ public class GraphElement extends CustomNode
         y=(Math.round(y/25))*25;            //grid
     }
 
-    override var onMouseEntered = function(e)    {
-        ModelerUtils.startToolTip("Hola {toolTipText}", x-w/2-modeler.clipView.clipX, y+h/2-modeler.clipView.clipY+3);
+    override var onMouseEntered = function(e)
+    {
+        //var name=getClass().getName();
+        //println(name);
+        ModelerUtils.startToolTip("{toolTipText}", x-w/2-modeler.clipView.clipX, y+h/2-modeler.clipView.clipY+3);
         mouseEntered(e);
     }
 
