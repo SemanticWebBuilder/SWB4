@@ -190,6 +190,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_ADHOC
                             title:"Adhoc Task"
                             uri:"new:adhoctask:{counter++}"
                         }
@@ -207,6 +208,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_LOOP
                             title:"Loop Task"
                             uri:"new:looptask:{counter++}"
                         }
@@ -224,6 +226,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_COMPENSATION
                             title:"Compensation Task"
                             uri:"new:compensationtask:{counter++}"
                         }
@@ -241,6 +244,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_MULTIPLE
                             title:"Multiple Task"
                             uri:"new:multipletask:{counter++}"
                         }
@@ -258,6 +262,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_USER
                             title:"User Task"
                             uri:"new:usertask:{counter++}"
                         }
@@ -275,6 +280,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_SERVICE
                             title:"Service Task"
                             uri:"new:servicetask:{counter++}"
                         }
@@ -292,6 +298,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_SCRIPT
                             title:"Script Task"
                             uri:"new:scripttask:{counter++}"
                         }
@@ -309,6 +316,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_MANUAL
                             title:"Manual Task"
                             uri:"new:manualtask:{counter++}"
                         }
@@ -326,6 +334,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_SEND
                             title:"Send Task"
                             uri:"new:sendtask:{counter++}"
                         }
@@ -343,6 +352,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=Task
                         {
                             modeler:modeler
+                            type:Task.TYPE_RECEIVE
                             title:"Receive Task"
                             uri:"new:receivetask:{counter++}"
                         }
@@ -1486,6 +1496,15 @@ public class ToolBar extends CustomNode
                             action: function():Void
                             {
                                 stage.fullScreen = not stage.fullScreen;
+                            }
+                        },
+                        ImgButton {
+                            text:"Open"
+                            toolBar:this;
+                            image: "images/open_doc_1.png"
+                            imageOver: "images/open_doc_2.png"
+                            action: function():Void
+                            {
                             }
                         },
                         ImgButton {
