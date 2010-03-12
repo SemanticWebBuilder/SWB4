@@ -194,7 +194,14 @@ public class SWBServiceMgr implements SemanticObserver {
                     try
                     {
                         Class cls2=SWBPortal.getResourceMgr().createSWBResourceClass(obj.getProperty(ResourceType.swb_resourceClassName));
-                        ((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance())).install((ResourceType)obj.createGenericInstance());
+                        if(cls2!=null)
+                        {
+                            SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls2.newInstance()));
+                            if(res!=null)
+                            {
+                                res.install((ResourceType)obj.createGenericInstance());
+                            }
+                        }
                     }catch(Exception e){log.error(e);}
                 }
 
