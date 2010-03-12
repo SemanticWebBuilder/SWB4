@@ -31,6 +31,7 @@ public class CaptchaUtil
 
     private static final int width = 150;
     private static final int height = 50;
+    private static final Random _gen = new SecureRandom();
 
     public static void writeCaptcha(String cadena, OutputStream out) throws IOException
     {
@@ -59,17 +60,17 @@ public class CaptchaUtil
         TextLayout tl = new TextLayout(aci, frc);
         Shape shape = tl.getOutline(AffineTransform.getTranslateInstance(15, 37));
 
-        g.setColor(Color.BLUE);
+        g.setColor(Color.BLACK);
 
         g.draw(shape);
 
         g.setStroke(new BasicStroke(0.75f));
 
-        for (int i = 0; i <= width; i += 20)
+        for (int i = _gen.nextInt(10); i <= width; i += _gen.nextInt(5)+15)
         {
             g.drawLine(i, 0, i, height);
         }
-        for (int i = 0; i <= height; i += 10)
+        for (int i = _gen.nextInt(5); i <= height; i += _gen.nextInt(5)+5)
         {
             g.drawLine(0, i, width - 1, i);
         }
@@ -87,7 +88,6 @@ public class CaptchaUtil
         shearY(g, bi.getWidth(), bi.getHeight());
         g.dispose();
     }
-    private static final Random _gen = new SecureRandom();
 
     private static void shearX(Graphics2D g, int w1, int h1)
     {
