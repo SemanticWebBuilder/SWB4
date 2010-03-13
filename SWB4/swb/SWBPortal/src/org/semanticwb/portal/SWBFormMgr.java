@@ -621,6 +621,12 @@ public class SWBFormMgr
                 ret.append("	</fieldset>\n");
             }
             ret.append("<fieldset><span align=\"center\">\n");
+            if (useCaptcha)
+            {
+                ret.append("<table>");
+                ret.append(getCaptchaField(DOJO));
+                ret.append("</table>\n");
+            }
             //ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
             Iterator it=buttons.iterator();
             while(it.hasNext())
@@ -675,32 +681,7 @@ public class SWBFormMgr
             //ret.append("        <tr><td align=\"center\" colspan=\"2\"><hr/></td></tr>");
             if (useCaptcha)
             {
-                ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");
-                ret.append("<img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
-                ret.append("<a onclick=\"document.getElementById('captchaimg').src='"+SWBPlatform.getContextPath()+
-                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">Cambiar im&aacute;gen</a><br/>");
-                ret.append("<input name=\"frmCaptchaValue\" id=\"frmCaptchaValue\"  ");
-
-                if (DOJO) {
-                    String required="La validaci&oacute;n es requerida";
-                    String pmsg="Captura los caracteres en la im&aacute;gen";
-                    String imsg="Captura los caracteres en la im&aacute;gen";
-                    if (m_lang.equals("en")) {
-                        required="Validation required";
-                     pmsg="Type the characters in the image";
-                     imsg="Type the characters in the image";
-                    }
-                    ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
-                    ret.append(" required=\"" + required + "\"");
-                    ret.append(" promptMessage=\"" + pmsg + "\"");
-                    ret.append(" invalidMessage=\"" + imsg + "\"");
-                    ret.append(" isValid=\"return validateElement('frmCaptchaValue','/frmprocess/validCaptcha?none=1',this.textbox.value);\"");
-                    ret.append(" trim=\"true\"");
-                }
-
-                ret.append(" style=\"width:100px;\"/>");
-
-                ret.append("</td></tr>\n");
+                ret.append(getCaptchaField(DOJO));
             }
             ret.append("        <tr><td align=\"center\" colspan=\"2\">\n");
             //ret.append("            <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
@@ -1156,6 +1137,37 @@ public class SWBFormMgr
      */
     public void setFilterHTMLTags(boolean filterHTMLTags) {
         this.filterHTMLTags = filterHTMLTags;
+    }
+
+    private String getCaptchaField(boolean isdojo){
+        StringBuilder ret = new StringBuilder();
+        ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");
+                ret.append("<img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
+                ret.append("<a onclick=\"document.getElementById('captchaimg').src='"+SWBPlatform.getContextPath()+
+                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">Cambiar im&aacute;gen</a><br/>");
+                ret.append("<input name=\"frmCaptchaValue\" id=\"frmCaptchaValue\"  ");
+
+                if (isdojo) {
+                    String required="La validaci&oacute;n es requerida";
+                    String pmsg="Captura los caracteres en la im&aacute;gen";
+                    String imsg="Captura los caracteres en la im&aacute;gen";
+                    if (m_lang.equals("en")) {
+                        required="Validation required";
+                     pmsg="Type the characters in the image";
+                     imsg="Type the characters in the image";
+                    }
+                    ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
+                    ret.append(" required=\"" + required + "\"");
+                    ret.append(" promptMessage=\"" + pmsg + "\"");
+                    ret.append(" invalidMessage=\"" + imsg + "\"");
+                    ret.append(" isValid=\"return validateElement('frmCaptchaValue','/frmprocess/validCaptcha?none=1',this.textbox.value);\"");
+                    ret.append(" trim=\"true\"");
+                }
+
+                ret.append(" style=\"width:100px;\"/>");
+
+                ret.append("</td></tr>\n");
+                return ret.toString();
     }
 
 }
