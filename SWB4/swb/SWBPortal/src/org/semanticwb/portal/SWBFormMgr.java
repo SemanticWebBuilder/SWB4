@@ -36,6 +36,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.FormView;
 import org.semanticwb.model.GenericFormElement;
@@ -146,6 +147,9 @@ public class SWBFormMgr
 
     /** The submit by ajax. */
     private boolean submitByAjax=false;
+
+    /** The use captcha */
+    private boolean useCaptcha=false;
 
     /** The removed. */
     private ArrayList<SemanticProperty> removed=null;
@@ -405,6 +409,24 @@ public class SWBFormMgr
     }    
     
     /**
+     * Gets the captcha status.
+     *
+     * @return the lang
+     */
+    public boolean getCaptchaStatus() {
+        return useCaptcha;
+    }
+
+    /**
+     * Sets the captcha status.
+     *
+     * @param value the new captcha status
+     */
+    public void setCaptchaStatus(boolean value) {
+        this.useCaptcha = value;
+    }
+
+    /**
      * Gets the type.
      * 
      * @return the type
@@ -544,6 +566,7 @@ public class SWBFormMgr
      */
     public String renderForm(HttpServletRequest request)
     {
+        System.out.println("Rendereando...............................");
         boolean DOJO=false;
         boolean IPHONE=false;
         boolean XHTML=false;
@@ -568,6 +591,7 @@ public class SWBFormMgr
 
         if(!m_mode.equals(MODE_CREATE))
         {
+            System.out.println("En No Create...............................");
             String sid="Identificador";
             if(m_lang.equals("en"))sid="Identifier";
             ret.append("	<fieldset>\n");
@@ -596,7 +620,6 @@ public class SWBFormMgr
                 ret.append("	    </table>\n");
                 ret.append("	</fieldset>\n");
             }
-
             ret.append("<fieldset><span align=\"center\">\n");
             //ret.append("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
             Iterator it=buttons.iterator();
@@ -650,6 +673,35 @@ public class SWBFormMgr
                 ret.append(getIdentifierElement());
             }
             //ret.append("        <tr><td align=\"center\" colspan=\"2\"><hr/></td></tr>");
+            if (useCaptcha)
+            {
+                ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");
+                ret.append("<img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
+                ret.append("<a onclick=\"document.getElementById('captchaimg').src='"+SWBPlatform.getContextPath()+
+                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">Cambiar im&aacute;gen</a><br/>");
+                ret.append("<input name=\"frmCaptchaValue\" id=\"frmCaptchaValue\"  ");
+
+                if (DOJO) {
+                    String required="La validaci&oacute;n es requerida";
+                    String pmsg="Captura los caracteres en la im&aacute;gen";
+                    String imsg="Captura los caracteres en la im&aacute;gen";
+                    if (m_lang.equals("en")) {
+                        required="Validation required";
+                     pmsg="Type the characters in the image";
+                     imsg="Type the characters in the image";
+                    }
+                    ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
+                    ret.append(" required=\"" + required + "\"");
+                    ret.append(" promptMessage=\"" + pmsg + "\"");
+                    ret.append(" invalidMessage=\"" + imsg + "\"");
+                    ret.append(" isValid=\"return validateElement('frmCaptchaValue','/frmprocess/validCaptcha?none=1',this.textbox.value);\"");
+                    ret.append(" trim=\"true\"");
+                }
+
+                ret.append(" style=\"width:100px;\"/>");
+
+                ret.append("</td></tr>\n");
+            }
             ret.append("        <tr><td align=\"center\" colspan=\"2\">\n");
             //ret.append("            <button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
             //ret.append("            <button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">Cancelar</button>");
@@ -685,6 +737,12 @@ public class SWBFormMgr
      */
     public SemanticObject validateForm(HttpServletRequest request) throws FormValidateException
     {
+        if (useCaptcha)
+        {
+            if (!((String) request.getSession(true).getAttribute("captchaCad")).equalsIgnoreCase(request.getParameter("frmCaptchaValue"))){
+                throw new FormValidateException("Invalid human submitted form validation");
+            }
+        }
         SemanticObject ret=m_obj;
         String smode=request.getParameter(PRM_MODE);
         if(smode!=null)
