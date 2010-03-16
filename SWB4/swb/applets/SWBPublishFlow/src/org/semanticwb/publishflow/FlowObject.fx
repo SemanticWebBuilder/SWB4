@@ -21,6 +21,8 @@ public class FlowObject extends GraphElement
     public var dpx : Number;                        //diferencia de pool
     public var dpy : Number;                        //diferencia de pool
 
+    public var busyPoints:Integer;;
+
     override public function create(): Node
     {
         zindex=2;
@@ -61,7 +63,13 @@ public class FlowObject extends GraphElement
         return text;
 
     }
-    
+
+    public function onConected() : Void
+    {
+        busyPoints=getBusyPoints();
+    }
+
+
     public function getAvailablePoints() : Integer
     {        
         var count:Integer=0;
@@ -78,7 +86,7 @@ public class FlowObject extends GraphElement
     }
     public function getBusyPoints() : Integer
     {
-        var count:Integer=0;
+        var count :Integer=0;
         for(cpoint in connectionPoints)
         {
             if(cpoint.connectionObject!=null)

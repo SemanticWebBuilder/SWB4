@@ -66,6 +66,7 @@ public class ConnectionObject extends CustomNode {
                     
                     if (not deleted) {
                         cp.connectionObject = this;
+                        //this.ini.onConected();
                     }
                 }
 
@@ -76,6 +77,7 @@ public class ConnectionObject extends CustomNode {
                 var con: ConnectionPoint = olvalue as ConnectionPoint;
                 if (con.connectionObject != null) {
                     con.connectionObject = null;
+                    //this.ini.onConected();
                 }
             }
             if (pini instanceof ConnectionPoint) {
@@ -83,6 +85,7 @@ public class ConnectionObject extends CustomNode {
                 if (cp.connectionObject == null) {                    
                     if (not deleted) {
                         cp.connectionObject = this;
+                        //this.ini.onConected();
                     }
                 }
             }
@@ -96,6 +99,7 @@ public class ConnectionObject extends CustomNode {
                 if (cp.connectionObject == null) {                    
                     if (not deleted) {
                         cp.connectionObject = this;
+                        //this.end.onConected();
                     }
                 }
 
@@ -106,6 +110,7 @@ public class ConnectionObject extends CustomNode {
                 var con: ConnectionPoint = olvalue as ConnectionPoint;
                 if (con.connectionObject != null) {
                     con.connectionObject = null;
+                    //this.end.onConected();
                 }
             }
             if (pend instanceof ConnectionPoint) {
@@ -114,7 +119,9 @@ public class ConnectionObject extends CustomNode {
                     
                     if (not deleted) {
                         cp.connectionObject = this;
-                    }
+                        //this.end.onConected();
+                    }                   
+
                 }
             }
         }
