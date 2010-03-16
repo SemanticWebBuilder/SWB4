@@ -530,15 +530,14 @@ public class Modeler extends CustomNode
 
             }
         }
-        /*for(node in contents)
+        for(node in contents)
         {
             if(node instanceof Task)
             {
                 var task:Task=node as Task;
-                
+                task.onConected();
             }
-
-        }*/
+        }
 
         organizeMap();
     }
