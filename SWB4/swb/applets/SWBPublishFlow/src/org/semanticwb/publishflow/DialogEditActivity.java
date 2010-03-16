@@ -152,16 +152,22 @@ public class DialogEditActivity extends javax.swing.JDialog
             {
                 String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>" + tm + "</tm></req>";
                 xml = con.getData(xml);
-                WBXMLParser parser = new WBXMLParser();
-                WBTreeNode exml = parser.parse(xml);
-                Iterator eusers = exml.getFirstNode().getNodesbyName("user");
-                while (eusers.hasNext())
+                if(xml!=null && !xml.trim().equals(""))
                 {
-                    WBTreeNode wuser = (WBTreeNode) eusers.next();
-                    String id = wuser.getAttribute("id");
-                    String oname = wuser.getAttribute("name");
-                    User user = new User(id, oname);
-                    model.addUser(user);
+                    WBXMLParser parser = new WBXMLParser();
+                    WBTreeNode exml = parser.parse(xml);
+                    if(exml!=null && exml.getFirstNode()!=null && exml.getFirstNode().getNodesbyName("user")!=null)
+                    {
+                        Iterator eusers = exml.getFirstNode().getNodesbyName("user");
+                        while (eusers.hasNext())
+                        {
+                            WBTreeNode wuser = (WBTreeNode) eusers.next();
+                            String id = wuser.getAttribute("id");
+                            String oname = wuser.getAttribute("name");
+                            User user = new User(id, oname);
+                            model.addUser(user);
+                        }
+                    }
                 }
             }
         
@@ -176,17 +182,23 @@ public class DialogEditActivity extends javax.swing.JDialog
         {
             String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>" + tm + "</tm></req>";
             xml = con.getData(xml);
-            WBXMLParser parser = new WBXMLParser();
-            WBTreeNode exml = parser.parse(xml);
-            Iterator eusers = exml.getFirstNode().getNodesbyName("role");
-            while (eusers.hasNext())
+            if(xml!=null && !xml.trim().equals(""))
             {
-                WBTreeNode wuser = (WBTreeNode) eusers.next();
-                String id = wuser.getAttribute("id");
-                String oname = wuser.getAttribute("name");
-                String repository = wuser.getAttribute("repository");
-                Role role = new Role(id, oname, repository);
-                model.addRole(role);
+                WBXMLParser parser = new WBXMLParser();
+                WBTreeNode exml = parser.parse(xml);
+                if(exml!=null && exml.getFirstNode()!=null && exml.getFirstNode().getNodesbyName("role")!=null)
+                {
+                    Iterator eusers = exml.getFirstNode().getNodesbyName("role");
+                    while (eusers.hasNext())
+                    {
+                        WBTreeNode wuser = (WBTreeNode) eusers.next();
+                        String id = wuser.getAttribute("id");
+                        String oname = wuser.getAttribute("name");
+                        String repository = wuser.getAttribute("repository");
+                        Role role = new Role(id, oname, repository);
+                        model.addRole(role);
+                    }
+                }
             }
         }
         
