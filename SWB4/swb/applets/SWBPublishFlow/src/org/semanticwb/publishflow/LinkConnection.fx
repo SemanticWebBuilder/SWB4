@@ -52,8 +52,7 @@ public class LinkConnection extends ConnectionObject {
 
     function getEditX(elements:PathElement[]) : Number
     {
-        var size:Integer=sizeof elements;
-        println("sizex: {size}");
+        var size:Integer=sizeof elements;        
         if(size==4)
         {
             if(elements[1] instanceof LineTo and elements[2] instanceof LineTo)
@@ -115,34 +114,59 @@ public class LinkConnection extends ConnectionObject {
     function getEditY(elements:PathElement[]) : Number
     {
         var size:Integer=sizeof elements;
-        println("sizex: {size}");
         if(size==4)
         {
-            if(elements[3] instanceof LineTo)
+            if(elements[1] instanceof LineTo and elements[2] instanceof LineTo)
             {
-                var lineto:LineTo=elements[2] as LineTo;
-                lineto.y-15
+                var lineto1:LineTo=elements[1] as LineTo;
+                var lineto2:LineTo=elements[2] as LineTo;
+                if(lineto1.y-lineto2.y>0)
+                {
+                    lineto2.y+((lineto1.y-lineto2.y)/2)-20
+                }
+                else if(lineto1.x-lineto2.x<0)
+                {
+                    lineto1.y+((lineto2.y-lineto1.y)/2)-20
+                }
+                else
+                {
+                    lineto2.y-20
+                }
             }
             else
             {
-                pinter1.y-15
+                pinter1.y-20
             }
         }
         else if(size==5)
         {
-            if(elements[4] instanceof LineTo)
+            if(elements[2] instanceof LineTo and elements[3] instanceof LineTo)
             {
-                var lineto:LineTo=elements[2] as LineTo;
-                lineto.y -15
+                var lineto1:LineTo=elements[2] as LineTo;
+                var lineto2:LineTo=elements[3] as LineTo;
+                if(lineto1.y-lineto2.y>0)
+                {
+                    lineto2.y+((lineto1.y-lineto2.y)/2)-20
+                }
+                else if(lineto1.y-lineto2.y<0)
+                {
+                    lineto1.y+((lineto2.y-lineto1.y)/2)-20
+                }
+                else
+                {
+                    lineto2.y-20
+                }
+
+
             }
             else
             {
-                pinter1.y-15
+                pinter1.y-20
             }
         }
         else
         {
-            pinter1.y-15
+            pinter1.y-20
         }
     }
 }
