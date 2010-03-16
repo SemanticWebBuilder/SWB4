@@ -19,6 +19,7 @@ public class AuthorizeLink extends LinkConnection {
         color_row = Styles.style_connection_arrow_authorize;
         authorized=true;
         type="authorized";
+        authorized=true;
         return super.create();
     }
 
