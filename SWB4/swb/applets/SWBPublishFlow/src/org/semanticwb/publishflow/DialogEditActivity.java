@@ -385,17 +385,17 @@ public class DialogEditActivity extends javax.swing.JDialog
         }
 
 
-        /*for(int i=0;i<usermodel.getRowCount();i++)
+        for(int i=0;i<usermodel.getRowCount();i++)
         {
-        if(usermodel.getUser(i).isChecked())
-        {
-        selected=true;
+            if(usermodel.getUser(i).isChecked())
+            {
+                selected=true;
+            }
         }
-        }*/
         if (!selected)
         {
             this.jTabbedPane1.setSelectedIndex(1);
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/org/semanticwb/publishflow/DialogEditActivity", locale).getString("No_selecciono_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditActivity", locale).getString("No_selecciono_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (this.jCheckBoxDuration.isSelected())

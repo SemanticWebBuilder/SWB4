@@ -39,6 +39,8 @@ public class ConnectionObject extends CustomNode {
     public var color_row = Styles.style_connection_row;
     public var deleted:Boolean;
 
+    public var button:ImgButton;
+
     def offset:Number=10;
     var o: Number = 0.8;                   //opacity
     public var pini: Point = bind getIniConnection(ini) on replace olvalue {
@@ -231,7 +233,23 @@ public class ConnectionObject extends CustomNode {
     
 
     public override function create(): Node {
-        cursor = Cursor.HAND;        
+        cursor = Cursor.HAND;
+        button=ImgButton
+        {
+            text: "Edit"
+            image: "images/edit_task_1.png"
+            imageOver: "images/edit_task_1.png"
+            scaleX:0.5
+            scaleY:0.5
+            translateX:bind pinter1.x
+            translateY:bind pinter1.y
+            opacity:0.8
+            action:function(): Void
+            {
+                
+            }
+
+        }
         return Group {
                     content: [
                         path, Line {
@@ -298,41 +316,30 @@ public class ConnectionObject extends CustomNode {
             };
 
 
-
-
-
-
-
-
-
-
-
-
-
-public bound function getEndConnection(end: FlowObject): Point
-{
-    if(end==null)
+    public bound function getEndConnection(end: FlowObject): Point
     {
-        Point
-                {
-                   x: modeler.mousex;
-                   y: modeler.mousey;
-                }
+        if(end==null)
+        {
+            Point
+                    {
+                       x: modeler.mousex;
+                       y: modeler.mousey;
+                    }
+        }
+        else
+        {
+
+
+                    end.getConnectionPoint(Point
+                            {
+                               x: modeler.mousex;
+                               y: modeler.mousey;
+                            }, this)
+
+        }
+
+
     }
-    else
-    {
-            
-
-                end.getConnectionPoint(Point
-                        {
-                           x: modeler.mousex;
-                           y: modeler.mousey;
-                        }, this)
-            
-    }
-
-
-}
 
     public bound function getIniConnection(ini: FlowObject): Point
     {
@@ -473,9 +480,6 @@ public bound function getEndConnection(end: FlowObject): Point
     }
 
     
-
-    
-
     bound function getArrow(grad: Number) : Number
     {        
 
