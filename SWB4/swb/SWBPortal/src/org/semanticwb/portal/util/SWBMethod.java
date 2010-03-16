@@ -211,9 +211,16 @@ public class SWBMethod
         Object o = null;
         if ("content".equals(arguments[0]))
         {
+            ResourceType type=(ResourceType)arguments[2];
             try
             {
-                o = mgr.getContents(user, topic, (HashMap) arguments[1], tpl);
+                if(type!=null)
+                {
+                    o = mgr.getResources(type, null, user, topic, (HashMap) arguments[1], tpl);
+                }else
+                {
+                    o = mgr.getContents(user, topic, (HashMap) arguments[1], tpl);
+                }
             } catch (Exception e)
             {
                 log.error("Error invoking methos:"+arguments[0], e);
