@@ -184,6 +184,8 @@ public class SWBIFMethod
      */
     public String eval(User user, WebPage webpage)
     {
+        //System.out.println("txt:"+txt);
+        //System.out.println("type:"+type);
         String ret=txt;
         if(type.equals("if:user"))
         {
