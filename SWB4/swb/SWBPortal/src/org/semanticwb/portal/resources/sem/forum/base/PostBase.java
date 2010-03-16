@@ -1,331 +1,157 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 package org.semanticwb.portal.resources.sem.forum.base;
 
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class PostBase.
- */
-public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
+public abstract class PostBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
 {
-       
-       /** The Constant frm_Post. */
-       public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
-       
-       /** The Constant frm_haschildPost. */
-       public static final org.semanticwb.platform.SemanticProperty frm_haschildPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#haschildPost");
-       
-       /** The Constant frm_Thread. */
-       public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
-       
-       /** The Constant frm_pstThread. */
-       public static final org.semanticwb.platform.SemanticProperty frm_pstThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstThread");
-       
-       /** The Constant frm_Attachment. */
-       public static final org.semanticwb.platform.SemanticClass frm_Attachment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Attachment");
-       
-       /** The Constant frm_hasAttachments. */
-       public static final org.semanticwb.platform.SemanticProperty frm_hasAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasAttachments");
-       
-       /** The Constant frm_pstBody. */
-       public static final org.semanticwb.platform.SemanticProperty frm_pstBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstBody");
-       
-       /** The Constant frm_pstParentPost. */
-       public static final org.semanticwb.platform.SemanticProperty frm_pstParentPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstParentPost");
-       
-       /** The Constant sclass. */
-       public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
-    
-    /**
-     * The Class ClassMgr.
-     */
+    public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
+    public static final org.semanticwb.platform.SemanticProperty frm_pstThread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstThread");
+    public static final org.semanticwb.platform.SemanticProperty frm_pstBody=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstBody");
+    public static final org.semanticwb.platform.SemanticClass frm_Post=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
+    public static final org.semanticwb.platform.SemanticProperty frm_pstParentPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#pstParentPost");
+    public static final org.semanticwb.platform.SemanticClass frm_Attachment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Attachment");
+    public static final org.semanticwb.platform.SemanticProperty frm_hasAttachments=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#hasAttachments");
+    public static final org.semanticwb.platform.SemanticProperty frm_haschildPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#haschildPost");
+    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Post");
+
     public static class ClassMgr
     {
 
-       /**
-        * List posts.
-        * 
-        * @param model the model
-        * @return the java.util. iterator
-        */
-       public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts(org.semanticwb.model.SWBModel model)
-       {
-           java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts(org.semanticwb.model.SWBModel model)
+        {
+            java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
+        }
 
-       /**
-        * List posts.
-        * 
-        * @return the java.util. iterator
-        */
-       public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
-       {
-           java.util.Iterator it=sclass.listInstances();
-           return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
-       }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPosts()
+        {
+            java.util.Iterator it=sclass.listInstances();
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(it, true);
+        }
 
-       /**
-        * Creates the post.
-        * 
-        * @param model the model
-        * @return the org.semanticwb.portal.resources.sem.forum. post
-        */
-       public static org.semanticwb.portal.resources.sem.forum.Post createPost(org.semanticwb.model.SWBModel model)
-       {
-           long id=model.getSemanticObject().getModel().getCounter(sclass);
-           return org.semanticwb.portal.resources.sem.forum.Post.ClassMgr.createPost(String.valueOf(id), model);
-       }
+        public static org.semanticwb.portal.resources.sem.forum.Post createPost(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.portal.resources.sem.forum.Post.ClassMgr.createPost(String.valueOf(id), model);
+        }
 
-       /**
-        * Gets the post.
-        * 
-        * @param id the id
-        * @param model the model
-        * @return the post
-        */
-       public static org.semanticwb.portal.resources.sem.forum.Post getPost(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
-       }
+        public static org.semanticwb.portal.resources.sem.forum.Post getPost(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+        }
 
-       /**
-        * Creates the post.
-        * 
-        * @param id the id
-        * @param model the model
-        * @return the org.semanticwb.portal.resources.sem.forum. post
-        */
-       public static org.semanticwb.portal.resources.sem.forum.Post createPost(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
-       }
+        public static org.semanticwb.portal.resources.sem.forum.Post createPost(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (org.semanticwb.portal.resources.sem.forum.Post)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+        }
 
-       /**
-        * Removes the post.
-        * 
-        * @param id the id
-        * @param model the model
-        */
-       public static void removePost(String id, org.semanticwb.model.SWBModel model)
-       {
-           model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
-       }
+        public static void removePost(String id, org.semanticwb.model.SWBModel model)
+        {
+            model.getSemanticObject().getModel().removeSemanticObject(model.getSemanticObject().getModel().getObjectUri(id,sclass));
+        }
 
-       /**
-        * Checks for post.
-        * 
-        * @param id the id
-        * @param model the model
-        * @return true, if successful
-        */
-       public static boolean hasPost(String id, org.semanticwb.model.SWBModel model)
-       {
-           return (getPost(id, model)!=null);
-       }
-   
-   /**
-    * List post by modified by.
-    * 
-    * @param modifiedby the modifiedby
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_modifiedBy, modifiedby.getSemanticObject()));
-       return it;
-   }
+        public static boolean hasPost(String id, org.semanticwb.model.SWBModel model)
+        {
+            return (getPost(id, model)!=null);
+        }
 
-   /**
-    * List post by modified by.
-    * 
-    * @param modifiedby the modifiedby
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByModifiedBy(org.semanticwb.model.User modifiedby)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjects(swb_modifiedBy,modifiedby.getSemanticObject()));
-       return it;
-   }
-   
-   /**
-    * List post by creator.
-    * 
-    * @param creator the creator
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(swb_creator, creator.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, modifiedby.getSemanticObject(),sclass));
+            return it;
+        }
 
-   /**
-    * List post by creator.
-    * 
-    * @param creator the creator
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByCreator(org.semanticwb.model.User creator)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjects(swb_creator,creator.getSemanticObject()));
-       return it;
-   }
-   
-   /**
-    * List post by child post.
-    * 
-    * @param haschildpost the haschildpost
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByChildPost(org.semanticwb.portal.resources.sem.forum.Post haschildpost,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(frm_haschildPost, haschildpost.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByModifiedBy(org.semanticwb.model.User modifiedby)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,modifiedby.getSemanticObject(),sclass));
+            return it;
+        }
 
-   /**
-    * List post by child post.
-    * 
-    * @param haschildpost the haschildpost
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByChildPost(org.semanticwb.portal.resources.sem.forum.Post haschildpost)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(haschildpost.getSemanticObject().getModel().listSubjects(frm_haschildPost,haschildpost.getSemanticObject()));
-       return it;
-   }
-   
-   /**
-    * List post by thread.
-    * 
-    * @param pstthread the pstthread
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByThread(org.semanticwb.portal.resources.sem.forum.Thread pstthread,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(frm_pstThread, pstthread.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByThread(org.semanticwb.portal.resources.sem.forum.Thread pstthread,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_pstThread, pstthread.getSemanticObject(),sclass));
+            return it;
+        }
 
-   /**
-    * List post by thread.
-    * 
-    * @param pstthread the pstthread
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByThread(org.semanticwb.portal.resources.sem.forum.Thread pstthread)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(pstthread.getSemanticObject().getModel().listSubjects(frm_pstThread,pstthread.getSemanticObject()));
-       return it;
-   }
-   
-   /**
-    * List post by attachments.
-    * 
-    * @param hasattachments the hasattachments
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByAttachments(org.semanticwb.portal.resources.sem.forum.Attachment hasattachments,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(frm_hasAttachments, hasattachments.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByThread(org.semanticwb.portal.resources.sem.forum.Thread pstthread)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(pstthread.getSemanticObject().getModel().listSubjectsByClass(frm_pstThread,pstthread.getSemanticObject(),sclass));
+            return it;
+        }
 
-   /**
-    * List post by attachments.
-    * 
-    * @param hasattachments the hasattachments
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByAttachments(org.semanticwb.portal.resources.sem.forum.Attachment hasattachments)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(hasattachments.getSemanticObject().getModel().listSubjects(frm_hasAttachments,hasattachments.getSemanticObject()));
-       return it;
-   }
-   
-   /**
-    * List post by parent post.
-    * 
-    * @param pstparentpost the pstparentpost
-    * @param model the model
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByParentPost(org.semanticwb.portal.resources.sem.forum.Post pstparentpost,org.semanticwb.model.SWBModel model)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjects(frm_pstParentPost, pstparentpost.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByParentPost(org.semanticwb.portal.resources.sem.forum.Post pstparentpost,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_pstParentPost, pstparentpost.getSemanticObject(),sclass));
+            return it;
+        }
 
-   /**
-    * List post by parent post.
-    * 
-    * @param pstparentpost the pstparentpost
-    * @return the java.util. iterator
-    */
-   public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByParentPost(org.semanticwb.portal.resources.sem.forum.Post pstparentpost)
-   {
-       org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(pstparentpost.getSemanticObject().getModel().listSubjects(frm_pstParentPost,pstparentpost.getSemanticObject()));
-       return it;
-   }
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByParentPost(org.semanticwb.portal.resources.sem.forum.Post pstparentpost)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(pstparentpost.getSemanticObject().getModel().listSubjectsByClass(frm_pstParentPost,pstparentpost.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, creator.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByCreator(org.semanticwb.model.User creator)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjectsByClass(swb_creator,creator.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByAttachments(org.semanticwb.portal.resources.sem.forum.Attachment hasattachments,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_hasAttachments, hasattachments.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByAttachments(org.semanticwb.portal.resources.sem.forum.Attachment hasattachments)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(hasattachments.getSemanticObject().getModel().listSubjectsByClass(frm_hasAttachments,hasattachments.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByChildPost(org.semanticwb.portal.resources.sem.forum.Post haschildpost,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(frm_haschildPost, haschildpost.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.forum.Post> listPostByChildPost(org.semanticwb.portal.resources.sem.forum.Post haschildpost)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> it=new org.semanticwb.model.GenericIterator(haschildpost.getSemanticObject().getModel().listSubjectsByClass(frm_haschildPost,haschildpost.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
-    /**
-     * Instantiates a new post base.
-     * 
-     * @param base the base
-     */
     public PostBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#setModifiedBy(org.semanticwb.model.User)
-     */
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
+    }
+
     public void setModifiedBy(org.semanticwb.model.User value)
     {
         getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#removeModifiedBy()
-     */
     public void removeModifiedBy()
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
     }
 
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#getModifiedBy()
-     */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -337,132 +163,16 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#setCreator(org.semanticwb.model.User)
-     */
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#removeCreator()
-     */
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#getCreator()
-     */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#getCreated()
-     */
-    public java.util.Date getCreated()
-    {
-        return getSemanticObject().getDateProperty(swb_created);
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#setCreated(java.util.Date)
-     */
-    public void setCreated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_created, value);
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#getUpdated()
-     */
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.TraceableBase#setUpdated(java.util.Date)
-     */
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-    /**
-     * Listchild posts.
-     * 
-     * @return the org.semanticwb.model. generic iterator
-     */
-    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listchildPosts()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(getSemanticObject().listObjectProperties(frm_haschildPost));
-    }
-
-    /**
-     * Haschild post.
-     * 
-     * @param post the post
-     * @return true, if successful
-     */
-    public boolean haschildPost(org.semanticwb.portal.resources.sem.forum.Post post)
-    {
-        if(post==null)return false;
-        return getSemanticObject().hasObjectProperty(frm_haschildPost,post.getSemanticObject());
-    }
-
-
-    /**
-     * Gets the child post.
-     * 
-     * @return the child post
-     */
-    public org.semanticwb.portal.resources.sem.forum.Post getchildPost()
-    {
-         org.semanticwb.portal.resources.sem.forum.Post ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_haschildPost);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.portal.resources.sem.forum.Post)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    /**
-     * Sets the thread.
-     * 
-     * @param value the new thread
-     */
     public void setThread(org.semanticwb.portal.resources.sem.forum.Thread value)
     {
         getSemanticObject().setObjectProperty(frm_pstThread, value.getSemanticObject());
     }
 
-    /**
-     * Removes the thread.
-     */
     public void removeThread()
     {
         getSemanticObject().removeProperty(frm_pstThread);
     }
 
-
-    /**
-     * Gets the thread.
-     * 
-     * @return the thread
-     */
     public org.semanticwb.portal.resources.sem.forum.Thread getThread()
     {
          org.semanticwb.portal.resources.sem.forum.Thread ret=null;
@@ -474,34 +184,93 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
-    /**
-     * List attachmentses.
-     * 
-     * @return the org.semanticwb.model. generic iterator
-     */
+    public String getBody()
+    {
+        return getSemanticObject().getProperty(frm_pstBody);
+    }
+
+    public void setBody(String value)
+    {
+        getSemanticObject().setProperty(frm_pstBody, value);
+    }
+
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+    public void setParentPost(org.semanticwb.portal.resources.sem.forum.Post value)
+    {
+        getSemanticObject().setObjectProperty(frm_pstParentPost, value.getSemanticObject());
+    }
+
+    public void removeParentPost()
+    {
+        getSemanticObject().removeProperty(frm_pstParentPost);
+    }
+
+    public org.semanticwb.portal.resources.sem.forum.Post getParentPost()
+    {
+         org.semanticwb.portal.resources.sem.forum.Post ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_pstParentPost);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.portal.resources.sem.forum.Post)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
+    public void setCreator(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+    }
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
+    }
+
+    public org.semanticwb.model.User getCreator()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment> listAttachmentses()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Attachment>(getSemanticObject().listObjectProperties(frm_hasAttachments));
     }
 
-    /**
-     * Checks for attachments.
-     * 
-     * @param attachment the attachment
-     * @return true, if successful
-     */
     public boolean hasAttachments(org.semanticwb.portal.resources.sem.forum.Attachment attachment)
     {
-        if(attachment==null)return false;
-        return getSemanticObject().hasObjectProperty(frm_hasAttachments,attachment.getSemanticObject());
+        boolean ret=false;
+        if(attachment!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(frm_hasAttachments,attachment.getSemanticObject());
+        }
+        return ret;
     }
 
-
-    /**
-     * Gets the attachments.
-     * 
-     * @return the attachments
-     */
     public org.semanticwb.portal.resources.sem.forum.Attachment getAttachments()
     {
          org.semanticwb.portal.resources.sem.forum.Attachment ret=null;
@@ -513,70 +282,25 @@ public abstract class PostBase extends org.semanticwb.model.SWBClass implements 
          return ret;
     }
 
-    /**
-     * Gets the body.
-     * 
-     * @return the body
-     */
-    public String getBody()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post> listchildPosts()
     {
-        return getSemanticObject().getProperty(frm_pstBody);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.forum.Post>(getSemanticObject().listObjectProperties(frm_haschildPost));
     }
 
-    /**
-     * Sets the body.
-     * 
-     * @param value the new body
-     */
-    public void setBody(String value)
+    public boolean haschildPost(org.semanticwb.portal.resources.sem.forum.Post post)
     {
-        getSemanticObject().setProperty(frm_pstBody, value);
+        boolean ret=false;
+        if(post!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(frm_haschildPost,post.getSemanticObject());
+        }
+        return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.ActiveableBase#isActive()
-     */
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.ActiveableBase#setActive(boolean)
-     */
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
-    }
-
-    /**
-     * Sets the parent post.
-     * 
-     * @param value the new parent post
-     */
-    public void setParentPost(org.semanticwb.portal.resources.sem.forum.Post value)
-    {
-        getSemanticObject().setObjectProperty(frm_pstParentPost, value.getSemanticObject());
-    }
-
-    /**
-     * Removes the parent post.
-     */
-    public void removeParentPost()
-    {
-        getSemanticObject().removeProperty(frm_pstParentPost);
-    }
-
-
-    /**
-     * Gets the parent post.
-     * 
-     * @return the parent post
-     */
-    public org.semanticwb.portal.resources.sem.forum.Post getParentPost()
+    public org.semanticwb.portal.resources.sem.forum.Post getchildPost()
     {
          org.semanticwb.portal.resources.sem.forum.Post ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_pstParentPost);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(frm_haschildPost);
          if(obj!=null)
          {
              ret=(org.semanticwb.portal.resources.sem.forum.Post)obj.createGenericInstance();
