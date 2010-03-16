@@ -38,7 +38,7 @@ public class Task extends FlowObject {
     public var button:ImgButton;
     public var alert:ImageView;
 
-    public var viewalert:Boolean=bind hasErros(users, roles) and getBusyPoints()<2;
+    public var viewalert:Boolean=bind hasErros(users, roles) or busyPoints<2;
     public override function create(): Node {
             super.create();
             
@@ -151,14 +151,6 @@ public class Task extends FlowObject {
         else
         {
             false
-            /*if(getBusyPoints()<2)
-            {
-                true
-            }
-            else
-            {
-                false
-            }*/
         }
 
 
@@ -183,8 +175,6 @@ public class Task extends FlowObject {
                 false
             }
         }
-
-
     }
 
     public override function getSequence() : ConnectionObject

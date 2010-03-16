@@ -12,7 +12,31 @@ import javafx.util.Math;
  */
 
 public class ConnectionPoint extends Point {
-    public var connectionObject:ConnectionObject;
+    public var connectionObject:ConnectionObject on replace oldValue
+    {
+            if(oldValue!=null)
+            {
+                if(oldValue.ini!=null)
+                {
+                    oldValue.ini.onConected();
+                }
+                if(oldValue.end!=null)
+                {
+                    oldValue.ini.onConected();
+                }
+            }
+            if(connectionObject!=null)
+            {
+                if(connectionObject.ini!=null)
+                {
+                    connectionObject.ini.onConected();
+                }
+                if(connectionObject.end!=null)
+                {
+                    connectionObject.ini.onConected();
+                }
+            }
+    };
     public var id:String;
     public function getDistance(point : FlowObject) : Number
     {
