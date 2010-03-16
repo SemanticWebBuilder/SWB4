@@ -43,6 +43,7 @@ a:hover {text-decoration: underline;}
       <%
         WebPage webpage = paramRequest.getWebPage();
         Resource base = paramRequest.getResourceBase();
+        SWBForum oforum=(SWBForum)SWBPortal.getResourceMgr().getResource(base);
         WebSite website = webpage.getWebSite();
         SWBResourceURL urlthread = paramRequest.getRenderUrl();
         SWBResourceURL url = paramRequest.getRenderUrl();
@@ -51,11 +52,7 @@ a:hover {text-decoration: underline;}
         User user = paramRequest.getUser();
         boolean acceptguesscomments=false;
         if(request.getAttribute("acceptguesscomments")!=null) acceptguesscomments=(Boolean)request.getAttribute("acceptguesscomments");
-        boolean isforumAdmin=false;
-        Role forumAdmin=website.getUserRepository().getRole("administrador_foros");
-        if(forumAdmin!=null)  {
-            isforumAdmin=user.hasRole(forumAdmin);
-        }
+        boolean isforumAdmin=user.hasRole(oforum.getAdminRole());
         String lang = user.getLanguage();
         String action = paramRequest.getAction();
         String autor = "";
@@ -90,13 +87,13 @@ a:hover {text-decoration: underline;}
               <p><%=thread.getBody()%></p>
               <div class="vistasForo">
                 <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
-                 <%if(isTheAuthor){%> |  <%urlthread.setMode("editThread");%>
+                 <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editThread");%>
                  <a href="<%=urlthread%>">
                      <%=paramRequest.getLocaleString("edit")%>
                  </a>
                  <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
                  <%}%>
-                 <%if(isTheAuthor){%>|  <%url.setAction("removePost");url.setParameter("isthread", "1");
+                 <%if(isTheAuthor || isforumAdmin){%>|  <%url.setAction("removePost");url.setParameter("isthread", "1");
                          %> 
                 <a href="<%=url%>">
                     <%=paramRequest.getLocaleString("remove")%>
