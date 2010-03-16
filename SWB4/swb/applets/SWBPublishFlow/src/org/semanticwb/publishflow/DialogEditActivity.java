@@ -359,14 +359,14 @@ public class DialogEditActivity extends javax.swing.JDialog
         {
             this.jTabbedPane1.setSelectedIndex(0);
             this.jTextFieldName.grabFocus();
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("DialogEditActivity", locale).getString("Favor_de_indicar_el_nombre_de_la_activitdad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditActivity", locale).getString("Favor_de_indicar_el_nombre_de_la_activitdad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (this.jTextAreaDescription.getText().trim().equals(""))
         {
             this.jTabbedPane1.setSelectedIndex(0);
             this.jTextAreaDescription.grabFocus();
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("DialogEditActivity", locale).getString("Favor_de_indicar_la_descripcion_dela_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditActivity", locale).getString("Favor_de_indicar_la_descripcion_dela_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
             return;
         }
         name = this.jTextFieldName.getText();
@@ -395,7 +395,7 @@ public class DialogEditActivity extends javax.swing.JDialog
         if (!selected)
         {
             this.jTabbedPane1.setSelectedIndex(1);
-            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("DialogEditActivity", locale).getString("No_selecciono_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/org/semanticwb/publishflow/DialogEditActivity", locale).getString("No_selecciono_rol_o_usuario_que_tenga_permisos_sobre_esta_actividad"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (this.jCheckBoxDuration.isSelected())
@@ -412,7 +412,7 @@ public class DialogEditActivity extends javax.swing.JDialog
             {
                 this.jTabbedPane1.setSelectedIndex(0);
                 this.jTextFieldDias.grabFocus();
-                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("DialogEditActivity", locale).getString("La_duracion_de_la_actividad_es_cero,_favor_de_indicar_una_durecion_mayor_a_cero"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditActivity", locale).getString("La_duracion_de_la_actividad_es_cero,_favor_de_indicar_una_durecion_mayor_a_cero"), this.getTitle(), JOptionPane.ERROR_MESSAGE);
                 return;
             }
             //activity.setDuraction(dias,horas);

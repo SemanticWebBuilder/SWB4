@@ -8,12 +8,15 @@ package org.semanticwb.publishflow;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.image.ImageView;
 /**
  * @author victor.lorenzana
  */
 
 public class StartEvent extends Event
 {
+    
+
     public override function create(): Node
     {
          var ret=super.create();
