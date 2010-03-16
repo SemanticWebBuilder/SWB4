@@ -107,6 +107,9 @@ public class TemplateImp extends Template
         objects.put("webpath", SWBPlatform.getContextPath());
         objects.put("distpath", SWBPortal.getDistributorPath());
         objects.put("if:user", SWBIFMethod.class);
+        objects.put("if:topic", SWBIFMethod.class);
+        objects.put("if:webpage", SWBIFMethod.class);
+        objects.put("if:template", SWBIFMethod.class);
         
         webPath = SWBPortal.getWebWorkPath()+super.getWorkPath();
         actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
