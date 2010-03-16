@@ -22,7 +22,7 @@ public class ConnectionPoint extends Point {
                 }
                 if(oldValue.end!=null)
                 {
-                    oldValue.ini.onConected();
+                    oldValue.end.onConected();
                 }
             }
             if(connectionObject!=null)
@@ -33,7 +33,7 @@ public class ConnectionPoint extends Point {
                 }
                 if(connectionObject.end!=null)
                 {
-                    connectionObject.ini.onConected();
+                    connectionObject.end.onConected();
                 }
             }
     };
