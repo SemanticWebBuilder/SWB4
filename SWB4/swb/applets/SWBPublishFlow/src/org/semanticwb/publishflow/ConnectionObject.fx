@@ -21,7 +21,7 @@ import org.semanticwb.publishflow.Styles;
 import javafx.scene.paint.Color;
 import org.semanticwb.publishflow.ConnectionPoint;
 import javafx.scene.shape.PathElement;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 
 /**
  * @author victor.lorenzana
@@ -37,7 +37,9 @@ public class ConnectionObject extends CustomNode {
     public var text: EditableText;
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
+    public var strokeFocused=Color.web(Styles.color_focused);
     public var deleted:Boolean;    
+    
     
 
     def offset:Number=10;
@@ -277,6 +279,7 @@ public class ConnectionObject extends CustomNode {
         if (modeler.clickedNode == null) {
             modeler.clickedNode = this;
             modeler.focusedNode = this;
+            requestFocus();
         }
     }
 
@@ -292,6 +295,7 @@ public class ConnectionObject extends CustomNode {
     public function mouseExited(e: MouseEvent): Void {
         if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = false;
         path.stroke = Color.web(Styles.color);
+        if(focused) path.stroke=strokeFocused;
         path.strokeWidth = 2;
     }
 
@@ -470,6 +474,19 @@ public class ConnectionObject extends CustomNode {
         }
     }
 
+    override var onKeyPressed = function( e: KeyEvent )
+    {
+        keyPressed(e);
+    }
+
+    public function keyPressed( e: KeyEvent )
+    {
+        if(e.code==e.code.VK_DELETE)
+        {
+            remove();
+        }
+        //println(e);
+    }
     
     bound function getArrow(grad: Number) : Number
     {        
@@ -493,4 +510,5 @@ public class ConnectionObject extends CustomNode {
     {
 
     }
+    
 }
