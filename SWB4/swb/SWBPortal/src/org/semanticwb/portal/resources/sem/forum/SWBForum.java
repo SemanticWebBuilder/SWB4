@@ -95,13 +95,37 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("addThread")) {
-            doAddThread(request, response, paramRequest);
+            if(!isAcceptGuessUsers() && !paramRequest.getUser().isSigned())
+            {
+                response.sendError(403);
+            }else
+            {
+                doAddThread(request, response, paramRequest);
+            }
         } else if (paramRequest.getMode().equals("editThread")) {
-            doEditThread(request, response, paramRequest);
+            if(!isAcceptGuessUsers() && !paramRequest.getUser().isSigned())
+            {
+                response.sendError(403);
+            }else
+            {
+                doEditThread(request, response, paramRequest);
+            }
         } else if (paramRequest.getMode().equals("editPost")) {
-            doEditPost(request, response, paramRequest);
+            if(!isAcceptGuessUsers() && !paramRequest.getUser().isSigned())
+            {
+                response.sendError(403);
+            }else
+            {
+                doEditPost(request, response, paramRequest);
+            }
         } else if (paramRequest.getMode().equals("replyPost")) {
-            doReplyPost(request, response, paramRequest);
+            if(!isAcceptGuessUsers() && !paramRequest.getUser().isSigned())
+            {
+                response.sendError(403);
+            }else
+            {
+                doReplyPost(request, response, paramRequest);
+            }
         }else {
             super.processRequest(request, response, paramRequest);
         }
@@ -338,201 +362,204 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
      * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
      */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        WebPage page = response.getWebPage();
-        WebSite website = page.getWebSite();
-        User user = response.getUser();
-        Resource base = response.getResourceBase();
-        Date date = new Date();
-        String action = response.getAction();
-        if (action.equals("addThread")) {
-            SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, website.getSemanticObject(), null);
-            try
-            {
-                SemanticObject semObj = mgr.processForm(request);
-                Thread th=(Thread)semObj.createGenericInstance();
-                Thread thread = Thread.ClassMgr.getThread(th.getId(), website);
-                thread.setParent(page);
-                if (user != null && user.isSigned()) {
-                    thread.setCreator(user);
-                }
-                thread.setForum(this);
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
+    {
+        if(isAcceptGuessUsers() || response.getUser().isSigned())
+        {
+            WebPage page = response.getWebPage();
+            WebSite website = page.getWebSite();
+            User user = response.getUser();
+            Resource base = response.getResourceBase();
+            Date date = new Date();
+            String action = response.getAction();
+            if (action.equals("addThread")) {
+                SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, website.getSemanticObject(), null);
+                try
+                {
+                    SemanticObject semObj = mgr.processForm(request);
+                    Thread th=(Thread)semObj.createGenericInstance();
+                    Thread thread = Thread.ClassMgr.getThread(th.getId(), website);
+                    thread.setParent(page);
+                    if (user != null && user.isSigned()) {
+                        thread.setCreator(user);
+                    }
+                    thread.setForum(this);
 
-                //processFiles(request, response, thread.getSemanticObject());
-            }catch(FormValidateException e)
-            {
-                //TODO:Validar
-                log.error(e);
-            }
-
-            response.setMode(response.Mode_VIEW);
-            response.setAction("viewThreads");
-        } else if (action.equals("replyPost")) {
-            SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            Thread thread = Thread.ClassMgr.getThread(soThread.getId(), website);
-            if(request.getParameter("pstBody")!=null && request.getParameter("pstBody").trim().length()>0)
-            {
-                SemanticObject soPost = null;
-                Post post = null;
-                if (request.getParameter("postUri") != null) {
-                    soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    post = Post.ClassMgr.getPost(soPost.getId(), website);
+                    //processFiles(request, response, thread.getSemanticObject());
+                }catch(FormValidateException e)
+                {
+                    //TODO:Validar
+                    log.error(e);
                 }
 
-                SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
+                response.setMode(response.Mode_VIEW);
+                response.setAction("viewThreads");
+            } else if (action.equals("replyPost")) {
+                SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                Thread thread = Thread.ClassMgr.getThread(soThread.getId(), website);
+                if(request.getParameter("pstBody")!=null && request.getParameter("pstBody").trim().length()>0)
+                {
+                    SemanticObject soPost = null;
+                    Post post = null;
+                    if (request.getParameter("postUri") != null) {
+                        soPost = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                        post = Post.ClassMgr.getPost(soPost.getId(), website);
+                    }
+
+                    SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
+                    try
+                    {
+                        SemanticObject semObj = mgr.processForm(request);
+
+                        Post newPost = Post.ClassMgr.getPost(semObj.getId(), website);
+
+                        newPost.setThread(thread);
+                        if (post != null) {
+                            newPost.setParentPost(post);
+                        }
+
+                        //processFiles(request, response, newPost.getSemanticObject());
+
+                        thread.setReplyCount(thread.getReplyCount() + 1);
+                        thread.setLastPostDate(date);
+                        if (user != null && user.isSigned()) {
+                            thread.setLastPostMember(user);
+                        }
+                    }catch(FormValidateException e)
+                    {
+                        //TODO:Validar
+                        log.error(e);
+                    }
+                }
+                response.setMode(response.Mode_VIEW);
+                response.setAction("viewPost");
+                response.setRenderParameter("threadUri", thread.getURI());
+            } else if (action.equals("editPost")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
                 try
                 {
                     SemanticObject semObj = mgr.processForm(request);
 
                     Post newPost = Post.ClassMgr.getPost(semObj.getId(), website);
 
-                    newPost.setThread(thread);
-                    if (post != null) {
-                        newPost.setParentPost(post);
-                    }
-
                     //processFiles(request, response, newPost.getSemanticObject());
 
-                    thread.setReplyCount(thread.getReplyCount() + 1);
-                    thread.setLastPostDate(date);
-                    if (user != null && user.isSigned()) {
-                        thread.setLastPostMember(user);
-                    }
+                    response.setMode(response.Mode_VIEW);
+                    response.setRenderParameter("threadUri", request.getParameter("threadUri"));
                 }catch(FormValidateException e)
                 {
                     //TODO:Validar
                     log.error(e);
                 }
-            }
-            response.setMode(response.Mode_VIEW);
-            response.setAction("viewPost");
-            response.setRenderParameter("threadUri", thread.getURI());
-        } else if (action.equals("editPost")) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-            SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-            try
-            {
-                SemanticObject semObj = mgr.processForm(request);
-
-                Post newPost = Post.ClassMgr.getPost(semObj.getId(), website);
-
-                //processFiles(request, response, newPost.getSemanticObject());
-
-                response.setMode(response.Mode_VIEW);
-                response.setRenderParameter("threadUri", request.getParameter("threadUri"));
-            }catch(FormValidateException e)
-            {
-                //TODO:Validar
-                log.error(e);
-            }
-            response.setAction("viewPost");
-        } else if (action.equals("removeThread")) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            Thread thread = Thread.ClassMgr.getThread(semObject.getId(), website);
-            //int threadReplyCount = thread.getReplyCount();
-            //Elimina fileSystem de post asociados
-            GenericIterator<Post> itPost=thread.listPosts();
-            while(itPost.hasNext()){
-                Post post=itPost.next();
-                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + post.getId() + "/");
-            }
-            //Elimina filesystem de thread
-            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/threads/" + thread.getId() + "/");
-            semObject.remove();
-            //Redirecciona
-            response.setMode(response.Mode_VIEW);
-        } else if (action.equals("removePost")) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-
-            Post Post2remove = Post.ClassMgr.getPost(semObject.getId(), website);
-            int childPost = 0;
-            GenericIterator<Post> gitPost = Post2remove.listchildPosts();
-            while (gitPost.hasNext()) {
-                childPost++;
-                childPost = getChilds2Remove(gitPost.next(), childPost);
-            }
-            semObject.remove();
-
-            SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + Post2remove.getId() + "/");
-            
-            //Resta el post al contador del thread
-            SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            Thread thread = Thread.ClassMgr.getThread(soThread.getId(), website);
-            thread.setReplyCount(thread.getReplyCount() - (childPost + 1));
-            //Forum forum = thread.getForum();
-            //forum.setPostcount(forum.getPostcount() - (childPost + 1));
-            //Redirecciona
-            response.setRenderParameter("threadUri", thread.getURI());
-            response.setMode(response.Mode_VIEW);
-            response.setAction("viewPost");
-        } else if (action.equals("addFavoriteThread")) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            Thread favThread = Thread.ClassMgr.getThread(semObject.getId(), page.getWebSite());
-            UserFavThread frmUserThread = UserFavThread.ClassMgr.createUserFavThread(website);
-            frmUserThread.setThread(favThread);
-            if (user != null && user.isSigned()) {
-                frmUserThread.setUser(user);
-            }
-            response.setMode(response.Mode_VIEW);
-            response.setAction("viewThreads");
-        } else if (action.equals("editThread")) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
-            SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-
-            try
-            {
-                SemanticObject semObj = mgr.processForm(request);
-                Thread thread = Thread.ClassMgr.getThread(semObj.getId(), website);
-
-                //processFiles(request, response, thread.getSemanticObject());
-            }catch(FormValidateException e)
-            {
-                //TODO:Validar
-                log.error(e);
-            }
-            response.setMode(response.Mode_VIEW);
-            response.setRenderParameter("threadUri", request.getParameter("threadUri"));
-            response.setAction("viewPost");
-        } else if (action.equals("removeAttach")) {
-            if (request.getParameter("removeAttach") != null) {
-                String attachType="threads";
-                if(request.getParameter("postUri")!=null){
-                    attachType="replies";
-                }
-
+                response.setAction("viewPost");
+            } else if (action.equals("removeThread")) {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
                 Thread thread = Thread.ClassMgr.getThread(semObject.getId(), website);
-
-                Post post=null;
-                if(attachType.equals("replies")){
-                    semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
-                    post = Post.ClassMgr.getPost(semObject.getId(), website);
+                //int threadReplyCount = thread.getReplyCount();
+                //Elimina fileSystem de post asociados
+                GenericIterator<Post> itPost=thread.listPosts();
+                while(itPost.hasNext()){
+                    Post post=itPost.next();
+                    SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + post.getId() + "/");
                 }
+                //Elimina filesystem de thread
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/threads/" + thread.getId() + "/");
+                semObject.remove();
+                //Redirecciona
+                response.setMode(response.Mode_VIEW);
+            } else if (action.equals("removePost")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
 
-                GenericIterator<Attachment> lAttchments = thread.listAttachments();
-                if(post!=null) {
-                    lAttchments=post.listAttachmentses();
+                Post Post2remove = Post.ClassMgr.getPost(semObject.getId(), website);
+                int childPost = 0;
+                GenericIterator<Post> gitPost = Post2remove.listchildPosts();
+                while (gitPost.hasNext()) {
+                    childPost++;
+                    childPost = getChilds2Remove(gitPost.next(), childPost);
                 }
+                semObject.remove();
 
-                String attachUri=request.getParameter("removeAttach");
-                while (lAttchments.hasNext()) {
-                    Attachment attch = lAttchments.next();
-                    if(attch.getURI().equals(attachUri)){
-                        try{
-                            File file = new File(SWBPortal.getWorkPath() + base.getWorkPath() + "/"+attachType+"/" + semObject.getId() + "/" + attch.getFileName());
-                            file.delete();
-                            attch.remove();
-                        }catch(Exception e){
-                            log.debug(e);
+                SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath() + base.getWorkPath() + "/replies/" + Post2remove.getId() + "/");
+
+                //Resta el post al contador del thread
+                SemanticObject soThread = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                Thread thread = Thread.ClassMgr.getThread(soThread.getId(), website);
+                thread.setReplyCount(thread.getReplyCount() - (childPost + 1));
+                //Forum forum = thread.getForum();
+                //forum.setPostcount(forum.getPostcount() - (childPost + 1));
+                //Redirecciona
+                response.setRenderParameter("threadUri", thread.getURI());
+                response.setMode(response.Mode_VIEW);
+                response.setAction("viewPost");
+            } else if (action.equals("addFavoriteThread")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                Thread favThread = Thread.ClassMgr.getThread(semObject.getId(), page.getWebSite());
+                UserFavThread frmUserThread = UserFavThread.ClassMgr.createUserFavThread(website);
+                frmUserThread.setThread(favThread);
+                if (user != null && user.isSigned()) {
+                    frmUserThread.setUser(user);
+                }
+                response.setMode(response.Mode_VIEW);
+                response.setAction("viewThreads");
+            } else if (action.equals("editThread")) {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+
+                try
+                {
+                    SemanticObject semObj = mgr.processForm(request);
+                    Thread thread = Thread.ClassMgr.getThread(semObj.getId(), website);
+
+                    //processFiles(request, response, thread.getSemanticObject());
+                }catch(FormValidateException e)
+                {
+                    //TODO:Validar
+                    log.error(e);
+                }
+                response.setMode(response.Mode_VIEW);
+                response.setRenderParameter("threadUri", request.getParameter("threadUri"));
+                response.setAction("viewPost");
+            } else if (action.equals("removeAttach")) {
+                if (request.getParameter("removeAttach") != null) {
+                    String attachType="threads";
+                    if(request.getParameter("postUri")!=null){
+                        attachType="replies";
+                    }
+
+                    SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("threadUri"));
+                    Thread thread = Thread.ClassMgr.getThread(semObject.getId(), website);
+
+                    Post post=null;
+                    if(attachType.equals("replies")){
+                        semObject = SemanticObject.createSemanticObject(request.getParameter("postUri"));
+                        post = Post.ClassMgr.getPost(semObject.getId(), website);
+                    }
+
+                    GenericIterator<Attachment> lAttchments = thread.listAttachments();
+                    if(post!=null) {
+                        lAttchments=post.listAttachmentses();
+                    }
+
+                    String attachUri=request.getParameter("removeAttach");
+                    while (lAttchments.hasNext()) {
+                        Attachment attch = lAttchments.next();
+                        if(attch.getURI().equals(attachUri)){
+                            try{
+                                File file = new File(SWBPortal.getWorkPath() + base.getWorkPath() + "/"+attachType+"/" + semObject.getId() + "/" + attch.getFileName());
+                                file.delete();
+                                attch.remove();
+                            }catch(Exception e){
+                                log.debug(e);
+                            }
                         }
                     }
-                }
 
-                response.setRenderParameter("threadUri", request.getParameter("threadUri"));
-                response.setRenderParameter("postUri", request.getParameter("postUri"));
+                    response.setRenderParameter("threadUri", request.getParameter("threadUri"));
+                    response.setRenderParameter("postUri", request.getParameter("postUri"));
+                }
             }
         }
-
     }
 
     /**
