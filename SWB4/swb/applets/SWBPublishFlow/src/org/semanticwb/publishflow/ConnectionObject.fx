@@ -37,9 +37,8 @@ public class ConnectionObject extends CustomNode {
     public var text: EditableText;
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
-    public var deleted:Boolean;
-
-    public var button:ImgButton;
+    public var deleted:Boolean;    
+    
 
     def offset:Number=10;
     var o: Number = 0.8;                   //opacity
@@ -49,10 +48,10 @@ public class ConnectionObject extends CustomNode {
     public var pend: Point = bind getEndConnection(end) on replace olvalue {
                 replaceEnd(olvalue);
             };
-    var pinter1: Point = bind getInterFirstConnection(pini,pend);
-    var pinter2: Point = bind getInterLastConnection(pini,pend);
+    protected var pinter1: Point = bind getInterFirstConnection(pini,pend);
+    protected var pinter2: Point = bind getInterLastConnection(pini,pend);
 
-    var elements:PathElement[] =bind getPoints(pini,pend,pinter1,pinter2);
+    protected var elements:PathElement[] =bind getPoints(pini,pend,pinter1,pinter2);
     
     var path: Path= Path {
             elements: bind {elements}
@@ -146,12 +145,12 @@ public class ConnectionObject extends CustomNode {
             {
                     var landa:Number=(ini.x-pinter1.x)/(pinter2.x-pinter1.x);                    
                     if(landa>0 and landa<1) // a traviesa en centro de inicio
-                    {
-                        //println("landa y: a traviesa en centro de inicio");
+                    {                        
                         lt=LineTo { x: bind pinter1.x, y: bind pinter1.y+offset };
                         insert lt into pathElements;
 
 
+                        
                         lt=LineTo { x: bind pinter2.x, y: bind pinter1.y+offset };
                         insert lt into pathElements;
 
@@ -160,6 +159,7 @@ public class ConnectionObject extends CustomNode {
                     }
                     else
                     {
+                        
                         lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                         insert lt into pathElements;
                     }
@@ -174,6 +174,8 @@ public class ConnectionObject extends CustomNode {
                 if(landa>0 and landa<1) // a traviesa en centro de inicio
                 {
                     //println("landa x: a traviesa en centro de inicio");
+
+                                        
                     lt=LineTo { x: bind pinter1.x+offset, y: bind pinter1.y };
                     insert lt into pathElements;
 
@@ -182,12 +184,14 @@ public class ConnectionObject extends CustomNode {
                 }
                 else
                 {
+                    
                     lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                     insert lt into pathElements;
                 }                
             }
             else
             {
+                 
                  lt=LineTo { x: bind pinter2.x, y: bind pinter2.y };
                  insert lt into pathElements;
             }
@@ -231,25 +235,12 @@ public class ConnectionObject extends CustomNode {
 
 
     
+    
+
 
     public override function create(): Node {
         cursor = Cursor.HAND;
-        button=ImgButton
-        {
-            text: "Edit"
-            image: "images/edit_task_1.png"
-            imageOver: "images/edit_task_1.png"
-            scaleX:0.5
-            scaleY:0.5
-            translateX:bind pinter1.x
-            translateY:bind pinter1.y
-            opacity:0.8
-            action:function(): Void
-            {
-                
-            }
-
-        }
+        
         return Group {
                     content: [
                         path, Line {
