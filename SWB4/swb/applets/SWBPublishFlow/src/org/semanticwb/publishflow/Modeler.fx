@@ -127,7 +127,9 @@ public class Modeler extends CustomNode
                         tempNode=null;
                         disablePannable=false;                        
                     }
-                }                
+                }
+               
+
              }
              onMouseDragged: function( e: MouseEvent ):Void
              {                
