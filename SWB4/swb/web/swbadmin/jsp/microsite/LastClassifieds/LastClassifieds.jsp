@@ -74,7 +74,10 @@
             {
     %>
     <li>No hay actividad durante las últimas dos semanas</li>
-    <%            }
+    <%      
+            return;
+            }
+            
 
             int count = 0;
             for (Clasified obj : elements)
@@ -112,7 +115,7 @@
                 }
 
             }
-            if (count == 0)
+            if (count == 0 && elements.size() != 0)
             {
         %>
     <li>No hay actividad durante las últimas dos semanas</li>
