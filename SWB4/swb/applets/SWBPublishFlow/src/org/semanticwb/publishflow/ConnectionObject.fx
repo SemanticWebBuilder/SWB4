@@ -21,6 +21,7 @@ import org.semanticwb.publishflow.Styles;
 import javafx.scene.paint.Color;
 import org.semanticwb.publishflow.ConnectionPoint;
 import javafx.scene.shape.PathElement;
+import javafx.scene.image.ImageView;
 
 /**
  * @author victor.lorenzana
@@ -37,6 +38,7 @@ public class ConnectionObject extends CustomNode {
     public var color = Styles.style_connection;
     public var color_row = Styles.style_connection_row;
     public var deleted:Boolean;
+
     def offset:Number=10;
     var o: Number = 0.8;                   //opacity
     public var pini: Point = bind getIniConnection(ini) on replace olvalue {
