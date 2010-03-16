@@ -54,16 +54,16 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
             HashMap<String, User> elements = new HashMap();
 
 
-            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());
+            Iterator<FriendshipProspect> itFriendshipProspect = FriendshipProspect.ClassMgr.listFriendshipProspectByFriendShipRequested(owner, wpage.getWebSite());            
             while (itFriendshipProspect.hasNext())
-            {
+            {               
                 FriendshipProspect friendshipProspect = itFriendshipProspect.next();
                 if (friendshipProspect != null)
                 {
                     User userRequester = friendshipProspect.getFriendShipRequester();
                     if (userRequester != null && user.getURI() != null)
                     {
-                        elements.put(user.getURI(), userRequester);
+                        elements.put(userRequester.getURI(), userRequester);
                     }
                 }
             }
