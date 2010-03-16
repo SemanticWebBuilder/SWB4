@@ -208,10 +208,14 @@ public class TemplateImp extends Template
      */
     private ResourceType getResourceType(String type)
     {
-        //busca el tipo de recurso en el topicmap del template
-        ResourceType rt=getWebSite().getResourceType(type);
-        //busca el tipo de recurso en el topicmap global
-        //if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceType(type);
+        ResourceType rt=null;
+        if(type!=null)
+        {
+            //busca el tipo de recurso en el topicmap del template
+            rt=getWebSite().getResourceType(type);
+            //busca el tipo de recurso en el topicmap global
+            //if(rt==null)rt=SWBContext.getGlobalWebSite().getResourceType(type);
+        }
         return rt;
     }
     
@@ -461,7 +465,8 @@ public class TemplateImp extends Template
                                     String name = (String) en.nextElement();
                                     params.put(name.toLowerCase(), tag.getParam(name));
                                 }
-                                Object args[] = {"content", params};
+                                ResourceType type=getResourceType(tag.getParam("type"));
+                                Object args[] = {"content", params, type};
                                 parts.add(new SWBMethod(null, obj, args, this));
                                 //System.out.print(cls.getName()+":"+"getResources");
                             } else

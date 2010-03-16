@@ -260,7 +260,7 @@ private SWBResourceCachedMgr cache;
      * @return the contents
      * @return
      */
-    public Iterator getContents(User user, WebPage topic, HashMap params, Template tpl)
+    public Iterator<SWBResource> getContents(User user, WebPage topic, HashMap params, Template tpl)
     {
         Date today = new Date();
         //today = new Date(today.getYear(), today.getMonth(), today.getDate());
