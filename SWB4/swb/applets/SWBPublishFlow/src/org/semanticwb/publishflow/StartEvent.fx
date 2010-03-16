@@ -33,9 +33,11 @@ public class StartEvent extends Event
                 y:bind {y}-(h/2)-7
 
         }
+        
          var ret:Group=super.create() as Group;
          insert alert into ret.content;
          stroke=Color.web(Styles.color_iniEvent);
+         text.visible=false;
          return ret;
     }
 

@@ -36,6 +36,7 @@ public class EndEvent extends Event
          var ret:Group=super.create() as Group;
          insert alert into ret.content;
          title="Terminar flujo";
+         text.visible=false;
          stroke=Color.web(Styles.color_endEvent);
          shape.strokeWidth=4;
          stkw=4;
