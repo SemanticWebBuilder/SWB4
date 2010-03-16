@@ -72,7 +72,7 @@
 
             if (elements.size() == 0)
             {
-    %>
+                    %>
     <li>No hay actividad durante las últimas dos semanas</li>
     <%      
             }
