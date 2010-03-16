@@ -311,8 +311,14 @@ public int calcularEdad(java.util.Calendar fechaNaci, java.util.Calendar fechaAl
     <%
                     if (request.getParameter("user") == null)
                     {
+                        String persona="persona";
+                        if(elementos>1)
+                        {
+                            persona="personas";
+                        }
     %>
-    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=elementos%> persona(s) a que te unas como su amigo</a></li>
+
+    <li><a class="contactos_nombre" href="<%=requesterPath%><%=userParam%>" >Te han invitado <%=elementos%> <%=persona%> a que te unas como su amigo</a></li>
     <%
                     }
     %>
