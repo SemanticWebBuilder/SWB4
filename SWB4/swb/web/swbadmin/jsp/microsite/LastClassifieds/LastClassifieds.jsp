@@ -75,7 +75,6 @@
     %>
     <li>No hay actividad durante las últimas dos semanas</li>
     <%      
-            return;
             }
             
 
