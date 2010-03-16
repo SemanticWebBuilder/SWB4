@@ -33,8 +33,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticClass;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -72,6 +74,12 @@ public class SWBIFMethod
     /** The devices. */
     private ArrayList<Device> devices=null;
 
+    /** The notinstanceOf. */
+    private boolean notinstanceOfs=false;
+
+    /** The instanceOf. */
+    private ArrayList<SemanticClass> instanceOfs=null;
+
     /**
      * Instantiates a new sWBIF method.
      * 
@@ -97,10 +105,12 @@ public class SWBIFMethod
     {
         String lang=tag.getParam("language");
         String device=tag.getParam("device");
+        String instanceOf=tag.getParam("instanceof");
         //System.out.println("lang:"+lang);
         //System.out.println("device:"+lang);
         langs=new ArrayList();
         devices=new ArrayList();
+        instanceOfs=new ArrayList();
 
         try
         {
@@ -134,10 +144,35 @@ public class SWBIFMethod
                 {
                     String dv=st.nextToken();
                     Device d=tpl.getWebSite().getDevice(dv);
-                    if(d!=null)devices.add(d);
+                    if(d!=null)
+                    {
+                        devices.add(d);
+                    }
                 }
             }
         }catch(Exception e){log.error("Error reading if user devices...",e);}
+
+        try
+        {
+            if(instanceOf!=null)
+            {
+                if(instanceOf.startsWith("!"))
+                {
+                    instanceOf=instanceOf.substring(1);
+                    notinstanceOfs=true;
+                }
+                StringTokenizer st=new StringTokenizer(instanceOf,"|");
+                while(st.hasMoreTokens())
+                {
+                    String aux=st.nextToken();
+                    SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(aux);
+                    if(cls!=null)
+                    {
+                        instanceOfs.add(cls);
+                    }
+                }
+            }
+        }catch(Exception e){log.error("Error reading if WebPage instanceof...",e);}
     }
 
     /**
@@ -180,7 +215,24 @@ public class SWBIFMethod
             }
         }else if(type.equals("if:topic") || type.equals("if:webpage"))
         {
-            //TODO:
+            if(!instanceOfs.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<SemanticClass> it=instanceOfs.iterator();
+                while(it.hasNext())
+                {
+                    SemanticClass cls=it.next();
+                    if(webpage.getSemanticObject().instanceOf(cls))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !notinstanceOfs)||(cont && notinstanceOfs))
+                {
+                    return "";
+                }
+            }
         }else if(type.equals("if:template"))
         {
             //TODO:
