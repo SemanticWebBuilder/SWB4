@@ -6,6 +6,10 @@
 
 package org.semanticwb.publishflow;
 import javafx.scene.Node;
+import javafx.scene.Group;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.PathElement;
+import java.lang.Void;
 
 /**
  * @author victor.lorenzana
@@ -18,8 +22,127 @@ public class LinkConnection extends ConnectionObject {
     public var type: String;
     public var authorized:Boolean;
     public var published:Boolean;
+    public var button:ImgButton;
     public override function create(): Node {
 
-        return super.create();
+        var group:Group=super.create() as Group;
+        button=ImgButton
+        {
+            text: "Edit"
+            image: "images/edit_task_1.png"
+            imageOver: "images/edit_task_1.png"
+            scaleX:0.5
+            scaleY:0.5
+            translateX:bind getEditX(elements)
+            translateY:bind getEditY(elements)
+            opacity:0.8
+            action:function(): Void
+            {
+                edit();
+            }
+
+        }
+        insert button into group.content;
+        return group;
+    }
+    public function edit() : Void
+    {
+
+    }
+
+    function getEditX(elements:PathElement[]) : Number
+    {
+        var size:Integer=sizeof elements;
+        println("sizex: {size}");
+        if(size==4)
+        {
+            if(elements[1] instanceof LineTo and elements[2] instanceof LineTo)
+            {
+                var lineto1:LineTo=elements[1] as LineTo;
+                var lineto2:LineTo=elements[2] as LineTo;
+                if(lineto1.x-lineto2.x>0)
+                {
+                    lineto2.x+((lineto1.x-lineto2.x)/2)-20
+                }
+                else if(lineto1.x-lineto2.x<0)
+                {
+                    lineto1.x+((lineto2.x-lineto1.x)/2)-20
+                }
+                else
+                {
+                    lineto2.x-20
+                }
+            }
+            else
+            {
+                pinter1.x-20
+            }
+        }
+        else if(size==5)
+        {
+            if(elements[2] instanceof LineTo and elements[3] instanceof LineTo)
+            {
+                var lineto1:LineTo=elements[2] as LineTo;
+                var lineto2:LineTo=elements[3] as LineTo;
+                if(lineto1.x-lineto2.x>0)
+                {
+                    lineto2.x+((lineto1.x-lineto2.x)/2)-20
+                }
+                else if(lineto1.x-lineto2.x<0)
+                {
+                    lineto1.x+((lineto2.x-lineto1.x)/2)-20
+                }
+                else
+                {
+                    lineto2.x-20
+                }
+
+
+            }
+            else
+            {
+                pinter1.x-20
+            }
+        }
+        else
+        {
+            pinter1.x-20
+        }
+
+
+    }
+
+    function getEditY(elements:PathElement[]) : Number
+    {
+        var size:Integer=sizeof elements;
+        println("sizex: {size}");
+        if(size==4)
+        {
+            if(elements[3] instanceof LineTo)
+            {
+                var lineto:LineTo=elements[2] as LineTo;
+                lineto.y-15
+            }
+            else
+            {
+                pinter1.y-15
+            }
+        }
+        else if(size==5)
+        {
+            if(elements[4] instanceof LineTo)
+            {
+                var lineto:LineTo=elements[2] as LineTo;
+                lineto.y -15
+            }
+            else
+            {
+                pinter1.y-15
+            }
+        }
+        else
+        {
+            pinter1.y-15
+        }
     }
 }

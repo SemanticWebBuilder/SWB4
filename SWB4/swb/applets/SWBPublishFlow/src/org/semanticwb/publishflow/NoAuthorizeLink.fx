@@ -29,28 +29,32 @@ public class NoAuthorizeLink extends LinkConnection {
         color = Styles.style_connection_not_authorize;
         color_row = Styles.style_connection_arrow_not_authorize;
     }
+    public override function edit() : Void
+    {
+        var dialogEditLink: DialogEditLink;
+        dialogEditLink=new DialogEditLink();
+        dialogEditLink.published=published;
+        dialogEditLink.roles=roles;
+        dialogEditLink.locale=modeler.locale;
+        dialogEditLink.tm=modeler.tm;
+        dialogEditLink.users=users;
+        dialogEditLink.showPublicar=false;
+        dialogEditLink.init();
+        dialogEditLink.setVisible(true);
+        if(not dialogEditLink.cancel)
+        {
+            this.published=published;
+            this.users=users;
+            this.roles=roles;
+        }
+    }
 
     public override function mouseClicked(e: MouseEvent)
       {
         super.mouseClicked(e);
         if (e.clickCount == 2 and e.button == MouseButton.PRIMARY) {
 
-            var dialogEditLink: DialogEditLink;
-            dialogEditLink=new DialogEditLink();
-            dialogEditLink.published=published;
-            dialogEditLink.roles=roles;
-            dialogEditLink.locale=modeler.locale;
-            dialogEditLink.tm=modeler.tm;
-            dialogEditLink.users=users;
-            dialogEditLink.showPublicar=false;
-            dialogEditLink.init();
-            dialogEditLink.setVisible(true);
-            if(not dialogEditLink.cancel)
-            {
-                this.published=published;
-                this.users=users;
-                this.roles=roles;
-            }
+            //edit()
 
         }
     }
