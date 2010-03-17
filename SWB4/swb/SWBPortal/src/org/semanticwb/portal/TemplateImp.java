@@ -268,6 +268,7 @@ public class TemplateImp extends Template
     public ArrayList parse(String filename)
     {
         ArrayList parts = new ArrayList();
+        ArrayList tmpParts = new ArrayList();
         try
         {
             //FileInputStream in= new FileInputStream(AFUtils.getInstance().getWorkPath()+"/templates/"+recTemplate.getId()+"/"+recTemplate.getActualversion()+"/"+filename);
@@ -278,6 +279,7 @@ public class TemplateImp extends Template
                 tok = new HtmlStreamTokenizer(SWBPortal.getFileFromWorkPath(actRelWorkPath + "/" + filename));
             StringBuffer auxpart = new StringBuffer();
             HtmlTag opentag=null;                       //tag inicial
+            HtmlTag openiftag=null;                       //if tag inicial
             boolean textpart = false;
             boolean objectpart = false;
             boolean resourcepart = false;
@@ -369,10 +371,16 @@ public class TemplateImp extends Template
                                 if (!textpart) textpart = true;
                                 parts.add(auxpart.toString());
                                 auxpart = new StringBuffer();
+                                //Guardar partes y crear temporal
+                                tmpParts=parts;
+                                parts=new ArrayList();
+                                openiftag=tag;
                             }else
                             {
-                                parts.add(new SWBIFMethod(opentag, auxpart.toString(), this));
+                                parts.add(auxpart.toString());
+                                tmpParts.add(new SWBIFMethod(openiftag, parts, this));
                                 auxpart = new StringBuffer();
+                                parts=tmpParts;
                             }
                         }else
                         {
@@ -919,6 +927,32 @@ public class TemplateImp extends Template
                 logbuf.append("_");
         }
         log.debug("<!-- Template1:"+ (System.currentTimeMillis()-tini) +"ms -->");
+        build(request, response, out, user, topic, savelog, content, distparams, parts, resbuf);
+        if (savelog)
+        {
+            long tfin = System.currentTimeMillis() - tini;            
+            SWBPortal.getMessageCenter().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
+        }
+        log.debug("<!-- TemplateFin:"+ (System.currentTimeMillis()-tini) +"ms -->");
+    }
+
+
+
+    /**
+     * Builds the.
+     *
+     * @param request the request
+     * @param response the response
+     * @param out the out
+     * @param user the user
+     * @param topic the topic
+     * @param savelog the savelog
+     * @param content the content
+     * @param distparams the distparams
+     */
+    public void build(HttpServletRequest request, HttpServletResponse response, PrintWriter out, User user, WebPage topic, boolean savelog, String content, DistributorParams distparams, ArrayList parts, StringBuffer resbuf)
+    {
+        if(parts==null)return;
         HashMap antresrc = new HashMap(5);                    //recursos evaluados anteriormente
         try
         {
@@ -956,11 +990,11 @@ public class TemplateImp extends Template
                                     if(!topic.getWebSiteId().equals(distparams.getAccResourceTMID()))
                                         resbuf.append("0");
                                     resbuf.append(distparams.getAccResourceID());
-                                }                                
+                                }
                             } else
                             {
                                 boolean first = true;
-                                
+
                                 //cambio de topico en el contenido
                                 String resTopic=(String)args.get("topic");
                                 WebPage auxTopic=null;
@@ -968,7 +1002,7 @@ public class TemplateImp extends Template
                                 {
                                     auxTopic=topic.getWebSite().getWebPage(resTopic);
                                 }
-                                
+
                                 Iterator it;
                                 if(auxTopic!=null)
                                     it = (Iterator) wbm.invoke((SWBResourceMgr) wbm.getObj(), user, auxTopic);
@@ -980,7 +1014,7 @@ public class TemplateImp extends Template
                                     con++;
                                     SWBResource wbres = (SWBResource) it.next();
                                     //System.out.println("tpl id:"+wbres.getResourceBase().getId()+" prt:"+wbres.getResourceBase().getPriority()+wbres.getResourceBase().getRandPriority());
-                                    
+
                                     String resTitle=(String)args.get("gettitle");
                                     if(resTitle!=null)
                                     {
@@ -1004,7 +1038,7 @@ public class TemplateImp extends Template
                                         if(rt==con)out.print(wbres.getResourceBase().getDescription());
                                         continue;
                                     }
-/*                                    
+/*
                                     String resMUrl=(String)args.get("getmaximizedurl");
                                     if(resMUrl!=null)
                                     {
@@ -1023,12 +1057,12 @@ public class TemplateImp extends Template
                                             }else
                                             {
                                                 req=new WBHttpServletRequestWrapper(request);
-                                            }              
+                                            }
                                             WBParamRequestImp resParams = new WBParamRequestImp(req,wbres.getResourceBase(),topic,user);
                                             out.print(resParams.getRenderUrl().setWindowState(WBResourceURL.WinState_MAXIMIZED));
                                         }
                                         continue;
-                                    }                                    
+                                    }
                                     String resDUrl=(String)args.get("getdirecturl");
                                     if(resDUrl!=null)
                                     {
@@ -1047,13 +1081,13 @@ public class TemplateImp extends Template
                                             }else
                                             {
                                                 req=new WBHttpServletRequestWrapper(request);
-                                            }              
+                                            }
                                             WBParamRequestImp resParams = new WBParamRequestImp(req,wbres.getResourceBase(),topic,user);
                                             out.print(resParams.getRenderUrl().setCallMethod(WBResourceURL.Call_DIRECT));
                                         }
                                         continue;
-                                    }                                    
-*/                                    
+                                    }
+*/
                                     if (!(!first && wbres.getResourceBase().getIndex() <= 0))
                                     {
                                         String resCont=(String)args.get("getcontent");
@@ -1065,8 +1099,8 @@ public class TemplateImp extends Template
                                                 rt=Integer.parseInt(resCont);
                                             }catch(Exception e){log.error(e);}
                                             if(rt!=con)continue;
-                                        }                                        
-                                        
+                                        }
+
                                         //System.out.println("tpl ok");
                                         //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));
                                         String rid=wbres.getResourceBase().getId();
@@ -1088,10 +1122,10 @@ public class TemplateImp extends Template
                                             }
                                             extParams=distparams.getNotAccResourceURI(rid);
                                         }
-                                        
+
                                         //System.out.println("rid:"+rid);
                                         //System.out.println("distparams.getAccResourceID():"+distparams.getAccResourceID());
-                                        
+
                                         SWBHttpServletResponseWrapper res=new SWBHttpServletResponseWrapper(response);
                                         javax.servlet.http.HttpServletRequest req=null;
                                         if(distparams!=null)
@@ -1100,20 +1134,20 @@ public class TemplateImp extends Template
                                         }else
                                         {
                                             req=new SWBHttpServletRequestWrapper(request);
-                                        }              
-                                        
+                                        }
+
                                         SWBParamRequestImp resParams = new SWBParamRequestImp(req,wbres.getResourceBase(),topic,user);
                                         resParams.setArguments(args);
                                         resParams.setExtURIParams(extParams);
                                         resParams.setCallMethod(SWBResourceModes.Call_CONTENT);
                                         if(act!=null)resParams.setAction(act);
                                         if(mdo!=null)resParams.setMode(mdo);
-                                        if(wst!=null)resParams.setWindowState(wst);                                        
+                                        if(wst!=null)resParams.setWindowState(wst);
                                         if(vtopic!=null)
                                         {
                                             resParams.setVirtualTopic(vtopic);
                                         }
-                                        
+
                                         SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(wbres, req, res, resParams);
                                         out.print(res.toString());
 
@@ -1127,7 +1161,7 @@ public class TemplateImp extends Template
 //                                            System.out.println(" "+(int)f.charAt(x)+" "+arr[ri+x]);
 //                                        }
 //                                        //System.out.println("res:"+new String(res.toByteArray(),"UTF-8"));
-                                        
+
                                         String intraBR=(String)args.get("intrabr");
                                         if(it.hasNext() && (intraBR==null || intraBR.equalsIgnoreCase("true")))
                                         {
@@ -1156,7 +1190,7 @@ public class TemplateImp extends Template
                                 {
                                     SWBResource wbres = (SWBResource) it.next();
                                     //System.out.println("rec:"+wbres.getResourceBase().getId()+" typemap="+wbres.getResourceBase().getTopicMapId());
-                                    
+
                                     //String rid=wbres.getResourceBase().getSId();
                                     String rid=wbres.getResourceBase().getId();
                                     String mdo=null;
@@ -1176,7 +1210,7 @@ public class TemplateImp extends Template
                                         }
                                         extParams=distparams.getNotAccResourceURI(rid);
                                     }
-                                    
+
                                     //out.print(SWBResourceMgr.getInstance().getResourceTraceMgr().getHtmlTraced(wbres, request, response, user, topic, args));
                                     SWBHttpServletResponseWrapper res=new SWBHttpServletResponseWrapper(response);
                                     javax.servlet.http.HttpServletRequest req=null;
@@ -1186,8 +1220,8 @@ public class TemplateImp extends Template
                                     }else
                                     {
                                         req=new SWBHttpServletRequestWrapper(request);
-                                    }                                       
-                                    
+                                    }
+
                                     SWBParamRequestImp resParams = new SWBParamRequestImp(request,wbres.getResourceBase(),topic,user);
                                     resParams.setArguments(args);
                                     resParams.setExtURIParams(extParams);
@@ -1195,17 +1229,17 @@ public class TemplateImp extends Template
                                     if(act!=null)resParams.setAction(act);
                                     //resParams.setCallMethod(mto);
                                     if(mdo!=null)resParams.setMode(mdo);
-                                    if(wst!=null)resParams.setWindowState(wst);                                        
+                                    if(wst!=null)resParams.setWindowState(wst);
                                     if(vtopic!=null)
                                     {
                                         resParams.setVirtualTopic(vtopic);
                                     }
-                                    
+
                                     SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(wbres, req, res, resParams);
                                     out.print(res.toString());
-                                    
+
                                     //System.out.println("Salida:"+wbres.getResourceBase().getId()+":"+res.toString());
-                                    
+
                                     if (savelog)
                                     {
                                         resbuf.append("|");
@@ -1221,7 +1255,7 @@ public class TemplateImp extends Template
                                 //System.out.println("id:"+id+":n");
                                 Iterator it = (Iterator) antresrc.get(id);
                                 SWBResource wbres = (SWBResource) it.next();
-                                
+
                                 //String rid=wbres.getResourceBase().getSId();
                                 String rid=wbres.getResourceBase().getId();
                                 String mdo=null;
@@ -1250,25 +1284,25 @@ public class TemplateImp extends Template
                                 }else
                                 {
                                     req=new SWBHttpServletRequestWrapper(request);
-                                }                                
-                                
+                                }
+
                                 SWBParamRequestImp resParams = new SWBParamRequestImp(request,wbres.getResourceBase(),topic,user);
                                 resParams.setArguments(args);
                                 resParams.setExtURIParams(extParams);
                                 resParams.setCallMethod(SWBResourceModes.Call_STRATEGY);
-                                
+
                                 if(act!=null)resParams.setAction(act);
                                 //resParams.setCallMethod(mto);
                                 if(mdo!=null)resParams.setMode(mdo);
-                                if(wst!=null)resParams.setWindowState(wst);                                        
+                                if(wst!=null)resParams.setWindowState(wst);
                                 if(vtopic!=null)
                                 {
                                     resParams.setVirtualTopic(vtopic);
                                 }
-                                
+
                                 SWBPortal.getResourceMgr().getResourceTraceMgr().renderTraced(wbres, req, res, resParams);
                                 out.print(res.toString());
-                                
+
                                 if (!it.hasNext()) antresrc.remove(id);
                                 if (savelog)
                                 {
@@ -1289,25 +1323,22 @@ public class TemplateImp extends Template
                             out.print(include((String)wbm.getArguments(0),request,response,user,topic,args));
                         }
                     } else
+                    {
                         out.print(wbm.invoke(topic, user, request,response));
+                    }
                 }else if (obj instanceof SWBIFMethod)
                 {
-                    out.print(((SWBIFMethod)obj).eval(user, topic));
+                    ArrayList subparts=((SWBIFMethod)obj).eval(user, topic);
+                    //System.out.println("subparts:"+subparts);
+                    build(request, response, out, user, topic, savelog, content, distparams, subparts, resbuf);
                 }
-                log.debug("<!-- TemplateTag:"+ (System.currentTimeMillis()-tini) +"ms -->");                
             }
         } catch (Exception e)
         {
             log.error("Error Template Build...",e);
         }
-
-        if (savelog)
-        {
-            long tfin = System.currentTimeMillis() - tini;            
-            SWBPortal.getMessageCenter().sendMessage(logbuf.toString()+"|"+tfin+resbuf.toString());
-        }
-        log.debug("<!-- TemplateFin:"+ (System.currentTimeMillis()-tini) +"ms -->");
     }
+
     
     /**
      * Builds the contents.

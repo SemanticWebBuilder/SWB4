@@ -57,7 +57,7 @@ public class SWBIFMethod
     private HtmlTag tag;
     
     /** The txt. */
-    private String txt;
+    private ArrayList parts;
     
     /** The type. */
     private String type=null;
@@ -87,14 +87,13 @@ public class SWBIFMethod
      * @param txt the txt
      * @param tpl the tpl
      */
-    public SWBIFMethod(HtmlTag tag, String txt, Template tpl)
+    public SWBIFMethod(HtmlTag tag, ArrayList parts, Template tpl)
     {
         this.tpl=tpl;
         //System.out.println("tag:"+tag);
         this.tag = tag;
-        this.txt = txt;
+        this.parts = parts;
         type=tag.getTagString().toLowerCase();
-
         initUser();
     }
 
@@ -108,6 +107,7 @@ public class SWBIFMethod
         String instanceOf=tag.getParam("instanceof");
         //System.out.println("lang:"+lang);
         //System.out.println("device:"+lang);
+        //System.out.println("instanceof:"+instanceOf);
         langs=new ArrayList();
         devices=new ArrayList();
         instanceOfs=new ArrayList();
@@ -165,7 +165,9 @@ public class SWBIFMethod
                 while(st.hasMoreTokens())
                 {
                     String aux=st.nextToken();
+                    //System.out.println("aux:("+aux+")");
                     SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(aux);
+                    //System.out.println("cls:"+cls);
                     if(cls!=null)
                     {
                         instanceOfs.add(cls);
@@ -182,11 +184,11 @@ public class SWBIFMethod
      * @param webpage the webpage
      * @return the string
      */
-    public String eval(User user, WebPage webpage)
+    public ArrayList eval(User user, WebPage webpage)
     {
-        //System.out.println("txt:"+txt);
         //System.out.println("type:"+type);
-        String ret=txt;
+        //System.out.println("parts:"+parts);
+        ArrayList ret=parts;
         if(type.equals("if:user"))
         {
             if(!langs.isEmpty())
@@ -194,7 +196,7 @@ public class SWBIFMethod
                 boolean cont=langs.contains(user.getLanguage());
                 if((!cont && !notlangs)||(cont && notlangs))
                 {
-                    return "";
+                    return null;
                 }
             }
             if(!devices.isEmpty())
@@ -212,11 +214,12 @@ public class SWBIFMethod
                 }
                 if((!cont && !notdevices)||(cont && notdevices))
                 {
-                    return "";
+                    return null;
                 }
             }
         }else if(type.equals("if:topic") || type.equals("if:webpage"))
         {
+            //System.out.println("instanceOfs:"+instanceOfs);
             if(!instanceOfs.isEmpty())
             {
                 boolean cont=false;
@@ -224,6 +227,7 @@ public class SWBIFMethod
                 while(it.hasNext())
                 {
                     SemanticClass cls=it.next();
+                    //System.out.println("cls:"+cls);
                     if(webpage.getSemanticObject().instanceOf(cls))
                     {
                         cont=true;
@@ -232,7 +236,7 @@ public class SWBIFMethod
                 }
                 if((!cont && !notinstanceOfs)||(cont && notinstanceOfs))
                 {
-                    return "";
+                    return null;
                 }
             }
         }else if(type.equals("if:template"))
