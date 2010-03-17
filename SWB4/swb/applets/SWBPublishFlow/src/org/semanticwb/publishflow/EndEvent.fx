@@ -21,7 +21,7 @@ import javafx.scene.text.Font;
 public class EndEvent extends Event
 {
     public var alert:ImageView;
-    public var viewalert:Boolean=bind busyPoints==0;
+    public var viewalert:Boolean=bind busyInputPoints==0;
     public var textAlert:Text;
     public override function create(): Node
     {
@@ -63,7 +63,7 @@ public class EndEvent extends Event
 
     bound public function getTextAlert() : String
     {
-       if(busyPoints==0)
+       if(busyInputPoints==0)
        {
            "1"
        }
