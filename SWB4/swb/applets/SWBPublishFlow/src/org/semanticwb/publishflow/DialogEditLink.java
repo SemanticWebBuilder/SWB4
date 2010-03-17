@@ -19,6 +19,7 @@ import java.awt.Frame;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -50,8 +51,7 @@ public class DialogEditLink extends javax.swing.JDialog
             // No debe hacer nada
             System.out.println(ue.getMessage());
         }
-        initComponents();
-        init();
+        initComponents();        
 
     }
 
