@@ -550,6 +550,7 @@ public class Modeler extends CustomNode
         dialog.name=name;
         dialog.locale=locale;
         dialog.description=description;
+        dialog.con=ToolBar.conn;
         dialog.init();
         dialog.setVisible(true);
         if(not dialog.cancel)
