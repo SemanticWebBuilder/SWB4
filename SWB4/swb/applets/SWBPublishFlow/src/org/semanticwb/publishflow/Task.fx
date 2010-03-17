@@ -42,7 +42,7 @@ public class Task extends FlowObject {
     public var alert:ImageView;
     public var textAlert:Text;
     public var stextAlert:String;
-    public var viewalert:Boolean=bind hasErros(users, roles) or busyPoints<2;
+    public var viewalert:Boolean=bind hasErros(users, roles) or busyoutputPoints<2;
     public override function create(): Node {
             super.create();
             
