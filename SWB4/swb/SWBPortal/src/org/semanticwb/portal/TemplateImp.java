@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -268,7 +269,7 @@ public class TemplateImp extends Template
     public ArrayList parse(String filename)
     {
         ArrayList parts = new ArrayList();
-        ArrayList tmpParts = new ArrayList();
+        LinkedList<SWBIFMethod> ifs = new LinkedList();
         try
         {
             //FileInputStream in= new FileInputStream(AFUtils.getInstance().getWorkPath()+"/templates/"+recTemplate.getId()+"/"+recTemplate.getActualversion()+"/"+filename);
@@ -278,8 +279,7 @@ public class TemplateImp extends Template
             else
                 tok = new HtmlStreamTokenizer(SWBPortal.getFileFromWorkPath(actRelWorkPath + "/" + filename));
             StringBuffer auxpart = new StringBuffer();
-            HtmlTag opentag=null;                       //tag inicial
-            HtmlTag openiftag=null;                       //if tag inicial
+            //HtmlTag opentag=null;                       //tag inicial
             boolean textpart = false;
             boolean objectpart = false;
             boolean resourcepart = false;
@@ -293,11 +293,11 @@ public class TemplateImp extends Template
                 {
                     HtmlTag tag = new HtmlTag();
                     tok.parseTag(tok.getStringValue(), tag);
-                    if(!tag.isEndTag())
-                    {
-                        //System.out.println("tok:"+tok.getStringValue()+" "+tag);
-                        opentag=tag;
-                    }
+//                    if(!tag.isEndTag())
+//                    {
+//                        //System.out.println("tok:"+tok.getStringValue()+" "+tag);
+//                        opentag=tag;
+//                    }
                     if (tag.getTagString().toLowerCase().equals("resource"))
                     {
                         if (textpart)
@@ -372,15 +372,16 @@ public class TemplateImp extends Template
                                 parts.add(auxpart.toString());
                                 auxpart = new StringBuffer();
                                 //Guardar partes y crear temporal
-                                tmpParts=parts;
-                                parts=new ArrayList();
-                                openiftag=tag;
+                                SWBIFMethod ifp=new SWBIFMethod(tag, parts, this);
+                                parts.add(ifp);
+                                ifs.add(ifp);
+                                parts=ifp.getParts();
                             }else
                             {
                                 parts.add(auxpart.toString());
-                                tmpParts.add(new SWBIFMethod(openiftag, parts, this));
                                 auxpart = new StringBuffer();
-                                parts=tmpParts;
+                                SWBIFMethod ifp=ifs.removeLast();
+                                parts=ifp.getBaseParts();
                             }
                         }else
                         {
