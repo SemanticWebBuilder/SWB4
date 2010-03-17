@@ -54,11 +54,12 @@ public class EditWorkflow extends javax.swing.JDialog
         this.jTextFieldName.setVisible(false);
         this.jScrollPaneAreaDescription.setVisible(false);
         this.jCheckBoxEdit.setVisible(false);
-        loadResources();
+        
    }
 
     public void init()
     {
+        loadResources();
         if(resourceTypes!=null)
         {
             for(String res : resourceTypes)
