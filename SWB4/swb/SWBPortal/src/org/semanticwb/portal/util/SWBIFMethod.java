@@ -81,6 +81,12 @@ public class SWBIFMethod
     /** The instanceOf. */
     private ArrayList<SemanticClass> instanceOfs=null;
 
+    /** The notinstanceOf. */
+    private boolean nottypeOfs=false;
+
+    /** The instanceOf. */
+    private ArrayList<SemanticClass> typeOfs=null;
+
     /**
      * Instantiates a new sWBIF method.
      * 
@@ -107,12 +113,14 @@ public class SWBIFMethod
         String lang=tag.getParam("language");
         String device=tag.getParam("device");
         String instanceOf=tag.getParam("instanceof");
+        String typeOf=tag.getParam("typeof");
         //System.out.println("lang:"+lang);
         //System.out.println("device:"+lang);
         //System.out.println("instanceof:"+instanceOf);
         langs=new ArrayList();
         devices=new ArrayList();
         instanceOfs=new ArrayList();
+        typeOfs=new ArrayList();
 
         try
         {
@@ -177,6 +185,30 @@ public class SWBIFMethod
                 }
             }
         }catch(Exception e){log.error("Error reading if WebPage instanceof...",e);}
+
+        try
+        {
+            if(typeOf!=null)
+            {
+                if(typeOf.startsWith("!"))
+                {
+                    typeOf=typeOf.substring(1);
+                    nottypeOfs=true;
+                }
+                StringTokenizer st=new StringTokenizer(typeOf,"|");
+                while(st.hasMoreTokens())
+                {
+                    String aux=st.nextToken();
+                    //System.out.println("aux:("+aux+")");
+                    SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(aux);
+                    //System.out.println("cls:"+cls);
+                    if(cls!=null)
+                    {
+                        typeOfs.add(cls);
+                    }
+                }
+            }
+        }catch(Exception e){log.error("Error reading if WebPage typeof...",e);}
     }
 
     /**
@@ -237,6 +269,26 @@ public class SWBIFMethod
                     }
                 }
                 if((!cont && !notinstanceOfs)||(cont && notinstanceOfs))
+                {
+                    return null;
+                }
+            }
+            //System.out.println("typeOfs:"+typeOfs);
+            if(!typeOfs.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<SemanticClass> it=typeOfs.iterator();
+                while(it.hasNext())
+                {
+                    SemanticClass cls=it.next();
+                    //System.out.println("cls:"+cls);
+                    if(webpage.getSemanticObject().getSemanticClass().equals(cls))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !nottypeOfs)||(cont && nottypeOfs))
                 {
                     return null;
                 }
