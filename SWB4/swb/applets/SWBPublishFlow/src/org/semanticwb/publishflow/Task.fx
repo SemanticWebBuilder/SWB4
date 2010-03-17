@@ -19,7 +19,10 @@ import org.semanticwb.publishflow.EndEvent;
 import org.semanticwb.publishflow.ConnectionPoint;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import java.lang.Void;
+import javafx.scene.text.Font;
+import javafx.scene.paint.Color;
 import java.lang.Void;
 
 
@@ -37,7 +40,8 @@ public class Task extends FlowObject {
     public var hours:Integer;
     public var button:ImgButton;
     public var alert:ImageView;
-
+    public var textAlert:Text;
+    public var stextAlert:String;
     public var viewalert:Boolean=bind hasErros(users, roles) or busyPoints<2;
     public override function create(): Node {
             super.create();
@@ -46,6 +50,21 @@ public class Task extends FlowObject {
         w = 100;
         h = 60;
         tooltip=title;
+
+        textAlert=Text
+        {
+            content:bind stextAlert;
+            visible:bind viewalert
+            x:bind {x}-(w/2)
+            y:bind {y}-(h/2)+5
+            font: Font
+            {
+                size:10
+            }
+            fill: Color.WHITE
+
+        }
+
         text = EditableText {
             text: bind title with inverse
             x: bind x
@@ -88,6 +107,7 @@ public class Task extends FlowObject {
             action:function(): Void
             {
                 editTask();
+                onConected();
             }
 
         }
@@ -127,10 +147,10 @@ public class Task extends FlowObject {
             y:bind {y}+h/2;
         };
         insert cp into connectionPoints;
-
+        onConected();
         return Group {
                     content: [
-                        shape, text,button,alert
+                        shape, text,button,alert,textAlert
                     ]
                     scaleX: bind s;
                     scaleY: bind s;
@@ -138,7 +158,29 @@ public class Task extends FlowObject {
                     effect: Styles.dropShadow;
                 };
     }
+    
 
+    public function getTextAlert() : String
+    {
+        var value:Integer=0;
+        var nusers:Integer=sizeof users;
+        var nroles:Integer=sizeof roles;
+        if(nusers==0 and nroles==0)
+        {
+            value++;
+            if(getBusyOutputPoints()<2)
+            {
+                value+=2-getBusyOutputPoints();
+            }                      
+        }
+        else
+        {
+            
+        }
+        stextAlert=String.valueOf(value);
+    }
+
+   
 
     bound public function hasErros(users: String[],roles: String[]) :Boolean
     {
@@ -221,7 +263,11 @@ public class Task extends FlowObject {
             roles=dialog.roles;
         }
     }
-
+    public override function onConected() : Void
+    {
+        super.onConected();
+        stextAlert=getTextAlert();
+    }
 
     public override function mouseClicked(e: MouseEvent)
       {
