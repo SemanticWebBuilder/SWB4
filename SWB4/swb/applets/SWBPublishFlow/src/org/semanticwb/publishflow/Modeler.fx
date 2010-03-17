@@ -418,8 +418,7 @@ public class Modeler extends CustomNode
                             var rolid:String =erole.getAttribute("id");
                             var rolname:String=erole.getAttribute("name");
                             var rep:String=erole.getAttribute("repository");
-                            var srole:String="{rolid}@{rep}@{rolname}";
-                            System.out.println("agregando rol {srole}");
+                            var srole:String="{rolid}@{rep}@{rolname}";                            
                             if(existsRol(srole))
                             {
                                 insert srole into activity.roles;
@@ -432,8 +431,7 @@ public class Modeler extends CustomNode
                             //User user=new User(,);
                             var userid:String=euser.getAttribute("id");
                             var username:String=euser.getAttribute("name");
-                            var suser:String="{userid}@{username}";
-                            System.out.println("agregando user {suser}");
+                            var suser:String="{userid}@{username}";                            
                             if(existsUser(suser))
                             {
                                 insert suser into activity.users;
@@ -672,8 +670,7 @@ public class Modeler extends CustomNode
             var status:Integer = JOptionPane.showConfirmDialog(
                     null,"{ask}\r\n{msg}",
                     ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"),
-                    JOptionPane.YES_NO_OPTION+
-                    JOptionPane.QUESTION_MESSAGE);
+                    JOptionPane.YES_NO_OPTION);
             if (status == JOptionPane.NO_OPTION)
             {
                 return;
