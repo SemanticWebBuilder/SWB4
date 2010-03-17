@@ -66,7 +66,7 @@ public class FlowObject extends GraphElement
 
     public function onConected() : Void
     {
-        busyPoints=getBusyPoints();
+        busyPoints=getBusyOutputPoints();
     }
 
 
@@ -84,6 +84,19 @@ public class FlowObject extends GraphElement
         return count;
 
     }
+    public function getBusyOutputPoints() : Integer
+    {
+        var count :Integer=0;
+        for(cpoint in connectionPoints)
+        {
+            if(cpoint.connectionObject!=null and cpoint.connectionObject.ini==this)
+            {
+                count++;
+            }
+        }        
+        return count;
+
+    }
     public function getBusyPoints() : Integer
     {
         var count :Integer=0;
@@ -93,8 +106,7 @@ public class FlowObject extends GraphElement
             {
                 count++;
             }
-        }
-        println("getBusyPoints: {count}");
+        }        
         return count;
 
     }

@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.Group;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 /**
  * @author victor.lorenzana
  */
@@ -20,8 +22,22 @@ public class StartEvent extends Event
     
     public var alert:ImageView;
     public var viewalert:Boolean=bind busyPoints==0;
+    public var textAlert:Text;
     public override function create(): Node
     {
+        textAlert=Text
+        {
+            content:bind getTextAlert();
+            visible:bind viewalert
+            x:bind {x}-(w/2)
+            y:bind {y}-(h/2)+5
+            font: Font
+            {
+                size:10
+            }
+            fill: Color.WHITE
+
+        }
         alert=ImageView
         {
                 image:Image
@@ -36,9 +52,24 @@ public class StartEvent extends Event
         
          var ret:Group=super.create() as Group;
          insert alert into ret.content;
+         insert textAlert into ret.content;
          stroke=Color.web(Styles.color_iniEvent);
          text.visible=false;
          return ret;
+    }
+
+    bound public function getTextAlert() : String
+    {
+       if(busyPoints==0)
+       {
+           "1"
+       }
+       else
+       {
+           ""
+       }
+
+
     }
 
     override public function canIniLink(link: ConnectionObject): Boolean {
