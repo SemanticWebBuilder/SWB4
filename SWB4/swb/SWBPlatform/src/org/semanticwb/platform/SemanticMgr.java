@@ -300,7 +300,6 @@ private SemanticOntology m_schema;
         getSchema().addSubModel(smodel,false);
         getOntology().addSubModel(smodel,false);
 
-
         //agregar todos los NS del schema
         Iterator it=smodel.getRDFModel().getNsPrefixMap().values().iterator();
         while(it.hasNext())
