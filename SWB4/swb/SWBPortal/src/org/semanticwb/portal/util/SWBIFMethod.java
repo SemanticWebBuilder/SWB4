@@ -56,7 +56,8 @@ public class SWBIFMethod
     /** The tag. */
     private HtmlTag tag;
     
-    /** The txt. */
+    private ArrayList baseParts;
+
     private ArrayList parts;
     
     /** The type. */
@@ -87,12 +88,13 @@ public class SWBIFMethod
      * @param txt the txt
      * @param tpl the tpl
      */
-    public SWBIFMethod(HtmlTag tag, ArrayList parts, Template tpl)
+    public SWBIFMethod(HtmlTag tag, ArrayList baseParts, Template tpl)
     {
         this.tpl=tpl;
         //System.out.println("tag:"+tag);
         this.tag = tag;
-        this.parts = parts;
+        this.baseParts=baseParts;
+        this.parts = new ArrayList();
         type=tag.getTagString().toLowerCase();
         initUser();
     }
@@ -246,5 +248,13 @@ public class SWBIFMethod
         return ret;
     }
 
+    public ArrayList getBaseParts()
+    {
+        return baseParts;
+    }
 
+    public ArrayList getParts()
+    {
+        return parts;
+    }
 }
