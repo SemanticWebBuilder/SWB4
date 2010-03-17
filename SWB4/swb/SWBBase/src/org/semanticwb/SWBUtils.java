@@ -143,6 +143,10 @@ public class SWBUtils {
      * <p>La cadena que representa la ruta f&iacute;sica de esta aplicaci&oacute;n</p>
      */
     private static String applicationPath = "" + SWBUtils.class.getResource("/");
+    static
+    {
+        if(applicationPath.endsWith("/"))applicationPath.substring(0,applicationPath.length()-1);
+    }
     /**
      * Defines the size used for creating arrays that will be used in I/O operations.
      * <p>Define el tama&ntilde;o utilizado en la creaci&oacute;n de arrays que
@@ -232,7 +236,6 @@ public class SWBUtils {
      */
     public static String getApplicationPath()
     {
-
         return SWBUtils.applicationPath;
     }
 
