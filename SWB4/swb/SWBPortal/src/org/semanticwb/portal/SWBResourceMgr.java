@@ -166,6 +166,9 @@ private SWBResourceCachedMgr cache;
                         m.read(in, null);
                         model=new SemanticModel(cls,m);
                         SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+
+                        //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                        
                         System.out.println(cls);
                     }
                 }catch(Exception e){log.error("Error loading OWL File:"+cls,e);}
