@@ -20,6 +20,7 @@ public class AuthorizeLink extends LinkConnection {
         authorized=true;
         type="authorized";
         authorized=true;
+        published=true;
         return super.create();
     }
 
