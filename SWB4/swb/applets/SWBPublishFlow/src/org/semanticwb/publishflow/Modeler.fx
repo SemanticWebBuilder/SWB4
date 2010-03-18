@@ -220,7 +220,10 @@ public class Modeler extends CustomNode
     }
     public function loadRoles() :Void
     {
-
+        if(FX.getArgument("tm")!=null)
+        {
+            tm = FX.getArgument("tm").toString();
+        }
         if (tm != null)
         {
             var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
@@ -243,7 +246,10 @@ public class Modeler extends CustomNode
     }
     public function loadUsers() :Void
     {
-
+        if(FX.getArgument("tm")!=null)
+        {
+            tm = FX.getArgument("tm").toString();
+        }
         if (tm != null)
         {
             var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
@@ -426,7 +432,9 @@ public class Modeler extends CustomNode
                             var rolid:String =erole.getAttribute("id");
                             var rolname:String=erole.getAttribute("name");
                             var rep:String=erole.getAttribute("repository");
-                            var srole:String="{rolid}@{rep}@{rolname}";                            
+                            var srole:String="{rolid}@{rep}@{rolname}";                
+                            System.out.println("srole: {srole}");
+                            System.out.println("existsRol(srole): {existsRol(srole)}");
                             if(existsRol(srole))
                             {
                                 insert srole into activity.roles;
@@ -439,7 +447,9 @@ public class Modeler extends CustomNode
                             //User user=new User(,);
                             var userid:String=euser.getAttribute("id");
                             var username:String=euser.getAttribute("name");
-                            var suser:String="{userid}@{username}";                            
+                            var suser:String="{userid}@{username}";
+                            System.out.println("suser: {suser}");
+                            System.out.println("existsUser(suser): {existsUser(suser)}");
                             if(existsUser(suser))
                             {
                                 insert suser into activity.users;
