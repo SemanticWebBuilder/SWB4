@@ -28,6 +28,7 @@ public class EditWorkflow extends javax.swing.JDialog
     WBConnection con;
     String name;
     String description;
+    String version;
     
     
     Locale locale=new Locale("es");
@@ -78,6 +79,7 @@ public class EditWorkflow extends javax.swing.JDialog
                 }
             }
         }
+        this.jTextFieldVersion.setText(version);
         this.jTextFieldName.setText(name);
         this.jTextAreaDescription.setText(description);
     }
@@ -94,6 +96,7 @@ public class EditWorkflow extends javax.swing.JDialog
         {
             String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getResourceTypeCat</cmd><tm>" + tm + "</tm></req>";
             xml = con.getData(xml);
+            System.out.println("xml resourceType: "+xml);
             WBXMLParser parser = new WBXMLParser();
             WBTreeNode exml = parser.parse(xml);
             if (exml.getFirstNode() != null)
@@ -173,11 +176,11 @@ public class EditWorkflow extends javax.swing.JDialog
         jPanelPropiedades.add(jLabelDescription);
         jLabelDescription.setBounds(10, 100, 58, 14);
 
-        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12));
+        jLabelVersion.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabelVersion.setLabelFor(jTextFieldVersion);
         jLabelVersion.setText(bundle1.getString("version")); // NOI18N
         jPanelPropiedades.add(jLabelVersion);
-        jLabelVersion.setBounds(10, 20, 47, 15);
+        jLabelVersion.setBounds(20, 20, 47, 15);
 
         jTextFieldVersion.setEditable(false);
         jTextFieldVersion.setText("1.0");

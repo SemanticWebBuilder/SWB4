@@ -274,6 +274,10 @@ public class Modeler extends CustomNode
         {
             id_workflow = FX.getArgument("idworkflow").toString();
         }
+        if(FX.getArgument("tm")!=null)
+        {
+            tm = FX.getArgument("tm").toString();
+        }
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id_workflow}</id><tm>{tm}</tm></req>";
         var respxml : String= ToolBar.conn.getData(xml);
         //var respxml : String= "<res><workflow id=\"http://www.Capacitacion.swb#swb_PFlow:1_Capacitacion\"           name=\"Flujo del Curso\"             version=\"3.0\">      <description>_</description>      <activity days=\"0\" hours=\"3\" name=\"Revision 1\" type=\"Activity\">         <description>Primera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor1\" name=\"Revisor 1\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 2\" type=\"Activity\">         <description>Segunda revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_2\" name=\"Revisor 2\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 3\" type=\"Activity\">        <description>Tercera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_3\" name=\"Revisor 3\" repository=\"uradm\"/>      </activity>      <activity name=\"Generador de contenido\" type=\"AuthorActivity\"/>      <activity name=\"Terminar flujo\" type=\"EndActivity\"/>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\" to=\"Revision 2\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\" to=\"Revision 3\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"true\" from=\"Revision 3\" publish=\"true\" to=\"Terminar flujo\"            type=\"authorized\">         <service>mail</service>         <service>publish</service>         <service>authorize</service>      </link>      <link authorized=\"false\" from=\"Revision 3\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <resourceType id=\"ExcelContent\" name=\"ExcelContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"PPTContent\" name=\"PPTContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"WordContent\" name=\"WordContent\" topicmap=\"Capacitacion\"/>   </workflow></res>";
@@ -396,10 +400,14 @@ public class Modeler extends CustomNode
                         var hours:Integer=0;
                         try
                         {
-                            days=Integer.parseInt(eactivity.getAttribute("days"));
+                            //days=Integer.parseInt(eactivity.getAttribute("days"));
                             if(eactivity.getAttribute("hours")!=null and not eactivity.getAttribute("hours").equals(""))
                             {
                                 hours=Integer.parseInt(eactivity.getAttribute("hours"));
+                            }
+                            if(eactivity.getAttribute("days")!=null and not eactivity.getAttribute("days").equals(""))
+                            {
+                                days=Integer.parseInt(eactivity.getAttribute("days"));
                             }
                         }
                         catch( e: Exception)
@@ -549,7 +557,9 @@ public class Modeler extends CustomNode
         dialog.resourceTypes=resourceTypes;
         dialog.name=name;
         dialog.locale=locale;
+        dialog.version=version;
         dialog.description=description;
+        dialog.tm=tm;
         dialog.con=ToolBar.conn;
         dialog.init();
         dialog.setVisible(true);
@@ -606,7 +616,15 @@ public class Modeler extends CustomNode
                 break;
             }
         }
-
+        var countTask:Integer=0;
+        for(content in contents)
+        {
+            if(content instanceof Task)
+            {
+                countTask++;
+                break;
+            }
+        }
         if(startEvent==null)
         {
             JOptionPane.showMessageDialog(null, "Debe indicar un nodo de inicio", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
@@ -616,6 +634,11 @@ public class Modeler extends CustomNode
         {
             JOptionPane.showMessageDialog(null, "Debe inidicar cual es la actividad inicial", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
             startEvent.requestFocus();
+            return;
+        }
+        if(countTask==0)
+        {
+            JOptionPane.showMessageDialog(null, "Debe indicar por lo menos una tarea", "Guardar Flujo", JOptionPane.OK_OPTION + JOptionPane.ERROR_MESSAGE);
             return;
         }
 
