@@ -3,12 +3,12 @@ package org.semanticwb.publishflow;
 
 import javax.swing.*;
 import java.net.*;
-import java.io.*;
 import java.util.*;
 import java.awt.*;
 
 
 import applets.commons.*;
+import com.sun.javafx.runtime.TypeInfo;
 import com.sun.javafx.runtime.sequence.Sequence;
 
 
@@ -277,6 +277,18 @@ public class EditWorkflow extends javax.swing.JDialog
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("Debe_indicar_a_que_tipos_de_recursos_aplica_el_flujo_de_publicacion"), java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/EditWorkflow", locale).getString("title"), JOptionPane.ERROR_MESSAGE);
             return;
         }
+        HashSet<String> otypes = new HashSet<String>();
+        for (int i = 0; i < modelres.getRowCount(); i++)
+        {
+            if (modelres.getResourceType(i).isSelected().booleanValue())
+            {
+                ResourceType type=modelres.getResourceType(i);
+                otypes.add(type.getID()+"@"+type.getTopicMap());
+                
+            }
+        }
+        TypeInfo t = TypeInfo.getTypeInfo(String.class);
+        resourceTypes = com.sun.javafx.runtime.sequence.Sequences.fromCollection(t, otypes);
         cancel=true;
         this.setVisible(false);
     }//GEN-LAST:event_jButtonOkActionPerformed

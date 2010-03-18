@@ -196,6 +196,8 @@ public class Modeler extends CustomNode
     {
         for(role in roles)
         {
+            System.out.println("role cat: {role}");
+            System.out.println("value: {value}");
             if(role.startsWith(value))
             {
                 return true
@@ -209,6 +211,8 @@ public class Modeler extends CustomNode
     {
         for(user in users)
         {
+            System.out.println("user cat: {user}");
+            System.out.println("value: {value}");
             if(user.startsWith(value))
             {
                 return true
@@ -228,6 +232,7 @@ public class Modeler extends CustomNode
         {
             var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
             xml = ToolBar.conn.getData(xml);
+            System.out.println("xmlrolescat: {xml}");
             var  parser : WBXMLParser = new WBXMLParser();
             var exml : WBTreeNode = parser.parse(xml);
             var eusers : Iterator = exml.getFirstNode().getNodesbyName("role");
@@ -237,7 +242,7 @@ public class Modeler extends CustomNode
                 var idrole: String = wuser.getAttribute("id");
                 var oname : String= wuser.getAttribute("name");
                 var repository :String = wuser.getAttribute("repository");
-                var role:String="{idrole}@{repository}@{oname}";
+                var role:String="{idrole}@{repository}";
                 insert role into roles
 
             }
@@ -252,8 +257,9 @@ public class Modeler extends CustomNode
         }
         if (tm != null)
         {
-            var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatRoles</cmd><tm>{tm}</tm></req>";
+            var  xml : String= "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getcatUsers</cmd><tm>{tm}</tm></req>";
             xml = ToolBar.conn.getData(xml);
+            System.out.println("xmluserscat: {xml}");
             var  parser : WBXMLParser = new WBXMLParser();
             var exml : WBTreeNode = parser.parse(xml);
             var eusers : Iterator = exml.getFirstNode().getNodesbyName("user");
@@ -261,7 +267,7 @@ public class Modeler extends CustomNode
             {
                 var wuser : WBTreeNode= eusers.next() as WBTreeNode;
                 var iduser: String = wuser.getAttribute("id");
-                var user:String="{iduser}@";
+                var user:String="{iduser}";
                 insert user into users
 
             }
@@ -284,6 +290,10 @@ public class Modeler extends CustomNode
         {
             tm = FX.getArgument("tm").toString();
         }
+        users=null;
+        roles=null;
+        loadRoles();
+        loadUsers();
         var xml:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getWorkflow</cmd><id>{id_workflow}</id><tm>{tm}</tm></req>";
         var respxml : String= ToolBar.conn.getData(xml);
         //var respxml : String= "<res><workflow id=\"http://www.Capacitacion.swb#swb_PFlow:1_Capacitacion\"           name=\"Flujo del Curso\"             version=\"3.0\">      <description>_</description>      <activity days=\"0\" hours=\"3\" name=\"Revision 1\" type=\"Activity\">         <description>Primera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor1\" name=\"Revisor 1\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 2\" type=\"Activity\">         <description>Segunda revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_2\" name=\"Revisor 2\" repository=\"uradm\"/>      </activity>      <activity days=\"0\" hours=\"3\" name=\"Revision 3\" type=\"Activity\">        <description>Tercera Revision</description>         <role id=\"Instructor\" name=\"Instructor\" repository=\"uradm\"/>         <role id=\"Revisor_3\" name=\"Revisor 3\" repository=\"uradm\"/>      </activity>      <activity name=\"Generador de contenido\" type=\"AuthorActivity\"/>      <activity name=\"Terminar flujo\" type=\"EndActivity\"/>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 1\" publish=\"false\" to=\"Revision 2\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <link authorized=\"false\" from=\"Revision 2\" publish=\"false\" to=\"Revision 3\"            type=\"authorized\">         <service>mail</service>      </link>      <link authorized=\"true\" from=\"Revision 3\" publish=\"true\" to=\"Terminar flujo\"            type=\"authorized\">         <service>mail</service>         <service>publish</service>         <service>authorize</service>      </link>      <link authorized=\"false\" from=\"Revision 3\" publish=\"false\"            to=\"Generador de contenido\"            type=\"unauthorized\">         <service>mail</service>         <service>noauthorize</service>      </link>      <resourceType id=\"ExcelContent\" name=\"ExcelContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"PPTContent\" name=\"PPTContent\" topicmap=\"Capacitacion\"/>      <resourceType id=\"WordContent\" name=\"WordContent\" topicmap=\"Capacitacion\"/>   </workflow></res>";
@@ -430,9 +440,9 @@ public class Modeler extends CustomNode
                             var erole: WBTreeNode=roles.next() as WBTreeNode;
                             //var role: Role=new Role(erole.getAttribute("id"),erole.getAttribute("name"),erole.getAttribute("repository"));
                             var rolid:String =erole.getAttribute("id");
-                            var rolname:String=erole.getAttribute("name");
+                            //var rolname:String=erole.getAttribute("name");
                             var rep:String=erole.getAttribute("repository");
-                            var srole:String="{rolid}@{rep}@{rolname}";                
+                            var srole:String="{rolid}@{rep}";                
                             System.out.println("srole: {srole}");
                             System.out.println("existsRol(srole): {existsRol(srole)}");
                             if(existsRol(srole))
@@ -446,8 +456,8 @@ public class Modeler extends CustomNode
                             var euser: WBTreeNode=users.next() as WBTreeNode;
                             //User user=new User(,);
                             var userid:String=euser.getAttribute("id");
-                            var username:String=euser.getAttribute("name");
-                            var suser:String="{userid}@{username}";
+                            //var username:String=euser.getAttribute("name");
+                            var suser:String="{userid}";
                             System.out.println("suser: {suser}");
                             System.out.println("existsUser(suser): {existsUser(suser)}");
                             if(existsUser(suser))
@@ -513,7 +523,7 @@ public class Modeler extends CustomNode
                                 if(eNotification.getAttribute("type").equals("user"))
                                 {
                                     var userid:String=eNotification.getAttribute("to");
-                                    var user:String="{userid}@";
+                                    var user:String="{userid}";
                                     if(existsUser(user))
                                     {
                                         insert user into link.users;
@@ -746,8 +756,7 @@ public class Modeler extends CustomNode
             var values:String[]=svalue.split("@");
             var erole : WBTreeNode = eactivity.addNode();
             erole.setName("role");
-            erole.addAttribute("id", values[0]);
-            erole.addAttribute("name", values[2]);
+            erole.addAttribute("id", values[0]);            
             erole.addAttribute("repository",values[1]);
         }
         for(svalue in iniActivity.users)
@@ -756,7 +765,7 @@ public class Modeler extends CustomNode
             var euser: WBTreeNode = eactivity.addNode();
             euser.setName("user");
             euser.addAttribute("id", values[0]);
-            euser.addAttribute("name", values[1]);
+            //euser.addAttribute("name", values[1]);
         }
         for(content in contents)
         {
@@ -794,7 +803,7 @@ public class Modeler extends CustomNode
                         var erole : WBTreeNode = eactivity.addNode();
                         erole.setName("role");
                         erole.addAttribute("id", values[0]);
-                        erole.addAttribute("name", values[2]);
+                        //erole.addAttribute("name", values[2]);
                         erole.addAttribute("repository",values[1]);
                     }
                     for(svalue in task.users)
@@ -803,7 +812,7 @@ public class Modeler extends CustomNode
                         var euser: WBTreeNode = eactivity.addNode();
                         euser.setName("user");
                         euser.addAttribute("id", values[0]);
-                        euser.addAttribute("name", values[1]);
+                        //euser.addAttribute("name", values[1]);
                     }
                 }
                 }
