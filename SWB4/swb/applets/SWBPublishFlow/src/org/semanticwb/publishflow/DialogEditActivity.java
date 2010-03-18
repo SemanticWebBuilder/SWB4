@@ -70,14 +70,17 @@ public class DialogEditActivity extends javax.swing.JDialog
             for (String srole : roles)
             {
                 String[] values = srole.split("@");
-
+                System.out.println("role: "+srole);
+                System.out.println("values.length: "+values.length);
                 if (values.length == 3)
                 {
+
                     Role tempRole = new Role(values[0], values[2], values[1]);
                     int irows = rolemodel.getRowCount();
                     for (int i = 0; i < irows; i++)
                     {
                         Role role = rolemodel.getRole(i);
+                        System.out.println("role.equals(tempRole): "+role.equals(tempRole));
                         if (role.equals(tempRole))
                         {
                             role.setChecked(true);
@@ -91,10 +94,11 @@ public class DialogEditActivity extends javax.swing.JDialog
         jTableUserModel usermodel = (jTableUserModel) this.jTableUsuarios.getModel();
         if (users != null)
         {
-            for (String srole : users)
+            for (String suser : users)
             {
-                String[] values = srole.split("@");
-
+                String[] values = suser.split("@");
+                System.out.println("suser: "+suser);
+                System.out.println("values.length: "+values.length);
                 if (values.length == 2)
                 {
                     User tempUser = new User(values[0], values[1]);
@@ -102,6 +106,7 @@ public class DialogEditActivity extends javax.swing.JDialog
                     for (int i = 0; i < irows; i++)
                     {
                         User user = usermodel.getUser(i);
+                        System.out.println("user.equals(tempUser): "+user.equals(tempUser));
                         if (user.equals(tempUser))
                         {
                             user.setChecked(true);
