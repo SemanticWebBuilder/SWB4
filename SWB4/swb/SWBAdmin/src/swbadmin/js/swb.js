@@ -144,7 +144,7 @@
 
       function postText(url)
       {
-          var ret=[];
+          var ret='';
           var obj=dojo.xhrPost({
               url: url,
               sync: true,
