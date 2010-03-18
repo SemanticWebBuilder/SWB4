@@ -72,10 +72,10 @@ public class DialogEditActivity extends javax.swing.JDialog
                 String[] values = srole.split("@");
                 System.out.println("role: "+srole);
                 System.out.println("values.length: "+values.length);
-                if (values.length == 3)
+                if (values.length == 2)
                 {
 
-                    Role tempRole = new Role(values[0], values[2], values[1]);
+                    Role tempRole = new Role(values[0], "", values[1]);
                     int irows = rolemodel.getRowCount();
                     for (int i = 0; i < irows; i++)
                     {
@@ -99,9 +99,9 @@ public class DialogEditActivity extends javax.swing.JDialog
                 String[] values = suser.split("@");
                 System.out.println("suser: "+suser);
                 System.out.println("values.length: "+values.length);
-                if (values.length == 2)
+                if (values.length == 1)
                 {
-                    User tempUser = new User(values[0], values[1]);
+                    User tempUser = new User(values[0], "");
                     int irows = usermodel.getRowCount();
                     for (int i = 0; i < irows; i++)
                     {
@@ -469,7 +469,7 @@ public class DialogEditActivity extends javax.swing.JDialog
             Role role = rolemodel.getRole(i);
             if (role.isChecked())
             {
-                oroles.add(role.id + "@" + role.repository + "@" + role.name);
+                oroles.add(role.id + "@" + role.repository);
             }
         }
         TypeInfo t = TypeInfo.getTypeInfo(String.class);
@@ -483,7 +483,7 @@ public class DialogEditActivity extends javax.swing.JDialog
             User user = (User) usermodel.getUser(i);
             if (user.isChecked())
             {
-                ousers.add(user.id + "@" + user.name);
+                ousers.add(user.id);
             }
         }
         users = com.sun.javafx.runtime.sequence.Sequences.fromCollection(t, ousers);

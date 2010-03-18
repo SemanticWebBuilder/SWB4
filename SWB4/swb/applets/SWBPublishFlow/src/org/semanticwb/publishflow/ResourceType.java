@@ -81,6 +81,7 @@ public class ResourceType {
     {
         this.selected=selected;
     }
+    @Override
     public boolean equals(Object obj)
     {
         if(obj instanceof ResourceType)
@@ -92,6 +93,15 @@ public class ResourceType {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 47 * hash + (this.id != null ? this.id.hashCode() : 0);
+        hash = 47 * hash + (this.topicmap != null ? this.topicmap.hashCode() : 0);
+        return hash;
     }
     
     
