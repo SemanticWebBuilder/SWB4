@@ -63,6 +63,9 @@ public class Admin implements InternalServlet
     
     /** The asegurar. */
     boolean asegurar=false;
+
+    /** The agzip. */
+    boolean agzip = true;
     
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
@@ -72,6 +75,7 @@ public class Admin implements InternalServlet
         try
         {
             asegurar = SWBPlatform.getEnv("swb/secureAdmin","false").equalsIgnoreCase("true");
+            agzip = SWBPlatform.getEnv("swb/responseGZIPEncoding", "true").equalsIgnoreCase("true");
         } catch (Exception e)
         {
             log.error("Can't find init variables asuming defaults...",e);
@@ -158,15 +162,40 @@ public class Admin implements InternalServlet
             response.setDateHeader("Last-Modified", file.lastModified());
         }
         
-        OutputStream out=response.getOutputStream();
         response.setContentType(contentType);
-        response.setContentLength((int)file.length());        
+
+        boolean gzip = false;
+        if (agzip)
+        {
+            if (request.getHeader("Via") != null
+                    || request.getHeader("X-Forwarded-For") != null
+                    //|| request.getHeader("Cache-Control") != null
+                )
+            {
+                //using proxy -> no zip
+            } else {
+                String accept = request.getHeader("Accept-Encoding");
+                if (accept != null && accept.toLowerCase().indexOf("gzip") != -1) {
+                    gzip = true;
+                }
+            }
+        }
+
+        java.util.zip.GZIPOutputStream garr = null;
+        OutputStream out=null;
+
+        if (gzip && contentType.indexOf("text")>-1) {
+            response.setHeader("Content-Encoding", "gzip");
+            out = new java.util.zip.GZIPOutputStream(response.getOutputStream());
+        } else {
+            response.setContentLength((int)file.length());
+            out = response.getOutputStream();
+        }
         
         try
         {
             response.setBufferSize(SWBUtils.IO.getBufferSize());
         }catch(Exception noe){}
-        
         
         SWBUtils.IO.copyStream(file.getInputStream(), out);
         //out.close();
