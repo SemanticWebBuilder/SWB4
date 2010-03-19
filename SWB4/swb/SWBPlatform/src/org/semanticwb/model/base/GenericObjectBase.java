@@ -45,7 +45,7 @@ public class GenericObjectBase implements GenericObject
 {
     
     /** The m_obj. */
-    SemanticObject m_obj;
+    protected SemanticObject m_obj;
     
     /**
      * Instantiates a new generic object base.
