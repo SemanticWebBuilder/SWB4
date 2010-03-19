@@ -46,10 +46,10 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Device;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBSessionUser;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.servlet.internal.Login;
 
 
@@ -174,7 +174,7 @@ public class SWBUserMgr
             String language = request.getLocale().getLanguage().trim();
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
-            ret=new User(new SemanticObject(rep.getSemanticObject().getModel(),User.swb_User));
+            ret=new SWBSessionUser(rep);
             try
             {
                 sub.getPrincipals().add(ret);
