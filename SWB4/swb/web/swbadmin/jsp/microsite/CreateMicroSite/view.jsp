@@ -4,10 +4,10 @@
     SWBParamRequest paramRequest=(SWBParamRequest)request.getAttribute("paramRequest");
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
-
+    String lang = user.getLanguage();
     int nwp = 0;
 
-    Iterator<WebPage> itso = wpage.listChilds(user.getLanguage(),true,false,false,false);
+    Iterator<WebPage> itso = wpage.listChilds(lang,true,false,false,false);
     if(itso.hasNext())
     {
         while(itso.hasNext())
@@ -20,27 +20,113 @@
             }
         }
     }
-    SWBParamRequestImp imp=(SWBParamRequestImp)paramRequest;
 
-    if(user.isRegistered()&&nwp==0 && imp.getRequest().getParameter("act")==null)
+    SWBParamRequestImp imp=(SWBParamRequestImp)paramRequest;
+    String mode=paramRequest.getArgument("mode","");
+
+    String act = request.getParameter("act");
+
+    SWBResourceURL urlAdd = null;
+
+    int nivelWP = wpage.getLevel();
+    if(nivelWP==1||nivelWP==2)
     {
-        SWBResourceURL urlAdd = paramRequest.getRenderUrl();
+        if(null==act)
+        {
+            urlAdd = paramRequest.getRenderUrl();
+            urlAdd.setParameter("act", "view");
+        }
+        else
+        {
+            urlAdd = paramRequest.getRenderUrl();
+            urlAdd.setParameter("act", "add");
+        }
+        urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
+    }
+    else if(nivelWP==3)
+    {
+        urlAdd = paramRequest.getRenderUrl();
         urlAdd.setParameter("act", "add");
         urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
-        String mode=paramRequest.getArgument("mode", "");
-        if(mode!=null && mode.equals("menu"))
-            {
+    }
+
+    
+    System.out.println("act:"+act);
+
+    if(user.isRegistered()) //&&nwp==0&& imp.getRequest().getParameter("act")==null
+    {
+        if(mode!=null && mode.equals("menu") && act==null)
+        {
         %>
         <div id="opcionesHeader" class="opt3">
-    	<ul class="listaOpciones">
-      	<li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
-      </ul>
-    </div>
-
-        <%-- <div id="busquedaPalabraClave" style="width:130px; margin-top:18px;">
-            <a style="margin-left:20px;" class="adminTool" href="<%=urlAdd%>">Crear Comunidad</a>
-        </div>--%>
+            <ul class="listaOpciones">
+                <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
+            </ul>
+        </div>
         <%
         }
+        else if(act!=null&&act.equals("view"))
+        {
+
+
+            StringBuffer select = new StringBuffer("");
+            select.append("<select name=\"wpid\">");
+            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite) && wpage.getLevel()==1)
+            {
+                //obteniendo WebPages de temas que sería el Level = 2
+                Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,false);
+                while(iteWP.hasNext())
+                {
+                    WebPage wpc = iteWP.next();
+                    if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    {
+                        String opciones =  getSubTemas(wpc,lang);
+                        if(opciones.length()>0)
+                        {
+                            select.append("<optgroup label=\""+wpc.getDisplayName()+"\">");
+                            select.append(opciones);
+                            select.append("</optgroup>");
+                        }
+                    }
+                }
+            } else if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite) && wpage.getLevel()==2)
+            {
+                String opciones =  getSubTemas(wpage,lang);
+                if(opciones.length()>0)
+                {
+                    select.append(opciones);
+                }
+            }
+            select.append("</select>");
+
+        %>
+        <div id="opcionesHeader" class="opt3">
+            <form id="faddMS" action="<%=urlAdd%>" method="post">
+            <ul class="listaOpciones">
+                <li><%=select.toString()%></li>
+                <li><a href=""><button name="btnsubmit" type="submit">Agregar</button></a></li>
+            </ul>
+            </form>
+        </div>
+<%
+        }
+     }
+%>
+
+<%!
+    public String getSubTemas(WebPage wp, String lang)
+    {
+        StringBuffer stOpts = new StringBuffer("");
+        // obteniendo el listado de subtemas
+        Iterator<WebPage> itwpst = wp.listChilds(lang,true,false,false,false);
+        while(itwpst.hasNext())
+        {
+            WebPage wpst = itwpst.next();
+            if(!(wpst.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            {
+               stOpts.append("<option label=\""+wpst.getDisplayName()+"\">"+wpst.getId()+"</option>");
+            }
+        }
+        return stOpts.toString();
     }
 %>
