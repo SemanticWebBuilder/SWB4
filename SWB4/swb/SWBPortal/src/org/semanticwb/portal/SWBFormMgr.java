@@ -566,7 +566,6 @@ public class SWBFormMgr
      */
     public String renderForm(HttpServletRequest request)
     {
-        System.out.println("Rendereando...............................");
         boolean DOJO=false;
         boolean IPHONE=false;
         boolean XHTML=false;
@@ -591,7 +590,6 @@ public class SWBFormMgr
 
         if(!m_mode.equals(MODE_CREATE))
         {
-            System.out.println("En No Create...............................");
             String sid="Identificador";
             if(m_lang.equals("en"))sid="Identifier";
             ret.append("	<fieldset>\n");
