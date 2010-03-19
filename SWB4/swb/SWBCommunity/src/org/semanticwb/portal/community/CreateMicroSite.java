@@ -31,6 +31,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -45,7 +46,21 @@ public class CreateMicroSite extends GenericResource
         String act=request.getParameter("act");
         if(act==null)act="view";
         String path="/swbadmin/jsp/microsite/CreateMicroSite/view.jsp";
-        if(act.equals("add"))path="/swbadmin/jsp/microsite/CreateMicroSite/add.jsp";
+        if(act.equals("add"))
+        {
+            path="/swbadmin/jsp/microsite/CreateMicroSite/add.jsp";
+            if(request.getParameter("wpid")!=null)
+            {
+                WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(request.getParameter("wpid"));
+                if(wp!=null)
+                {
+                    SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
+                    url.setParameter("act", "add");
+                    url.setWindowState(SWBResourceURL.WinState_NORMAL);
+                    response.sendRedirect(url.toString());
+                }
+            }
+        }
         if(act.equals("edit"))path="/swbadmin/jsp/microsite/CreateMicroSite/edit.jsp";
         if(act.equals("detail"))path="/swbadmin/jsp/microsite/CreateMicroSite/detail.jsp";
 
@@ -57,8 +72,9 @@ public class CreateMicroSite extends GenericResource
         }catch(Exception e){log.error(e);}
     }
 
+
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException 
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         WebPage page=response.getWebPage();
         WebSite model = page.getWebSite();
@@ -70,6 +86,12 @@ public class CreateMicroSite extends GenericResource
         //System.out.println("act:"+action);
         if("add".equals(action))
         {
+            String wpid = request.getParameter("wpid");
+            if(wpid!=null)
+            {
+                WebPage wptmp = model.getWebPage(wpid);
+                if(wptmp!=null) page = wptmp;
+            }
             String title=request.getParameter("title");
             String id=request.getParameter("id");
             String description=request.getParameter("description");
@@ -135,10 +157,10 @@ public class CreateMicroSite extends GenericResource
                     {
                         MicroSiteUtil msu = (MicroSiteUtil)sowpu;
                         MicroSiteWebPageUtil mswpu = MicroSiteWebPageUtil.ClassMgr.createMicroSiteWebPageUtil(ms.getId()+"_"+msu.getId(), model);
-                        
+
                         mswpu.setTitle(msu.getTitle());
-                        
-                        
+
+
                         mswpu.setMicroSite(ms);
                         mswpu.setMicroSiteUtil(msu);
 
