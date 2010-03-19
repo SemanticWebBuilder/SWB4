@@ -194,6 +194,11 @@ action="$acc_url"   method="post">
                 <td>${frm.renderElement(request, User.swb_usrSecondLastName, SWBFormMgr.MODE_EDIT)}</td></tr>
             <tr><td width="200px" align="right">${frm.renderLabel(request, User.swb_usrEmail, SWBFormMgr.MODE_EDIT)}</td>
                 <td>${frm.renderElement(request, User.swb_usrEmail, SWBFormMgr.MODE_EDIT)}</td></tr>
+            <tr><td width="200px" align="right"><label for="usrPassword">Contrase&ntilde;a &nbsp;</label></td>
+                <td><input name="usrPassword" type="password"  dojoType="dijit.form.ValidationTextBox"
+                required="false" promptMessage="Captura Contraseña." invalidMessage=""
+                trim="true" value="{MD5}tq5RXfs6DGIXD6dlHUgeQA==">
+            </td></tr>
             <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userBirthDate"), SWBFormMgr.MODE_EDIT)}</td>
                 <td>${frm.renderElement(request, (SemanticProperty)mapa.get("userBirthDate"), SWBFormMgr.MODE_EDIT)}</td></tr>
             <tr><td width="200px" align="right">${frm.renderLabel(request, (SemanticProperty)mapa.get("userSex"), SWBFormMgr.MODE_EDIT)}</td>
