@@ -41,6 +41,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Geolocalizable;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBSessionUser;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
@@ -163,14 +164,23 @@ public class GeoLoginModule implements LoginModule {
         }
         Iterator it = subject.getPrincipals().iterator();
         User tmp = null;
-        if (it.hasNext())
+        while(it.hasNext())
         {
-            tmp = (User) it.next();
+            tmp=(User)it.next();
+            if(principal.getUserRepository().equals(tmp.getUserRepository()))
+            {
+                break;
+            }
         }
         if (null != tmp)
         {
-            tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
+            ((SWBSessionUser)tmp).updateUser(principal);
+            //tmp.getSemanticObject().setRDFResource(principal.getSemanticObject().getRDFResource());
             flag = true;
+            //TODO: Pendiente
+            //subject.getPrincipals().clear();
+            //principal.setDefaultData(tmp);
+            //subject.getPrincipals().add(principal);
         } else
         {
             subject.getPrincipals().add(principal);

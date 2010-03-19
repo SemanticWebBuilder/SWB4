@@ -184,6 +184,11 @@ public class RegisterUser extends GenericAdmResource {
             }
         }
         if ("edit".equals(response.getAction()) && user.isSigned()) {
+
+            if (request.getParameter("usrPassword")!=null && !"{MD5}tq5RXfs6DGIXD6dlHUgeQA==".equalsIgnoreCase(request.getParameter("usrPassword")))
+            {
+                user.setPassword(request.getParameter("usrPassword"));
+            }
             user.setFirstName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrFirstName")));
             user.setLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrLastName")));
             user.setSecondLastName(SWBUtils.XML.replaceXMLChars(request.getParameter("usrSecondLastName")));
@@ -236,7 +241,8 @@ public class RegisterUser extends GenericAdmResource {
             } catch (SWBException nex) {
                 log.error(nex);
             }
-
+            
+            
             response.sendRedirect(response.getWebPage().getWebSite().getWebPage("perfil").getRealUrl());
             //response.sendRedirect(response.getWebPage().getRealUrl()+"?act=detail");
             return;
