@@ -326,8 +326,8 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("            }\n");
         buffer.append("            .form{\n");
         buffer.append("                width:300px;\n");
-//        buffer.append("                border:1px solid #ccc;\n");
-//        buffer.append("                margin:5px;\n");
+        buffer.append("                border:0px solid #ccc;\n");
+        buffer.append("                margin:0px;\n");
 //        buffer.append("                padding:3px;\n");
         buffer.append("                position:relative;\n");
         buffer.append("            }\n");
