@@ -170,7 +170,7 @@ public class MigrateOfficeContents
         String contentid = String.valueOf(resource.getResourceBase().getId());
         String file = resource.getResourceBase().getAttribute("url1");
         String version = String.valueOf(resource.getResourceBase().getActualversion());
-        OfficeDocument document = new OfficeDocument();
+        //OfficeDocument document = new OfficeDocument();
         return document.isOfficeDocument(className, workpath, contentid, file, version);
 
     }
