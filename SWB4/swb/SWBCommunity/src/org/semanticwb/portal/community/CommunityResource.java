@@ -232,7 +232,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
 
         GenericObject gen = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
-        if (desc == null)
+        if (desc == null || "".equals(desc.trim()))
         {
             return;
         }
