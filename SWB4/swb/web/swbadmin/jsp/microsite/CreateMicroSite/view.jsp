@@ -128,6 +128,7 @@
         <div id="opcionesHeader" class="opt3">
             <form id="faddMS" action="<%=urlAdd%>" method="post">
             <ul class="listaOpciones">
+                <li>Seleccione la categoria para crear la comunidad:</li>
                 <li><%=select.toString()%></li>
                 <li><a href=""><button name="btnsubmit" type="submit">Agregar</button></a></li>
             </ul>
