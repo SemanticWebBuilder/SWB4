@@ -67,6 +67,11 @@
         }
         else if(act!=null&&act.equals("view"))
         {
+            if("Comunidades".equals(wpage.getId()))
+            {
+                wpage=wpage.getWebSite().getWebPage("Intereses");
+            }
+
             StringBuffer select = new StringBuffer("");
             StringBuffer temas = new StringBuffer("");
             String opciones = null;
@@ -126,13 +131,13 @@
 
         %>
         <div id="opcionesHeader" class="opt3">
-            <form id="faddMS" action="<%=urlAdd%>" method="post">
+            
             <ul class="listaOpciones">
-                <li>Seleccione la categoria para crear la comunidad:</li>
-                <li><%=select.toString()%></li>
-                <li><a href=""><button name="btnsubmit" type="submit">Agregar</button></a></li>
+                <li>Seleccione la categoria para crear la comunidad:
+                    <form id="faddMS" action="<%=urlAdd%>" method="post">
+                <%=select.toString()%>
+                <button name="btnsubmit" type="submit">Agregar</button></form></li>
             </ul>
-            </form>
         </div>
 <%
         }
