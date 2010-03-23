@@ -143,6 +143,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg = "";
             String ext= (String)request.getAttribute("extensions");
+            //String ext= "jpg|gif|png";
 
             if ((name != null) && (request.getAttribute("attachCount_" + name) != null)) {
                 attchMsg = "Archivo(s) existentes:<br/>";
@@ -214,7 +215,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + "\" style=\"width:5px; float: right;\"></div>\n" + "</div>\n";
             ret += "<script type=\"text/javascript\">\n" + "function uploadjs_" + name + "(forma){\n" + "if(forma."
                    + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name
-                   + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){alert('La extensión del archivo no corresponse con las extensiones permitidas'); return false; }"     // TODO:Internacionalizar
+                   + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){ return false; }"     // TODO:Internacionalizar
                     +"  var encoding=forma.encoding;\n" + "  forma.encoding='multipart/form-data';\n"
                     + "  var method=forma.method;\n" + "  forma.method='post';\n" + "  var action=forma.action;\n"
                     + "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n"
@@ -223,7 +224,6 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + "  forma.action=action;\n" + "  forma.target=target;\n" + "  return true;\n" + "}\n"
                     + " \nfunction isFileType(pFile, pExt)"
                     + " \n{"
-                    + " alert(pFile);alert(pExt);"
                     + " \n   if(pFile.length > 0) "
                     + " \n   {"
                     + " \n      var swFormat=pExt + '|';"
