@@ -134,6 +134,7 @@
                                 Ver todos los comentarios
                     </a></span>
                 </xsl:if>
+                <xsl:if test="/comments/@level= '1'">
                 <form action="" method="post">
                     <xsl:for-each select="comments">
                         <input type="hidden" name="blogid" >
@@ -149,6 +150,7 @@
                             <button type="button" onClick="javascript:EnviaComentarioPost(this.form);" name="save">Agregar</button>
                     </fieldset>
                 </form>
+                </xsl:if>
     </xsl:template>
     
 </xsl:stylesheet>
