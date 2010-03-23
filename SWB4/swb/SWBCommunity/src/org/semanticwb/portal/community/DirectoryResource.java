@@ -700,7 +700,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
 
         if (desc == null)
         {
-            desc = "";
+            //desc = "";
+            return;
         }
         if (gen != null && gen instanceof DirectoryObject)
         {

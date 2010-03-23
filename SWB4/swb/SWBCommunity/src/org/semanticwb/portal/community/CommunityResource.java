@@ -234,7 +234,7 @@ public class CommunityResource extends org.semanticwb.portal.community.base.Comm
 
         if (desc == null)
         {
-            desc = "";
+            return;
         }
         if (gen != null && gen instanceof MicroSiteElement)
         {
