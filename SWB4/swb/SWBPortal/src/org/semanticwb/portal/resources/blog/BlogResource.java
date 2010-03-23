@@ -602,6 +602,24 @@ public class BlogResource extends GenericResource
             out.println("<option " + (numofblogs == i ? "selected" : "") + "  value='" + i + "'>" + i + "</option>");
         }
         out.println("</select></td></tr>");
+
+        final boolean anonimous=Boolean.parseBoolean(paramRequest.getResourceBase().getAttribute("anonimous","true"));
+
+        String ckeckedYes="",checkedNo="";
+        if(anonimous)
+        {
+            ckeckedYes="checked=\"checked\"";
+        }
+        else
+        {
+            checkedNo="checked=\"checked\"";
+        }
+
+        out.println("<tr><td >"+ paramRequest.getLocaleString("anonimous") +"</td>");
+        out.println("<td>");
+        out.println("<input "+ckeckedYes+" type=\"radio\" name=\"anonimous\" value=\"true\">Sí&nbsp;&nbsp;&nbsp;");
+        out.println("<input "+checkedNo+" type=\"radio\" name=\"anonimous\" value=\"false\">No");
+        out.println("</td></tr>");
         out.println("<tr><td >"+ paramRequest.getLocaleString("numOfCommentsToShow") +"</td>");
         out.println("<td><select name='numofcomments'>");
         int numofcomments = getNumMaxOfComments();
@@ -2167,9 +2185,19 @@ public class BlogResource extends GenericResource
                     getResourceBase().updateAttributesToDB();
                 }catch(SWBException e){log.error(e);}
                 response.setMode(response.Mode_ADMIN);
-                return;
+                
             }
 
+            String anonimous = request.getParameter("anonimous");
+            if ( anonimous != null && !anonimous.equals("") )
+            {
+                this.getResourceBase().setAttribute("anonimous", String.valueOf(Boolean.parseBoolean(anonimous)));
+                try
+                {
+                    getResourceBase().updateAttributesToDB();
+                }catch(SWBException e){log.error(e);}
+                response.setMode(response.Mode_ADMIN);                
+            }
             String numofcomments = request.getParameter("numofcomments");
             if ( numofcomments != null && !numofcomments.equals("") )
             {
@@ -2470,6 +2498,15 @@ public class BlogResource extends GenericResource
         Connection con = SWBUtils.DB.getDefaultConnection();
         Document doc = new Document();
         Element comments = new Element("comments");
+        final boolean anonimous=Boolean.parseBoolean(paramRequest.getResourceBase().getAttribute("anonimous","true"));
+        if(anonimous || paramRequest.getUser().isSigned())
+        {
+            comments.setAttribute("level", "1");
+        }
+        else
+        {
+            comments.setAttribute("level", "0");
+        }
         comments.setAttribute("blogid", String.valueOf(blogid));
         comments.setAttribute("postid", String.valueOf(postid));
         if ( showAll )
