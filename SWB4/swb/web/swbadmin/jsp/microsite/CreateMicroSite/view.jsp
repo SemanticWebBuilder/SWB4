@@ -51,7 +51,7 @@
     }
 
     
-    System.out.println("act:"+act);
+    //System.out.println("act:"+act);
 
     if(user.isRegistered()) //&&nwp==0&& imp.getRequest().getParameter("act")==null
     {
@@ -67,37 +67,62 @@
         }
         else if(act!=null&&act.equals("view"))
         {
-
-
             StringBuffer select = new StringBuffer("");
-            select.append("<select name=\"wpid\">");
-            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite) && wpage.getLevel()==1)
+            StringBuffer temas = new StringBuffer("");
+            String opciones = null;
+            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
             {
-                //obteniendo WebPages de temas que sería el Level = 2
-                Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,false);
-                while(iteWP.hasNext())
+                if(wpage.getLevel()==1)
                 {
-                    WebPage wpc = iteWP.next();
-                    if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    //obteniendo WebPages de temas que sería el Level = 2
+                    Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,false);
+                    while(iteWP.hasNext())
                     {
-                        String opciones =  getSubTemas(wpc,lang);
-                        if(opciones.length()>0)
+                        WebPage wpc = iteWP.next();
+                        if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
                         {
-                            select.append("<optgroup label=\""+wpc.getDisplayName()+"\">");
-                            select.append(opciones);
-                            select.append("</optgroup>");
+                            opciones =  getSubTemas(wpc,lang);
+                            if(opciones.trim().length()>0)
+                            {
+                                temas.append("<optgroup label=\""+wpc.getDisplayName()+"\">");
+                                temas.append(opciones);
+                                temas.append("</optgroup>");
+                            }
                         }
                     }
-                }
-            } else if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite) && wpage.getLevel()==2)
-            {
-                String opciones =  getSubTemas(wpage,lang);
-                if(opciones.length()>0)
+                    if(null!=temas&&temas.toString().trim().length()>0)
+                    {
+                        select.append("<select name=\"wpid\">");
+                        select.append(temas);
+                        select.append("</select>");
+                    }
+
+                } else if(wpage.getLevel()==2)
                 {
-                    select.append(opciones);
+                    opciones = getSubTemas(wpage,lang);
+                    if(null!=opciones&&opciones.trim().length()>0)
+                    {
+                        select.append("<select name=\"wpid\">");
+                        select.append(opciones);
+                        select.append("</select>");
+                    }
+                }
+                
+                if(select.toString().trim().length()==0&&wpage.getLevel()==1)
+                {
+                    if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    {
+                        opciones =  getSubTemas(wpage,lang);
+                    }
+                    if(null!=opciones&&opciones.trim().length()>0)
+                    {
+                        select.append("<select name=\"wpid\">");
+                        select.append(opciones);
+                        select.append("</select>");
+                    }
                 }
             }
-            select.append("</select>");
+
 
         %>
         <div id="opcionesHeader" class="opt3">
