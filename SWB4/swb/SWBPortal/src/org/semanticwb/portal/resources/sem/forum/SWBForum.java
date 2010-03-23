@@ -158,12 +158,13 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
     public void doAddThread(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, paramRequest.getWebPage().getSemanticObject(), null);
+        mgr.setType(mgr.TYPE_DOJO);
+        mgr.setCaptchaStatus(true);
         if (paramRequest.getUser() != null) {
             lang = paramRequest.getUser().getLanguage();
         }
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
-        mgr.setType(mgr.TYPE_XHTML);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction("addThread");
         mgr.setAction(url.toString());
@@ -202,7 +203,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         } else {
             mgr = new SWBFormMgr(Post.frm_Post, soThread, null);
         }
-
+        mgr.setCaptchaStatus(true);
         mgr.hideProperty(Post.frm_hasAttachments);
 
 
@@ -215,7 +216,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
         mgr.setLang(lang);
         mgr.setSubmitByAjax(false);
-        mgr.setType(mgr.TYPE_XHTML);
+        mgr.setType(mgr.TYPE_DOJO);
         url.setAction("replyPost");
         mgr.setAction(url.toString());
 
@@ -374,6 +375,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
             String action = response.getAction();
             if (action.equals("addThread")) {
                 SWBFormMgr mgr = new SWBFormMgr(Thread.frm_Thread, website.getSemanticObject(), null);
+                mgr.setCaptchaStatus(true);
                 try
                 {
                     SemanticObject semObj = mgr.processForm(request);
@@ -407,6 +409,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                     }
 
                     SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, page.getSemanticObject(), null);
+                    mgr.setCaptchaStatus(true);
                     try
                     {
                         SemanticObject semObj = mgr.processForm(request);
