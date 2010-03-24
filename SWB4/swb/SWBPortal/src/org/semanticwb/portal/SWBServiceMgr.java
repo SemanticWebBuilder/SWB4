@@ -145,7 +145,7 @@ public class SWBServiceMgr implements SemanticObserver {
                         String txt=Template.DEFAUL_HTML;
                         try
                         {
-                            SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr.getURI());
+                            SWBPortal.writeFileToWorkPath(tpl.getWorkPath()+"/1/"+"template.html", SWBUtils.IO.getStreamFromString(txt), usr);
                         }catch(Exception e){log.error(e);}
                     }
                     if(obj.instanceOf(Dns.sclass))
