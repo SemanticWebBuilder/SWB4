@@ -41,6 +41,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Role;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -173,7 +174,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
 
         request.setAttribute("formName", mgr.getFormName());
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         out.println(mgr.renderForm(request));
     }
 
@@ -231,7 +232,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         out.println("</table>");
 
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
@@ -287,7 +288,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
          * */
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
@@ -354,7 +355,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
          * */
         mgr.addButton(SWBFormButton.newSaveButton());
-        mgr.addButton(SWBFormButton.newCancelButton());
+        mgr.addButton(SWBFormButton.newBackButton());
         request.setAttribute("formName", mgr.getFormName());
         out.println(mgr.renderForm(request));
     }
@@ -379,14 +380,28 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
                 try
                 {
                     SemanticObject semObj = mgr.processForm(request);
-                    Thread th=(Thread)semObj.createGenericInstance();
-                    Thread thread = Thread.ClassMgr.getThread(th.getId(), website);
+                    Thread thread=(Thread)semObj.createGenericInstance();
+                    //Thread thread = Thread.ClassMgr.getThread(th.getId(), website);
                     thread.setParent(page);
                     if (user != null && user.isSigned()) {
                         thread.setCreator(user);
                     }
                     thread.setForum(this);
-
+                    
+                    Role admin=getAdminRole();
+                    if(isNotifyThreadCreation() && admin!=null)
+                    {
+                        Iterator<User> it=User.ClassMgr.listUserByRole(admin, admin.getUserRepository());
+                        while (it.hasNext())
+                        {
+                            User user1 = it.next();
+                            String subject="Se creó el comentario en el foro de título: "+thread.getTitle();
+                            String body="Usuario: "+thread.getCreator().getFullName()+"<br/>\n"+
+                                    "Título: "+thread.getTitle()+"<br/>\n"+
+                                    "Descripción: "+thread.getBody()+"<br/>\n";
+                            SWBUtils.EMAIL.sendBGEmail(user1.getEmail(), subject, body);
+                        }
+                    }
                     //processFiles(request, response, thread.getSemanticObject());
                 }catch(FormValidateException e)
                 {
