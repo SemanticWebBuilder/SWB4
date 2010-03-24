@@ -41,13 +41,13 @@
             urlAdd = paramRequest.getRenderUrl();
             urlAdd.setParameter("act", "add");
         }
-        urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
+        urlAdd.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
     }
     else if(nivelWP==3)
     {
         urlAdd = paramRequest.getRenderUrl();
         urlAdd.setParameter("act", "add");
-        urlAdd.setWindowState(SWBResourceURL.WinState_NORMAL);
+        urlAdd.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
     }
 
     
