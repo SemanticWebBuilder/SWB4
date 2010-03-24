@@ -2077,7 +2077,7 @@ public class BlogResource extends GenericResource
         try{
             this.getResourceBase().setAttribute("templateblog", "blog.xsl");
             this.getResourceBase().updateAttributesToDB();
-            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/blog.xsl", in, response.getUser().getId());
+            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/blog.xsl", in, response.getUser());
         }
         catch(Exception e){log.error(e);}
         

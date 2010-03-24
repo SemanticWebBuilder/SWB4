@@ -239,11 +239,11 @@ public class Wiki extends GenericResource {
      */
     public void writeContent(SWBParamRequest paramsRequest, String content) {
         String topic = paramsRequest.getWebPage().getId();
-        String userid = paramsRequest.getUser().getId();
+        User user = paramsRequest.getUser();
         try {
             SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(paramsRequest.getResourceBase());
             String path = paramsRequest.getResourceBase().getWorkPath() + "/" + topic;
-            SWBPortal.writeFileToWorkPath(path, SWBUtils.IO.getStreamFromString(content), userid);
+            SWBPortal.writeFileToWorkPath(path, SWBUtils.IO.getStreamFromString(content), user);
         } catch (Exception noe) {
         }
     }
