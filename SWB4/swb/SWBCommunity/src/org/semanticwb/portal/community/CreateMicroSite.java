@@ -56,7 +56,7 @@ public class CreateMicroSite extends GenericResource
                 {
                     SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
                     url.setParameter("act", "add");
-                    url.setWindowState(SWBResourceURL.WinState_NORMAL);
+                    url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
                     response.sendRedirect(url.toString());
                 }
             }
