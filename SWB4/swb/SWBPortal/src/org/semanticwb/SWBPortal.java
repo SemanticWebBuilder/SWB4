@@ -1103,7 +1103,7 @@ public class SWBPortal
      * @throws org.semanticwb.SWBException if the path specified cannot be created or is {@code null}
      * @throws SWBException the sWB exception
      */
-    public static void writeFileToWorkPath(String path, InputStream in, String userid) throws SWBException
+    public static void writeFileToWorkPath(String path, InputStream in, User user) throws SWBException
     {
         //System.out.println("writeFileToWorkPath:"+path);
         //TOTO:Impementar Replicacion de archivos
