@@ -2101,7 +2101,7 @@ public class BlogResource extends GenericResource
         {
             this.getResourceBase().setAttribute("templatecomments", "comments.xsl");
             this.getResourceBase().updateAttributesToDB();
-            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/comments.xsl", in, response.getUser().getId());
+            SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/comments.xsl", in, response.getUser());
         }
         catch(Exception e){log.error(e);}
         
@@ -2322,14 +2322,14 @@ public class BlogResource extends GenericResource
             InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE);
             if ( in == null )
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + DELETE_FILE, indeleteblog, paramRequest.getUser());
             }
             catch ( SWBException afe2 )
             {
@@ -2354,14 +2354,14 @@ public class BlogResource extends GenericResource
             InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE);
             if ( in == null )
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + ADD_FILE, indeleteblog, paramRequest.getUser());
             }
             catch ( SWBException afe2 )
             {
@@ -2386,14 +2386,14 @@ public class BlogResource extends GenericResource
             InputStream in = SWBPortal.getFileFromWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE);
             if ( in == null )
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser());
             }
         }
         catch ( SWBException afe )
         {
             try
             {
-                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser().getId());
+                SWBPortal.writeFileToWorkPath(this.getResourceBase().getWorkPath() + "/" + EDIT_FILE, indeleteblog, paramRequest.getUser());
             }
             catch ( SWBException afe2 )
             {

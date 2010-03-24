@@ -210,7 +210,7 @@ public class Wiki extends GenericResource {
     public String backUpContent(SWBParamRequest paramsRequest, String summary) {
         StringBuffer header = new StringBuffer();
         String topic = paramsRequest.getWebPage().getId();
-        String userid = paramsRequest.getUser().getId();
+        User user = paramsRequest.getUser();
         try {
             String data = readFile(paramsRequest);
             if (data != null) {
@@ -218,7 +218,7 @@ public class Wiki extends GenericResource {
                 synchronized (this) {
                     String path = paramsRequest.getResourceBase().getWorkPath();
                     String backfile = "/old/" + topic + "." + df.format(new Date());
-                    SWBPortal.writeFileToWorkPath(path + backfile, SWBUtils.IO.getStreamFromString(data), userid);
+                    SWBPortal.writeFileToWorkPath(path + backfile, SWBUtils.IO.getStreamFromString(data), user);
 
                     header.insert(0, "#previous:" + backfile + "\n");
                     header.insert(0, "#user:" + paramsRequest.getUser().getId() + "\n");
