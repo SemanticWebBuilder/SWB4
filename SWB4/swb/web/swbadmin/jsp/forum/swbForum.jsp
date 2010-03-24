@@ -6,7 +6,9 @@
 <%@page import="org.semanticwb.model.Resource"%>
 <%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="java.util.Comparator"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.portal.resources.sem.forum.UserFavThread"%>
@@ -108,6 +110,7 @@ a:hover {text-decoration: underline;}
                 if((user!=null && user.isRegistered()) || acceptguesscomments)
                 {
                     SWBFormMgr mgr = new SWBFormMgr(Post.frm_Post, thread.getSemanticObject(), null);
+                    mgr.setCaptchaStatus(true);
                     actionURL.setParameter("threadUri", thread.getURI());
                     lang = user.getLanguage();
                     mgr.setLang(lang);
@@ -118,14 +121,14 @@ a:hover {text-decoration: underline;}
                     actionURL.setAction("replyPost");
                     mgr.setAction(actionURL.toString());
                     mgr.addButton(SWBFormButton.newSaveButton());
-                    mgr.addButton(SWBFormButton.newCancelButton());
+                    mgr.addButton(SWBFormButton.newBackButton());
                     request.setAttribute("formName", mgr.getFormName());
                     %>
                         <%=mgr.renderForm(request)%>
                     <%
                 }
                 boolean cambiaColor = true;
-                GenericIterator<Post> itPost = thread.listPosts();
+                Iterator<Post> itPost = SWBComparator.sortByCreated(thread.listPosts(),false);
                 while (itPost.hasNext()) {
                     Post post = itPost.next();
                     url.setParameter("postUri", post.getURI());
@@ -153,6 +156,7 @@ a:hover {text-decoration: underline;}
                       </div>
                       <p class="tituloNoticia"><%=postCreator%></p>
                       <p><%=post.getBody()%></p>
+                      <p><%=SWBUtils.TEXT.getTimeAgo(post.getUpdated(),user.getLanguage())%></p>
                       <%urlRemovePost.setAction("removePost");%>
                       <div class="vistasForo_comment">
                           <%urlthread.setMode("replyPost");urlthread.setParameter("postUri", post.getURI());%>
@@ -426,10 +430,33 @@ a:hover {text-decoration: underline;}
                     autor = "";
                     url.setMode(url.Mode_VIEW);
                     url.setAction("viewPost");
-                    GenericIterator<WebPage> itThreads = webpage.listChilds();
+
+                    TreeSet<Thread> treeSet=new TreeSet(new Comparator()
+                    {
+                        public int compare(Object o1, Object o2)
+                        {
+                            Thread ob1 = (Thread) (o1);
+                            Thread ob2 = (Thread) (o2);
+                            int ret=-1;
+                            if(ob1.getLastPostDate()!=null && ob2.getLastPostDate()!=null)
+                            {
+                                ret=ob1.getLastPostDate().after(ob2.getLastPostDate())? -1 : 1;
+                            }
+                            return ret;
+                        }
+                    });
+                    Iterator<WebPage> itThreads = webpage.listChilds();
                     while (itThreads.hasNext()) {
                         WebPage wp = itThreads.next();
-                        Thread thread = (Thread) wp.getSemanticObject().createGenericInstance();
+                        //System.out.println("treeSet:"+treeSet+" "+wp);
+                        if(wp!=null && wp instanceof Thread)
+                        {
+                            treeSet.add((Thread)wp);
+                        }
+                    }
+                    Iterator<Thread> itThreads2 = treeSet.iterator();
+                    while (itThreads2.hasNext()) {
+                        Thread thread = itThreads2.next();
                         SWBForum forum = thread.getForum();
                         if (forum.getId().equals(base.getId())) {
                             url.setParameter("threadUri", thread.getURI());
@@ -453,7 +480,7 @@ a:hover {text-decoration: underline;}
                                 <%
                                 String date=null;
                                 if(thread.getLastPostDate()!=null){
-                                    date=SWBUtils.TEXT.getStrDate(thread.getLastPostDate(), user.getLanguage());
+                                    date=SWBUtils.TEXT.getTimeAgo(thread.getLastPostDate(), user.getLanguage());
                                 }
                                 %>
                                 <p>Último Comentario:
