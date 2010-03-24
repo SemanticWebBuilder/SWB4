@@ -61,6 +61,8 @@ public class GraphElement extends CustomNode
 
     protected function initializeCustomNode():Void
     {
+        cache=true;
+        if(toolTipText==null)toolTipText=title;
         text=EditableText
         {
             text: bind title with inverse

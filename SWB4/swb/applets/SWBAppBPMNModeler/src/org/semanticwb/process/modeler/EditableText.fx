@@ -14,6 +14,9 @@ import javafx.scene.transform.Translate;
 import javafx.scene.text.TextOrigin;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextBox;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import org.semanticwb.process.modeler.Styles;
 
 /**
  * @author javier.solis
@@ -27,6 +30,7 @@ public class EditableText extends CustomNode
     public var height : Number;
 
     public var text : String;
+    public var fill : Boolean;
 
     var textb : TextBox;
     var textl : Text;
@@ -62,15 +66,25 @@ public class EditableText extends CustomNode
              style: Styles.style_task_text
              textOrigin: TextOrigin.TOP
              wrappingWidth: bind width
-             transforms: [
-                 Translate{
-                     x: bind x-(textl.boundsInLocal.width)/2+2
-                     y: bind y-(textl.boundsInLocal.height)/2
-                 }
-             ]
+             translateX:bind x-(textl.boundsInLocal.width)/2+2
+             translateY:bind y-(textl.boundsInLocal.height)/2
              //smooth:true;
              visible: true
         };
+
+        var back;
+        if(text!=null and fill)
+        {
+            back=Rectangle
+            {
+                x:bind textl.translateX-2
+                y:bind textl.translateY-2
+                width:bind textl.boundsInLocal.width
+                height:bind textl.boundsInLocal.height
+                style: Styles.style_tooltip
+            };
+        }
+
         textb= TextBox
         {
              text: text
@@ -95,7 +109,7 @@ public class EditableText extends CustomNode
         return Group
         {
             content: [
-               textl,textb
+               back,textl,textb
             ]
         };
     }

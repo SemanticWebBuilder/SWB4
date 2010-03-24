@@ -27,6 +27,7 @@ import org.semanticwb.process.modeler.SequenceFlow;
 import org.semanticwb.process.modeler.SubProcess;
 import applets.commons.WBXMLParser;
 import org.semanticwb.process.modeler.ConditionalFlow;
+import org.semanticwb.process.modeler.ComplexGateWay;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -54,7 +55,7 @@ public class ToolBar extends CustomNode
         {
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
-            println("json:{json}");
+            //println("json:{json}");
 
             var jsobj=new JSONObject(json);
             var jsarr = jsobj.getJSONArray("nodes");
@@ -102,7 +103,7 @@ public class ToolBar extends CustomNode
                     ge.x=x;
                     ge.y=y;
                     modeler.add(ge);
-                    println("jsobj:{js.toString()}, i: {i}");
+                    //println("jsobj:{js.toString()}, i: {i}");
                 }
                 i++;
             }
@@ -140,7 +141,7 @@ public class ToolBar extends CustomNode
                     co.ini=modeler.getGraphElementByURI(start);
                     co.end=modeler.getGraphElementByURI(end);
                     modeler.add(co);
-                    println("jsobj:{js.toString()}, i: {i}");
+                    //println("jsobj:{js.toString()}, i: {i}");
                 }
                 i++;
             }
@@ -395,6 +396,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
+                            type:SubProcess.TYPE_ADHOC
                             title:"Adhoc SubProcess"
                             uri:"new:adhocsubprocess:{counter++}"
                         }
@@ -410,6 +412,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
+                            type:SubProcess.TYPE_LOOP
                             title:"Loop SubProcess"
                             uri:"new:loopsubprocess:{counter++}"
                         }
@@ -425,6 +428,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
+                            type:SubProcess.TYPE_COMPENSATION
                             title:"Compensation SubProcess"
                             uri:"new:compensationsubprocess:{counter++}"
                         }
@@ -440,6 +444,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
+                            type:SubProcess.TYPE_MULTIPLE
                             title:"Multiple SubProcess"
                             uri:"new:multiplesubprocess:{counter++}"
                         }
@@ -455,6 +460,7 @@ public class ToolBar extends CustomNode
                         modeler.tempNode=SubProcess
                         {
                             modeler:modeler
+                            type:SubProcess.TYPE_TRANSACTION
                             title:"Transaction SubProcess"
                             uri:"new:transactionsubprocess:{counter++}"
                         }
@@ -1103,7 +1109,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=GateWay
+                        modeler.tempNode=XORGateWay
                         {
                             modeler:modeler
                             title:"XOR GateWay"
@@ -1127,13 +1133,13 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Initial Event OR GateWay"
+                    text:"Start Event OR GateWay"
                     image: "images/gate_eventos_str_1.png"
                     imageOver: "images/gate_eventos_str_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ORGateWay
+                        modeler.tempNode=StartORGateWay
                         {
                             modeler:modeler
                             title:"Initial Event OR GateWay"
@@ -1148,7 +1154,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ORGateWay
+                        modeler.tempNode=InterORGateWay
                         {
                             modeler:modeler
                             title:"Inter Event OR GateWay"
@@ -1178,7 +1184,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ANDGateWay
+                        modeler.tempNode=EventANDGateWay
                         {
                             modeler:modeler
                             title:"Event AND GateWay"
@@ -1193,7 +1199,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=GateWay
+                        modeler.tempNode=ComplexGateWay
                         {
                             modeler:modeler
                             title:"Complex GateWay"

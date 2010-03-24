@@ -273,7 +273,7 @@ class Modeler extends CustomNode
              //translateX:40;
              onMousePressed: function( e: MouseEvent ):Void
              {
-                println("onMousePressed modeler:{e}");
+                //println("onMousePressed modeler:{e}");
                 mousex=e.x+clipView.clipX;
                 mousey=e.y+clipView.clipY;
                 if(tempNode!=null)
@@ -302,8 +302,8 @@ class Modeler extends CustomNode
                     {
                         tempNode=null;
                         modeler.disablePannable=false;
-                        println(e);
-                        println(tempNode);
+                        //println(e);
+                        //println(tempNode);
                     }
                 }
              }
@@ -335,7 +335,7 @@ class Modeler extends CustomNode
              }
              onMouseReleased: function( e: MouseEvent ):Void
              {
-                 println("onMouseReleased modeler:{e}");
+                 //println("onMouseReleased modeler:{e}");
                  if(tempNode!=null)
                  {
                      if(tempNode instanceof ConnectionObject)
@@ -912,12 +912,12 @@ class GraphElement extends CustomNode
     {
         if (focused)
         {
-            println("focused");
+            //println("focused");
         }
         else
         {
             shape.stroke=Color.web(color);
-            println("lost focus");
+            //println("lost focus");
         }
     }
 
@@ -952,12 +952,12 @@ class GraphElement extends CustomNode
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
-        println("onMouseClicked node:{e}");
+        //println("onMouseClicked node:{e}");
         if(modeler.focusedNode==this)
         {
             if(e.clickCount >= 2)
             {
-                println("starEditing");
+                //println("starEditing");
                 text.startEditing();
             }
         }
@@ -992,7 +992,7 @@ class GraphElement extends CustomNode
             //toFront();
             requestFocus();
         }
-        println("onMousePress node:{e}");
+        //println("onMousePress node:{e}");
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
@@ -1004,7 +1004,7 @@ class GraphElement extends CustomNode
             x=(Math.round(x/25))*25;            //grid
             y=(Math.round(y/25))*25;            //grid
         }
-        println("onMouseRelease node");
+        //println("onMouseRelease node");
     }
 
     override var onMouseEntered = function(e)
@@ -1035,7 +1035,7 @@ class GraphElement extends CustomNode
         {
             remove();
         }
-        println(e);
+        //println(e);
     }
 
     public function remove()
@@ -1422,12 +1422,12 @@ class Pool extends CustomNode
     {
         if (focused)
         {
-            println("pool focused");
+            //println("pool focused");
         }
         else
         {
             shape.stroke=Color.web(color);
-            println("pool lost focus");
+            //println("pool lost focus");
         }
     }
 
@@ -1470,12 +1470,12 @@ class Pool extends CustomNode
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
-        println("onMouseClicked node:{e}");
+        //println("onMouseClicked node:{e}");
         if(modeler.focusedNode==this)
         {
             if(e.clickCount >= 2)
             {
-                println("starEditing");
+                //println("starEditing");
                 text.startEditing();
             }
         }
@@ -1513,7 +1513,7 @@ class Pool extends CustomNode
             //toFront();
             requestFocus();
         }
-        println("onMousePress node:{e}");
+        //println("onMousePress node:{e}");
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
@@ -1525,7 +1525,7 @@ class Pool extends CustomNode
             x=(Math.round(x/25))*25;            //grid
             y=(Math.round(y/25))*25;            //grid
         }
-        println("onMouseRelease node");
+        //println("onMouseRelease node");
     }
 
     override var onMouseEntered = function(e)
@@ -1554,7 +1554,7 @@ class Pool extends CustomNode
         {
             remove();
         }
-        println(e);
+        //println(e);
     }
 
     public function remove()

@@ -8,25 +8,17 @@ package org.semanticwb.process.modeler;
 
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.effect.Lighting;
-import javafx.scene.effect.light.DistantLight;
+import javafx.stage.StageStyle;
 import javafx.scene.Cursor;
 import org.semanticwb.process.modeler.ModelerUtils;
+import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
  */
 
-var maxx : Number = bind scene.width on replace{ modeler.organizeMap();};
-var maxy : Number = bind scene.height on replace{ modeler.organizeMap();};
-
-var lighting = Lighting{
-    surfaceScale: 5
-    light: DistantLight{
-        azimuth: 10
-        elevation: 40
-    }
-}
+var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
+var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
 
 //println("dir:{__DIR__}");
 
@@ -35,7 +27,7 @@ var modeler:Modeler = Modeler
     layoutX:0 //69
     layoutY:0
     width:bind maxx
-    height:bind maxy-23
+    height:bind maxy
     pannable:true
     cursor:Cursor.CROSSHAIR
 }
@@ -51,9 +43,9 @@ var toolbar:ToolBar = ToolBar
 
 var scene : Scene = Scene {
     content: [
-            modeler,
-            toolbar,
-            ModelerUtils.getToolTip()
+        modeler,
+        toolbar,
+        ModelerUtils.getToolTip()
     ]
     width: 600
     height: 300
@@ -65,8 +57,7 @@ var stage : Stage = Stage {
     title: "BPMN Modeler"
     resizable: true
     scene: scene
-    //style: StageStyle.TRANSPARENT //StageStyle.UNDECORATED
+    //style: StageStyle.TRANSPARENT    //StageStyle.UNDECORATED
 }
 
 toolbar.stage=stage;
-

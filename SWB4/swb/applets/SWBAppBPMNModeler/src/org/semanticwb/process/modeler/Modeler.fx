@@ -46,11 +46,12 @@ public class Modeler extends CustomNode
              }
              width:bind width
              height:bind height
+
              pannable: bind pannable and not disablePannable
              //translateX:40;
              onMousePressed: function( e: MouseEvent ):Void
              {
-                println("onMousePressed modeler:{e}");
+                //println("onMousePressed modeler:{e}");
                 mousex=e.x+clipView.clipX;
                 mousey=e.y+clipView.clipY;
                 if(tempNode!=null)
@@ -123,7 +124,7 @@ public class Modeler extends CustomNode
              }
              onMouseReleased: function( e: MouseEvent ):Void
              {
-                 println("onMouseReleased modeler:{e}");
+                 //println("onMouseReleased modeler:{e}");
                  if(tempNode!=null)
                  {
                      if(tempNode instanceof ConnectionObject)

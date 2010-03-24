@@ -41,7 +41,7 @@ public class InterEvent extends Event
             radius: bind w/2
             //styleClass: "event"
             style: Styles.style_event
-            smooth:true;
+            //smooth:true;
         };
 
         setType(type);
@@ -59,7 +59,7 @@ public class InterEvent extends Event
                     stroke: bind shape.stroke
                     //styleClass: "event"
                     style: Styles.style_event
-                    smooth:true;
+                    //smooth:true;
                 },
                 message
             ]
