@@ -103,11 +103,12 @@
                             Iterator<PostElement> it = blog.listPostElements();
                             while (it.hasNext())
                             {
-                                PostElement element = it.next();
-                                if (element.canView(member))
+                                PostElement element = it.next();                                
+                                if (member!=null && element!=null && element.canView(member))
                                 {
                                     entradas++;
                                 }
+                                
                             }
         %>
         <li><a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>"><img src="<%=cssPath%>icoBlog.png" alt="blog"/><span class="elemento">Blog:</span> <%=entradas%> entradas</a> <a href="<%=wp.getWebSite().getWebPage(wp.getId() + "_Blog").getUrl()%>" class="verMas">ver</a></li>
@@ -128,7 +129,7 @@
                     while (elements.hasNext())
                     {
                         EventElement element = elements.next();
-                        if (element.canView(member))
+                        if (member!=null && element!=null && element.canView(member))
                         {
                             eventos++;
                         }
@@ -152,7 +153,7 @@
                     while (elements.hasNext())
                     {
                         PhotoElement element = elements.next();
-                        if (element.canView(member))
+                        if (member!=null && element!=null && element.canView(member))
                         {
                             fotos++;
                         }
@@ -204,7 +205,7 @@
                     while (elements.hasNext())
                     {
                         NewsElement element = elements.next();
-                        if (element.canView(member))
+                        if (member!=null && element!=null && element.canView(member))
                         {
                             noticias++;
                         }
@@ -229,7 +230,7 @@
                     while (elements.hasNext())
                     {
                         VideoElement element = elements.next();
-                        if (element.canView(member))
+                        if (member!=null && element!=null && element.canView(member))
                         {
                             videos++;
                         }
