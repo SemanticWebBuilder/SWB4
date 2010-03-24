@@ -142,7 +142,8 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
 
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg = "";
-            String ext= (String)request.getAttribute("extensions");
+            String ext= "";
+            if(request.getAttribute("extensions")!=null)  ext=(String)request.getAttribute("extensions");
             //String ext= "jpg|gif|png";
 
             if ((name != null) && (request.getAttribute("attachCount_" + name) != null)) {
@@ -224,7 +225,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + "  forma.action=action;\n" + "  forma.target=target;\n" + "  return true;\n" + "}\n"
                     + " \nfunction isFileType(pFile, pExt)"
                     + " \n{"
-                    + " \n   if(pFile.length > 0) "
+                    + " \n   if(pFile.length > 0 && pExt.length > 0) "
                     + " \n   {"
                     + " \n      var swFormat=pExt + '|';"
                     + " \n      sExt=pFile.substring(pFile.indexOf(\".\")).toLowerCase();"
