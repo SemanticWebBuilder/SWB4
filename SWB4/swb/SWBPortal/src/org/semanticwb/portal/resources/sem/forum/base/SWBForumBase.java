@@ -4,6 +4,7 @@ package org.semanticwb.portal.resources.sem.forum.base;
 public abstract class SWBForumBase extends org.semanticwb.portal.api.GenericSemResource 
 {
     public static final org.semanticwb.platform.SemanticProperty frm_acceptGuessUsers=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#acceptGuessUsers");
+    public static final org.semanticwb.platform.SemanticProperty frm_notifyThreadCreation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#notifyThreadCreation");
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty frm_adminRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwb.org/SWBForum#adminRole");
     public static final org.semanticwb.platform.SemanticClass frm_Thread=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwb.org/SWBForum#Thread");
@@ -28,6 +29,16 @@ public abstract class SWBForumBase extends org.semanticwb.portal.api.GenericSemR
     public void setAcceptGuessUsers(boolean value)
     {
         getSemanticObject().setBooleanProperty(frm_acceptGuessUsers, value);
+    }
+
+    public boolean isNotifyThreadCreation()
+    {
+        return getSemanticObject().getBooleanProperty(frm_notifyThreadCreation);
+    }
+
+    public void setNotifyThreadCreation(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(frm_notifyThreadCreation, value);
     }
 
     public void setAdminRole(org.semanticwb.model.Role value)
