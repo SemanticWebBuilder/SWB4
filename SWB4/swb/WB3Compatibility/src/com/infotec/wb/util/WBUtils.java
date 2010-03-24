@@ -53,6 +53,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
 
 /** objeto: Utilerias de uso comun para desarrolladores de WB.
  * @author Javier Solis Gonzalez
@@ -420,8 +422,14 @@ public class WBUtils implements AFAppObject
     }
     
     public void writeFileToWorkPath(String path, InputStream in, String userid) throws AFException {
+        SemanticObject obj=SemanticObject.getSemanticObject(userid);
+        User user=null;
+        if(obj!=null)
+        {
+            user=(User)obj.createGenericInstance();
+        }
         try {
-            SWBPortal.writeFileToWorkPath(path, in, userid);
+            SWBPortal.writeFileToWorkPath(path, in, user);
         } catch (Exception e) {
             throw new AFException(e.getMessage(), "writeFileToWorkPath");
         }
