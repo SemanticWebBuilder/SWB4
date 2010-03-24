@@ -15,7 +15,10 @@
 
 
 <div class="soria">
-    <fieldset><legend>Nueva comunidad</legend>
+    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Proporciona la siguiente información para la Nueva comunidad</h4>
+    <!-- <fieldset><legend></legend> -->
+        <table border="0">
+            <tr><td width="20">&nbsp;</td><td>
 <%
     SWBFormMgr mgr=new SWBFormMgr(MicroSite.sclass, wpage.getSemanticObject(), null);
     mgr.setType(mgr.TYPE_DOJO);
@@ -26,12 +29,14 @@
     mgr.addProperty(MicroSite.swbcomm_private);
     mgr.addProperty(MicroSite.swbcomm_moderate);
     mgr.addProperty(MicroSiteType.swbcomm_hasMicroSiteUtil);
-    mgr.addButton(SWBFormButton.newSaveButton());
-    mgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location='"+paramRequest.getRenderUrl()+"';"));
+    mgr.addButton(SWBFormButton.newSaveButton().setAttribute("class","adminTool").setAttribute("style", "border:none;"));
+    mgr.addButton(SWBFormButton.newCancelButton().setAttribute("onclick", "window.location='"+paramRequest.getRenderUrl().setWindowState(SWBResourceURL.WinState_NORMAL)+"';").setAttribute("class","adminTool").setAttribute("style", "border:none;"));
     mgr.addHiddenParameter("act", "add");
     out.println(mgr.renderForm(request));
 %>
-    </fieldset>
+                </td></tr>
+        </table>
+    <!-- </fieldset> -->
 </div>
     
 
