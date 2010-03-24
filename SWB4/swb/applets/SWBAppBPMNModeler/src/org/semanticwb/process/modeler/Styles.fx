@@ -35,6 +35,7 @@ public-read var style_task_textbox="font-size: 14px; font-family: \"Helvetica, A
 public-read var style_gateway="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 2;";
 public-read var style_message="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
 public-read var style_simbol="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 4;";
+public-read var style_simbol2="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 2;";
 public-read var style_event="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
 public-read var style_connection="stroke: {color}; strokeWidth: 2;";
 public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";

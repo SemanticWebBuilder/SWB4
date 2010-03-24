@@ -10,7 +10,6 @@ import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import java.lang.Math;
@@ -20,6 +19,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.CubicCurveTo;
 
 /**
  * @author javier.solis
@@ -62,49 +62,64 @@ public class ConnectionObject  extends CustomNode
             y: bind pini.y + (pend.y - pini.y) / 2
             width: 80
             height: 20
+            fill: true
         }
 
         path=Path {
             elements: [
                 MoveTo{x:bind pini.x,y:bind pini.y},
-                LineTo{x:bind pinter1.x,y:bind pinter1.y},
-                LineTo{x:bind pinter2.x,y:bind pinter2.y},
-                LineTo{x:bind pend.x,y:bind pend.y}
+                CubicCurveTo {
+                    controlX1: bind pinter1.x
+                    controlY1: bind pinter1.y
+                    controlX2: bind pinter2.x
+                    controlY2: bind pinter2.y
+                    x: bind pend.x
+                    y: bind pend.y
+                }
+//                LineTo{x:bind pinter1.x,y:bind pinter1.y},
+//                LineTo{x:bind pinter2.x,y:bind pinter2.y},
+//                LineTo{x:bind pend.x,y:bind pend.y}
             ]
             style: Styles.style_connection
-            smooth:true;
-            strokeLineCap: StrokeLineCap.ROUND
-            strokeLineJoin: StrokeLineJoin.ROUND
-
+            strokeDashArray: [5,5,1,5]
+            //smooth:true;
+            //strokeLineCap: StrokeLineCap.ROUND
+            //strokeLineJoin: StrokeLineJoin.ROUND
         };
 
         return Group
         {
             content: [
-                path, text,
-                Line{
-                    startX: bind pend.x;
-                    startY: bind pend.y;
-                    endX: bind pend.x+6*Math.cos(getArrow(points, -45));
-                    endY: bind pend.y-6*Math.sin(getArrow(points, -45));
-                    style: Styles.style_connection_arrow
-                    stroke: bind path.stroke;
-                    strokeLineCap: StrokeLineCap.ROUND
-                    smooth:true;
+                Group
+                {
+                    content: [
+                        path,
+                        Line{
+                            startX: bind pend.x;
+                            startY: bind pend.y;
+                            endX: bind pend.x+6*Math.cos(getArrow(points, -45));
+                            endY: bind pend.y-6*Math.sin(getArrow(points, -45));
+                            style: Styles.style_connection_arrow
+                            stroke: bind path.stroke;
+                            strokeLineCap: StrokeLineCap.ROUND
+                            //smooth:true;
+                        },
+                        Line{
+                            startX: bind pend.x;
+                            startY: bind pend.y;
+                            endX: bind pend.x+6*Math.cos(getArrow(points, 45));
+                            endY: bind pend.y-6*Math.sin(getArrow(points, 45));
+                            style: Styles.style_connection_arrow
+                            stroke: bind path.stroke;
+                            strokeLineCap: StrokeLineCap.ROUND
+                            //smooth:true;
+                        }
+                    ]
+                    effect: Styles.dropShadow
                 },
-                Line{
-                    startX: bind pend.x;
-                    startY: bind pend.y;
-                    endX: bind pend.x+6*Math.cos(getArrow(points, 45));
-                    endY: bind pend.y-6*Math.sin(getArrow(points, 45));
-                    style: Styles.style_connection_arrow
-                    stroke: bind path.stroke;
-                    strokeLineCap: StrokeLineCap.ROUND
-                    smooth:true;
-                }
+                text
             ]
             opacity: bind o;
-            effect: Styles.dropShadow
         };
     }
 

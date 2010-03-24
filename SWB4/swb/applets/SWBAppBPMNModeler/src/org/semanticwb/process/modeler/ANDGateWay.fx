@@ -30,7 +30,7 @@ public class ANDGateWay extends FlowObject
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
             style: Styles.style_gateway
-            smooth: true;
+            //smooth: true;
         };
 
         return Group
@@ -43,7 +43,7 @@ public class ANDGateWay extends FlowObject
                     endX: w/2+w/4
                     endY: h/2
                     style: Styles.style_simbol
-                    smooth: true;
+                    //smooth: true;
                     strokeLineCap: StrokeLineCap.ROUND
                 }, Line{
                     startX: w/2
@@ -51,7 +51,7 @@ public class ANDGateWay extends FlowObject
                     endX: w/2
                     endY: h/2+h/4
                     style: Styles.style_simbol
-                    smooth: true;
+                    //smooth: true;
                     strokeLineCap: StrokeLineCap.ROUND
                 }
             ]

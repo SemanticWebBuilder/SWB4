@@ -40,7 +40,7 @@ public class Pool extends GraphElement
             width: w
             height: h
             style: Styles.style_pool
-            smooth:true;
+            //smooth:true;
         };
 
         return Group

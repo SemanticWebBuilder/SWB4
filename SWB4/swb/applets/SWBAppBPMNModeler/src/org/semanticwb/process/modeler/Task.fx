@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.shape.Polyline;
 
 /**
  * @author javier.solis
@@ -41,7 +42,7 @@ public class Task extends FlowObject
         x: bind x+ix;
         y: bind y+iy;
         opacity: o;
-        smooth: true;
+        //smooth: true;
         scaleX: bind is;
         scaleY: bind is;
         effect: ColorAdjust
@@ -72,7 +73,7 @@ public class Task extends FlowObject
             //effect: lighting
             //styleClass: "task"
             style: Styles.style_task
-            smooth:true;
+            //smooth:true;
         };
 
         return Group

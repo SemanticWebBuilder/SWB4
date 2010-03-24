@@ -29,7 +29,7 @@ public class GateWay extends FlowObject
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
             style: Styles.style_gateway
-            smooth: true;
+            //smooth: true;
         };
 
         return Group

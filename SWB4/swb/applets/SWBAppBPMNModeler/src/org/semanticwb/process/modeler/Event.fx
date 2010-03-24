@@ -60,7 +60,7 @@ public class Event extends FlowObject
         x: bind x-ix;
         y: bind y-iy;
         opacity: o;
-        smooth: true;
+        //smooth: true;
         scaleX: bind is+scaleOff;
         scaleY: bind is+scaleOff;
         effect: colorAdjust;
@@ -80,7 +80,7 @@ public class Event extends FlowObject
             radius: bind w/2
             //styleClass: "event"
             style: Styles.style_event
-            smooth:true;
+            //smooth:true;
         };
 
         setType(type);
