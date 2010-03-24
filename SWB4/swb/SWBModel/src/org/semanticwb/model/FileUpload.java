@@ -216,7 +216,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + "\" style=\"width:5px; float: right;\"></div>\n" + "</div>\n";
             ret += "<script type=\"text/javascript\">\n" + "function uploadjs_" + name + "(forma){\n" + "if(forma."
                    + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name
-                   + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){ return false; }"     // TODO:Internacionalizar
+                   + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){ forma." + name+ ".value=\"\"; return false; }"     // TODO:Internacionalizar
                     +"  var encoding=forma.encoding;\n" + "  forma.encoding='multipart/form-data';\n"
                     + "  var method=forma.method;\n" + "  forma.method='post';\n" + "  var action=forma.action;\n"
                     + "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n"
