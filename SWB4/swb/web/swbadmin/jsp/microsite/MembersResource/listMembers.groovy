@@ -157,8 +157,9 @@ if (null!=microsite){
    
     
    
-    if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
-    {
+    //if (paramRequest.getCallMethod()==paramRequest.Call_STRATEGY && (!paramRequest.getArgument("virtualcontent").equals("true")))
+    //if(true)
+    //{
         def iElement = 0;
         lista = microsite.listMembers()
         while (lista.hasNext()){
@@ -290,7 +291,7 @@ if (null!=microsite){
 </div >
       <div class="columnaCentro">      	
       </div> """
-    }
+    //}
 }
 def calcularEdad( fechaNaci, fechaAlta){    
         def int diff_ano =fechaAlta.get(Calendar.YEAR)-fechaNaci.get(Calendar.YEAR)
