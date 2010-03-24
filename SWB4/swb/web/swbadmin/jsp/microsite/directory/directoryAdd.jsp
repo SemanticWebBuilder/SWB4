@@ -27,8 +27,6 @@
         User user = paramRequest.getUser();
         SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("uri"));
         SWBFormMgr mgr = new SWBFormMgr(cls, site.getSemanticObject(), null);
-        mgr.hideProperty(Rankable.swb_rank);
-        mgr.hideProperty(Rankable.swb_reviews);
         mgr.setFilterRequired(false);
         String lang="";
         if (paramRequest.getUser() != null) {
@@ -42,6 +40,8 @@
         url.setAction(url.Action_ADD);
         mgr.setAction(url.toString());
         request.setAttribute("formName", mgr.getFormName());
+        mgr.hideProperty(Rankable.swb_rank);
+        mgr.hideProperty(Rankable.swb_reviews);
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.addButton(SWBFormButton.newBackButton());
         if (user.isRegistered() && user.isSigned()) {

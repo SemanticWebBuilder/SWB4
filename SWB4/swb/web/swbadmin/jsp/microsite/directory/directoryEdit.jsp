@@ -32,8 +32,6 @@
                return;
            }
            SWBFormMgr mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-           mgr.hideProperty(Rankable.swb_rank);
-           mgr.hideProperty(Rankable.swb_reviews);
            String lang = "";
            if (paramRequest.getUser() != null)
            {
@@ -75,6 +73,8 @@
            }
 
            request.setAttribute("formName", mgr.getFormName());
+           mgr.hideProperty(Rankable.swb_rank);
+           mgr.hideProperty(Rankable.swb_reviews);
            mgr.addButton(SWBFormButton.newSaveButton());
            mgr.addButton(SWBFormButton.newBackButton());
            if (user.isRegistered() && user.isSigned())
