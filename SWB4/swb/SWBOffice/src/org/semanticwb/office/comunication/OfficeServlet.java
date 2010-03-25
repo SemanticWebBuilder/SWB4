@@ -32,9 +32,9 @@ import java.util.UUID;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.resource.office.sem.OfficeResource;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
@@ -143,6 +143,21 @@ public abstract class OfficeServlet extends XMLRPCServlet
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         checkSecurity(request, response);
+        String pUserName = null;
+        final String authorization = request.getHeader("Authorization");
+        if (!(authorization == null || authorization.equals("")) && authorization.startsWith(PREFIX_BASIC))
+        {            
+            final String userpassEncoded = authorization.substring(6);
+            final String userpassDecoded = new String(decode(userpassEncoded));
+            pUserName = getUserName(userpassDecoded);            
+        }
+        if(pUserName==null)
+        {
+            response.sendError(response.SC_FORBIDDEN);
+            return;
+        }
+
+
         String contentId = request.getParameter("contentId");
         String versionName = request.getParameter("versionName");
         String repositoryName = request.getParameter("repositoryName");
@@ -168,22 +183,23 @@ public abstract class OfficeServlet extends XMLRPCServlet
             try
             {
                 InputStream in = doc.getContent(repositoryName, contentId, versionName);
-                String name=UUID.randomUUID().toString();
-                String dir=SWBPortal.getWorkPath()+"/"+name;
-                OfficeResource.loadContent(in, dir,type);
+                final String name=UUID.randomUUID().toString();
+                final String dir=SWBPortal.getWorkPath()+"/"+name;
+                final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(pUserName);
+                OfficeResource.loadContent(in, dir,type,wbuser);
                 String file = doc.getContentFile(repositoryName, contentId, versionName);
                 if (file != null)
                 {
 
                     file = file.replace(".doc", ".html");
                     file = file.replace(".odt", ".html");
-                    String path = dir+ "\\" + file;
-                    StringBuffer html = new StringBuffer();
-                    File filecontent = new File(path);
+                    final String path = dir+ "\\" + file;
+                    final StringBuffer html = new StringBuffer();
+                    final File filecontent = new File(path);
                     if (filecontent.exists())
                     {
-                        FileInputStream inFile = new FileInputStream(path);
-                        byte[] buffer = new byte[2048];
+                        final FileInputStream inFile = new FileInputStream(path);
+                        final byte[] buffer = new byte[2048];
                         int read = inFile.read(buffer);
                         while (read != -1)
                         {
@@ -207,7 +223,7 @@ public abstract class OfficeServlet extends XMLRPCServlet
             }
             catch (Exception e)
             {
-                PrintWriter out = response.getWriter();
+                final PrintWriter out = response.getWriter();
                 out.println("<html>");
                 out.println("<head>");
                 out.println("<title>" + title + "</title>");

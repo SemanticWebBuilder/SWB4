@@ -1092,7 +1092,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             try
             {
                 InputStream in = doc.getContent(officeResource.getRepositoryName(), officeResource.getContent(), officeResource.getVersionToShow());
-                officeResource.loadContent(in);
+                User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+                officeResource.loadContent(in,wbuser);
             }
             catch (Exception e)
             {
