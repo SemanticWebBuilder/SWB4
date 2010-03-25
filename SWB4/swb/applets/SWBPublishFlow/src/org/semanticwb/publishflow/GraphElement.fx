@@ -35,8 +35,6 @@ public class GraphElement extends CustomNode
     public var shape : Shape;
     public var text : EditableText;
 
-    var toolobj: Tooltip;
-
     public var stroke=Color.web(Styles.color);
     public var strokeOver=Color.web(Styles.color_over);
     public var strokeFocused=Color.web(Styles.color_focused);
@@ -80,12 +78,7 @@ public class GraphElement extends CustomNode
 
     public function mouseMoved( e: MouseEvent )
     {            
-        if(toolobj!=null)
-        {
-            toolobj.x=e.x;
-            toolobj.y=e.y;
-        }
-
+        
     }
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
@@ -193,28 +186,12 @@ public class GraphElement extends CustomNode
         modeler.overNode=this;
         shape.stroke=strokeOver;
         shape.strokeWidth=stkwo;
-        
-        if(toolobj==null and tooltip!=null)
-        {
-            toolobj=Tooltip
-            {
-                text: tooltip
-                x: modeler.mousex;
-                y: modeler.mousey;
-            }            
-        }
-        insert toolobj into modeler.contents;
-        //overtimer.playFromStart();
         if(modeler.tempNode==null)modeler.disablePannable=true;
     }
 
 
     override var onMouseExited = function(e)
-    {
-        if(toolobj!=null)
-        {
-            delete toolobj from modeler.contents;
-        }
+    {        
         mouseExited(e);
     }
 

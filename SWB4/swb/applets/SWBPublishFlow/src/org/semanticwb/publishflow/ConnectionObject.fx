@@ -235,11 +235,6 @@ public class ConnectionObject extends CustomNode {
         return pathElements;
     }
 
-
-    
-    
-
-
     public override function create(): Node {
         cursor = Cursor.HAND;
         

@@ -25,6 +25,7 @@ public class StartEvent extends Event
     public var textAlert:Text;
     public override function create(): Node
     {
+        tooltip=title;
         textAlert=Text
         {
             content:bind getTextAlert();

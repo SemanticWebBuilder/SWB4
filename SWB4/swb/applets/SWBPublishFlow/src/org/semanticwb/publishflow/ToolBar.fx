@@ -47,6 +47,7 @@ public class ToolBar extends CustomNode {
         var submenuEvents=SubMenu
         {
             modeler: modeler
+            toolBar:this
             text:"Start Event"
             image: "images/start_1.png"
             imageOver: "images/start_2.png"
@@ -55,6 +56,7 @@ public class ToolBar extends CustomNode {
                     ImgButton
                     {
                         text: "Start Event"
+                        toolBar:this
                         image: "images/start_1.png"
                         imageOver: "images/start_2.png"
                         action: function (): Void {
@@ -73,6 +75,7 @@ public class ToolBar extends CustomNode {
                     },
                     ImgButton {
                         text: "End Event"
+                        toolBar:this
                         image: "images/end_1.png"
                         imageOver: "images/end_2.png"
                         action: function (): Void {
@@ -92,6 +95,7 @@ public class ToolBar extends CustomNode {
                     },
                     ImgButton {
                         text: "Author Event"
+                        toolBar:this
                         image: "images/author_1.png"
                         imageOver: "images/author_2.png"
                         action: function (): Void {
@@ -113,6 +117,7 @@ public class ToolBar extends CustomNode {
         var submenuLines=SubMenu
         {
             modeler: modeler
+            toolBar:this
             text:"SequenceFlow"
             image: "images/flow_1.png"
             imageOver: "images/flow_2.png"
@@ -121,6 +126,7 @@ public class ToolBar extends CustomNode {
                      ImgButton
                     {
                         text: "SequenceFlow"
+                        toolBar:this
                         image: "images/flow_1.png"
                         imageOver: "images/flow_2.png"
                         action: function (): Void {
@@ -133,6 +139,7 @@ public class ToolBar extends CustomNode {
                     },
                     ImgButton {
                         text: "AuthorizeFlow"
+                        toolBar:this
                         image: "images/flow_a_1.png"
                         imageOver: "images/flow_a_2.png"
                         action: function (): Void {
@@ -145,6 +152,7 @@ public class ToolBar extends CustomNode {
                     },
                     ImgButton {
                         text: "UnAuthorizeFlow"
+                        toolBar:this
                         image: "images/flow_u_1.png"
                         imageOver: "images/flow_u_2.png"
                         action: function (): Void {
@@ -205,6 +213,7 @@ public class ToolBar extends CustomNode {
                                 },
                                 ImgButton {
                                     text: "Save"
+                                    toolBar:this
                                     image: "images/save_1.png"
                                     imageOver: "images/save_2.png"
                                     action: function (): Void {
@@ -213,6 +222,7 @@ public class ToolBar extends CustomNode {
                                 },
                                  ImgButton {
                                     text: "Editar Propiedades"
+                                    toolBar:this
                                     image: "images/edit_flujo_1.png"
                                     imageOver: "images/edit_flujo_2.png"
                                     action: function (): Void {
@@ -227,6 +237,7 @@ public class ToolBar extends CustomNode {
                                 },
                                 ImgButton {
                                     text: "Task"
+                                    toolBar:this
                                     image: "images/task_1.png"
                                     imageOver: "images/task_2.png"
                                     action: function (): Void {

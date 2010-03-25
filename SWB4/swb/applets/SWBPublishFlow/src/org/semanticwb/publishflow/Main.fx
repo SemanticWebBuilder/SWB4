@@ -52,7 +52,8 @@ var toolbar:ToolBar = ToolBar
 var scene : Scene = Scene {
     content: [
             modeler,
-            toolbar
+            toolbar,
+            ModelerUtils.getToolTip()
     ]
     width: 600
     height: 300
