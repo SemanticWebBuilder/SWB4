@@ -97,22 +97,25 @@ public class EditWorkflow extends javax.swing.JDialog
             String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getResourceTypeCat</cmd><tm>" + tm + "</tm></req>";
             xml = con.getData(xml);
             System.out.println("xml resourceType: "+xml);
-            WBXMLParser parser = new WBXMLParser();
-            WBTreeNode exml = parser.parse(xml);
-            if (exml.getFirstNode() != null)
+            if(xml!=null && !xml.trim().equals(""))
             {
-                Vector nodes = exml.getFirstNode().getNodes();
-                for (int i = 0; i < nodes.size(); i++)
+                WBXMLParser parser = new WBXMLParser();
+                WBTreeNode exml = parser.parse(xml);
+                if (exml!=null && exml.getFirstNode() != null)
                 {
-                    WBTreeNode node = (WBTreeNode) nodes.elementAt(i);
-                    if (node.getName().equalsIgnoreCase("resourceType"))
+                    Vector nodes = exml.getFirstNode().getNodes();
+                    for (int i = 0; i < nodes.size(); i++)
                     {
-                        WBTreeNode ereosurce = (WBTreeNode) node;
-                        String sdescription = ereosurce.getFirstNode().getFirstNode().getText();
-                        ResourceType type = new ResourceType(ereosurce.getAttribute("id"), ereosurce.getAttribute("name"), sdescription, ereosurce.getAttribute("topicmap"), ereosurce.getAttribute("topicmapname"));
-                        model.addResourceType(type);
-                    }
+                        WBTreeNode node = (WBTreeNode) nodes.elementAt(i);
+                        if (node.getName().equalsIgnoreCase("resourceType"))
+                        {
+                            WBTreeNode ereosurce = (WBTreeNode) node;
+                            String sdescription = ereosurce.getFirstNode().getFirstNode().getText();
+                            ResourceType type = new ResourceType(ereosurce.getAttribute("id"), ereosurce.getAttribute("name"), sdescription, ereosurce.getAttribute("topicmap"), ereosurce.getAttribute("topicmapname"));
+                            model.addResourceType(type);
+                        }
 
+                    }
                 }
             }
         }
