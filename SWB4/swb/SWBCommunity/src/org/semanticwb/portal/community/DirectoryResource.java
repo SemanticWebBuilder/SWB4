@@ -25,6 +25,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.base.util.ImageResizer;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
@@ -104,6 +105,18 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
 
         String path = "/swbadmin/jsp/microsite/directory/directoryView.jsp";
+        if(request.getParameter("wpid")!=null)
+        {
+            WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(request.getParameter("wpid"));
+            if(wp!=null)
+            {
+                SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
+                url.setParameter("act", "add");
+                url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+                response.sendRedirect(url.toString());
+                return;
+            }
+        }
         if (act.equals("view") && getListJsp() != null)
         {
             path = getListJsp();
