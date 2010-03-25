@@ -32,7 +32,6 @@ import applets.commons.WBXMLParser;
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
 
-
 /**
  * @author javier.solis
  */
@@ -116,7 +115,6 @@ public class ToolBar extends CustomNode
         }
 
     }
-
 
     public function loadProcess(): Void
     {
