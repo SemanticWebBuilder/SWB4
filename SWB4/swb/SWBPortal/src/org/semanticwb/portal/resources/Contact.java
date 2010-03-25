@@ -165,6 +165,7 @@ public class Contact extends GenericAdmResource {
 
         if(email == null) {
             User user = paramRequest.getUser();
+            SWBResourceURL url=paramRequest.getRenderUrl().setCallMethod(paramRequest.Call_DIRECT).setMode("sendEmail");
             String title = base.getAttribute("title");
             String contactPhone = base.getAttribute("phone");
             
@@ -207,7 +208,7 @@ public class Contact extends GenericAdmResource {
 
                 out.println("var s = new String('');");
                 out.println("s = s.concat('<div id=\"contacto\">');");
-                out.println("s = s.concat('<form id=\"frmContact\" action=\"\" method=\"post\" class=\"form\" >');");
+                out.println("s = s.concat('<form name=\"frmContact\" id=\"frmContact\" action=\"\" method=\"post\" class=\"form\" >');");
                 if(title != null) {
                     out.println("s = s.concat('<h3>" + title + "</h3>');");
                 }else {
@@ -238,8 +239,8 @@ public class Contact extends GenericAdmResource {
                 out.println("s = s.concat('<textarea name=\"message\" id=\"message\" cols=\"40\" rows=\"5\"></textarea>');");
                 out.println("s = s.concat('</p>');");
                 out.println("s = s.concat('<p  id=\"cmdContact\">');");
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
+//                SWBResourceURL url=paramRequest.getRenderUrl();
+//                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
                 out.println("s = s.concat('<label for=\"contactoEnviar\">Enviar</label>');");
                 out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail(\\'"+url+"\\'+\\'&name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" />');");
                 out.println("s = s.concat('<label for=\"contactoRestablecer\">Limpiar</label>');");
@@ -276,8 +277,14 @@ public class Contact extends GenericAdmResource {
                 else
                     out.println("<img alt=\""+base.getAttribute("image")+"\" src=\""+webWorkPath+"/"+base.getAttribute("image")+"\" onclick=\"displayImage('cover01','#000000',80)\" />");
             }else {
+                out.println("<script type=\"text/javascript\">");
+                out.println("  function sendEmail(url) {");
+                out.println("    alert(postText(url));");
+                out.println("  }");
+                out.println("</script>");
+
                 out.print("<div class=\"swb-contactus\">");
-                out.print("<form name=\"frmContact\" id=\"frmContact\" action=\""+paramRequest.getActionUrl()+"\" method=\"post\" >");
+                out.print("<form name=\"frmContact\" id=\"frmContact\" action=\"\" method=\"post\" >");
 
                 if(title != null) {
                     out.println("<h3>" + title + "</h3>");
@@ -310,16 +317,14 @@ public class Contact extends GenericAdmResource {
                 out.print("<label for=\"message\">"+paramRequest.getLocaleString("message")+"</label>");
                 out.print("<textarea name=\"message\" id=\"message\" cols=\"40\" rows=\"5\"></textarea>");
                 out.print("</div>");
-                out.print("<div>");
 
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
+                out.print("<div>");
+//                SWBResourceURL url=paramRequest.getRenderUrl();
+//                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
                 out.print("<label for=\"contactoEnviar\">Enviar</label>");
-                out.print("<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail(\\'"+url+"\\'+\\'?name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value);removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" />");
-                out.print("<label for=\"contactoRestablecer\">Enviar</label>");
+                out.print("<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail('"+url+"'+'?name='+dojo.byId('name').value+'&email='+dojo.byId('email').value+'&subject='+dojo.byId('subject').value+'&message='+dojo.byId('message').value)\" value=\""+paramRequest.getLocaleString("send")+"\" />");
+                out.print("<label for=\"contactoRestablecer\">Limpiar</label>");
                 out.print("<input name=\"reset\" id=\"contactoRestablecer\" type=\"reset\" value=\""+paramRequest.getLocaleString("reset")+"\" />");
-                out.print("<label for=\"contactoCancelar\">Enviar</label>");
-                out.print("<input name=\"cancel\" id=\"contactoCancelar\" type=\"button\" onclick=\"removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("cancel")+"\" /><br>");
                 out.print("</div>");
 
                 out.print("</form>");

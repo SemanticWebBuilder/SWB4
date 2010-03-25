@@ -6,9 +6,9 @@
     <fieldset legend="Datos">
         <input type="TEXT" name="name" label="Nombre completo del contacto:" size="50" jsrequired="true" />
         <input type="TEXT" name="email" label="Dirección de correo electrónico del contacto:" size="50" jsrequired="true" />
-        <input type="TEXT" name="name" label="Título, puesto o razón social:" size="50" />
-        <input type="TEXT" name="name" label="Teléfono del contacto:" size="50" />
-        <input type="TEXT" name="name" label="Dirección del contacto o de la razón social:" size="50" />
+        <input type="TEXT" name="title" label="Título, puesto o razón social:" size="50" />
+        <input type="TEXT" name="phone" label="Teléfono del contacto:" size="50" />
+        <input type="TEXT" name="address" label="Dirección del contacto o de la razón social:" size="50" />
 
         <statictext name="txtTarget">¿Cómo desea mostrar el recurso de contacto?:</statictext>
         <input type="RADIO" name="modal" label="Modal" value="true"/>
