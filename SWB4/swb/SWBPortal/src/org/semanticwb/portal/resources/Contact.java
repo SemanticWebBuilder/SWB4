@@ -105,11 +105,6 @@ public class Contact extends GenericAdmResource {
         String contactAddress = base.getAttribute("address");
         String title = base.getAttribute("title");
 
-        /*String name = request.getParameter("name");
-        String customer = request.getParameter("email");
-        String subject = request.getParameter("subject");
-        String message = request.getParameter("message");*/
-
         try {
             if( SWBUtils.EMAIL.isValidEmailAddress(customerEmail) && !isEmpty(subject) && !isEmpty(message) && SWBUtils.EMAIL.isValidEmailAddress(contactEmail) ) {
                 StringBuilder msgToCustomer = new StringBuilder();
@@ -131,7 +126,7 @@ public class Contact extends GenericAdmResource {
 
                 // send email to contact
                 InternetAddress address1 = new InternetAddress();
-                address1.setAddress(contactAddress);
+                address1.setAddress(contactEmail);
                 ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
                 aAddress.add(address1);
                 SWBUtils.EMAIL.sendMail(customerEmail, customerName, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
@@ -141,7 +136,7 @@ public class Contact extends GenericAdmResource {
                 address1.setAddress(customerEmail);
                 aAddress = new ArrayList<InternetAddress>();
                 aAddress.add(address1);
-                SWBUtils.EMAIL.sendMail(contactAddress, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
+                SWBUtils.EMAIL.sendMail(contactEmail, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
                 out.print(paramRequest.getLocaleString("thanks"));
             }else {
                 out.print(paramRequest.getLocaleString("apologies"));
@@ -239,8 +234,6 @@ public class Contact extends GenericAdmResource {
                 out.println("s = s.concat('<textarea name=\"message\" id=\"message\" cols=\"40\" rows=\"5\"></textarea>');");
                 out.println("s = s.concat('</p>');");
                 out.println("s = s.concat('<p  id=\"cmdContact\">');");
-//                SWBResourceURL url=paramRequest.getRenderUrl();
-//                url.setCallMethod(url.Call_DIRECT).setMode("sendEmail");
                 out.println("s = s.concat('<label for=\"contactoEnviar\">Enviar</label>');");
                 out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail(\\'"+url+"\\'+\\'&name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" />');");
                 out.println("s = s.concat('<label for=\"contactoRestablecer\">Limpiar</label>');");
