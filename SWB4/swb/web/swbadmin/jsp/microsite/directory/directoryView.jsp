@@ -20,7 +20,16 @@ private final int I_PAGE_SIZE = 20;
             Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
             SemanticClass cls = null;
             String lang = user.getLanguage();
-            SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
+            SemanticObject sobj=null;
+            if(request.getParameter("sobj")==null)
+            {
+                sobj= (SemanticObject) request.getAttribute("sobj");
+            }
+            else
+            {
+                sobj=paramRequest.getResourceBase().getSemanticObject().getSemanticObject(request.getParameter("sobj"));
+            }
+            
 
             SWBResourceURL url = paramRequest.getRenderUrl();
             boolean toggleOrder = true;
