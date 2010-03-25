@@ -57,16 +57,17 @@
     {
         if(mode!=null && mode.equals("menu") && act==null)
         {
-            SWBResourceURL urlAddElement=paramRequest.getRenderUrl();
-            urlAddElement.setParameter("mode", "showcombo");
-        %>
-        <div id="opcionesHeader" class="opt3">
-            <ul class="listaOpciones">
-                <li><a href="?mode=showcombo">Agregar elemento</a></li>
-                <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
-            </ul>
-        </div>
-        <%
+            //SWBResourceURL urlAddElement=wpage.getUrl();
+            //urlAddElement.setParameter("mode", "showcombo");
+            //urlAddElement.setWindowState(paramRequest.WinState_NORMAL);
+            %>
+            <div id="opcionesHeader" class="opt3">
+                <ul class="listaOpciones">
+                    <li><a href="<%=wpage.getUrl()%>?mode=showcombo">Agregar elemento</a></li>
+                    <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
+                </ul>
+            </div>
+            <%
         }
         else if(act!=null&&act.equals("view"))
         {
