@@ -9,12 +9,9 @@
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.portal.community.*"%>
-<%@page import="org.semanticwb.portal.SWBFormMgr"%>
-
-<%!
+<%@page import="org.semanticwb.portal.SWBFormMgr"%><%!
 private final int I_PAGE_SIZE = 20;
 %>
-
 <%
             Resource base = paramRequest.getResourceBase();
             User user = paramRequest.getUser();
@@ -22,12 +19,105 @@ private final int I_PAGE_SIZE = 20;
             String perfilPath = wpage.getWebSite().getWebPage("perfil").getUrl();
             Iterator<DirectoryObject> itObjs = (Iterator) request.getAttribute("itDirObjs");
             SemanticClass cls = null;
-
+            String lang = user.getLanguage();
             SemanticObject sobj = (SemanticObject) request.getAttribute("sobj");
 
             SWBResourceURL url = paramRequest.getRenderUrl();
             boolean toggleOrder = true;
+            if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
+            {
 
+                SWBResourceURL urlAdd=paramRequest.getRenderUrl();
+
+                if("showcombo".equals(request.getParameter("mode")))
+                {
+                    if("Comunidades".equals(wpage.getId()))
+                    {
+                        wpage=wpage.getWebSite().getWebPage("Intereses");
+                    }
+                    StringBuffer select = new StringBuffer("");
+                    StringBuffer temas = new StringBuffer("");
+                    String opciones = null;
+                    if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                    {
+                        if(wpage.getLevel()==1)
+                        {
+                            //obteniendo WebPages de temas que sería el Level = 2
+                            Iterator<WebPage> iteWP = wpage.listChilds(paramRequest.getUser().getLanguage(),true,false,false,false);
+                            while(iteWP.hasNext())
+                            {
+                                WebPage wpc = iteWP.next();
+                                if(!(wpc.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                                {
+                                    opciones =  getSubTemas(wpc,lang);
+                                    if(opciones.trim().length()>0)
+                                    {
+                                        temas.append("<optgroup label=\""+wpc.getDisplayName()+"\">");
+                                        temas.append(opciones);
+                                        temas.append("</optgroup>");
+                                    }
+                                }
+                            }
+                            if(null!=temas&&temas.toString().trim().length()>0)
+                            {
+                                select.append("<select name=\"wpid\">");
+                                select.append(temas);
+                                select.append("</select>");
+                            }
+
+                        } else if(wpage.getLevel()==2)
+                        {
+                            
+                            opciones = getSubTemas(wpage,lang);
+                            if(null!=opciones&&opciones.trim().length()>0)
+                            {
+                                select.append("<select name=\"wpid\">");
+                                select.append(opciones);
+                                select.append("</select>");
+                            }
+                        }
+
+                        if(select.toString().trim().length()==0&&wpage.getLevel()==1)
+                        {
+                            if(!(wpage.getSemanticObject().getGenericInstance() instanceof MicroSite))
+                            {
+                                opciones =  getSubTemas(wpage,lang);
+                            }
+                            if(null!=opciones&&opciones.trim().length()>0)
+                            {
+                                select.append("<select name=\"wpid\">");
+                                select.append(opciones);
+                                select.append("</select>");
+                            }
+                        }
+                    }
+                    %>
+                    <div id="opcionesHeader" class="opt3">
+                        <ul class="listaOpciones">
+                            <li>Seleccione la categoria para crear el elemento:
+                                <form id="faddMS" action="<%=urlAdd%>" method="post">
+                            <%=select.toString()%>
+                            <button name="btnsubmit" type="submit">Agregar</button></form></li>
+                        </ul>
+                    </div>
+                    <%
+                }
+                else
+                {
+                    
+                    urlAdd.setParameter("mode", "showcombo");
+                    %>
+                        <div id="opcionesHeader" class="opt3">
+                            <ul class="listaOpciones">
+                                <li><a href="<%=urlAdd%>">Agregar elemento</a></li>
+                            </ul>
+                        </div>
+                    <%
+                }
+                return;
+            }
+
+            
             if (sobj != null)
             {
                 cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sobj.getURI());
@@ -536,6 +626,7 @@ if (!exist)
 </div>
 <%
             }
+            
 %>
 
 <%!
@@ -561,5 +652,23 @@ if (!exist)
             iFinPage = iSize;
         }
         return iIniPage + "|" + iFinPage + "|" + iTotPage;
+    }
+%>
+
+<%!
+    public String getSubTemas(WebPage wp, String lang)
+    {
+        StringBuffer stOpts = new StringBuffer("");
+        // obteniendo el listado de subtemas
+        Iterator<WebPage> itwpst = wp.listChilds(lang,true,false,false,false);
+        while(itwpst.hasNext())
+        {
+            WebPage wpst = itwpst.next();
+            if(!(wpst.getSemanticObject().getGenericInstance() instanceof MicroSite))
+            {
+               stOpts.append("<option label=\""+wpst.getDisplayName()+"\">"+wpst.getId()+"</option>");
+            }
+        }
+        return stOpts.toString();
     }
 %>
