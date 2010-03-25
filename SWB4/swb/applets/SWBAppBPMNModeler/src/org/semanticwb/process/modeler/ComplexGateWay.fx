@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class ComplexGateWay extends FlowObject
+public class ComplexGateWay extends GateWay
 {
     public override function create(): Node
     {

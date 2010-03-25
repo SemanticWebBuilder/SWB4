@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class ORGateWay extends FlowObject
+public class ORGateWay extends GateWay
 {
     public override function create(): Node
     {
