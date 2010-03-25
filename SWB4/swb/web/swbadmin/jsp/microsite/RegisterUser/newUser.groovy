@@ -27,7 +27,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.portal.api.SWBResourceURL
 
 
-
+def context=org.semanticwb.SWBPortal.getContextPath();
 def login="";if(request.getParameter("login")!=null) login=request.getParameter("login");
 def pwd="";if(request.getParameter("pwd")!=null) pwd=request.getParameter("pwd");
 def firstName="";if(request.getParameter("firstName")!=null) firstName=request.getParameter("firstName");
@@ -48,7 +48,7 @@ println """<script type="text/javascript">
                    dojo.require("dijit.form.Form");
                    dojo.require("dijit.form.ValidationTextBox");
                    dojo.require("dijit.form.Button");
-
+                   init('$context');
         </script>
 <form id="org.semanticwb.community.User/com/create" dojoType="dijit.form.Form" class="swbform"
 action="$url" 
@@ -102,7 +102,7 @@ method="POST">
                 <tr><td colspan="2" align="center">&nbsp;</td></tr>
 
                 <tr><td colspan="2" align="center">
-                <img src="/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="155" height="65" /><br/>
+                <img src="$context/swbadmin/jsp/securecode.jsp?sAttr=cdlog" id="imgseccode" width="155" height="65" /><br/>
                 <a href="#" onclick="changeSecureCodeImage('imgseccode');">Cambiar imagen</a><br/>
                 </td></tr>
                 <tr><td width="200px" align="right">
@@ -135,7 +135,7 @@ method="POST">
      var img = dojo.byId(imgid);
      if(img) {
         var rn = Math.floor(Math.random()*99999);
-        img.src = "/swbadmin/jsp/securecode.jsp?sAttr=cdlog&nc="+rn;
+        img.src = "$context/swbadmin/jsp/securecode.jsp?sAttr=cdlog&nc="+rn;
      }
    }
 
