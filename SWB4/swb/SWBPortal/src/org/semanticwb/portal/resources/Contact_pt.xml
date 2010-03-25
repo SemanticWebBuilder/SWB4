@@ -29,7 +29,7 @@
         </statictext>
     </fieldset>
     </form>
-    
+
     <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
@@ -56,7 +56,7 @@
         <![CDATA[
             if(!document.frmContact.modal[0].checked && !document.frmContact.modal[1].checked)
                     document.frmContact.modal[1].checked=true;
-                    
+
             function jsValida(frm) {
                 if(frm.email.value==null || frm.email.value=='' || frm.email.value==' ') {
                     alert('Indique la dirección de correo electrónico del contacto.');
