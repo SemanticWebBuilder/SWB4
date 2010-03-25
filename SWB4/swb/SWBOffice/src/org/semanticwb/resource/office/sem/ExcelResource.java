@@ -78,7 +78,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
 
 
     @Override
-    public void loadContent(InputStream in)
+    public void loadContent(InputStream in,User user)
     {
         clean();
         File zipFile = null;
@@ -87,7 +87,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
+                SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, user);
                 zipFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
@@ -103,7 +103,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                         {
                             file=file.substring(pos+1);
                         }*/
-                        SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
+                        SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, user);
                     }
                 }
                 zip.close();

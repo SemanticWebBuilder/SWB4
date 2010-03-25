@@ -35,6 +35,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
@@ -117,7 +118,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
         }
     }
 
-    public void loadContent(InputStream in)
+    public void loadContent(InputStream in,User user)
     {
         clean();
         File zipFile = null;
@@ -126,7 +127,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, "");
+                SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + name, in, user);
                 zipFile = new File(SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
@@ -144,7 +145,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                             {
                                 file = file.substring(pos + 1);
                             }
-                            SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, "");
+                            SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, user);
                         }
                         else
                         {
@@ -169,7 +170,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
-    public static void loadContent(InputStream in, String dir, String type)
+    public static void loadContent(InputStream in, String dir, String type,User user)
     {
         File zipFile = null;
         try
@@ -177,7 +178,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
             if (in != null)
             {
                 String name = UUID.randomUUID().toString() + ".zip";
-                SWBPortal.writeFileToWorkPath(dir + "/" + name, in, "");
+                SWBPortal.writeFileToWorkPath(dir + "/" + name, in, user);
                 zipFile = new File(SWBPortal.getWorkPath() + dir + "/" + name);
                 ZipFile zip = new ZipFile(zipFile);
                 Enumeration entries = zip.entries();
@@ -203,7 +204,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                                 file = file.substring(pos + 1);
                             }
                         }
-                        SWBPortal.writeFileToWorkPath(dir + "/" + file, inEntry, "");
+                        SWBPortal.writeFileToWorkPath(dir + "/" + file, inEntry, user);
                     }
                 }
                 zip.close();

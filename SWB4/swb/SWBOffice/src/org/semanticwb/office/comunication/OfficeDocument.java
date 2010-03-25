@@ -40,7 +40,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.UUID;
-import java.util.logging.Level;
 
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -702,7 +701,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                             if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
                             {
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
-                                officeResource.loadContent(in);
+                                final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+                                officeResource.loadContent(in,wbuser);
                             }
                         }
                     }
@@ -854,7 +854,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                     if (versionToShow.equals("*") || versionToShow.equals(versionName))
                                     {
                                         InputStream in = getContent(repositoryName, contentId, versionToShow);
-                                        officeResource.loadContent(in);
+                                        final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+                                        officeResource.loadContent(in,wbuser);
                                     }
                                 }
                             }
@@ -1513,7 +1514,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             try
             {
                 InputStream in = getContent(repositoryName, contentId, version);
-                officeResource.loadContent(in);
+                final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+                officeResource.loadContent(in,wbuser);
                 ResourceInfo info = getResourceInfo(officeResource);
                 return info;
             }
@@ -2020,7 +2022,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         String name = UUID.randomUUID().toString();
         String dir = "/" + name;
         InputStream in = getContent(repositoryName, contentId, version);
-        OfficeResource.loadContent(in, dir, type);
+        final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+        OfficeResource.loadContent(in, dir, type,wbuser);
         in.close();
         return name;
     }
@@ -2112,7 +2115,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         officeResource.setResourceBase(resource);
         officeResource.setVersionToShow(newVersion);
         InputStream in = getContent(officeResource.getRepositoryName(), officeResource.getContent(), newVersion);
-        officeResource.loadContent(in);
+        final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+        officeResource.loadContent(in,wbuser);
 
     }
 
