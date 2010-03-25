@@ -37,7 +37,7 @@ public class Task extends FlowObject
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
 
-    public var message=ImageView
+    protected var message=ImageView
     {
         x: bind x+ix;
         y: bind y+iy;

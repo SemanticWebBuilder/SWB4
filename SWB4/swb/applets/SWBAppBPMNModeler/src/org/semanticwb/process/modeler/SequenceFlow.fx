@@ -6,11 +6,19 @@
 
 package org.semanticwb.process.modeler;
 
+import javafx.scene.Node;
+
 /**
  * @author javier.solis
  */
 
 public class SequenceFlow extends ConnectionObject
 {
+    public override function create(): Node
+    {
+        arrowType=ARROW_TYPE_SEQUENCE;
+        var ret=super.create();
+        return ret;
+    }
 
 }

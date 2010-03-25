@@ -15,9 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import applets.commons.JSONObject;
-import applets.commons.JSONArray;
-import javafx.stage.AppletStageExtension;
-import javafx.stage.Alert;
 import javafx.stage.Stage;
 import applets.commons.WBConnection;
 import org.semanticwb.process.modeler.SubMenu;
@@ -25,9 +22,12 @@ import java.lang.Exception;
 import org.semanticwb.process.modeler.StartEvent;
 import org.semanticwb.process.modeler.SequenceFlow;
 import org.semanticwb.process.modeler.SubProcess;
-import applets.commons.WBXMLParser;
 import org.semanticwb.process.modeler.ConditionalFlow;
 import org.semanticwb.process.modeler.ComplexGateWay;
+import applets.commons.JSONArray;
+import javafx.stage.AppletStageExtension;
+import javafx.stage.Alert;
+import applets.commons.WBXMLParser;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -48,6 +48,75 @@ public class ToolBar extends CustomNode
     var dx : Number;                        //temporal drag x
     var dy : Number;                        //temporal drag y
 
+    var isApplet:Boolean=false;
+
+    public function openProcess(): Void
+    {
+
+    }
+
+    public function saveProcess(): Void
+    {
+        var obj:JSONObject =new JSONObject();
+        obj.put("uri","test");
+        var nodes:JSONArray =new JSONArray();
+        obj.putOpt("nodes",nodes);
+        for(node in modeler.contents)
+        {
+            var ele:JSONObject=new JSONObject();
+            nodes.put(ele);
+            if(node instanceof GraphElement)
+            {
+               var ge=node as GraphElement;
+               ele.put("class",ge.getClass().getName());
+               ele.put("title",ge.title);
+               ele.put("uri",ge.uri);
+               ele.put("x",ge.x);
+               ele.put("y",ge.y);
+            }
+            if(node instanceof FlowObject)
+            {
+               var ge=node as FlowObject;
+               ele.put("lane",ge.pool.uri);
+            }
+            if(node instanceof Event)
+            {
+               var ge=node as Event;
+               ele.put("type",ge.type);
+            }
+            if(node instanceof ConnectionObject)
+            {
+               var ge=node as ConnectionObject;
+               ele.put("class",ge.getClass().getName());
+               ele.put("uri",ge.uri);
+               ele.put("title",ge.title);
+               ele.put("start",ge.ini.uri);
+               ele.put("end",ge.end.uri);
+               if(node instanceof ConditionalFlow)
+               {
+                   var con=node as ConditionalFlow;
+                   ele.put("action", ge.action);
+               }
+            }
+
+        }
+        //println(obj.toString());
+
+        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(obj.toString(),"UTF8")}</json></req>";
+        var data=conn.getData(comando);
+        AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
+        if(data.indexOf("OK")>0)
+        {
+            Alert.inform("SemanticWebBuilder","Los datos fueron enviados correctamente");
+            delete modeler.contents;
+            loadProcess();
+        }else
+        {
+            Alert.inform("Error",data);
+        }
+
+    }
+
 
     public function loadProcess(): Void
     {
@@ -56,102 +125,109 @@ public class ToolBar extends CustomNode
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
             //println("json:{json}");
-
-            var jsobj=new JSONObject(json);
-            var jsarr = jsobj.getJSONArray("nodes");
-            var i=0;
-            //GraphicElements
-            while(i<jsarr.length())
-            {
-                //generic
-                var js = jsarr.getJSONObject(i);
-                var cls:String=js.getString("class");
-                var uri:String=js.getString("uri");
-
-                var ge:GraphElement=null;
-                if(cls.endsWith(".UserTask"))
-                {
-                    ge=Task{};
-                }else if(cls.endsWith(".Process"))
-                {
-                    ge=SubProcess{};
-                }else if(cls.endsWith(".InitEvent"))
-                {
-                    ge=StartEvent{};
-                }else if(cls.endsWith(".EndEvent"))
-                {
-                    ge=EndEvent{};
-                }else if(cls.endsWith(".GateWay"))
-                {
-                    ge=GateWay{};
-                }else if(cls.endsWith(".ORGateWay"))
-                {
-                    ge=ORGateWay{};
-                }else if(cls.endsWith(".ANDGateWay"))
-                {
-                    ge=ANDGateWay{};
-                }
-                if(ge!=null)
-                {
-                    var title=js.getString("title");
-                    var x=js.getInt("x");
-                    var y=js.getInt("y");
-
-                    ge.modeler=modeler;
-                    ge.uri=uri;
-                    ge.title=title;
-                    ge.x=x;
-                    ge.y=y;
-                    modeler.add(ge);
-                    //println("jsobj:{js.toString()}, i: {i}");
-                }
-                i++;
-            }
-
-            //ConnectionObjects
-            i=0;
-            while(i<jsarr.length())
-            {
-                //generic
-                var js = jsarr.getJSONObject(i);
-                var cls:String=js.getString("class");
-                var uri:String=js.getString("uri");
-
-                var co:ConnectionObject=null;
-
-                if(cls.endsWith(".SequenceFlow"))
-                {
-                    co=SequenceFlow{};
-                }
-                if(cls.endsWith(".ConditionalFlow"))
-                {
-                    co=ConditionalFlow{};
-                    var cond=js.getString("action");
-                    if(cond!=null)co.title=cond;
-                }
-                if(co!=null)
-                {
-                    //ConnectionObjects
-                    var start=js.getString("start");
-                    var end=js.getString("end");
-
-                    co.modeler=modeler;
-                    co.uri=uri;
-                    //co.title=title;
-                    co.ini=modeler.getGraphElementByURI(start);
-                    co.end=modeler.getGraphElementByURI(end);
-                    modeler.add(co);
-                    //println("jsobj:{js.toString()}, i: {i}");
-                }
-                i++;
-            }
+            createProcess(json);
         }catch(e:Exception){println(e);}
+
     }
+
+    public function createProcess(json:String): Void
+    {
+        var jsobj=new JSONObject(json);
+        var jsarr = jsobj.getJSONArray("nodes");
+        var i=0;
+        //GraphicElements
+        while(i<jsarr.length())
+        {
+            //generic
+            var js = jsarr.getJSONObject(i);
+            var cls:String=js.getString("class");
+            var uri:String=js.getString("uri");
+
+            var ge:GraphElement=null;
+            if(cls.endsWith(".UserTask"))
+            {
+                ge=Task{};
+            }else if(cls.endsWith(".Process"))
+            {
+                ge=SubProcess{};
+            }else if(cls.endsWith(".InitEvent"))
+            {
+                ge=StartEvent{};
+            }else if(cls.endsWith(".EndEvent"))
+            {
+                ge=EndEvent{};
+            }else if(cls.endsWith(".GateWay"))
+            {
+                ge=GateWay{};
+            }else if(cls.endsWith(".ORGateWay"))
+            {
+                ge=ORGateWay{};
+            }else if(cls.endsWith(".ANDGateWay"))
+            {
+                ge=ANDGateWay{};
+            }
+            if(ge!=null)
+            {
+                var title=js.getString("title");
+                var x=js.getInt("x");
+                var y=js.getInt("y");
+
+                ge.modeler=modeler;
+                ge.uri=uri;
+                ge.title=title;
+                ge.x=x;
+                ge.y=y;
+                modeler.add(ge);
+                //println("jsobj:{js.toString()}, i: {i}");
+            }
+            i++;
+        }
+
+        //ConnectionObjects
+        i=0;
+        while(i<jsarr.length())
+        {
+            //generic
+            var js = jsarr.getJSONObject(i);
+            var cls:String=js.getString("class");
+            var uri:String=js.getString("uri");
+
+            var co:ConnectionObject=null;
+
+            if(cls.endsWith(".SequenceFlow"))
+            {
+                co=SequenceFlow{};
+            }
+            if(cls.endsWith(".ConditionalFlow"))
+            {
+                co=ConditionalFlow{};
+                var cond=js.getString("action");
+                if(cond!=null)co.title=cond;
+            }
+            if(co!=null)
+            {
+                //ConnectionObjects
+                var start=js.getString("start");
+                var end=js.getString("end");
+
+                co.modeler=modeler;
+                co.uri=uri;
+                //co.title=title;
+                co.ini=modeler.getGraphElementByURI(start);
+                co.end=modeler.getGraphElementByURI(end);
+                modeler.add(co);
+                //println("jsobj:{js.toString()}, i: {i}");
+            }
+            i++;
+        }
+
+    }
+
 
     public override function create(): Node
     {
-        loadProcess();
 
+        if(isApplet)loadProcess();
 
         var task=SubMenu
         {
@@ -1254,7 +1330,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/flow_defecto2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SequenceFlow
+                        modeler.tempNode=DefaultFlow
                         {
                             modeler:modeler
                             uri:"new:defaultflow:{counter++}"
@@ -1268,24 +1344,41 @@ public class ToolBar extends CustomNode
                     imageOver: "images/flow_msj2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SequenceFlow
+                        modeler.tempNode=MessageFlow
                         {
                             modeler:modeler
                             uri:"new:messageflow:{counter++}"
+                            cubicCurve:true
                         }
                     }
                 },
                 ImgButton {
-                    text:"Association Flow"
+                    text:"Association"
+                    toolBar:this;
+                    image: "images/doc_dir_asocia1.png"
+                    imageOver: "images/doc_dir_asocia2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Association
+                        {
+                            modeler:modeler
+                            uri:"new:associationflow:{counter++}"
+                            cubicCurve:true
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Directional Association"
                     toolBar:this;
                     image: "images/doc_asocia1.png"
                     imageOver: "images/doc_asocia2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SequenceFlow
+                        modeler.tempNode=DirectionalAssociation
                         {
                             modeler:modeler
-                            uri:"new:associationflow:{counter++}"
+                            uri:"new:dirassociationflow:{counter++}"
+                            cubicCurve:true
                         }
                     }
                 },
@@ -1309,7 +1402,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=Artifact
                         {
                             modeler:modeler
                             title:"Artifact"
@@ -1325,9 +1418,10 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=Artifact
                         {
                             modeler:modeler
+                            type:Artifact.TYPE_MULTIPLE
                             title:"Multiple Artifact"
                             uri:"new:multipleartifact:{counter++}"
                         }
@@ -1341,8 +1435,9 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=Artifact
                         {
+                            type:Artifact.TYPE_INPUT
                             modeler:modeler
                             title:"Input Artifact"
                             uri:"new:inputartifact:{counter++}"
@@ -1357,8 +1452,9 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=Artifact
                         {
+                            type:Artifact.TYPE_OUTPUT
                             modeler:modeler
                             title:"Output Artifact"
                             uri:"new:outputartifact:{counter++}"
@@ -1511,6 +1607,7 @@ public class ToolBar extends CustomNode
                             imageOver: "images/open_doc_2.png"
                             action: function():Void
                             {
+                                openProcess();
                             }
                         },
                         ImgButton {
@@ -1520,63 +1617,7 @@ public class ToolBar extends CustomNode
                             imageOver: "images/save_2.png"
                             action: function():Void
                             {
-                                var obj:JSONObject =new JSONObject();
-                                obj.put("uri","test");
-                                var nodes:JSONArray =new JSONArray();
-                                obj.putOpt("nodes",nodes);
-                                for(node in modeler.contents)
-                                {
-                                    var ele:JSONObject=new JSONObject();
-                                    nodes.put(ele);
-                                    if(node instanceof GraphElement)
-                                    {
-                                       var ge=node as GraphElement;
-                                       ele.put("class",ge.getClass().getName());
-                                       ele.put("title",ge.title);
-                                       ele.put("uri",ge.uri);
-                                       ele.put("x",ge.x);
-                                       ele.put("y",ge.y);
-                                    }
-                                    if(node instanceof FlowObject)
-                                    {
-                                       var ge=node as FlowObject;
-                                       ele.put("lane",ge.pool.uri);
-                                    }
-                                    if(node instanceof Event)
-                                    {
-                                       var ge=node as Event;
-                                       ele.put("type",ge.type);
-                                    }
-                                    if(node instanceof ConnectionObject)
-                                    {
-                                       var ge=node as ConnectionObject;
-                                       ele.put("class",ge.getClass().getName());
-                                       ele.put("uri",ge.uri);
-                                       ele.put("title",ge.title);
-                                       ele.put("start",ge.ini.uri);
-                                       ele.put("end",ge.end.uri);
-                                       if(node instanceof ConditionalFlow)
-                                       {
-                                           var con=node as ConditionalFlow;
-                                           ele.put("action", ge.action);
-                                       }
-                                    }
-
-                                }
-                                //println(obj.toString());
-
-                                var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(obj.toString(),"UTF8")}</json></req>";
-                                var data=conn.getData(comando);
-                                AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
-                                if(data.indexOf("OK")>0)
-                                {
-                                    Alert.inform("SemanticWebBuilder","Los datos fueron enviados correctamente");
-                                    delete modeler.contents;
-                                    loadProcess();
-                                }else
-                                {
-                                    Alert.inform("Error",data);
-                                }
+                                saveProcess();
                             }
                         },
                         ImageView {

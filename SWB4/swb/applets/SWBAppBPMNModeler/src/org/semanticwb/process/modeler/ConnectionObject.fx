@@ -20,16 +20,23 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.ClosePath;
 
 /**
  * @author javier.solis
  */
+
+public-read var ARROW_TYPE_SEQUENCE="sequence";
+public-read var ARROW_TYPE_MESSAGE="mesage";
+public-read var ARROW_TYPE_ASSOCIATION="association";
+public-read var ARROW_TYPE_NONE="none";
 
 public class ConnectionObject  extends CustomNode
 {
     public var modeler:Modeler;
     public var ini : GraphElement;
     public var end : GraphElement;
+    public var cubicCurve : Boolean;
 
     public var title : String;
     public var action : String=bind title;
@@ -38,16 +45,19 @@ public class ConnectionObject  extends CustomNode
     public var text : EditableText;
 
     public var points : Point[];
-    var path : Path;
+    public var strokeWidth : Float=2;
+    public var arrowType : String;
 
-    var o : Number = 0.8;                   //opacity
+    protected var path : Path;
+    protected var arrow : Path;
+    protected var o : Number = 0.8;                   //opacity
+    protected var strokeDash : Float[];
+
+    protected var notGroup : Boolean;                 //No agrega los elementos path y arrow al grupo
 
     public override function create(): Node
     {
         cursor=Cursor.HAND;
-//                HLineTo { x: 70 },
-//                QuadCurveTo { x: 120  y: 60  controlX: 100  controlY: 0 },
-//                ArcTo { x: 10  y: 50  radiusX: 100  radiusY: 100  sweepFlag: true },
 
         var pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
         var pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
@@ -65,62 +75,105 @@ public class ConnectionObject  extends CustomNode
             fill: true
         }
 
-        path=Path {
-            elements: [
-                MoveTo{x:bind pini.x,y:bind pini.y},
-                CubicCurveTo {
-                    controlX1: bind pinter1.x
-                    controlY1: bind pinter1.y
-                    controlX2: bind pinter2.x
-                    controlY2: bind pinter2.y
-                    x: bind pend.x
-                    y: bind pend.y
-                }
-//                LineTo{x:bind pinter1.x,y:bind pinter1.y},
-//                LineTo{x:bind pinter2.x,y:bind pinter2.y},
-//                LineTo{x:bind pend.x,y:bind pend.y}
-            ]
-            style: Styles.style_connection
-            strokeDashArray: [5,5,1,5]
-            //smooth:true;
-            //strokeLineCap: StrokeLineCap.ROUND
-            //strokeLineJoin: StrokeLineJoin.ROUND
-        };
-
-        return Group
+        if(not(arrowType.equals(ARROW_TYPE_NONE)))
         {
-            content: [
-                Group
-                {
-                    content: [
-                        path,
-                        Line{
-                            startX: bind pend.x;
-                            startY: bind pend.y;
-                            endX: bind pend.x+6*Math.cos(getArrow(points, -45));
-                            endY: bind pend.y-6*Math.sin(getArrow(points, -45));
-                            style: Styles.style_connection_arrow
-                            stroke: bind path.stroke;
-                            strokeLineCap: StrokeLineCap.ROUND
-                            //smooth:true;
-                        },
-                        Line{
-                            startX: bind pend.x;
-                            startY: bind pend.y;
-                            endX: bind pend.x+6*Math.cos(getArrow(points, 45));
-                            endY: bind pend.y-6*Math.sin(getArrow(points, 45));
-                            style: Styles.style_connection_arrow
-                            stroke: bind path.stroke;
-                            strokeLineCap: StrokeLineCap.ROUND
-                            //smooth:true;
-                        }
-                    ]
-                    effect: Styles.dropShadow
-                },
-                text
-            ]
-            opacity: bind o;
-        };
+            var close:ClosePath;
+            if(arrowType.equals(ARROW_TYPE_MESSAGE))
+            {
+                close=ClosePath{};
+            }
+            arrow=Path {
+                elements: [
+                    MoveTo{
+                        x:bind pend.x+8*Math.cos(getArrow(points, -45))
+                        y:bind pend.y-8*Math.sin(getArrow(points, -45))
+                    },
+                    LineTo{
+                        x:bind pend.x
+                        y:bind pend.y
+                    },
+                    LineTo{
+                        x:bind pend.x+8*Math.cos(getArrow(points, 45))
+                        y:bind pend.y-8*Math.sin(getArrow(points, 45))
+                    },close
+                ]
+                //style: Styles.style_connection
+                stroke: Color.web(Styles.color);
+            };
+            if(arrowType.equals(ARROW_TYPE_MESSAGE))
+            {
+                arrow.fill=Color.WHITE;
+                arrow.strokeWidth=1;
+            }else if(arrowType.equals(ARROW_TYPE_SEQUENCE))
+            {
+                arrow.fill=Color.web(Styles.color);
+                arrow.strokeWidth=1;
+            }else
+            {
+                arrow.strokeWidth=2;
+            }
+        }
+        
+        if(cubicCurve)
+        {
+            path=Path {
+                elements: [
+                    MoveTo{x:bind pini.x,y:bind pini.y},
+                    CubicCurveTo {
+                        controlX1: bind pinter1.x
+                        controlY1: bind pinter1.y
+                        controlX2: bind pinter2.x
+                        controlY2: bind pinter2.y
+                        x: bind pend.x
+                        y: bind pend.y
+                    }
+                ]
+                style: Styles.style_connection
+                strokeDashArray: strokeDash
+                strokeWidth: strokeWidth;
+                //smooth:true;
+            };
+        }else
+        {
+            path=Path {
+                elements: [
+                    MoveTo{x:bind pini.x,y:bind pini.y},
+                    LineTo{x:bind pinter1.x,y:bind pinter1.y},
+                    LineTo{x:bind pinter2.x,y:bind pinter2.y},
+                    LineTo{x:bind pend.x,y:bind pend.y}
+                ]
+                style: Styles.style_connection
+                strokeDashArray: strokeDash
+                strokeWidth: strokeWidth;
+                //smooth:true;
+                //strokeLineCap: StrokeLineCap.ROUND
+                //strokeLineJoin: StrokeLineJoin.ROUND
+            };
+        }
+
+        var ret;
+        if(not notGroup)
+        {
+            ret=Group
+            {
+                content: [
+                    Group
+                    {
+                        content: [
+                            path,
+                            arrow
+                        ]
+                        effect: Styles.dropShadow
+                    },
+                    text
+                ]
+                opacity: bind o;
+            };
+        }else
+        {
+            ret=Group{};
+        }
+        return ret;
     }
 
     public function remove()
@@ -158,17 +211,19 @@ public class ConnectionObject  extends CustomNode
     {
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
         path.stroke=Color.web(Styles.color_over);
-        path.strokeWidth=3;
+        arrow.stroke=Color.web(Styles.color_over);
+        path.strokeWidth=strokeWidth+1;
     }
 
     override var onMouseExited = function(e)
     {
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false;
         path.stroke=Color.web(Styles.color);
-        path.strokeWidth=2;
+        arrow.stroke=Color.web(Styles.color);
+        path.strokeWidth=strokeWidth;
     }
 
-    bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
+    protected bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
     {
         if(ini!=null)
         {
@@ -227,7 +282,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    bound function getConnectionY(ini: GraphElement, end: GraphElement): Number
+    protected bound function getConnectionY(ini: GraphElement, end: GraphElement): Number
     {
         if(ini!=null)
         {
@@ -286,7 +341,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    bound function getInter1ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter1ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -304,7 +359,7 @@ public class ConnectionObject  extends CustomNode
 
     }
 
-    bound function getInter1ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter1ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -321,7 +376,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    bound function getInter2ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter2ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -338,7 +393,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    bound function getInter2ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter2ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -355,7 +410,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    bound function getArrow(points:Point[], grad: Number) : Number
+    protected bound function getArrow(points:Point[], grad: Number) : Number
     {
         var pini:Point=points[(sizeof points)-2];
         var pend:Point=points[(sizeof points)-1];

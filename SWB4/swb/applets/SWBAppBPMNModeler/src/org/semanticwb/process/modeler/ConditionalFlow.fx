@@ -8,6 +8,10 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.Group;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -18,7 +22,42 @@ public class ConditionalFlow extends ConnectionObject
     public override function create(): Node
     {
         title="Condition";
-        var ret=super.create();
+        arrowType=ARROW_TYPE_SEQUENCE;
+        notGroup=true;  //No agrega los elementos path y arrow al grupo
+        super.create();
+        //Se reemplaza
+        var poly=Polygon
+        {
+            points:[
+                 0,-6,
+                 6, 0,
+                 0, 6,
+                -6, 0
+            ]
+            translateX:bind points[0].x
+            translateY:bind points[0].y
+            style:Styles.style_flow
+            stroke:bind path.stroke
+            fill:Color.WHITE
+            visible:bind not(ini instanceof GateWay)
+        };
+
+        var ret=Group
+        {
+            content: [
+                Group
+                {
+                    content: [
+                        path,
+                        poly,
+                        arrow
+                    ]
+                    effect: Styles.dropShadow
+                },
+                text
+            ]
+            opacity: bind o;
+        };
         return ret;
     }
 
