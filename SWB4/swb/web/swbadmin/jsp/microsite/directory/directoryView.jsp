@@ -27,8 +27,7 @@ private final int I_PAGE_SIZE = 20;
             if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY)
             {
 
-                SWBResourceURL urlAdd=paramRequest.getRenderUrl();
-
+                SWBResourceURL urlAdd=paramRequest.getRenderUrl();                
                 if("showcombo".equals(request.getParameter("mode")))
                 {
                     if("Comunidades".equals(wpage.getId()))
@@ -98,23 +97,12 @@ private final int I_PAGE_SIZE = 20;
                                 <form id="faddMS" action="<%=urlAdd%>" method="post">
                             <%=select.toString()%>
                             <button name="btnsubmit" type="submit">Agregar</button></form></li>
+
                         </ul>
                     </div>
                     <%
                 }
-                else
-                {
-                    
-                    urlAdd.setParameter("mode", "showcombo");
-                    %>
-                        <div id="opcionesHeader" class="opt3">
-                            <ul class="listaOpciones">
-                                <li><a href="<%=urlAdd%>">Agregar elemento</a></li>
-                            </ul>
-                        </div>
-                    <%
-                }
-                return;
+                               
             }
 
             
