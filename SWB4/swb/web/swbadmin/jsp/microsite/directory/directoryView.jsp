@@ -96,10 +96,16 @@ private final int I_PAGE_SIZE = 20;
                             <li>Seleccione la categoria para crear el elemento:
                                 <form id="faddMS" action="<%=urlAdd%>" method="post">
                             <%=select.toString()%>
-                            <button name="btnsubmit" type="submit">Agregar</button></form></li>
-
+                            <button name="btnsubmit" type="submit">Agregar</button><button name="btnsubmit" type="button" onClick="javascript:Cancel('<%=paramRequest.getRenderUrl()%>');">Cancelar</button>
+                            </form></li>
                         </ul>
                     </div>
+                             <script type="text/javascript">
+                    function Cancel(url)
+                    {
+                        window.location=url;
+                    }
+                    </script>
                     <%
                 }
                                
