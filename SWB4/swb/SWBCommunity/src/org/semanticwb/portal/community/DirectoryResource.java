@@ -105,7 +105,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
         }
 
         String path = "/swbadmin/jsp/microsite/directory/directoryView.jsp";
-        if(request.getParameter("wpid")!=null)
+        if(request.getParameter("wpid")!=null && "view".equals(act))
         {
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(request.getParameter("wpid"));
             if(wp!=null)
@@ -117,7 +117,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                 return;
             }
         }
-        if (act.equals("view") && getListJsp() != null)
+        else if (act.equals("view") && getListJsp() != null)
         {
             path = getListJsp();
         }
