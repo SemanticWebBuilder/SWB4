@@ -112,6 +112,7 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             {
                 SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
                 url.setParameter("act", "add");
+                url.setParameter("sobj", getDirectoryClass().getURI());
                 url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
                 response.sendRedirect(url.toString());
                 return;
