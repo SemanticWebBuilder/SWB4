@@ -57,9 +57,12 @@
     {
         if(mode!=null && mode.equals("menu") && act==null)
         {
+            SWBResourceURL urlAddElement=paramRequest.getRenderUrl();
+            urlAddElement.setParameter("mode", "showcombo");
         %>
         <div id="opcionesHeader" class="opt3">
             <ul class="listaOpciones">
+                <li><a href="?mode=showcombo">Agregar elemento</a></li>
                 <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
             </ul>
         </div>
@@ -136,9 +139,16 @@
                 <li>Seleccione la categoria para crear la comunidad:
                     <form id="faddMS" action="<%=urlAdd%>" method="post">
                 <%=select.toString()%>
-                <button name="btnsubmit" type="submit">Agregar</button></form></li>
-            </ul>
+                <button name="btnsubmit" type="submit">Agregar</button><button name="btnsubmit" type="button" onClick="javascript:Cancel('<%=paramRequest.getRenderUrl()%>');">Cancelar</button>
+                </form></li>
+            </ul>               
         </div>
+                 <script type="text/javascript">
+                    function Cancel(url)
+                    {
+                        window.location=url;
+                    }
+                    </script>
 <%
         }
      }
