@@ -17,7 +17,7 @@
       {
         FriendshipProspect.createFriendshipProspect(owner, user, website);
       }
-      if (!owner.getURI().equals(user.getURI()) && !Friendship.areFriends(owner, user, website) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, website))
+      if (user!=null && user.getURI()!=null && owner!=null && owner.getURI()!=null && !owner.getURI().equals(user.getURI()) && !Friendship.areFriends(owner, user, website) && !FriendshipProspect.findFriendProspectedByRequester(owner, user, website))
       {
          String url = ((WebPage) request.getAttribute("webpage")).getUrl() + "?user=" + user.getEncodedURI() + "&addprospect=true";
         %>
