@@ -176,14 +176,19 @@ public class Contact extends GenericAdmResource {
         address1.setAddress(contactEmail);
         ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
         aAddress.add(address1);
-        SWBUtils.EMAIL.sendMail(customerEmail, customerName, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
-
+        String ret = SWBUtils.EMAIL.sendMail(customerEmail, customerName, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
+        if(ret==null) {
+            throw new Exception("Error in resource Contact while trying to send the email");
+        }
         // send email to customer
         address1 = new InternetAddress();
         address1.setAddress(customerEmail);
         aAddress = new ArrayList<InternetAddress>();
         aAddress.add(address1);
-        SWBUtils.EMAIL.sendMail(contactEmail, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
+        ret = SWBUtils.EMAIL.sendMail(contactEmail, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
+        if(ret==null) {
+            throw new Exception("Error in resource Contact while trying to send the email");
+        }
     }
 
     /**
