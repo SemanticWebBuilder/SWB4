@@ -110,7 +110,8 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(request.getParameter("wpid"));
             if(wp!=null)
             {
-                SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
+                Resource base=getResourceBase();
+                SWBResourceURLImp url = new SWBResourceURLImp(request,base,wp,SWBResourceURLImp.UrlType_RENDER);
                 GenericIterator<Resource> resources=wp.listResources();
                 while(resources.hasNext())
                 {
