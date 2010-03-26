@@ -68,6 +68,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
+import java.net.SocketException;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -97,11 +98,14 @@ import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.mail.EmailException;
 import org.apache.poi.POITextExtractor;
 import org.apache.poi.extractor.ExtractorFactory;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -2992,11 +2996,10 @@ public class SWBUtils {
         public static String sendMail(String fromEmail, String fromName,
                 Collection address, Collection ccEmail, Collection bccEmail,
                 String subject, String contentType, String data, String login,
-                String password, ArrayList<EmailAttachment> attachments)
+                String password, ArrayList<EmailAttachment> attachments) throws EmailException
         {
             String ret = null;
-            try
-            {
+//            try {
                 HtmlEmail email = new HtmlEmail();
 
                 if (attachments != null && attachments.size() > 0)
@@ -3036,10 +3039,10 @@ public class SWBUtils {
                     email.setAuthentication(login, password);
                 }
                 ret = email.send();
-            } catch (Exception e)
-            {
-                SWBUtils.log.error(e);
-            }
+//            } catch (Exception e)
+//            {
+//                SWBUtils.log.error(e);
+//            }
             return ret;
         }
 
