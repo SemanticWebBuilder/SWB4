@@ -110,12 +110,23 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
             WebPage wp = paramRequest.getWebPage().getWebSite().getWebPage(request.getParameter("wpid"));
             if(wp!=null)
             {
-                //SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setParameter("act", "add");                
-                url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-                response.sendRedirect(url.toString());
-                return;
+                SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), wp, SWBResourceURLImp.UrlType_RENDER);
+                GenericIterator<Resource> resources=wp.listResources();
+                while(resources.hasNext())
+                {
+                    Resource resource=resources.next();
+                    if(resource.getResourceType().getResourceClassName().equals(this.getClass().getCanonicalName()))
+                    {
+                        DirectoryResource directoryResource=new DirectoryResource(resource.getSemanticObject());
+                        directoryResource.setResourceBase(resource);
+                        url.setParameter("act", "add");
+                        url.setParameter("sobj", directoryResource.getDirectoryClass().getURI());
+                        url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+                        response.sendRedirect(url.toString());
+                        return;
+                    }
+                }
+                
             }
         }
         else if (act.equals("view") && getListJsp() != null)
