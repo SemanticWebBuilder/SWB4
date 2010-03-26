@@ -2996,10 +2996,10 @@ public class SWBUtils {
         public static String sendMail(String fromEmail, String fromName,
                 Collection address, Collection ccEmail, Collection bccEmail,
                 String subject, String contentType, String data, String login,
-                String password, ArrayList<EmailAttachment> attachments) throws EmailException
+                String password, ArrayList<EmailAttachment> attachments)
         {
             String ret = null;
-//            try {
+            try {
                 HtmlEmail email = new HtmlEmail();
 
                 if (attachments != null && attachments.size() > 0)
@@ -3039,10 +3039,10 @@ public class SWBUtils {
                     email.setAuthentication(login, password);
                 }
                 ret = email.send();
-//            } catch (Exception e)
-//            {
-//                SWBUtils.log.error(e);
-//            }
+            } catch (Exception e)
+            {
+                SWBUtils.log.error(e);
+            }
             return ret;
         }
 
