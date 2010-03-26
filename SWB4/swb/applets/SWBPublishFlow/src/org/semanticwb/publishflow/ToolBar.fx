@@ -181,7 +181,7 @@ public class ToolBar extends CustomNode {
                                     }
                                     cursor: Cursor.MOVE
                                     onMousePressed: function (e: MouseEvent): Void {
-                                        modeler.clickedNode = this;
+                                        ModelerUtils.clickedNode = this;
                                         modeler.disablePannable = true;
                                         dx = x - e.sceneX;
                                         dy = y - e.sceneY;
@@ -191,7 +191,7 @@ public class ToolBar extends CustomNode {
                                         y = dy + e.sceneY;
                                     }
                                     onMouseReleased: function (e: MouseEvent): Void {
-                                        modeler.clickedNode = null;
+                                        ModelerUtils.clickedNode = null;
                                         modeler.disablePannable = false;
                                     }
                                 },

@@ -271,8 +271,8 @@ public class ConnectionObject extends CustomNode {
     }
 
     public function mousePressed(e: MouseEvent): Void {
-        if (modeler.clickedNode == null) {
-            modeler.clickedNode = this;
+        if (ModelerUtils.clickedNode == null) {
+            ModelerUtils.clickedNode = this;
             modeler.focusedNode = this;
             requestFocus();
         }
@@ -282,20 +282,20 @@ public class ConnectionObject extends CustomNode {
                 mousePressed(e);
             }
     override var onMouseReleased = function (e: MouseEvent): Void {
-                if (modeler.clickedNode == this) {
-                    modeler.clickedNode = null;
+                if (ModelerUtils.clickedNode == this) {
+                    ModelerUtils.clickedNode = null;
                 }
             }
 
     public function mouseExited(e: MouseEvent): Void {
-        if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = false;
+        if (modeler.tempNode == null and ModelerUtils.clickedNode == null) modeler.disablePannable = false;
         path.stroke = Color.web(Styles.color);
         if(focused) path.stroke=strokeFocused;
         path.strokeWidth = 2;
     }
 
     override var onMouseEntered = function (e) {
-                if (modeler.tempNode == null and modeler.clickedNode == null) modeler.disablePannable = true;
+                if (modeler.tempNode == null and ModelerUtils.clickedNode == null) modeler.disablePannable = true;
                 path.stroke = Color.web(Styles.color_over);
                 color = Styles.style_connection_over;
                 color_row = Styles.style_connection_row_over;

@@ -44,7 +44,7 @@ public class Modeler extends CustomNode
     public var disablePannable: Boolean=false;
     public var tempNode: Node;                          //Nodo temporal por toolbar
     public var focusedNode: Node;                       //Nodo con el foco
-    public var clickedNode: Node;
+    //public var clickedNode: Node;
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
@@ -109,16 +109,16 @@ public class Modeler extends CustomNode
                     }else if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
-                        if(clickedNode instanceof GraphElement)
+                        if(ModelerUtils.clickedNode instanceof GraphElement)
                         {
-                            var ge=clickedNode as GraphElement;
+                            var ge=ModelerUtils.clickedNode as GraphElement;
                             if(ge.canIniLink(a) and ge instanceof FlowObject)
                             {
                                 a.ini=ge as FlowObject;
                                 add(tempNode);
                             }
                             close=false;
-                            clickedNode=null;
+                            ModelerUtils.clickedNode=null;
                         }
                     }
 
@@ -155,9 +155,9 @@ public class Modeler extends CustomNode
                         }
                     }
                 }
-                else if(clickedNode instanceof ConnectionObject)
+                else if(ModelerUtils.clickedNode instanceof ConnectionObject)
                 {
-                    tempNode=clickedNode;
+                    tempNode=ModelerUtils.clickedNode;
                     var co: ConnectionObject=tempNode as ConnectionObject;                                        
                     co.end=null;
                 }

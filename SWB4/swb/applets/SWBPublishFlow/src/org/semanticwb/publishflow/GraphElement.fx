@@ -100,7 +100,7 @@ public class GraphElement extends CustomNode
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
             mouseDragged(e);
         }
@@ -116,9 +116,9 @@ public class GraphElement extends CustomNode
 
     override var onMousePressed = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==null)
+        if(ModelerUtils.clickedNode==null)
         {
-            modeler.clickedNode=this;
+            ModelerUtils.clickedNode=this;
             mousePressed(e);
         }
     }
@@ -156,9 +156,9 @@ public class GraphElement extends CustomNode
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
-        if(modeler.clickedNode==this)
+        if(ModelerUtils.clickedNode==this)
         {
-            modeler.clickedNode=null;
+            ModelerUtils.clickedNode=null;
             mouseReleased(e);
         }
     }
@@ -197,7 +197,7 @@ public class GraphElement extends CustomNode
 
     public function mouseExited( e: MouseEvent )
     {
-        if(modeler.overNode==this and modeler.clickedNode==null)
+        if(modeler.overNode==this and ModelerUtils.clickedNode==null)
         {
             modeler.overNode=null;
             if(modeler.tempNode==null)modeler.disablePannable=false;
