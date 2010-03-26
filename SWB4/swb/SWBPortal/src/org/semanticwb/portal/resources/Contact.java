@@ -80,7 +80,7 @@ public class Contact extends GenericAdmResource {
         }
     }
 
-    private String processEmails(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    private String processEmails(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base = getResourceBase();
         String ret;
 
@@ -96,7 +96,7 @@ public class Contact extends GenericAdmResource {
         String contactAddress = base.getAttribute("address");
         String title = base.getAttribute("title");
 
-        //try {
+        try {
         if( SWBUtils.EMAIL.isValidEmailAddress(customerEmail) && !isEmpty(subject) && !isEmpty(message) && SWBUtils.EMAIL.isValidEmailAddress(contactEmail) ) {
             StringBuilder msgToCustomer = new StringBuilder();
             msgToCustomer.append(paramRequest.getLocaleString("dear")+" "+customerName+" :\n");
@@ -114,7 +114,7 @@ public class Contact extends GenericAdmResource {
             msgToContact.append("\nemail: "+customerEmail);
             msgToContact.append("\nAsunto: "+subject);
             msgToContact.append("\nMensaje: "+message);
-
+            
             // send email to contact
             InternetAddress address1 = new InternetAddress();
             address1.setAddress(contactEmail);
@@ -132,15 +132,15 @@ public class Contact extends GenericAdmResource {
         }else {
             ret = paramRequest.getLocaleString("apologies");
         }
-//        }catch(Exception e) {
-//            log.error("Error in resource Contact, in PymTur Project, while bringing HTML by ajax. ", e);
-//        }
+        }catch(Exception e) {
+            log.error("Error in resource Contact, in PymTur Project, while bringing HTML by ajax. ", e);
+            ret = paramRequest.getLocaleString("apologies");
+        }
         return ret;
     }
 
-    private String processEmails(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, Exception {
         Resource base = getResourceBase();
-        String ret;
 
         String site = base.getWebSite().getDisplayTitle(response.getUser().getLanguage());
         String customerName = request.getParameter("name");
@@ -154,46 +154,36 @@ public class Contact extends GenericAdmResource {
         String contactAddress = base.getAttribute("address");
         String title = base.getAttribute("title");
 
-        //try {
-        if( SWBUtils.EMAIL.isValidEmailAddress(customerEmail) && !isEmpty(subject) && !isEmpty(message) && SWBUtils.EMAIL.isValidEmailAddress(contactEmail) ) {
-            StringBuilder msgToCustomer = new StringBuilder();
-            msgToCustomer.append(response.getLocaleString("dear")+" "+customerName+" :\n");
-            msgToCustomer.append(response.getLocaleString("greating"));
-            msgToCustomer.append(contactName+"\n");
-            msgToCustomer.append(contactEmail+"\n");
-            msgToCustomer.append(title==null?"":title+"\n");
-            msgToCustomer.append(contactPhone==null?"":contactPhone+"\n");
-            msgToCustomer.append(contactAddress==null?"":contactAddress);
-            msgToCustomer.append("\n");
+        StringBuilder msgToCustomer = new StringBuilder();
+        msgToCustomer.append(response.getLocaleString("dear")+" "+customerName+" :\n");
+        msgToCustomer.append(response.getLocaleString("greating"));
+        msgToCustomer.append(contactName+"\n");
+        msgToCustomer.append(contactEmail+"\n");
+        msgToCustomer.append(title==null?"":title+"\n");
+        msgToCustomer.append(contactPhone==null?"":contactPhone+"\n");
+        msgToCustomer.append(contactAddress==null?"":contactAddress);
+        msgToCustomer.append("\n");
 
-            StringBuilder msgToContact = new StringBuilder();
-            msgToContact.append("Site: "+site);
-            msgToContact.append("\nNombre: "+customerName);
-            msgToContact.append("\nemail: "+customerEmail);
-            msgToContact.append("\nAsunto: "+subject);
-            msgToContact.append("\nMensaje: "+message);
+        StringBuilder msgToContact = new StringBuilder();
+        msgToContact.append("Site: "+site);
+        msgToContact.append("\nNombre: "+customerName);
+        msgToContact.append("\nemail: "+customerEmail);
+        msgToContact.append("\nAsunto: "+subject);
+        msgToContact.append("\nMensaje: "+message);
 
-            // send email to contact
-            InternetAddress address1 = new InternetAddress();
-            address1.setAddress(contactEmail);
-            ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
-            aAddress.add(address1);
-            SWBUtils.EMAIL.sendMail(customerEmail, customerName, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
+        // send email to contact
+        InternetAddress address1 = new InternetAddress();
+        address1.setAddress(contactEmail);
+        ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
+        aAddress.add(address1);
+        SWBUtils.EMAIL.sendMail(customerEmail, customerName, aAddress, null, null, subject, "text/plain", msgToContact.toString(), null, null, null);
 
-            // send email to customer
-            address1 = new InternetAddress();
-            address1.setAddress(customerEmail);
-            aAddress = new ArrayList<InternetAddress>();
-            aAddress.add(address1);
-            SWBUtils.EMAIL.sendMail(contactEmail, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
-            ret = response.getLocaleString("thanks");
-        }else {
-            ret = response.getLocaleString("apologies");
-        }
-//        }catch(Exception e) {
-//            log.error("Error in resource Contact, in PymTur Project, while bringing HTML by ajax. ", e);
-//        }
-        return ret;
+        // send email to customer
+        address1 = new InternetAddress();
+        address1.setAddress(customerEmail);
+        aAddress = new ArrayList<InternetAddress>();
+        aAddress.add(address1);
+        SWBUtils.EMAIL.sendMail(contactEmail, customerName, aAddress, null, null, subject, "text/plain", msgToCustomer.toString(), null, null, null);
     }
 
     /**
@@ -400,19 +390,23 @@ public class Contact extends GenericAdmResource {
             out.println("<div class=\"swb-contacted\">");
             out.println(paramRequest.getLocaleString("thanks"));
             out.println("</div>");
-        }else if(email.equalsIgnoreCase("missdata")) {
+        }else {
             out.println("<div class=\"swb-contacted\">");
             out.println(paramRequest.getLocaleString("apologies"));
             out.println("</div>");
         }
     }
 
+
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
         try {
             processEmails(request, response);
             response.setRenderParameter("email", "sucess");
-        }catch(Exception e) {            
+        }catch(SWBResourceException re) {
+            throw new SWBResourceException(re.getMessage());
+        }catch(Exception e) {
+            log.error("Error in resource Contact, while trying to send the email. ", e);
             response.setRenderParameter("email", "missdata");
         }finally {
             response.setMode(response.Mode_EDIT);
