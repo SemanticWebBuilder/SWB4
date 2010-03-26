@@ -53,7 +53,7 @@ public class LinkConnection extends ConnectionObject {
     bound function isVisible(elements:PathElement[]) : Boolean
     {
         var size:Integer=sizeof elements;
-        if(size>=5)
+        if(size>=4 and end!=null)
         {
             true;
         }
