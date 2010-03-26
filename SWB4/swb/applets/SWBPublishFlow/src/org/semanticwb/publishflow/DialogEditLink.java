@@ -215,7 +215,8 @@ public class DialogEditLink extends javax.swing.JDialog
         jTableUsuarios = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Editar propiedades de publicación");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditLink_es"); // NOI18N
+        setTitle(bundle.getString("editproperties")); // NOI18N
 
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 30));
 
@@ -262,8 +263,8 @@ public class DialogEditLink extends javax.swing.JDialog
 
         jPanel2.setLayout(null);
 
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditLink_es",locale); // NOI18N
-        jCheckBoxPublicar.setText(bundle.getString("publicar")); // NOI18N
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("org/semanticwb/publishflow/DialogEditLink_es",locale); // NOI18N
+        jCheckBoxPublicar.setText(bundle1.getString("publicar")); // NOI18N
         jPanel2.add(jCheckBoxPublicar);
         jCheckBoxPublicar.setBounds(0, 10, 395, 40);
 
