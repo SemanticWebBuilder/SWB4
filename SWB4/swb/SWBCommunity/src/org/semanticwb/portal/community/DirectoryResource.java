@@ -119,11 +119,14 @@ public class DirectoryResource extends org.semanticwb.portal.community.base.Dire
                     {
                         DirectoryResource directoryResource=new DirectoryResource(resource.getSemanticObject());
                         directoryResource.setResourceBase(resource);
-                        url.setParameter("act", "add");
-                        url.setParameter("sobj", directoryResource.getDirectoryClass().getURI());
-                        url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
-                        response.sendRedirect(url.toString());
-                        return;
+                        if(directoryResource.getDirectoryClass()!=null && directoryResource.getDirectoryClass().getURI()!=null)
+                        {
+                            url.setParameter("act", "add");
+                            url.setParameter("sobj", directoryResource.getDirectoryClass().getURI());
+                            url.setWindowState(SWBResourceURL.WinState_MAXIMIZED);
+                            response.sendRedirect(url.toString());
+                            return;
+                        }
                     }
                 }
                 
