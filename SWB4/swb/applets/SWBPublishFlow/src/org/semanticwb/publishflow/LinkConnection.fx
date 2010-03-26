@@ -36,6 +36,7 @@ public class LinkConnection extends ConnectionObject {
             translateX:bind getEditX(elements)
             translateY:bind getEditY(elements)
             opacity:0.8
+            visible:bind isVisible(elements)
             action:function(): Void
             {
                 edit();
@@ -47,6 +48,20 @@ public class LinkConnection extends ConnectionObject {
     }
     public function edit() : Void
     {
+
+    }
+    bound function isVisible(elements:PathElement[]) : Boolean
+    {
+        var size:Integer=sizeof elements;
+        if(size>=5)
+        {
+            true;
+        }
+        else
+        {
+            false;
+        }
+
 
     }
 
