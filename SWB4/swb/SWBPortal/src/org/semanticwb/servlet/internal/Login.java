@@ -591,6 +591,7 @@ public class Login implements InternalServlet
             user = (User) it.next();
             log.trace("user checked?:" + user.hashCode() + ":" + user.isSigned());
         }
+        if(null==user.getLanguage()) user.setLanguage("es"); //forzar lenguage si no se dio de alta.
         sendLoginLog(request, user);
     }
 }
