@@ -1296,9 +1296,11 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                         out.println("<td>" + nfi.getName() + "</td>"); //nombre del evento
                                         Node ndata = nfi.getNode(JCR_CONTENT);
                                         String s_usrID = ndata.getProperty(SWBFILEREPUSERID).getString();
-
+                                        //System.out.println("USRID:"+s_usrID);
                                         out.println("<td>" + df.format(new Date(ndata.getProperty(JCR_LASTMODIFIED).getDate().getTimeInMillis())) + "</td>");
-                                        User usrcreator = paramRequest.getUser().getUserRepository().getUser(s_usrID);
+                                        //User usrcreator = paramRequest.getUser().getUserRepository().getUser(s_usrID);
+                                        User usrcreator = paramRequest.getWebPage().getWebSite().getUserRepository().getUser(s_usrID);
+                                        //System.out.println("UsrCreator: "+usrcreator+", UsrWS:"+usrws);
                                         out.println("<td><a href=\"mailto:" + usrcreator.getEmail() + "\">" + usrcreator.getEmail() + "</a></td>");
                                         out.println("<td>");
                                         SWBResourceURL urlrecover = paramRequest.getActionUrl();
