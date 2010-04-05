@@ -103,7 +103,7 @@ private final int I_PAGE_SIZE = 20;
                     <div id="opcionesHeader" class="opt3">
                         <ul class="listaOpciones">
                             <li>Seleccione la categoria para crear el elemento:
-                                <form id="faddMS" action="<%=urlAdd%>" method="post">
+                                <form id="faddMS" action="<%=urlAdd%>" method="get">
                             <%=select.toString()%>
                             <button name="btnsubmit" type="submit">Agregar</button><button name="btnsubmit" type="button" onClick="javascript:Cancel('<%=paramRequest.getRenderUrl()%>');">Cancelar</button>
                             </form></li>
