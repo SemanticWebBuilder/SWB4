@@ -130,7 +130,7 @@
         <%
                 }
             }
-            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?video=" + java.net.URLEncoder.encode(wpage.getURI());
+            String pageUri = SWBPortal.getContextPath() +"/swbadmin/jsp/microsite/rss/rss.jsp?video=" + java.net.URLEncoder.encode(wpage.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al canal de videos de la comunidad</a></li>
     </ul>
