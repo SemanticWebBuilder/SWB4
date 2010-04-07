@@ -440,7 +440,7 @@
         <%
                 }
             }
-            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + blog.getEncodedURI();
+            String pageUri = SWBPortal.getContextPath() +"/swbadmin/jsp/microsite/rss/rss.jsp?blog=" + blog.getEncodedURI();
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS al blog de la comunidad</a></li>
     </ul>
