@@ -293,7 +293,7 @@
                 }
 
             }
-            String pageUri = "/swbadmin/jsp/microsite/rss/rss.jsp?comm=" + java.net.URLEncoder.encode(wp.getURI());
+            String pageUri = SWBPortal.getContextPath() +"/swbadmin/jsp/microsite/rss/rss.jsp?comm=" + java.net.URLEncoder.encode(wp.getURI());
         %>
         <li><a class="rss" href="<%=pageUri%>">Suscribirse via RSS </a></li>
         <%
