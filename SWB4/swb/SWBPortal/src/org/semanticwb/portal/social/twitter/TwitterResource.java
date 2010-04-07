@@ -61,7 +61,7 @@ public class TwitterResource extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/twitter/twitter.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/twitter/twitter.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
