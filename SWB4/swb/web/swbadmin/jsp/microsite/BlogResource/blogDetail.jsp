@@ -94,12 +94,7 @@
     </h2>
 
     <p>
-        <script type="text/javascript">
-            <!--
-            document.write('<%=content%>');
-            -->
-        </script>
-
+        <%=content%>
     </p>
     <br/>
     <br/>
@@ -118,11 +113,13 @@
             -->
         </script></h2>
     <p>
+
         <script type="text/javascript">
             <!--
             document.write('<%=description%>');
             -->
-        </script> </p>
+        </script>
+    </p>
     <p> Autor: <%=postAuthor%> </p>
     <p> Actualizado: <%=updated%> </p>
     <p> Calificación: <%=rank%> </p>
