@@ -42,6 +42,7 @@
 
     //Create calendar for start of month
     Calendar startOfMonth = new GregorianCalendar();
+
     startOfMonth.setTime(currCal.getTime());
     startOfMonth.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -51,7 +52,8 @@
     endOfMonth.set(Calendar.DAY_OF_MONTH, currCal.getActualMaximum(Calendar.DAY_OF_MONTH));
 
     //Find out when this mont starts and ends
-    int firstWeekDay = startOfMonth.getFirstDayOfWeek();
+    int offset = startOfMonth.get(startOfMonth.DAY_OF_WEEK) - startOfMonth.SUNDAY;
+    int firstWeekDay = offset;
     int daysInMonth = currCal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
     if (act.equals("calendar") && paramRequest.getCallMethod() != paramRequest.Call_CONTENT) {
@@ -88,8 +90,8 @@
                     }
                 }
             }
-            
-            
+
+
             //Add reserved days to the set
             for (int i = sDay; i <= eDay; i++) {
                 if (isNow) {
@@ -98,7 +100,7 @@
             }
 }
 }
-            
+
 
             catch(Exception e){}
         }
@@ -124,7 +126,7 @@
             pm.setParameter("m", String.valueOf(ilmonth - 1));
             pm.setParameter("y", String.valueOf(ilyear));
         }
-        
+
 %>
 <h2>Eventos del mes</h2>
 <div id ="calendario" style="margin:10px; height:220px;">
@@ -134,7 +136,7 @@
     <ul id="anchorDays" class="dias semana">
         <%
         for(int i = 0; i < 7; i++) {
-        %><li><%=days[i]%></li><%
+        %><li> <%=days[i]%></li><%
         }
         %>
     </ul>
