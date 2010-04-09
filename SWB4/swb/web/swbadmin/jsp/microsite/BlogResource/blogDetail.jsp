@@ -92,10 +92,12 @@
         </script>
 
     </h2>
-
-    <p>
+            <div style="margin-left: 5px;margin-right: 5px">
+            <p >
         <%=content%>
+
     </p>
+    </div>
     <br/>
     <br/>
 
