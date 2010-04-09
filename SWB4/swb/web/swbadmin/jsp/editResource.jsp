@@ -5,7 +5,14 @@
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String id=request.getParameter("suri");
-    Resource obj=(Resource)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
+    Object obj1=SWBPlatform.getSemanticMgr().getOntology().getGenericObject(id);
+    if(obj1 instanceof Resource)
+        {
+    Resource obj=(Resource)obj1;
     //System.out.println("suri:"+obj.getSemanticObject().getEncodedURI());
     String url=SWBPlatform.getContextPath()+"/swb/SWBAdmin/bh_AdminPorltet/_vtp/"+obj.getWebSiteId()+"/"+obj.getWebSite().getHomePage().getId()+"/_rid/"+obj.getId()+"/_mod/admin/_wst/maximized";
 %><iframe dojoType_="dijit.layout.ContentPane" src="<%=url%>" style="border:0px; width:100%; height:100%" frameborder="0" scrolling="yes"></iframe>
+
+<%
+}
+%>
