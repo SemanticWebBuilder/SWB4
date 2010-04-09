@@ -5,12 +5,14 @@
     User user=paramRequest.getUser();
     WebPage wpage=paramRequest.getWebPage();
     String mode=paramRequest.getArgument("mode", "");
+
         if(mode!=null && mode.equals("content"))
             {
 
 %>
 <script type="text/javascript">
     dojo.require("dijit.form.ValidationTextBox");
+    init('<%=SWBPortal.getContextPath()%>');
 </script>
 
 
