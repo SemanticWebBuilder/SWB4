@@ -2099,9 +2099,9 @@ public class CodeGenerator
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void remove" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
+                    javaClassContent.append("    public void remove" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());" + ENTER);
+                    javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
             }
