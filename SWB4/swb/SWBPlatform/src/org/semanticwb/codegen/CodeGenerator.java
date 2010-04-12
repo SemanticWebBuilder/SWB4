@@ -2069,7 +2069,7 @@ public class CodeGenerator
                 javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        boolean ret=false;" + ENTER);
-                javaClassContent.append("        if(" + tpcToReturn.getClassCodeName().toLowerCase() + "!=null)" + ENTER);
+                javaClassContent.append("        if(" + "value" + "!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
                 javaClassContent.append("           ret=get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());"+ ENTER);
                 javaClassContent.append("        }" + ENTER);
