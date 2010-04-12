@@ -2066,12 +2066,12 @@ public class CodeGenerator
                 javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));"+ ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + tpcToReturn.getClassCodeName().toLowerCase() + ")" + ENTER);
+                javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        boolean ret=false;" + ENTER);
                 javaClassContent.append("        if(" + tpcToReturn.getClassCodeName().toLowerCase() + "!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("           ret=get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + tpcToReturn.getClassCodeName().toLowerCase() + ".getSemanticObject());"+ ENTER);
+                javaClassContent.append("           ret=get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());"+ ENTER);
                 javaClassContent.append("        }" + ENTER);
                 javaClassContent.append("        return ret;" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
