@@ -1245,11 +1245,15 @@ public class CodeGenerator
             }
             if (!isInSuperInterface)
             {
-                javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+                String name=tpp.getPrefix() + "_" + tpp.getName();
+                if(rangeNames.contains(name))
+                {
+                    javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+                    rangeNames.add(name);
+                }
 
             }
         }
-
         javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
         insertPropertiesToInterface(tpc, javaClassContent);
         javaClassContent.append("}" + ENTER);
