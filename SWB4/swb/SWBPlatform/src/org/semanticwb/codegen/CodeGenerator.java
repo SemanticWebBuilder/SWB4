@@ -1246,7 +1246,7 @@ public class CodeGenerator
             if (!isInSuperInterface)
             {
                 String name=tpp.getPrefix() + "_" + tpp.getName();
-                if(rangeNames.contains(name))
+                if(!rangeNames.contains(name))
                 {
                     javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
                     rangeNames.add(name);
