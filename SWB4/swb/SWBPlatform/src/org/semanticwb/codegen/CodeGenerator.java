@@ -1254,7 +1254,12 @@ public class CodeGenerator
 
             }
         }
-        javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName()) + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
+        String name=tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName());
+        if(!rangeNames.contains(name))
+        {
+            javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
+            rangeNames.add(name);
+        }
         insertPropertiesToInterface(tpc, javaClassContent);
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName() + "Base") + ".java");
