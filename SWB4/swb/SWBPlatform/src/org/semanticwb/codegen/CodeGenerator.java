@@ -1035,7 +1035,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("        public static java.util.Iterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> list" + toUpperCase(tpc.getClassCodeName()) + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                     javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(" + tpp.getName().toLowerCase() + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
+                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getCodePackage() + "." + tpc.getClassCodeName() + "> it=new org.semanticwb.model.GenericIterator(" + "value" + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
                     javaClassContent.append("            return it;" + ENTER);
                     javaClassContent.append("        }" + ENTER);
                 }
