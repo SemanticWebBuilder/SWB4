@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,7 +48,6 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -90,6 +90,39 @@ public class BlogResource extends GenericResource
     /** The base. */
     Resource base = null;
 
+
+    private void checktables(ResourceType type) throws SWBResourceException
+    {
+        Connection con = SWBUtils.DB.getDefaultConnection();
+        try
+        {
+            con.setAutoCommit(false);
+
+            DatabaseMetaData dbm = con.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, "wbblog", null);
+            if (!tables.next())
+            {
+                install(type);
+            }           
+
+        }
+        catch(SQLException sqle)
+        {
+             log.error(sqle);
+             throw new SWBResourceException("It was not possible to create the tables of the BlogResource: "+sqle.getMessage(),sqle);
+        }
+        finally
+        {
+            try
+            {
+                con.close();
+            }
+            catch(SQLException sqle)
+            {
+                log.error(sqle);
+            }
+        }
+    }
 
     /**
      * Install my sql.
@@ -2848,6 +2881,7 @@ public class BlogResource extends GenericResource
      */
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        checktables(paramRequest.getResourceBase().getResourceType());
         String pathDeleteBlog = getDeleteImagePath(paramRequest);
         String pathEditBlog = getEditImagePath(paramRequest);
         String pathAddBlog=getAddImagePath(paramRequest);
