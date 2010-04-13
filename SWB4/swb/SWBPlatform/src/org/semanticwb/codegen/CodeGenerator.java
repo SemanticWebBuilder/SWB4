@@ -1318,7 +1318,7 @@ public class CodeGenerator
                         objectName = objectName.substring(3);
                         javaClassContent.append(ENTER);
                         javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> list" + getNameInPlural(objectName) + "();" + ENTER);
-                        javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                        javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
                         if (tpp.isInheritProperty())
                         {
                             javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> listInherit" + getNameInPlural(objectName) + "();" + ENTER);
@@ -1327,11 +1327,11 @@ public class CodeGenerator
                         if (!tpp.hasInverse())
                         {
                             javaClassContent.append(ENTER);
-                            javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                            javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
                             javaClassContent.append(ENTER);
                             javaClassContent.append("    public void removeAll" + objectName + "();" + ENTER);
                             javaClassContent.append(ENTER);
-                            javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + valueToReturn + " " + valueToReturn.toLowerCase() + ");" + ENTER);
+                            javaClassContent.append("    public void remove" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
                             javaClassContent.append(ENTER);
                             javaClassContent.append(PUBLIC + pack + "." + valueToReturn + " get" + objectName + "();" + ENTER);
                         }
