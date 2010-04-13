@@ -1184,6 +1184,13 @@ public class CodeGenerator
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
+        HashSet<SemanticProperty> props=new HashSet<SemanticProperty>();
+        while (properties.hasNext())
+        {
+            SemanticProperty tpp = properties.next();
+            props.add(tpp);
+        }
+        properties=props.iterator();
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
@@ -1240,6 +1247,7 @@ public class CodeGenerator
             if (!isInSuperInterface)
             {
                 javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
+
             }
         }
 
