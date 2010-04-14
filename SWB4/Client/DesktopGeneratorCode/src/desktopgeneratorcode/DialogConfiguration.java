@@ -41,8 +41,17 @@ public class DialogConfiguration extends javax.swing.JDialog
         {
             for (String key : config.getKeys())
             {
-                OWL owl = new OWL(new File(config.get(key)));
-                owlsBaseCommons.add(owl);
+                File file=new File(config.get(key));
+                if(file.exists())
+                {
+                    OWL owl = new OWL(file);
+                    owlsBaseCommons.add(owl);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this,"El archivo "+file.getAbsolutePath()+" no se encontró, este archivo esta definido como un archivo común para la generacion de proyectos", "Error", JOptionPane.OK_OPTION | JOptionPane.WARNING_MESSAGE);
+                }
+
 
             }
         }
@@ -164,6 +173,7 @@ public class DialogConfiguration extends javax.swing.JDialog
         jToolBar1.setName("jToolBar1"); // NOI18N
         jToolBar1.setPreferredSize(new java.awt.Dimension(100, 30));
 
+        jButtonAdd.setIcon(resourceMap.getIcon("jButtonAdd.icon")); // NOI18N
         jButtonAdd.setText(resourceMap.getString("jButtonAdd.text")); // NOI18N
         jButtonAdd.setToolTipText(resourceMap.getString("jButtonAdd.toolTipText")); // NOI18N
         jButtonAdd.setFocusable(false);
@@ -177,6 +187,7 @@ public class DialogConfiguration extends javax.swing.JDialog
         });
         jToolBar1.add(jButtonAdd);
 
+        jButtonRemove.setIcon(resourceMap.getIcon("jButtonRemove.icon")); // NOI18N
         jButtonRemove.setText(resourceMap.getString("jButtonRemove.text")); // NOI18N
         jButtonRemove.setToolTipText(resourceMap.getString("jButtonRemove.toolTipText")); // NOI18N
         jButtonRemove.setFocusable(false);

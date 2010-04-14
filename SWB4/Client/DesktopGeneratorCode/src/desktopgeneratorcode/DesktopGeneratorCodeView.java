@@ -256,13 +256,18 @@ public class DesktopGeneratorCodeView extends FrameView
         jPanel3.setPreferredSize(new java.awt.Dimension(459, 30));
         jPanel3.setLayout(new java.awt.BorderLayout());
 
+        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.setDoubleBuffered(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
+        jButtonAdd.setIcon(resourceMap.getIcon("jButtonAdd.icon")); // NOI18N
         jButtonAdd.setText(resourceMap.getString("jButtonAdd.text")); // NOI18N
+        jButtonAdd.setToolTipText(resourceMap.getString("jButtonAdd.toolTipText")); // NOI18N
         jButtonAdd.setFocusable(false);
         jButtonAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonAdd.setName("jButtonAdd"); // NOI18N
+        jButtonAdd.setNextFocusableComponent(jButtonDelete);
         jButtonAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -271,7 +276,9 @@ public class DesktopGeneratorCodeView extends FrameView
         });
         jToolBar1.add(jButtonAdd);
 
+        jButtonDelete.setIcon(resourceMap.getIcon("jButtonDelete.icon")); // NOI18N
         jButtonDelete.setText(resourceMap.getString("jButtonDelete.text")); // NOI18N
+        jButtonDelete.setToolTipText(resourceMap.getString("jButtonDelete.toolTipText")); // NOI18N
         jButtonDelete.setFocusable(false);
         jButtonDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonDelete.setName("jButtonDelete"); // NOI18N
@@ -283,7 +290,9 @@ public class DesktopGeneratorCodeView extends FrameView
         });
         jToolBar1.add(jButtonDelete);
 
+        jButtonGenerate.setIcon(resourceMap.getIcon("jButtonGenerate.icon")); // NOI18N
         jButtonGenerate.setText(resourceMap.getString("jButtonGenerate.text")); // NOI18N
+        jButtonGenerate.setToolTipText(resourceMap.getString("jButtonGenerate.toolTipText")); // NOI18N
         jButtonGenerate.setFocusable(false);
         jButtonGenerate.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButtonGenerate.setName("jButtonGenerate"); // NOI18N
