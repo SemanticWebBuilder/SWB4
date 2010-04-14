@@ -123,6 +123,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButtonAdd">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonAdd.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="jButtonAdd.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonAdd.toolTipText"/>
             <Property name="focusable" type="boolean" value="false"/>
@@ -136,6 +137,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButtonRemove">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonRemove.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="jButtonRemove.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonRemove.toolTipText"/>
             <Property name="focusable" type="boolean" value="false"/>

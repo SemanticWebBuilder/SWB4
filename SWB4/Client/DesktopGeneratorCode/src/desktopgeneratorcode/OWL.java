@@ -219,7 +219,7 @@ public class OWL
             return false;
         }
         final OWL other = (OWL) obj;
-        if (this.location != other.location && (this.location == null || !this.location.equals(other.location)))
+        if (this.getName() != other.getName() && (this.getName() == null || !this.getName().equals(other.getName())))
         {
             return false;
         }
@@ -230,7 +230,7 @@ public class OWL
     public int hashCode()
     {
         int hash = 3;
-        hash = 41 * hash + (this.location != null ? this.location.hashCode() : 0);
+        hash = 41 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         return hash;
     }
 }

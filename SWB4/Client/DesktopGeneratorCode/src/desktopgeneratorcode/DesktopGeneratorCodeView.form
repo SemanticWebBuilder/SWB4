@@ -110,7 +110,9 @@
               <SubComponents>
                 <Container class="javax.swing.JToolBar" name="jToolBar1">
                   <Properties>
+                    <Property name="floatable" type="boolean" value="false"/>
                     <Property name="rollover" type="boolean" value="true"/>
+                    <Property name="doubleBuffered" type="boolean" value="true"/>
                     <Property name="name" type="java.lang.String" value="jToolBar1" noResource="true"/>
                   </Properties>
                   <Constraints>
@@ -123,10 +125,15 @@
                   <SubComponents>
                     <Component class="javax.swing.JButton" name="jButtonAdd">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonAdd.icon"/>
                         <Property name="text" type="java.lang.String" resourceKey="jButtonAdd.text"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonAdd.toolTipText"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="name" type="java.lang.String" value="jButtonAdd" noResource="true"/>
+                        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                          <ComponentRef name="jButtonDelete"/>
+                        </Property>
                         <Property name="verticalTextPosition" type="int" value="3"/>
                       </Properties>
                       <Events>
@@ -135,7 +142,9 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="jButtonDelete">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonDelete.icon"/>
                         <Property name="text" type="java.lang.String" resourceKey="jButtonDelete.text"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonDelete.toolTipText"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="name" type="java.lang.String" value="jButtonDelete" noResource="true"/>
@@ -147,7 +156,9 @@
                     </Component>
                     <Component class="javax.swing.JButton" name="jButtonGenerate">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" resourceKey="jButtonGenerate.icon"/>
                         <Property name="text" type="java.lang.String" resourceKey="jButtonGenerate.text"/>
+                        <Property name="toolTipText" type="java.lang.String" resourceKey="jButtonGenerate.toolTipText"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="horizontalTextPosition" type="int" value="0"/>
                         <Property name="name" type="java.lang.String" value="jButtonGenerate" noResource="true"/>
