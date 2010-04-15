@@ -93,7 +93,7 @@ public class FB_Login extends GenericAdmResource {
         request.setAttribute("API_KEY", API_KEY);
         request.setAttribute("SECRET_KEY", SECRET_KEY);
         request.setAttribute("redirect", redirect);
-        RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/facebook/fb_Login.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/facebook/fb_Login.jsp");
         
         String sessionKey = "";
         HttpSession session = request.getSession(true);
