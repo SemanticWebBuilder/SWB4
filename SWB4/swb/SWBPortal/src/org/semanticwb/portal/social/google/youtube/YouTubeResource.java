@@ -69,7 +69,7 @@ public class YouTubeResource extends GenericResource {
         }
         YouTubeService service = getYouTubeService();
         if (service != null) {
-            RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath() + "/swbadmin/jsp/youtube/youtube.jsp");
+            RequestDispatcher dis = request.getRequestDispatcher("/swbadmin/jsp/youtube/youtube.jsp");
             try {
                 request.setAttribute("paramRequest", paramRequest);
                 request.setAttribute("service", service);
