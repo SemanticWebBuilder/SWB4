@@ -140,7 +140,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         try {
             request.setAttribute("acceptguesscomments", isAcceptGuessUsers());
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/forum/swbForum.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/forum/swbForum.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
