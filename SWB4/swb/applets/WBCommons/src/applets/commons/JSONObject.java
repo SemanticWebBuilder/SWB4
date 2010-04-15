@@ -28,7 +28,7 @@ public class JSONObject extends org.json.JSONObject
     @Override
     public JSONObject put(String key, Object value) throws JSONException
     {
-        super.put(key, value);
+        if(value!=null)super.put(key, value);
         return this;
     }
 
