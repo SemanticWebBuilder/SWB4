@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
+import javafx.scene.Cursor;
 import javafx.scene.CustomNode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +50,7 @@ public class ImgButton extends CustomNode
                  visible: bind over
                }
             ]
+            //blocksMouse:true
             onMouseEntered: function( e: MouseEvent ):Void
             {
                  over=true;
@@ -82,7 +84,10 @@ public class ImgButton extends CustomNode
                  content.requestFocus();
                  subMenu.action=this.action;
                  ModelerUtils.clickedNode=this;
+                 var tmpCursor=cursor;
+                 cursor=Cursor.WAIT;
                  action();
+                 cursor=tmpCursor;
             }
             onMouseReleased: function( e: MouseEvent ):Void
             {
@@ -92,7 +97,10 @@ public class ImgButton extends CustomNode
             onKeyTyped: function( e: KeyEvent ):Void
             {
                  content.requestFocus();
+                 var tmpCursor=cursor;
+                 cursor=Cursor.WAIT;
                  action();
+                 cursor=tmpCursor;
             }
         }
         return content;

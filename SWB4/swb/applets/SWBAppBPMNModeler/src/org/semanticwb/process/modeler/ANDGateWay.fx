@@ -61,6 +61,7 @@ public class ANDGateWay extends GateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 }

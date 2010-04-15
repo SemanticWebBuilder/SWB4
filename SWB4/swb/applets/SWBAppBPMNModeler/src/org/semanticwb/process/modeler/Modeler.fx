@@ -12,7 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.GraphElement;
-
+import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
  * @author javier.solis
@@ -26,21 +26,20 @@ public class Modeler extends CustomNode
     public var pannable: Boolean;
     public var disablePannable: Boolean=false;
     public var tempNode: Node;                          //Nodo temporal por toolbar
-    public var focusedNode: Node;                       //Nodo con el foco
-    //public var clickedNode: Node;
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
     public var clipView:ClipView;
-    public var overPool: Pool;                          //Nodo temporal por toolbar
+    public var containerElement: GraphElement;
+
+    var focusedNode: Node;                       //Nodo con el foco
 
     public override function create(): Node
     {
-         clipView=ClipView
          //var ret=ScrollPane
+         clipView=ClipView
          {
              node:Group
-             //content:Group
              {
                  content: bind contents
              }
@@ -67,6 +66,7 @@ public class Modeler extends CustomNode
                             a.x=e.x+clipView.clipX;
                             a.y=e.y+clipView.clipY;
                             a.snapToGrid();
+                            a.setContainer(containerElement);
                         }else //se presiono algun boton del toolbar
                         {
                             close=false;
@@ -144,6 +144,7 @@ public class Modeler extends CustomNode
 //                 println(e);
 //             }
          };
+         //return ret;
          return clipView;
     }
 
@@ -219,6 +220,7 @@ public class Modeler extends CustomNode
     public function remove(obj:Node)
     {
         delete obj from contents;
+
     }
 
     public function getGraphElementByURI(uri:String):GraphElement
@@ -232,6 +234,17 @@ public class Modeler extends CustomNode
             }
         }
         return null;
+    }
+
+    public function setFocusedNode(node:Node)
+    {
+        focusedNode=node;
+        ModelerUtils.setResizeNode(node);
+    }
+
+    public function getFocusedNode():Node
+    {
+        return focusedNode;
     }
 
 }

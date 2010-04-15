@@ -50,7 +50,7 @@ public class ConnectionObject  extends CustomNode
 
     protected var path : Path;
     protected var arrow : Path;
-    protected var o : Number = 0.8;                   //opacity
+    protected var o : Number = Styles.opacity;                   //opacity
     protected var strokeDash : Float[];
 
     protected var notGroup : Boolean;                 //No agrega los elementos path y arrow al grupo
@@ -168,6 +168,7 @@ public class ConnectionObject  extends CustomNode
                     text
                 ]
                 opacity: bind o;
+                visible: bind canView()
             };
         }else
         {
@@ -195,7 +196,7 @@ public class ConnectionObject  extends CustomNode
         if(ModelerUtils.clickedNode==null)
         {
             ModelerUtils.clickedNode=this;
-            modeler.focusedNode=this;
+            modeler.setFocusedNode(this);
         }
     }
 
@@ -423,4 +424,10 @@ public class ConnectionObject  extends CustomNode
             2*Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
         }
     }
+
+    public bound function canView():Boolean
+    {
+        return modeler.containerElement==ini.container or modeler.containerElement==end.container;
+    }
+
 }

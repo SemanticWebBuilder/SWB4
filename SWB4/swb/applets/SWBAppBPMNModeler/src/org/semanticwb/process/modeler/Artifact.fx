@@ -24,8 +24,6 @@ public-read var TYPE_OUTPUT="output";
 
 public class Artifact extends GraphElement
 {
-    public var type:String;
-
     protected var ix:Number;                          //offset imagen x
     protected var iy:Number;                          //offset imagen x
     protected var is:Number=1;                        //image scale
@@ -93,6 +91,7 @@ public class Artifact extends GraphElement
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 
@@ -116,8 +115,9 @@ public class Artifact extends GraphElement
        super.remove();
     }
 
-    public function setType(type:String):Void
+    public override function setType(type:String):Void
     {
+        super.setType(type);
         if(type.equals(TYPE_INPUT))
         {
             message.image=Styles.ICO_EVENT_W_LINK;
@@ -136,7 +136,19 @@ public class Artifact extends GraphElement
             ix=-message.image.width/2;
             iy=h/2-message.image.height-3;
             is=1;
+        }else
+        {
+             message.visible=false;
         }
     }
 
+    public override function canAttach(parent:GraphElement):Boolean
+    {
+        var ret=false;
+        if(parent instanceof Pool or parent instanceof Lane)
+        {
+            ret=true;
+        }
+        return ret;
+    }
 }

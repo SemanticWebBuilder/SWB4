@@ -78,6 +78,7 @@ public class InterORGateWay extends ORGateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 }

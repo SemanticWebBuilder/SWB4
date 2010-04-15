@@ -28,6 +28,9 @@ import applets.commons.JSONArray;
 import javafx.stage.AppletStageExtension;
 import javafx.stage.Alert;
 import applets.commons.WBXMLParser;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -49,65 +52,58 @@ public class ToolBar extends CustomNode
 
     var isApplet:Boolean=false;
 
+    var fileChooser = javax.swing.JFileChooser{};
+
     public function openProcess(): Void
     {
-
+        //fileChooser.setDialogType(javax.swing.JFileChooser.OPEN_DIALOG);
+        if (fileChooser.showOpenDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
+        {
+            var file = fileChooser.getSelectedFile();
+            //println(file);
+            try
+            {
+                var in=new FileInputStream(file);
+                var proc=WBConnection.readInputStream(in);
+                //println(proc);
+                delete modeler.contents;
+                modeler.containerElement=null;
+                createProcess(proc);
+            }catch(e:Exception){Alert.inform("Error",e.getMessage());}
+        }
     }
 
     public function saveProcess(): Void
     {
-        var obj:JSONObject =new JSONObject();
-        obj.put("uri","test");
-        var nodes:JSONArray =new JSONArray();
-        obj.putOpt("nodes",nodes);
-        for(node in modeler.contents)
-        {
-            var ele:JSONObject=new JSONObject();
-            nodes.put(ele);
-            if(node instanceof GraphElement)
+        //fileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            var file = fileChooser.getSelectedFile();
+            if(not file.getName().toLowerCase().endsWith("swp"))
             {
-               var ge=node as GraphElement;
-               ele.put("class",ge.getClass().getName());
-               ele.put("title",ge.title);
-               ele.put("uri",ge.uri);
-               ele.put("x",ge.x);
-               ele.put("y",ge.y);
-            }
-            if(node instanceof FlowObject)
-            {
-               var ge=node as FlowObject;
-               ele.put("lane",ge.pool.uri);
-            }
-            if(node instanceof Event)
-            {
-               var ge=node as Event;
-               ele.put("type",ge.type);
-            }
-            if(node instanceof ConnectionObject)
-            {
-               var ge=node as ConnectionObject;
-               ele.put("class",ge.getClass().getName());
-               ele.put("uri",ge.uri);
-               ele.put("title",ge.title);
-               ele.put("start",ge.ini.uri);
-               ele.put("end",ge.end.uri);
-               if(node instanceof ConditionalFlow)
-               {
-                   var con=node as ConditionalFlow;
-                   ele.put("action", ge.action);
-               }
+                file=new File("{file.getPath()}.swp");
             }
 
+            //println(file);
+            var proc=getProcess();
+            try
+            {
+                var out=new FileOutputStream(file);
+                out.write(proc.getBytes());
+                out.close();
+            }catch(e:Exception){Alert.inform("Error",e.getMessage());}
         }
-        //println(obj.toString());
+    }
 
-        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(obj.toString(),"UTF8")}</json></req>";
+    public function storeProcess(): Void
+    {
+        var process=getProcess();
+
+        var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>updateModel</cmd><json>{WBXMLParser.encode(process,"UTF8")}</json></req>";
         var data=conn.getData(comando);
         AppletStageExtension.eval("parent.reloadTreeNodeByURI('{conn.getUri()}')");
         if(data.indexOf("OK")>0)
         {
             Alert.inform("SemanticWebBuilder","Los datos fueron enviados correctamente");
-            delete modeler.contents;
             loadProcess();
         }else
         {
@@ -123,11 +119,73 @@ public class ToolBar extends CustomNode
             var comando="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getProcessJSON</cmd></req>";
             var json=conn.getData(comando);
             //println("json:{json}");
+            delete modeler.contents;
             createProcess(json);
         }catch(e:Exception){println(e);}
 
     }
 
+    /**
+    * Serialyze the process to JSON
+    */
+    public function getProcess(): String
+    {
+        var obj:JSONObject =new JSONObject();
+        obj.put("uri","test");
+        var nodes:JSONArray =new JSONArray();
+        obj.putOpt("nodes",nodes);
+        for(node in modeler.contents)
+        {
+            var ele:JSONObject=new JSONObject();
+            nodes.put(ele);
+            if(node instanceof GraphElement)
+            {
+               var ge=node as GraphElement;
+               ele.put("class",ge.getClass().getName());
+               ele.put("container",ge.getContainer().uri);
+               ele.put("parent",ge.getGraphParent().uri);
+               ele.put("title",ge.title);
+               ele.put("type",ge.type);
+               ele.put("uri",ge.uri);
+               ele.put("x",ge.x);
+               ele.put("y",ge.y);
+               ele.put("w",ge.w);
+               ele.put("h",ge.h);
+            }
+            if(node instanceof ConnectionObject)
+            {
+               var ge=node as ConnectionObject;
+               ele.put("class",ge.getClass().getName());
+               ele.put("uri",ge.uri);
+               ele.put("title",ge.title);
+               ele.put("start",ge.ini.uri);
+               ele.put("end",ge.end.uri);
+               if(node instanceof ConditionalFlow)
+               {
+                   var con=node as ConditionalFlow;
+                   ele.put("action", ge.action);
+               }
+            }
+        }
+        return obj.toString();
+    }
+
+    /**
+    * Increment the internal counter for new uris
+    */
+    function validateUri(uri:String):String
+    {
+        if(uri.startsWith("new:"))
+        {
+            var c=Integer.parseInt(uri.substring(uri.lastIndexOf(":")+1));
+            if(c>counter)counter=c+1;
+        }
+        return uri;
+    }
+
+    /**
+    * Create a process from a JSON
+    */
     public function createProcess(json:String): Void
     {
         var jsobj=new JSONObject(json);
@@ -139,42 +197,35 @@ public class ToolBar extends CustomNode
             //generic
             var js = jsarr.getJSONObject(i);
             var cls:String=js.getString("class");
-            var uri:String=js.getString("uri");
+            var uri:String=validateUri(js.getString("uri"));
+
+            var clss=getClass().forName(cls);
+            var node=clss.newInstance() as Node;
 
             var ge:GraphElement=null;
-            if(cls.endsWith(".UserTask"))
+            if(node instanceof GraphElement)
             {
-                ge=Task{};
-            }else if(cls.endsWith(".Process"))
-            {
-                ge=SubProcess{};
-            }else if(cls.endsWith(".InitEvent"))
-            {
-                ge=StartEvent{};
-            }else if(cls.endsWith(".EndEvent"))
-            {
-                ge=EndEvent{};
-            }else if(cls.endsWith(".GateWay"))
-            {
-                ge=GateWay{};
-            }else if(cls.endsWith(".ORGateWay"))
-            {
-                ge=ORGateWay{};
-            }else if(cls.endsWith(".ANDGateWay"))
-            {
-                ge=ANDGateWay{};
+                ge=node as GraphElement;
             }
+
             if(ge!=null)
             {
                 var title=js.getString("title");
+                var type=js.getString("type");
                 var x=js.getInt("x");
                 var y=js.getInt("y");
+                var w=js.getInt("w");
+                var h=js.getInt("h");
 
                 ge.modeler=modeler;
                 ge.uri=uri;
+                //println("uri:{ge.uri}");
                 ge.title=title;
+                ge.setType(type);
                 ge.x=x;
                 ge.y=y;
+                if(w>0)ge.w=w;
+                if(h>0)ge.h=h;
                 modeler.add(ge);
                 //println("jsobj:{js.toString()}, i: {i}");
             }
@@ -188,29 +239,42 @@ public class ToolBar extends CustomNode
             //generic
             var js = jsarr.getJSONObject(i);
             var cls:String=js.getString("class");
-            var uri:String=js.getString("uri");
+            var uri:String=validateUri(js.getString("uri"));
+
+            var clss=getClass().forName(cls);
+            var node=clss.newInstance() as Node;
+
+            var ge:GraphElement=null;
+            if(node instanceof GraphElement)
+            {
+                ge=modeler.getGraphElementByURI(uri);
+            }
+
+            if(ge!=null)
+            {
+                var parent=js.getString("parent");
+                ge.setGraphParent(modeler.getGraphElementByURI(parent));
+                var container=js.getString("container");
+                ge.setContainer(modeler.getGraphElementByURI(container));
+                //println("{ge} parent:{ge.getGraphParent()}");
+            }
 
             var co:ConnectionObject=null;
+            if(node instanceof ConnectionObject)
+            {
+                co=node as ConnectionObject;
+            }
 
-            if(cls.endsWith(".SequenceFlow"))
-            {
-                co=SequenceFlow{};
-            }
-            if(cls.endsWith(".ConditionalFlow"))
-            {
-                co=ConditionalFlow{};
-                var cond=js.getString("action");
-                if(cond!=null)co.title=cond;
-            }
             if(co!=null)
             {
                 //ConnectionObjects
                 var start=js.getString("start");
                 var end=js.getString("end");
+                var title=js.getString("title");
 
                 co.modeler=modeler;
                 co.uri=uri;
-                //co.title=title;
+                co.title=title;
                 co.ini=modeler.getGraphElementByURI(start);
                 co.end=modeler.getGraphElementByURI(end);
                 modeler.add(co);
@@ -218,12 +282,12 @@ public class ToolBar extends CustomNode
             }
             i++;
         }
-
     }
-
 
     public override function create(): Node
     {
+        var filter = FileFilter{};
+        fileChooser.setFileFilter(filter);
 
         if(isApplet)loadProcess();
 
@@ -1346,7 +1410,6 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             uri:"new:messageflow:{counter++}"
-                            cubicCurve:true
                         }
                     }
                 },
@@ -1361,7 +1424,6 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             uri:"new:associationflow:{counter++}"
-                            cubicCurve:true
                         }
                     }
                 },
@@ -1376,7 +1438,6 @@ public class ToolBar extends CustomNode
                         {
                             modeler:modeler
                             uri:"new:dirassociationflow:{counter++}"
-                            cubicCurve:true
                         }
                     }
                 },
@@ -1535,7 +1596,7 @@ public class ToolBar extends CustomNode
             imageOver: "images/lane_2.png"
             action: function():Void {
                 modeler.disablePannable=true;
-                modeler.tempNode=Pool
+                modeler.tempNode=Lane
                 {
                     modeler:modeler
                     title:"Lane"
@@ -1560,6 +1621,7 @@ public class ToolBar extends CustomNode
                                 url: "{__DIR__}images/barra_mov.png"
                             }
                             cursor:Cursor.MOVE
+                            //blocksMouse:true
                             onMousePressed: function (e: MouseEvent): Void
                             {
                                 ModelerUtils.clickedNode=this;
@@ -1605,6 +1667,8 @@ public class ToolBar extends CustomNode
                             imageOver: "images/open_doc_2.png"
                             action: function():Void
                             {
+                                ModelerUtils.clickedNode=null;
+                                modeler.disablePannable=false;
                                 openProcess();
                             }
                         },
@@ -1615,6 +1679,8 @@ public class ToolBar extends CustomNode
                             imageOver: "images/save_2.png"
                             action: function():Void
                             {
+                                ModelerUtils.clickedNode=null;
+                                modeler.disablePannable=false;
                                 saveProcess();
                             }
                         },
@@ -1622,6 +1688,7 @@ public class ToolBar extends CustomNode
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
+                            //blocksMouse:true
                         },
                         task,
                         subtask,
@@ -1633,18 +1700,21 @@ public class ToolBar extends CustomNode
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
+                            //blocksMouse:true
                         },
                         sequence,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
+                            //blocksMouse:true
                         },
                         artifacts,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
                             }
+                            //blocksMouse:true
                         },
                         pool,
                         lane,
@@ -1652,6 +1722,7 @@ public class ToolBar extends CustomNode
                             image: Image {
                                 url: "{__DIR__}images/barra_bottom.png"
                             }
+                            //blocksMouse:true
                         }
                     ]
                 },
@@ -1665,9 +1736,19 @@ public class ToolBar extends CustomNode
                 artifacts.subBar
              ]
              cursor:Cursor.HAND;
+             blocksMouse:true
         };
 
         return ret;
     }
 }
 
+class FileFilter extends javax.swing.filechooser.FileFilter {
+    override public function getDescription() : String {
+        return "SWP Process File";
+    }
+
+    override public function accept(f: java.io.File) : Boolean {
+        return f.isDirectory() or f.getName().endsWith(".swp")
+    }
+}

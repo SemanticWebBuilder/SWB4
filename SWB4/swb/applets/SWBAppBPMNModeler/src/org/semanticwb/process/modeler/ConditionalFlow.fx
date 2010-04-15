@@ -9,7 +9,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.paint.Color;
 
@@ -57,6 +56,7 @@ public class ConditionalFlow extends ConnectionObject
                 text
             ]
             opacity: bind o;
+            visible: bind canView()
         };
         return ret;
     }
@@ -66,7 +66,7 @@ public class ConditionalFlow extends ConnectionObject
         if(ModelerUtils.clickedNode==null)
         {
             ModelerUtils.clickedNode=this;
-            modeler.focusedNode=this;
+            modeler.setFocusedNode(this);
             if(e.clickCount >= 2)
             {
                 //println("starEditing");

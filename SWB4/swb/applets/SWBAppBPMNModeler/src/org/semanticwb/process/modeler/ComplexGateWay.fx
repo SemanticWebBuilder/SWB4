@@ -77,6 +77,7 @@ public class ComplexGateWay extends GateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 }

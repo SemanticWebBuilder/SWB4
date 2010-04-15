@@ -71,6 +71,7 @@ public class StartORGateWay extends ORGateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible:bind canView()
         };
     }
 }

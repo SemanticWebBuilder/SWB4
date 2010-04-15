@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
 /**
@@ -42,7 +41,9 @@ public-read var style_connection="stroke: {color}; strokeWidth: 2;";
 public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
 public-read var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
 public-read var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
+public-read var style_pool_line="stroke: {color}; strokeWidth: 1;";
 public-read var style_artifact="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
+public-read var style_resize="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
 
 public-read var ICO_SUBPROCESS_ADHOC=Image{url: "{__DIR__}images/n_adhoc2.png"}
 public-read var ICO_SUBPROCESS_CICLE=Image{url: "{__DIR__}images/n_ciclo2.png"}
@@ -81,12 +82,17 @@ public-read var ICO_EVENT_B_SCALATION=Image{url: "{__DIR__}images/n_escala_n.png
 public-read var ICO_EVENT_B_TERMINATION=Image{url: "{__DIR__}images/n_termina.png"}
 public-read var ICO_EVENT_B_LINK=Image{url: "{__DIR__}images/n_enlace_n.png"}
 
-
-public-read var dropShadow = DropShadow {
-    offsetX: 3
-    offsetY: 3
-    radius: 10.0
-    color: Color.web("#707070")
-}
+public-read var dropShadow:DropShadow=null;
+//public-read var dropShadow = DropShadow
+//{
+//    offsetX: 3
+//    offsetY: 3
+//    radius: 10.0
+//    color: Color.web("#707070")
+//}
 
 public-read var style_tooltip="fill: #FFFF66; stroke: #000000; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
+public-read var style_containerButton="fill: #e5e5ff; stroke: #FFFFFF; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
+public-read var style_containerButtonText="stroke: #0000FF; strokeWidth: 0;";
+
+public var opacity : Number = 1;

@@ -18,6 +18,7 @@ public class Association extends ConnectionObject
     {
         arrowType=ARROW_TYPE_NONE;
         strokeDash=[2,5];
+        cubicCurve=true;
         var ret=super.create();
         return ret;
     }

@@ -50,6 +50,7 @@ public class ORGateWay extends GateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 }

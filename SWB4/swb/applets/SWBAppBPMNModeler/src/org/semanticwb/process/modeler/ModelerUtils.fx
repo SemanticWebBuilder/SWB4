@@ -21,6 +21,8 @@ var toolTip=ToolTip
     visible:false
 }
 
+var resize=ResizeNode{};
+
 // Tooltips are displayed after a delay.
 var toolTipTimeline= Timeline
 {
@@ -42,6 +44,10 @@ public function getToolTip():ToolTip
     return toolTip;
 }
 
+public function getResizeNode():ResizeNode
+{
+    return resize;
+}
 
 public function startToolTip(text:String,x:Number,y:Number)
 {
@@ -61,8 +67,16 @@ public function stopToolTip()
     toolTip.layout();
 }
 
-
-
+public function setResizeNode(node:Node)
+{
+    if(node==null)
+    {
+        resize.attachedNode=null;
+    }else if(node instanceof GraphElement)
+    {
+        resize.attachedNode=node as GraphElement;
+    }
+}
 
 public class ModelerUtils {
 
