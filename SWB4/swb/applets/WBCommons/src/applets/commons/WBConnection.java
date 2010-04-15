@@ -33,12 +33,13 @@ package applets.commons;
 
 import java.applet.Applet;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  *
@@ -70,8 +71,11 @@ public class WBConnection
         {
             URL cb=new URL(codeBase);
             System.out.println("codeBase:"+codeBase+" cgipath:"+cgipath+" cb:"+cb);
-            url=new URL(cb,cgiPath);
-            System.out.println("url:"+url);
+            if(cgiPath!=null)
+            {
+                url=new URL(cb,cgiPath);
+                System.out.println("url:"+url);
+            }
         }catch(Exception e){e.printStackTrace();}
     }
 
@@ -150,5 +154,34 @@ public class WBConnection
         }
         return ret;
     }
+
+        /**
+         * Reads an input stream and creates a string with that content.
+         * <p>Lee un objeto inputStream y crea un objeto string con el contenido le&iacute;do.</p>
+         *
+         * @param in an input stream to read its content
+         * @return a string whose content is the same as for the input stream read.
+         * un objeto string cuyo contenido es el mismo que el del objeto
+         * inputStream le&iacute;do.
+         * @throws IOException if the input stream received is {@code null}.
+         * <p>Si el objeto inputStream recibido tiene un valor {@code null}.</p>
+         */
+        public static String readInputStream(InputStream in) throws IOException
+        {
+            if (in == null)
+            {
+                throw new IOException("Input Stream null");
+            }
+            StringBuffer buf = new StringBuffer();
+            byte[] bfile = new byte[8192];
+            int x;
+            while ((x = in.read(bfile, 0, 8192)) > -1)
+            {
+                String aux = new String(bfile, 0, x);
+                buf.append(aux);
+            }
+            in.close();
+            return buf.toString();
+        }
 
 }
