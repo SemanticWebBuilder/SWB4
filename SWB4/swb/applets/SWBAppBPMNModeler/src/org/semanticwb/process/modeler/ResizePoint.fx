@@ -1,0 +1,126 @@
+/*
+ * ResizeNode.fx
+ *
+ * Created on 30/03/2010, 06:42:33 PM
+ */
+
+package org.semanticwb.process.modeler;
+
+import javafx.scene.CustomNode;
+import javafx.scene.Node;
+import javafx.scene.shape.Circle;
+import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Math;
+
+/**
+ * @author javier.solis
+ */
+
+public class ResizePoint extends CustomNode
+{
+    public var attachedNode:GraphElement;
+    public var modeler:Modeler;
+    public var type:Number;
+
+    var ox:Number;
+    var oy:Number;
+
+    override protected function create () : Node
+    {
+        var cursor:Cursor;
+        var ix=0.0;
+        var iy=0.0;
+        if(type==1)
+        {
+            cursor=Cursor.NW_RESIZE;
+            ix=-0.5;
+            iy=-0.5;
+        }else if(type==2)
+        {
+            cursor=Cursor.V_RESIZE;
+            ix=0;
+            iy=-0.5;
+        }else if(type==3)
+        {
+            cursor=Cursor.NE_RESIZE;
+            ix=0.5;
+            iy=-0.5;
+        }else if(type==4)
+        {
+            cursor=Cursor.H_RESIZE;
+            ix=-0.5;
+            iy=0;
+        }else if(type==5)
+        {
+            cursor=Cursor.H_RESIZE;
+            ix=0.5;
+            iy=0;
+        }else if(type==6)
+        {
+            cursor=Cursor.NE_RESIZE;
+            ix=-0.5;
+            iy=0.5;
+        }else if(type==7)
+        {
+            cursor=Cursor.V_RESIZE;
+            ix=0;
+            iy=0.5;
+        }else if(type==8)
+        {
+            cursor=Cursor.NW_RESIZE;
+            ix=0.5;
+            iy=0.5;
+        }
+
+        var c=Circle{
+            centerX:bind attachedNode.x+(ix*attachedNode.w)-modeler.clipView.clipX
+            centerY:bind attachedNode.y+(iy*attachedNode.h)-modeler.clipView.clipY
+            radius:5
+            cursor:cursor
+            style:Styles.style_resize
+            onMousePressed:function( e: MouseEvent ):Void
+            {
+                if(ModelerUtils.clickedNode==null)
+                {
+                    modeler.disablePannable=true;
+                    ModelerUtils.clickedNode=this;
+                    ox=attachedNode.x-attachedNode.w*ix;
+                    oy=attachedNode.y-attachedNode.h*iy;
+                }
+            }
+            onMouseReleased:function( e: MouseEvent ):Void
+            {
+                if(ModelerUtils.clickedNode==this)
+                {
+                    ModelerUtils.clickedNode=null;
+                    attachedNode.snapToGrid();
+                }
+            }
+            onMouseDragged:function( e: MouseEvent ):Void
+            {
+                if(ModelerUtils.clickedNode==this)
+                {
+                    if(ix!=0)
+                    {
+                        attachedNode.w=Math.abs(ox-(e.sceneX+modeler.clipView.clipX));
+                        attachedNode.x=ox+attachedNode.w*ix;
+                    }
+                    if(iy!=0)
+                    {
+                        attachedNode.h=Math.abs(oy-(e.sceneY+modeler.clipView.clipY));
+                        if(attachedNode.getGraphParent()!=null)
+                        {
+                            attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;
+                        }else
+                        {
+                            attachedNode.y=oy+attachedNode.h*iy;
+                        }
+                    }
+                }
+            }
+        };
+        return c;
+    }
+
+}
