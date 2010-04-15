@@ -65,8 +65,5 @@ public class CodeGeneratorProcess2
         }
     }
 
-
-
-
 }
 
