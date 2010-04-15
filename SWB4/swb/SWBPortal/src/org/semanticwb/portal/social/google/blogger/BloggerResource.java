@@ -30,7 +30,7 @@ public class BloggerResource  extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         try {
             request.setAttribute("paramRequest", paramRequest);
-            RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/blogger/blogger.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/blogger/blogger.jsp");
             rd.include(request, response);
         } catch (Exception e) {
             e.printStackTrace();
