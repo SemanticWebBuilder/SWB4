@@ -1932,7 +1932,7 @@ public class CodeGenerator
             }
             else
             {
-                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported");
+                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported, from class:"+tpc+", property:"+tpp);
             }
 
             getMethod = "get" + semanticObject + "()." + getMethod;
