@@ -114,7 +114,7 @@ public class FB_MyPhotos extends GenericResource {
                     }
                 }
                 request.setAttribute("aPhotos", aPhotos);
-                RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/facebook/fb_MyPhotos.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/facebook/fb_MyPhotos.jsp");
                 rd.include(request, response);
             }
         } catch (Exception e) {

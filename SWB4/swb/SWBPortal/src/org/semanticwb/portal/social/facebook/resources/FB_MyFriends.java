@@ -130,7 +130,7 @@ public class FB_MyFriends extends GenericResource {
                         }
                     }
                     request.setAttribute("aUserData", aUserData);
-                    RequestDispatcher rd = request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/facebook/fb_MyFriends.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("/swbadmin/jsp/facebook/fb_MyFriends.jsp");
                     rd.include(request, response);
                 }
             }
