@@ -24,10 +24,8 @@ public-read var TYPE_COMPENSATION="compensation";
 public-read var TYPE_MULTIPLE="multiple";
 public-read var TYPE_TRANSACTION="transaction";
 
-public class SubProcess extends FlowObject
+public class SubProcess extends Activity
 {
-    public var type:String;
-
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
@@ -51,6 +49,8 @@ public class SubProcess extends FlowObject
 
     public override function create(): Node
     {
+        resizeable=true;
+        containerable=true;
         initializeCustomNode();
         cursor=Cursor.HAND;
         w=100;
@@ -71,8 +71,8 @@ public class SubProcess extends FlowObject
         {
             x: bind x-w/2
             y: bind y-h/2
-            width: w
-            height: h
+            width: bind w
+            height: bind h
             //effect: lighting
             //styleClass: "task"
             style: Styles.style_task
@@ -124,11 +124,13 @@ public class SubProcess extends FlowObject
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible:bind canView()
         };
     }
 
-    public function setType(type:String):Void
+    public override function setType(type:String):Void
     {
+        super.setType(type);
         if(type.equals(TYPE_ADHOC))
         {
             message.image=Styles.ICO_TASK_ADHOC;
@@ -155,10 +157,14 @@ public class SubProcess extends FlowObject
             is=1;
         }else if(type.equals(TYPE_TRANSACTION))
         {
+             message.visible=false;
 //            message.image=Styles.ICO_TASK_USER;
 //            ix=-w/2+5;
 //            iy=-h/2+3;
 //            is=1;
+        }else
+        {
+            message.visible=false;
         }
     }
 

@@ -40,8 +40,6 @@ public-read var B_LINK="b_link";
 
 public class Event extends FlowObject
 {
-    public var type:String;
-
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
@@ -96,11 +94,13 @@ public class Event extends FlowObject
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 
-    public function setType(type:String):Void
+    public override function setType(type:String):Void
     {
+        super.setType(type);
         if(type.equals(W_TIMER))
         {
             message.image=Styles.ICO_EVENT_W_TIMER;
@@ -221,6 +221,9 @@ public class Event extends FlowObject
             ix=8;
             iy=8;
             is=1.1;
+        }else
+        {
+             message.visible=false;
         }
 
     }

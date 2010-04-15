@@ -8,10 +8,8 @@ package org.semanticwb.process.modeler;
 
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.stage.StageStyle;
 import javafx.scene.Cursor;
 import org.semanticwb.process.modeler.ModelerUtils;
-import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -19,6 +17,8 @@ import javafx.scene.paint.Color;
 
 var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
+
+//public-read var inBrowser = "true".equals(FX.getArgument("isApplet") as String);
 
 //println("dir:{__DIR__}");
 
@@ -30,7 +30,8 @@ var modeler:Modeler = Modeler
     height:bind maxy
     pannable:true
     cursor:Cursor.CROSSHAIR
-}
+};
+
 modeler.load("home");
 modeler.organizeMap();
 
@@ -41,11 +42,73 @@ var toolbar:ToolBar = ToolBar
     modeler: modeler
 }
 
+var path:ContainerPath = ContainerPath
+{
+    w:bind maxx
+    h:20
+    x:bind maxx-path.flow.boundsInLocal.width-2
+    y:0
+    modeler: modeler
+    visible:bind if(modeler.containerElement!=null)true else false
+}
+
+var resize=ModelerUtils.getResizeNode();
+resize.modeler=modeler;
+
 var scene : Scene = Scene {
     content: [
         modeler,
+        resize,
+        path,
         toolbar,
-        ModelerUtils.getToolTip()
+        ModelerUtils.getToolTip(),
+//            MenuBar{
+//                menus: [
+//                    Menu{
+//                        text: "File"
+//                        items: [
+//                            MenuItem{
+//                                text: "Open File"
+//                                action: function(){
+//                                    println("Open File!")
+//                                }
+//                                blocksMouse:true;
+//                            }
+//                            MenuItem{
+//                                text: "Save File"
+//                                action: function(){
+//                                    println("Save File!")
+//                                }
+//                                blocksMouse:true;
+//                            }
+//                        ]
+//                        blocksMouse:true;
+//                    },
+//                    Menu{
+//                        text: "Edit"
+//                        items: [
+//                            MenuItem{
+//                                text: "Copy"
+//                                action: function(){
+//                                    println("Copy!")
+//                                }
+//                                cursor:Cursor.DEFAULT
+//                            }
+//                            MenuItem{
+//                                text: "Paste"
+//                                action: function(){
+//                                    println("Paste!")
+//                                }
+//                                cursor:Cursor.DEFAULT
+//                            }
+//                        ]
+//                        cursor:Cursor.DEFAULT
+//                    }
+//                ]
+//                width:bind maxx;
+//                blocksMouse:true;
+//                //cursor:Cursor.DEFAULT
+//            }
     ]
     width: 600
     height: 300

@@ -67,7 +67,18 @@ public class InterEvent extends Event
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
+    }
+
+    public override function canAttach(parent:GraphElement):Boolean
+    {
+        var ret=false;
+        if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane)
+        {
+            ret=true;
+        }
+        return ret;
     }
 }
 

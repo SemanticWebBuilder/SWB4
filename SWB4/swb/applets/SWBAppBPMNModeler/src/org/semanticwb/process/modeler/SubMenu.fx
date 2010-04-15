@@ -105,6 +105,7 @@ public class SubMenu extends CustomNode
                  //clicked=true;
                  action();
             }
+            //blocksMouse:true
         }
 
          subBar=Group

@@ -48,6 +48,7 @@ public class GateWay extends FlowObject
                     effect: Styles.dropShadow
                 }
             ]
+            visible: bind canView()
         };
     }
 }

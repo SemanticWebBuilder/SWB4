@@ -71,6 +71,7 @@ public class EventANDGateWay extends ANDGateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 }

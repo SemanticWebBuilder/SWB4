@@ -53,6 +53,7 @@ public class DefaultFlow extends ConnectionObject
                 text
             ]
             opacity: bind o;
+            visible: bind canView()
         };
     }
 

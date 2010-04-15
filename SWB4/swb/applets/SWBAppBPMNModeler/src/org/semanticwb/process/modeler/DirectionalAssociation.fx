@@ -18,6 +18,7 @@ public class DirectionalAssociation extends ConnectionObject
     {
         arrowType=ARROW_TYPE_ASSOCIATION;
         strokeDash=[2,5];
+        cubicCurve=true;
         var ret=super.create();
         return ret;
     }

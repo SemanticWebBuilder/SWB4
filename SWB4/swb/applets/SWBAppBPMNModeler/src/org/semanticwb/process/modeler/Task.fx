@@ -12,7 +12,6 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.shape.Polyline;
 
 /**
  * @author javier.solis
@@ -29,10 +28,8 @@ public-read var TYPE_MANUAL="manual";
 public-read var TYPE_SEND="send";
 public-read var TYPE_RECEIVE="receive";
 
-public class Task extends FlowObject
+public class Task extends Activity
 {
-    public var type:String;
-
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
@@ -56,8 +53,8 @@ public class Task extends FlowObject
 
     public override function create(): Node
     {
+        resizeable=true;
         initializeCustomNode();
-
         cursor=Cursor.HAND;
         w=100;
         h=60;
@@ -68,8 +65,8 @@ public class Task extends FlowObject
         {
             x: bind x-w/2
             y: bind y-h/2
-            width: w
-            height: h
+            width: bind w
+            height: bind h
             //effect: lighting
             //styleClass: "task"
             style: Styles.style_task
@@ -81,10 +78,11 @@ public class Task extends FlowObject
             content: [
                 shape,text,message
             ]
-            scaleX: bind s;
-            scaleY: bind s;
-            opacity: bind o;
-            effect: Styles.dropShadow;
+            scaleX: bind s
+            scaleY: bind s
+            opacity: bind o
+            effect: Styles.dropShadow
+            visible: bind canView()
         };
     }
 
@@ -94,8 +92,9 @@ public class Task extends FlowObject
         return ret;
     }
 
-    public function setType(type:String):Void
+    public override function setType(type:String):Void
     {
+        super.setType(type);
         if(type.equals(TYPE_ADHOC))
         {
             message.image=Styles.ICO_TASK_ADHOC;
@@ -156,7 +155,11 @@ public class Task extends FlowObject
             ix=-w/2+5;
             iy=-h/2+3;
             is=1;
+        }else
+        {
+            message.visible=false;
         }
+
     }
 
 }

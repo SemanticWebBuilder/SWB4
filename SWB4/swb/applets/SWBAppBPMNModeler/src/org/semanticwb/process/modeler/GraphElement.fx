@@ -14,6 +14,8 @@ import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
+import org.semanticwb.process.modeler.ModelerUtils;
+
 
 /**
  * @author javier.solis
@@ -26,6 +28,8 @@ public class GraphElement extends CustomNode
     public var y : Number;
     public var w : Number;
     public var h : Number;
+
+    public var type:String;
 
     public var title : String;
     public var toolTipText : String;
@@ -40,16 +44,41 @@ public class GraphElement extends CustomNode
     public var strokeFocused=Color.web(Styles.color_focused);
 
     public var s : Number = 1;                     //size
-    public var o : Number = 0.8;                   //opacity
+    public var o : Number = Styles.opacity;        //opacity
     public var stkw : Number = 2;                  //strokeWidth
     public var stkwo : Number = 3;                 //strokeWidth Over
 
-    var mx : Number;                        //temporal movimiento x
-    var my : Number;                        //temporal movimiento y
-    var dx : Number;                        //temporal drag x
-    var dy : Number;                        //temporal drag y
+    public var resizeable:Boolean=false;
 
-    public var zindex=0;
+    var mx : Number;                               //temporal movimiento x
+    var my : Number;                               //temporal movimiento y
+    protected var dx : Number;                               //temporal drag x
+    protected var dy : Number;                               //temporal drag y
+
+    protected var zindex=0;
+
+    var graphParent:GraphElement;
+    var graphChilds:GraphElement[];
+
+    protected var dpx : Number;                     //diference of parent
+    protected var dpy : Number;                     //diference of parent
+
+    protected var container:GraphElement;                 //Container Element
+    protected var containerChilds:GraphElement[];         //Container Childs
+    public var containerable:Boolean=false;               //can contains
+
+    public-read var over:Boolean;
+
+    public var useGrid:Boolean=true;
+
+    var px = bind graphParent.x on replace
+    {
+        if(graphParent!=null)x=px+dpx;
+    }
+    var py = bind graphParent.y on replace
+    {
+        if(graphParent!=null)y=py+dpy;
+    }
 
     var focusState = bind focused on replace
     {
@@ -73,7 +102,6 @@ public class GraphElement extends CustomNode
         }
     }
 
-
     public override function create(): Node
     {
         initializeCustomNode();
@@ -82,12 +110,13 @@ public class GraphElement extends CustomNode
             content: [
                 text
             ]
+            visible: bind canView()
         }
     }
 
     override var onMouseClicked = function ( e: MouseEvent ) : Void
     {
-        if(modeler.focusedNode==this)
+        if(modeler.getFocusedNode()==this)
         {
             mouseClicked(e);
         }
@@ -99,7 +128,19 @@ public class GraphElement extends CustomNode
         if(e.clickCount >= 2)
         {
             //println("starEditing");
-            text.startEditing();
+            if(containerable)
+            {
+                if(text.boundsInLocal.contains(e.sceneX, e.sceneY))
+                {
+                    text.startEditing();
+                }else
+                {
+                    modeler.containerElement=this;
+                }
+            }else
+            {
+                text.startEditing();
+            }
         }
     }
 
@@ -132,7 +173,7 @@ public class GraphElement extends CustomNode
 
     public function mousePressed( e: MouseEvent )
     {
-        modeler.focusedNode=this;
+        modeler.setFocusedNode(this);
         //if(modeler.tempNode==null)
             modeler.disablePannable=true;
         dx=x-e.sceneX;
@@ -166,19 +207,91 @@ public class GraphElement extends CustomNode
     {
         //if(modeler.tempNode==null)modeler.disablePannable=false;
         snapToGrid();
+
+        //check drop over node
+        var overNode:GraphElement;
+        for(node in modeler.contents)
+        {
+            if(node instanceof GraphElement)
+            {
+                if(node != this and (node as GraphElement).over)
+                {
+
+                    if(canAttach(node as GraphElement))
+                    {
+                        overNode=node as GraphElement;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        setGraphParent(overNode);
         //println("onMouseRelease node");
+    }
+
+    public function getGraphParent() : GraphElement
+    {
+        return graphParent;
+    }
+
+    public function setGraphParent(parent:GraphElement):Void
+    {
+        println("{this} setGraphParent {parent}");
+        if(parent!=null)
+        {
+            dpx=x-parent.x;
+            dpy=y-parent.y;
+
+            graphParent=parent;
+            insert this into parent.graphChilds;
+            //println("add {uri} parent:{parent.uri}");
+        }else
+        {
+            delete this from graphParent.graphChilds;
+            graphParent=null;
+            //println("remove {uri} parent:{parent.uri}");
+        }
+    }
+
+    public function getContainer():GraphElement
+    {
+        return container;
+    }
+
+    public function setContainer(contain:GraphElement)
+    {
+        if(contain!=null)
+        {
+            container=contain;
+            insert this into contain.containerChilds;
+        }else
+        {
+            delete this from container.graphChilds;
+            container=null;
+        }
+    }
+
+    public function getContainerChilds():GraphElement[]
+    {
+        return containerChilds;
     }
 
     public function snapToGrid()
     {
-        x=(Math.round(x/25))*25;            //grid
-        y=(Math.round(y/25))*25;            //grid
+        if(useGrid)
+        {
+            x=(Math.round(x/25))*25;            //grid
+            y=(Math.round(y/25))*25;            //grid
+        }
     }
 
     override var onMouseEntered = function(e)
     {
         //var name=getClass().getName();
         //println(name);
+        over=true;
         ModelerUtils.startToolTip("{toolTipText}", x-w/2-modeler.clipView.clipX, y+h/2-modeler.clipView.clipY+3);
         mouseEntered(e);
     }
@@ -192,9 +305,9 @@ public class GraphElement extends CustomNode
         if(modeler.tempNode==null)modeler.disablePannable=true;
     }
 
-
     override var onMouseExited = function(e)
     {
+        over=false;
         ModelerUtils.stopToolTip();
         mouseExited(e);
     }
@@ -226,7 +339,7 @@ public class GraphElement extends CustomNode
         //println(e);
     }
 
-    public function remove()
+    public function remove() : Void
     {
         modeler.remove(this);
         for(connection in modeler.contents where connection instanceof ConnectionObject)
@@ -235,6 +348,12 @@ public class GraphElement extends CustomNode
             if(c.end == this)c.remove();
             if(c.ini == this)c.remove();
         }
+
+        for(child in graphChilds)
+        {
+            child.remove();
+        }
+        ModelerUtils.setResizeNode(null);
     }
 
     /**
@@ -260,5 +379,19 @@ public class GraphElement extends CustomNode
         }
     }
 
+    public function setType(type:String):Void
+    {
+        this.type=type;
+    }
+
+    public function canAttach(parent:GraphElement):Boolean
+    {
+        return false;
+    }
+
+    public bound function canView():Boolean
+    {
+        return modeler.containerElement==this.container;
+    }
 }
 
