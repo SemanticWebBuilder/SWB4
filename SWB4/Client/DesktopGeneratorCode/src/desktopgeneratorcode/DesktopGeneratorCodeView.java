@@ -18,6 +18,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Properties;
@@ -782,7 +785,9 @@ public class DesktopGeneratorCodeView extends FrameView
             }
             this.progressBar.setValue(this.progressBar.getValue() + 1);
         }
-        jTextArea1.append("\r\nCódigo generado\r\n");
+        SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        String date=df.format(Calendar.getInstance().getTime());
+        jTextArea1.append("\r\nCódigo generado "+date+"\r\n");
         this.progressBar.setVisible(false);
     }
     private void jButtonGenerateActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonGenerateActionPerformed
