@@ -95,6 +95,7 @@ public class Task extends Activity
     public override function setType(type:String):Void
     {
         super.setType(type);
+        message.visible=true;
         if(type.equals(TYPE_ADHOC))
         {
             message.image=Styles.ICO_TASK_ADHOC;

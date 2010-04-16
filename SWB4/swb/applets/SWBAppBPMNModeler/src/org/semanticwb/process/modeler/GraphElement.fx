@@ -49,6 +49,7 @@ public class GraphElement extends CustomNode
     public var stkwo : Number = 3;                 //strokeWidth Over
 
     public var resizeable:Boolean=false;
+    public var resizeType:Number=ResizeNode.RESIZE_A;
 
     var mx : Number;                               //temporal movimiento x
     var my : Number;                               //temporal movimiento y
@@ -73,11 +74,11 @@ public class GraphElement extends CustomNode
 
     var px = bind graphParent.x on replace
     {
-        if(graphParent!=null)x=px+dpx;
+        onParentXChange();
     }
     var py = bind graphParent.y on replace
     {
-        if(graphParent!=null)y=py+dpy;
+        onParentYChange();
     }
 
     var focusState = bind focused on replace
@@ -87,6 +88,17 @@ public class GraphElement extends CustomNode
             shape.stroke=stroke;
         }
     }
+
+    public function onParentXChange()
+    {
+        if(graphParent!=null)x=px+dpx;
+    }
+
+    public function onParentYChange()
+    {
+        if(graphParent!=null)y=py+dpy;
+    }
+
 
     protected function initializeCustomNode():Void
     {
@@ -216,19 +228,29 @@ public class GraphElement extends CustomNode
             {
                 if(node != this and (node as GraphElement).over)
                 {
-
                     if(canAttach(node as GraphElement))
                     {
                         overNode=node as GraphElement;
+                        if(not(this instanceof Lane) and overNode instanceof Pool)  //check lanes in pool
+                        {
+                            var p=overNode as Pool;
+                            for(lane in p.lanes)
+                            {
+                                if(lane.over)
+                                {
+                                    overNode=lane;
+                                    break;
+                                }
+                            }
+                        }
                         break;
                     }
                 }
-
             }
         }
 
         setGraphParent(overNode);
-        //println("onMouseRelease node");
+        println("onMouseRelease {overNode.title}");
     }
 
     public function getGraphParent() : GraphElement
@@ -238,12 +260,13 @@ public class GraphElement extends CustomNode
 
     public function setGraphParent(parent:GraphElement):Void
     {
-        println("{this} setGraphParent {parent}");
+        //println("{this} setGraphParent {parent}");
         if(parent!=null)
         {
             dpx=x-parent.x;
             dpy=y-parent.y;
 
+            delete this from graphParent.graphChilds;
             graphParent=parent;
             insert this into parent.graphChilds;
             //println("add {uri} parent:{parent.uri}");
@@ -393,5 +416,11 @@ public class GraphElement extends CustomNode
     {
         return modeler.containerElement==this.container;
     }
+
+    public function updateSize()
+    {
+        
+    }
+
 }
 

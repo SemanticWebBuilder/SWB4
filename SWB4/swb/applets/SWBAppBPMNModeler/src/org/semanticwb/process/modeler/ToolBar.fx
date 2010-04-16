@@ -136,39 +136,55 @@ public class ToolBar extends CustomNode
         obj.putOpt("nodes",nodes);
         for(node in modeler.contents)
         {
-            var ele:JSONObject=new JSONObject();
+            var ele=getJSONObject(node);
             nodes.put(ele);
-            if(node instanceof GraphElement)
+
+            if(node instanceof Pool)
             {
-               var ge=node as GraphElement;
-               ele.put("class",ge.getClass().getName());
-               ele.put("container",ge.getContainer().uri);
-               ele.put("parent",ge.getGraphParent().uri);
-               ele.put("title",ge.title);
-               ele.put("type",ge.type);
-               ele.put("uri",ge.uri);
-               ele.put("x",ge.x);
-               ele.put("y",ge.y);
-               ele.put("w",ge.w);
-               ele.put("h",ge.h);
-            }
-            if(node instanceof ConnectionObject)
-            {
-               var ge=node as ConnectionObject;
-               ele.put("class",ge.getClass().getName());
-               ele.put("uri",ge.uri);
-               ele.put("title",ge.title);
-               ele.put("start",ge.ini.uri);
-               ele.put("end",ge.end.uri);
-               if(node instanceof ConditionalFlow)
-               {
-                   var con=node as ConditionalFlow;
-                   ele.put("action", ge.action);
-               }
+                var pool=node as Pool;
+                for(lane in pool.lanes)
+                {
+                    nodes.put(getJSONObject(lane));
+                }
             }
         }
         return obj.toString();
     }
+
+    function getJSONObject(node:Node):JSONObject
+    {
+        var ele:JSONObject=new JSONObject();
+        if(node instanceof GraphElement)
+        {
+           var ge=node as GraphElement;
+           ele.put("class",ge.getClass().getName());
+           ele.put("container",ge.getContainer().uri);
+           ele.put("parent",ge.getGraphParent().uri);
+           ele.put("title",ge.title);
+           ele.put("type",ge.type);
+           ele.put("uri",ge.uri);
+           ele.put("x",ge.x);
+           ele.put("y",ge.y);
+           ele.put("w",ge.w);
+           ele.put("h",ge.h);
+        }
+        if(node instanceof ConnectionObject)
+        {
+           var ge=node as ConnectionObject;
+           ele.put("class",ge.getClass().getName());
+           ele.put("uri",ge.uri);
+           ele.put("title",ge.title);
+           ele.put("start",ge.ini.uri);
+           ele.put("end",ge.end.uri);
+           if(node instanceof ConditionalFlow)
+           {
+               var con=node as ConditionalFlow;
+               ele.put("action", ge.action);
+           }
+        }
+        return ele;
+    }
+
 
     /**
     * Increment the internal counter for new uris
@@ -208,7 +224,7 @@ public class ToolBar extends CustomNode
                 ge=node as GraphElement;
             }
 
-            if(ge!=null)
+            if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
                 var type=js.getString("type");
@@ -232,6 +248,40 @@ public class ToolBar extends CustomNode
             i++;
         }
 
+
+        //Lanes
+        i=0;
+        while(i<jsarr.length())
+        {
+            //generic
+            var js = jsarr.getJSONObject(i);
+            var cls:String=js.getString("class");
+            var uri:String=validateUri(js.getString("uri"));
+
+            var clss=getClass().forName(cls);
+            var node=clss.newInstance() as Node;
+
+            if(node instanceof Lane)
+            {
+                var parent=js.getString("parent");
+                var title=js.getString("title");
+                var type=js.getString("type");
+                var h=js.getInt("h");
+                var p=modeler.getGraphElementByURI(parent);
+                if(p instanceof Pool)
+                {
+                    var pool=p as Pool;
+                    var lane=pool.addLane();
+                    lane.title=title;
+                    lane.type=type;
+                    lane.h=h;
+                    lane.uri=uri;
+                }
+            }
+            i++;
+        }
+
+
         //ConnectionObjects
         i=0;
         while(i<jsarr.length())
@@ -244,6 +294,7 @@ public class ToolBar extends CustomNode
             var clss=getClass().forName(cls);
             var node=clss.newInstance() as Node;
 
+            //Parents
             var ge:GraphElement=null;
             if(node instanceof GraphElement)
             {
@@ -256,9 +307,10 @@ public class ToolBar extends CustomNode
                 ge.setGraphParent(modeler.getGraphElementByURI(parent));
                 var container=js.getString("container");
                 ge.setContainer(modeler.getGraphElementByURI(container));
-                //println("{ge} parent:{ge.getGraphParent()}");
+                println("{ge} parent:{ge.getGraphParent()}");
             }
 
+            //Connections
             var co:ConnectionObject=null;
             if(node instanceof ConnectionObject)
             {
@@ -1528,7 +1580,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=DataStore
                         {
                             modeler:modeler
                             title:"Data Store Artifact"

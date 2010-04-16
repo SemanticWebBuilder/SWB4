@@ -109,9 +109,9 @@ public class ResizePoint extends CustomNode
                     if(iy!=0)
                     {
                         attachedNode.h=Math.abs(oy-(e.sceneY+modeler.clipView.clipY));
-                        if(attachedNode.getGraphParent()!=null)
+                        if(attachedNode instanceof Lane)
                         {
-                            attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;
+                            //attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;
                         }else
                         {
                             attachedNode.y=oy+attachedNode.h*iy;
