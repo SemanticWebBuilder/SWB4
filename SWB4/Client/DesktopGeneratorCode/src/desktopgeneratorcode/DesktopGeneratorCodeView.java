@@ -179,8 +179,13 @@ public class DesktopGeneratorCodeView extends FrameView
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        jButton1Save = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
+        jButton1 = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
         jButtonAdd = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
         jButtonGenerate = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -264,6 +269,40 @@ public class DesktopGeneratorCodeView extends FrameView
         jToolBar1.setDoubleBuffered(true);
         jToolBar1.setName("jToolBar1"); // NOI18N
 
+        jButton1Save.setIcon(resourceMap.getIcon("jButton1Save.icon")); // NOI18N
+        jButton1Save.setText(resourceMap.getString("jButton1Save.text")); // NOI18N
+        jButton1Save.setToolTipText(resourceMap.getString("jButton1Save.toolTipText")); // NOI18N
+        jButton1Save.setFocusable(false);
+        jButton1Save.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1Save.setName("jButton1Save"); // NOI18N
+        jButton1Save.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1Save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1SaveActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1Save);
+
+        jSeparator6.setName("jSeparator6"); // NOI18N
+        jToolBar1.add(jSeparator6);
+
+        jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setToolTipText(resourceMap.getString("jButton1.toolTipText")); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton1);
+
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        jToolBar1.add(jSeparator4);
+
         jButtonAdd.setIcon(resourceMap.getIcon("jButtonAdd.icon")); // NOI18N
         jButtonAdd.setText(resourceMap.getString("jButtonAdd.text")); // NOI18N
         jButtonAdd.setToolTipText(resourceMap.getString("jButtonAdd.toolTipText")); // NOI18N
@@ -292,6 +331,9 @@ public class DesktopGeneratorCodeView extends FrameView
             }
         });
         jToolBar1.add(jButtonDelete);
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        jToolBar1.add(jSeparator5);
 
         jButtonGenerate.setIcon(resourceMap.getIcon("jButtonGenerate.icon")); // NOI18N
         jButtonGenerate.setText(resourceMap.getString("jButtonGenerate.text")); // NOI18N
@@ -1080,6 +1122,16 @@ public class DesktopGeneratorCodeView extends FrameView
             }
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
+
+    private void jButton1SaveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1SaveActionPerformed
+    {//GEN-HEADEREND:event_jButton1SaveActionPerformed
+        jMenuItemSaveActionPerformed(null);
+    }//GEN-LAST:event_jButton1SaveActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        jMenuItemopenActionPerformed(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
     private void openProyect()
     {
         JFileChooser select = new JFileChooser();
@@ -1189,6 +1241,8 @@ public class DesktopGeneratorCodeView extends FrameView
 
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton1Save;
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonGenerate;
@@ -1211,6 +1265,9 @@ public class DesktopGeneratorCodeView extends FrameView
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
