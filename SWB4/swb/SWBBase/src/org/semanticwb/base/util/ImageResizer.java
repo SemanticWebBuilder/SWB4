@@ -57,22 +57,27 @@ public class ImageResizer
         BufferedImage bi = ImageIO.read(origFile);
         int x = bi.getWidth();
         int y = bi.getHeight();
+//        System.out.println("X:"+x+",Y:"+y+",tw:"+thresholdWidth+",th:"+thresholdHeight+",ret:"+ret);
         if (x>thresholdWidth){
             newWidth=thresholdWidth;
-            float cw=x/newWidth;
-            newHeight=(int)(y /cw);
+            float cw=(float)x/newWidth;
+            newHeight=(int)(y/cw);
+//            System.out.println("nw:"+newWidth+",nH:"+newHeight+",cw:"+cw);
             if (newHeight<thresholdHeight) {
                 ret=true;
             }
         }
+//        System.out.println("X:"+x+",Y:"+y+",tw:"+thresholdWidth+",th:"+thresholdHeight+",ret:"+ret);
         if (!ret && y > thresholdHeight){
             newHeight=thresholdHeight;
-            float cw=y/newHeight;
+            float cw=(float)y/newHeight;
             newWidth=(int)(x/cw);
+//            System.out.println("nw:"+newWidth+",nH:"+newHeight+",cw:"+cw);
             if (newWidth<thresholdWidth) {
                 ret=true;
             }
         }
+//        System.out.println("X:"+x+",Y:"+y+",tw:"+thresholdWidth+",th:"+thresholdHeight+",ret:"+ret);
         if (ret){
             ImageIO.write(createResizedCopy(bi, newWidth, newHeight, false, newWidth, newHeight), type, destfile);
         }
