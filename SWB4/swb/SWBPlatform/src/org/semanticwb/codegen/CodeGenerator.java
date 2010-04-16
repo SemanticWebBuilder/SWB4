@@ -306,7 +306,7 @@ public class CodeGenerator
             SemanticClass tpc = tpcit.next();
             if (clazz.isSWBInterface() && tpc.isSWBClass())
             {
-                throw new CodeGeneratorException("The semantic class " + clazz.getURI() + " is an interface and its parent is a class\r\n");
+                throw new CodeGeneratorException("The Semantic class " + clazz.getURI() + " is an interface and its parent is a class\r\n");
             }
             /*if(clazz.isSWBClass() && tpc.isSWBInterface())
             {
