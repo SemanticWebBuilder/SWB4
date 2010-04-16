@@ -50,6 +50,35 @@ public class ImageResizer
         ImageIO.write(createResizedCopy(bi, calcWeight, calcHeight, centered, topsize), type, destfile);
     }
 
+    public static boolean shrinkTo(File origFile, int thresholdWidth, int thresholdHeight, File destfile, String type) throws IOException{
+        int newWidth=0;
+        int newHeight=0;
+        boolean ret = false;
+        BufferedImage bi = ImageIO.read(origFile);
+        int x = bi.getWidth();
+        int y = bi.getHeight();
+        if (x>thresholdWidth){
+            newWidth=thresholdWidth;
+            float cw=x/newWidth;
+            newHeight=(int)(y /cw);
+            if (newHeight<thresholdHeight) {
+                ret=true;
+            }
+        }
+        if (!ret && y > thresholdHeight){
+            newHeight=thresholdHeight;
+            float cw=y/newHeight;
+            newWidth=(int)(x/cw);
+            if (newWidth<thresholdWidth) {
+                ret=true;
+            }
+        }
+        if (ret){
+            ImageIO.write(createResizedCopy(bi, newWidth, newHeight, false, newWidth, newHeight), type, destfile);
+        }
+        return ret;
+    }
+
     /**
      * Resize.
      *
