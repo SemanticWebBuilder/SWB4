@@ -101,6 +101,7 @@ public class Event extends FlowObject
     public override function setType(type:String):Void
     {
         super.setType(type);
+        message.visible=true;
         if(type.equals(W_TIMER))
         {
             message.image=Styles.ICO_EVENT_W_TIMER;

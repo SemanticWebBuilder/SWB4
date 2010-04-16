@@ -14,6 +14,10 @@ import javafx.scene.Group;
  * @author javier.solis
  */
 
+public-read var RESIZE_A=1;                 //All
+public-read var RESIZE_V=2;                 //Vertical
+public-read var RESIZE_H=3;                 //Horizontal
+
 public class ResizeNode extends CustomNode
 {
     public var attachedNode:GraphElement;
@@ -25,41 +29,49 @@ public class ResizeNode extends CustomNode
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:1
+            visible:bind attachedNode.resizeType==ResizeNode.RESIZE_A
         };
         var c2=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:2
+            visible:bind attachedNode.resizeType!=ResizeNode.RESIZE_H
         };
         var c3=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:3
+            visible:bind attachedNode.resizeType==ResizeNode.RESIZE_A
         };
         var c4=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:4
+            visible:bind attachedNode.resizeType!=ResizeNode.RESIZE_V
         };
         var c5=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:5
+            visible:bind attachedNode.resizeType!=ResizeNode.RESIZE_V
         };
         var c6=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:6
+            visible:bind attachedNode.resizeType==ResizeNode.RESIZE_A
         };
         var c7=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:7
+            visible:bind attachedNode.resizeType!=ResizeNode.RESIZE_H
         };
         var c8=ResizePoint{
             attachedNode:bind attachedNode
             modeler:bind modeler
             type:8
+            visible:bind attachedNode.resizeType==ResizeNode.RESIZE_A
         };
         return Group{
             content: 

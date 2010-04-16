@@ -59,15 +59,53 @@ public class Modeler extends CustomNode
 
                     if(tempNode instanceof GraphElement)
                     {
-                        if(ModelerUtils.clickedNode==null)
+                        if(ModelerUtils.clickedNode==null) //elemento sobre modeler
                         {
-                            if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                            if(tempNode instanceof Lane)
+                            {
+                                //no se permite crear lanes sin pool
+                            }else
+                            {
+                                if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                                var a=tempNode as GraphElement;
+                                a.x=e.x+clipView.clipX;
+                                a.y=e.y+clipView.clipY;
+                                a.snapToGrid();
+                                a.setContainer(containerElement);
+                            }
+                        }else if(ModelerUtils.clickedNode instanceof Pool or ModelerUtils.clickedNode instanceof Lane)
+                        {
+                            if(tempNode instanceof Pool) //se esta agregando un pool
+                            {
+                                //addFirst(tempNode)
+                            }else if(tempNode instanceof Lane) //se esta agregando un lane
+                            {
+                                if(ModelerUtils.clickedNode instanceof Pool) //sobre un pool
+                                {
+                                    var p=ModelerUtils.clickedNode as Pool;
+                                    p.addLane();
+                                    //p.updateLanesCords();
+                                }else  //sobre un lane
+                                {
+                                    //TODO: Falta lanes dentro de lanes
+                                    var p=(ModelerUtils.clickedNode as Lane).getPool();
+                                    p.addLane();
+                                    //p.updateLanesCords();
+                                }
+                            }else
+                            {
+                                add(tempNode);
+                            }
                             var a=tempNode as GraphElement;
                             a.x=e.x+clipView.clipX;
                             a.y=e.y+clipView.clipY;
                             a.snapToGrid();
+                            if(a.canAttach(ModelerUtils.clickedNode as GraphElement))
+                            {
+                                a.setGraphParent(ModelerUtils.clickedNode as GraphElement);
+                            }
                             a.setContainer(containerElement);
-                        }else //se presiono algun boton del toolbar
+                        }else//se presiono algun boton del toolbar
                         {
                             close=false;
                         }
@@ -138,6 +176,19 @@ public class Modeler extends CustomNode
                          disablePannable=false;
                      }
                  }
+
+//                 if(ModelerUtils.clickedNode instanceof Pool)
+//                 {
+//                     var p=ModelerUtils.clickedNode as Pool;
+//                     p.updateLanesCords();
+//                 }
+//                 if(ModelerUtils.clickedNode instanceof Lane)
+//                 {
+//                     var p=(ModelerUtils.clickedNode as Lane).getPool();
+//                     p.updateLanesCords();
+//                 }
+
+
              }
 //             onKeyTyped: function( e: KeyEvent ):Void
 //             {
@@ -231,6 +282,12 @@ public class Modeler extends CustomNode
             {
                 var ge=node as GraphElement;
                 if(ge.uri.equals(uri))return ge;
+                if(ge instanceof Pool)
+                {
+                    var pool=ge as Pool;
+                    var lane=pool.getLaneByURI(uri);
+                    if(lane!=null)return lane;
+                }
             }
         }
         return null;

@@ -41,7 +41,7 @@ public-read var style_connection="stroke: {color}; strokeWidth: 2;";
 public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
 public-read var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
 public-read var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
-public-read var style_pool_line="stroke: {color}; strokeWidth: 1;";
+public-read var style_pool_line="stroke: {color}; strokeWidth: 2;";
 public-read var style_artifact="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
 public-read var style_resize="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
 

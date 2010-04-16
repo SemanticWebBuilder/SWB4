@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
-import javafx.scene.layout.Flow;
 import org.semanticwb.process.modeler.ModelerUtils;
 
 /**
@@ -22,20 +21,19 @@ import org.semanticwb.process.modeler.ModelerUtils;
 public class Pool extends GraphElement
 {
 
-    public var flow:Flow;
+    var py=bind y on replace
+    {
+        updateSize();
+    }
 
     public var lanes:Lane[];
 
-    var lanesh = bind flow.boundsInLocal.height on replace
-    {
-        h=lanesh;
-    }
-
     override public function create(): Node
     {
-        stkw=2;
-        stkwo=2;
+        //stkw=2;
+        //stkwo=2;
         resizeable=true;
+        resizeType=ResizeNode.RESIZE_A;
         cursor=Cursor.HAND;
         w=600;
         h=200;
@@ -48,20 +46,6 @@ public class Pool extends GraphElement
             height: 20
             rotate: -90
         }
-
-        addLane();
-        addLane();
-        addLane();
-
-        flow=Flow
-        {
-            width:bind w
-            content: bind lanes
-            translateX:bind x-w/2+20
-            translateY:bind y-h/2
-            //hgap:10
-            vgap:-1
-        };
 
         shape= Rectangle
         {
@@ -78,11 +62,16 @@ public class Pool extends GraphElement
                 shape,Line
                 {
                     startX: bind x-w/2+20
-                    startY: bind y-h/2
+                    startY: bind y-h/2+1
                     endX: bind x-w/2+20
-                    endY: bind y+h/2
+                    endY: bind y+h/2-1
                     style: Styles.style_pool_line
-                },text,flow
+                    stroke: bind shape.stroke
+                },text,
+                Group
+                {
+                    content:bind lanes
+                }
             ]
             scaleX: bind s;
             scaleY: bind s;
@@ -90,6 +79,7 @@ public class Pool extends GraphElement
             effect: Styles.dropShadow
             visible: bind canView()
         };
+
     }
 
     override public function mouseEntered( e: MouseEvent )
@@ -109,17 +99,24 @@ public class Pool extends GraphElement
 
     override public function remove()
     {
+       for(lane in lanes)
+       {
+           lane.remove();
+       }
        super.remove();
     }
 
     public function removeLane(lane:Lane)
     {
-        println("{this} removeLane {lane}");
+        //println("{this} removeLane {lane}");
         delete lane from lanes;
+        if(sizeof lanes==0)resizeType=ResizeNode.RESIZE_A;
+        updateSize();
     }
 
-    public function addLane()
+    public function addLane():Lane
     {
+        //println("{this} addLane");
         var lane=Lane
         {
             title:"Lane"
@@ -128,7 +125,45 @@ public class Pool extends GraphElement
             w:bind w
         };
         lane.setGraphParent(this);
+        lane.setContainer(getContainer());
         insert lane into lanes;
+        ModelerUtils.setResizeNode(null);
+        resizeType=ResizeNode.RESIZE_H;
+        updateSize();
+        return lane;
+    }
+
+    public override function updateSize()
+    {
+        var t:Number=0;
+        for(lane in lanes)
+        {
+            t=t+lane.h;
+        }
+        
+        if(t>0)
+        {
+            h=t;
+        }
+
+        var ay=y-h/2;
+        for(lane in lanes)
+        {
+            lane.y=ay+lane.h/2;
+            ay=ay+lane.h;
+        }
+    }
+
+
+
+    public function getLaneByURI(uri:String):GraphElement
+    {
+        for(lane in lanes)
+        {
+            println("{lane.uri}={uri}");
+            if(lane.uri.equals(uri))return lane;
+        }
+        return null;
     }
 
 }
