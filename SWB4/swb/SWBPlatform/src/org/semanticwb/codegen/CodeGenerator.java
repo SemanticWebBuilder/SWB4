@@ -51,55 +51,38 @@ public class CodeGenerator
 
     /** The Constant GLOBAL_CLASS_NAME. */
     private static final String GLOBAL_CLASS_NAME = "ClassMgr";
-    
     /** The Constant CLOSE_BLOCK. */
     private static final String CLOSE_BLOCK = "    }";
-    
     /** The Constant END_OF_METHOD. */
     private static final String END_OF_METHOD = "();";
-    
     /** The Constant ENTER. */
     private static final String ENTER = "\r\n";
-    
     /** The Constant OPEN_BLOCK. */
     private static final String OPEN_BLOCK = "    {";
-    
     /** The Constant PUBLIC. */
     private static final String PUBLIC = "    public ";
-    
     /** The Constant TYPE_BOOLEAN. */
     private static final String TYPE_BOOLEAN = "boolean";
-    
     /** The Constant TYPE_BYTE. */
     private static final String TYPE_BYTE = "byte";
-    
     /** The Constant TYPE_DATE_TIME. */
     private static final String TYPE_DATE_TIME = "dateTime";
-    
     /** The Constant TYPE_BINARY. */
     private static final String TYPE_BINARY = "base64Binary";
-    
     /** The Constant TYPE_DATE. */
     private static final String TYPE_DATE = "date";
-    
     /** The Constant TYPE_DOUBLE. */
     private static final String TYPE_DOUBLE = "double";
-    
     /** The Constant TYPE_FLOAT. */
     private static final String TYPE_FLOAT = "float";
-    
     /** The Constant TYPE_INT. */
     private static final String TYPE_INT = "int";
-    
     /** The Constant TYPE_LONG. */
     private static final String TYPE_LONG = "long";
-    
     /** The Constant TYPE_SHORT. */
     private static final String TYPE_SHORT = "short";
-    
     /** The Constant TYPE_VOID. */
     private static final String TYPE_VOID = "void";
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
@@ -315,6 +298,23 @@ public class CodeGenerator
     createSWBContext("", pDirectory);
     }
     }*/
+    private void checkClass(SemanticClass clazz) throws CodeGeneratorException
+    {        
+        Iterator<SemanticClass> tpcit = clazz.listSuperClasses(true);
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            if (clazz.isSWBInterface() && tpc.isSWBClass())
+            {
+                throw new CodeGeneratorException("The semantic class " + clazz.getURI() + " is an interface and its parent is a class\r\n");
+            }
+            /*if(clazz.isSWBClass() && tpc.isSWBInterface())
+            {
+            throw new CodeGeneratorException("The semantic class "+ clazz.getURI() +" is a class and its parent is an interface");
+            }*/
+        }
+    }
+
     /**
      * Generate code.
      * 
@@ -328,6 +328,15 @@ public class CodeGenerator
 
         SemanticMgr mgr = SWBPlatform.getSemanticMgr();
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
+        while (tpcit.hasNext())
+        {
+            SemanticClass tpc = tpcit.next();
+            if (prefix == null || (tpc.getPrefix().equals(prefix)))
+            {
+                checkClass(tpc);
+            }
+        }
+        tpcit = mgr.getVocabulary().listSemanticClasses();        
         while (tpcit.hasNext())
         {
             SemanticClass tpc = tpcit.next();
@@ -1184,7 +1193,7 @@ public class CodeGenerator
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         Iterator<SemanticProperty> properties = tpc.listProperties();
-        HashSet<String> rangeNames=new HashSet<String>();
+        HashSet<String> rangeNames = new HashSet<String>();
         while (properties.hasNext())
         {
             SemanticProperty tpp = properties.next();
@@ -1214,8 +1223,8 @@ public class CodeGenerator
                     }
                     if (!isInSuperInterface)
                     {
-                        String name=range.getPrefix() + "_" + toUpperCase(range.getClassCodeName());
-                        if(!rangeNames.contains(name))
+                        String name = range.getPrefix() + "_" + toUpperCase(range.getClassCodeName());
+                        if (!rangeNames.contains(name))
                         {
                             javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
                             rangeNames.add(name);
@@ -1245,8 +1254,8 @@ public class CodeGenerator
             }
             if (!isInSuperInterface)
             {
-                String name=tpp.getPrefix() + "_" + tpp.getName();
-                if(!rangeNames.contains(name))
+                String name = tpp.getPrefix() + "_" + tpp.getName();
+                if (!rangeNames.contains(name))
                 {
                     javaClassContent.append("    public static final org.semanticwb.platform.SemanticProperty " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(\"" + tpp.getURI() + "\");" + ENTER);
                     rangeNames.add(name);
@@ -1254,8 +1263,8 @@ public class CodeGenerator
 
             }
         }
-        String name=tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName());
-        if(!rangeNames.contains(name))
+        String name = tpc.getPrefix() + "_" + toUpperCase(tpc.getClassCodeName());
+        if (!rangeNames.contains(name))
         {
             javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + name + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
             rangeNames.add(name);
@@ -1932,7 +1941,7 @@ public class CodeGenerator
             }
             else
             {
-                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported, from class:"+tpc+", property:"+tpp);
+                throw new IllegalArgumentException("Data type '" + tpp.getRange() + "' is no supported, from class:" + tpc + ", property:" + tpp);
             }
 
             getMethod = "get" + semanticObject + "()." + getMethod;
@@ -2079,7 +2088,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + "> list" + getNameInPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));"+ ENTER);
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
@@ -2087,7 +2096,7 @@ public class CodeGenerator
                 javaClassContent.append("        boolean ret=false;" + ENTER);
                 javaClassContent.append("        if(" + "value" + "!=null)" + ENTER);
                 javaClassContent.append("        {" + ENTER);
-                javaClassContent.append("           ret=get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());"+ ENTER);
+                javaClassContent.append("           ret=get" + semanticObject + "().hasObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());" + ENTER);
                 javaClassContent.append("        }" + ENTER);
                 javaClassContent.append("        return ret;" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -2096,7 +2105,7 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + "> listInherit" + getNameInPlural(objectName) + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));"+ ENTER);
+                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
 
