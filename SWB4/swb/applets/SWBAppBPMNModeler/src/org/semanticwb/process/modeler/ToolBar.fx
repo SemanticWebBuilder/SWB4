@@ -343,6 +343,69 @@ public class ToolBar extends CustomNode
 
         if(isApplet)loadProcess();
 
+
+        var file=SubMenu
+        {
+            modeler: modeler
+            toolBar:this;
+            text:"File"
+            image: "images/file1.png"
+            imageOver: "images/file2.png"
+            imageClicked: "images/file3.png"
+            buttons: [
+                ImgButton {
+                    text:"New"
+                    toolBar:this;
+                    image: "images/file_nuevo1.png"
+                    imageOver: "images/file_nuevo2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        ModelerUtils.setResizeNode(null);
+                        modeler.containerElement=null;
+                        modeler.disablePannable=false;
+                        delete modeler.contents;
+                    }
+                },
+                ImgButton {
+                    text:"Open"
+                    toolBar:this;
+                    image: "images/file_abrir1.png"
+                    imageOver: "images/file_abrir2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        ModelerUtils.setResizeNode(null);
+                        modeler.containerElement=null;
+                        modeler.disablePannable=false;
+                        openProcess();
+                    }
+                },
+                ImgButton {
+                    text:"Save"
+                    toolBar:this;
+                    image: "images/file_guardar1.png"
+                    imageOver: "images/file_guardar2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
+                        saveProcess();
+                    }
+                },
+                ImgButton {
+                    text:"Print"
+                    toolBar:this;
+                    image: "images/file_print1.png"
+                    imageOver: "images/file_print2.png"
+                    action: function():Void
+                    {
+                        //TODO:
+                    }
+                },
+            ]
+        };
+
         var task=SubMenu
         {
             modeler: modeler
@@ -1580,7 +1643,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=DataStore
+                        modeler.tempNode=DataStoreArtifact
                         {
                             modeler:modeler
                             title:"Data Store Artifact"
@@ -1596,7 +1659,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=AnnotationArtifact
                         {
                             modeler:modeler
                             title:"Annotation Artifact"
@@ -1612,7 +1675,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=GroupArtifact
                         {
                             modeler:modeler
                             title:"Group Artifact"
@@ -1623,38 +1686,48 @@ public class ToolBar extends CustomNode
             ]
         }
 
-        var pool=ImgButton
+        var pool=SubMenu
         {
-            text:"Pool"
+            modeler: modeler
             toolBar:this;
+            text:"Pool"
             image: "images/pool_1.png"
             imageOver: "images/pool_2.png"
-            action: function():Void {
-                modeler.disablePannable=true;
-                modeler.tempNode=Pool
+            imageClicked: "images/pool_3.png"
+            buttons: [
+                ImgButton
                 {
-                    modeler:modeler
-                    title:"Pool"
-                    uri:"new:pool:{counter++}"
-                }
-            }
-        };
-
-        var lane=ImgButton
-        {
-            text:"Lane"
-            toolBar:this;
-            image: "images/lane_1.png"
-            imageOver: "images/lane_2.png"
-            action: function():Void {
-                modeler.disablePannable=true;
-                modeler.tempNode=Lane
+                    text:"Pool"
+                    toolBar:this;
+                    image: "images/pool_pool1.png"
+                    imageOver: "images/pool_pool2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Pool
+                        {
+                            modeler:modeler
+                            title:"Pool"
+                            uri:"new:pool:{counter++}"
+                        }
+                    }
+                },
+                ImgButton
                 {
-                    modeler:modeler
-                    title:"Lane"
-                    uri:"new:Lane:{counter++}"
+                    text:"Lane"
+                    toolBar:this;
+                    image: "images/pool_lane1.png"
+                    imageOver: "images/pool_lane2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=Lane
+                        {
+                            modeler:modeler
+                            title:"Lane"
+                            uri:"new:Lane:{counter++}"
+                        }
+                    }
                 }
-            }
+            ]
         };
 
         var ret=Group
@@ -1712,30 +1785,7 @@ public class ToolBar extends CustomNode
                                 stage.fullScreen = not stage.fullScreen;
                             }
                         },
-                        ImgButton {
-                            text:"Open"
-                            toolBar:this;
-                            image: "images/open_doc_1.png"
-                            imageOver: "images/open_doc_2.png"
-                            action: function():Void
-                            {
-                                ModelerUtils.clickedNode=null;
-                                modeler.disablePannable=false;
-                                openProcess();
-                            }
-                        },
-                        ImgButton {
-                            text:"Save"
-                            toolBar:this;
-                            image: "images/save_1.png"
-                            imageOver: "images/save_2.png"
-                            action: function():Void
-                            {
-                                ModelerUtils.clickedNode=null;
-                                modeler.disablePannable=false;
-                                saveProcess();
-                            }
-                        },
+                        file,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_division.png"
@@ -1769,7 +1819,6 @@ public class ToolBar extends CustomNode
                             //blocksMouse:true
                         },
                         pool,
-                        lane,
                         ImageView {
                             image: Image {
                                 url: "{__DIR__}images/barra_bottom.png"
@@ -1778,6 +1827,7 @@ public class ToolBar extends CustomNode
                         }
                     ]
                 },
+                file.subBar,
                 task.subBar,
                 subtask.subBar,
                 startEvent.subBar,
@@ -1785,7 +1835,8 @@ public class ToolBar extends CustomNode
                 endEvent.subBar,
                 gateWay.subBar,
                 sequence.subBar,
-                artifacts.subBar
+                artifacts.subBar,
+                pool.subBar
              ]
              cursor:Cursor.HAND;
              blocksMouse:true
