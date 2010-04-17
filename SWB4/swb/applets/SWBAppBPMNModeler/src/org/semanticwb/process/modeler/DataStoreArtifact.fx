@@ -24,7 +24,7 @@ public-read var TYPE_INPUT="input";
 public-read var TYPE_OUTPUT="output";
 
 
-public class DataStore extends GraphElement
+public class DataStoreArtifact extends GraphElement
 {
     override public function create(): Node
     {

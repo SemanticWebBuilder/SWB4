@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://www.semanticwebbuilder.org/OS/process/modeler/" href="Modeler.jnlp">
+    <information>
+        <title>SemanticWebProcess BPMN Modeler</title>
+        <vendor>Infotec</vendor>
+        <description kind='short'>SemanticWebProcess BPMN Modeler</description>
+        <description kind='one-line'>A Open Source BPMN Modeler developed with SemanticWebBuilder Platform by Infotec</description>
+        <description kind='tooltip'>SemanticWebProcess BPMN Modeler</description>
+        <homepage href="http://www.semanticwebbuilder.org/OS/process/modeler/"/>
+        <icon href='images/icon.gif'/>
+        <icon href='images/splash.gif' kind='splash'/>
+        <icon href='images/shortcut.png' kind='shortcut'/>
+        <offline-allowed/>
+        <shortcut online='true'>
+            <desktop/>
+            <menu submenu='SWP Modeler'/>
+        </shortcut>
+        <association extensions='swp' mime-type='application/swp-model'>
+            <description>SemanticWebProcess BPMN Modeler data file (.swp)</description>
+        </association>
+    </information>
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.5+"/>
+        <property name="jnlp.packEnabled" value="true"/>
+        <property name="jnlp.versionEnabled" value="true"/>
+        <extension name="JavaFX Runtime" href="http://dl.javafx.com/1.2/javafx-rt.jnlp"/>
+        <jar href="SWBAppBPMNModeler.jar" main="true" version_='0.1.0'/>
+        <jar href="lib/SWBAplCommons.jar"/>
+        <jar href="lib/json.jar"/>
+    </resources>
+    <application-desc main-class="com.sun.javafx.runtime.main.Main">
+        <argument>MainJavaFXScript=org.semanticwb.process.modeler.Main</argument>
+    </application-desc>
+    <update check='background' policy_='prompt-update'/>
+</jnlp>
