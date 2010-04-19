@@ -185,21 +185,27 @@ public class SemanticObject
         if(gen==null)
         {
             SemanticClass clazz=getSemanticClass();
-            if(getSemanticClass().isSWBInterface())
+            if(clazz==null)
             {
-                Iterator<SemanticClass> classes=listSemanticClasses();
-                while(classes.hasNext())
+                log.error("SemanticObject("+this+") without SemanticClass...");
+            }else
+            {
+                if(clazz.isSWBInterface())
                 {
-                    SemanticClass tempClazz=classes.next();
-                    if(tempClazz.isSWBClass())
+                    Iterator<SemanticClass> classes=listSemanticClasses();
+                    while(classes.hasNext())
                     {
-                        clazz=tempClazz;
-                        break;
+                        SemanticClass tempClazz=classes.next();
+                        if(tempClazz.isSWBClass())
+                        {
+                            clazz=tempClazz;
+                            break;
+                        }
                     }
                 }
+                gen=clazz.construcGenericInstance(this);
+                setGenericInstance(gen);
             }
-            gen=clazz.construcGenericInstance(this);
-            setGenericInstance(gen);
         }
         return gen;
     }
