@@ -58,12 +58,12 @@ public class ImageResizer
         int x = bi.getWidth();
         int y = bi.getHeight();
 //        System.out.println("X:"+x+",Y:"+y+",tw:"+thresholdWidth+",th:"+thresholdHeight+",ret:"+ret);
-        if (x>=thresholdWidth){
+        if (x>thresholdWidth){
             newWidth=thresholdWidth;
             float cw=(float)x/newWidth;
             newHeight=(int)(y/cw);
 //            System.out.println("nw:"+newWidth+",nH:"+newHeight+",cw:"+cw);
-            if (newHeight<thresholdHeight) {
+            if (newHeight<=thresholdHeight) {
                 ret=true;
             }
         }
@@ -73,7 +73,7 @@ public class ImageResizer
             float cw=(float)y/newHeight;
             newWidth=(int)(x/cw);
 //            System.out.println("nw:"+newWidth+",nH:"+newHeight+",cw:"+cw);
-            if (newWidth<thresholdWidth) {
+            if (newWidth<=thresholdWidth) {
                 ret=true;
             }
         }
