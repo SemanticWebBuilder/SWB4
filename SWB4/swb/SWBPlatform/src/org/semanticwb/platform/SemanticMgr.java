@@ -242,7 +242,9 @@ private SemanticOntology m_schema;
             //Revisar si las tablas existen
             List list=store.getConnection().getTableNames();
             //System.out.println("list:"+list);
-            if(!list.contains("nodes") && !list.contains("triples") && !list.contains("quads"))
+            if(!(list.contains("nodes")||list.contains("NODES")) &&
+                    !(list.contains("triples")||list.contains("TRIPLES")) &&
+                    !(list.contains("quads")||list.contains("QUADS"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS
             {
                 log.event("Formating Database Tables...");
                 store.getTableFormatter().create();
