@@ -317,6 +317,27 @@ public class CodeGenerator
             throw new CodeGeneratorException("The semantic class "+ clazz.getURI() +" is a class and its parent is an interface");
             }*/
         }
+        Iterator<SemanticProperty> properties=clazz.listProperties();
+        while(properties.hasNext())
+        {
+            SemanticProperty tpp=properties.next();
+            if(tpp.isObjectProperty())
+            {
+                if (tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate())
+                {
+                    throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as Object Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
+                }
+
+
+            }
+            if(tpp.isDataTypeProperty())
+            {
+                if (!(tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate()))
+                {
+                    throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as DataType Property, but the type is "+ tpp.getRangeClass().getURI() +" \r\n");
+                }
+            }
+        }
     }
 
     /**
