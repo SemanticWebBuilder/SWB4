@@ -98,6 +98,9 @@ public class SemanticVocabulary
     
     /** The Constant XMLS_INT. */
     public static final String XMLS_INT = XMLS_URI + "int";
+
+    /** The Constant XMLS_INTEGERS. */
+    public static final String XMLS_INTEGER = XMLS_URI + "integer";
     
     /** The Constant XMLS_FLOAT. */
     public static final String XMLS_FLOAT = XMLS_URI + "float";

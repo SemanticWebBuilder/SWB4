@@ -877,7 +877,7 @@ public class SemanticProperty
     {
         boolean ret = false;
         Resource res = getRange();
-        if (res != null && res.getURI().equals(SemanticVocabulary.XMLS_INT))
+        if (res != null && (res.getURI().equals(SemanticVocabulary.XMLS_INTEGER)||res.getURI().equals(SemanticVocabulary.XMLS_INT)))
         {
             ret = true;
         }
