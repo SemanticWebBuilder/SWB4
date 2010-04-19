@@ -299,7 +299,11 @@ public class CodeGenerator
     }
     }*/
     private void checkClass(SemanticClass clazz) throws CodeGeneratorException
-    {        
+    {
+        if(clazz.getCodePackage()==null)
+        {
+            throw new CodeGeneratorException("The code package for Semantic class " + clazz.getURI() + " is not defined\r\n");
+        }
         Iterator<SemanticClass> tpcit = clazz.listSuperClasses(true);
         while (tpcit.hasNext())
         {
