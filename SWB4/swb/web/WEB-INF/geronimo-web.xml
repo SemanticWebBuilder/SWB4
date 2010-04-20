@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web:web-app xmlns:app="http://geronimo.apache.org/xml/ns/j2ee/application-2.0" xmlns:client="http://geronimo.apache.org/xml/ns/j2ee/application-client-2.0" xmlns:conn="http://geronimo.apache.org/xml/ns/j2ee/connector-1.2" xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2" xmlns:ejb="http://openejb.apache.org/xml/ns/openejb-jar-2.2" xmlns:name="http://geronimo.apache.org/xml/ns/naming-1.2" xmlns:pers="http://java.sun.com/xml/ns/persistence" xmlns:pkgen="http://openejb.apache.org/xml/ns/pkgen-2.1" xmlns:sec="http://geronimo.apache.org/xml/ns/security-2.0" xmlns:web="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1">
+<web:web-app xmlns:app="http://geronimo.apache.org/xml/ns/j2ee/application-2.0"
+xmlns:client="http://geronimo.apache.org/xml/ns/j2ee/application-client-2.0"
+xmlns:conn="http://geronimo.apache.org/xml/ns/j2ee/connector-1.2"
+xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2"
+xmlns:ejb="http://openejb.apache.org/xml/ns/openejb-jar-2.2"
+xmlns:name="http://geronimo.apache.org/xml/ns/naming-1.2"
+xmlns:pers="http://java.sun.com/xml/ns/persistence"
+xmlns:pkgen="http://openejb.apache.org/xml/ns/pkgen-2.1"
+xmlns:sec="http://geronimo.apache.org/xml/ns/security-2.0"
+xmlns:web="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1">
     <dep:environment>
         <dep:moduleId>
             <dep:groupId>default</dep:groupId>
             <dep:artifactId>swb</dep:artifactId>
-            <dep:version>4.0.1.2</dep:version>
+            <dep:version>4.0.1.3</dep:version>
             <dep:type>war</dep:type>
         </dep:moduleId>
         <dep:dependencies>
@@ -19,46 +28,6 @@
         <dep:inverse-classloading/>
     </dep:environment>
     <web:context-root>/swb</web:context-root> <!--Cambiar a "/" si el despliegue se quiere realizar en Raíz -->
-    <web:security-realm-name>swb4TripleStoreModule</web:security-realm-name>
-    <sec:security>
-        <sec:role-mappings>
-            <sec:role role-name="swbrole">
-                <sec:realm realm-name="swb4TripleStoreModule">
-                    <!-- <sec:principal class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" name="admin"/> -->
-                </sec:realm>
-            </sec:role>
-        </sec:role-mappings>
-    </sec:security>
-    <web:security-realm-name>LDAPModule</web:security-realm-name>
-    <sec:security>
-        <sec:role-mappings>
-            <sec:role role-name="swbrole">
-                <sec:realm realm-name="LDAPModule">
-                    <!-- <sec:principal class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" name="admin"/> -->
-                </sec:realm>
-            </sec:role>
-        </sec:role-mappings>
-    </sec:security>
-    <web:security-realm-name>GeoLoginModule</web:security-realm-name>
-    <sec:security>
-        <sec:role-mappings>
-            <sec:role role-name="swbrole">
-                <sec:realm realm-name="GeoLoginModule">
-                    <!-- <sec:principal class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" name="admin"/> -->
-                </sec:realm>
-            </sec:role>
-        </sec:role-mappings>
-    </sec:security>
-    <web:security-realm-name>RemoteURLLoginModule</web:security-realm-name>
-    <sec:security>
-        <sec:role-mappings>
-            <sec:role role-name="swbrole">
-                <sec:realm realm-name="RemoteURLLoginModule">
-                    <!-- <sec:principal class="org.apache.geronimo.security.realm.providers.GeronimoUserPrincipal" name="admin"/> -->
-                </sec:realm>
-            </sec:role>
-        </sec:role-mappings>
-    </sec:security>
     <dep:gbean class="org.apache.geronimo.security.realm.GenericSecurityRealm" name="swb4TripleStoreModule">
         <dep:attribute name="realmName">swb4TripleStoreModule </dep:attribute>
         <dep:reference name="ServerInfo">
