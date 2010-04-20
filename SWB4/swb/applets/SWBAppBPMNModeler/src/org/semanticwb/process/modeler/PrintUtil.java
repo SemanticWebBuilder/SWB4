@@ -23,14 +23,12 @@ import java.awt.print.PrinterJob;
  */
 public class PrintUtil
 {
-    static PageFormat pf=null;
-
     public void print(BufferedImage bufferedImage[])
     {
         // Get the representation of the current printer and
         //the current print job.
         PrinterJob printerJob = PrinterJob.getPrinterJob();
-        if(pf==null)pf=printerJob.defaultPage();
+        PageFormat pf=printerJob.defaultPage();
         printerJob.pageDialog(pf);
         printerJob.setPrintable(new DocToPrint(bufferedImage));
 
