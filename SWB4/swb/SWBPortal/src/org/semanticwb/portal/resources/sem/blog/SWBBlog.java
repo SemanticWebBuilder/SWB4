@@ -4,7 +4,7 @@
  */
 package org.semanticwb.portal.resources.sem.blog;
 
-import com.hp.hpl.jena.query.ResultSet;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

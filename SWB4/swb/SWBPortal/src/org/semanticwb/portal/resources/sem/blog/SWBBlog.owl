@@ -12,38 +12,83 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
-  <owl:ObjectProperty rdf:ID="hasComment">
-    <rdfs:domain>
-      <swb:Class rdf:ID="Post">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-      </swb:Class>
-    </rdfs:domain>
+  <owl:Class rdf:ID="Blog">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Comment">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Post">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasPermission">
+    <rdfs:domain rdf:resource="#Blog"/>
     <rdfs:range>
-      <swb:Class rdf:ID="Comment">
+      <swb:Class rdf:ID="Permision">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasComment">
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="#Comment"/>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPost">
-    <rdfs:domain>
-      <swb:Class rdf:ID="Blog">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:domain rdf:resource="#Blog"/>
     <rdfs:range rdf:resource="#Post"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="userComment">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="UserPost">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#Post"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="comment">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Comment"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="fec_altaComment">
+    <rdfs:domain rdf:resource="#Comment"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="level">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:domain rdf:resource="#Permision"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="securityId">
+    <rdfs:domain rdf:resource="#Permision"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isRol">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Permision"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="fecha_alta">
+    <rdfs:domain rdf:resource="#Post"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#blogpackage">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.blog</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >blog</swb:prefix>
+  </swb:CodePackage>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
