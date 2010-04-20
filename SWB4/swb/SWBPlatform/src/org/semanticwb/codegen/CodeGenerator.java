@@ -323,9 +323,16 @@ public class CodeGenerator
             SemanticProperty tpp=properties.next();
             if(tpp.isObjectProperty())
             {
+                try
+                {
                 if (tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate())
                 {
                     throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as Object Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
+                }
+                }
+                catch(Exception e)
+                {
+                    throw new CodeGeneratorException("The property "+tpp.getURI()+" has an error\r\n",e);
                 }
 
 
@@ -364,7 +371,7 @@ public class CodeGenerator
         tpcit = mgr.getVocabulary().listSemanticClasses();        
         while (tpcit.hasNext())
         {
-            SemanticClass tpc = tpcit.next();
+            SemanticClass tpc = tpcit.next();            
             boolean create = false;
             if (prefix == null)
             {
@@ -824,6 +831,7 @@ public class CodeGenerator
         }
         File dir = createPackage(tpc.getCodePackage(), pDirectory);
         dir = new File(dir.getPath() + File.separatorChar + "base");
+
         if (!dir.exists())
         {
             dir.mkdirs();
@@ -1114,6 +1122,14 @@ public class CodeGenerator
         }
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName()) + "Base.java");
+        try
+        {
+            System.out.println("Creando clase "+fileClass.getCanonicalPath());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         saveFile(fileClass, javaClassContent.toString());
         createClass(tpc, parent, pDirectory);
     }
@@ -1297,6 +1313,14 @@ public class CodeGenerator
         insertPropertiesToInterface(tpc, javaClassContent);
         javaClassContent.append("}" + ENTER);
         File fileClass = new File(dir.getPath() + File.separatorChar + toUpperCase(tpc.getClassCodeName() + "Base") + ".java");
+        try
+        {
+            System.out.println("Creando interface "+fileClass.getCanonicalPath());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         saveFile(fileClass, javaClassContent.toString());
         createInterface(tpc, pDirectory);
     }
