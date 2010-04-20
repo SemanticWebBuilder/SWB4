@@ -22,6 +22,7 @@
 **/ 
  
 import java.io.File;
+import java.io.FileNotFoundException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.codegen.CodeGenerator;
@@ -36,7 +37,7 @@ public class CodeGeneratorBlog
 {
     public static void main(String []args)
     {
-        new CodeGeneratorResources().codeGen(args);
+        new CodeGeneratorBlog().codeGen(args);
     }
 
     public void codeGen(String []args)
@@ -44,8 +45,9 @@ public class CodeGeneratorBlog
         String base=SWBUtils.getApplicationPath();
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");        
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../SWBPortal/src/org/semanticwb/portal/resources/sem/blog/SWBBlog.owl");        
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/SWBBlog.owl");
+        //SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../SWBPortal/src/org/semanticwb/portal/resources/sem/blog/SWBBlog.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();        
         SWBPlatform.getSemanticMgr().getOntology().rebind();
 
