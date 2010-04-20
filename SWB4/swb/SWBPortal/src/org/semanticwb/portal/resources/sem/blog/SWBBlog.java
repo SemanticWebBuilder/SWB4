@@ -2313,10 +2313,7 @@ public class SWBBlog extends GenericResource
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        String pathDeleteBlog = getDeleteImagePath(paramRequest);
-        String pathEditBlog = getEditImagePath(paramRequest);
-        String pathAddBlog = getAddImagePath(paramRequest);
+    {        
         PrintWriter out = response.getWriter();
         out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
