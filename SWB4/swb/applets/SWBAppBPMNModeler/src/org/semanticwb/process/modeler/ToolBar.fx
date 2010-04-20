@@ -31,6 +31,9 @@ import applets.commons.WBXMLParser;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.BufferedOutputStream;
+import java.awt.image.BufferedImage;
+import org.semanticwb.process.modeler.GraphElement;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -53,6 +56,7 @@ public class ToolBar extends CustomNode
     var isApplet:Boolean=false;
 
     var fileChooser = javax.swing.JFileChooser{};
+    var imageFileChooser = javax.swing.JFileChooser{};
 
     public function openProcess(): Void
     {
@@ -70,6 +74,35 @@ public class ToolBar extends CustomNode
                 modeler.containerElement=null;
                 createProcess(proc);
             }catch(e:Exception){Alert.inform("Error",e.getMessage());}
+        }
+    }
+
+    public function saveAsImage(): Void
+    {
+        //fileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        if (imageFileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            var file = imageFileChooser.getSelectedFile();
+            if(not file.getName().toLowerCase().endsWith("png"))
+            {
+                file=new File("{file.getPath()}.png");
+            }
+            println(file);
+            var bufferedImage=modeler.renderToImage(25);
+            println(bufferedImage);
+            try
+            {
+                var out=new FileOutputStream(file);
+                def bufferedOutputStream = new BufferedOutputStream(out);
+                println(bufferedOutputStream);
+                javax.imageio.ImageIO.write( bufferedImage, "PNG", bufferedOutputStream );
+                bufferedOutputStream.close();
+                out.close();
+                println("end");
+            }catch(e:Exception)
+            {
+                println(e.getMessage());
+                Alert.inform("Error",e.getMessage());
+            }
         }
     }
 
@@ -204,6 +237,8 @@ public class ToolBar extends CustomNode
     */
     public function createProcess(json:String): Void
     {
+        println("Arguments:{FX.getArgument}");
+
         var jsobj=new JSONObject(json);
         var jsarr = jsobj.getJSONArray("nodes");
         var i=0;
@@ -340,6 +375,8 @@ public class ToolBar extends CustomNode
     {
         var filter = FileFilter{};
         fileChooser.setFileFilter(filter);
+        var imgFilter = ImageFileFilter{};
+        imageFileChooser.setFileFilter(imgFilter);
 
         if(isApplet)loadProcess();
 
@@ -400,7 +437,48 @@ public class ToolBar extends CustomNode
                     imageOver: "images/file_print2.png"
                     action: function():Void
                     {
+                        var print=PrintUtil{};
+                        var aux=modeler.containerElement;
+                        modeler.containerElement=null;
+                        var arr=[modeler.renderToImage(1)];
+                        for(node in modeler.contents)
+                        {
+                            if(node instanceof GraphElement)
+                            {
+                                var ge=node as GraphElement;
+                                if(ge.containerable)
+                                {
+                                    modeler.containerElement=ge;
+                                    insert modeler.renderToImage(1) into arr;
+                                }
+                            }
+                        }
+                        modeler.containerElement=aux;
+                        print.print(arr);
                         //TODO:
+                    }
+                },
+                ImgButton {
+                    text:"Save As"
+                    toolBar:this;
+                    image: "images/file_saveas1.png"
+                    imageOver: "images/file_saveas2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
+                        saveAsImage();
+                    }
+                },
+                ImgButton {
+                    text:"About"
+                    toolBar:this;
+                    image: "images/file_about1.png"
+                    imageOver: "images/file_about2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
                     }
                 },
             ]
@@ -1782,6 +1860,8 @@ public class ToolBar extends CustomNode
                             imageOver: "images/maxim_2.png"
                             action: function():Void
                             {
+                                ModelerUtils.clickedNode=null;
+                                modeler.disablePannable=false;
                                 stage.fullScreen = not stage.fullScreen;
                             }
                         },
@@ -1853,5 +1933,15 @@ class FileFilter extends javax.swing.filechooser.FileFilter {
 
     override public function accept(f: java.io.File) : Boolean {
         return f.isDirectory() or f.getName().endsWith(".swp")
+    }
+}
+
+class ImageFileFilter extends javax.swing.filechooser.FileFilter {
+    override public function getDescription() : String {
+        return "PNG Image";
+    }
+
+    override public function accept(f: java.io.File) : Boolean {
+        return f.isDirectory() or f.getName().endsWith(".png")
     }
 }
