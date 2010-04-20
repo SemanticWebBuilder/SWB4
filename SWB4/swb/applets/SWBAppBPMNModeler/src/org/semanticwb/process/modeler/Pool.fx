@@ -71,6 +71,7 @@ public class Pool extends GraphElement
                 Group
                 {
                     content:bind lanes
+                    visible: bind sizeof lanes > 0
                 }
             ]
             scaleX: bind s;

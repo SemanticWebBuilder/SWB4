@@ -42,6 +42,8 @@ var toolbar:ToolBar = ToolBar
     modeler: modeler
 }
 
+modeler.toolBar=toolbar;
+
 var path:ContainerPath = ContainerPath
 {
     w:bind maxx

@@ -13,6 +13,7 @@ import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.GraphElement;
 import org.semanticwb.process.modeler.ModelerUtils;
+import java.awt.image.BufferedImage;
 
 /**
  * @author javier.solis
@@ -30,19 +31,24 @@ public class Modeler extends CustomNode
     public var mousex:Number;
     public var mousey:Number;
     public var clipView:ClipView;
+    public var content:Group;
     public var containerElement: GraphElement;
+    public var toolBar:ToolBar;
 
     var focusedNode: Node;                       //Nodo con el foco
 
     public override function create(): Node
     {
          //var ret=ScrollPane
+
+         content=Group
+         {
+             content: bind contents
+         }
+
          clipView=ClipView
          {
-             node:Group
-             {
-                 content: bind contents
-             }
+             node:content
              width:bind width
              height:bind height
 
@@ -173,21 +179,10 @@ public class Modeler extends CustomNode
                              remove(tempNode);
                          }
                          tempNode=null;
-                         disablePannable=false;
+                         disablePannable=true;
+                         ModelerUtils.clickedNode=null;
                      }
                  }
-
-//                 if(ModelerUtils.clickedNode instanceof Pool)
-//                 {
-//                     var p=ModelerUtils.clickedNode as Pool;
-//                     p.updateLanesCords();
-//                 }
-//                 if(ModelerUtils.clickedNode instanceof Lane)
-//                 {
-//                     var p=(ModelerUtils.clickedNode as Lane).getPool();
-//                     p.updateLanesCords();
-//                 }
-
 
              }
 //             onKeyTyped: function( e: KeyEvent ):Void
@@ -302,6 +297,41 @@ public class Modeler extends CustomNode
     public function getFocusedNode():Node
     {
         return focusedNode;
+    }
+
+    public function renderToImage(margin:Integer):BufferedImage
+    {
+        var minx=1000000.0;
+        var miny=1000000.0;
+        var maxx=0.0;
+        var maxy=0.0;
+        var one=false;
+        for(node in contents)   //se buscan elementos activos y visibles
+        {
+            if(node.visible)
+            {
+                var b=node.boundsInLocal;
+                if(b.width>0 and b.height>0)
+                {
+                    if(b.minX<minx)minx=b.minX;
+                    if(b.minY<miny)miny=b.minY;
+                    if(b.maxX>maxx)maxx=b.maxX;
+                    if(b.maxY>maxy)maxy=b.maxY;
+                    println("{node} {b.minX} {b.minY} {b.maxX} {b.maxY} {b.width} {b.height}");
+                    one=true;
+                }
+            }
+        }
+        if(not one) //Si no hay ningun element se inicia a cero
+        {
+            minx=0;
+            miny=0;
+        }
+        var bounds=content.boundsInLocal;
+        //var bufferedImage = new PrintUtil().renderToImage(content,bounds.width, bounds.height);
+        println("{bounds.minX} {bounds.minY} {bounds.maxX} {bounds.maxY} {bounds.width} {bounds.height}");
+        var bufferedImage = new ModelerUtils().renderToImage(content,minx-margin,miny-margin,maxx-minx+margin*2, maxy-miny+margin*2);
+        return bufferedImage;
     }
 
 }
