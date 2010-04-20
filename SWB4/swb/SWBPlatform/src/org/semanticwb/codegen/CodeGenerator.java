@@ -325,10 +325,10 @@ public class CodeGenerator
             {
                 try
                 {
-                if (tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate())
-                {
-                    throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as Object Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
-                }
+                    if (tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate())
+                    {
+                        throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as Object Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
+                    }
                 }
                 catch(Exception e)
                 {
