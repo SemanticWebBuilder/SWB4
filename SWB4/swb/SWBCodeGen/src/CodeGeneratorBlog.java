@@ -22,7 +22,6 @@
 **/ 
  
 import java.io.File;
-import java.io.FileNotFoundException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.codegen.CodeGenerator;
