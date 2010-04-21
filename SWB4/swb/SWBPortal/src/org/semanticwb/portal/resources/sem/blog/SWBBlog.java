@@ -1118,7 +1118,10 @@ public class SWBBlog extends GenericResource
                     Comment ocomment = Comment.ClassMgr.createComment(response.getWebPage().getWebSite());
                     ocomment.setComment(comment);
                     ocomment.setFec_altaComment(new Date(System.currentTimeMillis()));
-                    ocomment.setUserComment(response.getUser());
+                    if(response.getUser().getId()!=null)
+                    {
+                        ocomment.setUserComment(response.getUser());
+                    }
                     post.addComment(ocomment);
                 }
             }
@@ -2060,20 +2063,14 @@ public class SWBBlog extends GenericResource
                     Comment ocomment = ocomments.next();
                     Element comment = new Element("comment");
                     comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
-                    String userid = ocomment.getUserComment().getId();
-
-                    String uid = userid.substring(0, userid.indexOf("_"));
-                    String repid = userid.substring(userid.indexOf("_") + 1);
-                    User recuser = UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
-
                     StringBuffer name = new StringBuffer("");
-                    if (recuser == null)
+                    if(ocomment.getUserComment()==null)
                     {
                         name.append(paramRequest.getLocaleString("userAnonimous"));
                     }
                     else
                     {
-                        name.append(recuser.getFullName());
+                        name.append(ocomment.getUserComment().getFullName());
                     }
                     String user = name.toString().trim();
                     comment.setAttribute("user", user);
