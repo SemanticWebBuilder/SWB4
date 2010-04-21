@@ -4,7 +4,6 @@
  */
 package org.semanticwb.portal.resources.sem.blog;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -617,7 +616,7 @@ public class SWBBlog extends GenericResource
         out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'><tr><td>");
         out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'>");
 
-        int level = getLevel("*", true,paramRequest.getWebPage().getWebSite());
+        int level = getLevel("*", true, paramRequest.getWebPage().getWebSite());
 
         out.println("<tr>");
         out.println("<td >");
@@ -638,7 +637,7 @@ public class SWBBlog extends GenericResource
             out.println("<tr>");
             out.println("<td  >");
             Role recRole = roles.next();
-            level = getLevel(recRole.getId() + "_" + recRole.getUserRepository().getId(), true,paramRequest.getWebPage().getWebSite());
+            level = getLevel(recRole.getId() + "_" + recRole.getUserRepository().getId(), true, paramRequest.getWebPage().getWebSite());
             out.println(recRole.getTitle());
             out.println("<td>");
             out.println("<td  >");
@@ -740,7 +739,7 @@ public class SWBBlog extends GenericResource
         out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'><tr><td>");
         out.println("<table width='100%'  border='0' cellpadding='5' cellspacing='0'>");
 
-        int level = getLevel("*", false,paramRequest.getWebPage().getWebSite());
+        int level = getLevel("*", false, paramRequest.getWebPage().getWebSite());
         out.println("<tr>");
         out.println("<td >");
         out.println(paramRequest.getLocaleString("all"));
@@ -760,7 +759,7 @@ public class SWBBlog extends GenericResource
             out.println("<tr>");
             out.println("<td >");
             User recuser = users.next();
-            level = getLevel(recuser.getId() + "_" + recuser.getUserRepository().getId(), false,paramRequest.getWebPage().getWebSite());
+            level = getLevel(recuser.getId() + "_" + recuser.getUserRepository().getId(), false, paramRequest.getWebPage().getWebSite());
             out.println(recuser.getName() + " " + recuser.getLastName());
             out.println("<td>");
             out.println("<td>");
@@ -1118,7 +1117,7 @@ public class SWBBlog extends GenericResource
                     Comment ocomment = Comment.ClassMgr.createComment(response.getWebPage().getWebSite());
                     ocomment.setComment(comment);
                     ocomment.setFec_altaComment(new Date(System.currentTimeMillis()));
-                    if(response.getUser().getId()!=null)
+                    if (response.getUser().getId() != null)
                     {
                         ocomment.setUserComment(response.getUser());
                     }
@@ -1139,7 +1138,7 @@ public class SWBBlog extends GenericResource
      */
     public synchronized void deleteBlog(HttpServletRequest request, SWBActionResponse response, String blogid) throws SWBResourceException, IOException
     {
-        Blog blog=Blog.ClassMgr.getBlog(blogid, response.getWebPage().getWebSite());
+        Blog blog = Blog.ClassMgr.getBlog(blogid, response.getWebPage().getWebSite());
         blog.remove();
     }
 
@@ -2006,82 +2005,96 @@ public class SWBBlog extends GenericResource
         Blog blog = Blog.ClassMgr.getBlog(blogid, paramRequest.getWebPage().getWebSite());
         if (blog != null)
         {
-            Post post = blog.getPost(postid);//new Post(postid, blogid,wbUser.getUserRepository());
-            comments.setAttribute("title", post.getTitle());
-            comments.setAttribute("name", blog.getTitle());
-            comments.setAttribute("url", urlBlog);
-            comments.setAttribute("comments", String.valueOf(post.getNumberOfComments()));
-            comments.setAttribute("id", String.valueOf(post.getId()));
-            comments.setAttribute("blogid", String.valueOf(blogid));
-            comments.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("dd/MM/yyyy 'a las' HH:mm:ss", defaultFormat)).format(post.getFecha_alta()));
-            comments.setAttribute("author", post.getUserPost().getFullName());
-            Element eDescription = new Element("description");
-            CDATA cDescription = new CDATA(post.getDescription());
-            eDescription.addContent(cDescription);
-            comments.addContent(eDescription);
-
-
-            if (showAll)
+            Post post = blog.getPost(postid);
+            try
             {
-                GenericIterator<Comment> ocomments = post.listComments();
-                while (ocomments.hasNext())
+                comments.setAttribute("title", post.getTitle());
+                comments.setAttribute("name", blog.getTitle());
+                comments.setAttribute("url", urlBlog);
+                comments.setAttribute("comments", String.valueOf(post.getNumberOfComments()));
+                comments.setAttribute("id", String.valueOf(post.getId()));
+                comments.setAttribute("blogid", String.valueOf(blogid));
+                comments.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("dd/MM/yyyy 'a las' HH:mm:ss", defaultFormat)).format(post.getFecha_alta()));
+                comments.setAttribute("author", post.getUserPost().getFullName());
+                Element eDescription = new Element("description");
+                CDATA cDescription = new CDATA(post.getDescription());
+                eDescription.addContent(cDescription);
+                comments.addContent(eDescription);
+
+
+                if (showAll)
                 {
-                    Comment ocomment = ocomments.next();
-                    Element comment = new Element("comment");
-                    comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
-                    String userid = ocomment.getUserComment().getId();
-
-                    String uid = userid.substring(0, userid.indexOf("_"));
-                    String repid = userid.substring(userid.indexOf("_") + 1);
-                    User recuser = UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
-
-                    //System.out.println("getComments: recuser: "+recuser);
-
-                    StringBuffer name = new StringBuffer("");
-                    if (recuser == null)
+                    GenericIterator<Comment> ocomments = post.listComments();
+                    while (ocomments.hasNext())
                     {
-                        name.append(paramRequest.getLocaleString("userAnonimous"));
+                        Comment ocomment = ocomments.next();
+                        Element comment = new Element("comment");
+                        comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
+                        String userid = ocomment.getUserComment().getId();
+
+                        String uid = userid.substring(0, userid.indexOf("_"));
+                        String repid = userid.substring(userid.indexOf("_") + 1);
+                        User recuser = UserRepository.ClassMgr.getUserRepository(repid).getUser(uid);
+
+                        //System.out.println("getComments: recuser: "+recuser);
+
+                        StringBuffer name = new StringBuffer("");
+                        if (recuser == null)
+                        {
+                            name.append(paramRequest.getLocaleString("userAnonimous"));
+                        }
+                        else
+                        {
+                            name.append(recuser.getFullName());
+                        }
+                        String user = name.toString().trim();
+                        comment.setAttribute("user", user);
+                        comment.setText(ocomment.getComment());
+                        comments.addContent(comment);
                     }
-                    else
-                    {
-                        name.append(recuser.getFullName());
-                    }
-                    String user = name.toString().trim();
-                    comment.setAttribute("user", user);
-                    comment.setText(ocomment.getComment());
-                    comments.addContent(comment);
+
                 }
-
+                else
+                {
+                    int numofcomments = getNumMaxOfComments();
+                    int i = 1;
+                    GenericIterator<Comment> ocomments = post.listComments();
+                    while (ocomments.hasNext())
+                    {
+                        Comment ocomment = ocomments.next();
+                        try
+                        {
+                            Element comment = new Element("comment");
+                            comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
+                            StringBuffer name = new StringBuffer("");
+                            if (ocomment.getUserComment() == null)
+                            {
+                                name.append(paramRequest.getLocaleString("userAnonimous"));
+                            }
+                            else
+                            {
+                                name.append(ocomment.getUserComment().getFullName());
+                            }
+                            String user = name.toString().trim();
+                            comment.setAttribute("user", user);
+                            comment.setText(ocomment.getComment());
+                            comments.addContent(comment);
+                            if (i >= numofcomments)
+                            {
+                                break;
+                            }
+                            i++;
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
+                    }
+                }
             }
-            else
+            catch (Exception e)
             {
-                int numofcomments = getNumMaxOfComments();
-                int i = 1;
-                GenericIterator<Comment> ocomments = post.listComments();
-                while (ocomments.hasNext())
-                {
-                    Comment ocomment = ocomments.next();
-                    Element comment = new Element("comment");
-                    comment.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format_comments", defaultFormat)).format(ocomment.getFec_altaComment()));
-                    StringBuffer name = new StringBuffer("");
-                    if(ocomment.getUserComment()==null)
-                    {
-                        name.append(paramRequest.getLocaleString("userAnonimous"));
-                    }
-                    else
-                    {
-                        name.append(ocomment.getUserComment().getFullName());
-                    }
-                    String user = name.toString().trim();
-                    comment.setAttribute("user", user);
-                    comment.setText(ocomment.getComment());
-                    comments.addContent(comment);
-                    if (i >= numofcomments)
-                    {
-                        break;
-                    }
-                    i++;
-                }
+                log.error(e);
             }
         }
 
@@ -2314,10 +2327,9 @@ public class SWBBlog extends GenericResource
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
+    {
         PrintWriter out = response.getWriter();
         out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
