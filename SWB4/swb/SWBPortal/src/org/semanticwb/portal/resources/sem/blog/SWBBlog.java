@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
@@ -1042,6 +1043,8 @@ public class SWBBlog extends GenericResource
                 Post post = Post.ClassMgr.createPost(response.getWebPage().getWebSite());
                 post.setTitle(title);
                 post.setDescription(description);
+                post.setUserPost(response.getUser());
+                post.setFecha_alta(new Date(System.currentTimeMillis()));
                 blog.addPost(post);
             }
 
@@ -1114,6 +1117,8 @@ public class SWBBlog extends GenericResource
                 {
                     Comment ocomment = Comment.ClassMgr.createComment(response.getWebPage().getWebSite());
                     ocomment.setComment(comment);
+                    ocomment.setFec_altaComment(new Date(System.currentTimeMillis()));
+                    ocomment.setUserComment(response.getUser());
                     post.addComment(ocomment);
                 }
             }
@@ -1346,7 +1351,7 @@ public class SWBBlog extends GenericResource
                     while (permissions.hasNext())
                     {
                         Permision temp = permissions.next();
-                        if (temp.isIsRol() && temp.getSecurityId().endsWith(name.substring(5)))
+                        if (temp.isIsRol() && temp.getSecurityId().endsWith(name))
                         {
                             exists = true;
                             permission = temp;
@@ -1361,6 +1366,7 @@ public class SWBBlog extends GenericResource
                             permission.setIsRol(true);
                             permission.setSecurityId(name);
                             permission.setLevel(ilevel);
+                            blog.addPermission(permission);
                         }
                         else
                         {
@@ -1405,7 +1411,7 @@ public class SWBBlog extends GenericResource
                 while (permissions.hasNext())
                 {
                     Permision temp = permissions.next();
-                    if (temp.isIsRol() && temp.getSecurityId().endsWith(name.substring(5)))
+                    if (temp.isIsRol() && temp.getSecurityId().endsWith(name))
                     {
                         exists = true;
                         permission = temp;
@@ -1420,7 +1426,7 @@ public class SWBBlog extends GenericResource
                         permission.setIsRol(true);
                         permission.setSecurityId(name);
                         permission.setLevel(level);
-
+                        blog.addPermission(permission);
                     }
                     else
                     {
@@ -1472,7 +1478,7 @@ public class SWBBlog extends GenericResource
                     while (permissions.hasNext())
                     {
                         Permision temp = permissions.next();
-                        if (!temp.isIsRol() && temp.getSecurityId().endsWith(name.substring(5)))
+                        if (!temp.isIsRol() && temp.getSecurityId().endsWith(name))
                         {
                             exists = true;
                             permission = temp;
@@ -1487,6 +1493,7 @@ public class SWBBlog extends GenericResource
                             permission.setIsRol(false);
                             permission.setSecurityId(name);
                             permission.setLevel(ilevel);
+                            blog.addPermission(permission);
                         }
                         else
                         {

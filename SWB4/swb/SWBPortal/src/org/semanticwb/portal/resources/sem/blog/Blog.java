@@ -36,13 +36,13 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
         while(permissions.hasNext())
         {
             Permision permission=permissions.next();
-            if(permission.isIsRol())
+            if(permission.isIsRol() && !permission.getSecurityId().equals("*"))
             {
                 GenericIterator<Role> roles=user.listRoles();
                 while(roles.hasNext())
                 {
                     Role role=roles.next();
-                    if(role.getId().equals(permission.getSecurityId()))
+                    if(role.getId().equals(permission.getSecurityId()) && user.isRegistered())
                     {
                         return permission.getLevel();
                     }
@@ -50,12 +50,23 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
             }
             else
             {
-                if(permission.getSecurityId().equals(user.getId()))
+                if(permission.getSecurityId().equals(user.getId()) && !permission.getSecurityId().equals("*") && user.isRegistered())
                 {
                     return permission.getLevel();
                 }
             }
         }
+        
+        permissions=listPermissions();
+        while(permissions.hasNext())
+        {
+            Permision permission=permissions.next();
+            if(permission.isIsRol() && permission.getSecurityId().equals("*") && user.isRegistered())
+            {
+                return permission.getLevel();
+            }            
+        }
+
         return 0;
 
     }
@@ -115,18 +126,25 @@ public class Blog extends org.semanticwb.portal.resources.sem.blog.base.BlogBase
             {
                 break;
             }
-            Element ePost = new Element("post");
-            ePost.setAttribute("title", post.getTitle());
-            ePost.setAttribute("comments", String.valueOf(post.getNumberOfComments()));
-            ePost.setAttribute("id", post.getId());
-            ePost.setAttribute("blogid", this.getId());
-            ePost.setAttribute("date", iso8601dateFormat.format(post.getFecha_alta()));
-            ePost.setAttribute("author", post.getUserPost().getFullName());
-            Element eDescription = new Element("description");
-            CDATA cDescription = new CDATA(post.getDescription());
-            eDescription.addContent(cDescription);
-            ePost.addContent(eDescription);
-            blog.addContent(ePost);
+            try
+            {
+                Element ePost = new Element("post");
+                ePost.setAttribute("title", post.getTitle());
+                ePost.setAttribute("comments", String.valueOf(post.getNumberOfComments()));
+                ePost.setAttribute("id", post.getId());
+                ePost.setAttribute("blogid", this.getId());
+                ePost.setAttribute("date", iso8601dateFormat.format(post.getFecha_alta()));
+                ePost.setAttribute("author", post.getUserPost().getFullName());
+                Element eDescription = new Element("description");
+                CDATA cDescription = new CDATA(post.getDescription());
+                eDescription.addContent(cDescription);
+                ePost.addContent(eDescription);
+                blog.addContent(ePost);
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
         }
         return doc;
     }
