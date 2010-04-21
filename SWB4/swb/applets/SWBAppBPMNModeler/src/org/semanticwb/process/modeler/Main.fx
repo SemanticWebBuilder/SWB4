@@ -111,6 +111,8 @@ var scene : Scene = Scene {
 //                blocksMouse:true;
 //                //cursor:Cursor.DEFAULT
 //            }
+        ModelerUtils.splash
+
     ]
     width: 600
     height: 300

@@ -8,7 +8,7 @@
         <description kind='tooltip'>SemanticWebProcess BPMN Modeler</description>
         <homepage href="http://www.semanticwebbuilder.org/OS/process/modeler/"/>
         <icon href='images/icon.gif'/>
-        <icon href='images/splash.gif' kind='splash'/>
+        <icon href='images/splash.jpg' kind='splash'/>
         <icon href='images/shortcut.png' kind='shortcut'/>
         <offline-allowed/>
         <shortcut online='true'>

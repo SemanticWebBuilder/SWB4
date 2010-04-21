@@ -23,7 +23,11 @@ var toolTip=ToolTip
     visible:false
 }
 
+public var splash=Splash{ };
+
 var resize=ResizeNode{};
+
+public var version="0.1.0.0";
 
 // Tooltips are displayed after a delay.
 var toolTipTimeline= Timeline

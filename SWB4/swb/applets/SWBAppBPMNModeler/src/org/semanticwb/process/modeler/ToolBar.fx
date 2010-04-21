@@ -32,8 +32,8 @@ import java.io.FileOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.BufferedOutputStream;
-import java.awt.image.BufferedImage;
 import org.semanticwb.process.modeler.GraphElement;
+import org.semanticwb.process.modeler.ModelerUtils;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -479,6 +479,7 @@ public class ToolBar extends CustomNode
                     {
                         ModelerUtils.clickedNode=null;
                         modeler.disablePannable=false;
+                        ModelerUtils.splash.showDialog(modeler.width/2,modeler.height/2);
                     }
                 },
             ]
