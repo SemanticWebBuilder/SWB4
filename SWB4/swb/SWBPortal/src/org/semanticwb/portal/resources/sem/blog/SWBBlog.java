@@ -1,4 +1,4 @@
-/*
+g/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -2014,7 +2014,7 @@ public class SWBBlog extends GenericResource
                 comments.setAttribute("comments", String.valueOf(post.getNumberOfComments()));
                 comments.setAttribute("id", String.valueOf(post.getId()));
                 comments.setAttribute("blogid", String.valueOf(blogid));
-                comments.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("dd/MM/yyyy 'a las' HH:mm:ss", defaultFormat)).format(post.getFecha_alta()));
+                comments.setAttribute("date", new SimpleDateFormat(this.getResourceBase().getAttribute("format", defaultFormat)).format(post.getFecha_alta()));
                 comments.setAttribute("author", post.getUserPost().getFullName());
                 Element eDescription = new Element("description");
                 CDATA cDescription = new CDATA(post.getDescription());
