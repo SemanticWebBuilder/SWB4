@@ -41,10 +41,15 @@ public class PasswordManager extends GenericResource {
     
     /** The generator. */
     static SecureRandom generator = new SecureRandom();
-    
+
+    static private String priv=null;
 
     {
         generator.setSeed(System.currentTimeMillis());
+//        SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
+        priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(
+                SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey"));
+        if (priv==null)priv="TOO MANY SECRETS";
     }
     
     /** The log. */
@@ -436,7 +441,7 @@ public class PasswordManager extends GenericResource {
     String generateToken(String login) throws GeneralSecurityException {
         String value = login + "|" + (System.currentTimeMillis() + 1000L * 60 * 60 * 48) + "|" +
                 SWBPlatform.getVersion();
-        value = SFBase64.encodeBytes(SWBUtils.CryptoWrapper.PBEAES128Cipher("TOO MANY SECRETS", value.getBytes()), false);
+        value = SFBase64.encodeBytes(SWBUtils.CryptoWrapper.PBEAES128Cipher(priv, value.getBytes()), false);
         return value;
     }
 
@@ -453,7 +458,7 @@ public class PasswordManager extends GenericResource {
         if (url.lastIndexOf("_tkn/") > 1) {
             String value = url.substring(url.lastIndexOf("_tkn/") + 5);
             //System.out.println("val:" + value);
-            value = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher("TOO MANY SECRETS", SFBase64.decode(value)));
+            value = new String(SWBUtils.CryptoWrapper.PBEAES128Decipher(priv, SFBase64.decode(value)));
             String[] lista = value.split("\\|");
 
             if (System.currentTimeMillis() < Long.valueOf(lista[1]) && SWBPlatform.getVersion().equals(lista[2])) {
