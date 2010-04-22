@@ -134,8 +134,7 @@ public abstract class XMLRPCServlet extends HttpServlet
             catch (Exception ex)
             {
                 // No se puede hacer nada, no puede seralizar la respuesta, debe guardar el error en el log
-                // TODO:
-                ex.printStackTrace(System.out);
+                log.error(ex);                
             }
         }
 
