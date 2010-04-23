@@ -27,23 +27,22 @@ public-read var color_interEvent="#5e7a9e";
 
 public-read var color_gateway="#cc9900";
 
-public-read var style_flow="fill: {color_fill}; stroke: {color};";
-public-read var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
-public-read var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000;font-weight: bold;";
-//var style_task_textbox="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; border-fill:transparent; background-fill:transparent; focus-fill:transparent; shadow-fill:transparent";
-public-read var style_task_textbox="font-size: 14px; font-family: \"Helvetica, Arial\"; font-weight: bold; focus-fill:transparent; shadow-fill:transparent";
-public-read var style_gateway="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 2;";
-public-read var style_message="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
-public-read var style_simbol="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 4;";
-public-read var style_simbol2="fill: {color_fill}; stroke: {color_gateway}; strokeWidth: 2;";
-public-read var style_event="fill: {color_fill}; stroke: {color}; strokeWidth: 2;";
-public-read var style_connection="stroke: {color}; strokeWidth: 2;";
-public-read var style_connection_arrow="stroke: {color}; strokeWidth: 2;";
-public-read var style_toolbar="fill: #f0f0f0; stroke: #909090; strokeWidth: 2;";
-public-read var style_pool="fill: {color_fill_pool}; stroke: {color}; strokeWidth: 1;";
-public-read var style_pool_line="stroke: {color}; strokeWidth: 2;";
-public-read var style_artifact="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
-public-read var style_resize="fill: {color_fill}; stroke: {color}; strokeWidth: 1;";
+public-read var style_flow="-fx-fill: {color_fill}; -fx-stroke: {color};";
+public-read var style_task="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 2; -fx-arc-width: 15; -fx-arc-height: 15;";
+public-read var style_task_text="-fx-font-size: 14px; -fx-font-family: \"'Verdana'\"; -fx-fill: #000000; -fx-font-weight: bold;";
+public-read var style_task_textbox="-fx-font-size: 14px; -fx-font-family: \"Helvetica, Arial\"; -fx-font-weight: bold; -fx-focus-fill:transparent; -fx-shadow-fill:transparent";
+public-read var style_gateway="-fx-fill: {color_fill}; -fx-stroke: {color_gateway}; -fx-stroke-width: 2;";
+public-read var style_message="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 2;";
+public-read var style_simbol="-fx-fill: {color_fill}; -fx-stroke: {color_gateway}; -fx-stroke-width: 4;";
+public-read var style_simbol2="-fx-fill: {color_fill}; -fx-stroke: {color_gateway}; -fx-stroke-width: 2;";
+public-read var style_event="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 2;";
+public-read var style_connection="-fx-stroke: {color}; -fx-stroke-width: 2;";
+public-read var style_connection_arrow="-fx-stroke: {color}; -fx-stroke-width: 2;";
+public-read var style_toolbar="-fx-fill: #f0f0f0; -fx-stroke: #909090; -fx-stroke-width: 2;";
+public-read var style_pool="-fx-fill: {color_fill_pool}; -fx-stroke: {color}; -fx-stroke-width: 1;";
+public-read var style_pool_line="-fx-stroke: {color}; -fx-stroke-width: 2;";
+public-read var style_artifact="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 1;";
+public-read var style_resize="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 1;";
 
 public-read var ICO_SUBPROCESS_ADHOC=Image{url: "{__DIR__}images/n_adhoc2.png"}
 public-read var ICO_SUBPROCESS_CICLE=Image{url: "{__DIR__}images/n_ciclo2.png"}
@@ -91,8 +90,8 @@ public-read var dropShadow:DropShadow=null;
 //    color: Color.web("#707070")
 //}
 
-public-read var style_tooltip="fill: #FFFF66; stroke: #000000; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
-public-read var style_containerButton="fill: #e5e5ff; stroke: #FFFFFF; strokeWidth: 0; arcWidth: 0; arcHeight: 0;";
-public-read var style_containerButtonText="stroke: #0000FF; strokeWidth: 0;";
+public-read var style_tooltip="-fx-fill: #FFFF66; -fx-stroke: #000000; -fx-stroke-width: 0; -fx-arc-width: 0; -fx-arc-height: 0;";
+public-read var style_containerButton="-fx-fill: #e5e5ff; -fx-stroke: #FFFFFF; -fx-stroke-width: 0; -fx-arc-width: 0; -fx-arc-height: 0;";
+public-read var style_containerButtonText="-fx-stroke: #0000FF; -fx--fx-stroke-width: 0;";
 
 public var opacity : Number = 1;

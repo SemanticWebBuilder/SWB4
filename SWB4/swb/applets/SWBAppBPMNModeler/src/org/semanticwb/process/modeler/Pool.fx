@@ -13,6 +13,7 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
 import org.semanticwb.process.modeler.ModelerUtils;
+import javafx.stage.Alert;
 
 /**
  * @author javier.solis
@@ -98,13 +99,12 @@ public class Pool extends GraphElement
        super.mousePressed(e);
     }
 
-    override public function remove()
+    override public function remove(validate:Boolean)
     {
-       for(lane in lanes)
+       if(not validate or sizeof graphChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
        {
-           lane.remove();
+           super.remove(validate);
        }
-       super.remove();
     }
 
     public function removeLane(lane:Lane)

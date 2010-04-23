@@ -93,10 +93,6 @@ public class AnnotationArtifact extends GraphElement
        super.mousePressed(e);
     }
 
-    override public function remove()
-    {
-       super.remove();
-    }
 
     public override function canAttach(parent:GraphElement):Boolean
     {

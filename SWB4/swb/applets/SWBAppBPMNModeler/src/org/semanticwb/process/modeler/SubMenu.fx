@@ -117,6 +117,7 @@ public class SubMenu extends CustomNode
                 Flow {
                     height: bind content.layoutBounds.height
                     width: 1000
+                    vertical:true
                     content: [
                         ImageView {
                             image: Image {

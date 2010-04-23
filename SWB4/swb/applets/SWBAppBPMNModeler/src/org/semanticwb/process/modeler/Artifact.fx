@@ -110,11 +110,6 @@ public class Artifact extends GraphElement
        super.mousePressed(e);
     }
 
-    override public function remove()
-    {
-       super.remove();
-    }
-
     public override function setType(type:String):Void
     {
         super.setType(type);

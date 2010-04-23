@@ -15,6 +15,7 @@ import java.lang.Math;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
 import org.semanticwb.process.modeler.ModelerUtils;
+import org.semanticwb.process.modeler.ConnectionObject;
 
 
 /**
@@ -29,15 +30,15 @@ public class GraphElement extends CustomNode
     public var w : Number;
     public var h : Number;
 
-    public var type:String;
+    public var type:String;                     //tipo del elemento
 
-    public var title : String;
-    public var toolTipText : String;
+    public var title : String;                  //titulo del elemento
+    public var toolTipText : String;            //tooltip del elemento
 
-    public var uri : String;
+    public var uri : String;                    //uri del elemento
 
     protected var shape : Shape;
-    protected var text : EditableText;
+    protected var text : EditableText;          //objeto para editar el titulo
 
     public var stroke=Color.web(Styles.color);
     public var strokeOver=Color.web(Styles.color_over);
@@ -59,7 +60,7 @@ public class GraphElement extends CustomNode
     protected var zindex=0;
 
     var graphParent:GraphElement;
-    var graphChilds:GraphElement[];
+    protected var graphChilds:GraphElement[];
 
     protected var dpx : Number;                     //diference of parent
     protected var dpy : Number;                     //diference of parent
@@ -68,9 +69,9 @@ public class GraphElement extends CustomNode
     protected var containerChilds:GraphElement[];         //Container Childs
     public var containerable:Boolean=false;               //can contains
 
-    public-read var over:Boolean;
+    public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
 
-    public var useGrid:Boolean=true;
+    public var useGrid:Boolean=true;                    //Se usa snap to grid
 
     var px = bind graphParent.x on replace
     {
@@ -136,22 +137,29 @@ public class GraphElement extends CustomNode
 
     public function mouseClicked( e: MouseEvent )
     {
-        //println("onMouseClicked node:{e}");
-        if(e.clickCount >= 2)
+        println("onMouseClicked node:{e}");
+        if(e.button==e.button.SECONDARY)
         {
-            //println("starEditing");
-            if(containerable)
+            println("popup");
+            ModelerUtils.popup.event=e;
+        }else
+        {
+            if(e.clickCount >= 2)
             {
-                if(text.boundsInLocal.contains(e.sceneX, e.sceneY))
+                //println("starEditing");
+                if(containerable)
                 {
-                    text.startEditing();
+                    if(text.boundsInLocal.contains(e.sceneX, e.sceneY))
+                    {
+                        text.startEditing();
+                    }else
+                    {
+                        modeler.containerElement=this;
+                    }
                 }else
                 {
-                    modeler.containerElement=this;
+                    text.startEditing();
                 }
-            }else
-            {
-                text.startEditing();
             }
         }
     }
@@ -200,6 +208,7 @@ public class GraphElement extends CustomNode
             {
                 modeler:modeler
                 uri:"new:flowlink:{ToolBar.counter++}"
+                visible:false
             }
             if(canIniLink(link))modeler.tempNode=link;
         }
@@ -260,7 +269,7 @@ public class GraphElement extends CustomNode
 
     public function setGraphParent(parent:GraphElement):Void
     {
-        //println("{this} setGraphParent {parent}");
+        println("{this} setGraphParent {parent}");
         if(parent!=null)
         {
             dpx=x-parent.x;
@@ -287,6 +296,7 @@ public class GraphElement extends CustomNode
     {
         if(contain!=null)
         {
+            delete this from container.graphChilds;
             container=contain;
             insert this into contain.containerChilds;
         }else
@@ -357,13 +367,16 @@ public class GraphElement extends CustomNode
     {
         if(e.code==e.code.VK_DELETE)
         {
-            remove();
+            remove(true);
         }
         //println(e);
     }
 
-    public function remove() : Void
+    public function remove(validate:Boolean) : Void
     {
+        println("remove {this} {validate}");
+        setGraphParent(null);
+        setContainer(null);
         modeler.remove(this);
         for(connection in modeler.contents where connection instanceof ConnectionObject)
         {
@@ -374,8 +387,10 @@ public class GraphElement extends CustomNode
 
         for(child in graphChilds)
         {
-            child.remove();
+            child.remove(false);
         }
+        delete graphChilds;
+        
         ModelerUtils.setResizeNode(null);
     }
 

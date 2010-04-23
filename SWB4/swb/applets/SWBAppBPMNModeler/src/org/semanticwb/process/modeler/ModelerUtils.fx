@@ -11,6 +11,7 @@ import javafx.scene.*;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import java.awt.image.BufferedImage;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -24,6 +25,24 @@ var toolTip=ToolTip
 }
 
 public var splash=Splash{ };
+
+// Primer menu flotante
+public var popup=MenuPopup{
+    corner:20
+    padding:8
+    borderWidth:4
+    //borderColor:bind dynamicColor
+    opacity: 0.9
+    animate:true
+    // opciones del menu
+    content: [
+        MenuItem { text:"Say Hello!", call: function(e:MouseEvent):Void{println("Hello");} },
+        MenuItem { text:"Again, say Hello!", call:function(e:MouseEvent):Void{println("Hello 2");} },
+        MenuSeparator { },
+        MenuItem { text:"Say Bye!", call: function(e:MouseEvent):Void{println("Bye");} }
+    ]
+};
+
 
 var resize=ResizeNode{};
 
@@ -81,28 +100,36 @@ public function setResizeNode(node:Node)
     }else if(node instanceof GraphElement)
     {
         resize.attachedNode=node as GraphElement;
+    }else
+    {
+        resize.attachedNode=null;
     }
+
 }
 
 public function renderToImage(node:Node, minx:Integer, miny:Integer, width:Integer, height:Integer) : BufferedImage
 {
+//    var _bounds=new com.sun.javafx.geom.Bounds2D();
+//    var _affine=new com.sun.javafx.geom.transform.Affine2D();
+//    var bounds=node.impl_getPGNode().getContentBounds(_bounds, _affine);
+
     var context = FXLocal.getContext();
     var nodeClass = context.findClass("javafx.scene.Node");
     var getFXNode = nodeClass.getFunction("impl_getPGNode");
     var sgNode = (getFXNode.invoke(context.mirrorOf(node)) as FXLocal.ObjectValue).asObject();
     var g2dClass = (context.findClass("java.awt.Graphics2D") as FXLocal.ClassType).getJavaImplementationClass();
     var boundsClass=(context.findClass("com.sun.javafx.geom.Bounds2D") as FXLocal.ClassType).getJavaImplementationClass();
-    var affineClass=(context.findClass("com.sun.javafx.geom.AffineTransform") as FXLocal.ClassType).getJavaImplementationClass();
+    var affineClass=(context.findClass("com.sun.javafx.geom.transform.Affine2D") as FXLocal.ClassType).getJavaImplementationClass();
 
     // getContentBounds() method have different signature in JavaFX 1.2
     var getBounds = sgNode.getClass().getMethod("getContentBounds",boundsClass,affineClass);
-    var bounds = getBounds.invoke(sgNode, new com.sun.javafx.geom.Bounds2D(), new com.sun.javafx.geom.AffineTransform()) as com.sun.javafx.geom.Bounds2D;
+    var bounds = getBounds.invoke(sgNode, new com.sun.javafx.geom.Bounds2D(), new com.sun.javafx.geom.transform.Affine2D()) as com.sun.javafx.geom.Bounds2D;
 
     // Same with render() method
     var paintMethod = sgNode.getClass().getMethod("render", g2dClass, boundsClass, affineClass);
     var img = new java.awt.image.BufferedImage(width+minx, height+miny, java.awt.image.BufferedImage.TYPE_INT_ARGB);
     var g2 =img.createGraphics();
-    paintMethod.invoke(sgNode,g2, bounds, new com.sun.javafx.geom.AffineTransform());
+    paintMethod.invoke(sgNode,g2, bounds, new com.sun.javafx.geom.transform.Affine2D());
     g2.dispose();
 
     var img2 = new java.awt.image.BufferedImage(width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);

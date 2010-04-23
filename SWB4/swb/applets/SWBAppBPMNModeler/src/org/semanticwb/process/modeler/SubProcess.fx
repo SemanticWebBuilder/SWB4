@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import javafx.stage.Alert;
 
 /**
  * @author javier.solis
@@ -165,6 +166,20 @@ public class SubProcess extends Activity
         }else
         {
             message.visible=false;
+        }
+    }
+
+    override public function remove(validate:Boolean)
+    {
+        if(not validate or sizeof containerChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
+        {
+            for(child in containerChilds)
+            {
+                child.remove(false);
+            }
+            delete containerChilds;
+
+            super.remove(validate);
         }
     }
 
