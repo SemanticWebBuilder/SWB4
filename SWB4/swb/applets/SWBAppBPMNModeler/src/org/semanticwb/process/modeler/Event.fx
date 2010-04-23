@@ -55,8 +55,8 @@ public class Event extends FlowObject
 
     public var message=ImageView
     {
-        x: bind x-ix;
-        y: bind y-iy;
+        x: bind x-ix-.5;
+        y: bind y-iy-.5;
         opacity: o;
         //smooth: true;
         scaleX: bind is+scaleOff;

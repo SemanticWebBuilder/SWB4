@@ -459,7 +459,7 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Save As"
+                    text:"Save As Image"
                     toolBar:this;
                     image: "images/file_saveas1.png"
                     imageOver: "images/file_saveas2.png"

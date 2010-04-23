@@ -11,16 +11,14 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import java.lang.Math;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.ClosePath;
+import javafx.scene.input.KeyEvent;
 
 /**
  * @author javier.solis
@@ -45,7 +43,7 @@ public class ConnectionObject  extends CustomNode
     public var text : EditableText;
 
     public var points : Point[];
-    public var strokeWidth : Float=2;
+    public var strokeWidth : Number=2;
     public var arrowType : String;
 
     protected var path : Path;
@@ -54,6 +52,15 @@ public class ConnectionObject  extends CustomNode
     protected var strokeDash : Float[];
 
     protected var notGroup : Boolean;                 //No agrega los elementos path y arrow al grupo
+
+    var focusState = bind focused on replace
+    {
+        if (not focused)
+        {
+            path.stroke=Color.web(Styles.color);
+            arrow.stroke=Color.web(Styles.color);
+        }
+    }
 
     public override function create(): Node
     {
@@ -85,17 +92,22 @@ public class ConnectionObject  extends CustomNode
             arrow=Path {
                 elements: [
                     MoveTo{
-                        x:bind pend.x+8*Math.cos(getArrow(points, -45))
-                        y:bind pend.y-8*Math.sin(getArrow(points, -45))
+                        //x:bind pend.x+8.0*Math.cos(getArrow(points, -45.0))
+                        //y:bind pend.y-8.0*Math.sin(getArrow(points, -45.0))
+                        x:bind pend.x+8.0*getArrowCord(-45.0,"cos")
+                        y:bind pend.y-8.0*getArrowCord(-45.0,"sin")
                     },
                     LineTo{
                         x:bind pend.x
                         y:bind pend.y
                     },
                     LineTo{
-                        x:bind pend.x+8*Math.cos(getArrow(points, 45))
-                        y:bind pend.y-8*Math.sin(getArrow(points, 45))
-                    },close
+                        //x:bind pend.x+8.0*Math.cos(getArrow(points, 45.0))
+                        //y:bind pend.y-8.0*Math.sin(getArrow(points, 45.0))
+                        x:bind pend.x+8.0*getArrowCord(45.0,"cos")
+                        y:bind pend.y-8.0*getArrowCord(45.0,"sin")
+                    },
+                    close
                 ]
                 //style: Styles.style_connection
                 stroke: Color.web(Styles.color);
@@ -177,6 +189,21 @@ public class ConnectionObject  extends CustomNode
         return ret;
     }
 
+    protected bound function getArrowCord(angle: Number, type: String): Number
+    {
+//        if(type.equals("sin"))
+//        {
+//            //var ret=Math.sin(getArrow(points, angle));
+//            var ret=getArrow(points, angle);
+//            ret;
+//        }else
+//        {
+            //var ret=Math.cos(getArrow(points, angle));
+            getArrow(points, angle)+1
+//        }
+    }
+
+
     public function remove()
     {
         modeler.remove(this);
@@ -197,6 +224,7 @@ public class ConnectionObject  extends CustomNode
         {
             ModelerUtils.clickedNode=this;
             modeler.setFocusedNode(this);
+            requestFocus();
         }
     }
 
@@ -219,9 +247,32 @@ public class ConnectionObject  extends CustomNode
     override var onMouseExited = function(e)
     {
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false;
-        path.stroke=Color.web(Styles.color);
-        arrow.stroke=Color.web(Styles.color);
+
+        if(focused)
+        {
+            path.stroke=Color.web(Styles.color_focused);
+            arrow.stroke=Color.web(Styles.color_focused);
+        }else
+        {
+            path.stroke=Color.web(Styles.color);
+            arrow.stroke=Color.web(Styles.color);
+        }
+
         path.strokeWidth=strokeWidth;
+    }
+
+    override var onKeyPressed = function( e: KeyEvent )
+    {
+        keyPressed(e);
+    }
+
+    public function keyPressed( e: KeyEvent )
+    {
+        if(e.code==e.code.VK_DELETE)
+        {
+            remove();
+        }
+        //println(e);
     }
 
     protected bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
@@ -357,7 +408,6 @@ public class ConnectionObject  extends CustomNode
         {
             pini.x;
         }
-
     }
 
     protected bound function getInter1ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
@@ -390,7 +440,9 @@ public class ConnectionObject  extends CustomNode
             }
         }else
         {
-            getInter1ConnectionX(ini, end, pini, pend);
+            //1.0;
+            var ret=getInter1ConnectionX(ini, end, pini, pend);
+            ret;
         }
     }
 
@@ -407,7 +459,8 @@ public class ConnectionObject  extends CustomNode
             }
         }else
         {
-            getInter1ConnectionY(ini, end, pini, pend);
+            var ret=getInter1ConnectionY(ini, end, pini, pend);
+            ret;
         }
     }
 
@@ -423,6 +476,7 @@ public class ConnectionObject  extends CustomNode
         {
             2*Math.PI-Math.atan((pend.y-pini.y)/(pend.x-pini.x))+(grad*Math.PI)/180;
         }
+
     }
 
     public bound function canView():Boolean

@@ -111,6 +111,7 @@ var scene : Scene = Scene {
 //                blocksMouse:true;
 //                //cursor:Cursor.DEFAULT
 //            }
+        ModelerUtils.popup,
         ModelerUtils.splash
 
     ]

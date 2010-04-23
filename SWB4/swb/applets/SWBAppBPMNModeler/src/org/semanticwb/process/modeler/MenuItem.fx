@@ -1,43 +1,19 @@
-/*
- * MenuItem.fx
- *
- * Created on 2/04/2010, 11:04:10 PM
- */
-
 package org.semanticwb.process.modeler;
 
-/**
- * @author javier.solis
- */
+import javafx.scene.input.MouseEvent;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+// contiene una opcion del menu
+public class MenuItem {
 
-import javafx.ext.swing.SwingComponent;
-import javax.swing.JMenuItem;
-import javafx.scene.Cursor;
+    // texto de la opcion
+    public var text:String;
+    // funcion asociada a la opcion del menu (lo que ejecuta)
+    // le traspasa el mouseevent a la funcion; por ejemplo: si el usuario
+    // quiere saber donde se hizo click cuando aparecio el menu flotante
+    public var call:function(e:MouseEvent):Void;
+    // posicion de la opcion en el menu
+    public var pos:Number=0;
+    // indica que no es un separador de opciones del menu
+    protected var isSeparator=false;
 
-public class MenuItem extends SwingComponent{
-
-    protected var menuItem: JMenuItem;
-
-    public var text: String on replace{
-        menuItem.setText(text);
-    }
-
-    public var action: function();
-
-    public override function createJComponent(){
-        cursor=Cursor.DEFAULT;
-        menuItem = new JMenuItem();
-        menuItem.addActionListener(
-            ActionListener{
-                public override function actionPerformed(e:ActionEvent){
-                    println("menus: action");
-                    action();
-                }
-            }
-        );
-        return menuItem;
-    }
-}
+};

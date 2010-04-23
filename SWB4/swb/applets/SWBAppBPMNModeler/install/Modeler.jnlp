@@ -11,7 +11,7 @@
         <icon href='images/splash.jpg' kind='splash'/>
         <icon href='images/shortcut.png' kind='shortcut'/>
         <offline-allowed/>
-        <shortcut online='true'>
+        <shortcut online='false'>
             <desktop/>
             <menu submenu='SWP Modeler'/>
         </shortcut>

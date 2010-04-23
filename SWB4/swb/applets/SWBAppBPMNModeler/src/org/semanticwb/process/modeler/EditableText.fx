@@ -10,13 +10,14 @@ import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Translate;
 import javafx.scene.text.TextOrigin;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextBox;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
 import org.semanticwb.process.modeler.Styles;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.control.Tooltip;
+import javafx.scene.text.TextBoundsType;
 
 /**
  * @author javier.solis
@@ -34,6 +35,23 @@ public class EditableText extends CustomNode
 
     var textb : TextBox;
     var textl : Text;
+
+    var first : Boolean =true;
+
+    var f=bind textb.focused on replace
+    {
+        if(not f)
+        {
+            if(first)
+            {
+                //textb.text=text;
+                first=false;
+            }else
+            {
+                stopEditing();
+            }
+        }
+    }
 
     public function stopEditing() :Void
     {
@@ -62,12 +80,14 @@ public class EditableText extends CustomNode
     {
         textl= Text
         {
-             content: bind text
+             content: bind "{text}\r"
              style: Styles.style_task_text
              textOrigin: TextOrigin.TOP
+             textAlignment: TextAlignment.CENTER
              wrappingWidth: bind width
              translateX:bind x-(textl.boundsInLocal.width)/2+2
              translateY:bind y-(textl.boundsInLocal.height)/2
+             boundsType:TextBoundsType.VISUAL
              //smooth:true;
              visible: true
         };
@@ -95,6 +115,8 @@ public class EditableText extends CustomNode
              height: 20
              visible: false
              selectOnFocus:true
+             //tooltip:Tooltip{text:bind text}
+             //multiline:true
              onKeyTyped:function(k:KeyEvent)
              {
                  //if(k.char=="\n")stopEditing();

@@ -14,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.GraphElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.awt.image.BufferedImage;
+import javafx.scene.control.ScrollView;
+import javafx.scene.control.ScrollBarPolicy;
 
 /**
  * @author javier.solis
@@ -31,6 +33,7 @@ public class Modeler extends CustomNode
     public var mousex:Number;
     public var mousey:Number;
     public var clipView:ClipView;
+    //public var clipView:ScrollView;
     public var content:Group;
     public var containerElement: GraphElement;
     public var toolBar:ToolBar;
@@ -47,10 +50,13 @@ public class Modeler extends CustomNode
          }
 
          clipView=ClipView
+         //var ret=ScrollView
          {
              node:content
              width:bind width
              height:bind height
+             //hbarPolicy:ScrollBarPolicy.ALWAYS
+             //vbarPolicy:ScrollBarPolicy.ALWAYS
 
              pannable: bind pannable and not disablePannable
              //translateX:40;
@@ -81,10 +87,10 @@ public class Modeler extends CustomNode
                             }
                         }else if(ModelerUtils.clickedNode instanceof Pool or ModelerUtils.clickedNode instanceof Lane)
                         {
-                            if(tempNode instanceof Pool) //se esta agregando un pool
+                            if(tempNode instanceof Pool) //se esta agregando un pool dentro de otro pool o lane
                             {
                                 //addFirst(tempNode)
-                            }else if(tempNode instanceof Lane) //se esta agregando un lane
+                            }else if(tempNode instanceof Lane) //se esta agregando un lane dentro de lane o pool
                             {
                                 if(ModelerUtils.clickedNode instanceof Pool) //sobre un pool
                                 {
@@ -101,16 +107,16 @@ public class Modeler extends CustomNode
                             }else
                             {
                                 add(tempNode);
+                                var a=tempNode as GraphElement;
+                                a.x=e.x+clipView.clipX;
+                                a.y=e.y+clipView.clipY;
+                                a.snapToGrid();
+                                if(a.canAttach(ModelerUtils.clickedNode as GraphElement))
+                                {
+                                    a.setGraphParent(ModelerUtils.clickedNode as GraphElement);
+                                }
+                                a.setContainer(containerElement);
                             }
-                            var a=tempNode as GraphElement;
-                            a.x=e.x+clipView.clipX;
-                            a.y=e.y+clipView.clipY;
-                            a.snapToGrid();
-                            if(a.canAttach(ModelerUtils.clickedNode as GraphElement))
-                            {
-                                a.setGraphParent(ModelerUtils.clickedNode as GraphElement);
-                            }
-                            a.setContainer(containerElement);
                         }else//se presiono algun boton del toolbar
                         {
                             close=false;
@@ -149,6 +155,13 @@ public class Modeler extends CustomNode
                     mousey=e.y+clipView.clipY;
                     if(tempNode instanceof ConnectionObject)
                     {
+                        //activa el conection object cuando se inicia el drag
+                        if(not tempNode.visible)
+                        {
+                            //println("drag connection");
+                            tempNode.visible=true;
+                        }
+
                         var a=tempNode as ConnectionObject;
                         if(overNode!=null)
                         {

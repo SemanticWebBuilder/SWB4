@@ -31,11 +31,6 @@ public class FlowObject extends GraphElement
         super.mouseReleased(e);
     }
 
-    override public function remove()
-    {
-        super.remove();
-    }
-
     public override function canAttach(parent:GraphElement):Boolean
     {
         var ret=false;

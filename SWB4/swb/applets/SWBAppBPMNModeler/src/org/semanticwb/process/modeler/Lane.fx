@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
+import javafx.stage.Alert;
 
 /**
  * @author javier.solis
@@ -133,16 +134,18 @@ public class Lane extends GraphElement
     }
 
 
-    override public function remove()
+    override public function remove(validate:Boolean)
     {
-       //println("remove lane {getGraphParent()}");
-       super.remove();
-       if(getGraphParent() instanceof Pool)
+       if(not validate or sizeof graphChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
        {
-           var pool=getGraphParent() as Pool;
-           pool.removeLane(this);
+           //println("remove lane {getGraphParent()}");
+           if(getGraphParent() instanceof Pool)
+           {
+               var pool=getGraphParent() as Pool;
+               pool.removeLane(this);
+           }
+           super.remove(validate);
        }
-       
     }
 
     override public function canIniLink(link:ConnectionObject) : Boolean
