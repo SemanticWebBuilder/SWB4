@@ -92,24 +92,19 @@ public class ConnectionObject  extends CustomNode
             arrow=Path {
                 elements: [
                     MoveTo{
-                        //x:bind pend.x+8.0*Math.cos(getArrow(points, -45.0))
-                        //y:bind pend.y-8.0*Math.sin(getArrow(points, -45.0))
-                        x:bind pend.x+8.0*getArrowCord(-45.0,"cos")
-                        y:bind pend.y-8.0*getArrowCord(-45.0,"sin")
+                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
                     },
                     LineTo{
                         x:bind pend.x
                         y:bind pend.y
                     },
                     LineTo{
-                        //x:bind pend.x+8.0*Math.cos(getArrow(points, 45.0))
-                        //y:bind pend.y-8.0*Math.sin(getArrow(points, 45.0))
-                        x:bind pend.x+8.0*getArrowCord(45.0,"cos")
-                        y:bind pend.y-8.0*getArrowCord(45.0,"sin")
+                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
                     },
                     close
                 ]
-                //style: Styles.style_connection
                 stroke: Color.web(Styles.color);
             };
             if(arrowType.equals(ARROW_TYPE_MESSAGE))
@@ -188,21 +183,6 @@ public class ConnectionObject  extends CustomNode
         }
         return ret;
     }
-
-    protected bound function getArrowCord(angle: Number, type: String): Number
-    {
-//        if(type.equals("sin"))
-//        {
-//            //var ret=Math.sin(getArrow(points, angle));
-//            var ret=getArrow(points, angle);
-//            ret;
-//        }else
-//        {
-            //var ret=Math.cos(getArrow(points, angle));
-            getArrow(points, angle)+1
-//        }
-    }
-
 
     public function remove()
     {
@@ -464,7 +444,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getArrow(points:Point[], grad: Number) : Number
+    protected bound function getArrow(grad: Number) : Number
     {
         var pini:Point=points[(sizeof points)-2];
         var pend:Point=points[(sizeof points)-1];
