@@ -40,7 +40,7 @@ public class GraphElement extends CustomNode
     public var strokeFocused=Color.web(Styles.color_focused);
 
     public var s : Number = 1;                     //size
-    public var o : Number = 0.8;                   //opacity
+    public var o : Number = 0.8;               //opacity
     public var stkw : Number = 2;                  //strokeWidth
     public var stkwo : Number = 3;                 //strokeWidth Over
 
