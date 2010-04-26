@@ -54,13 +54,9 @@ var path:ContainerPath = ContainerPath
     visible:bind if(modeler.containerElement!=null)true else false
 }
 
-var resize=ModelerUtils.getResizeNode();
-resize.modeler=modeler;
-
 var scene : Scene = Scene {
     content: [
         modeler,
-        resize,
         path,
         toolbar,
         ModelerUtils.getToolTip(),
@@ -111,7 +107,6 @@ var scene : Scene = Scene {
 //                blocksMouse:true;
 //                //cursor:Cursor.DEFAULT
 //            }
-        ModelerUtils.popup,
         ModelerUtils.splash
 
     ]

@@ -74,8 +74,8 @@ public class ResizePoint extends CustomNode
         }
 
         var c=Circle{
-            centerX:bind attachedNode.x+(ix*attachedNode.w)-modeler.clipView.clipX
-            centerY:bind attachedNode.y+(iy*attachedNode.h)-modeler.clipView.clipY
+            centerX:bind attachedNode.x+(ix*attachedNode.w)//-modeler.getXScroll()
+            centerY:bind attachedNode.y+(iy*attachedNode.h)//-modeler.getYScroll()
             radius:5
             cursor:cursor
             style:Styles.style_resize
@@ -103,12 +103,12 @@ public class ResizePoint extends CustomNode
                 {
                     if(ix!=0)
                     {
-                        attachedNode.w=Math.abs(ox-(e.sceneX+modeler.clipView.clipX));
+                        attachedNode.w=Math.abs(ox-(e.sceneX));
                         attachedNode.x=ox+attachedNode.w*ix;
                     }
                     if(iy!=0)
                     {
-                        attachedNode.h=Math.abs(oy-(e.sceneY+modeler.clipView.clipY));
+                        attachedNode.h=Math.abs(oy-(e.sceneY));
                         if(attachedNode instanceof Lane)
                         {
                             //attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;

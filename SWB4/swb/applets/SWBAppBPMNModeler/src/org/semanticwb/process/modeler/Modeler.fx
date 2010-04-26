@@ -9,13 +9,13 @@ package org.semanticwb.process.modeler;
 import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.layout.ClipView;
 import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.GraphElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.awt.image.BufferedImage;
 import javafx.scene.control.ScrollView;
-import javafx.scene.control.ScrollBarPolicy;
+import javafx.scene.layout.LayoutInfo;
+import javafx.scene.Cursor;
 
 /**
  * @author javier.solis
@@ -32,39 +32,47 @@ public class Modeler extends CustomNode
     public var overNode: GraphElement;
     public var mousex:Number;
     public var mousey:Number;
-    public var clipView:ClipView;
-    //public var clipView:ScrollView;
+    public var scrollView:ScrollView;
     public var content:Group;
     public var containerElement: GraphElement;
     public var toolBar:ToolBar;
 
     var focusedNode: Node;                       //Nodo con el foco
+    var scrollOffset:ScrollOffset;
 
     public override function create(): Node
     {
-         //var ret=ScrollPane
+        var resize=ModelerUtils.getResizeNode();
+        resize.modeler=this;
 
+         //var ret=ScrollPane
          content=Group
          {
-             content: bind contents
+             content:
+             [
+                scrollOffset=ScrollOffset{},
+                Group
+                {
+                    content: bind contents
+                },
+                resize,
+                ModelerUtils.popup
+             ]
          }
 
-         clipView=ClipView
-         //var ret=ScrollView
+         scrollView=ScrollView
          {
              node:content
-             width:bind width
-             height:bind height
-             //hbarPolicy:ScrollBarPolicy.ALWAYS
-             //vbarPolicy:ScrollBarPolicy.ALWAYS
-
+             layoutInfo: LayoutInfo{ width:bind width, height: bind height }
+             //tooltip:Tooltip{text:"hola"}
              pannable: bind pannable and not disablePannable
              //translateX:40;
+             cursor:bind if(pannable)Cursor.MOVE else Cursor.DEFAULT
              onMousePressed: function( e: MouseEvent ):Void
              {
                 //println("onMousePressed modeler:{e}");
-                mousex=e.x+clipView.clipX;
-                mousey=e.y+clipView.clipY;
+                mousex=e.x+getXScroll();
+                mousey=e.y+getYScroll();
                 if(tempNode!=null)
                 {
                     var close: Boolean=true;
@@ -80,8 +88,8 @@ public class Modeler extends CustomNode
                             {
                                 if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
                                 var a=tempNode as GraphElement;
-                                a.x=e.x+clipView.clipX;
-                                a.y=e.y+clipView.clipY;
+                                a.x=e.x+getXScroll();
+                                a.y=e.y+getYScroll();
                                 a.snapToGrid();
                                 a.setContainer(containerElement);
                             }
@@ -108,8 +116,8 @@ public class Modeler extends CustomNode
                             {
                                 add(tempNode);
                                 var a=tempNode as GraphElement;
-                                a.x=e.x+clipView.clipX;
-                                a.y=e.y+clipView.clipY;
+                                a.x=e.x+getXScroll();
+                                a.y=e.y+getYScroll();
                                 a.snapToGrid();
                                 if(a.canAttach(ModelerUtils.clickedNode as GraphElement))
                                 {
@@ -151,8 +159,9 @@ public class Modeler extends CustomNode
                 //println("onMouseDragged modeler:{e}");
                 if(tempNode!=null)
                 {
-                    mousex=e.x+clipView.clipX;
-                    mousey=e.y+clipView.clipY;
+                    mousex=e.x+getXScroll();
+                    mousey=e.y+getYScroll();
+
                     if(tempNode instanceof ConnectionObject)
                     {
                         //activa el conection object cuando se inicia el drag
@@ -198,13 +207,8 @@ public class Modeler extends CustomNode
                  }
 
              }
-//             onKeyTyped: function( e: KeyEvent ):Void
-//             {
-//                 println(e);
-//             }
          };
-         //return ret;
-         return clipView;
+         return scrollView;
     }
 
     public function load(home: String)
@@ -262,10 +266,6 @@ public class Modeler extends CustomNode
     {
     }
 
-//    public function addRelation(tpuri1:String, tpuri2:String, tpr1:String, tpr2:String)
-//    {
-//    }
-
     public function add(obj:Node)
     {
         insert obj into contents;
@@ -301,6 +301,19 @@ public class Modeler extends CustomNode
         return null;
     }
 
+    public bound function getXScroll():Number
+    {
+        //println("{scrollView.node.boundsInParent} {scrollView.vmin} {scrollView.vmax} {scrollView.vvalue}");
+        //return scrollView.hvalue*(scrollView.node.boundsInParent.width-width);
+        return -scrollOffset.localToScene(scrollOffset.boundsInLocal).minX;
+    }
+
+    public bound function getYScroll():Number
+    {
+        //return scrollView.vvalue*(scrollView.node.boundsInParent.height-height);
+        return -scrollOffset.localToScene(scrollOffset.boundsInLocal).minY;
+    }
+
     public function setFocusedNode(node:Node)
     {
         focusedNode=node;
@@ -330,7 +343,7 @@ public class Modeler extends CustomNode
                     if(b.minY<miny)miny=b.minY;
                     if(b.maxX>maxx)maxx=b.maxX;
                     if(b.maxY>maxy)maxy=b.maxY;
-                    println("{node} {b.minX} {b.minY} {b.maxX} {b.maxY} {b.width} {b.height}");
+                    //println("{node} {b.minX} {b.minY} {b.maxX} {b.maxY} {b.width} {b.height}");
                     one=true;
                 }
             }
@@ -342,7 +355,7 @@ public class Modeler extends CustomNode
         }
         var bounds=content.boundsInLocal;
         //var bufferedImage = new PrintUtil().renderToImage(content,bounds.width, bounds.height);
-        println("{bounds.minX} {bounds.minY} {bounds.maxX} {bounds.maxY} {bounds.width} {bounds.height}");
+        //println("{bounds.minX} {bounds.minY} {bounds.maxX} {bounds.maxY} {bounds.width} {bounds.height}");
         var bufferedImage = new ModelerUtils().renderToImage(content,minx-margin,miny-margin,maxx-minx+margin*2, maxy-miny+margin*2);
         return bufferedImage;
     }

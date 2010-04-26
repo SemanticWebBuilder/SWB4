@@ -16,6 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.ConnectionObject;
+import javafx.geometry.Point2D;
+import javafx.scene.control.Tooltip;
 
 
 /**
@@ -30,10 +32,25 @@ public class GraphElement extends CustomNode
     public var w : Number;
     public var h : Number;
 
+    public-read var sceneX:Number;
+    public-read var sceneY:Number;
+
+//    var sx= bind x on replace
+//    {
+//        sceneX=localToScene(x, y).x;
+//    }
+//
+//    var sy= bind y on replace
+//    {
+//        sceneY=localToScene(x, y).y;
+//    }
+    
     public var type:String;                     //tipo del elemento
 
     public var title : String;                  //titulo del elemento
     public var toolTipText : String;            //tooltip del elemento
+
+//    protected var tooltip: Tooltip;
 
     public var uri : String;                    //uri del elemento
 
@@ -113,6 +130,11 @@ public class GraphElement extends CustomNode
             width: bind w
             height: bind h
         }
+
+//        tooltip = Tooltip
+//        {
+//            text: bind toolTipText;
+//        }
     }
 
     public override function create(): Node
@@ -137,10 +159,10 @@ public class GraphElement extends CustomNode
 
     public function mouseClicked( e: MouseEvent )
     {
-        println("onMouseClicked node:{e}");
+        //println("onMouseClicked node:{e}");
         if(e.button==e.button.SECONDARY)
         {
-            println("popup");
+            //println("popup");
             ModelerUtils.popup.event=e;
         }else
         {
@@ -259,7 +281,7 @@ public class GraphElement extends CustomNode
         }
 
         setGraphParent(overNode);
-        println("onMouseRelease {overNode.title}");
+        //println("onMouseRelease {overNode.title}");
     }
 
     public function getGraphParent() : GraphElement
@@ -269,7 +291,7 @@ public class GraphElement extends CustomNode
 
     public function setGraphParent(parent:GraphElement):Void
     {
-        println("{this} setGraphParent {parent}");
+        //println("{this} setGraphParent {parent}");
         if(parent!=null)
         {
             dpx=x-parent.x;
@@ -324,13 +346,15 @@ public class GraphElement extends CustomNode
     {
         //var name=getClass().getName();
         //println(name);
+//        tooltip.activate();
         over=true;
-        ModelerUtils.startToolTip("{toolTipText}", x-w/2-modeler.clipView.clipX, y+h/2-modeler.clipView.clipY+3);
+        ModelerUtils.startToolTip("{toolTipText}", x-w/2-modeler.getXScroll(), y+h/2-modeler.getYScroll()+3);
         mouseEntered(e);
     }
 
     public function mouseEntered( e: MouseEvent )
     {
+        //println("x:{x} {localToScene(x,y).x}");
         modeler.overNode=this;
         shape.stroke=strokeOver;
         shape.strokeWidth=stkwo;
@@ -340,6 +364,7 @@ public class GraphElement extends CustomNode
 
     override var onMouseExited = function(e)
     {
+//        tooltip.deactivate();
         over=false;
         ModelerUtils.stopToolTip();
         mouseExited(e);
@@ -374,7 +399,7 @@ public class GraphElement extends CustomNode
 
     public function remove(validate:Boolean) : Void
     {
-        println("remove {this} {validate}");
+        //println("remove {this} {validate}");
         setGraphParent(null);
         setContainer(null);
         modeler.remove(this);
