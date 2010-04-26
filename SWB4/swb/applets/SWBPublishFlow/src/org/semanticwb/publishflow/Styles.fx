@@ -37,7 +37,7 @@ public-read var style_tooltip="-fx-fill: #FFFF66; -fx-stroke: #000000; -fx-strok
 public-read var style_task="-fx-fill: {color_fill}; -fx-stroke: {color}; -fx-stroke-width: 2; -fx-arc-width: 15; -fx-arc-height: 15;";
 //public-read var style_task="fill: {color_fill}; stroke: {color}; strokeWidth: 2; arcWidth: 15; arcHeight: 15;";
 //public-read var style_task_text="font-size: 14px; font-family: \"'Verdana'\"; fill: #000000;font-weight: bold;";
-public-read var style_task_text="-fx-font-size: 14px; -fx-font-family: \"'Verdana'\"; -fx-fill: #000000; -fx-font-weight: bold;";
+public-read var style_task_text="-fx-font-size: 10px; -fx-font-family: \"'Verdana'\"; -fx-fill: #000000; -fx-font-weight: bold;";
 
 public-read var style_label_name_workflow="-fx-font-size: 14px; -fx-font-family: \"Helvetica, Arial\"; -fx-font-weight: bold; -fx-focus-fill:transparent; -fx-shadow-fill:transparent";
 public-read var style_task_textbox="-fx-font-size: 14px; -fx-font-family: \"Helvetica, Arial\"; -fx-font-weight: bold; -fx-border-fill:transparent; -fx-background-fill:transparent; -fx-focus-fill:transparent; -fx-shadow-fill:transparent";
