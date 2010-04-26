@@ -370,7 +370,7 @@ public class ConnectionObject extends CustomNode {
 
     
 
-    bound function getInterFirstConnection(pini: Point,pend: Point): Point
+    bound function getInterFirstConnection(pini: org.semanticwb.publishflow.Point,pend: org.semanticwb.publishflow.Point): org.semanticwb.publishflow.Point
     {
 
         if(end!=null)
@@ -422,7 +422,7 @@ public class ConnectionObject extends CustomNode {
         }
     }
 
-    bound function getInterLastConnection(pini: Point,pend: Point): Point
+    bound function getInterLastConnection(pini: Point,pend: Point): org.semanticwb.publishflow.Point
     {
         if(end!=null)
         {
@@ -465,7 +465,8 @@ public class ConnectionObject extends CustomNode {
                 }            
         }else
         {
-            getInterFirstConnection(pini,pend);
+            var point:Point=getInterFirstConnection(pini,pend);
+            point;
         }
     }
 
