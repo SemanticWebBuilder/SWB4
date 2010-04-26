@@ -67,7 +67,7 @@ public class Task extends FlowObject {
 
         text = EditableText {
             text: bind title with inverse
-            x: bind x
+            x: bind x+(w/2);
             y: bind y
             width: bind w
             height: bind h
