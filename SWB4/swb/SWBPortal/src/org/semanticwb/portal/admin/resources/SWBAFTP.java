@@ -33,6 +33,7 @@ package org.semanticwb.portal.admin.resources;
 
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.http.*;
 import javax.servlet.*;
@@ -43,6 +44,7 @@ import java.util.*;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.GenericResource;
@@ -56,7 +58,8 @@ import org.semanticwb.portal.api.GenericResource;
  * @author Victor Lorenzana
  */
 public class SWBAFTP extends GenericResource{
-    
+
+    private static final SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFTP.class);
     
@@ -87,7 +90,22 @@ public class SWBAFTP extends GenericResource{
         
         
     }
-    
+
+    private void log(String msg,String ip)
+    {
+        SimpleDateFormat dfFile=new SimpleDateFormat("yyyy-MM");
+        String logPath = SWBPortal.getWorkPath() + "/logs/wb_SWBAFTP."+ dfFile.format(new Date(System.currentTimeMillis()))  +".log";
+        msg=df.format(new Date(System.currentTimeMillis()))+"|"+msg+"|IP:"+ip;
+        try
+        {
+            SWBUtils.IO.log2File(logPath, msg);
+        }
+        catch(Exception e)
+        {
+            log.error(e);
+        }
+    }
+
     /**
      * Do download.
      * 
@@ -106,9 +124,10 @@ public class SWBAFTP extends GenericResource{
         {
             try
             {
-                File f=new File(path);      
+                
+                File f=new File(path);
                 if(f.exists())
-                {
+                {                    
                     response.setContentLength((int)f.length());
                     FileInputStream fin=new FileInputStream(f);            
                     OutputStream out=response.getOutputStream();
@@ -157,7 +176,16 @@ public class SWBAFTP extends GenericResource{
         {
             try
             {
-                File f=new File(path);                                  
+                File f=new File(path);
+                if(f.isDirectory())
+                {
+                    log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                }
+                else
+                {
+                    log("CREATED|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                }
+                
                 FileOutputStream fout=new FileOutputStream(f);            
                 InputStream in=request.getInputStream();
                 byte[] bcont=new byte[8192];
@@ -237,7 +265,7 @@ public class SWBAFTP extends GenericResource{
      */
     private Document getService(String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
-        return getDocument(user, src, cmd);        
+        return getDocument(user, src, cmd,request.getRemoteAddr());
     }
     
     /**
@@ -433,7 +461,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void createDir(Element res,Document src)
+    public void createDir(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0)
         {
@@ -443,6 +471,21 @@ public class SWBAFTP extends GenericResource{
             File f=new File(path);                        
             if(f.mkdirs())
             {
+                try
+                {
+                    if(f.isDirectory())
+                    {
+                        log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"",ip);
+                    }
+                    else
+                    {
+                        log("CREATED|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"",ip);
+                    }
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
                 addElement("create", "true", res);
                 return;
             }
@@ -456,7 +499,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void rename(Element res,Document src)
+    public void rename(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0 && src.getElementsByTagName("newpath").getLength()>0)
         {
@@ -473,6 +516,21 @@ public class SWBAFTP extends GenericResource{
             {
                 if(f.renameTo(newfile))
                 {
+                    try
+                    {
+                        if(f.isDirectory())
+                        {
+                            log("RENAME|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"|NEWFILE:\""+ newfile +"\"",ip);
+                        }
+                        else
+                        {
+                            log("RENAME|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"|NEWFILE:\""+ newfile +"\"",ip);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                     addElement("rename", "true", res);
                     return;
                 }
@@ -554,7 +612,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void delete(Element res,Document src)
+    public void delete(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0)
         {
@@ -566,6 +624,21 @@ public class SWBAFTP extends GenericResource{
             {                
                 if(f.delete())
                 {
+                    try
+                    {
+                        if(f.isDirectory())
+                        {
+                            log("DELETED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"",ip);
+                        }
+                        else
+                        {
+                            log("DELETED|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+user.getLogin()+"_"+ user.getUserRepository().getId() +"\"",ip);
+                        }
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                     addElement("delete", "true", res);
                     return;
                 }
@@ -631,7 +704,7 @@ public class SWBAFTP extends GenericResource{
      * @return the document
      * @return
      */    
-    public Document getDocument(User user, Document src, String cmd)
+    public Document getDocument(User user, Document src, String cmd,String ip)
     {
         Document dom = null;
         try
@@ -651,32 +724,20 @@ public class SWBAFTP extends GenericResource{
             }
             else if(cmd.equals("delete"))
             {
-                delete(res,src);
+                delete(res,src,user,ip);
             }
             else if(cmd.equals("createDir"))
             {
-                createDir(res,src);
+                createDir(res,src,user,ip);
             }
             else if(cmd.equals("rename"))
             {
-                rename(res,src);
+                rename(res,src,user,ip);
             }
             else if(cmd.equals("exists"))
             {
                 exists(res,src);
-            }
-            /*else if(cmd.equals("getcatUsers"))
-            {
-                getCatalogUsers(res,tm);
-            }   
-            else if(cmd.equals("getWorkflow"))
-            {                
-                getWorkflow(res,tm,src);
-            }
-            else if(cmd.equals("update"))
-            {
-                update(res,src,user,tm);
-            }  */ 
+            }           
         } catch (Exception e)
         {
             log.error(e);
