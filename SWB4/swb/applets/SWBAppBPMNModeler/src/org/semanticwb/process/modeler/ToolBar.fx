@@ -461,8 +461,8 @@ public class ToolBar extends CustomNode
                 ImgButton {
                     text:"Save As Image"
                     toolBar:this;
-                    image: "images/file_saveas1.png"
-                    imageOver: "images/file_saveas2.png"
+                    image: "images/file_saveasimage1.png"
+                    imageOver: "images/file_saveasimage2.png"
                     action: function():Void
                     {
                         ModelerUtils.clickedNode=null;
