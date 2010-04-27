@@ -382,7 +382,7 @@ public class SWBPortal
             if (con != null)
             {
                 log.info("-->Database: " + SWBUtils.DB.getDatabaseName());
-                //  checkHSQLHAck(con); //MAPS74
+                  if (SWBUtils.DB.getDatabaseName().startsWith("HSQL")) checkHSQLHAck(con); //MAPS74
                 haveDB = true;
                 //Si no existen las tablas, se crean automaticamente
 //                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
@@ -3070,7 +3070,7 @@ public class SWBPortal
             while (rs.next())
             {
                 base = rs.getString("obj");
-                if (base.endsWith("HSQL"))
+                if (!base.equals("Lv:0::HSQLDB"))
                 {
                     fix = true;
                 }
@@ -3080,8 +3080,10 @@ public class SWBPortal
                 System.out.println();
             }
             rs.close();
-            st.executeUpdate("update SWB_SYS_STMT set obj='" + base + "DB' where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
-            st.close();
+            if (fix){
+                st.executeUpdate("update SWB_SYS_STMT set obj='Lv:0::HSQLDB' where prop='Uv::http://jena.hpl.hp.com/2003/04/DB#EngineType'");
+                st.close();
+            }
         }
         catch (Exception e)
         {
