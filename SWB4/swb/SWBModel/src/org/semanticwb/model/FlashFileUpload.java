@@ -116,7 +116,9 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
         Iterator<SemanticLiteral>lista = obj.listLiteralProperties(prop);
         while (lista.hasNext()){
             SemanticLiteral lit = lista.next();
-            buffer.append("<option>"+lit.getString()+"</option>");
+            String fname = lit.getString();
+            fname = fname.substring(prop.getName().length()+1);
+            buffer.append("<option>"+fname+"</option>");
         }
         buffer.append("</select></td></tr></table>");
 
@@ -170,8 +172,8 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
             }
             String[]params = request.getParameterValues(prop.getName()+"_delFile");
             for (String valor:params){
-                grupo.remove(valor);
-                delfile(obj, valor);
+                grupo.remove(prop.getName()+"_"+valor);
+                delfile(obj, prop.getName()+"_"+valor);
             }
             obj.removeProperty(prop);
             for (String valor:grupo)
@@ -179,7 +181,7 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
                 obj.addLiteralProperty(prop, new SemanticLiteral(valor));
             }
             } else {
-                delfile(obj, request.getParameter(prop.getName()+"_delFile"));
+                delfile(obj, prop.getName()+"_"+request.getParameter(prop.getName()+"_delFile"));
                 obj.removeProperty(prop);
             }
         }
@@ -195,7 +197,7 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
-            File dest = new File(dir, arch.getOriginalName());
+            File dest = new File(dir, prop.getName()+"_"+arch.getOriginalName());
             if (!orig.renameTo(dest))
             {
                 try
@@ -208,10 +210,10 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
             }
             if (prop.getName().startsWith("has"))
             {
-                obj.addLiteralProperty(prop, new SemanticLiteral(arch.getOriginalName()));
+                obj.addLiteralProperty(prop, new SemanticLiteral(prop.getName()+"_"+arch.getOriginalName()));
             } else
             {
-                obj.setProperty(prop, arch.getOriginalName());
+                obj.setProperty(prop, prop.getName()+"_"+arch.getOriginalName());
             }
         }
         UploaderFileCacheUtils.clean(cad);
