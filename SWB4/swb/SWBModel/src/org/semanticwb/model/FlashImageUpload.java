@@ -43,8 +43,8 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
                 String[] params = request.getParameterValues(prop.getName() + "_delFile");
                 for (String valor : params)
                 {
-                    grupo.remove(valor);
-                    delfile(obj, valor);
+                    grupo.remove(prop.getName()+"_"+valor);
+                    delfile(obj, prop.getName()+"_"+valor);
                 }
                 obj.removeProperty(prop);
                 for (String valor : grupo)
@@ -53,7 +53,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
                 }
             } else
             {
-                delfile(obj, request.getParameter(prop.getName() + "_delFile"));
+                delfile(obj, prop.getName()+"_"+request.getParameter(prop.getName() + "_delFile"));
                 obj.removeProperty(prop);
             }
         }
@@ -69,7 +69,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
-            File dest = new File(dir, arch.getOriginalName());
+            File dest = new File(dir, prop.getName()+"_"+arch.getOriginalName());
             if (!orig.renameTo(dest))
             {
                 try
@@ -84,7 +84,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
             imgPrpcess(dest);
             if (prop.getName().startsWith("has"))
             {
-                obj.addLiteralProperty(prop, new SemanticLiteral(arch.getOriginalName()));
+                obj.addLiteralProperty(prop, new SemanticLiteral(prop.getName()+"_"+arch.getOriginalName()));
             } else
             {
                 obj.setProperty(prop, arch.getOriginalName());
