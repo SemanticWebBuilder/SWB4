@@ -53,16 +53,22 @@ public class Modeler extends GenericResource
     private static final String PROP_URI = "uri";
     private static final String PROP_X = "x";
     private static final String PROP_Y = "y";
+    private static final String PROP_W = "w";
+    private static final String PROP_H = "h";
     private static final String PROP_LANE = "lane";
     private static final String PROP_START = "start";
     private static final String PROP_END = "end";
     private static final String PROP_ACTION = "action";
     private static final String PROP_TYPE = "type";
+    private static final String PROP_PARENT = "parent";
+    private static final String PROP_CONTAINER = "container";
     private static final String TYPE_NORMAL = "";
     private static final String TYPE_RULE = "rule";
     private static final String TYPE_MESSAGE = "message";
     private static final String TYPE_TIMER = "timer";
     private static final String TYPE_MULTIPLE = "multiple";
+    private HashMap<String,JSONObject> hmjson = null;
+    private HashMap<String,String> hmnew = null;
 
     /**
      *
@@ -619,7 +625,7 @@ public class Modeler extends GenericResource
         out.println("<html>");
         out.println("<head>");
         out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">");
-        out.println("<script src=\"http://dl.javafx.com/1.2/dtfx.js\"></script>");
+        out.println("<script src=\"http://dl.javafx.com/1.3/dtfx.js\"></script>");
         out.println("</head>");
         out.println(" <body style=\"margin-top:0; margin-left:0;\">");
         out.println("    <script>");
@@ -647,14 +653,16 @@ public class Modeler extends GenericResource
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
 
+        //test(request, response, paramsRequest);
+
         SWBResourceURL urlapp = paramsRequest.getRenderUrl();
         urlapp.setMode("applet");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
         urlapp.setParameter("suri", suri);
 
         out.println("<div class=\"applet\">");
-        //out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\"/test.html\" height=\"100%\" width=\"100%\" ></IFRAME>");
-        out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" height=\"100%\" width=\"100%\" ></IFRAME>");
+        //out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\"/test.html\" height=\"1q00%\" width=\"100%\" ></IFRAME>");
+        out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" width=\"100%\" height=\"100%\"></IFRAME>");
         out.println("</div>");
     }
 
@@ -765,6 +773,315 @@ public class Modeler extends GenericResource
         seq.setToFlowObject(to);
         seq.setFlowCondition(condition);
         return seq;
+    }
+
+
+    public void test(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String str_class = null;
+        String str_title = null;
+        String str_uri = null;
+        String str_type = null;
+
+        hmjson = new HashMap();
+
+        JSONArray jsarr = null;
+        JSONObject jsobj = null;
+        try {
+            jsobj = new JSONObject(getTestProcessData());
+            jsarr = jsobj.getJSONArray("nodes");
+
+
+
+            //identificando los elementos asociados directamente al proceso
+            System.out.println("Elementos iniciales...");
+            for(int i=0; i<jsarr.length();i++)
+            {
+                jsobj = jsarr.getJSONObject(i);
+
+                // Propiedades que siempre traen los elementos del modelo
+                str_class = jsobj.getString(PROP_CLASS);
+                str_title = jsobj.getString(PROP_TITLE);
+                str_uri = jsobj.getString(PROP_URI);
+
+                hmjson.put(str_uri,jsobj);
+
+
+                if(!str_class.endsWith("SequenceFlow")&&!str_class.endsWith("MessageFlow"))
+                {
+                    if(jsobj.getString(PROP_CONTAINER).trim().length()==0&&jsobj.getString(PROP_PARENT).trim().length()==0)
+                    {
+                        System.out.println("class:"+str_class);
+                        System.out.println("title:"+str_title);
+                        System.out.println("uri:"+str_uri);
+                    }
+                }
+                System.out.println("i:"+i);
+                System.out.println("==========================================");
+            }
+//            System.out.println("Elementos que tienen parent (Pool y Lane)");
+//            for(int j=0; j<jsarr.length();j++)
+//            {
+//                jsobj = jsarr.getJSONObject(j);
+//                // Propiedades que siempre traen los elementos del modelo
+//                str_class = jsobj.getString(PROP_CLASS);
+//                str_title = jsobj.getString(PROP_TITLE);
+//                str_uri = jsobj.getString(PROP_URI);
+//
+//                if(!str_class.endsWith("SequenceFlow")&&!str_class.endsWith("MessageFlow"))
+//                {
+//                    if(jsobj.getString(PROP_CONTAINER).trim().length()==0&&jsobj.getString(PROP_PARENT).trim().length()>0)
+//                    {
+//                        System.out.println("class:"+str_class);
+//                        System.out.println("title:"+str_title);
+//                        System.out.println("uri:"+str_uri);
+//                    }
+//                }
+//                System.out.println("i:"+j);
+//                System.out.println("==========================================");
+//            }
+//            System.out.println("Elementos que tienen container (SubProcesos)");
+//            for(int k=0; k<jsarr.length();k++)
+//            {
+//                jsobj = jsarr.getJSONObject(k);
+//                // Propiedades que siempre traen los elementos del modelo
+//                str_class = jsobj.getString(PROP_CLASS);
+//                str_title = jsobj.getString(PROP_TITLE);
+//                str_uri = jsobj.getString(PROP_URI);
+//
+//                if(!str_class.endsWith("SequenceFlow")&&!str_class.endsWith("MessageFlow"))
+//                {
+//                    if(jsobj.getString(PROP_CONTAINER).trim().length()>0&&jsobj.getString(PROP_PARENT).trim().length()==0)
+//                    {
+//                        System.out.println("class:"+str_class);
+//                        System.out.println("title:"+str_title);
+//                        System.out.println("uri:"+str_uri);
+//                    }
+//                }
+//                System.out.println("i:"+k);
+//                System.out.println("==========================================");
+//            }
+//            System.out.println("Elementos SequenceFlow y MessageFlow");
+//            for(int k=0; k<jsarr.length();k++)
+//            {
+//                jsobj = jsarr.getJSONObject(k);
+//                // Propiedades que siempre traen los elementos del modelo
+//                str_class = jsobj.getString(PROP_CLASS);
+//                str_title = jsobj.getString(PROP_TITLE);
+//                str_uri = jsobj.getString(PROP_URI);
+//
+//                if(str_class.endsWith("SequenceFlow")||str_class.endsWith("MessageFlow"))
+//                {
+//                        System.out.println("class:"+str_class);
+//                        System.out.println("title:"+str_title);
+//                        System.out.println("uri:"+str_uri);
+//                        System.out.println("start:"+jsobj.getString(PROP_START));
+//                        System.out.println("end:"+jsobj.getString(PROP_END));
+//                }
+//                System.out.println("i:"+k);
+//                System.out.println("==========================================");
+//            }
+
+            createProcessElements();
+
+        }
+        catch(Exception e){}
+    }
+
+    public void createProcessElements()
+    {
+        System.out.println("CreateProcessElements........................."+hmjson.size());
+        try
+        {
+            int num=0;
+            Iterator<String> it = hmjson.keySet().iterator();
+            while(it.hasNext())
+            {
+                String key = it.next();
+                JSONObject json = (JSONObject)hmjson.get(key);
+                String uri = json.getString(PROP_URI);
+                String sclass = json.getString(PROP_CLASS);
+                if(!sclass.endsWith("SequenceFlow")&&!sclass.endsWith("MessageFlow"))
+                {
+                    num++;
+                    String container = json.getString(PROP_CONTAINER);
+                    String parent = json.getString(PROP_PARENT);
+                    System.out.println("("+num+") - element uri:"+uri+", container:"+container+", parent:"+parent+", class:"+sclass);
+                    // elemento que  tiene directamente al proceso como padre
+                    if(parent.trim().length()==0&&container.trim().length()==0)
+                    {
+                        System.out.println("createElement..."+uri);
+                        createElement(json);
+                    }
+                    // elemento que tiene como padre otro elemento
+                    else if(parent.trim().length()>0&&container.trim().length()==0)
+                    {
+                        System.out.println("findParent(PARENT)...");
+                        findParent(uri);
+                        createElement(json);
+                    }
+                    else if(parent.trim().length()==0&&container.trim().length()>0)
+                    {
+                        System.out.println("findParent(CONTAINER)...");
+                        findParent(container);
+                        createElement(json);
+                    }
+                    else if(container.trim().length()>0&&parent.trim().length()>0)
+                    {
+                        System.out.println("findParent(CONTAINER|PARENT)...");
+                        findParent(uri);
+                        createElement(json);
+                    }
+                    System.out.println("======================================================================");
+                }
+
+
+            }
+            it = hmjson.keySet().iterator();
+            while (it.hasNext()) {
+                String key = it.next();
+                if(hmnew.get(key)==null)
+                {
+                    JSONObject json = (JSONObject)hmjson.get(key);
+                    String uri = json.getString(PROP_URI);
+                    String sclass = json.getString(PROP_CLASS);
+                    if(sclass.endsWith("SequenceFlow")||sclass.endsWith("MessageFlow"))
+                    {
+                        num++;
+                        String title = json.getString("title");
+                        String start = json.getString("start");
+                        String end = json.getString("end");
+                        if(sclass.endsWith("SequenceFlow"))
+                        {
+                            //create SequenceFlow
+                            // el title viene vacio
+                        }
+                        else if(sclass.endsWith("MessageFlow"))
+                        {
+                            //create MessageFlow
+                            // el title es el mensaje
+                        }
+
+                        System.out.println("class..."+sclass);
+                        System.out.println("create link ("+title+")...from("+hmnew.get(start)+") to ("+hmnew.get(end)+")");
+                    }
+                }
+            }
+            System.out.println(""+num+" elementos procesados en el JSON....");
+            System.out.println("******************************************************************************");
+        } catch (Exception e) {
+        }
+    }
+
+    public void findParent(String uri)
+    {
+        System.out.println("findParent...."+uri);
+        try
+        {
+            JSONObject json = hmjson.get(uri);
+            if(json!=null)
+            {
+                String parent = json.getString(PROP_PARENT);
+                String container = json.getString(PROP_CONTAINER);
+                if(parent.trim().length()>0)
+                {
+                    if(hmnew.get(parent)==null)
+                    {
+                        findParent(parent);
+                        createElement(json);
+                    }
+                    else
+                    {
+                        createElement(json);
+                        System.out.println("ligando padre...");
+                    }
+                }
+                else if(container.trim().length()>0)
+                {
+                    if(hmnew.get(container)==null)
+                    {
+                        findParent(container);
+                        createElement(json);
+                    }
+                    else
+                    {
+                        createElement(json);
+                        System.out.println("ligando container...");
+                    }
+                }
+                else
+                    createElement(json);
+            }
+        } catch (Exception e) {
+        }
+        
+    }
+
+    public void createElement(JSONObject jsobj)
+    {
+        if(hmnew==null) hmnew = new HashMap<String, String>();
+        try
+        {
+
+            String uri = jsobj.getString(PROP_URI);
+            String container = jsobj.getString(PROP_CONTAINER);
+            String parent = jsobj.getString(PROP_PARENT);
+
+            if(hmnew.get(uri)==null)
+            {
+                System.out.println("createElement...."+uri);
+                //validar por cada tipo de lemento o clase
+
+                hmnew.put(uri, uri+"_new");
+            }
+            
+        } catch (Exception e) 
+        {
+            
+        }
+
+    }
+
+    // proceso para pruebas
+    public String getTestProcessData()
+    {
+        StringBuffer ret = new StringBuffer("");
+        ret.append("{\"nodes\":[{\"w\":600,\"title\":\"tramites\",\"container\":\"\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Pool\",\"type\":\"\",\"uri\":\"new:pool:0\",\"h\":400,\"y\":550,\"x\":600},");
+        ret.append("{\"w\":600,\"title\":\"recepcion docs\",\"container\":\"\",\"parent\":\"new:pool:0\",\"class\":\"org.semanticwb.process.modeler.Lane\",\"type\":\"\",\"uri\":\"new:Lane:2\",\"h\":200,\"y\":450,\"x\":620},");
+        ret.append("{\"w\":600,\"title\":\"revision\",\"container\":\"\",\"parent\":\"new:pool:0\",\"class\":\"org.semanticwb.process.modeler.Lane\",\"type\":\"\",\"uri\":\"new:Lane:4\",\"h\":200,\"y\":650,\"x\":620},");
+        ret.append("{\"w\":100,\"title\":\"recibir\",\"container\":\"\",\"parent\":\"new:Lane:2\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:5\",\"h\":60,\"y\":450,\"x\":475},");
+        ret.append("{\"w\":30,\"title\":\"Start Event\",\"container\":\"\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.StartEvent\",\"type\":\"\",\"uri\":\"new:startevent:6\",\"h\":30,\"y\":100,\"x\":175},");
+        ret.append("{\"w\":100,\"title\":\"revisar\",\"container\":\"\",\"parent\":\"new:Lane:4\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:8\",\"h\":60,\"y\":625,\"x\":475},");
+        ret.append("{\"w\":100,\"title\":\"entregar resultados\",\"container\":\"\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:10\",\"h\":60,\"y\":100,\"x\":700},");
+        ret.append("{\"w\":30,\"title\":\"End Event\",\"container\":\"\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.EndEvent\",\"type\":\"\",\"uri\":\"new:endevent:15\",\"h\":30,\"y\":100,\"x\":1075},");
+        ret.append("{\"w\":100,\"title\":\"recepcion documentacion\",\"container\":\"\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:21\",\"h\":60,\"y\":100,\"x\":400},");
+        ret.append("{\"title\":\"\",\"start\":\"new:startevent:6\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:7\",\"end\":\"new:task:21\"},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:5\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:12\",\"end\":\"new:task:8\"},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:10\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:18\",\"end\":\"new:endevent:15\"},");
+        ret.append("{\"title\":\"revisar\",\"start\":\"new:task:21\",\"class\":\"org.semanticwb.process.modeler.MessageFlow\",\"uri\":\"new:messageflow:22\",\"end\":\"new:task:5\"},");
+        ret.append("{\"w\":100,\"title\":\"notificar\",\"container\":\"\",\"parent\":\"new:Lane:4\",\"class\":\"org.semanticwb.process.modeler.SubProcess\",\"type\":\"\",\"uri\":\"new:subprocess:24\",\"h\":60,\"y\":625,\"x\":700},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:8\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:25\",\"end\":\"new:subprocess:24\"},");
+        ret.append("{\"title\":\"\",\"start\":\"new:subprocess:24\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:26\",\"end\":\"new:interevent:35\"},");
+        ret.append("{\"w\":30,\"title\":\"Start Event\",\"container\":\"new:subprocess:24\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.StartEvent\",\"type\":\"\",\"uri\":\"new:startevent:27\",\"h\":30,\"y\":250,\"x\":200},");
+        ret.append("{\"w\":100,\"title\":\"enviar notificacion\",\"container\":\"new:subprocess:24\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:28\",\"h\":60,\"y\":350,\"x\":400},");
+        ret.append("{\"w\":30,\"title\":\"Throwing Message Inter Event\",\"container\":\"new:subprocess:24\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.InterEvent\",\"type\":\"b_message\",\"uri\":\"new:interevent:29\",\"h\":30,\"y\":350,\"x\":575},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:28\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:31\",\"end\":\"new:interevent:29\"},");
+        ret.append("{\"title\":\"\",\"start\":\"new:startevent:27\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:32\",\"end\":\"new:subprocess:33\"},");
+        ret.append("{\"w\":100,\"title\":\"revisar solicitud\",\"container\":\"new:subprocess:24\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.SubProcess\",\"type\":\"\",\"uri\":\"new:subprocess:33\",\"h\":60,\"y\":250,\"x\":400},");
+        ret.append("{\"title\":\"\",\"start\":\"new:subprocess:33\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:34\",\"end\":\"new:task:28\"},");
+        ret.append("{\"w\":30,\"title\":\"Message Inter Event\",\"container\":\"\",\"parent\":\"new:Lane:2\",\"class\":\"org.semanticwb.process.modeler.InterEvent\",\"type\":\"w_message\",\"uri\":\"new:interevent:35\",\"h\":30,\"y\":450,\"x\":700},");
+        ret.append("{\"title\":\"\",\"start\":\"new:interevent:35\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:37\",\"end\":\"new:task:10\"},");
+        ret.append("{\"w\":30,\"title\":\"Start Event\",\"container\":\"new:subprocess:33\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.StartEvent\",\"type\":\"\",\"uri\":\"new:startevent:38\",\"h\":30,\"y\":325,\"x\":250},");
+        ret.append("{\"w\":100,\"title\":\"revisar solicitud\",\"container\":\"new:subprocess:33\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:39\",\"h\":60,\"y\":325,\"x\":400},");
+        ret.append("{\"title\":\"\",\"start\":\"new:startevent:38\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:40\",\"end\":\"new:task:39\"},");
+        ret.append("{\"w\":100,\"title\":\"obtener email\",\"container\":\"new:subprocess:33\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:41\",\"h\":60,\"y\":325,\"x\":575},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:39\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:42\",\"end\":\"new:task:41\"},");
+        ret.append("{\"w\":100,\"title\":\"redectar mensaje\",\"container\":\"new:subprocess:33\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.Task\",\"type\":\"\",\"uri\":\"new:task:43\",\"h\":60,\"y\":325,\"x\":775},");
+        ret.append("{\"w\":30,\"title\":\"End Event\",\"container\":\"new:subprocess:33\",\"parent\":\"\",\"class\":\"org.semanticwb.process.modeler.EndEvent\",\"type\":\"\",\"uri\":\"new:endevent:45\",\"h\":30,\"y\":325,\"x\":1000},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:43\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:46\",\"end\":\"new:endevent:45\"},");
+        ret.append("{\"title\":\"\",\"start\":\"new:task:41\",\"class\":\"org.semanticwb.process.modeler.SequenceFlow\",\"uri\":\"new:flowlink:47\",\"end\":\"new:task:43\"}],\"uri\":\"test\"}");
+
+        return ret.toString();
     }
 
 }
