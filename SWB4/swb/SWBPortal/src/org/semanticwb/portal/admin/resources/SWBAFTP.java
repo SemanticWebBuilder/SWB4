@@ -199,6 +199,10 @@ public class SWBAFTP extends GenericResource{
                 {
                     return;
                 }
+                if(isProtected(f))
+                {
+                   return;
+                }
                 if(f.isDirectory())
                 {
                     log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
