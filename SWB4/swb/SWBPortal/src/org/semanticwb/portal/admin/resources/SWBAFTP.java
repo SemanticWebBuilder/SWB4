@@ -586,7 +586,7 @@ public class SWBAFTP extends GenericResource{
             }
             else
             {
-                addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/org/admin/resources/SWBAFTP").getString("msg"), res);
+                addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAFTP").getString("msg"), res);
             }
         }
         addElement("rename", "false", res);
