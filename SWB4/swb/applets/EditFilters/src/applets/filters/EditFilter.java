@@ -39,6 +39,7 @@ import java.util.*;
 import java.awt.Color;
 
 import applets.commons.*;
+import java.awt.Cursor;
 /**
  * Formulario que muestra las secciones para egenrar filtros en WB3.0.
  * @author Victor Lorenzana
@@ -59,6 +60,7 @@ public class EditFilter extends javax.swing.JApplet {
     HashSet reloads=new HashSet();
     Locale locale;
     /** Initializes the applet EditFilter */
+    @Override
     public void init() {
         locale=Locale.getDefault();
         if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
@@ -70,7 +72,7 @@ public class EditFilter extends javax.swing.JApplet {
             }
             catch(Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace(System.err);
             }
         }        
         initComponents();
@@ -83,7 +85,7 @@ public class EditFilter extends javax.swing.JApplet {
         try {
             url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),cgiPath);
         }catch(Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }        
         jTree.setCellRenderer(new CheckRenderer());        
         jTree.addMouseListener(new CheckListener()); 
@@ -92,11 +94,13 @@ public class EditFilter extends javax.swing.JApplet {
         jTreeMenus.addMouseListener(new CheckListener()); 
         
         jTreeElements.setCellRenderer(new CheckRenderer());        
-        jTreeElements.addMouseListener(new CheckListener()); 
+        jTreeElements.addMouseListener(new CheckListener());
         
+        jTreeDirs.setCellRenderer(new CheckRenderer());
+        jTreeDirs.addMouseListener(new CheckListener());
         loadMenus();
         loadElements();
-        
+        loadDirectories();
         
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTreeFilter</cmd></req>";
         String resp=this.getData(xml);                                        
@@ -125,7 +129,7 @@ public class EditFilter extends javax.swing.JApplet {
                         catch(Exception e)
                         {
                             System.out.println("icon not found: "+icon.getAttribute("path"));
-                            e.printStackTrace(System.out);                            
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -153,7 +157,7 @@ public class EditFilter extends javax.swing.JApplet {
                     }
                     catch(Exception e)
                     {
-                        e.printStackTrace(System.out);
+                        e.printStackTrace();
                     }
                 }
                 root.setEditable(editable);
@@ -164,6 +168,157 @@ public class EditFilter extends javax.swing.JApplet {
         }
         loadFilter();
     }
+
+    private void loadDirectories(Directory odir)
+    {
+        odir.removeAllChildren();
+        String path=odir.getDirectory();
+        try
+        {
+            path=WBXMLParser.encode(path, "UTF-8");
+        }catch(Exception e){}
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";
+        String respxml=this.getData(xml);
+        WBXMLParser parser=new WBXMLParser();
+        WBTreeNode enode=parser.parse(respxml);
+        try
+        {
+            if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            {
+                WBTreeNode dir=enode.getFirstNode().getFirstNode();
+                if(dir.getName().equals("dir"))
+                {
+                    Iterator it=dir.getNodes().iterator();
+                    while(it.hasNext())
+                    {
+                        dir=(WBTreeNode)it.next();
+                        if(dir!=null && dir.getName().equals("dir"))
+                        {
+                            Directory child=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
+                            odir.add(child);
+                            if(odir.getChecked())
+                            {
+                                child.setChecked(false);
+                                child.setEnabled(false);
+                            }
+                            if(!odir.isEnabled())
+                            {
+                                child.setEnabled(false);
+                            }
+                            if(dir.getAttribute("hasChild").equals("true"))
+                            {
+                                child.add(new DefaultMutableTreeNode(""));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e){}
+    }
+    private void loadDirectories(WBTreeNode dir,Directory root)
+    {
+        Iterator it=dir.getNodes().iterator();
+        while(it.hasNext())
+        {
+            WBTreeNode enode=(WBTreeNode)it.next();
+            if(enode.getName().equals("dir"))
+            {
+                Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"));
+                root.add(child);
+                if(root.getChecked())
+                {
+                    child.setChecked(false);
+                    child.setEnabled(false);
+                }
+                if(!root.isEnabled())
+                {
+                    child.setEnabled(false);
+                } 
+                if(enode.getAttribute("hasChild").equals("true"))
+                {
+                    child.add(new DefaultMutableTreeNode(""));
+                }
+            }
+        }
+
+
+    }
+    private void loadDirectories()
+    {
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
+        String respxml=getData(xml);
+        WBXMLParser parser=new WBXMLParser();
+        WBTreeNode enode=parser.parse(respxml);
+        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        {
+            WBTreeNode dir=enode.getFirstNode().getFirstNode();
+            if(dir.getName().equals("dir"))
+            {
+                Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
+                jTreeDirs.setModel(new DefaultTreeModel(root));                                
+                loadDirectories(dir,root);
+                this.jTreeDirs.expandRow(0);
+            }
+        }
+    }
+    /*private void loadDirectories(Directory odir)
+    {
+        odir.removeAllChildren();
+        String path=odir.getDirectory();
+        try
+        {
+            path=WBXMLParser.encode(path, "UTF-8");
+        }catch(Exception e){}
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>"+ path +"</path></req>";
+        String respxml=this.getData(xml);
+        WBXMLParser parser=new WBXMLParser();
+        WBTreeNode enode=parser.parse(respxml);
+        try
+        {
+            if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            {
+                WBTreeNode dir=enode.getFirstNode().getFirstNode();
+                if(dir.getName().equals("dir"))
+                {
+                    Iterator it=dir.getNodes().iterator();
+                    while(it.hasNext())
+                    {
+                        dir=(WBTreeNode)it.next();
+                        if(dir!=null && dir.getName().equals("dir"))
+                        {
+                            Directory child=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
+                            odir.add(child);
+                            if(dir.getAttribute("hasChild").equals("true"))
+                            {
+                                child.add(new DefaultMutableTreeNode(""));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch(Exception e){}
+    }*/
+    /*private void loadDirectories(WBTreeNode dir,Directory root)
+    {
+        Iterator it=dir.getNodes().iterator();
+        while(it.hasNext())
+        {
+            WBTreeNode enode=(WBTreeNode)it.next();
+            if(enode.getName().equals("dir"))
+            {
+                Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"));
+                root.add(child);
+                if(enode.getAttribute("hasChild").equals("true"))
+                {
+                    child.add(new DefaultMutableTreeNode(""));
+                }
+            }
+        }
+
+
+    }*/
     private void loadElements(Topic root,WBTreeNode eroot)
     {
         Iterator topics=eroot.getNodesbyName("topic");
@@ -175,11 +330,11 @@ public class EditFilter extends javax.swing.JApplet {
             {
                 try
                 {
-                    editable=new Boolean(etopic.getAttribute("canModify")).booleanValue();
+                    editable=Boolean.valueOf(etopic.getAttribute("canModify")).booleanValue();
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace();
                 }
             }
             Topic child=new Topic("", etopic.getAttribute("topicmap"), etopic.getAttribute("id"), etopic.getAttribute("name"),  etopic.getAttribute("reload"), null);                        
@@ -207,11 +362,11 @@ public class EditFilter extends javax.swing.JApplet {
                 {
                     try
                     {
-                        editable=new Boolean(etopic.getAttribute("canModify")).booleanValue();
+                        editable=Boolean.valueOf(etopic.getAttribute("canModify")).booleanValue();
                     }
                     catch(Exception e)
                     {
-                        e.printStackTrace(System.out);
+                        e.printStackTrace();
                     }
                 }
                 Topic root=new Topic("", etopic.getAttribute("topicmap"), etopic.getAttribute("id"), etopic.getAttribute("name"),  etopic.getAttribute("reload"), null);                
@@ -234,11 +389,11 @@ public class EditFilter extends javax.swing.JApplet {
             {
                 try
                 {
-                    editable=new Boolean(etopic.getAttribute("canModify")).booleanValue();
+                    editable=Boolean.valueOf(etopic.getAttribute("canModify")).booleanValue();
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace();
                 }
             }
             Topic child=new Topic("", etopic.getAttribute("topicmap"), etopic.getAttribute("id"), etopic.getAttribute("name"), etopic.getAttribute("reload"), null);                        
@@ -266,11 +421,11 @@ public class EditFilter extends javax.swing.JApplet {
                 {
                     try
                     {
-                        editable=new Boolean(etopic.getAttribute("canModify")).booleanValue();
+                        editable=Boolean.valueOf(etopic.getAttribute("canModify")).booleanValue();
                     }
                     catch(Exception e)
                     {
-                        e.printStackTrace(System.out);
+                        e.printStackTrace();
                     }
                 }
                 Topic root=new Topic("", etopic.getAttribute("topicmap"), etopic.getAttribute("id"), etopic.getAttribute("name"),  etopic.getAttribute("reload"), null);                
@@ -282,19 +437,20 @@ public class EditFilter extends javax.swing.JApplet {
             }
         }
     }
+    
     private void loadFilterMenu(Topic root,WBTreeNode enode)
     {           
        String reload=enode.getAttribute("reload");                        
        if(reload.startsWith("getTopic"))
        {
-           String topicmap=enode.getAttribute("topicmap");                                      
+           String stopicmap=enode.getAttribute("topicmap");
            int childs=this.jTreeMenus.getModel().getChildCount(root);
            for(int ichild=0;ichild<childs;ichild++)
            {                               
                if(this.jTreeMenus.getModel().getChild(root, ichild) instanceof Topic)
                {                                   
                     Topic topic=(Topic)this.jTreeMenus.getModel().getChild(root, ichild);
-                    if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                    if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                     {
                         topic.setChecked(true);
                         this.jTreeMenus.expandPath(new TreePath(topic.getPath()));
@@ -308,6 +464,80 @@ public class EditFilter extends javax.swing.JApplet {
            }
        }        
     }
+
+    private void loadFilterDirs(Directory root,WBTreeNode enode)
+    {      
+       int childs=this.jTreeDirs.getModel().getChildCount(root);
+       for(int ichild=0;ichild<childs;ichild++)
+       {
+           if(this.jTreeDirs.getModel().getChild(root, ichild) instanceof Directory)
+           {
+                Directory dir=(Directory)this.jTreeDirs.getModel().getChild(root, ichild);
+                if(dir.path!=null && enode.getAttribute("path").equals(dir.path))
+                {
+                    dir.setChecked(true);
+                    this.jTreeDirs.expandPath(new TreePath(dir.getPath()));
+                    this.jTreeDirs.updateUI();
+                }
+                else
+                {
+                    if(dir.path!=null && enode.getAttribute("path").startsWith(dir.path))
+                    {
+                        this.jTreeDirs.expandPath(new TreePath(dir.getPath()));
+                        this.jTreeDirs.updateUI();
+                    }
+                    loadFilterDirs(dir, enode);
+                }
+           }
+       }
+       
+    }
+    private void loadFilterDirs(WBTreeNode efilter)
+    {
+        WBTreeNode dirs=efilter.getNodebyName("dirs");
+        if(dirs!=null)
+        {
+            Iterator it=dirs.getNodesbyName("dir");
+            while(it.hasNext())
+            {
+               WBTreeNode enode=(WBTreeNode)it.next();
+               String path=enode.getAttribute("path");
+               Object objroot=this.jTreeDirs.getModel().getRoot();
+               if(objroot instanceof Directory)
+               {
+                   Directory dir=(Directory)objroot;
+                   if(dir.path.equals(path))
+                   {
+                       dir.setChecked(true);
+                       break;
+                   }
+               }
+               int childs=this.jTreeDirs.getModel().getChildCount(objroot);
+               for(int ichild=0;ichild<childs;ichild++)
+               {
+                   if(this.jTreeDirs.getModel().getChild(objroot, ichild) instanceof Directory)
+                   {
+                        Directory dir=(Directory)this.jTreeDirs.getModel().getChild(objroot, ichild);
+                        if(dir.path!=null && enode.getAttribute("path").equals(dir.path))
+                        {
+                            dir.setChecked(true);
+                            this.jTreeDirs.expandPath(new TreePath(dir.getPath()));
+                            this.jTreeDirs.updateUI();
+                        }
+                        else
+                        {
+                            if(dir.path!=null && enode.getAttribute("path").startsWith(dir.path))
+                            {
+                                this.jTreeDirs.expandPath(new TreePath(dir.getPath()));
+                                this.jTreeDirs.updateUI();
+                            }
+                            loadFilterDirs(dir, enode);
+                        }
+                   }
+               }
+            }
+        }
+    }
     private void loadFilterMenu(WBTreeNode efilter)
     {
         WBTreeNode menus=efilter.getNodebyName("menus");
@@ -320,12 +550,12 @@ public class EditFilter extends javax.swing.JApplet {
                String reload=enode.getAttribute("reload");                                       
                if(reload.startsWith("getTopic"))
                {
-                   String topicmap=enode.getAttribute("topicmap");                           
+                   String stopicmap=enode.getAttribute("topicmap");
                    Object objroot=this.jTreeMenus.getModel().getRoot();                           
                    if(objroot instanceof Topic)
                    {
                         Topic topic=(Topic)objroot;
-                        if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                        if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                         {
                             topic.setChecked(true);
                             this.jTreeMenus.expandPath(new TreePath(topic.getPath()));
@@ -339,7 +569,7 @@ public class EditFilter extends javax.swing.JApplet {
                        if(this.jTreeMenus.getModel().getChild(objroot, ichild) instanceof Topic)
                        {                                   
                             Topic topic=(Topic)this.jTreeMenus.getModel().getChild(objroot, ichild);
-                            if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                            if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                             {
                                 topic.setChecked(true);
                                 this.jTreeMenus.expandPath(new TreePath(topic.getPath())); 
@@ -361,14 +591,14 @@ public class EditFilter extends javax.swing.JApplet {
        String reload=enode.getAttribute("reload");                        
        if(reload.startsWith("getTopic"))
        {
-           String topicmap=enode.getAttribute("topicmap");                                      
+           String stopicmap=enode.getAttribute("topicmap");
            int childs=this.jTreeElements.getModel().getChildCount(root);
            for(int ichild=0;ichild<childs;ichild++)
            {                               
                if(this.jTreeElements.getModel().getChild(root, ichild) instanceof Topic)
                {                                   
                     Topic topic=(Topic)this.jTreeElements.getModel().getChild(root, ichild);                                        
-                    if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                    if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                     {                        
                         topic.setChecked(true);
                         this.jTreeElements.expandPath(new TreePath(topic.getPath()));
@@ -394,12 +624,12 @@ public class EditFilter extends javax.swing.JApplet {
                String reload=enode.getAttribute("reload");                        
                if(reload.startsWith("getTopic"))
                {
-                   String topicmap=enode.getAttribute("topicmap");                           
+                   String stopicmap=enode.getAttribute("topicmap");
                    Object objroot=this.jTreeElements.getModel().getRoot();                           
                    if(objroot instanceof Topic)
                    {
                         Topic topic=(Topic)objroot;
-                        if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                        if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                         {
                             topic.setChecked(true);
                             this.jTreeElements.expandPath(new TreePath(topic.getPath()));
@@ -413,7 +643,7 @@ public class EditFilter extends javax.swing.JApplet {
                        if(this.jTreeElements.getModel().getChild(objroot, ichild) instanceof Topic)
                        {                                   
                             Topic topic=(Topic)this.jTreeElements.getModel().getChild(objroot, ichild);
-                            if(topic.getTopicMapID().equals(topicmap) && enode.getAttribute("id").equals(topic.getID()))
+                            if(topic.getTopicMapID().equals(stopicmap) && enode.getAttribute("id").equals(topic.getID()))
                             {
                                 topic.setChecked(true);
                                 this.jTreeElements.expandPath(new TreePath(topic.getPath()));
@@ -453,7 +683,7 @@ public class EditFilter extends javax.swing.JApplet {
                     */
                     loadFilterElements(efilter);
                     loadFilterMenu(efilter);
-                    
+                    loadFilterDirs(efilter);
                     WBTreeNode sites=efilter.getNodebyName("sites");
                     if(sites!=null)
                     {
@@ -464,7 +694,7 @@ public class EditFilter extends javax.swing.JApplet {
                            String reload=enode.getAttribute("reload");                        
                            if(reload.startsWith("getTopic"))
                            {
-                               String topicmap=enode.getAttribute("topicmap");                           
+                               String stopicmap=enode.getAttribute("topicmap");
                                Object objroot=this.jTree.getModel().getRoot();                           
                                int childs=this.jTree.getModel().getChildCount(objroot);
                                for(int ichild=0;ichild<childs;ichild++)
@@ -472,7 +702,7 @@ public class EditFilter extends javax.swing.JApplet {
                                    if(this.jTree.getModel().getChild(objroot, ichild) instanceof TopicMap)
                                    {                                   
                                         TopicMap map=(TopicMap)this.jTree.getModel().getChild(objroot, ichild);
-                                        if(map.getID().equals(topicmap))
+                                        if(map.getID().equals(stopicmap))
                                         {
                                             this.jTree.expandPath(new TreePath(map.getPath()));                           
                                             if(enode.getAttribute("reload")!=null && !enode.getAttribute("reload").equals(""))
@@ -647,7 +877,7 @@ public class EditFilter extends javax.swing.JApplet {
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace();
                 }
             }
             tm.setEditable(editable);
@@ -679,7 +909,7 @@ public class EditFilter extends javax.swing.JApplet {
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace();
                 }
             }
             topic.setEditable(editable);
@@ -758,7 +988,7 @@ public class EditFilter extends javax.swing.JApplet {
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace(System.out);
+                    e.printStackTrace();
                 }
             }
             topic.setEditable(editable);
@@ -818,7 +1048,7 @@ public class EditFilter extends javax.swing.JApplet {
     }
     public String getData(String xml)
     {
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         try {           
             
             URLConnection urlconn=url.openConnection();
@@ -837,7 +1067,7 @@ public class EditFilter extends javax.swing.JApplet {
                 ret.append("\n");
             }
             in.close();
-        }catch(Exception e){System.out.println("Error to open service..."+e);}
+        }catch(Exception e){e.printStackTrace();}
         return ret.toString();
     }
     private void findTopic(JTree jTree,Object root,Topic topic)
@@ -899,7 +1129,7 @@ public class EditFilter extends javax.swing.JApplet {
             }
             catch(Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace();
             }
         }
         topic.setEditable(editable);
@@ -1043,6 +1273,9 @@ public class EditFilter extends javax.swing.JApplet {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTreeElements = new javax.swing.JTree();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTreeDirs = new javax.swing.JTree();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale); // NOI18N
         jMenu1.setText(bundle.getString("Herramientas")); // NOI18N
@@ -1076,16 +1309,16 @@ public class EditFilter extends javax.swing.JApplet {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jTree.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                jTreeMouseMoved(evt);
-            }
-        });
         jTree.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
             public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
             }
             public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
                 jTreeTreeWillExpand(evt);
+            }
+        });
+        jTree.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTreeMouseMoved(evt);
             }
         });
         jScrollPane1.setViewportView(jTree);
@@ -1120,6 +1353,31 @@ public class EditFilter extends javax.swing.JApplet {
 
         jTabbedPane1.addTab(bundle.getString("filtro_system"), jPanel6); // NOI18N
 
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jTreeDirs.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+            }
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                jTreeDirsTreeWillExpand(evt);
+            }
+        });
+        jTreeDirs.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                jTreeDirsValueChanged(evt);
+            }
+        });
+        jTreeDirs.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                jTreeDirsMouseMoved(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jTreeDirs);
+
+        jPanel2.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        jTabbedPane1.addTab("Documentos del servidor", jPanel2);
+
         getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1138,13 +1396,12 @@ public class EditFilter extends javax.swing.JApplet {
         //win.call("doView", params);        
         try
         {
-            URL url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),url_script);            
-            this.getAppletContext().showDocument(url,"work");
+            URL document=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),url_script);
+            this.getAppletContext().showDocument(document,"work");
         }
         catch(Exception e)
         {
-            System.out.println(e.getMessage());
-            e.printStackTrace(System.out);
+            e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemVerFiltrosActionPerformed
 
@@ -1243,6 +1500,56 @@ public class EditFilter extends javax.swing.JApplet {
             }
         }
         
+        model=this.jTreeDirs.getModel();
+        if(model.getRoot() instanceof Directory)
+        {
+            WBTreeNode eDirs=efilter.addNode();
+            eDirs.setName("dirs");
+            Directory root=(Directory)model.getRoot();
+            if(root.getChecked())
+            {
+               WBTreeNode etm=eDirs.addNode();
+               etm.setName("dir");
+               etm.addAttribute("path",root.path);
+
+            }
+            else
+            {
+                for(int i=0;i<root.getChildCount();i++)
+                {
+                    TreeNode child=root.getChildAt(i);
+                    if(child instanceof Directory)
+                    {
+                        Directory topic=(Directory)child;
+                        if(topic.getChecked())
+                        {
+
+                           boolean existe=false;
+                           Iterator it=eDirs.getNodesbyName("dir");
+                           while(it.hasNext())
+                           {
+                               WBTreeNode node=(WBTreeNode)it.next();
+                               if(node.getAttribute("dir")!=null && topic.path!=null && node.getAttribute("dir").equals(topic.path))
+                               {
+                                   existe=true;
+                               }
+                           }
+                           if(!existe)
+                           {
+                               WBTreeNode etm=eDirs.addNode();
+                               etm.setName("dir");
+                               etm.addAttribute("path",topic.path);
+                           }
+                        }
+                        else
+                        {
+                            evaluateDirs(topic,eDirs);
+                        }
+                    }
+                }
+            }
+        }
+
         model=this.jTreeMenus.getModel();
         if(model.getRoot() instanceof Topic)
         {
@@ -1445,16 +1752,16 @@ public class EditFilter extends javax.swing.JApplet {
     }//GEN-LAST:event_jButton1ActionPerformed
     public String getPath(DefaultMutableTreeNode node)
     {         
-        String id="";
+        String oid="";
         if(node instanceof Topic)
         {
             Topic tp=(Topic)node;
-            id=tp.getID();
+            oid=tp.getID();
         }
         else if(node instanceof TopicMap)
         {
             TopicMap map=(TopicMap)node;
-            id=map.getID();
+            oid=map.getID();
         }
         else
         {
@@ -1471,7 +1778,7 @@ public class EditFilter extends javax.swing.JApplet {
                 {
                     path+="|";
                 }
-                return path+id;
+                return path+oid;
             }
             else if(node.getParent() instanceof TopicMap)
             {
@@ -1481,10 +1788,10 @@ public class EditFilter extends javax.swing.JApplet {
                 {
                     path+="|";
                 }
-                return path+id;
+                return path+oid;
             }
         }
-        return id;
+        return oid;
     }
     void evaluateTopics(Topic root,WBTreeNode efilter)
     {
@@ -1565,6 +1872,40 @@ public class EditFilter extends javax.swing.JApplet {
                     }
                 }
             }
+        }
+    }
+    void evaluateDirs(Directory root,WBTreeNode efilter)
+    {
+        for(int i=0;i<root.getChildCount();i++)
+        {
+            TreeNode child=root.getChildAt(i);
+            if(child instanceof Directory)
+            {
+                Directory topic=(Directory)child;
+                if(topic.getChecked())
+                {
+                   boolean existe=false;
+                   Iterator it=efilter.getNodesbyName("dir");
+                   while(it.hasNext())
+                   {
+                       WBTreeNode node=(WBTreeNode)it.next();
+                       if(node.getAttribute("path")!=null && topic.path!=null && node.getAttribute("path").startsWith(topic.path))
+                       {
+                           existe=true;
+                       }
+                   }
+                   if(!existe)
+                   {
+                       WBTreeNode etp=efilter.addNode();
+                       etp.setName("dir");
+                       etp.addAttribute("path",topic.path);
+                   }
+                }
+                else
+                {
+                    evaluateDirs(topic,efilter);
+                }
+            }                        
         }
     }
     void evaluateTopics(TopicMap root,WBTreeNode efilter)
@@ -1664,6 +2005,31 @@ public class EditFilter extends javax.swing.JApplet {
     private void jTreeMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeMouseMoved
         this.jTree.setSelectionPath(this.jTree.getPathForLocation(evt.getX(), evt.getY()));
     }//GEN-LAST:event_jTreeMouseMoved
+
+    private void jTreeDirsValueChanged(javax.swing.event.TreeSelectionEvent evt)//GEN-FIRST:event_jTreeDirsValueChanged
+    {//GEN-HEADEREND:event_jTreeDirsValueChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTreeDirsValueChanged
+
+    private void jTreeDirsTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException//GEN-FIRST:event_jTreeDirsTreeWillExpand
+    {//GEN-HEADEREND:event_jTreeDirsTreeWillExpand
+        if(evt.getPath().getLastPathComponent() instanceof Directory)
+        {
+            Directory dir=(Directory)evt.getPath().getLastPathComponent();
+            if(dir.getChildCount()==1 && !(dir.getChildAt(0) instanceof Directory))
+            {
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                dir.remove(0);
+                loadDirectories(dir);
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        }
+    }//GEN-LAST:event_jTreeDirsTreeWillExpand
+
+    private void jTreeDirsMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_jTreeDirsMouseMoved
+    {//GEN-HEADEREND:event_jTreeDirsMouseMoved
+        this.jTreeDirs.setSelectionPath(this.jTreeDirs.getPathForLocation(evt.getX(), evt.getY()));
+    }//GEN-LAST:event_jTreeDirsMouseMoved
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1672,15 +2038,18 @@ public class EditFilter extends javax.swing.JApplet {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemVerFiltros;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTree;
+    private javax.swing.JTree jTreeDirs;
     private javax.swing.JTree jTreeElements;
     private javax.swing.JTree jTreeMenus;
     // End of variables declaration//GEN-END:variables
