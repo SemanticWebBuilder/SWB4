@@ -382,7 +382,7 @@ public class SWBPortal
             if (con != null)
             {
                 log.info("-->Database: " + SWBUtils.DB.getDatabaseName());
-                  if (SWBUtils.DB.getDatabaseName().startsWith("HSQL")) checkHSQLHAck(con); //MAPS74
+                  if (SWBUtils.DB.getDatabaseName().startsWith("HSQL")) checkHSQLHack(con); //MAPS74
                 haveDB = true;
                 //Si no existen las tablas, se crean automaticamente
 //                PreparedStatement sr=con.prepareStatement("select * from swb_counter");
@@ -3059,7 +3059,7 @@ public class SWBPortal
      * 
      * @param con the con
      */
-    private void checkHSQLHAck(Connection con)
+    private void checkHSQLHack(Connection con)
     {
         try
         {
@@ -3076,8 +3076,8 @@ public class SWBPortal
                 }
                 //  System.out.println("Subj"+rs.getString("subj"));
                 //  System.out.println("Prop"+rs.getString("prop"));
-                System.out.println("Obj" + rs.getString("obj"));
-                System.out.println();
+                //System.out.println("Obj" + rs.getString("obj"));
+                //System.out.println();
             }
             rs.close();
             if (fix){
@@ -3085,9 +3085,9 @@ public class SWBPortal
                 st.close();
             }
         }
-        catch (Exception e)
+        catch (Exception noe)
         {
-            log.error("Problem Updating HSQL Header", e);
+            //log.error("Problem Updating HSQL Header", e);
         }
     }
 }
