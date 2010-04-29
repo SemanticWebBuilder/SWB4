@@ -159,7 +159,11 @@ public class SWBAFilters extends SWBATree {
 
             if (cmd.equals("getServer")) {
                 addServer(user, res);
-            } else if (cmd.equals("getGlobal")) {
+            } 
+            else if (cmd.equals("getDirectories")) {
+                getDirectories(user, res,src);
+            }
+            else if (cmd.equals("getGlobal")) {
                 addGlobal(user, res, PARCIAL_ACCESS);
             } else if (cmd.equals("getTopicMap")) {
                 WebSite tm = SWBContext.getWebSite(id);
@@ -1137,6 +1141,66 @@ public class SWBAFilters extends SWBATree {
         return ret;
     }
 
+    public void getDirectories(User user, Element res,Document src)
+    {
+        String path=SWBUtils.getApplicationPath();
+        if(src.getElementsByTagName("path").getLength()>0)
+        {
+            Element epath=(Element)src.getElementsByTagName("path").item(0);
+            Text etext=(Text)epath.getFirstChild();
+            path=etext.getNodeValue();
+            path=SWBUtils.getApplicationPath()+path;
+        }
+        File apppath=new File(path);
+        if(apppath.isDirectory() && apppath.exists())
+        {
+            Element dir=addNode("dir", "", apppath.getName(), res);
+            path=apppath.getAbsolutePath().substring(SWBUtils.getApplicationPath().length()-1);
+            path=path.replace('\\','/');
+            dir.setAttribute("path",path);
+            dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(apppath)));
+            getDirectories(dir,apppath);
+        }
+    }
+
+    public boolean hasSubdirectories(File fdir)
+    {
+        File[] dirs=fdir.listFiles();
+        for(int i=0;i<dirs.length;i++)
+        {
+            File file=dirs[i];
+            if(file.isDirectory())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the directories.
+     *
+     * @param edir the edir
+     * @param fdir the fdir
+     * @return the directories
+     */
+    public void getDirectories(Element edir,File fdir)
+    {
+        File[] dirs=fdir.listFiles();
+        Arrays.sort(dirs, new FileComprator());
+        for(int i=0;i<dirs.length;i++)
+        {
+            File file=dirs[i];
+            if(file.isDirectory())
+            {
+                Element dir=addNode("dir", "", file.getName(), edir);
+                String path=file.getAbsolutePath().substring(SWBUtils.getApplicationPath().length()-1);
+                path=path.replace('\\','/');
+                dir.setAttribute("path",path);
+                dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(file)));
+            }
+        }
+    }
 
     /**
      * Add server to dom document.
