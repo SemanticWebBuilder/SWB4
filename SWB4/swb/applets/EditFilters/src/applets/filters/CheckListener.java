@@ -35,11 +35,7 @@ package applets.filters;
  *
  * @author  Victor Lorenzana
  */
-import javax.swing.JTree;
 import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.*;
-import java.awt.*;
 import java.awt.event.*;
 
 /**
@@ -48,9 +44,11 @@ import java.awt.event.*;
  * @author Victor Lorenzana
  */
 public class CheckListener extends MouseAdapter {
+
+   @Override
    public void mousePressed(MouseEvent e) {
       //get the tree
-       if(e.getButton()==e.BUTTON1 && e.getClickCount()==1)
+       if(e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==1)
        {           
           JTree tree = (JTree)e.getSource ();    
           if(tree.getLastSelectedPathComponent() instanceof SelectableNode)
