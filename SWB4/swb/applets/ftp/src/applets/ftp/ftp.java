@@ -99,7 +99,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         try {
             url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),cgiPath);
         }catch(Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }          
         this.setJMenuBar(this.jMenuBar1);        
         this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));       
@@ -166,6 +166,40 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         
         
     }
+    public boolean hasPermission(String path)
+    {
+        boolean hasPermission=false;
+        
+        try
+        {
+            path=WBXMLParser.encode(path,"UTF-8");
+        }catch(Exception e){e.printStackTrace();}
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>hasPermissionFile</cmd><path>"+ path +"</path></req>";
+        String respxml=ftp.getData(xml);
+        WBXMLParser parser=new WBXMLParser();
+        WBTreeNode enode=parser.parse(respxml);        
+        try
+        {            
+            if(enode!=null && enode.getFirstNode()!=null)
+            {                
+                WBTreeNode node=enode.getFirstNode().getNodebyName("dir");                
+                if(node!=null && node.getAttribute("permission")!=null)
+                {                    
+                    hasPermission=Boolean.valueOf(node.getAttribute("permission"));                    
+                    return hasPermission;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return hasPermission;
+    }
+    public boolean hasPermission(File file)
+    {
+        return hasPermission(file.getPath());
+    }
     public void loadFiles(Directory dir)
     {
         String path=dir.getDirectory();
@@ -197,24 +231,31 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";        
         String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
-        WBTreeNode enode=parser.parse(respxml);
-        if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+        try
         {
-            WBTreeNode dir=enode.getFirstNode().getFirstNode();
-            if(dir.getName().equals("dir"))
-            {                
-                Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));                                                                
-                jTreeDirs.setModel(new DefaultTreeModel(root));                                
-                
-                loadDirectories(dir,root);                
-                loadFiles(root);  
-                this.jTreeDirs.expandRow(0);
+            WBTreeNode enode=parser.parse(respxml);
+            if(enode!=null && enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            {
+                WBTreeNode dir=enode.getFirstNode().getFirstNode();
+                if(dir.getName().equals("dir"))
+                {
+                    Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
+                    jTreeDirs.setModel(new DefaultTreeModel(root));
+
+                    loadDirectories(dir,root);
+                    loadFiles(root);
+                    this.jTreeDirs.expandRow(0);
+                }
             }
-        }       
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }   
     public static String getData(String xml) {
 
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         try {
 
             URLConnection urlconn=url.openConnection();
@@ -235,7 +276,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             in.close();
         }catch(Exception e)
         {
-            System.out.println("Error_to_open_service..."+e);
+            e.printStackTrace();
         }
         return ret.toString();
     }
@@ -626,20 +667,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }// </editor-fold>//GEN-END:initComponents
 
     private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MousePressed
+        this.jMenuItemFileDownload.setEnabled(false);
+        this.jMenuItemFileRename.setEnabled(false);
+        this.jMenuItemFileDelete.setEnabled(false);
         if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {         
             if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
             {
-                this.jMenuItemFileDownload.setEnabled(true);
-                this.jMenuItemFileRename.setEnabled(true);
-                this.jMenuItemFileDelete.setEnabled(true);
-            }
-            else
-            {
-                this.jMenuItemFileDownload.setEnabled(false);
-                this.jMenuItemFileRename.setEnabled(false);
-                this.jMenuItemFileDelete.setEnabled(false);
-            }
+                jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
+                File file=model.getFile(jTableFiles.getSelectedRow());
+                if(hasPermission(file))
+                {
+                    this.jMenuItemFileDownload.setEnabled(true);
+                    this.jMenuItemFileRename.setEnabled(true);
+                    this.jMenuItemFileDelete.setEnabled(true);
+                }
+            }            
             this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());            
         }
     }//GEN-LAST:event_jScrollPane2MousePressed
@@ -727,7 +770,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 }
                 catch(Exception e)
                 {
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -805,12 +848,25 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemDirAddFolderActionPerformed
 
     private void jTreeDirsMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeDirsMousePressed
-        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
+        if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1 && this.jTreeDirs.getSelectionPath()!=null)
         {
-            if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
-            {
-                this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(),evt.getY());
-            }
+            jMenuItemNewFolder.setEnabled(false);
+            jMenuDirAdd.setEnabled(false);
+            jMenuItemDirRename.setEnabled(false);
+            jMenuItemDirDelete.setEnabled(false);            
+            Object obj=this.jTreeDirs.getSelectionPath().getLastPathComponent();            
+            if(obj!=null && obj instanceof Directory)
+            {                
+                Directory directory=(Directory)obj;             
+                if(hasPermission(directory.getDirectory()))
+                {                    
+                    jMenuItemNewFolder.setEnabled(true);
+                    jMenuDirAdd.setEnabled(true);
+                    jMenuItemDirRename.setEnabled(true);
+                    jMenuItemDirDelete.setEnabled(true);
+                }
+            }            
+            this.jPopupMenuDir.show(this.jTreeDirs, evt.getX(),evt.getY());
         }
     }//GEN-LAST:event_jTreeDirsMousePressed
 
@@ -819,12 +875,24 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemAddFolderActionPerformed
 
     private void jTableFilesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFilesMousePressed
+        this.jMenuItemFileDownload.setEnabled(false);
+        this.jMenuItemFileRename.setEnabled(false);
+        this.jMenuItemFileDelete.setEnabled(false);        
         if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {            
-             this.jMenuItemFileDownload.setEnabled(true);
-            this.jMenuItemFileRename.setEnabled(true);
-            this.jMenuItemFileDelete.setEnabled(true);
-            this.jPopupMenuFile.show(this.jTableFiles, evt.getX(),evt.getY());            
+            if(this.jTableFiles.getSelectedRow()!=-1)
+            {         
+                jTableFileModel model=(jTableFileModel)jTableFiles.getModel();         
+                File file=model.getFile(this.jTableFiles.getSelectedRow());         
+                if(hasPermission(file))
+                {                    
+                    this.jMenuItemFileDownload.setEnabled(true);
+                    this.jMenuItemFileRename.setEnabled(true);
+                    this.jMenuItemFileDelete.setEnabled(true);
+                }
+            }            
+            this.jPopupMenuFile.show(this.jTableFiles, evt.getX(),evt.getY());
+            
         }
     }//GEN-LAST:event_jTableFilesMousePressed
 
@@ -1057,7 +1125,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             }
             catch(Exception e)
             {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }  
@@ -1173,7 +1241,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             }
             catch(Exception e)
             {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
