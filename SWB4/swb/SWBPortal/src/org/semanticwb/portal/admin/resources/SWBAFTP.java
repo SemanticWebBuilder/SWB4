@@ -46,7 +46,11 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AdminFilter;
+import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.portal.api.GenericResource;
 
 // TODO: Auto-generated Javadoc
@@ -62,7 +66,19 @@ public class SWBAFTP extends GenericResource{
     private static final SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAFTP.class);
-    
+
+
+    private static String[] prohibitedPaths={"/work",
+        "/swbadmin","/work/models","/work/logs","/work/logs/*",
+        "/WEB-INF","/work/config","/work/sitetemplates","/META-INF",
+        "/WEB-INF/owl","/WEB-INF/classes","/WEB-INF/lib","/WEB-INF/dtds","/WEB-INF/license",
+        "/WEB-INF/classes/db.properties",
+        "/WEB-INF/classes/license.properties",
+        "/WEB-INF/classes/topicmaps.properties",
+        "/WEB-INF/classes/user.properties",
+        "/WEB-INF/classes/web.properties",
+        "/WEB-INF/web.xml",
+    };
     /**
      * Creates a new instance of SWBAFTP.
      * 
@@ -72,6 +88,8 @@ public class SWBAFTP extends GenericResource{
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
+
+
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if(paramRequest.getMode().equals("gateway"))
@@ -126,7 +144,7 @@ public class SWBAFTP extends GenericResource{
             {
                 
                 File f=new File(path);
-                if(f.exists())
+                if(f.exists() && hasPermission(paramRequest.getUser(), f))
                 {                    
                     response.setContentLength((int)f.length());
                     FileInputStream fin=new FileInputStream(f);            
@@ -177,6 +195,10 @@ public class SWBAFTP extends GenericResource{
             try
             {
                 File f=new File(path);
+                if(!hasPermission(paramRequest.getUser(), f))
+                {
+                    return;
+                }
                 if(f.isDirectory())
                 {
                     log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
@@ -413,20 +435,35 @@ public class SWBAFTP extends GenericResource{
      * @param fdir the fdir
      * @return the directories
      */    
-    public void getDirectories(Element edir,File fdir)
+    public void getDirectories(Element edir,File fdir,User user)
     {
         File[] dirs=fdir.listFiles();
         Arrays.sort(dirs, new FileComprator());
         for(int i=0;i<dirs.length;i++)
         {
             File file=dirs[i];
-            if(file.isDirectory())
+            if(file.isDirectory() && showDirectory(user, file))
             {
                 Element dir=addNode("dir", "", file.getName(), edir);                
                 dir.setAttribute("path",file.getAbsolutePath());
                 dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(file)));                
             }
         }
+    }
+
+    public void hasPermissionFile(Element edir,Document src,User user)
+    {       
+        String path=SWBUtils.getApplicationPath();
+        if(src.getElementsByTagName("path").getLength()>0)
+        {
+            Element epath=(Element)src.getElementsByTagName("path").item(0);
+            Text etext=(Text)epath.getFirstChild();
+            path=etext.getNodeValue();
+        }
+        File file=new File(path);
+        Element dir=addNode("dir", "", file.getName(), edir);
+        dir.setAttribute("path",file.getAbsolutePath());
+        dir.setAttribute("permission",String.valueOf(hasPermission(user,file)));
     }
     
     /**
@@ -436,7 +473,7 @@ public class SWBAFTP extends GenericResource{
      * @param src the src
      * @return the directories
      */    
-    public void getDirectories(Element res,Document src)
+    public void getDirectories(Element res,Document src,User user)
     {
         String path=SWBUtils.getApplicationPath();
         if(src.getElementsByTagName("path").getLength()>0)
@@ -446,12 +483,12 @@ public class SWBAFTP extends GenericResource{
             path=etext.getNodeValue();            
         }
         File apppath=new File(path);
-        if(apppath.isDirectory())
+        if(apppath.isDirectory() && showDirectory(user, apppath))
         {
             Element dir=addNode("dir", "", apppath.getName(), res);
             dir.setAttribute("path",apppath.getAbsolutePath());
             dir.setAttribute("hasChild",String.valueOf(hasSubdirectories(apppath)));                
-            getDirectories(dir,apppath); 
+            getDirectories(dir,apppath,user);
         }
     }
     
@@ -468,7 +505,11 @@ public class SWBAFTP extends GenericResource{
             Element epath=(Element)src.getElementsByTagName("path").item(0);
             Text etext=(Text)epath.getFirstChild();
             String path=etext.getNodeValue();                         
-            File f=new File(path);                        
+            File f=new File(path);
+            if(!hasPermission(user, f))
+            {
+                return;
+            }
             if(f.mkdirs())
             {
                 try
@@ -511,7 +552,11 @@ public class SWBAFTP extends GenericResource{
             etext=(Text)ename.getFirstChild();
             String newname=etext.getNodeValue();
             File newfile=new File(newname);           
-            File f=new File(path);            
+            File f=new File(path);
+            if(!hasPermission(user, f))
+            {
+                return;
+            }
             if(!isProtected(f))
             {
                 if(f.renameTo(newfile))
@@ -580,30 +625,35 @@ public class SWBAFTP extends GenericResource{
      */    
     public boolean isProtected(File f)
     {
-        boolean isProtected=false;
         try
-        {         
-            
-            DataInputStream in=new DataInputStream(this.getClass().getResourceAsStream("/ftp.txt"));
-            String linea=in.readLine();
-            while(linea!=null)
+        {
+            String path=f.getCanonicalPath();
+            String appPath=new File(SWBUtils.getApplicationPath()).getCanonicalPath();
+            path=path.substring(appPath.length()).replace('\\','/');
+            for(String pathProhibited : prohibitedPaths)
             {
-                String path=SWBUtils.getApplicationPath()+"/"+linea;
-                File fp=new File(path);
-                if(fp.equals(f))
+                if(pathProhibited.endsWith("*"))
                 {
-                    isProtected=true;
+                    pathProhibited=pathProhibited.substring(0,pathProhibited.length()-1);
+                    if(path.startsWith(pathProhibited))
+                    {
+                        return true;
+                    }
                 }
-                linea=in.readLine();
+                else
+                {
+                    if(pathProhibited.equals(path))
+                    {
+                        return true;
+                    }
+                }
             }
-            in.close();
         }
         catch(Exception e)
         {
-           e.printStackTrace(System.out);
-           log.error(e);
+            log.error(e);
         }
-        return isProtected;
+        return false;
     }
     
     /**
@@ -619,7 +669,11 @@ public class SWBAFTP extends GenericResource{
             Element epath=(Element)src.getElementsByTagName("path").item(0);
             Text etext=(Text)epath.getFirstChild();
             String path=etext.getNodeValue();                                                
-            File f=new File(path);                        
+            File f=new File(path);
+            if(!hasPermission(user, f))
+            {
+                return;
+            }
             if(!isProtected(f))
             {                
                 if(f.delete())
@@ -650,7 +704,105 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("delete", "false", res);
     }
-    
+    public boolean hasPermission(User user, File directory)
+    {
+        UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
+        boolean permision=false;
+        if(su!=null && user.getAdminFilter()!=null || user.hasUserGroup(su))
+        {
+            permision=true;
+            if(user.getAdminFilter()!=null)
+            {
+                permision=false;
+                GenericIterator<AdminFilter> filters=user.listAdminFilters();
+                while(filters.hasNext())
+                {
+                    Document doc=filters.next().getDom();
+                    if(doc.getElementsByTagName("dirs").getLength()>0)
+                    {
+                        Element dirs=(Element)doc.getElementsByTagName("dirs").item(0);
+                        NodeList ldirs=dirs.getElementsByTagName("dir");
+                        for(int i=0;i<ldirs.getLength();i++)
+                        {
+                            try
+                            {
+                                if(ldirs.item(i) instanceof Element)
+                                {
+                                    Element edir=(Element)ldirs.item(i);
+                                    String pathPermission=edir.getAttribute("path");
+                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;
+                                    File filePermission=new File(pathPermission);
+                                    pathPermission=filePermission.getCanonicalPath();
+                                    String testPath=directory.getCanonicalPath();
+                                    if((pathPermission.equals(testPath) || testPath.startsWith(pathPermission)))
+                                    {
+                                        permision=true;
+                                        break;
+                                    }
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                log.error(e);
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+        return permision;
+    }
+
+    public boolean showDirectory(User user, File directory)
+    {
+        UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
+        boolean permision=false;
+        if(su!=null && user.getAdminFilter()!=null || user.hasUserGroup(su))
+        {
+            permision=true;
+            if(user.getAdminFilter()!=null)
+            {
+                permision=false;
+                GenericIterator<AdminFilter> filters=user.listAdminFilters();
+                while(filters.hasNext())
+                {
+                    Document doc=filters.next().getDom();
+                    if(doc.getElementsByTagName("dirs").getLength()>0)
+                    {
+                        Element dirs=(Element)doc.getElementsByTagName("dirs").item(0);
+                        NodeList ldirs=dirs.getElementsByTagName("dir");
+                        for(int i=0;i<ldirs.getLength();i++)
+                        {
+                            try
+                            {
+                                if(ldirs.item(i) instanceof Element)
+                                {
+                                    Element edir=(Element)ldirs.item(i);
+                                    String pathPermission=edir.getAttribute("path");
+                                    pathPermission=SWBUtils.getApplicationPath()+pathPermission;
+                                    File filePermission=new File(pathPermission);
+                                    pathPermission=filePermission.getCanonicalPath().replace('\\', '/')+"/";
+                                    String testPath=directory.getCanonicalPath().replace('\\', '/')+"/";
+                                    if(filePermission.isDirectory() && (pathPermission.startsWith(testPath) || testPath.startsWith(pathPermission)))
+                                    {
+                                        permision=true;
+                                        break;
+                                    }
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                log.error(e);
+                            }
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+        return permision;
+    }
     /**
      * Gets the files.
      * 
@@ -658,38 +810,42 @@ public class SWBAFTP extends GenericResource{
      * @param src the src
      * @return the files
      */    
-    public void getFiles(Element res,Document src)
-    {
+    public void getFiles(Element res,Document src,User user)
+    {     
         String path=SWBUtils.getApplicationPath();
         if(src.getElementsByTagName("path").getLength()>0)
         {
             Element epath=(Element)src.getElementsByTagName("path").item(0);
             Text etext=(Text)epath.getFirstChild();
-            path=etext.getNodeValue();            
+            path=etext.getNodeValue();
         }
-        java.text.SimpleDateFormat df=new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
-        
         File apppath=new File(path);
-        if(apppath.isDirectory())
+
+        if(hasPermission(user, apppath))
         {
-            File[] files=apppath.listFiles();
-            Vector vfiles=new Vector();
-            for(int i=0;i<files.length;i++)
+
+            if(apppath.isDirectory())
             {
-                vfiles.add(files[i]);
-            }
-            Collections.sort(vfiles);
-            Iterator itfiles=vfiles.iterator();
-            while(itfiles.hasNext())
-            {
-                File file=(File)itfiles.next();
-                if(file.isFile())
+                java.text.SimpleDateFormat simpleDateFormat=new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
+                File[] files=apppath.listFiles();
+                Vector<File> vfiles=new Vector();
+                for(File temp : files)
                 {
-                    Element efile=addNode("file", "", file.getName(), res);
-                    efile.setAttribute("path",file.getAbsolutePath());
-                    efile.setAttribute("size",String.valueOf(file.length()));
-                    java.sql.Date date=new java.sql.Date(file.lastModified());
-                    efile.setAttribute("lastupdate",df.format(date));
+                    vfiles.add(temp);
+                }
+                Collections.sort(vfiles);
+                Iterator itfiles=vfiles.iterator();
+                while(itfiles.hasNext())
+                {
+                    File file=(File)itfiles.next();
+                    if(file.isFile())
+                    {
+                        Element efile=addNode("file", "", file.getName(), res);
+                        efile.setAttribute("path",file.getAbsolutePath());
+                        efile.setAttribute("size",String.valueOf(file.length()));
+                        java.sql.Date date=new java.sql.Date(file.lastModified());
+                        efile.setAttribute("lastupdate",simpleDateFormat.format(date));
+                    }
                 }
             }
         }
@@ -716,11 +872,15 @@ public class SWBAFTP extends GenericResource{
             
             if(cmd.equals("getDirectories"))
             {
-                getDirectories(res,src);
+                getDirectories(res,src,user);
+            }
+            else if(cmd.equals("hasPermissionFile"))
+            {
+                hasPermissionFile(res,src,user);
             }
             else if(cmd.equals("getFiles"))
             {
-                getFiles(res,src);
+                getFiles(res,src,user);
             }
             else if(cmd.equals("delete"))
             {
