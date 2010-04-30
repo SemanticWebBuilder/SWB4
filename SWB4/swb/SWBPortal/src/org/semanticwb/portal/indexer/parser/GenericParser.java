@@ -424,7 +424,7 @@ public class GenericParser
      * @return  String type label of the {@link Searchable} object. String con
      *          la etiqueta para el tipo del objeto {@link Searchable}.
      */
-    public String getTypeDisplayLabel() {
+    public String getTypeDisplayLabel(Searchable gen) {
         return "Genérico";
 
     }
