@@ -662,7 +662,9 @@ public class Modeler extends GenericResource
 
         out.println("<div class=\"applet\">");
         //out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\"/test.html\" height=\"1q00%\" width=\"100%\" ></IFRAME>");
-        out.println("<IFRAME alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" src=\""+urlapp+"\" width=\"100%\" height=\"100%\"></IFRAME>");
+        // onload="this.style.height = ifr.document.body.scrollHeight + 5
+        String idframe = "ifr_"+getResourceBase().getId();
+        out.println("<iframe alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" name==\""+idframe+"\" id=\""+idframe+"\" src=\""+urlapp+"\" width=\"100%\" onload=\"this.style.height = "+idframe+".document.body.scrollHeight + 5\" ></iframe>"); //height=\"100%\"
         out.println("</div>");
     }
 
