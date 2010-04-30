@@ -138,4 +138,9 @@ public abstract class MessageBase extends org.semanticwb.process.model.BPMNBaseE
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

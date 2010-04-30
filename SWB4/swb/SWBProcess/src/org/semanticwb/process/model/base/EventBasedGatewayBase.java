@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EventBasedGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Instantiable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class EventBasedGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Instantiable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_eventGatewayType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#eventGatewayType");
     public static final org.semanticwb.platform.SemanticClass swp_EventBasedGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EventBasedGateway");
@@ -156,5 +156,10 @@ public abstract class EventBasedGatewayBase extends org.semanticwb.process.model
     public void setEventGatewayType(String value)
     {
         getSemanticObject().setProperty(swp_eventGatewayType, value);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

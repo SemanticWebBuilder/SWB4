@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.Collapsable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.FlowElementsContainerable,org.semanticwb.process.model.IOSpecificable
+public abstract class ProcessBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.FlowElementsContainerable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Collapsable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Process");
     public static final org.semanticwb.platform.SemanticProperty swp_hasSupportedProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasSupportedProcess");
@@ -699,5 +699,10 @@ public abstract class ProcessBase extends org.semanticwb.process.model.BPMNBaseE
              ret=(org.semanticwb.process.model.Monitoring)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

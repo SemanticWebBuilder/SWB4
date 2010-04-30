@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class BoundaryEventBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataOutputReferensable
+public abstract class BoundaryEventBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.process.model.DataOutputReferensable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_cancelActivity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#cancelActivity");
     public static final org.semanticwb.platform.SemanticClass swp_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Activity");
@@ -253,5 +253,10 @@ public abstract class BoundaryEventBase extends org.semanticwb.process.model.Cat
              ret=(org.semanticwb.process.model.Activity)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CallChoreographyActivityBase extends org.semanticwb.process.model.ChoreographyActivity implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.ParticipantAssociable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable
+public abstract class CallChoreographyActivityBase extends org.semanticwb.process.model.ChoreographyActivity implements org.semanticwb.process.model.ParticipantAssociable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CallChoreographyActivity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#CallChoreographyActivity");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#CallChoreographyActivity");
@@ -384,5 +384,10 @@ public abstract class CallChoreographyActivityBase extends org.semanticwb.proces
              ret=(org.semanticwb.process.model.Callable)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

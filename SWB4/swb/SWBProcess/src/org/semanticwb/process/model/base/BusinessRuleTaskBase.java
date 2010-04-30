@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.Implementable,org.semanticwb.process.model.IOSpecificable
+public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.Task implements org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Implementable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_BusinessRuleTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#BusinessRuleTask");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#BusinessRuleTask");
@@ -253,5 +253,10 @@ public abstract class BusinessRuleTaskBase extends org.semanticwb.process.model.
     public void setImplementation(String value)
     {
         getSemanticObject().setProperty(swp_implementation, value);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

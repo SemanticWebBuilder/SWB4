@@ -74,4 +74,9 @@ public abstract class ParticipantMultiplicityBase extends org.semanticwb.process
     {
         getSemanticObject().setIntProperty(swp_maximum, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

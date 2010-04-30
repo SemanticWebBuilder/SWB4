@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ParticipantBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable
+public abstract class ParticipantBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_EndPoint=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EndPoint");
     public static final org.semanticwb.platform.SemanticProperty swp_hasEndPointRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasEndPointRef");
@@ -348,5 +348,10 @@ public abstract class ParticipantBase extends org.semanticwb.process.model.BPMNB
              ret=(org.semanticwb.process.model.ProcessInterface)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

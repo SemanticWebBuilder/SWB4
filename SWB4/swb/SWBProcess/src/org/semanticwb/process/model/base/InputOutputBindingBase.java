@@ -155,4 +155,9 @@ public abstract class InputOutputBindingBase extends org.semanticwb.process.mode
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

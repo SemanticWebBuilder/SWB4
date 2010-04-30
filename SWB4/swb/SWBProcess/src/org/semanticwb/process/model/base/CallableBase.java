@@ -1,6 +1,6 @@
 package org.semanticwb.process.model.base;
 
-public interface CallableBase extends org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable
+public interface CallableBase extends org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_InputOutputBinding=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#InputOutputBinding");
     public static final org.semanticwb.platform.SemanticProperty swp_hasIOBinding=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasIOBinding");

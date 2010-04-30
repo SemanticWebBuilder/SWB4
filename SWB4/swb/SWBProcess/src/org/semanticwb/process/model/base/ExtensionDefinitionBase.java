@@ -157,4 +157,9 @@ public abstract class ExtensionDefinitionBase extends org.semanticwb.process.mod
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

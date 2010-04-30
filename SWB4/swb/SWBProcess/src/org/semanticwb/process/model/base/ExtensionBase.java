@@ -92,4 +92,9 @@ public abstract class ExtensionBase extends org.semanticwb.process.model.BPMNEle
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

@@ -124,4 +124,9 @@ public abstract class PotentialOwnerBase extends org.semanticwb.process.model.Hu
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

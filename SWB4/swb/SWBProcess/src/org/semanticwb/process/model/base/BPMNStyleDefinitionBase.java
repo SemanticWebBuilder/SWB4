@@ -96,4 +96,9 @@ public abstract class BPMNStyleDefinitionBase extends org.semanticwb.process.mod
     {
         getSemanticObject().setIntProperty(swp_x, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

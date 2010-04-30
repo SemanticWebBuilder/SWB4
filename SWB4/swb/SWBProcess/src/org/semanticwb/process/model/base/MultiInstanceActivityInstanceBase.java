@@ -106,4 +106,9 @@ public abstract class MultiInstanceActivityInstanceBase extends org.semanticwb.p
     {
         getSemanticObject().setIntProperty(swp_loopCounter, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

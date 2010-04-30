@@ -143,4 +143,9 @@ public abstract class CategoryBase extends org.semanticwb.process.model.BPMNBase
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

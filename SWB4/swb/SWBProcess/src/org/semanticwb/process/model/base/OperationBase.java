@@ -242,4 +242,9 @@ public abstract class OperationBase extends org.semanticwb.process.model.BPMNBas
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.IOSpecificable
+public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_startQuantity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#startQuantity");
     public static final org.semanticwb.platform.SemanticClass swp_ActivityResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ActivityResource");
@@ -571,5 +571,10 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
              ret=(org.semanticwb.process.model.DataInputAssociation)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

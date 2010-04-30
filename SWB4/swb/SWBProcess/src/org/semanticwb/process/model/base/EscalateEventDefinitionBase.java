@@ -134,4 +134,9 @@ public abstract class EscalateEventDefinitionBase extends org.semanticwb.process
     {
         getSemanticObject().setProperty(swp_escalationCode, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

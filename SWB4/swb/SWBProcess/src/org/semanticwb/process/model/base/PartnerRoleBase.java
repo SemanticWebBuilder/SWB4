@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PartnerRoleBase extends org.semanticwb.process.model.Participant implements org.semanticwb.process.model.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable
+public abstract class PartnerRoleBase extends org.semanticwb.process.model.Participant implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
     public static final org.semanticwb.platform.SemanticProperty swp_role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#role");
@@ -182,5 +182,10 @@ public abstract class PartnerRoleBase extends org.semanticwb.process.model.Parti
              ret=(org.semanticwb.model.Role)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

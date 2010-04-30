@@ -88,4 +88,9 @@ public abstract class LoopCharacteristicsBase extends org.semanticwb.process.mod
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

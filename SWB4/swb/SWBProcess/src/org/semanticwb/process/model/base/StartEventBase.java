@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class StartEventBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataOutputReferensable
+public abstract class StartEventBase extends org.semanticwb.process.model.CatchEvent implements org.semanticwb.process.model.DataOutputReferensable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_interrupting=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#interrupting");
     public static final org.semanticwb.platform.SemanticClass swp_StartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#StartEvent");
@@ -218,5 +218,10 @@ public abstract class StartEventBase extends org.semanticwb.process.model.CatchE
     public void setInterrupting(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_interrupting, value);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

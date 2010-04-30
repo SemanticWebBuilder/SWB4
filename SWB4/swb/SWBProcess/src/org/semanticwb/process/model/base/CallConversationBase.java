@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CallConversationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.ParticipantAssociable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable
+public abstract class CallConversationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.ParticipantAssociable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_CallConversation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#CallConversation");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#CallConversation");
@@ -324,5 +324,10 @@ public abstract class CallConversationBase extends org.semanticwb.process.model.
              ret=(org.semanticwb.process.model.InputOutputSpecification)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

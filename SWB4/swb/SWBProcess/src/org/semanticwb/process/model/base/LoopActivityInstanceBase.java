@@ -56,4 +56,9 @@ public abstract class LoopActivityInstanceBase extends org.semanticwb.process.mo
     {
         getSemanticObject().setIntProperty(swp_loopCounter, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

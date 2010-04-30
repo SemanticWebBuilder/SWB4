@@ -189,4 +189,9 @@ public abstract class CategoryValueBase extends org.semanticwb.process.model.BPM
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

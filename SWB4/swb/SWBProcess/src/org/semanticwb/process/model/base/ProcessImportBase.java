@@ -85,4 +85,9 @@ public abstract class ProcessImportBase extends org.semanticwb.process.model.BPM
     {
         getSemanticObject().setProperty(swp_namespace, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

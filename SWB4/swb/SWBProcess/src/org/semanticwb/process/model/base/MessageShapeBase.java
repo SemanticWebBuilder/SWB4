@@ -64,4 +64,9 @@ public abstract class MessageShapeBase extends org.semanticwb.process.model.Flow
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

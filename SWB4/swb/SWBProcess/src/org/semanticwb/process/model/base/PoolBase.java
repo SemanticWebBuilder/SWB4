@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PoolBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Messageable,org.semanticwb.process.model.Documentable
+public abstract class PoolBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Pool=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Pool");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Pool");
@@ -120,5 +120,10 @@ public abstract class PoolBase extends org.semanticwb.process.model.BPMNBaseElem
              ret=(org.semanticwb.process.model.Message)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

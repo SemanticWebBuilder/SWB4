@@ -88,4 +88,9 @@ public abstract class AuditingBase extends org.semanticwb.process.model.BPMNBase
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

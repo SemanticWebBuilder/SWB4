@@ -64,4 +64,9 @@ public abstract class DataObjectShapeBase extends org.semanticwb.process.model.F
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }
