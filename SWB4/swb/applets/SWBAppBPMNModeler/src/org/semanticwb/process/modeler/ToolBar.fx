@@ -53,7 +53,7 @@ public class ToolBar extends CustomNode
     var dx : Number;                        //temporal drag x
     var dy : Number;                        //temporal drag y
 
-    var isApplet:Boolean=false;
+    var isApplet:Boolean=FX.getArgument(WBConnection.PRM_CGIPATH).toString()!=null;
 
     var fileChooser = javax.swing.JFileChooser{};
     var imageFileChooser = javax.swing.JFileChooser{};
@@ -108,8 +108,8 @@ public class ToolBar extends CustomNode
 
     public function saveProcess(): Void
     {
-        //fileChooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showSaveDialog(null) == javax.swing.JFileChooser.APPROVE_OPTION)
+        {
             var file = fileChooser.getSelectedFile();
             if(not file.getName().toLowerCase().endsWith("swp"))
             {
@@ -427,7 +427,25 @@ public class ToolBar extends CustomNode
                     {
                         ModelerUtils.clickedNode=null;
                         modeler.disablePannable=false;
-                        saveProcess();
+                        if(isApplet)
+                        {
+                            storeProcess();
+                        }else
+                        {
+                            saveProcess();
+                        }
+                    }
+                },
+                ImgButton {
+                    text:"Save As Image"
+                    toolBar:this;
+                    image: "images/file_saveasimage1.png"
+                    imageOver: "images/file_saveasimage2.png"
+                    action: function():Void
+                    {
+                        ModelerUtils.clickedNode=null;
+                        modeler.disablePannable=false;
+                        saveAsImage();
                     }
                 },
                 ImgButton {
@@ -456,18 +474,6 @@ public class ToolBar extends CustomNode
                         modeler.containerElement=aux;
                         print.print(arr);
                         //TODO:
-                    }
-                },
-                ImgButton {
-                    text:"Save As Image"
-                    toolBar:this;
-                    image: "images/file_saveasimage1.png"
-                    imageOver: "images/file_saveasimage2.png"
-                    action: function():Void
-                    {
-                        ModelerUtils.clickedNode=null;
-                        modeler.disablePannable=false;
-                        saveAsImage();
                     }
                 },
                 ImgButton {
