@@ -284,6 +284,19 @@ public abstract class SWBIndexer
     }
 
     /**
+     * Un-Registers the {@link Searchable} parser of a given Class. It
+     * implies that the {@link Searchable} objects of the given class will not
+     * be indexed anymore until its parser is registered again.
+     * @param cls Java class of the {@link Searchable} object.
+     * TODO:Checar con Jei la conveniencia de este método
+     */
+    public void unRegisterParser(Class cls) {
+        if (m_parsers.get(cls) != null) {
+            m_parsers.remove(cls);
+        }
+    }
+
+    /**
      * Gets the parser associated to the specified {@link Searchable} object.
      * @param obj {@link Searchable} object to get parser for.
      * @return {@link GenericParser} for the {@link Searchable} object.
