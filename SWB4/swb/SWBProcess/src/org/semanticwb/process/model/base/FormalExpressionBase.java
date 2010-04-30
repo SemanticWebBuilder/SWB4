@@ -110,4 +110,9 @@ public abstract class FormalExpressionBase extends org.semanticwb.process.model.
     {
         getSemanticObject().setProperty(swp_body, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

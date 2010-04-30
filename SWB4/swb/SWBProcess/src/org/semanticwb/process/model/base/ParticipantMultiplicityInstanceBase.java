@@ -57,4 +57,9 @@ public abstract class ParticipantMultiplicityInstanceBase extends org.semanticwb
     {
         getSemanticObject().setIntProperty(swp_numParticipants, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

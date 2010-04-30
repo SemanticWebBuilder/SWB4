@@ -57,4 +57,9 @@ public abstract class ActivityInstanceBase extends org.semanticwb.process.model.
     {
         getSemanticObject().setProperty(swp_activityState, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

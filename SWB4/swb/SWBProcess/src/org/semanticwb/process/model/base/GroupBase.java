@@ -123,4 +123,9 @@ public abstract class GroupBase extends org.semanticwb.process.model.Artifact im
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

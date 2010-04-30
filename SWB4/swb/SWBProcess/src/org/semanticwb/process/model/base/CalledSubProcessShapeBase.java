@@ -84,4 +84,9 @@ public abstract class CalledSubProcessShapeBase extends org.semanticwb.process.m
     {
         getSemanticObject().setBooleanProperty(swp_collapsed, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

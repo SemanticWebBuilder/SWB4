@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GlobalBusinessRuleTaskBase extends org.semanticwb.process.model.GlobalTask implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable
+public abstract class GlobalBusinessRuleTaskBase extends org.semanticwb.process.model.GlobalTask implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_GlobalBusinessRuleTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalBusinessRuleTask");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalBusinessRuleTask");
@@ -135,5 +135,10 @@ public abstract class GlobalBusinessRuleTaskBase extends org.semanticwb.process.
     public GlobalBusinessRuleTaskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

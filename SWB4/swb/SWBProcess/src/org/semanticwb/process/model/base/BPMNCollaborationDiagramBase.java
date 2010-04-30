@@ -152,4 +152,9 @@ public abstract class BPMNCollaborationDiagramBase extends org.semanticwb.proces
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

@@ -88,4 +88,9 @@ public abstract class SignalBase extends org.semanticwb.process.model.BPMNBaseEl
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

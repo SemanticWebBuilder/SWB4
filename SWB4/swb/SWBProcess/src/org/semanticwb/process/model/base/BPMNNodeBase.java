@@ -110,4 +110,9 @@ public abstract class BPMNNodeBase extends org.semanticwb.model.base.GenericObje
     {
         return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

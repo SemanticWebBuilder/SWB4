@@ -124,4 +124,9 @@ public abstract class HumanPerformerBase extends org.semanticwb.process.model.Pe
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

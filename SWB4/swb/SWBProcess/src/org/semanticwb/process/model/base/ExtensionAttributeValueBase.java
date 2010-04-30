@@ -124,4 +124,9 @@ public abstract class ExtensionAttributeValueBase extends org.semanticwb.process
          ret=getSemanticObject().getObjectProperty(swp_attributeValueRef);
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

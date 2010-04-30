@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RelationshipBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class RelationshipBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass owl_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Class");
     public static final org.semanticwb.platform.SemanticProperty swp_hasTarget=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasTarget");
@@ -218,5 +218,10 @@ public abstract class RelationshipBase extends org.semanticwb.process.model.BPMN
          org.semanticwb.platform.SemanticObject ret=null;
          ret=getSemanticObject().getObjectProperty(swp_hasSource);
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

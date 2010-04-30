@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GlobalCommunicationBase extends org.semanticwb.model.base.GenericObjectBase implements org.semanticwb.process.model.MessageFlowable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Interactable,org.semanticwb.process.model.MultipleCorrelationKeyReferensable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable
+public abstract class GlobalCommunicationBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Interactable,org.semanticwb.process.model.MultipleCorrelationKeyReferensable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.MessageFlowable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_GlobalCommunication=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalCommunication");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalCommunication");
@@ -321,47 +321,6 @@ public abstract class GlobalCommunicationBase extends org.semanticwb.model.base.
          return ret;
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Documentation> listDocumentations()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Documentation>(getSemanticObject().listObjectProperties(swp_hasDocumentation));
-    }
-
-    public boolean hasDocumentation(org.semanticwb.process.model.Documentation value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasDocumentation,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-    public void addDocumentation(org.semanticwb.process.model.Documentation value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasDocumentation, value.getSemanticObject());
-    }
-
-    public void removeAllDocumentation()
-    {
-        getSemanticObject().removeProperty(swp_hasDocumentation);
-    }
-
-    public void removeDocumentation(org.semanticwb.process.model.Documentation value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasDocumentation,value.getSemanticObject());
-    }
-
-    public org.semanticwb.process.model.Documentation getDocumentation()
-    {
-         org.semanticwb.process.model.Documentation ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasDocumentation);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.Documentation)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
     public void setCalledElement(org.semanticwb.process.model.Callable value)
     {
         getSemanticObject().setObjectProperty(swp_calledElement, value.getSemanticObject());
@@ -445,18 +404,6 @@ public abstract class GlobalCommunicationBase extends org.semanticwb.model.base.
          return ret;
     }
 
-    public boolean isValid()
-    {
-        //Override this method in GlobalCommunication object
-        return getSemanticObject().getBooleanProperty(swb_valid,false);
-    }
-
-    public void setValid(boolean value)
-    {
-        //Override this method in GlobalCommunication object
-        getSemanticObject().setBooleanProperty(swb_valid, value,false);
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CorrelationKey> listCorrelationKeys()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.CorrelationKey>(getSemanticObject().listObjectProperties(swp_hasCorrelationKey));
@@ -498,47 +445,6 @@ public abstract class GlobalCommunicationBase extends org.semanticwb.model.base.
          return ret;
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ExtensionDefinition> listExtensionDefinitions()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ExtensionDefinition>(getSemanticObject().listObjectProperties(swp_hasExtensionDefinition));
-    }
-
-    public boolean hasExtensionDefinition(org.semanticwb.process.model.ExtensionDefinition value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasExtensionDefinition,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-    public void addExtensionDefinition(org.semanticwb.process.model.ExtensionDefinition value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasExtensionDefinition, value.getSemanticObject());
-    }
-
-    public void removeAllExtensionDefinition()
-    {
-        getSemanticObject().removeProperty(swp_hasExtensionDefinition);
-    }
-
-    public void removeExtensionDefinition(org.semanticwb.process.model.ExtensionDefinition value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasExtensionDefinition,value.getSemanticObject());
-    }
-
-    public org.semanticwb.process.model.ExtensionDefinition getExtensionDefinition()
-    {
-         org.semanticwb.process.model.ExtensionDefinition ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasExtensionDefinition);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ExtensionDefinition)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
@@ -564,54 +470,8 @@ public abstract class GlobalCommunicationBase extends org.semanticwb.model.base.
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ExtensionAttributeValue> listExtensionValues()
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ExtensionAttributeValue>(getSemanticObject().listObjectProperties(swp_hasExtensionValue));
-    }
-
-    public boolean hasExtensionValue(org.semanticwb.process.model.ExtensionAttributeValue value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swp_hasExtensionValue,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-    public void addExtensionValue(org.semanticwb.process.model.ExtensionAttributeValue value)
-    {
-        getSemanticObject().addObjectProperty(swp_hasExtensionValue, value.getSemanticObject());
-    }
-
-    public void removeAllExtensionValue()
-    {
-        getSemanticObject().removeProperty(swp_hasExtensionValue);
-    }
-
-    public void removeExtensionValue(org.semanticwb.process.model.ExtensionAttributeValue value)
-    {
-        getSemanticObject().removeObjectProperty(swp_hasExtensionValue,value.getSemanticObject());
-    }
-
-    public org.semanticwb.process.model.ExtensionAttributeValue getExtensionValue()
-    {
-         org.semanticwb.process.model.ExtensionAttributeValue ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasExtensionValue);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.process.model.ExtensionAttributeValue)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public void remove()
-    {
-        getSemanticObject().remove();
-    }
-
-    public java.util.Iterator<org.semanticwb.model.GenericObject> listRelatedObjects()
-    {
-        return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

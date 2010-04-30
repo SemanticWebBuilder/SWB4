@@ -58,4 +58,9 @@ public abstract class FlowNodeShapeBase extends org.semanticwb.process.model.BPM
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

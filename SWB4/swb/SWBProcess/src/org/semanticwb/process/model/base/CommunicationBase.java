@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class CommunicationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.MessageFlowReferensable,org.semanticwb.process.model.CorrelationKeyReferensable
+public abstract class CommunicationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.MessageFlowReferensable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.CorrelationKeyReferensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Communication=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Communication");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Communication");
@@ -185,5 +185,10 @@ public abstract class CommunicationBase extends org.semanticwb.process.model.Con
              ret=(org.semanticwb.process.model.CorrelationKey)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

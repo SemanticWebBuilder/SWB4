@@ -82,4 +82,9 @@ public abstract class TerminateEventDefinitionBase extends org.semanticwb.proces
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

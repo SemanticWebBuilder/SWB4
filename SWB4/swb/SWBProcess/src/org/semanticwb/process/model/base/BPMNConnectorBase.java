@@ -208,4 +208,9 @@ public abstract class BPMNConnectorBase extends org.semanticwb.model.base.Generi
     {
         return new org.semanticwb.model.GenericIterator(getSemanticObject().listRelatedObjects(),true);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

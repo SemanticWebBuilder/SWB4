@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PartnerEntityBase extends org.semanticwb.process.model.Participant implements org.semanticwb.process.model.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable
+public abstract class PartnerEntityBase extends org.semanticwb.process.model.Participant implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.ProcessReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_PartnerEntity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#PartnerEntity");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#PartnerEntity");
@@ -147,5 +147,10 @@ public abstract class PartnerEntityBase extends org.semanticwb.process.model.Par
     public PartnerEntityBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

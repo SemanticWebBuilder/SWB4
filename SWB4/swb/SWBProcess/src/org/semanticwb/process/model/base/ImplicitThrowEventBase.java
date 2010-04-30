@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ImplicitThrowEventBase extends org.semanticwb.process.model.ThrowEvent implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.DataInputReferensable,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataInputAssociable
+public abstract class ImplicitThrowEventBase extends org.semanticwb.process.model.ThrowEvent implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.EventDefinible,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.DataInputReferensable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ImplicitThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ImplicitThrowEvent");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ImplicitThrowEvent");
@@ -207,5 +207,10 @@ public abstract class ImplicitThrowEventBase extends org.semanticwb.process.mode
     public ImplicitThrowEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

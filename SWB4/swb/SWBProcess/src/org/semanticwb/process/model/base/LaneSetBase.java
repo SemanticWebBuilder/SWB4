@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneSetBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Laneable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class LaneSetBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Laneable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Lane");
     public static final org.semanticwb.platform.SemanticProperty swp_parentLane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#parentLane");
@@ -225,5 +225,10 @@ public abstract class LaneSetBase extends org.semanticwb.process.model.BPMNBaseE
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

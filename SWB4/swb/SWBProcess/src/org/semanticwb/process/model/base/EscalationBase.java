@@ -46,4 +46,9 @@ public abstract class EscalationBase extends org.semanticwb.process.model.BPMNEl
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

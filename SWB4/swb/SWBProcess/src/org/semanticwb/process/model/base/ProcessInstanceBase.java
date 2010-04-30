@@ -57,4 +57,9 @@ public abstract class ProcessInstanceBase extends org.semanticwb.process.model.B
     {
         getSemanticObject().setProperty(swp_processState, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ChoreographyTaskBase extends org.semanticwb.process.model.ChoreographyActivity implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.MessageFlowable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ParticipantReferensable
+public abstract class ChoreographyTaskBase extends org.semanticwb.process.model.ChoreographyActivity implements org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.MessageFlowable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ChoreographyTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ChoreographyTask");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ChoreographyTask");
@@ -212,5 +212,10 @@ public abstract class ChoreographyTaskBase extends org.semanticwb.process.model.
              ret=(org.semanticwb.process.model.MessageFlow)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DefaultFlowBase extends org.semanticwb.process.model.SequenceFlow implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class DefaultFlowBase extends org.semanticwb.process.model.SequenceFlow implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable
 {
     public static final org.semanticwb.platform.SemanticClass swp_DefaultFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#DefaultFlow");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#DefaultFlow");
@@ -135,5 +135,10 @@ public abstract class DefaultFlowBase extends org.semanticwb.process.model.Seque
     public DefaultFlowBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

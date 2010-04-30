@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ComplexBehaviorDefinitionBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Conditionable
+public abstract class ComplexBehaviorDefinitionBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Conditionable,org.semanticwb.process.model.Documentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_ImplicitThrowEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ImplicitThrowEvent");
     public static final org.semanticwb.platform.SemanticProperty swp_event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#event");
@@ -155,5 +155,10 @@ public abstract class ComplexBehaviorDefinitionBase extends org.semanticwb.proce
              ret=(org.semanticwb.process.model.ImplicitThrowEvent)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

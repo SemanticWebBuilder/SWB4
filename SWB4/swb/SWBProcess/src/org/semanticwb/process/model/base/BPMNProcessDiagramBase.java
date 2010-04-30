@@ -117,4 +117,9 @@ public abstract class BPMNProcessDiagramBase extends org.semanticwb.process.mode
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

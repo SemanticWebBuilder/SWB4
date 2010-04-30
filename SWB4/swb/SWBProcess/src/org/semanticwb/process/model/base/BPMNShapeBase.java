@@ -64,4 +64,9 @@ public abstract class BPMNShapeBase extends org.semanticwb.process.model.BPMNNod
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

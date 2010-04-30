@@ -46,4 +46,9 @@ public abstract class BPMNInstanceBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

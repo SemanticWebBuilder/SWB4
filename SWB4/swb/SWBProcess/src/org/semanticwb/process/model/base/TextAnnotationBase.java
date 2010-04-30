@@ -99,4 +99,9 @@ public abstract class TextAnnotationBase extends org.semanticwb.process.model.Ar
     {
         getSemanticObject().setProperty(swp_annotationText, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

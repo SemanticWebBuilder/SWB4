@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageFlowBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class MessageFlowBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Messageable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Messageable");
     public static final org.semanticwb.platform.SemanticProperty swp_flowTargetRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#flowTargetRef");
@@ -239,5 +239,10 @@ public abstract class MessageFlowBase extends org.semanticwb.process.model.BPMNB
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

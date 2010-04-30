@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class MessageEventDefinitionBase extends org.semanticwb.process.model.EventDefinition implements org.semanticwb.process.model.Messageable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.OperationReferensable
+public abstract class MessageEventDefinitionBase extends org.semanticwb.process.model.EventDefinition implements org.semanticwb.process.model.OperationReferensable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticClass swp_MessageEventDefinition=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#MessageEventDefinition");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#MessageEventDefinition");
@@ -153,5 +153,10 @@ public abstract class MessageEventDefinitionBase extends org.semanticwb.process.
              ret=(org.semanticwb.process.model.Message)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

@@ -124,4 +124,9 @@ public abstract class ExtensionAttributeDefinitionBase extends org.semanticwb.pr
     {
         getSemanticObject().setBooleanProperty(swp_reference, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

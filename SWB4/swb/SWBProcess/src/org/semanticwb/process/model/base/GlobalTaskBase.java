@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GlobalTaskBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable
+public abstract class GlobalTaskBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Callable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_GlobalTask=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalTask");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#GlobalTask");
@@ -309,5 +309,10 @@ public abstract class GlobalTaskBase extends org.semanticwb.process.model.BPMNBa
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

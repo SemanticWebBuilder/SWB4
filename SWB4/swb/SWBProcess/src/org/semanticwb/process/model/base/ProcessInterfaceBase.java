@@ -248,4 +248,9 @@ public abstract class ProcessInterfaceBase extends org.semanticwb.process.model.
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

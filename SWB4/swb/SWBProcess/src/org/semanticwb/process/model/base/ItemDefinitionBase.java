@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ItemDefinitionBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable,org.semanticwb.process.model.Collectionable
+public abstract class ItemDefinitionBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Collectionable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_itemKind=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#itemKind");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessImport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#ProcessImport");
@@ -143,5 +143,10 @@ public abstract class ItemDefinitionBase extends org.semanticwb.process.model.BP
     public void setCollection(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_collection, value);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

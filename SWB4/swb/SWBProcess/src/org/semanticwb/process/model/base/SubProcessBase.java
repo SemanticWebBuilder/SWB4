@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.Messageable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.FlowElementsContainerable,org.semanticwb.process.model.IOSpecificable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.FlowElementsContainerable,org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.Propertyable,org.semanticwb.process.model.IOSpecificable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputAssociable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.DataInputAssociable,org.semanticwb.process.model.Messageable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_triggeredByEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#triggeredByEvent");
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#SubProcess");
@@ -360,5 +360,10 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
              ret=(org.semanticwb.process.model.FlowElement)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

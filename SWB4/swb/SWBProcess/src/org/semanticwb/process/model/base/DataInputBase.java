@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataInputBase extends org.semanticwb.process.model.DataObject implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.InformationAssociable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable
+public abstract class DataInputBase extends org.semanticwb.process.model.DataObject implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.InformationAssociable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticClass swp_InputSet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#InputSet");
     public static final org.semanticwb.platform.SemanticProperty swp_hasInputSetWithWhileExecuting=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasInputSetWithWhileExecuting");
@@ -232,5 +232,10 @@ public abstract class DataInputBase extends org.semanticwb.process.model.DataObj
              ret=(org.semanticwb.process.model.InputSet)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

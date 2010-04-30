@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubConversationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.MultipleCorrelationKeyReferensable,org.semanticwb.process.model.ParticipantReferensable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Conversationable
+public abstract class SubConversationBase extends org.semanticwb.process.model.ConversationNode implements org.semanticwb.process.model.Artifactable,org.semanticwb.process.model.Conversationable,org.semanticwb.process.model.MultipleCorrelationKeyReferensable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ParticipantReferensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubConversation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#SubConversation");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#SubConversation");
@@ -258,5 +258,10 @@ public abstract class SubConversationBase extends org.semanticwb.process.model.C
              ret=(org.semanticwb.process.model.CorrelationKey)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

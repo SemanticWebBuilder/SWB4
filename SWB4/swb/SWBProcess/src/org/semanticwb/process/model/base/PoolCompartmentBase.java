@@ -117,4 +117,9 @@ public abstract class PoolCompartmentBase extends org.semanticwb.process.model.B
          }
          return ret;
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

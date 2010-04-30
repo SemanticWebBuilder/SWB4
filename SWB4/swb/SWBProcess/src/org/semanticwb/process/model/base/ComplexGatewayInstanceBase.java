@@ -68,4 +68,9 @@ public abstract class ComplexGatewayInstanceBase extends org.semanticwb.process.
     {
         getSemanticObject().setBooleanProperty(swp_waitingForStart, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

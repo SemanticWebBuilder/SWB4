@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ConversationAssociationBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.MessageFlowReferensable,org.semanticwb.process.model.CorrelationKeyReferensable
+public abstract class ConversationAssociationBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.MessageFlowReferensable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.CorrelationKeyReferensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Conversation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Conversation");
     public static final org.semanticwb.platform.SemanticProperty swp_conversationRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#conversationRef");
@@ -208,5 +208,10 @@ public abstract class ConversationAssociationBase extends org.semanticwb.process
              ret=(org.semanticwb.process.model.CorrelationKey)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

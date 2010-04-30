@@ -145,4 +145,9 @@ public abstract class StandardLoopCharacteristicsBase extends org.semanticwb.pro
     {
         getSemanticObject().setIntProperty(swp_loopMaximum, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class PropertyBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.InformationAssociable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class PropertyBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.InformationAssociable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Property");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#Property");

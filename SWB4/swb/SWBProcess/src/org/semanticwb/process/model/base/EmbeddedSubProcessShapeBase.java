@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class EmbeddedSubProcessShapeBase extends org.semanticwb.process.model.ActivityShape implements org.semanticwb.process.model.Collapsable,org.semanticwb.process.model.LaneCompartmentable,org.semanticwb.process.model.DiagramLinkable
+public abstract class EmbeddedSubProcessShapeBase extends org.semanticwb.process.model.ActivityShape implements org.semanticwb.process.model.Collapsable,org.semanticwb.process.model.DiagramLinkable,org.semanticwb.process.model.LaneCompartmentable
 {
     public static final org.semanticwb.platform.SemanticClass swp_EmbeddedSubProcessShape=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EmbeddedSubProcessShape");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#EmbeddedSubProcessShape");
@@ -136,5 +136,10 @@ public abstract class EmbeddedSubProcessShapeBase extends org.semanticwb.process
     public void setCollapsed(boolean value)
     {
         getSemanticObject().setBooleanProperty(swp_collapsed, value);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

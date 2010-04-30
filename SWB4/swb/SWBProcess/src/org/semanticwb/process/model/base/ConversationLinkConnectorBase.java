@@ -94,4 +94,9 @@ public abstract class ConversationLinkConnectorBase extends org.semanticwb.proce
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

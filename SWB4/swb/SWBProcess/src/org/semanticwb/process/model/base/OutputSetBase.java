@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class OutputSetBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.DataOutputReferensable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.InputSetReferensable
+public abstract class OutputSetBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.DataOutputReferensable,org.semanticwb.process.model.InputSetReferensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_DataOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#DataOutput");
     public static final org.semanticwb.platform.SemanticProperty swp_hasOptionalOutput=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#hasOptionalOutput");
@@ -302,5 +302,10 @@ public abstract class OutputSetBase extends org.semanticwb.process.model.BPMNBas
              ret=(org.semanticwb.process.model.DataOutput)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

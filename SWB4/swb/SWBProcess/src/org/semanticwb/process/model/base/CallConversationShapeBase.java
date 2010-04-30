@@ -64,4 +64,9 @@ public abstract class CallConversationShapeBase extends org.semanticwb.process.m
     {
         super(base);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

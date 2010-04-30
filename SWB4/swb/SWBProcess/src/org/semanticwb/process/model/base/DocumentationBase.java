@@ -99,4 +99,9 @@ public abstract class DocumentationBase extends org.semanticwb.process.model.BPM
     {
         getSemanticObject().setProperty(swp_docText, value);
     }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+    }
 }

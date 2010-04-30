@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class InclusiveGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.process.model.Auditable,org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.Monitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Documentable
+public abstract class InclusiveGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.process.model.DefaultFlowable,org.semanticwb.process.model.Documentable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Auditable,org.semanticwb.process.model.Monitorable
 {
     public static final org.semanticwb.platform.SemanticClass swp_InclusiveGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#InclusiveGateway");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swp#InclusiveGateway");
@@ -168,5 +168,10 @@ public abstract class InclusiveGatewayBase extends org.semanticwb.process.model.
              ret=(org.semanticwb.process.model.SequenceFlow)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

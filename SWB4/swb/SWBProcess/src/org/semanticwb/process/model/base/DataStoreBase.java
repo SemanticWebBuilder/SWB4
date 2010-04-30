@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class DataStoreBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.InformationAssociable,org.semanticwb.process.model.Documentable,org.semanticwb.process.model.Rootable
+public abstract class DataStoreBase extends org.semanticwb.process.model.BPMNBaseElement implements org.semanticwb.process.model.Documentable,org.semanticwb.process.model.InformationAssociable,org.semanticwb.process.model.Rootable
 {
     public static final org.semanticwb.platform.SemanticProperty swp_capacity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#capacity");
     public static final org.semanticwb.platform.SemanticProperty swp_unlimited=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swp#unlimited");
@@ -152,5 +152,10 @@ public abstract class DataStoreBase extends org.semanticwb.process.model.BPMNBas
              ret=(org.semanticwb.process.model.ItemDefinition)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
