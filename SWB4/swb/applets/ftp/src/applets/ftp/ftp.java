@@ -227,7 +227,8 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
     }
     private void loadDirectories()
-    {        
+    {
+        
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";        
         String respxml=ftp.getData(xml);
         WBXMLParser parser=new WBXMLParser();
@@ -587,9 +588,13 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jTreeDirs.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTreeDirsKeyReleased(evt);
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
+        jTreeDirs.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTreeDirs.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+            }
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                jTreeDirsTreeWillExpand(evt);
             }
         });
         jTreeDirs.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -602,11 +607,9 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 jTreeDirsValueChanged(evt);
             }
         });
-        jTreeDirs.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
-            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-            }
-            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
-                jTreeDirsTreeWillExpand(evt);
+        jTreeDirs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTreeDirsKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(jTreeDirs);
@@ -639,14 +642,14 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTableFiles.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTableFilesKeyReleased(evt);
-            }
-        });
         jTableFiles.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTableFilesMousePressed(evt);
+            }
+        });
+        jTableFiles.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTableFilesKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(jTableFiles);
