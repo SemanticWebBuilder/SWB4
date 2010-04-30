@@ -220,6 +220,7 @@ public class WBSearch extends GenericAdmResource
                         if(parser.getImage(srch) != null && !parser.getImage(srch).equals("")) {
                             addElem(doc, eobj, "objImg", parser.getImage(srch));
                         }
+                        addElem(doc, eobj, "objTypeLbl", parser.getTypeDisplayLabel(srch));
                     }
                 }
             }
