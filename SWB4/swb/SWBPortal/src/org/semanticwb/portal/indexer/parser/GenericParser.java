@@ -412,4 +412,20 @@ public class GenericParser
     public String getType(Searchable gen) {
         return "Generic";
     }
+
+    /**
+     * Gets the {@link Searchable} object's type label for the search result
+     * snippet.
+     * <p>
+     * Obtiene la etiqueta de despliegue del tipo de objeto {@link Searchable}
+     * para mostrar en el resultado de la búsqueda.
+     *
+     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return  String type label of the {@link Searchable} object. String con
+     *          la etiqueta para el tipo del objeto {@link Searchable}.
+     */
+    public String getTypeDisplayLabel() {
+        return "Genérico";
+
+    }
 }
