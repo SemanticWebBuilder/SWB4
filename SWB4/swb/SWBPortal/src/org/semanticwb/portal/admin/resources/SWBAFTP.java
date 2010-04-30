@@ -712,7 +712,7 @@ public class SWBAFTP extends GenericResource{
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
-        if(su!=null && (user.getAdminFilter()!=null || user.hasUserGroup(su)))
+        if(user.getAdminFilter()!=null || (su!=null && user.hasUserGroup(su)))
         {
             permision=true;
             if(user.getAdminFilter()!=null)
@@ -762,7 +762,7 @@ public class SWBAFTP extends GenericResource{
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
-        if(su!=null && (user.getAdminFilter()!=null || user.hasUserGroup(su)))
+        if(user.getAdminFilter()!=null || (su!=null && user.hasUserGroup(su)))
         {
             permision=true;
             if(user.getAdminFilter()!=null)
