@@ -610,7 +610,7 @@ public class ContentUtils {
                  * @param position the position
                  * @return the string
                  */
-                public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
+     public String paginationOpenOffice(String htmlOut, WebPage page, String npage, Resource base, int snpages, String stxtant, String stxtsig, String stfont, int position) {
         String toFind="<P STYLE=\"page-break-before: always\">";
         int totPages = getOpenOfficeContentPagesNumber(htmlOut, toFind);
         if (totPages > 1) {
