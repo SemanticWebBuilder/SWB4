@@ -53,12 +53,12 @@ import org.semanticwb.portal.api.SWBResourceException;
 // TODO: Auto-generated Javadoc
 /**
  * Banner se encarga de desplegar y administrar un banner bajo ciertos
- * criterios(configuraci�n de recurso).
+ * criterios(configuración de recurso).
  *
  * Banner is in charge to unfold and to administer a banner under certain
  * criteria (resource configuration).
  *
- * @author : Jorge Alberto Jim�nez
+ * @author : Jorge Alberto Jiménez
  * @version 1.0
  */
 
@@ -92,77 +92,74 @@ public class Banner extends GenericAdmResource
                     if (url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:")) {
                         wburl = url.replaceAll("\"", "&#34;");
                     }
-                    synchronized (ret) {
-                        if (img.endsWith(".swf")) {
-                            String schema = new URL(request.getRequestURL().toString()).getProtocol();
+                    if (img.endsWith(".swf")) {
+                        String schema = new URL(request.getRequestURL().toString()).getProtocol();
 
-                            ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\"");
-                            if (!width.equals("")) {
-                                ret.append(" width=\"" + width + "\"");
+                        ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\"");
+                        if (!width.equals("")) {
+                            ret.append(" width=\"" + width + "\"");
+                        }
+                        if (!height.equals("")) {
+                            ret.append(" height=\"" + height + "\"");
+                        }
+                        ret.append(">\n");
+                        ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />\n");
+                        ret.append("<param name=\"quality\" value=\"high\" />\n");
+                        ret.append("<param name=\"wmode\" value=\"transparent\" /> \n");
+                        ret.append("<param name=\"FlashVars\" value=\"liga=" + wburl + "\" />\n");
+                        ret.append("<embed id=\"" + img + "\" name=\"" + img + "\" src=\"");
+                        ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                        ret.append(" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" ");
+                        if (!width.equals("")) {
+                            ret.append(" width=\"" + width + "\"");
+                        }
+                        if (!height.equals("")) {
+                            ret.append(" height=\"" + height + "\"");
+                        }
+                        ret.append(">");
+                        ret.append("</embed>\n");
+                        ret.append("</object>");
+                    } else {
+                        String alt = base.getAttribute("alt", "").trim();
+                        if (!url.equals("")) {
+                            String target = base.getAttribute("target", "0").trim();
+                            
+                            ret.append("<a href=\"" + wburl + "\"");
+                            if (target.equals("1")) {
+                                ret.append(" target=\"_newbnr\"");
                             }
-                            if (!height.equals("")) {
-                                ret.append(" height=\"" + height + "\"");
-                            }
-                            ret.append(">\n");
-                            ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />\n");
-                            ret.append("<param name=\"quality\" value=\"high\" />\n");
-                            ret.append("<param name=\"wmode\" value=\"transparent\" /> \n");
-                            ret.append("<param name=\"FlashVars\" value=\"liga=" + wburl + "\" />\n");
-                            ret.append("<embed id=\"" + img + "\" name=\"" + img + "\" src=\"");
-                            ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                            ret.append(" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" ");
-                            if (!width.equals("")) {
-                                ret.append(" width=\"" + width + "\"");
-                            }
-                            if (!height.equals("")) {
-                                ret.append(" height=\"" + height + "\"");
+                            if (!styleClass.equals("")) {
+                                ret.append(" class=\"" + styleClass + "\"");
                             }
                             ret.append(">");
-                            ret.append("</embed>\n");
-                            ret.append("</object>");
-                        } else {
-                            String alt = base.getAttribute("alt", "").trim();
-                            if (!url.equals("")) {
-                                String target = base.getAttribute("target", "0").trim();
-                                synchronized (ret) {
-                                    ret.append("<a href=\"" + wburl + "\"");
-                                    if (target.equals("1")) {
-                                        ret.append(" target=\"_newbnr\"");
-                                    }
-                                    if (!styleClass.equals("")) {
-                                        ret.append(" class=\"" + styleClass + "\"");
-                                    }
-                                    ret.append(">");
-                                    //System.out.println("liga: " + ret.toString());
-                                }
-                            }
-                            ret.append("<img src=\"");
-                            ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                            //System.out.println("liga: " + ret.toString());
+                        }
+                        ret.append("<img src=\"");
+                        ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
 
-                           if (paramRequest.getArguments().containsKey("border")) {
-                                ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
-                            }
-                            
-                           /*else {
-                                ret.append(" border=\"0\"");
-                            }*/
-                            /*if (!alt.equals("")) {
-                                ret.append(" alt=\"" + alt + "\"");
-                            }*/
-                            // El uso de alt es obligatorio
+                       if (paramRequest.getArguments().containsKey("border")) {
+                            ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
+                        }
+
+                       /*else {
+                            ret.append(" border=\"0\"");
+                        }*/
+                        /*if (!alt.equals("")) {
                             ret.append(" alt=\"" + alt + "\"");
-                            if (!width.equals("")) {
-                                ret.append(" width=\"" + width + "\"");
-                            }
-                            if (!height.equals("")) {
-                                ret.append(" height=\"" + height + "\"");
-                            }
-                            
-                            ret.append("/>");
+                        }*/
+                        // El uso de alt es obligatorio
+                        ret.append(" alt=\"" + alt + "\"");
+                        if (!width.equals("")) {
+                            ret.append(" width=\"" + width + "\"");
+                        }
+                        if (!height.equals("")) {
+                            ret.append(" height=\"" + height + "\"");
+                        }
 
-                            if (!url.equals("")) {
-                                ret.append("</a>");
-                            }
+                        ret.append("/>");
+
+                        if (!url.equals("")) {
+                            ret.append("</a>");
                         }
                     }
                 }
