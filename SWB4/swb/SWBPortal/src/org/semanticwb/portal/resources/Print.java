@@ -39,11 +39,11 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Template;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.GenericResource;
@@ -114,9 +114,9 @@ public class Print extends GenericResource
      */
     public void getParams(javax.servlet.http.HttpServletRequest request, SWBResourceURLImp url)
     {
-        if(null!=request.getQueryString())
+        if(request.getParameterMap().size()>0)
         {
-            Map q=SWBUtils.TEXT.parseQueryParams("?"+request.getQueryString());
+            Map q=request.getParameterMap();
             if(q!=null)
             {
                 Set s=q.keySet();
@@ -126,10 +126,11 @@ public class Print extends GenericResource
                     while(it.hasNext())
                     {
                         String key=(String)it.next();
-                        if(!key.equals("page"))
-                        {
+                        //if(!key.equals("page")) //Comentado ya que segun yo debe estar afectando el recurso content en su impresión cuando tiene páginación (Jorge Jiménez-3/Mayo/2010)
+                        //{
                             url.setParameter(key,(String[])q.get(key));
-                        }
+                        //}
+                        
                     }
                 }
             }
@@ -178,8 +179,6 @@ public class Print extends GenericResource
                 //url.setParameter("page", "0");
             }
             getParams(request, url);
-
-            //response.sendRedirect(url.toString());
             String onclick="javascript:window.open('" + url.toString() +"','_newimp','" + getWindowConf() + "'); return false;";
 
             synchronized (ret)
