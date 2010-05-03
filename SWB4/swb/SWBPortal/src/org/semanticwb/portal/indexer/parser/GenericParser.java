@@ -426,6 +426,5 @@ public class GenericParser
      */
     public String getTypeDisplayLabel(Searchable gen) {
         return "Genérico";
-
     }
 }
