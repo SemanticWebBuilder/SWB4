@@ -73,6 +73,8 @@
             this.groupHelp = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
             this.buttonHelp = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonAbout = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.buttonAddLinkDo = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.separator3 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -125,6 +127,8 @@
             this.group2.Items.Add(this.buttonInformation);
             this.group2.Items.Add(this.buttonCleanPropeties);
             this.group2.Items.Add(this.buttonShowDocumentDetail);
+            this.group2.Items.Add(this.separator3);
+            this.group2.Items.Add(this.buttonAddLinkDo);
             this.group2.Items.Add(this.separator2);
             this.group2.Items.Add(this.buttonDelete);
             this.group2.Label = "Contenido";
@@ -261,6 +265,18 @@
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAbout_Click);
             // 
+            // buttonAddLinkDo
+            // 
+            this.buttonAddLinkDo.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonAddLinkDo.Label = "Agregar liga a documento del repositorio";
+            this.buttonAddLinkDo.Name = "buttonAddLinkDo";
+            this.buttonAddLinkDo.ShowImage = true;
+            this.buttonAddLinkDo.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAddLinkDo_Click);
+            // 
+            // separator3
+            // 
+            this.separator3.Name = "separator3";
+            // 
             // RibbonMenuWord
             // 
             this.Name = "RibbonMenuWord";
@@ -305,6 +321,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonDocsToAuthorize;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonShowDocumentDetail;
+        internal Microsoft.Office.Tools.Ribbon.RibbonSeparator separator3;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonAddLinkDo;
     }
 
     partial class ThisRibbonCollection : Microsoft.Office.Tools.Ribbon.RibbonReadOnlyCollection
