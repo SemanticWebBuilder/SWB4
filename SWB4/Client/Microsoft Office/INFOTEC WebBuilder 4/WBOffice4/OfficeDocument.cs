@@ -197,6 +197,12 @@ namespace WBOffice4
         /// <param name="properties">Properties to save</param>
         protected abstract void SaveCustomProperties(Dictionary<String, String> properties);
 
+        protected void InsertLinkToDocumentRepository()
+        {
+            FormInsertLinkToDocuentRepository frm = new FormInsertLinkToDocuentRepository(this);
+            frm.ShowDialog();
+        }
+
         protected abstract void CleanContentProperties();
 
 
@@ -786,6 +792,15 @@ namespace WBOffice4
             if (OfficeApplication.TryLogOn())
             {
                 FormAddLink formAddLink = new FormAddLink(this);
+                formAddLink.ShowDialog();
+            }
+        }
+
+        public void InsertLinkToDoc()
+        {
+            if (OfficeApplication.TryLogOn())
+            {
+                FormInsertLinkToDocuentRepository formAddLink = new FormInsertLinkToDocuentRepository(this);
                 formAddLink.ShowDialog();
             }
         }

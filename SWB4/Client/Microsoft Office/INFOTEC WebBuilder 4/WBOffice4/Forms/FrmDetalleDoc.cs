@@ -295,307 +295,159 @@ namespace WBOffice4.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(FrmDetalleDoc));
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.listView1 = new System.Windows.Forms.ListView();
-			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.listView2 = new System.Windows.Forms.ListView();
-			this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.listView3 = new System.Windows.Forms.ListView();
-			this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
-			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabPage2.SuspendLayout();
-			this.tabPage3.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// tabControl1
-			// 
-			this.tabControl1.AccessibleDescription = resources.GetString("tabControl1.AccessibleDescription");
-			this.tabControl1.AccessibleName = resources.GetString("tabControl1.AccessibleName");
-			this.tabControl1.Alignment = ((System.Windows.Forms.TabAlignment)(resources.GetObject("tabControl1.Alignment")));
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("tabControl1.Anchor")));
-			this.tabControl1.Appearance = ((System.Windows.Forms.TabAppearance)(resources.GetObject("tabControl1.Appearance")));
-			this.tabControl1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabControl1.BackgroundImage")));
-			this.tabControl1.Controls.Add(this.tabPage1);
-			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Controls.Add(this.tabPage3);
-			this.tabControl1.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("tabControl1.Dock")));
-			this.tabControl1.Enabled = ((bool)(resources.GetObject("tabControl1.Enabled")));
-			this.tabControl1.Font = ((System.Drawing.Font)(resources.GetObject("tabControl1.Font")));
-			this.tabControl1.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("tabControl1.ImeMode")));
-			this.tabControl1.ItemSize = ((System.Drawing.Size)(resources.GetObject("tabControl1.ItemSize")));
-			this.tabControl1.Location = ((System.Drawing.Point)(resources.GetObject("tabControl1.Location")));
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.Padding = ((System.Drawing.Point)(resources.GetObject("tabControl1.Padding")));
-			this.tabControl1.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("tabControl1.RightToLeft")));
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.ShowToolTips = ((bool)(resources.GetObject("tabControl1.ShowToolTips")));
-			this.tabControl1.Size = ((System.Drawing.Size)(resources.GetObject("tabControl1.Size")));
-			this.tabControl1.TabIndex = ((int)(resources.GetObject("tabControl1.TabIndex")));
-			this.tabControl1.Text = resources.GetString("tabControl1.Text");
-			this.tabControl1.Visible = ((bool)(resources.GetObject("tabControl1.Visible")));
-			// 
-			// tabPage1
-			// 
-			this.tabPage1.AccessibleDescription = resources.GetString("tabPage1.AccessibleDescription");
-			this.tabPage1.AccessibleName = resources.GetString("tabPage1.AccessibleName");
-			this.tabPage1.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("tabPage1.Anchor")));
-			this.tabPage1.AutoScroll = ((bool)(resources.GetObject("tabPage1.AutoScroll")));
-			this.tabPage1.AutoScrollMargin = ((System.Drawing.Size)(resources.GetObject("tabPage1.AutoScrollMargin")));
-			this.tabPage1.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("tabPage1.AutoScrollMinSize")));
-			this.tabPage1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage1.BackgroundImage")));
-			this.tabPage1.Controls.Add(this.listView1);
-			this.tabPage1.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("tabPage1.Dock")));
-			this.tabPage1.Enabled = ((bool)(resources.GetObject("tabPage1.Enabled")));
-			this.tabPage1.Font = ((System.Drawing.Font)(resources.GetObject("tabPage1.Font")));
-			this.tabPage1.ImageIndex = ((int)(resources.GetObject("tabPage1.ImageIndex")));
-			this.tabPage1.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("tabPage1.ImeMode")));
-			this.tabPage1.Location = ((System.Drawing.Point)(resources.GetObject("tabPage1.Location")));
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("tabPage1.RightToLeft")));
-			this.tabPage1.Size = ((System.Drawing.Size)(resources.GetObject("tabPage1.Size")));
-			this.tabPage1.TabIndex = ((int)(resources.GetObject("tabPage1.TabIndex")));
-			this.tabPage1.Text = resources.GetString("tabPage1.Text");
-			this.tabPage1.ToolTipText = resources.GetString("tabPage1.ToolTipText");
-			this.tabPage1.Visible = ((bool)(resources.GetObject("tabPage1.Visible")));
-			// 
-			// listView1
-			// 
-			this.listView1.AccessibleDescription = resources.GetString("listView1.AccessibleDescription");
-			this.listView1.AccessibleName = resources.GetString("listView1.AccessibleName");
-			this.listView1.Alignment = ((System.Windows.Forms.ListViewAlignment)(resources.GetObject("listView1.Alignment")));
-			this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("listView1.Anchor")));
-			this.listView1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView1.BackgroundImage")));
-			this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						this.columnHeader1,
-																						this.columnHeader2});
-			this.listView1.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("listView1.Dock")));
-			this.listView1.Enabled = ((bool)(resources.GetObject("listView1.Enabled")));
-			this.listView1.Font = ((System.Drawing.Font)(resources.GetObject("listView1.Font")));
-			this.listView1.FullRowSelect = true;
-			this.listView1.GridLines = true;
-			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			this.listView1.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("listView1.ImeMode")));
-			this.listView1.LabelWrap = ((bool)(resources.GetObject("listView1.LabelWrap")));
-			this.listView1.LargeImageList = this.imageList1;
-			this.listView1.Location = ((System.Drawing.Point)(resources.GetObject("listView1.Location")));
-			this.listView1.Name = "listView1";
-			this.listView1.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("listView1.RightToLeft")));
-			this.listView1.Size = ((System.Drawing.Size)(resources.GetObject("listView1.Size")));
-			this.listView1.SmallImageList = this.imageList1;
-			this.listView1.TabIndex = ((int)(resources.GetObject("listView1.TabIndex")));
-			this.listView1.Text = resources.GetString("listView1.Text");
-			this.listView1.View = System.Windows.Forms.View.Details;
-			this.listView1.Visible = ((bool)(resources.GetObject("listView1.Visible")));
-			// 
-			// columnHeader1
-			// 
-			this.columnHeader1.Text = resources.GetString("columnHeader1.Text");
-			this.columnHeader1.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader1.TextAlign")));
-			this.columnHeader1.Width = ((int)(resources.GetObject("columnHeader1.Width")));
-			// 
-			// columnHeader2
-			// 
-			this.columnHeader2.Text = resources.GetString("columnHeader2.Text");
-			this.columnHeader2.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader2.TextAlign")));
-			this.columnHeader2.Width = ((int)(resources.GetObject("columnHeader2.Width")));
-			// 
-			// imageList1
-			// 
-			this.imageList1.ImageSize = ((System.Drawing.Size)(resources.GetObject("imageList1.ImageSize")));
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			// 
-			// tabPage2
-			// 
-			this.tabPage2.AccessibleDescription = resources.GetString("tabPage2.AccessibleDescription");
-			this.tabPage2.AccessibleName = resources.GetString("tabPage2.AccessibleName");
-			this.tabPage2.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("tabPage2.Anchor")));
-			this.tabPage2.AutoScroll = ((bool)(resources.GetObject("tabPage2.AutoScroll")));
-			this.tabPage2.AutoScrollMargin = ((System.Drawing.Size)(resources.GetObject("tabPage2.AutoScrollMargin")));
-			this.tabPage2.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("tabPage2.AutoScrollMinSize")));
-			this.tabPage2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage2.BackgroundImage")));
-			this.tabPage2.Controls.Add(this.listView2);
-			this.tabPage2.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("tabPage2.Dock")));
-			this.tabPage2.Enabled = ((bool)(resources.GetObject("tabPage2.Enabled")));
-			this.tabPage2.Font = ((System.Drawing.Font)(resources.GetObject("tabPage2.Font")));
-			this.tabPage2.ImageIndex = ((int)(resources.GetObject("tabPage2.ImageIndex")));
-			this.tabPage2.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("tabPage2.ImeMode")));
-			this.tabPage2.Location = ((System.Drawing.Point)(resources.GetObject("tabPage2.Location")));
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("tabPage2.RightToLeft")));
-			this.tabPage2.Size = ((System.Drawing.Size)(resources.GetObject("tabPage2.Size")));
-			this.tabPage2.TabIndex = ((int)(resources.GetObject("tabPage2.TabIndex")));
-			this.tabPage2.Text = resources.GetString("tabPage2.Text");
-			this.tabPage2.ToolTipText = resources.GetString("tabPage2.ToolTipText");
-			this.tabPage2.Visible = ((bool)(resources.GetObject("tabPage2.Visible")));
-			// 
-			// listView2
-			// 
-			this.listView2.AccessibleDescription = resources.GetString("listView2.AccessibleDescription");
-			this.listView2.AccessibleName = resources.GetString("listView2.AccessibleName");
-			this.listView2.Alignment = ((System.Windows.Forms.ListViewAlignment)(resources.GetObject("listView2.Alignment")));
-			this.listView2.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("listView2.Anchor")));
-			this.listView2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView2.BackgroundImage")));
-			this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						this.columnHeader3,
-																						this.columnHeader4,
-																						this.columnHeader5,
-																						this.columnHeader6,
-																						this.columnHeader7});
-			this.listView2.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("listView2.Dock")));
-			this.listView2.Enabled = ((bool)(resources.GetObject("listView2.Enabled")));
-			this.listView2.Font = ((System.Drawing.Font)(resources.GetObject("listView2.Font")));
-			this.listView2.FullRowSelect = true;
-			this.listView2.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("listView2.ImeMode")));
-			this.listView2.LabelWrap = ((bool)(resources.GetObject("listView2.LabelWrap")));
-			this.listView2.LargeImageList = this.imageList1;
-			this.listView2.Location = ((System.Drawing.Point)(resources.GetObject("listView2.Location")));
-			this.listView2.Name = "listView2";
-			this.listView2.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("listView2.RightToLeft")));
-			this.listView2.Size = ((System.Drawing.Size)(resources.GetObject("listView2.Size")));
-			this.listView2.SmallImageList = this.imageList1;
-			this.listView2.TabIndex = ((int)(resources.GetObject("listView2.TabIndex")));
-			this.listView2.Text = resources.GetString("listView2.Text");
-			this.listView2.View = System.Windows.Forms.View.Details;
-			this.listView2.Visible = ((bool)(resources.GetObject("listView2.Visible")));
-			// 
-			// columnHeader3
-			// 
-			this.columnHeader3.Text = resources.GetString("columnHeader3.Text");
-			this.columnHeader3.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader3.TextAlign")));
-			this.columnHeader3.Width = ((int)(resources.GetObject("columnHeader3.Width")));
-			// 
-			// columnHeader4
-			// 
-			this.columnHeader4.Text = resources.GetString("columnHeader4.Text");
-			this.columnHeader4.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader4.TextAlign")));
-			this.columnHeader4.Width = ((int)(resources.GetObject("columnHeader4.Width")));
-			// 
-			// columnHeader5
-			// 
-			this.columnHeader5.Text = resources.GetString("columnHeader5.Text");
-			this.columnHeader5.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader5.TextAlign")));
-			this.columnHeader5.Width = ((int)(resources.GetObject("columnHeader5.Width")));
-			// 
-			// columnHeader6
-			// 
-			this.columnHeader6.Text = resources.GetString("columnHeader6.Text");
-			this.columnHeader6.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader6.TextAlign")));
-			this.columnHeader6.Width = ((int)(resources.GetObject("columnHeader6.Width")));
-			// 
-			// columnHeader7
-			// 
-			this.columnHeader7.Text = resources.GetString("columnHeader7.Text");
-			this.columnHeader7.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader7.TextAlign")));
-			this.columnHeader7.Width = ((int)(resources.GetObject("columnHeader7.Width")));
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.AccessibleDescription = resources.GetString("tabPage3.AccessibleDescription");
-			this.tabPage3.AccessibleName = resources.GetString("tabPage3.AccessibleName");
-			this.tabPage3.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("tabPage3.Anchor")));
-			this.tabPage3.AutoScroll = ((bool)(resources.GetObject("tabPage3.AutoScroll")));
-			this.tabPage3.AutoScrollMargin = ((System.Drawing.Size)(resources.GetObject("tabPage3.AutoScrollMargin")));
-			this.tabPage3.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("tabPage3.AutoScrollMinSize")));
-			this.tabPage3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage3.BackgroundImage")));
-			this.tabPage3.Controls.Add(this.listView3);
-			this.tabPage3.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("tabPage3.Dock")));
-			this.tabPage3.Enabled = ((bool)(resources.GetObject("tabPage3.Enabled")));
-			this.tabPage3.Font = ((System.Drawing.Font)(resources.GetObject("tabPage3.Font")));
-			this.tabPage3.ImageIndex = ((int)(resources.GetObject("tabPage3.ImageIndex")));
-			this.tabPage3.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("tabPage3.ImeMode")));
-			this.tabPage3.Location = ((System.Drawing.Point)(resources.GetObject("tabPage3.Location")));
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("tabPage3.RightToLeft")));
-			this.tabPage3.Size = ((System.Drawing.Size)(resources.GetObject("tabPage3.Size")));
-			this.tabPage3.TabIndex = ((int)(resources.GetObject("tabPage3.TabIndex")));
-			this.tabPage3.Text = resources.GetString("tabPage3.Text");
-			this.tabPage3.ToolTipText = resources.GetString("tabPage3.ToolTipText");
-			this.tabPage3.Visible = ((bool)(resources.GetObject("tabPage3.Visible")));
-			// 
-			// listView3
-			// 
-			this.listView3.AccessibleDescription = resources.GetString("listView3.AccessibleDescription");
-			this.listView3.AccessibleName = resources.GetString("listView3.AccessibleName");
-			this.listView3.Alignment = ((System.Windows.Forms.ListViewAlignment)(resources.GetObject("listView3.Alignment")));
-			this.listView3.Anchor = ((System.Windows.Forms.AnchorStyles)(resources.GetObject("listView3.Anchor")));
-			this.listView3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView3.BackgroundImage")));
-			this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						this.columnHeader8,
-																						this.columnHeader9});
-			this.listView3.Dock = ((System.Windows.Forms.DockStyle)(resources.GetObject("listView3.Dock")));
-			this.listView3.Enabled = ((bool)(resources.GetObject("listView3.Enabled")));
-			this.listView3.Font = ((System.Drawing.Font)(resources.GetObject("listView3.Font")));
-			this.listView3.FullRowSelect = true;
-			this.listView3.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("listView3.ImeMode")));
-			this.listView3.LabelWrap = ((bool)(resources.GetObject("listView3.LabelWrap")));
-			this.listView3.LargeImageList = this.imageList1;
-			this.listView3.Location = ((System.Drawing.Point)(resources.GetObject("listView3.Location")));
-			this.listView3.Name = "listView3";
-			this.listView3.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("listView3.RightToLeft")));
-			this.listView3.Size = ((System.Drawing.Size)(resources.GetObject("listView3.Size")));
-			this.listView3.SmallImageList = this.imageList1;
-			this.listView3.TabIndex = ((int)(resources.GetObject("listView3.TabIndex")));
-			this.listView3.Text = resources.GetString("listView3.Text");
-			this.listView3.View = System.Windows.Forms.View.Details;
-			this.listView3.Visible = ((bool)(resources.GetObject("listView3.Visible")));
-			// 
-			// columnHeader8
-			// 
-			this.columnHeader8.Text = resources.GetString("columnHeader8.Text");
-			this.columnHeader8.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader8.TextAlign")));
-			this.columnHeader8.Width = ((int)(resources.GetObject("columnHeader8.Width")));
-			// 
-			// columnHeader9
-			// 
-			this.columnHeader9.Text = resources.GetString("columnHeader9.Text");
-			this.columnHeader9.TextAlign = ((System.Windows.Forms.HorizontalAlignment)(resources.GetObject("columnHeader9.TextAlign")));
-			this.columnHeader9.Width = ((int)(resources.GetObject("columnHeader9.Width")));
-			// 
-			// FrmDetalleDoc
-			// 
-			this.AccessibleDescription = resources.GetString("$this.AccessibleDescription");
-			this.AccessibleName = resources.GetString("$this.AccessibleName");
-			this.AutoScaleBaseSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScaleBaseSize")));
-			this.AutoScroll = ((bool)(resources.GetObject("$this.AutoScroll")));
-			this.AutoScrollMargin = ((System.Drawing.Size)(resources.GetObject("$this.AutoScrollMargin")));
-			this.AutoScrollMinSize = ((System.Drawing.Size)(resources.GetObject("$this.AutoScrollMinSize")));
-			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-			this.ClientSize = ((System.Drawing.Size)(resources.GetObject("$this.ClientSize")));
-			this.Controls.Add(this.tabControl1);
-			this.Enabled = ((bool)(resources.GetObject("$this.Enabled")));
-			this.Font = ((System.Drawing.Font)(resources.GetObject("$this.Font")));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.ImeMode = ((System.Windows.Forms.ImeMode)(resources.GetObject("$this.ImeMode")));
-			this.Location = ((System.Drawing.Point)(resources.GetObject("$this.Location")));
-			this.MaximizeBox = false;
-			this.MaximumSize = ((System.Drawing.Size)(resources.GetObject("$this.MaximumSize")));
-			this.MinimizeBox = false;
-			this.MinimumSize = ((System.Drawing.Size)(resources.GetObject("$this.MinimumSize")));
-			this.Name = "FrmDetalleDoc";
-			this.RightToLeft = ((System.Windows.Forms.RightToLeft)(resources.GetObject("$this.RightToLeft")));
-			this.ShowInTaskbar = false;
-			this.StartPosition = ((System.Windows.Forms.FormStartPosition)(resources.GetObject("$this.StartPosition")));
-			this.Text = resources.GetString("$this.Text");
-			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage2.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmDetalleDoc));
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.listView2 = new System.Windows.Forms.ListView();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader7 = new System.Windows.Forms.ColumnHeader();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.listView3 = new System.Windows.Forms.ListView();
+            this.columnHeader8 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader9 = new System.Windows.Forms.ColumnHeader();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            resources.ApplyResources(this.tabControl1, "tabControl1");
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.listView1);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
+            this.tabPage1.Name = "tabPage1";
+            // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            resources.ApplyResources(this.listView1, "listView1");
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Name = "listView1";
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            resources.ApplyResources(this.columnHeader1, "columnHeader1");
+            // 
+            // columnHeader2
+            // 
+            resources.ApplyResources(this.columnHeader2, "columnHeader2");
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "");
+            this.imageList1.Images.SetKeyName(1, "");
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.listView2);
+            resources.ApplyResources(this.tabPage2, "tabPage2");
+            this.tabPage2.Name = "tabPage2";
+            // 
+            // listView2
+            // 
+            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5,
+            this.columnHeader6,
+            this.columnHeader7});
+            resources.ApplyResources(this.listView2, "listView2");
+            this.listView2.FullRowSelect = true;
+            this.listView2.LargeImageList = this.imageList1;
+            this.listView2.Name = "listView2";
+            this.listView2.SmallImageList = this.imageList1;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader3
+            // 
+            resources.ApplyResources(this.columnHeader3, "columnHeader3");
+            // 
+            // columnHeader4
+            // 
+            resources.ApplyResources(this.columnHeader4, "columnHeader4");
+            // 
+            // columnHeader5
+            // 
+            resources.ApplyResources(this.columnHeader5, "columnHeader5");
+            // 
+            // columnHeader6
+            // 
+            resources.ApplyResources(this.columnHeader6, "columnHeader6");
+            // 
+            // columnHeader7
+            // 
+            resources.ApplyResources(this.columnHeader7, "columnHeader7");
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.listView3);
+            resources.ApplyResources(this.tabPage3, "tabPage3");
+            this.tabPage3.Name = "tabPage3";
+            // 
+            // listView3
+            // 
+            this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader8,
+            this.columnHeader9});
+            resources.ApplyResources(this.listView3, "listView3");
+            this.listView3.FullRowSelect = true;
+            this.listView3.LargeImageList = this.imageList1;
+            this.listView3.Name = "listView3";
+            this.listView3.SmallImageList = this.imageList1;
+            this.listView3.UseCompatibleStateImageBehavior = false;
+            this.listView3.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader8
+            // 
+            resources.ApplyResources(this.columnHeader8, "columnHeader8");
+            // 
+            // columnHeader9
+            // 
+            resources.ApplyResources(this.columnHeader9, "columnHeader9");
+            // 
+            // FrmDetalleDoc
+            // 
+            resources.ApplyResources(this, "$this");
+            this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FrmDetalleDoc";
+            this.ShowInTaskbar = false;
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 		#endregion

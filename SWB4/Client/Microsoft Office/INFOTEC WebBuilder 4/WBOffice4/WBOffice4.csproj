@@ -289,6 +289,9 @@
     <EmbeddedResource Include="Forms\FormEditPorlet.resx">
       <DependentUpon>FormEditPorlet.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInsertLinkToDocuentRepository.resx">
+      <DependentUpon>FormInsertLinkToDocuentRepository.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLogin.resx">
       <DependentUpon>FormLogin.cs</DependentUpon>
     </EmbeddedResource>
@@ -464,6 +467,12 @@
     <Compile Include="Forms\FormEditPorlet.Designer.cs">
       <DependentUpon>FormEditPorlet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormInsertLinkToDocuentRepository.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormInsertLinkToDocuentRepository.Designer.cs">
+      <DependentUpon>FormInsertLinkToDocuentRepository.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormMoveContent.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -485,6 +494,9 @@
     <Compile Include="Forms\MessageBoxWB4.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\SemanticFileItem.cs" />
+    <Compile Include="Forms\SemanticFolderNode.cs" />
+    <Compile Include="Forms\SemanticRepositoryNode.cs" />
     <Compile Include="Interfaces\CalendarInfo.cs" />
     <Compile Include="Interfaces\ElementInfo.cs" />
     <Compile Include="Interfaces\FlowContentInformation.cs" />
@@ -492,6 +504,9 @@
     <Compile Include="Interfaces\PageInfo.cs" />
     <Compile Include="Interfaces\PFlow.cs" />
     <Compile Include="Interfaces\RepositoryInfo.cs" />
+    <Compile Include="Interfaces\SemanticFileRepository.cs" />
+    <Compile Include="Interfaces\SemanticFolderRepository.cs" />
+    <Compile Include="Interfaces\SemanticRepository.cs" />
     <Compile Include="Interfaces\SiteInfo.cs" />
     <Compile Include="Interfaces\Value.cs" />
     <Compile Include="Steps\CategoryNode.cs" />

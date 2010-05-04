@@ -134,6 +134,22 @@ namespace WBOffice4.Interfaces
 
         [XmlRpcMethod("OfficeApplication.canRemoveCategory")]
         bool canRemoveCategory(String repositoryName, String categoryId);
+        
+        [XmlRpcMethod("OfficeApplication.getSemanticRepositories")]
+        SemanticRepository[] getSemanticRepositories(SiteInfo siteInfo);
 
+        [XmlRpcMethod("OfficeApplication.getSemanticFolderRepositories")]
+        SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository);
+
+        [XmlRpcMethod("OfficeApplication.getSemanticFolderRepositories")]
+        SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolderRepository);
+
+
+        [XmlRpcMethod("OfficeApplication.getSemanticFileRepositories")]
+        SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository, SemanticFolderRepository semanticFolder);
+
+        [XmlRpcMethod("OfficeApplication.getSemanticFileRepositories")]
+        SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository);
+        
     }
 }
