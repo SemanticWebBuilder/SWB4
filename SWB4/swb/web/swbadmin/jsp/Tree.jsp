@@ -467,11 +467,21 @@
         boolean ret=false;
         if(inv!=null)
         {
-            SemanticClass aux=inv.getAllValuesFromRestrictionClass(child);
+            SemanticClass aux=inv.getAllValuesFromRestrictionClass(child); //Class and Subclasses
             if(aux!=null)
             {
                 if(cls.equals(aux) || cls.isSubClass(aux))ret=true;
-            }else ret=true;
+            }else
+            {
+                aux=inv.getSomeValuesFromRestrictionClass(child);   //Only class
+                if(aux!=null)
+                {
+                    if(cls.equals(aux))ret=true;
+                }else
+                {
+                    ret=true;
+                }
+            }
         }else
         {
             ret=true;
@@ -551,9 +561,20 @@
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
             while(pit.hasNext())
             {
+                boolean subclasses=true;
                 SemanticProperty prop=pit.next();
                 SemanticClass rcls=prop.getAllValuesFromRestrictionClass(cls);
-                if(rcls==null)rcls=prop.getRangeClass();
+                if(rcls==null)
+                {
+                    rcls=prop.getSomeValuesFromRestrictionClass(cls);
+                    if(rcls!=null)
+                    {
+                        subclasses=false;
+                    }else
+                    {
+                        rcls=prop.getRangeClass();
+                    }
+                }
                 //System.out.println("cls:"+cls+" "+rcls);
                 //Restricciones inversas
                 SemanticProperty inv=prop.getInverse();
@@ -568,18 +589,21 @@
                 }
 
                 //add subclasess
-                Iterator<SemanticClass> it=rcls.listSubClasses();
-                while(it.hasNext())
+                if(subclasses)
                 {
-                    SemanticClass scls=it.next();
-                    if(model.hasModelClass(scls))
+                    Iterator<SemanticClass> it=rcls.listSubClasses();
+                    while(it.hasNext())
                     {
-                        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, scls, AdminFilter.ACTION_ADD))
+                        SemanticClass scls=it.next();
+                        if(model.hasModelClass(scls))
                         {
-                            if(checkInverse(cls, scls, inv))
+                            if(SWBPortal.getAdminFilterMgr().haveClassAction(user, scls, AdminFilter.ACTION_ADD))
                             {
-                                menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
-                                dropacc.put(scls.getClassId());
+                                if(checkInverse(cls, scls, inv))
+                                {
+                                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                                    dropacc.put(scls.getClassId());
+                                }
                             }
                         }
                     }
