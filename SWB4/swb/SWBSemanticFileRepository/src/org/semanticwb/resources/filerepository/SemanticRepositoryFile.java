@@ -213,6 +213,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
         StringBuffer ret = new StringBuffer("");
         User user = paramRequest.getUser();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
         int luser = getLevelUser(user);
         Session session = null;
 
@@ -329,7 +330,8 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                             ret.append("\n" + nodo.getProperty("swb:title").getString());
                             ret.append("\n</td>");
                             ret.append("\n<td>");
-                            ret.append("\n" + nodo.getProperty("jcr:created").getString());
+
+                            ret.append("\n" + sdf.format(nodo.getProperty("jcr:created").getDate()));
                             ret.append("\n</td>");
                             ret.append("\n<td>");
                             SWBResourceURL uout = paramRequest.getActionUrl();
@@ -1217,7 +1219,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
 
         } else if (accion.equals("showold")) {
 
-            SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy hh:mm", new Locale(paramRequest.getUser().getLanguage()));
+            SimpleDateFormat df = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss", new Locale(paramRequest.getUser().getLanguage()));
             String ns = docRepNS(request, response, paramRequest);
             Node nodeRep = null;
             Node nf = null;
@@ -1260,7 +1262,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                 out.println("<tr " + rowColor + ">");
                                 out.println("<td>" + nf.getName() + "</td>");
                                 out.println("<td>" + "folder" + "</td>");
-                                out.println("<td>" + df.format(new Date(nf.getProperty("jcr:created").getDate().getTimeInMillis())) + "</td>");
+                                out.println("<td>" + df.format(nf.getProperty("jcr:created").getDate()) + "</td>");
                                 User usrcreator = paramRequest.getUser().getUserRepository().getUser(getResourceBase().getCreator().getId());
                                 out.println("<td><a href=\"mailto:" + usrcreator.getEmail() + "\">" + usrcreator.getEmail() + "</a></td>");
                                 out.println("<td>");
@@ -1297,7 +1299,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                                         Node ndata = nfi.getNode(JCR_CONTENT);
                                         String s_usrID = ndata.getProperty(SWBFILEREPUSERID).getString();
                                         //System.out.println("USRID:"+s_usrID);
-                                        out.println("<td>" + df.format(new Date(ndata.getProperty(JCR_LASTMODIFIED).getDate().getTimeInMillis())) + "</td>");
+                                        out.println("<td>" + df.format(ndata.getProperty(JCR_LASTMODIFIED).getDate()) + "</td>");
                                         //User usrcreator = paramRequest.getUser().getUserRepository().getUser(s_usrID);
                                         User usrcreator = paramRequest.getWebPage().getWebSite().getUserRepository().getUser(s_usrID);
                                         //System.out.println("UsrCreator: "+usrcreator+", UsrWS:"+usrws);
