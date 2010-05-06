@@ -71,10 +71,10 @@ public class Poll extends GenericResource {
     HashMap hashPrim=new HashMap();
     
     /** The work path. */
-    String workPath = "";
+    String workPath;
     
     /** The web work path. */
-    String webWorkPath= "/work";
+    String webWorkPath;
     
     /** The restype. */
     String restype = "";
@@ -96,8 +96,8 @@ public class Poll extends GenericResource {
         try 
         {
             super.setResourceBase(base);
-            workPath = (String) SWBPortal.getWorkPath() +  base;
-            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+            workPath = SWBPortal.getWorkPath()+base.getWorkPath()+"/";
+            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
             restype= base.getResourceType().getResourceClassName();
         }
         catch(Exception e) { log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  }
@@ -513,7 +513,7 @@ public class Poll extends GenericResource {
                     ret.append(" text=\""+base.getAttribute("textcolorres")+"\"");
                 }
                 if (!"".equals(base.getAttribute("backimgres", "").trim())) {
-                    ret.append(" background=\""+webWorkPath +"/"+ base.getAttribute("backimgres")+"\"");
+                    ret.append(" background=\""+webWorkPath+base.getAttribute("backimgres")+"\"");
                 }
                 ret.append("> \n");
                 /*
@@ -543,7 +543,7 @@ public class Poll extends GenericResource {
                     ret.append("color:" + base.getAttribute("textcolorres").trim() + "; ");
                 }
                 if (!"".equals(base.getAttribute("backimgres", "").trim())) {
-                    ret.append("background-image:url(" + webWorkPath +"/"+ base.getAttribute("backimgres").trim() + "); ");
+                    ret.append("background-image:url(" + webWorkPath+base.getAttribute("backimgres").trim() + "); ");
                 }
                 ret.append("\"> \n");
             }
@@ -713,7 +713,7 @@ public class Poll extends GenericResource {
                     value = null != fup.getValue("noimgencuesta") && !"".equals(fup.getValue("noimgencuesta").trim()) ? fup.getValue("noimgencuesta").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("imgencuesta", "").trim()))
                     {
-                        SWBUtils.IO.removeDirectory(workPath + "/" + base.getAttribute("imgencuesta").trim());
+                        SWBUtils.IO.removeDirectory(workPath+base.getAttribute("imgencuesta").trim());
                         base.removeAttribute("imgencuesta");
                     }
                     else
@@ -750,7 +750,7 @@ public class Poll extends GenericResource {
                     value = null != fup.getValue("nobutton") && !"".equals(fup.getValue("nobutton").trim()) ? fup.getValue("nobutton").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("button", "").trim()))
                     {
-                        SWBUtils.IO.removeDirectory(workPath + "/" + base.getAttribute("button").trim());
+                        SWBUtils.IO.removeDirectory(workPath+base.getAttribute("button").trim());
                         base.removeAttribute("button");
                     }
                     else
@@ -783,7 +783,7 @@ public class Poll extends GenericResource {
                     value = null != fup.getValue("nobackimgres") && !"".equals(fup.getValue("nobackimgres").trim()) ? fup.getValue("nobackimgres").trim() : "0";
                     if ("1".equals(value) && !"".equals(base.getAttribute("backimgres", "").trim()))
                     {
-                        SWBUtils.IO.removeDirectory(workPath + "/" + base.getAttribute("backimgres").trim());
+                        SWBUtils.IO.removeDirectory(workPath+base.getAttribute("backimgres").trim());
                         base.removeAttribute("backimgres");
                     }
                     else
