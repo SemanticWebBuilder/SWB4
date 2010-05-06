@@ -28,7 +28,7 @@
 <%
 
         Resource base = paramRequest.getResourceBase();
-        String webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+        String webWorkPath = (String) SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
        
 
         try {
