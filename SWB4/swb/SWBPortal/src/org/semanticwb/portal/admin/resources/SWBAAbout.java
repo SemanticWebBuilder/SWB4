@@ -55,13 +55,13 @@ public class SWBAAbout extends GenericAdmResource{
         PrintWriter out=response.getWriter();
         out.println("<BR><BR><BR><BR><center>");
         out.println("<table width=\"500\" height=\"300\" border=\"0\" background=\""+SWBPlatform.getContextPath()+"/swbadmin/images/splash.jpg\" >");
-        out.println("  <tr>");
-        out.println("    <td align=\"center\" valign=\"top\" height=\"170\" >&nbsp;</td>");
+        out.println("  <tr height=\"220\">");
+        out.println("    <td height=\"220\">&nbsp;</td>");
         out.println("  </tr>");
-        out.println("  <tr>");
-        out.println("    <td align=\"center\" valign=\"top\" >");
-        out.println("	<font color=\"#000000\" size=\"4\" face=\"Arial, Helvetica, sans-serif\"><B>Version: "+SWBPlatform.getVersion()+"</B></font>");
-        out.println("     </td>");
+        out.println("  <tr height=\"80\">");
+        out.println("    <td height=\"80\" align=\"center\" valign=\"top\" >");
+        out.println("	   <font color=\"#000000\" size=\"3\" face=\"Arial, Helvetica, sans-serif\"><B>Version: "+SWBPlatform.getVersion()+"</B></font>");
+        out.println("    </td>");
         out.println("  </tr>");
         out.println("</table></center>");
 
