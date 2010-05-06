@@ -39,9 +39,11 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.shared.PropertyNotFoundException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.Vector;
 import org.semanticwb.*;
 import org.semanticwb.base.util.URLEncoder;
@@ -831,6 +833,31 @@ public Iterator<SemanticObject> listInstances()
         return m_props.values().iterator();
     }
 
+    public Iterator<SemanticProperty> listSortProperties()
+    {
+        final SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
+
+        TreeSet<SemanticProperty> props=new TreeSet(new Comparator(){
+            public int compare(Object o1, Object o2){
+                SemanticObject sobj1=((SemanticProperty)o1).getDisplayProperty();
+                SemanticObject sobj2=((SemanticProperty)o2).getDisplayProperty();
+                int v1=999999999;
+                int v2=999999999;
+                if(sobj1!=null)v1=sobj1.getIntProperty(swb_index);
+                if(sobj2!=null)v2=sobj2.getIntProperty(swb_index);
+                return v1<v2?-1:1;
+            }
+        });
+
+        Iterator<SemanticProperty> it=listProperties();
+        while(it.hasNext())
+        {
+            SemanticProperty prop=it.next();
+            props.add(prop);
+        }
+        return props.iterator();
+    }
+
     /**
      * Gets the ont class.
      * 
@@ -1181,4 +1208,5 @@ public Iterator<SemanticObject> listInstances()
         }
         return ret;
     }
+
 }
