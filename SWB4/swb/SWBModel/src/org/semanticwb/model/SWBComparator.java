@@ -346,6 +346,62 @@ public static Iterator sortSermanticObjects(Iterator it) {
         return set;
     }
 
+
+    /**
+     * Sort by created set.
+     *
+     * @param it the it
+     * @return the sets the
+     */
+    public static Set sortByLastUpdateSet(Iterator it) {
+        return sortByCreatedSet(it, true);
+    }
+
+
+    /**
+     * Sort by created set.
+     *
+     * @param it the it
+     * @param ascendente the ascendente
+     * @return the sets the
+     */
+    public static Set sortByLastUpdateSet(Iterator it, boolean ascendente) {
+        TreeSet set = null;
+
+        if (ascendente) {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Traceable ob1 = (Traceable) (o1);
+                    Traceable ob2 = (Traceable) (o2);
+                    int       ret = ob1.getUpdated().after(ob2.getUpdated())
+                                    ? 1
+                                    : -1;
+
+                    return ret;
+                }
+            });
+        } else {
+            set = new TreeSet(new Comparator() {
+                public int compare(Object o1, Object o2) {
+                    Traceable ob1 = (Traceable) (o1);
+                    Traceable ob2 = (Traceable) (o2);
+                    int       ret = ob1.getUpdated().after(ob2.getUpdated())
+                                    ? -1
+                                    : 1;
+
+                    return ret;
+                }
+            });
+        }
+
+        while (it.hasNext()) {
+            set.add(it.next());
+        }
+
+        return set;
+    }
+
+
     /**
      * Compare sortable.
      * 
