@@ -34,7 +34,9 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -87,12 +89,15 @@ private SWBResourceCachedMgr cache;
     /** The tracer. */
     private SWBResourceTraceMgr tracer;
 
+    private Set resourceOWLS;               //hash de ontologias de recursos
+
     /**
      * Instantiates a new sWB resource mgr.
      */
     public SWBResourceMgr()
     {
         log.event("Initializing SWBResourceMgr...");
+        resourceOWLS=new HashSet();
     }
 
 
@@ -158,18 +163,20 @@ private SWBResourceCachedMgr cache;
                 try
                 {
                     String path="/"+SWBUtils.TEXT.replaceAll(cls, ".", "/")+".owl";
-                    InputStream in=getClass().getResourceAsStream(path);
-                    if(in!=null)
+                    if(!resourceOWLS.contains(path))
                     {
-                        log.debug("Reading:"+path);
-                        Model m=ModelFactory.createDefaultModel();
-                        m.read(in, null);
-                        model=new SemanticModel(cls,m);
-                        SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
-
-                        //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
-                        
-                        System.out.println(cls);
+                        resourceOWLS.add(path);
+                        InputStream in=getClass().getResourceAsStream(path);
+                        if(in!=null)
+                        {
+                            log.debug("Reading:"+path);
+                            Model m=ModelFactory.createDefaultModel();
+                            m.read(in, null);
+                            model=new SemanticModel(cls,m);
+                            SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
+                            //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                            //System.out.println(cls);
+                        }
                     }
                 }catch(Exception e){log.error("Error loading OWL File:"+cls,e);}
             }
