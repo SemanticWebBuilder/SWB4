@@ -980,6 +980,7 @@ public Document getDomProperty(SemanticProperty prop)
             {
                 if(!prop.isLocaleable())
                 {
+                    //System.out.println("borrar:"+prop.getRDFProperty());
                     m_res.removeAll(prop.getRDFProperty());
                 }else
                 {
