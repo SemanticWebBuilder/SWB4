@@ -29,6 +29,7 @@ import javafx.stage.AppletStageExtension;
 import javafx.stage.Alert;
 import applets.commons.WBXMLParser;
 import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.BufferedOutputStream;
@@ -123,6 +124,9 @@ public class ToolBar extends CustomNode
                 var out=new FileOutputStream(file);
                 out.write(proc.getBytes());
                 out.close();
+                //var o= new ObjectOutputStream(out);
+                //o.writeObject(modeler);
+                //o.close();
             }catch(e:Exception){Alert.inform("Error",e.getMessage());}
         }
     }
