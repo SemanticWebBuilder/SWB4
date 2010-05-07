@@ -63,6 +63,7 @@ import org.semanticwb.portal.SWBTemplateMgr;
 import org.semanticwb.portal.SWBUserMgr;
 import org.semanticwb.portal.access.SWBAccessIncrement;
 import org.semanticwb.portal.access.SWBAccessLog;
+import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.db.SWBDBAdmLog;
 import org.semanticwb.portal.indexer.SWBIndexMgr;
 import org.semanticwb.portal.resources.ImageGallery;
@@ -2606,6 +2607,28 @@ public class SWBPortal
                                 }
                             }
                             fileModel.delete();
+                        }
+                    }
+
+                    if(website!=null)
+                    {
+                        Iterator<ResourceType> it=website.listResourceTypes();
+                        while (it.hasNext())
+                        {
+                            ResourceType resourceType = it.next();
+                            try
+                            {
+                                //Runtime.getRuntime().loadLibrary(oldTitle)
+                                Class cls=SWBPortal.getResourceMgr().createSWBResourceClass(resourceType.getResourceClassName());
+                                if(cls!=null)
+                                {
+                                    SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls.newInstance()));
+                                    if(res!=null)
+                                    {
+                                        res.install(resourceType);
+                                    }
+                                }
+                            }catch(Exception e){log.error(e);}
                         }
                     }
                     return website;
