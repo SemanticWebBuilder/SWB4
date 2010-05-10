@@ -48,6 +48,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.jcr170.implementation.SWBCredentials;
+import org.semanticwb.jcr170.implementation.SWBRepository;
 import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericIterator;
@@ -76,11 +78,15 @@ import org.semanticwb.office.interfaces.SiteInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.FlowNotification;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.resource.office.sem.OfficeResource;
 import org.semanticwb.xmlrpc.Part;
 import org.semanticwb.xmlrpc.XmlRpcObject;
+import org.semanticwb.office.interfaces.SemanticRepository;
+import org.semanticwb.office.interfaces.SemanticFolderRepository;
+import org.semanticwb.office.interfaces.SemanticFileRepository;
 
 /**
  *
@@ -88,10 +94,20 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
-
+    private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
+    private static final String REP_FILE = "swbfilerep:RepositoryFile";
+    private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
+    private static SWBRepository rep = null;
     static Logger log = SWBUtils.getLogger(OfficeApplication.class);
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
+    static {
+        try {
+            rep = new SWBRepository();
+        } catch (Exception e) {
+            log.error(e);
+        }
+    }
     //private Session session;
     public boolean isValidVersion(double version)
     {
@@ -677,7 +693,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         info.url = site.getHomePage().getUrl();
         int childs = 0;
         GenericIterator<WebPage> childWebPages = site.getHomePage().listChilds();
-        while (childWebPages.hasNext())
+        if (childWebPages.hasNext())
         {
             childWebPages.next();
             childs++;
@@ -696,7 +712,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             WebPage page = pages.next();
             User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-            if (SWBPortal.getAdminFilterMgr().haveAccessToWebPage(ouser, page))
+            if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, page.getSemanticObject()))
             {
                 WebPageInfo info = new WebPageInfo();
                 info.id = page.getId();
@@ -707,7 +723,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 info.url = page.getUrl();
                 int childs = 0;
                 GenericIterator<WebPage> childWebPages = page.listChilds();
-                while (childWebPages.hasNext())
+                if (childWebPages.hasNext())
                 {
                     childWebPages.next();
                     childs++;
@@ -1173,7 +1189,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
             throw e;
         }
         finally
@@ -1240,7 +1256,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
             throw e;
         }
         finally
@@ -1250,5 +1266,243 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 session.logout();
             }
         }
+    }
+
+    public SemanticRepository[] getSemanticRepositories(SiteInfo siteInfo) throws Exception
+    {
+
+        HashSet<SemanticRepository> getSemanticRepositories=new HashSet<SemanticRepository>();
+        WebSite website = SWBContext.getWebSite(siteInfo.id);
+        Iterator<ResourceType> resourceTypes=ResourceType.ClassMgr.listResourceTypes(website);
+        while(resourceTypes.hasNext())
+        {
+            ResourceType resourceType=resourceTypes.next();
+            if(resourceType.getResourceClassName().equals("org.semanticwb.resources.filerepository.SemanticRepositoryFile"))
+            {
+                Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType, website);
+                while(resources.hasNext())
+                {
+                    Resource resource=resources.next();
+                    GenericIterator<Resourceable> resourceables=resource.listResourceables();
+                    while(resourceables.hasNext())
+                    {
+                        Resourceable resourceable=resourceables.next();
+                        if(resourceable instanceof WebPage)
+                        {
+                            WebPage wp=(WebPage)resourceable;                            
+                            SemanticRepository sr=new SemanticRepository();
+                            sr.name=resource.getTitle();
+                            sr.resid=resource.getId();                            
+                            sr.pageid=wp.getId();
+                            sr.uri=resource.getURI();
+                            getSemanticRepositories.add(sr);
+                        }
+                    }
+                }
+            }
+        }
+        return getSemanticRepositories.toArray(new SemanticRepository[getSemanticRepositories.size()]);
+    }
+
+
+    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
+    {
+        HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
+        WebSite website = SWBContext.getWebSite(siteInfo.id);
+        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables=resource.listResourceables();
+        while(resourceables.hasNext())
+        {
+            Resourceable resourceable=resourceables.next();
+            if(resourceable instanceof WebPage)
+            {
+                WebPage wp=(WebPage)resourceable;
+                String resUUID = resource.getAttribute(wp.getId() + "_uuid");
+                Session session=null;
+                String idrep=docRepNS(website);
+                if(idrep!=null)
+                {
+                    org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+                    session = rep.login(new SWBCredentials(userModel), idrep);
+                    Node nodePage = session.getNodeByUUID(resUUID);
+                    NodeIterator nit = nodePage.getNodes(REP_FOLDER);
+                    while (nit.hasNext())
+                    {
+                        Node nodofolder = nit.nextNode();
+                        boolean hasChilds=false;
+                        NodeIterator nc=nodofolder.getNodes(REP_FOLDER);
+                        hasChilds=nc.hasNext();
+                        String title=nodofolder.getProperty("swb:title").getString();
+                        String uuid=nodofolder.getUUID();
+                        SemanticFolderRepository sf=new SemanticFolderRepository();
+                        sf.name=title;
+                        sf.uuid=uuid;
+                        sf.haschilds=hasChilds;
+                        getSemanticFolderRepositories.add(sf);
+                    }
+                }
+            }
+        }
+        return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
+    }
+
+    private String docRepNS(WebSite site) {
+        String NS = null;
+        WebSite ws = site;
+        try {
+
+            String[] lws = rep.listWorkspaces();
+            for (int i = 0; i < lws.length; i++) {
+                if (lws[i].endsWith(ws.getId() + "_rep")) {
+                    NS = lws[i];
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error al obtener el NameSpace del Repositorio de documentos.", e);
+        }
+        return NS;
+    }
+
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolder) throws Exception
+    {
+        HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
+        WebSite website = SWBContext.getWebSite(siteInfo.id);
+        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables=resource.listResourceables();
+        while(resourceables.hasNext())
+        {
+            Resourceable resourceable=resourceables.next();
+            if(resourceable instanceof WebPage)
+            {
+                WebPage wp=(WebPage)resourceable;                
+                Session session=null;
+                String idrep=docRepNS(website);
+                if(idrep!=null)
+                {
+                    org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+                    session = rep.login(new SWBCredentials(userModel), idrep);
+                    Node nodeFolder = session.getNodeByUUID(semanticFolder.uuid);
+                    NodeIterator nit = nodeFolder.getNodes();
+                    while (nit.hasNext())
+                    {
+                        Node nodoFile = nit.nextNode();
+                        if (nodoFile.getPrimaryNodeType().getName().equals(REP_FILE))
+                        {
+                            boolean isdeleted = false;
+                            try {
+                                isdeleted = nodoFile.getProperty(SWB_FILEREP_DELETED).getBoolean();
+                            } catch (Exception e) {
+                                log.event("Error al revisar la propiedad Deleted del repositorio de documentos.", e);
+                            }
+                            if(!isdeleted)
+                            {
+                                String title=nodoFile.getProperty("swb:title").getString();
+                                Date created=nodoFile.getProperty("jcr:created").getDate().getTime();
+                                SemanticFileRepository sf=new SemanticFileRepository();
+                                sf.uuid=nodoFile.getUUID();
+                                sf.title=title;
+                                sf.name=nodoFile.getName();
+                                sf.date=created;
+                                getSemanticFileRepositories.add(sf);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return getSemanticFileRepositories.toArray(new SemanticFileRepository[getSemanticFileRepositories.size()]);
+    }
+
+    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository, SemanticFolderRepository semanticFolderRepository) throws Exception
+    {
+        HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
+        WebSite website = SWBContext.getWebSite(siteInfo.id);
+        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables=resource.listResourceables();
+        while(resourceables.hasNext())
+        {
+            Resourceable resourceable=resourceables.next();
+            if(resourceable instanceof WebPage)
+            {
+                WebPage wp=(WebPage)resourceable;                
+                Session session=null;
+                String idrep=docRepNS(website);
+                if(idrep!=null)
+                {
+                    org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+                    session = rep.login(new SWBCredentials(userModel), idrep);
+                    Node nodeFolder = session.getNodeByUUID(semanticFolderRepository.uuid);
+                    NodeIterator nit = nodeFolder.getNodes(REP_FOLDER);
+                    while (nit.hasNext())
+                    {
+                        Node subnodofolder = nit.nextNode();
+                        boolean hasChilds=false;
+                        NodeIterator nc=subnodofolder.getNodes(REP_FOLDER);
+                        hasChilds=nc.hasNext();
+                        String title=subnodofolder.getProperty("swb:title").getString();
+                        String uuid=subnodofolder.getUUID();
+                        SemanticFolderRepository sf=new SemanticFolderRepository();
+                        sf.name=title;
+                        sf.uuid=uuid;
+                        sf.haschilds=hasChilds;
+                        getSemanticFolderRepositories.add(sf);
+                    }
+                }
+            }
+        }
+        return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
+    }
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
+    {
+        HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
+        WebSite website = SWBContext.getWebSite(siteInfo.id);
+        Resource resource=new Resource(SemanticObject.getSemanticObject(semanticRepository.uri));
+        GenericIterator<Resourceable> resourceables=resource.listResourceables();
+        while(resourceables.hasNext())
+        {
+            Resourceable resourceable=resourceables.next();
+            if(resourceable instanceof WebPage)
+            {
+                WebPage wp=(WebPage)resourceable;
+                String resUUID = resource.getAttribute(wp.getId() + "_uuid");
+                Session session=null;
+                String idrep=docRepNS(website);
+                if(idrep!=null)
+                {
+                    org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
+                    session = rep.login(new SWBCredentials(userModel), idrep);
+                    Node nodeFolder = session.getNodeByUUID(resUUID);
+                    NodeIterator nit = nodeFolder.getNodes();
+                    while (nit.hasNext())
+                    {
+                        Node nodoFile = nit.nextNode();
+                        if (nodoFile.getPrimaryNodeType().getName().equals(REP_FILE))
+                        {
+                            boolean isdeleted = false;
+                            try {
+                                isdeleted = nodoFile.getProperty(SWB_FILEREP_DELETED).getBoolean();
+                            } catch (Exception e) {
+                                log.event("Error al revisar la propiedad Deleted del repositorio de documentos.", e);
+                            }
+                            if(!isdeleted)
+                            {
+                                String title=nodoFile.getProperty("swb:title").getString();
+                                Date created=nodoFile.getProperty("jcr:created").getDate().getTime();
+                                SemanticFileRepository sf=new SemanticFileRepository();
+                                sf.uuid=nodoFile.getUUID();
+                                sf.title=title;
+                                sf.name=nodoFile.getName();
+                                sf.date=created;
+                                getSemanticFileRepositories.add(sf);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return getSemanticFileRepositories.toArray(new SemanticFileRepository[getSemanticFileRepositories.size()]);
     }
 }
