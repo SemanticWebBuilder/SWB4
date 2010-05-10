@@ -154,6 +154,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     }
                 }
                 zip.close();
+                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
             }
         }
         catch (Exception e)
@@ -170,7 +171,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
-    public static void loadContent(InputStream in, String dir, String type,User user)
+    public void loadContent(InputStream in, String dir, String type,User user)
     {
         File zipFile = null;
         try
@@ -208,6 +209,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     }
                 }
                 zip.close();
+                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
             }
         }
         catch (Exception e)
