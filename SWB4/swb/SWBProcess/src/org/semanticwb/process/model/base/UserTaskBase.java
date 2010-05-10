@@ -49,27 +49,27 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
             return (getUserTask(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByToConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByToConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByContainer(org.semanticwb.process.model.Containerable value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -85,27 +85,27 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByParentProcess(org.semanticwb.process.model.SubProcess value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByParentProcess(org.semanticwb.process.model.SubProcess value)
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -130,6 +130,18 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
         public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByFormView(org.semanticwb.model.FormView value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_processFormView,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.UserTask> listUserTaskByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.UserTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
             return it;
         }
     }

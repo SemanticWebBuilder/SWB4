@@ -47,6 +47,18 @@ public abstract class PoolBase extends org.semanticwb.process.model.GraphicalEle
             return (getPool(id, model)!=null);
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
@@ -56,6 +68,30 @@ public abstract class PoolBase extends org.semanticwb.process.model.GraphicalEle
         public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -70,10 +106,27 @@ public abstract class PoolBase extends org.semanticwb.process.model.GraphicalEle
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Pool> listPoolByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Pool> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public PoolBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

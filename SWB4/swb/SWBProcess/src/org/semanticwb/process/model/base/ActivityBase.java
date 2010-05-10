@@ -3,7 +3,6 @@ package org.semanticwb.process.model.base;
 
 public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
-    public static final org.semanticwb.platform.SemanticProperty swp_executions=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#executions");
     public static final org.semanticwb.platform.SemanticClass swp_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Activity");
 
@@ -42,27 +41,27 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
             return (getActivity(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByToConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByToConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByContainer(org.semanticwb.process.model.Containerable value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -78,27 +77,27 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByParentProcess(org.semanticwb.process.model.SubProcess value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByParentProcess(org.semanticwb.process.model.SubProcess value)
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -113,20 +112,22 @@ public abstract class ActivityBase extends org.semanticwb.process.model.FlowNode
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Activity> listActivityByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Activity> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public ActivityBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-    public int getExecutions()
-    {
-        return getSemanticObject().getIntProperty(swp_executions);
-    }
-
-    public void setExecutions(int value)
-    {
-        getSemanticObject().setIntProperty(swp_executions, value);
     }
 }

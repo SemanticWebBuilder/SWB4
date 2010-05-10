@@ -47,27 +47,27 @@ public abstract class DefaultFlowBase extends org.semanticwb.process.model.Seque
             return (getDefaultFlow(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByToFlowObject(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByTarget(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_toFlowObject, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_target, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByToFlowObject(org.semanticwb.process.model.FlowNode value)
+        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByTarget(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_toFlowObject,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_target,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByFromFlowObject(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_fromFlowObjectInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByFromFlowObject(org.semanticwb.process.model.FlowNode value)
+        public static java.util.Iterator<org.semanticwb.process.model.DefaultFlow> listDefaultFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_fromFlowObjectInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DefaultFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
             return it;
         }
     }

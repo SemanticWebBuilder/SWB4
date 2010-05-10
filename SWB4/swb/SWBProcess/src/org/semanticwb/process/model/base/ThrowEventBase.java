@@ -41,6 +41,30 @@ public abstract class ThrowEventBase extends org.semanticwb.process.model.Event 
             return (getThrowEvent(id, model)!=null);
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
@@ -53,51 +77,27 @@ public abstract class ThrowEventBase extends org.semanticwb.process.model.Event 
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFromConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFromConnectionObjectInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByFlowObjectInstance(org.semanticwb.process.model.FlowObjectInstance value)
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowObjectInstansInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByToConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByToConnectionObject(org.semanticwb.process.model.ConnectionObject value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasToConnectionObject,value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByParentProcess(org.semanticwb.process.model.SubProcess value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByParentProcess(org.semanticwb.process.model.SubProcess value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parentProcessInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -110,6 +110,18 @@ public abstract class ThrowEventBase extends org.semanticwb.process.model.Event 
         public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.ThrowEvent> listThrowEventByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ThrowEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
             return it;
         }
     }

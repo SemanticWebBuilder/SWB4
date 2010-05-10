@@ -47,6 +47,18 @@ public abstract class DataStoreArtifactBase extends org.semanticwb.process.model
             return (getDataStoreArtifact(id, model)!=null);
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByContainer(org.semanticwb.process.model.Containerable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
@@ -56,6 +68,30 @@ public abstract class DataStoreArtifactBase extends org.semanticwb.process.model
         public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByInputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasInputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -70,10 +106,27 @@ public abstract class DataStoreArtifactBase extends org.semanticwb.process.model
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.DataStoreArtifact> listDataStoreArtifactByParent(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.DataStoreArtifact> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_parent,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public DataStoreArtifactBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }

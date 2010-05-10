@@ -3,7 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class ProcessWebPageBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Rankable,org.semanticwb.model.Trashable,org.semanticwb.model.Viewable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Searchable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Resourceable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable
 {
-    public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
+    public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
     public static final org.semanticwb.platform.SemanticProperty swp_process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#process");
     public static final org.semanticwb.platform.SemanticClass swp_ProcessWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ProcessWebPage");
@@ -67,13 +67,13 @@ public abstract class ProcessWebPageBase extends org.semanticwb.model.WebPage im
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessWebPage> listProcessWebPageByProcess(org.semanticwb.process.model.SubProcess value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessWebPage> listProcessWebPageByProcess(org.semanticwb.process.model.Process value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessWebPage> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_process, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ProcessWebPage> listProcessWebPageByProcess(org.semanticwb.process.model.SubProcess value)
+        public static java.util.Iterator<org.semanticwb.process.model.ProcessWebPage> listProcessWebPageByProcess(org.semanticwb.process.model.Process value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessWebPage> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_process,value.getSemanticObject(),sclass));
             return it;
@@ -253,7 +253,7 @@ public abstract class ProcessWebPageBase extends org.semanticwb.model.WebPage im
         super(base);
     }
 
-    public void setProcess(org.semanticwb.process.model.SubProcess value)
+    public void setProcess(org.semanticwb.process.model.Process value)
     {
         getSemanticObject().setObjectProperty(swp_process, value.getSemanticObject());
     }
@@ -263,13 +263,13 @@ public abstract class ProcessWebPageBase extends org.semanticwb.model.WebPage im
         getSemanticObject().removeProperty(swp_process);
     }
 
-    public org.semanticwb.process.model.SubProcess getProcess()
+    public org.semanticwb.process.model.Process getProcess()
     {
-         org.semanticwb.process.model.SubProcess ret=null;
+         org.semanticwb.process.model.Process ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_process);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.SubProcess)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.Process)obj.createGenericInstance();
          }
          return ret;
     }
