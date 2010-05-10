@@ -817,7 +817,6 @@ public class ToolBar extends CustomNode
                             modeler:modeler
                             title:"Start Event"
                             uri:"new:startevent:{counter++}"
-                            //type: Event.RULE;
                         }
                     }
                 },
@@ -827,12 +826,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/start_msj2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=MessageStartEvent
                         {
                             modeler:modeler
                             title:"Message Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_MESSAGE;
                         }
                     }
                 },
@@ -843,27 +841,25 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=TimerStartEvent
                         {
                             modeler:modeler
                             title:"Timer Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_TIMER;
                         }
                     }
                 },
                 ImgButton {
-                    text:"Conditional Start Event"
+                    text:"Rule Start Event"
                     image: "images/start_cond1.png"
                     imageOver: "images/start_cond2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=RuleStartEvent
                         {
                             modeler:modeler
-                            title:"Conditional Start Event"
+                            title:"Rule Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_CONDITINAL;
                         }
                     }
                 },
@@ -874,12 +870,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=SignalStartEvent
                         {
                             modeler:modeler
                             title:"Signal Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_SIGNAL;
                         }
                     }
                 },
@@ -890,12 +885,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=MultipleStartEvent
                         {
                             modeler:modeler
                             title:"Multiple Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_MULTIPLE;
                         }
                     }
                 },
@@ -906,12 +900,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=ParallelStartEvent
                         {
                             modeler:modeler
                             title:"Parallel Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_PARALLEL;
                         }
                     }
                 },
@@ -922,12 +915,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=ScalationStartEvent
                         {
                             modeler:modeler
                             title:"Escalation Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_SCALATION;
                         }
                     }
                 },
@@ -938,12 +930,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=ErrorStartEvent
                         {
                             modeler:modeler
                             title:"Error Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_ERROR;
                         }
                     }
                 },
@@ -954,12 +945,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartEvent
+                        modeler.tempNode=CompensationStartEvent
                         {
                             modeler:modeler
                             title:"Compensation Start Event"
                             uri:"new:startevent:{counter++}"
-                            type: Event.W_COMPENSATION;
                         }
                     }
                 }
@@ -1254,7 +1244,6 @@ public class ToolBar extends CustomNode
                             modeler:modeler
                             title:"End Event"
                             uri:"new:endevent:{counter++}"
-                            //type: Event.RULE;
                         }
                     }
                 },
@@ -1264,12 +1253,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/end_msj2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=MessageEndEvent
                         {
                             modeler:modeler
                             title:"Message End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_MESSAGE;
                         }
                     }
                 },
@@ -1280,12 +1268,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=ErrorEndEvent
                         {
                             modeler:modeler
                             title:"Error End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_ERROR;
                         }
                     }
                 },
@@ -1296,12 +1283,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=CancelationEndEvent
                         {
                             modeler:modeler
                             title:"Cancelation End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_CANCELATION;
                         }
                     }
                 },
@@ -1312,12 +1298,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=CompensationEndEvent
                         {
                             modeler:modeler
                             title:"Compensation End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_COMPENSATION;
                         }
                     }
                 },
@@ -1328,12 +1313,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=SignalEndEvent
                         {
                             modeler:modeler
                             title:"Signal End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_SIGNAL;
                         }
                     }
                 },
@@ -1344,12 +1328,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=MultipleEndEvent
                         {
                             modeler:modeler
                             title:"Multiple End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_MULTIPLE;
                         }
                     }
                 },
@@ -1360,12 +1343,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=ScalationEndEvent
                         {
                             modeler:modeler
                             title:"Escalation End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_SCALATION;
                         }
                     }
                 },
@@ -1376,12 +1358,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EndEvent
+                        modeler.tempNode=TerminationEndEvent
                         {
                             modeler:modeler
                             title:"Termination End Event"
                             uri:"new:endevent:{counter++}"
-                            type: Event.B_TERMINATION;
                         }
                     }
                 }         
