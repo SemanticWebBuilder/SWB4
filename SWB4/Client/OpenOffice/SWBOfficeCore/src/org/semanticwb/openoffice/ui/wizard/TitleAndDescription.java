@@ -64,6 +64,25 @@ public class TitleAndDescription extends WizardPage
     {   
         super.renderingPage();
         this.jTextFieldName.requestFocus();
+        try
+        {
+            if(showTypeOfcontent)
+            {
+                this.jComboBoxType.removeAllItems();
+                if (SelectCategory.map!=null && SelectCategory.map.get(SelectCategory.REPOSITORY_ID) != null && SelectCategory.map.get(NODE_TYPE) == null)
+                {
+                    String repository = SelectCategory.map.get(SelectCategory.REPOSITORY_ID).toString();
+                    for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(repository))
+                    {
+                        this.jComboBoxType.addItem(type);
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public TitleAndDescription()
