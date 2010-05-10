@@ -435,27 +435,28 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
      */
     public boolean haveAccessToWebPage(WebPage page) {
         boolean ret = false;
-        //System.out.print("haveAccessToWebPage:"+page);
-        Iterator<WebPage> it = pages.iterator();
-        while (it.hasNext()) {
-            WebPage webPage = it.next();
-            if (page.equals(webPage) || page.isChildof(webPage)) {
-                ret = true;
-                break;
-            }
-        }
-        //System.out.print(" retet1:"+ret);
-        if (!ret) {
-            Iterator<WebPage> it2 = vpages.iterator();
-            while (it2.hasNext()) {
-                WebPage webPage = it2.next();
-                if (page.equals(webPage)) {
-                    ret = true;
-                    break;
-                }
-            }
-        }
-        //System.out.println(" retet2:"+ret);
+//        //System.out.print("haveAccessToWebPage:"+page);
+//        Iterator<WebPage> it = pages.iterator();
+//        while (it.hasNext()) {
+//            WebPage webPage = it.next();
+//            if (page.equals(webPage) || page.isChildof(webPage)) {
+//                ret = true;
+//                break;
+//            }
+//        }
+//        //System.out.print(" retet1:"+ret);
+//        if (!ret) {
+//            Iterator<WebPage> it2 = vpages.iterator();
+//            while (it2.hasNext()) {
+//                WebPage webPage = it2.next();
+//                if (page.equals(webPage)) {
+//                    ret = true;
+//                    break;
+//                }
+//            }
+//        }
+//        //System.out.println(" retet2:"+ret);
+        ret = haveAccessToSemanticObject(page.getSemanticObject());
         return ret;
     }
 
