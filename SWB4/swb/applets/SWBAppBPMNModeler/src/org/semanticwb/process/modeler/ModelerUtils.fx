@@ -97,9 +97,9 @@ public function setResizeNode(node:Node)
     if(node==null)
     {
         resize.attachedNode=null;
-    }else if(node instanceof GraphElement)
+    }else if(node instanceof GraphicalElement)
     {
-        resize.attachedNode=node as GraphElement;
+        resize.attachedNode=node as GraphicalElement;
     }else
     {
         resize.attachedNode=null;

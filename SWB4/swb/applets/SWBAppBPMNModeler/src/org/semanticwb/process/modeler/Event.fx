@@ -38,7 +38,7 @@ public-read var B_SCALATION="b_scalation";
 public-read var B_TERMINATION="b_termination";
 public-read var B_LINK="b_link";
 
-public class Event extends FlowObject
+public class Event extends FlowNode
 {
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x

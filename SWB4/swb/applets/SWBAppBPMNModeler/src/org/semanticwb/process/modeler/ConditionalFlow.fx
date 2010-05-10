@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class ConditionalFlow extends ConnectionObject
+public class ConditionalFlow extends SequenceFlow
 {
     public override function create(): Node
     {
@@ -38,7 +38,7 @@ public class ConditionalFlow extends ConnectionObject
             style:Styles.style_flow
             stroke:bind path.stroke
             fill:Color.WHITE
-            visible:bind not(ini instanceof GateWay)
+            visible:bind not(ini instanceof Gateway)
         };
 
         var ret=Group

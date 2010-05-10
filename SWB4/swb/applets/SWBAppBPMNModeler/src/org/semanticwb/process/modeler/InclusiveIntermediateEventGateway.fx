@@ -1,5 +1,5 @@
 /*
- * ORGateWay.fx
+ * InclusiveIntermediateEventGateway.fx
  *
  * Created on 13/02/2010, 11:24:44 AM
  */
@@ -18,7 +18,7 @@ import javafx.scene.effect.ColorAdjust;
  * @author javier.solis
  */
 
-public class StartORGateWay extends ORGateWay
+public class InclusiveIntermediateEventGateway extends EventBasedGateway
 {
     public override function create(): Node
     {
@@ -62,6 +62,13 @@ public class StartORGateWay extends ORGateWay
                     radius: w/3.5
                     style: Styles.style_simbol2
                     //smooth: true;
+                }, Circle
+                {
+                    centerX: w/2
+                    centerY: h/2
+                    radius: w/3.5-3
+                    style: Styles.style_simbol2
+                    //smooth: true;
                 },
                 message
             ]
@@ -71,7 +78,7 @@ public class StartORGateWay extends ORGateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
-            visible:bind canView()
+            visible: bind canView()
         };
     }
 }

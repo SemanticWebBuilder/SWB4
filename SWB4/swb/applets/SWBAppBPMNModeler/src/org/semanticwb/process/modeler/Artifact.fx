@@ -22,7 +22,7 @@ public-read var TYPE_INPUT="input";
 public-read var TYPE_OUTPUT="output";
 
 
-public class Artifact extends GraphElement
+public class Artifact extends GraphicalElement
 {
     protected var ix:Number;                          //offset imagen x
     protected var iy:Number;                          //offset imagen x
@@ -35,6 +35,7 @@ public class Artifact extends GraphElement
         opacity: o;
         scaleX: bind is;
         scaleY: bind is;
+        visible:false;
     };
 
     override public function create(): Node
@@ -138,7 +139,7 @@ public class Artifact extends GraphElement
         }
     }
 
-    public override function canAttach(parent:GraphElement):Boolean
+    public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
         if(parent instanceof Pool or parent instanceof Lane)

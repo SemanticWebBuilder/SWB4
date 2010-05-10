@@ -20,7 +20,7 @@ public-read var RESIZE_H=3;                 //Horizontal
 
 public class ResizeNode extends CustomNode
 {
-    public var attachedNode:GraphElement;
+    public var attachedNode:GraphicalElement;
     public var modeler:Modeler;
 
     override protected function create () : Node

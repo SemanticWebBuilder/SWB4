@@ -19,7 +19,7 @@ import javafx.stage.Alert;
  * @author javier.solis
  */
 
-public class Pool extends GraphElement
+public class Pool extends GraphicalElement
 {
 
     var py=bind y on replace
@@ -157,7 +157,7 @@ public class Pool extends GraphElement
 
 
 
-    public function getLaneByURI(uri:String):GraphElement
+    public function getLaneByURI(uri:String):GraphicalElement
     {
         for(lane in lanes)
         {

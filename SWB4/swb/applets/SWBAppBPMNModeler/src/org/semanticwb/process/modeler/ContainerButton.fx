@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 
 public class ContainerButton extends CustomNode
 {
-    public var container:GraphElement;
+    public var container:GraphicalElement;
     public var modeler:Modeler;
 
     public override function create(): Node

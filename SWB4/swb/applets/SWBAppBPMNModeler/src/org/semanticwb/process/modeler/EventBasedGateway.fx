@@ -1,0 +1,16 @@
+/*
+ * EventBasedGateway.fx
+ *
+ * Created on 13/02/2010, 11:28:15 AM
+ */
+
+package org.semanticwb.process.modeler;
+
+/**
+ * @author javier.solis
+ */
+
+public class EventBasedGateway extends Gateway
+{
+
+}

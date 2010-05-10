@@ -32,8 +32,8 @@ public-read var ARROW_TYPE_NONE="none";
 public class ConnectionObject  extends CustomNode
 {
     public var modeler:Modeler;
-    public var ini : GraphElement;
-    public var end : GraphElement;
+    public var ini : GraphicalElement;
+    public var end : GraphicalElement;
     public var cubicCurve : Boolean;
 
     public var title : String;
@@ -255,7 +255,7 @@ public class ConnectionObject  extends CustomNode
         //println(e);
     }
 
-    protected bound function getConnectionX(ini: GraphElement, end: GraphElement): Number
+    protected bound function getConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
     {
         if(ini!=null)
         {
@@ -314,7 +314,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getConnectionY(ini: GraphElement, end: GraphElement): Number
+    protected bound function getConnectionY(ini: GraphicalElement, end: GraphicalElement): Number
     {
         if(ini!=null)
         {
@@ -373,7 +373,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter1ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter1ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -390,7 +390,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter1ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter1ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -407,7 +407,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter2ConnectionX(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter2ConnectionX(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {
@@ -426,7 +426,7 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
-    protected bound function getInter2ConnectionY(ini: GraphElement, end: GraphElement, pini: Point,pend: Point): Number
+    protected bound function getInter2ConnectionY(ini: GraphicalElement, end: GraphicalElement, pini: Point,pend: Point): Number
     {
         if(end!=null)
         {

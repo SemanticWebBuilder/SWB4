@@ -1,5 +1,5 @@
 /*
- * InterEvent.fx
+ * IntermediateThrowEvent.fx
  *
  * Created on 13/02/2010, 11:30:48 AM
  */
@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class InterEvent extends Event
+public class IntermediateThrowEvent extends ThrowEvent
 {
     public override function create(): Node
     {
@@ -71,7 +71,7 @@ public class InterEvent extends Event
         };
     }
 
-    public override function canAttach(parent:GraphElement):Boolean
+    public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
         if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane)

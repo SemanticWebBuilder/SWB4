@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class StartEvent extends Event
+public class StartEvent extends CatchEvent
 {
     public override function create(): Node
     {

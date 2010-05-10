@@ -1,7 +1,7 @@
 /*
- * FlowLink.fx
+ * ManualTask.fx
  *
- * Created on 13/02/2010, 10:51:55 AM
+ * Created on 13/02/2010, 11:19:11 AM
  */
 
 package org.semanticwb.process.modeler;
@@ -12,11 +12,11 @@ import javafx.scene.Node;
  * @author javier.solis
  */
 
-public class Activity extends FlowNode
+public class ManualTask extends Task
 {
     public override function create(): Node
     {
-        var ret=super.create();
-        return ret;
+        type=TYPE_MANUAL;
+        return super.create();
     }
 }

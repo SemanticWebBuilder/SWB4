@@ -10,7 +10,7 @@ import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import org.semanticwb.process.modeler.GraphElement;
+import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 import java.awt.image.BufferedImage;
 import javafx.scene.control.ScrollView;
@@ -29,12 +29,12 @@ public class Modeler extends CustomNode
     public var pannable: Boolean;
     public var disablePannable: Boolean=false;
     public var tempNode: Node;                          //Nodo temporal por toolbar
-    public var overNode: GraphElement;
+    public var overNode: GraphicalElement;
     public var mousex:Number;
     public var mousey:Number;
     public var scrollView:ScrollView;
     public var content:Group;
-    public var containerElement: GraphElement;
+    public var containerElement: GraphicalElement;
     public var toolBar:ToolBar;
 
     var focusedNode: Node;                       //Nodo con el foco
@@ -77,7 +77,7 @@ public class Modeler extends CustomNode
                 {
                     var close: Boolean=true;
 
-                    if(tempNode instanceof GraphElement)
+                    if(tempNode instanceof GraphicalElement)
                     {
                         if(ModelerUtils.clickedNode==null) //elemento sobre modeler
                         {
@@ -87,7 +87,7 @@ public class Modeler extends CustomNode
                             }else
                             {
                                 if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
-                                var a=tempNode as GraphElement;
+                                var a=tempNode as GraphicalElement;
                                 a.x=e.x+getXScroll();
                                 a.y=e.y+getYScroll();
                                 a.snapToGrid();
@@ -115,13 +115,13 @@ public class Modeler extends CustomNode
                             }else
                             {
                                 add(tempNode);
-                                var a=tempNode as GraphElement;
+                                var a=tempNode as GraphicalElement;
                                 a.x=e.x+getXScroll();
                                 a.y=e.y+getYScroll();
                                 a.snapToGrid();
-                                if(a.canAttach(ModelerUtils.clickedNode as GraphElement))
+                                if(a.canAttach(ModelerUtils.clickedNode as GraphicalElement))
                                 {
-                                    a.setGraphParent(ModelerUtils.clickedNode as GraphElement);
+                                    a.setGraphParent(ModelerUtils.clickedNode as GraphicalElement);
                                 }
                                 a.setContainer(containerElement);
                             }
@@ -132,9 +132,9 @@ public class Modeler extends CustomNode
                     }else if(tempNode instanceof ConnectionObject)
                     {
                         var a=tempNode as ConnectionObject;
-                        if(ModelerUtils.clickedNode instanceof GraphElement)
+                        if(ModelerUtils.clickedNode instanceof GraphicalElement)
                         {
-                            var ge=ModelerUtils.clickedNode as GraphElement;
+                            var ge=ModelerUtils.clickedNode as GraphicalElement;
                             if(ge.canIniLink(a))
                             {
                                 a.ini=ge;
@@ -246,7 +246,7 @@ public class Modeler extends CustomNode
         };
         add(p1);
 
-        add(ANDGateWay {
+        add(ParallelGateway {
             x : 300, y : 100
             uri : "gateway1"
         });
@@ -282,13 +282,13 @@ public class Modeler extends CustomNode
 
     }
 
-    public function getGraphElementByURI(uri:String):GraphElement
+    public function getGraphElementByURI(uri:String):GraphicalElement
     {
         for(node in contents)
         {
-            if(node instanceof GraphElement)
+            if(node instanceof GraphicalElement)
             {
-                var ge=node as GraphElement;
+                var ge=node as GraphicalElement;
                 if(ge.uri.equals(uri))return ge;
                 if(ge instanceof Pool)
                 {
