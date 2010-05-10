@@ -66,7 +66,7 @@ public class WB4WriterTest
     XComponentContext xContext;
     XComponent xCompDest = null;
     XDesktop oDesktop = null;
-    File sUrlDestiny = new File("C:\\temp\\PruebaJordi.doc");
+    File sUrlDestiny = new File("C:\\temp\\articulo2.odt");
     File tempDir = new File("c:/temp/demo/");
 
     public WB4WriterTest()
@@ -304,7 +304,7 @@ public class WB4WriterTest
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void showContentsInFlowTest()
     {
         try
@@ -481,6 +481,21 @@ public class WB4WriterTest
             WB4Writer writer = new WB4Writer(this.xContext);
             List<File> attachments = writer.getAllAttachments();
             Assert.assertEquals(attachments.size(), 2);
+        }
+        catch (WBException wbe)
+        {
+            Assert.fail(wbe.getMessage());
+        }
+    }
+
+    @Test
+    //@Ignore
+    public void insertLinkDocTest()
+    {
+        try
+        {
+            WB4Writer writer = new WB4Writer(this.xContext);
+            writer.insertLinkDoc();
         }
         catch (WBException wbe)
         {
