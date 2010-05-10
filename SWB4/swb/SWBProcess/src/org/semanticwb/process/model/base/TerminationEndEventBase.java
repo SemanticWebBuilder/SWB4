@@ -83,13 +83,13 @@ public abstract class TerminationEndEventBase extends org.semanticwb.process.mod
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TerminationEndEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TerminationEndEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;

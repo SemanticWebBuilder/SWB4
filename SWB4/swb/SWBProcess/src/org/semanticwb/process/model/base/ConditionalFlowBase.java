@@ -60,13 +60,13 @@ public abstract class ConditionalFlowBase extends org.semanticwb.process.model.S
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConditionalFlow> listConditionalFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ConditionalFlow> listConditionalFlowBySource(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConditionalFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConditionalFlow> listConditionalFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.ConditionalFlow> listConditionalFlowBySource(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConditionalFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
             return it;
