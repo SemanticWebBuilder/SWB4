@@ -725,10 +725,9 @@ public class ToolBar extends CustomNode
                     imageOver: "images/subtask_adhoc+2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SubProcess
+                        modeler.tempNode=AdhocSubProcess
                         {
                             modeler:modeler
-                            type:SubProcess.TYPE_ADHOC
                             title:"Adhoc SubProcess"
                             uri:"new:adhocsubprocess:{counter++}"
                         }
@@ -741,10 +740,9 @@ public class ToolBar extends CustomNode
                     imageOver: "images/subtask_ciclo+2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SubProcess
+                        modeler.tempNode=LoopSubProcess
                         {
                             modeler:modeler
-                            type:SubProcess.TYPE_LOOP
                             title:"Loop SubProcess"
                             uri:"new:loopsubprocess:{counter++}"
                         }
@@ -757,10 +755,9 @@ public class ToolBar extends CustomNode
                     imageOver: "images/subtask_compensa+2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SubProcess
+                        modeler.tempNode=CompensationSubProcess
                         {
                             modeler:modeler
-                            type:SubProcess.TYPE_COMPENSATION
                             title:"Compensation SubProcess"
                             uri:"new:compensationsubprocess:{counter++}"
                         }
@@ -773,10 +770,9 @@ public class ToolBar extends CustomNode
                     imageOver: "images/subtask_instancia+2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SubProcess
+                        modeler.tempNode=MultipleSubProcess
                         {
                             modeler:modeler
-                            type:SubProcess.TYPE_MULTIPLE
                             title:"Multiple SubProcess"
                             uri:"new:multiplesubprocess:{counter++}"
                         }
@@ -789,10 +785,9 @@ public class ToolBar extends CustomNode
                     imageOver: "images/subtask_transaccion2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=SubProcess
+                        modeler.tempNode=TransactionSubProcess
                         {
                             modeler:modeler
-                            type:SubProcess.TYPE_TRANSACTION
                             title:"Transaction SubProcess"
                             uri:"new:transactionsubprocess:{counter++}"
                         }
@@ -1001,12 +996,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_msj_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=MessageIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Message Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_MESSAGE;
                         }
                     }
                 },
@@ -1016,12 +1010,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_msj_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=MessageIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Message Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_MESSAGE;
                         }
                     }
                 },
@@ -1032,12 +1025,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=TimerIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Timer Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_TIMER;
                         }
                     }
                 },
@@ -1048,12 +1040,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=ErrorIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Error Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_ERROR;
                         }
                     }
                 },
@@ -1064,12 +1055,11 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=CancelationIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Cancelation Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_CANCELATION;
                         }
                     }
                 },
@@ -1079,12 +1069,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_compensa_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=CompensationIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Compensation Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_COMPENSATION;
                         }
                     }
                 },
@@ -1094,27 +1083,25 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_compensa_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=CompensationIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Compensation Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_COMPENSATION;
                         }
                     }
                 },
                 ImgButton {
-                    text:"Conditional Inter Event"
+                    text:"Rule Inter Event"
                     image: "images/inter_cond1.png"
                     imageOver: "images/inter_cond2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=RuleIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Conditional Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_CONDITINAL;
                         }
                     }
                 },
@@ -1124,12 +1111,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_enlace_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=LinkIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Link Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_LINK;
                         }
                     }
                 },
@@ -1139,12 +1125,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_enlace_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=LinkIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Link Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_LINK;
                         }
                     }
                 },
@@ -1154,12 +1139,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_senal_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=SignalIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Signal Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_SIGNAL;
                         }
                     }
                 },
@@ -1169,12 +1153,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_senal_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=SignalIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Signal Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_SIGNAL;
                         }
                     }
                 },
@@ -1184,12 +1167,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_multi_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=MultipleIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Multiple Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_MULTIPLE;
                         }
                     }
                 },
@@ -1199,12 +1181,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_multi_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=MultipleIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Multiple Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_MULTIPLE;
                         }
                     }
                 },
@@ -1214,12 +1195,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_escala_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=ScalationIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Scalation Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_SCALATION;
                         }
                     }
                 },
@@ -1229,12 +1209,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_escala_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=ScalationIntermediateThrowEvent
                         {
                             modeler:modeler
                             title:"Throwing Scalation Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.B_SCALATION;
                         }
                     }
                 },
@@ -1244,12 +1223,11 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_paralelo2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=IntermediateCatchEvent
+                        modeler.tempNode=ParallelIntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Parallel Inter Event"
                             uri:"new:interevent:{counter++}"
-                            type: Event.W_PARALLEL;
                         }
                     }
                 }

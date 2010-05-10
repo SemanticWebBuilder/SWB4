@@ -16,27 +16,27 @@ import javafx.scene.effect.ColorAdjust;
 /**
  * @author javier.solis
  */
-public-read var W_TIMER="w_timer";
-public-read var W_MESSAGE="w_message";
-public-read var W_CONDITINAL="w_conditinal";
-public-read var W_LINK="w_link";
-public-read var W_MULTIPLE="w_multiple";
-public-read var W_SIGNAL="w_signal";
-public-read var W_PARALLEL="w_parallel";
-public-read var W_SCALATION="w_scalation";
-public-read var W_ERROR="w_error";
-public-read var W_COMPENSATION="w_compensation";
-public-read var W_CANCELATION="w_cancelation";
+public-read var CATCH_TIMER="w_timer";
+public-read var CATCH_MESSAGE="w_message";
+public-read var CATCH_RULE="w_conditinal";
+public-read var CATCH_LINK="w_link";
+public-read var CATCH_MULTIPLE="w_multiple";
+public-read var CATCH_SIGNAL="w_signal";
+public-read var CATCH_PARALLEL="w_parallel";
+public-read var CATCH_SCALATION="w_scalation";
+public-read var CATCH_ERROR="w_error";
+public-read var CATCH_COMPENSATION="w_compensation";
+public-read var CATCH_CANCELATION="w_cancelation";
 
-public-read var B_MESSAGE="b_message";
-public-read var B_ERROR="b_error";
-public-read var B_CANCELATION="b_cancelation";
-public-read var B_COMPENSATION="b_compensation";
-public-read var B_SIGNAL="b_signal";
-public-read var B_MULTIPLE="b_multiple";
-public-read var B_SCALATION="b_scalation";
-public-read var B_TERMINATION="b_termination";
-public-read var B_LINK="b_link";
+public-read var THROW_MESSAGE="b_message";
+public-read var THROW_ERROR="b_error";
+public-read var THROW_CANCELATION="b_cancelation";
+public-read var THROW_COMPENSATION="b_compensation";
+public-read var THROW_SIGNAL="b_signal";
+public-read var THROW_MULTIPLE="b_multiple";
+public-read var THROW_SCALATION="b_scalation";
+public-read var THROW_TERMINATION="b_termination";
+public-read var THROW_LINK="b_link";
 
 public class Event extends FlowNode
 {
@@ -102,121 +102,121 @@ public class Event extends FlowNode
     {
         super.setType(type);
         message.visible=true;
-        if(type.equals(W_TIMER))
+        if(type.equals(CATCH_TIMER))
         {
             message.image=Styles.ICO_EVENT_W_TIMER;
             ix=11;
             iy=11;
             is=1;
-        }else if(type.equals(W_LINK))
+        }else if(type.equals(CATCH_LINK))
         {
             message.image=Styles.ICO_EVENT_W_LINK;
             ix=10;
             iy=10;
             is=0.9;
-        }else if(type.equals(W_MESSAGE))
+        }else if(type.equals(CATCH_MESSAGE))
         {
             message.image=Styles.ICO_EVENT_W_MESSAGE;
             ix=9;
             iy=8;
             is=1;
-        }else if(type.equals(W_CONDITINAL))
+        }else if(type.equals(CATCH_RULE))
         {
             message.image=Styles.ICO_EVENT_W_CONDITINAL;
             ix=8;
             iy=9;
             is=1;
-        }else if(type.equals(W_SIGNAL))
+        }else if(type.equals(CATCH_SIGNAL))
         {
             message.image=Styles.ICO_EVENT_W_SIGNAL;
             ix=10;
             iy=11;
             is=1.1;
-        }else if(type.equals(W_MULTIPLE))
+        }else if(type.equals(CATCH_MULTIPLE))
         {
             message.image=Styles.ICO_EVENT_W_MULTIPLE;
             ix=11;
             iy=12;
             is=1;
-        }else if(type.equals(W_PARALLEL))
+        }else if(type.equals(CATCH_PARALLEL))
         {
             message.image=Styles.ICO_EVENT_W_PARALLEL;
             ix=9;
             iy=9;
             is=1.1;
-        }else if(type.equals(W_SCALATION))
+        }else if(type.equals(CATCH_SCALATION))
         {
             message.image=Styles.ICO_EVENT_W_SCALATION;
             ix=9;
             iy=12;
             is=1;
-        }else if(type.equals(W_ERROR))
+        }else if(type.equals(CATCH_ERROR))
         {
             message.image=Styles.ICO_EVENT_W_ERROR;
             ix=10;
             iy=10;
             is=1;
-        }else if(type.equals(W_COMPENSATION))
+        }else if(type.equals(CATCH_COMPENSATION))
         {
             message.image=Styles.ICO_EVENT_W_COMPENSATION;
             ix=11;
             iy=6;
             is=1;
-        }else if(type.equals(W_CANCELATION))
+        }else if(type.equals(CATCH_CANCELATION))
         {
             message.image=Styles.ICO_EVENT_W_CANCELATION;
             ix=9;
             iy=9;
             is=1.1;
-        }else if(type.equals(B_LINK))
+        }else if(type.equals(THROW_LINK))
         {
             message.image=Styles.ICO_EVENT_B_LINK;
             ix=10;
             iy=10;
             is=0.9;
-        }else if(type.equals(B_MESSAGE))
+        }else if(type.equals(THROW_MESSAGE))
         {
             message.image=Styles.ICO_EVENT_B_MESSAGE;
             ix=9;
             iy=8;
             is=1;
-        }else if(type.equals(B_SIGNAL))
+        }else if(type.equals(THROW_SIGNAL))
         {
             message.image=Styles.ICO_EVENT_B_SIGNAL;
             ix=10;
             iy=11;
             is=1.1;
-        }else if(type.equals(B_MULTIPLE))
+        }else if(type.equals(THROW_MULTIPLE))
         {
             message.image=Styles.ICO_EVENT_B_MULTIPLE;
             ix=11;
             iy=12;
             is=1;
-        }else if(type.equals(B_SCALATION))
+        }else if(type.equals(THROW_SCALATION))
         {
             message.image=Styles.ICO_EVENT_B_SCALATION;
             ix=9;
             iy=12;
             is=1;
-        }else if(type.equals(B_ERROR))
+        }else if(type.equals(THROW_ERROR))
         {
             message.image=Styles.ICO_EVENT_B_ERROR;
             ix=10;
             iy=10;
             is=1;
-        }else if(type.equals(B_COMPENSATION))
+        }else if(type.equals(THROW_COMPENSATION))
         {
             message.image=Styles.ICO_EVENT_B_COMPENSATION;
             ix=11;
             iy=6;
             is=1;
-        }else if(type.equals(B_CANCELATION))
+        }else if(type.equals(THROW_CANCELATION))
         {
             message.image=Styles.ICO_EVENT_B_CANCELATION;
             ix=9;
             iy=9;
             is=1.1;
-        }else if(type.equals(B_TERMINATION))
+        }else if(type.equals(THROW_TERMINATION))
         {
             message.image=Styles.ICO_EVENT_B_TERMINATION;
             ix=8;
