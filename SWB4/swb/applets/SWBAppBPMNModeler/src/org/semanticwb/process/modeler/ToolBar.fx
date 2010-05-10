@@ -1623,18 +1623,17 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Multiple Artifact"
+                    text:"Collection Artifact"
                     toolBar:this;
                     image: "images/doc_objeto1.png"
                     imageOver: "images/doc_objeto2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Artifact
+                        modeler.tempNode=CollectionArtifact
                         {
                             modeler:modeler
-                            type:Artifact.TYPE_MULTIPLE
-                            title:"Multiple Artifact"
+                            title:"Collection Artifact"
                             uri:"new:multipleartifact:{counter++}"
                         }
                     }
@@ -1647,9 +1646,8 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Artifact
+                        modeler.tempNode=InputArtifact
                         {
-                            type:Artifact.TYPE_INPUT
                             modeler:modeler
                             title:"Input Artifact"
                             uri:"new:inputartifact:{counter++}"
@@ -1664,9 +1662,8 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Artifact
+                        modeler.tempNode=OutputArtifact
                         {
-                            type:Artifact.TYPE_OUTPUT
                             modeler:modeler
                             title:"Output Artifact"
                             uri:"new:outputartifact:{counter++}"
