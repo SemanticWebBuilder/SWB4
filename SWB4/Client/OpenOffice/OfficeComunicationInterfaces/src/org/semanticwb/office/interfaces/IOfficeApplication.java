@@ -144,4 +144,19 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.activePage")
     public void activePage(PageInfo webPageInfo,boolean active) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSemanticRepositories")
+    public SemanticRepository[] getSemanticRepositories(SiteInfo siteInfo) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSemanticFolderRepositories")
+    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSemanticFolderRepositories")
+    public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolderRepository) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSemanticFileRepositories")
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolder) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.getSemanticFileRepositories")
+    public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception;
 }
