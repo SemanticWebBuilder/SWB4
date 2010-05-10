@@ -3,9 +3,9 @@ package org.semanticwb.process.model.base;
 
 public abstract class ConnectionObjectBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticClass swp_FlowNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNode");
-    public static final org.semanticwb.platform.SemanticProperty swp_toFlowObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#toFlowObject");
-    public static final org.semanticwb.platform.SemanticProperty swp_fromFlowObjectInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#fromFlowObjectInv");
+    public static final org.semanticwb.platform.SemanticClass swp_GraphicalElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#GraphicalElement");
+    public static final org.semanticwb.platform.SemanticProperty swp_target=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#target");
+    public static final org.semanticwb.platform.SemanticProperty swp_source=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#source");
     public static final org.semanticwb.platform.SemanticClass swp_ConnectionObject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ConnectionObject");
 
@@ -44,27 +44,27 @@ public abstract class ConnectionObjectBase extends org.semanticwb.model.SWBClass
             return (getConnectionObject(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByToFlowObject(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByTarget(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_toFlowObject, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_target, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByToFlowObject(org.semanticwb.process.model.FlowNode value)
+        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByTarget(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_toFlowObject,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_target,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByFromFlowObject(org.semanticwb.process.model.FlowNode value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_fromFlowObjectInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByFromFlowObject(org.semanticwb.process.model.FlowNode value)
+        public static java.util.Iterator<org.semanticwb.process.model.ConnectionObject> listConnectionObjectByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_fromFlowObjectInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -74,44 +74,64 @@ public abstract class ConnectionObjectBase extends org.semanticwb.model.SWBClass
         super(base);
     }
 
-    public void setToFlowObject(org.semanticwb.process.model.FlowNode value)
+    public void setTarget(org.semanticwb.process.model.GraphicalElement value)
     {
-        getSemanticObject().setObjectProperty(swp_toFlowObject, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swp_target, value.getSemanticObject());
     }
 
-    public void removeToFlowObject()
+    public void removeTarget()
     {
-        getSemanticObject().removeProperty(swp_toFlowObject);
+        getSemanticObject().removeProperty(swp_target);
     }
 
-    public org.semanticwb.process.model.FlowNode getToFlowObject()
+    public org.semanticwb.process.model.GraphicalElement getTarget()
     {
-         org.semanticwb.process.model.FlowNode ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_toFlowObject);
+         org.semanticwb.process.model.GraphicalElement ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_target);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.FlowNode)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
          }
          return ret;
     }
 
-    public void setFromFlowObject(org.semanticwb.process.model.FlowNode value)
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> listOutputConnectionObjects()
     {
-        getSemanticObject().setObjectProperty(swp_fromFlowObjectInv, value.getSemanticObject());
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement>(getSemanticObject().listObjectProperties(swp_source));
     }
 
-    public void removeFromFlowObject()
+    public boolean hasOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
     {
-        getSemanticObject().removeProperty(swp_fromFlowObjectInv);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_source,value.getSemanticObject());
+        }
+        return ret;
     }
 
-    public org.semanticwb.process.model.FlowNode getFromFlowObject()
+    public void addOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
     {
-         org.semanticwb.process.model.FlowNode ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_fromFlowObjectInv);
+        getSemanticObject().addObjectProperty(swp_source, value.getSemanticObject());
+    }
+
+    public void removeAllOutputConnectionObject()
+    {
+        getSemanticObject().removeProperty(swp_source);
+    }
+
+    public void removeOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
+    {
+        getSemanticObject().removeObjectProperty(swp_source,value.getSemanticObject());
+    }
+
+    public org.semanticwb.process.model.GraphicalElement getOutputConnectionObject()
+    {
+         org.semanticwb.process.model.GraphicalElement ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_source);
          if(obj!=null)
          {
-             ret=(org.semanticwb.process.model.FlowNode)obj.createGenericInstance();
+             ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
          }
          return ret;
     }
