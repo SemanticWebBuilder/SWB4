@@ -1,28 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.resource.office.sem;
 
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -43,9 +45,8 @@ import org.semanticwb.portal.util.ContentUtils;
  *
  * @author Jorge Jiménez
  */
-
-public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase {
-
+public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
+{
 
     int snpages = 15;
     String stxtant = "Anterior";
@@ -53,31 +54,38 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
     int position = 1;
 
-    public WordResource() {
+    public WordResource()
+    {
         super();
     }
 
-    public WordResource(SemanticObject obj) {
+    public WordResource(SemanticObject obj)
+    {
         super(obj);
     }
     private static Logger log = SWBUtils.getLogger(WordResource.class);
 
-    protected void beforePrintDocument(PrintWriter out) {
+    protected void beforePrintDocument(PrintWriter out)
+    {
     }
 
-    protected void afterPrintDocument(PrintWriter out) {
+    protected void afterPrintDocument(PrintWriter out)
+    {
     }
 
-    protected void printDocument(PrintWriter out, String path, String workpath, String html) {
+    protected void printDocument(PrintWriter out, String path, String workpath, String html)
+    {
         out.write(html);
     }
 
-    public static org.semanticwb.resource.office.sem.WordResource createWordResource(String id, org.semanticwb.model.SWBModel model) {
+    public static org.semanticwb.resource.office.sem.WordResource createWordResource(String id, org.semanticwb.model.SWBModel model)
+    {
         return (org.semanticwb.resource.office.sem.WordResource) model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ClassMgr.sclass), ClassMgr.sclass);
     }
 
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         ContentUtils contentUtils = new ContentUtils();
         Resource base = paramRequest.getResourceBase();
         WebPage page = paramRequest.getWebPage();
@@ -85,93 +93,187 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         String contentId = getContent();
         String repositoryName = getRepositoryName();
         OfficeDocument document = new OfficeDocument();
-        try {
+        try
+        {
             User user = paramRequest.getUser();
             String file = document.getContentFile(repositoryName, contentId, version, user);
-            if (file != null) {
+            if (file != null)
+            {
                 file = file.replace(".doc", ".html");
-                file=java.net.URLDecoder.decode(file, "utf-8");
+                file = java.net.URLDecoder.decode(file, "utf-8");
                 String path = SWBPortal.getWorkPath();
-                if (path.endsWith("/")) {
+                if (path.endsWith("/"))
+                {
                     path = path.substring(0, path.length() - 1);
                     path += getResourceBase().getWorkPath() + "/" + file;
-                } else {
+                }
+                else
+                {
                     path += getResourceBase().getWorkPath() + "/" + file;
                 }
 
                 File filecontent = new File(path);
-                if (filecontent.exists()) {
+                if (filecontent.exists())
+                {
                     String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
-                    StringBuffer html = new StringBuffer();
-                    try {
+                    StringBuilder html = new StringBuilder();
+                    try
+                    {
                         FileInputStream in = new FileInputStream(path);
                         byte[] buffer = new byte[2048];
                         int read = in.read(buffer);
-                        while (read != -1) {
+                        while (read != -1)
+                        {
                             html.append(new String(buffer, 0, read));
                             read = in.read(buffer);
                         }
                         String htmlOut = null;
-                        if (isPages() && getNpages() > 0) {
+                        if (isPages() && getNpages() > 0)
+                        {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
-                        } else {
+                        }
+                        else
+                        {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
                         }
                         PrintWriter out = response.getWriter();
                         beforePrintDocument(out);
 
                         //Agregado por Jorge Jiménez para poner estilos predefinidos y paginación MsWord y OpenOffice (5/07/2009)
-                        if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
-                        if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
-                        if(getNpages()>0) snpages=getNpages();
-                        if(getTxtant()!=null && getTxtant().trim().length()>0) stxtant=getTxtant();
-                        if(getTxtsig()!=null && getTxtsig().trim().length()>0) stxtsig=getTxtsig();
-                        if(getTfont()!=null && getTfont().trim().length()>0) stfont=getTfont();
-                        if(getPosition()>0) position=getPosition();
+                        if (paramRequest.getLocaleString("txtant") != null)
+                        {
+                            stxtant = paramRequest.getLocaleString("txtant");
+                        }
+                        if (paramRequest.getLocaleString("txtsig") != null)
+                        {
+                            stxtsig = paramRequest.getLocaleString("txtsig");
+                        }
+                        if (getNpages() > 0)
+                        {
+                            snpages = getNpages();
+                        }
+                        if (getTxtant() != null && getTxtant().trim().length() > 0)
+                        {
+                            stxtant = getTxtant();
+                        }
+                        if (getTxtsig() != null && getTxtsig().trim().length() > 0)
+                        {
+                            stxtsig = getTxtsig();
+                        }
+                        if (getTfont() != null && getTfont().trim().length() > 0)
+                        {
+                            stfont = getTfont();
+                        }
+                        if (getPosition() > 0)
+                        {
+                            position = getPosition();
+                        }
 
                         boolean iswordcontent = true;
                         int posword = htmlOut.toLowerCase().indexOf("name=\"generator\" content=\"openoffice.org"); //detección de si el contenido es de openOffice
-                        if (posword > -1) iswordcontent = false;
-                        if (iswordcontent) { //Contenido MsWord
-                            htmlOut=contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
-                            if(isPages()) {
+                        if (posword > -1)
+                        {
+                            iswordcontent = false;
+                        }
+                        if (iswordcontent)
+                        { //Contenido MsWord
+                            htmlOut = contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
+                            if (isPages())
+                            {
                                 htmlOut = contentUtils.paginationMsWord(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
                             } //Paginación
-                        } else if(isPages()){ //Contenido OpenOffice
+                        }
+                        else if (isPages())
+                        { //Contenido OpenOffice
                             htmlOut = contentUtils.paginationOpenOffice(htmlOut, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position); //Paginación
                         }
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
+                        // eliminar <head><body>, etc
 
+                        htmlOut = replaceHtml(htmlOut);
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         log.error(e);
                     }
 
-                } else {
+                }
+                else
+                {
                     log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + getContent() + "@" + getRepositoryName());
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
     }
 
-     /**
+    public static String replaceHtml(String datos)
+    {
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
+        StringBuilder ret = new StringBuilder();
+        HtmlTag tag = new HtmlTag();
+        try
+        {
+            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+            {
+                int ttype = tok.getTokenType();
+                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                {
+                    if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                    {
+                        continue;
+                    }
+                    tok.parseTag(tok.getStringValue(), tag);
+
+                    if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                    {
+                        continue;
+                    }
+                    if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        ret.append(tok.getRawString());
+                    }
+                }
+                else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                {
+                    ret.append(tok.getRawString());
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return ret.toString();
+    }
+
+    /**
      * Inicializa la clase creando objetos de configuración del recurso
      */
     @Override
-    public void setResourceBase(Resource base) {
-        try{
+    public void setResourceBase(Resource base)
+    {
+        try
+        {
             ContentUtils contentUtils = new ContentUtils();
             super.setResourceBase(base);
             contentUtils.setResourceBase(base, "Content");
-        }catch(Exception e){
+        }
+        catch (Exception e)
+        {
             log.error(e);
         }
 
     }
-
 }
-
