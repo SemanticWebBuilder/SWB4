@@ -55,6 +55,7 @@ import org.semanticwb.openoffice.ui.dialogs.DialogContentInformation;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentDetail;
 import org.semanticwb.openoffice.ui.dialogs.DialogDocumentsAuthorize;
 import org.semanticwb.openoffice.ui.dialogs.DialogHistory;
+import org.semanticwb.openoffice.ui.dialogs.DialogInsertLinkDoc;
 import org.semanticwb.openoffice.ui.dialogs.DialogSaveDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogUpdateContent;
 import org.semanticwb.openoffice.ui.wizard.ContentProperties;
@@ -916,11 +917,11 @@ public abstract class OfficeDocument
                         else
                         {
                             PublishResultProducer resultProducer = new PublishResultProducer(this);
-                            Class[] clazz = new Class[]
+                            WizardPage[] pages = new WizardPage[]
                             {
-                                SelectCategory.class, TitleAndDescription.class, ContentProperties.class
+                                new SelectCategory(), new TitleAndDescription(true), new ContentProperties()
                             };
-                            Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, clazz, resultProducer);
+                            Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);
                             wiz.show();
 
                         }
@@ -1079,5 +1080,13 @@ public abstract class OfficeDocument
             return true;
         }
         return false;
+    }
+    public void insertLinkDoc()
+    {
+        if (OfficeApplication.tryLogin())
+        {
+            DialogInsertLinkDoc dialog=new DialogInsertLinkDoc(this);
+            dialog.setVisible(true);
+        }
     }
 }
