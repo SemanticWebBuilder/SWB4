@@ -1,5 +1,5 @@
 /*
- * MultipleSubProcess.fx
+ * SignalIntermediateThrowEvent.fx
  *
  * Created on 13/02/2010, 11:19:11 AM
  */
@@ -12,11 +12,11 @@ import javafx.scene.Node;
  * @author javier.solis
  */
 
-public class MultipleSubProcess extends SubProcess
+public class SignalIntermediateThrowEvent extends IntermediateThrowEvent
 {
     public override function create(): Node
     {
-        type=TYPE_MULTIPLE;
+        type=THROW_SIGNAL;
         return super.create();
     }
 }

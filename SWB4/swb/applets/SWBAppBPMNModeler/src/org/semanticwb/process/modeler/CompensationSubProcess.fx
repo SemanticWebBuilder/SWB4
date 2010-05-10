@@ -1,5 +1,5 @@
 /*
- * AdhocSubProcess.fx
+ * CompensationSubProcess.fx
  *
  * Created on 13/02/2010, 11:19:11 AM
  */
@@ -16,7 +16,7 @@ public class CompensationSubProcess extends SubProcess
 {
     public override function create(): Node
     {
-        type=TYPE_ADHOC;
+        type=TYPE_COMPENSATION;
         return super.create();
     }
 }
