@@ -1,0 +1,339 @@
+<map version="0.8.1">
+<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
+<node CREATED="1273190618330" ID="Freemind_Link_1633705715" MODIFIED="1273190636982" TEXT="Models">
+<node CREATED="1273190637794" FOLDED="true" ID="_" MODIFIED="1273190640119" POSITION="right" TEXT="SWP">
+<node CREATED="1273190640915" ID="Freemind_Link_1475123819" MODIFIED="1273191809883" TEXT="BPMNElement">
+<node CREATED="1273190667231" ID="Freemind_Link_1040078210" MODIFIED="1273190671851" TEXT="Artifact">
+<node CREATED="1273190691705" ID="Freemind_Link_158196765" MODIFIED="1273191809883" TEXT="Association">
+<arrowlink DESTINATION="Freemind_Link_1475123819" ENDARROW="Default" ENDINCLINATION="416;0;" ID="Freemind_Arrow_Link_5323330" STARTARROW="None" STARTINCLINATION="416;0;"/>
+</node>
+<node CREATED="1273190698963" ID="Freemind_Link_115938596" MODIFIED="1273190701242" TEXT="Group"/>
+<node CREATED="1273190701726" ID="Freemind_Link_1548568130" MODIFIED="1273190704052" TEXT="Annotation"/>
+</node>
+<node CREATED="1273190672460" ID="Freemind_Link_1018463040" MODIFIED="1273190685321" TEXT="FlowElement">
+<node CREATED="1273190710857" ID="Freemind_Link_1815929131" MODIFIED="1273190714306" TEXT="DataAssociation"/>
+<node CREATED="1273190714868" ID="Freemind_Link_1591501406" MODIFIED="1273190724936" TEXT="DataObject"/>
+<node CREATED="1273190754264" ID="Freemind_Link_1281470874" MODIFIED="1273191843066" TEXT="FlowNode">
+<node CREATED="1273190771168" ID="Freemind_Link_1874571274" MODIFIED="1273192108239" TEXT="Activity">
+<arrowlink DESTINATION="Freemind_Link_110370434" ENDARROW="Default" ENDINCLINATION="612;0;" ID="Freemind_Arrow_Link_437621766" STARTARROW="None" STARTINCLINATION="612;0;"/>
+<node CREATED="1273190803946" ID="Freemind_Link_1994130844" MODIFIED="1273190808847" TEXT="Task">
+<node CREATED="1273190825033" ID="Freemind_Link_1253218361" MODIFIED="1273190827655" TEXT="UserTask"/>
+<node CREATED="1273190832525" ID="Freemind_Link_1755687365" MODIFIED="1273190835694" TEXT="ServiceTask"/>
+<node CREATED="1273190842593" ID="Freemind_Link_172176255" MODIFIED="1273190846214" TEXT="ScriptTask"/>
+<node CREATED="1273190855688" ID="Freemind_Link_1153802369" MODIFIED="1273190858326" TEXT="SendTask"/>
+<node CREATED="1273190864835" ID="Freemind_Link_1239982399" MODIFIED="1273190867270" TEXT="ReceiveTask"/>
+<node CREATED="1273190870501" ID="Freemind_Link_1686208054" MODIFIED="1273190874777" TEXT="ManualTask"/>
+<node CREATED="1273190875823" ID="Freemind_Link_1930819982" MODIFIED="1273190886546" TEXT="RuleTask"/>
+</node>
+<node CREATED="1273190809315" ID="Freemind_Link_838897519" MODIFIED="1273190812141" TEXT="SubTask">
+<node CREATED="1273190895584" ID="Freemind_Link_1213051139" MODIFIED="1273190905448" TEXT="AdHocSubProcess"/>
+<node CREATED="1273190906229" ID="Freemind_Link_1385137553" MODIFIED="1273190927191" TEXT="EmbeddedSubprocess"/>
+<node CREATED="1273190939849" ID="Freemind_Link_1059749444" MODIFIED="1273190945781" TEXT="Transaction"/>
+</node>
+</node>
+<node CREATED="1273190780518" ID="Freemind_Link_286593575" MODIFIED="1273192111735" TEXT="Event">
+<arrowlink DESTINATION="Freemind_Link_110370434" ENDARROW="Default" ENDINCLINATION="446;0;" ID="Freemind_Arrow_Link_1122890000" STARTARROW="None" STARTINCLINATION="446;0;"/>
+<node CREATED="1273190972908" ID="Freemind_Link_321660825" MODIFIED="1273191116288" TEXT="CatchEvent">
+<node CREATED="1273191128915" ID="Freemind_Link_122498450" MODIFIED="1273191138608" TEXT="BoundaryEvent"/>
+<node CREATED="1273191145085" ID="Freemind_Link_1495356379" MODIFIED="1273193339556" TEXT="IntermediateCatchEvent"/>
+<node CREATED="1273191152359" ID="Freemind_Link_511201387" MODIFIED="1273191158868" TEXT="StartEvent"/>
+<node CREATED="1273190780518" FOLDED="true" ID="Freemind_Link_792120616" MODIFIED="1273192111735" TEXT="Event">
+<arrowlink DESTINATION="Freemind_Link_110370434" ENDARROW="Default" ENDINCLINATION="446;0;" ID="Freemind_Arrow_Link_1384705339" STARTARROW="None" STARTINCLINATION="446;0;"/>
+<node CREATED="1273190972908" ID="Freemind_Link_373278508" MODIFIED="1273191116288" TEXT="CatchEvent">
+<node CREATED="1273191128915" ID="Freemind_Link_1263368970" MODIFIED="1273191138608" TEXT="BoundaryEvent"/>
+<node CREATED="1273191145085" ID="Freemind_Link_10192677" MODIFIED="1273193339556" TEXT="IntermediateCatchEvent"/>
+<node CREATED="1273191152359" ID="Freemind_Link_1941193269" MODIFIED="1273191158868" TEXT="StartEvent"/>
+</node>
+<node CREATED="1273191118520" ID="Freemind_Link_171707775" MODIFIED="1273191127698" TEXT="ThrowEvent">
+<node CREATED="1273191193581" ID="Freemind_Link_59373182" MODIFIED="1273191203727" TEXT="EndEvent"/>
+<node CREATED="1273191241671" ID="Freemind_Link_1330784912" MODIFIED="1273191248273" TEXT="IntermediateThrowEvent"/>
+</node>
+</node>
+</node>
+<node CREATED="1273191118520" FOLDED="true" ID="Freemind_Link_1892403501" MODIFIED="1273191127698" TEXT="ThrowEvent">
+<node CREATED="1273191193581" ID="Freemind_Link_836806716" MODIFIED="1273191203727" TEXT="EndEvent"/>
+<node CREATED="1273191241671" ID="Freemind_Link_1474117638" MODIFIED="1273191248273" TEXT="IntermediateThrowEvent"/>
+</node>
+</node>
+<node CREATED="1273190787026" ID="Freemind_Link_885327296" MODIFIED="1273190789102" TEXT="Gateway">
+<node CREATED="1273190968491" ID="Freemind_Link_1065139203" MODIFIED="1273190972299" TEXT="ComplexGateway"/>
+<node CREATED="1273190996493" ID="Freemind_Link_572634656" MODIFIED="1273191013709" TEXT="EventBasedGateway"/>
+<node CREATED="1273191020842" ID="Freemind_Link_1195550146" MODIFIED="1273191027304" TEXT="ExclusiveGateway"/>
+<node CREATED="1273191077157" ID="Freemind_Link_503527906" MODIFIED="1273191081918" TEXT="InclusiveGateway">
+<node CREATED="1273194738932" ID="Freemind_Link_743090862" MODIFIED="1273194799765" TEXT="InclusiveStartGateway">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273194767623" ID="Freemind_Link_1374627115" MODIFIED="1273194832798" TEXT="InclusiveIntermediateGateway">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273191082355" ID="Freemind_Link_1018417899" MODIFIED="1273191094654" TEXT="ParallelGateway"/>
+</node>
+</node>
+</node>
+<node CREATED="1273191313345" ID="Freemind_Link_1888862746" MODIFIED="1273191843066" TEXT="SequenceFlow">
+<arrowlink DESTINATION="Freemind_Link_1281470874" ENDARROW="Default" ENDINCLINATION="296;0;" ID="Freemind_Arrow_Link_1945408546" STARTARROW="None" STARTINCLINATION="296;0;"/>
+<node CREATED="1273191319635" ID="Freemind_Link_1929091070" MODIFIED="1273191331092" TEXT="ConditionalFlow"/>
+<node CREATED="1273191336212" ID="Freemind_Link_216668816" MODIFIED="1273191343345" TEXT="DefaultFlow"/>
+<node CREATED="1273191346638" ID="Freemind_Link_428461044" MODIFIED="1273191357689" TEXT="ExceptionFlow"/>
+<node CREATED="1273191423838" ID="Freemind_Link_442885769" MODIFIED="1273191426928" TEXT="NormalFlow"/>
+</node>
+<node CREATED="1273191450419" ID="Freemind_Link_503143618" MODIFIED="1273192115544" TEXT="Pool">
+<arrowlink DESTINATION="Freemind_Link_110370434" ENDARROW="Default" ENDINCLINATION="106;0;" ID="Freemind_Arrow_Link_1395868112" STARTARROW="None" STARTINCLINATION="106;0;"/>
+</node>
+<node CREATED="1273191465481" ID="Freemind_Link_964091586" MODIFIED="1273191467245" TEXT="Lane"/>
+<node CREATED="1273191475158" ID="Freemind_Link_528703268" MODIFIED="1273191477671" TEXT="LaneSet"/>
+<node CREATED="1273191591145" ID="Freemind_Link_704483583" MODIFIED="1273192096299" TEXT="MessageFlow">
+<arrowlink DESTINATION="Freemind_Link_110370434" ENDARROW="Default" ENDINCLINATION="108;0;" ID="Freemind_Arrow_Link_1130026551" STARTARROW="None" STARTINCLINATION="108;0;"/>
+</node>
+</node>
+<node CREATED="1273192076398" ID="Freemind_Link_110370434" MODIFIED="1273192115544" TEXT="Messageable"/>
+</node>
+<node CREATED="1273190643350" ID="Freemind_Link_555804275" MODIFIED="1273190651154" POSITION="right" TEXT="SWB-Process"/>
+<node CREATED="1273190651670" ID="Freemind_Link_189263809" MODIFIED="1273190655494" POSITION="right" TEXT="Modeler">
+<node CREATED="1273192305687" ID="Freemind_Link_578327963" MODIFIED="1273464558781" TEXT="GraphicalElement">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273192348891" ID="Freemind_Link_1502980335" MODIFIED="1273464563281" TEXT="FlowNode">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273192352856" FOLDED="true" ID="Freemind_Link_1741330443" MODIFIED="1273192356680" TEXT="GateWay">
+<node CREATED="1273192357444" ID="Freemind_Link_178578295" MODIFIED="1273467586609" TEXT="ParallelGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273192496671" ID="Freemind_Link_1104948558" MODIFIED="1273192502015" TEXT="ComplexGateway"/>
+<node CREATED="1273192732423" ID="Freemind_Link_248591508" MODIFIED="1273467591140" TEXT="InclusiveGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273193068402" ID="Freemind_Link_361413745" MODIFIED="1273467593593" TEXT="ExclusiveGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256013084" ID="Freemind_Link_698851284" MODIFIED="1273467595187" TEXT="EventBasedGateway">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273192655297" ID="Freemind_Link_128663867" MODIFIED="1273467596796" TEXT="ParallelEventGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273193014015" ID="Freemind_Link_1113706458" MODIFIED="1273467597859" TEXT="InclusiveStartEventGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273192738739" ID="Freemind_Link_763595061" MODIFIED="1273467599546" TEXT="InclusiveIntermediateEventGateway">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1273192392087" ID="Freemind_Link_192726088" MODIFIED="1273192394908" TEXT="Activity">
+<node CREATED="1273190803946" FOLDED="true" ID="Freemind_Link_1928331355" MODIFIED="1273190808847" TEXT="Task">
+<node CREATED="1273190825033" ID="Freemind_Link_1729936862" MODIFIED="1273505177263" TEXT="UserTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190832525" ID="Freemind_Link_1206409966" MODIFIED="1273505178530" TEXT="ServiceTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190842593" ID="Freemind_Link_723075889" MODIFIED="1273505179360" TEXT="ScriptTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190855688" ID="Freemind_Link_1002300290" MODIFIED="1273505180158" TEXT="SendTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190864835" ID="Freemind_Link_1638573482" MODIFIED="1273505180909" TEXT="ReceiveTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190870501" ID="Freemind_Link_697416641" MODIFIED="1273505182051" TEXT="ManualTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256442243" ID="Freemind_Link_624859954" MODIFIED="1273505182880" TEXT="AdhocTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256460103" ID="Freemind_Link_1595691028" MODIFIED="1273505185071" TEXT="LoopTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256476291" ID="Freemind_Link_1804160133" MODIFIED="1273505185775" TEXT="CompensationTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256487495" ID="Freemind_Link_1985702461" MODIFIED="1273505186573" TEXT="MultipleTask">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273190809315" ID="Freemind_Link_288439346" MODIFIED="1273468763984" TEXT="SubProcess">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273190895584" ID="Freemind_Link_1175881262" MODIFIED="1273505875224" TEXT="AdhocSubProceses">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273190939849" ID="Freemind_Link_1175600578" MODIFIED="1273256781828" TEXT="TransactionSubProcess">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256628608" ID="Freemind_Link_869157901" MODIFIED="1273256817797" TEXT="LoopSubProcess">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256636327" ID="Freemind_Link_1881088882" MODIFIED="1273256818234" TEXT="CompensationSubProcess">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273256758671" ID="Freemind_Link_1876522201" MODIFIED="1273256818578" TEXT="MultipleSubProcess">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1273192639107" ID="Freemind_Link_1462929899" MODIFIED="1273464658328" TEXT="Event">
+<node CREATED="1273190972908" ID="Freemind_Link_279543973" MODIFIED="1273464566312" TEXT="CatchEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273191145085" ID="Freemind_Link_198437213" MODIFIED="1273465649968" TEXT="IntermediateCatchEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273280869570" ID="Freemind_Link_1461466978" MODIFIED="1273280968082" TEXT="MessageIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280892584" ID="Freemind_Link_1678089453" MODIFIED="1273280968598" TEXT="TimerIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280898474" ID="Freemind_Link_1367604082" MODIFIED="1273280968910" TEXT="ErrorIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280900958" ID="Freemind_Link_634412893" MODIFIED="1273280969223" TEXT="CancelationIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280906817" ID="Freemind_Link_1332890565" MODIFIED="1273280969598" TEXT="CompensationIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280914677" ID="Freemind_Link_484995206" MODIFIED="1273280969941" TEXT="RuleIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280924114" ID="Freemind_Link_91158194" MODIFIED="1273280970285" TEXT="LinkIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280928551" ID="Freemind_Link_1615151958" MODIFIED="1273280970660" TEXT="SignalIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280933051" ID="Freemind_Link_549451187" MODIFIED="1273280971051" TEXT="MultipleIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280938520" ID="Freemind_Link_1118324011" MODIFIED="1273280971426" TEXT="ScalationIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280956785" ID="Freemind_Link_1274147864" MODIFIED="1273280971816" TEXT="ParallelIntermediateCatchEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273191152359" ID="Freemind_Link_762479709" MODIFIED="1273465652828" TEXT="StartEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273280560069" ID="Freemind_Link_1025516653" MODIFIED="1273280748031" TEXT="MessageStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280590445" ID="Freemind_Link_1239125137" MODIFIED="1273280748531" TEXT="RuleStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280639413" ID="Freemind_Link_1994860118" MODIFIED="1273280748906" TEXT="SignalStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280646365" ID="Freemind_Link_1853169071" MODIFIED="1273280749265" TEXT="TimerStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280665817" ID="Freemind_Link_116777401" MODIFIED="1273280749640" TEXT="MultipleStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280705065" ID="Freemind_Link_1024436277" MODIFIED="1273280750031" TEXT="ParallelStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280726610" ID="Freemind_Link_849804616" MODIFIED="1273280750421" TEXT="ScalationStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280732110" ID="Freemind_Link_477670790" MODIFIED="1273280750812" TEXT="ErrorStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280736078" ID="Freemind_Link_1843909359" MODIFIED="1273280751171" TEXT="CompensationStartEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node CREATED="1273191118520" ID="Freemind_Link_1063072040" MODIFIED="1273464567015" TEXT="ThrowEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273191193581" ID="Freemind_Link_1889286240" MODIFIED="1273465654796" TEXT="EndEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273280762499" ID="Freemind_Link_1728414953" MODIFIED="1273280860227" TEXT="MessageEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280789481" ID="Freemind_Link_489833465" MODIFIED="1273280860727" TEXT="SignalEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280794496" ID="Freemind_Link_1979162866" MODIFIED="1273280861070" TEXT="ErrorEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280797059" ID="Freemind_Link_568694382" MODIFIED="1273280861430" TEXT="CancelationEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280802215" ID="Freemind_Link_511791046" MODIFIED="1273280861789" TEXT="CompensationEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280839900" ID="Freemind_Link_1270994413" MODIFIED="1273280862164" TEXT="MultipleEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280844446" ID="Freemind_Link_432447886" MODIFIED="1273280862508" TEXT="ScalationEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280851837" ID="Freemind_Link_1647995671" MODIFIED="1273280862867" TEXT="TerminationEndEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273191241671" ID="Freemind_Link_498958425" MODIFIED="1273465657093" TEXT="IntermediateThrowEvent">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273280975332" ID="Freemind_Link_1821353287" MODIFIED="1273281023706" TEXT="MessageIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273280993207" ID="Freemind_Link_859873767" MODIFIED="1273281024613" TEXT="CompensationIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281000285" ID="Freemind_Link_130208533" MODIFIED="1273281024925" TEXT="LinkIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281004175" ID="Freemind_Link_56296924" MODIFIED="1273281025269" TEXT="SignalIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281012300" ID="Freemind_Link_1423203388" MODIFIED="1273281025628" TEXT="MultipleIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281017613" ID="Freemind_Link_548331369" MODIFIED="1273281026066" TEXT="ScalationIntermediateThrowEvent">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1273192411998" ID="Freemind_Link_193377093" MODIFIED="1273192439602" TEXT="Artifact">
+<node CREATED="1273192579910" ID="Freemind_Link_955734197" MODIFIED="1273469440109" TEXT="AnnotationArtifact">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273192541175" ID="Freemind_Link_557938055" MODIFIED="1273469441265" TEXT="DataStoreArtifact">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273192694734" ID="Freemind_Link_731072520" MODIFIED="1273469442906" TEXT="GroupArtifact">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281044706" ID="Freemind_Link_785827397" MODIFIED="1273281125768" TEXT="CollectionArtifact">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281058831" ID="Freemind_Link_1607509817" MODIFIED="1273281126955" TEXT="OutputArtifact">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273281082768" ID="Freemind_Link_431741434" MODIFIED="1273281127361" TEXT="InputArtifact">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273192865925" ID="Freemind_Link_1451293543" MODIFIED="1273192870752" TEXT="Lane"/>
+<node CREATED="1273192950267" ID="Freemind_Link_1955151869" MODIFIED="1273192951740" TEXT="Pool"/>
+</node>
+<node CREATED="1273192467364" FOLDED="true" ID="Freemind_Link_1648178242" MODIFIED="1273192472141" TEXT="ConectionObject">
+<node CREATED="1273192481946" ID="Freemind_Link_1929141627" MODIFIED="1273469611078" TEXT="AssociationFlow">
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1273192607451" ID="Freemind_Link_316996032" MODIFIED="1273469722640" TEXT="DirectionalAssociation">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1273192889385" ID="Freemind_Link_1928013134" MODIFIED="1273192894933" TEXT="MessageFlow"/>
+<node CREATED="1273192973022" ID="Freemind_Link_1108489734" MODIFIED="1273192976344" TEXT="SequenceFlow">
+<node CREATED="1273192514990" ID="Freemind_Link_667312561" MODIFIED="1273469832500" TEXT="ConditionalFlow">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1273192594823" ID="Freemind_Link_496203196" MODIFIED="1273469834953" TEXT="DefaultFlow">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</map>
