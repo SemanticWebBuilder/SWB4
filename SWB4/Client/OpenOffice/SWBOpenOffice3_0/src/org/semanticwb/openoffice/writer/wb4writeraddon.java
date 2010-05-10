@@ -198,6 +198,11 @@ public final class wb4writeraddon extends WeakBase
                     document.insertLink();
                     return;
                 }
+                if (aURL.Path.compareTo("addDocLink") == 0)
+                {
+                    document.insertLinkDoc();
+                    return;
+                }
                 if (aURL.Path.compareTo("createSection") == 0)
                 {
                     WB4WriterApplication.createPage();
