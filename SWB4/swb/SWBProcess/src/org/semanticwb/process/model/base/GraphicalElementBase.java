@@ -100,6 +100,18 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
             return it;
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByChild(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByChild(org.semanticwb.process.model.GraphicalElement value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasChildInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
@@ -309,6 +321,32 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
          return ret;
     }
 
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> listChilds()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement>(getSemanticObject().listObjectProperties(swp_hasChildInv));
+    }
+
+    public boolean hasChild(org.semanticwb.process.model.GraphicalElement value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasChildInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public org.semanticwb.process.model.GraphicalElement getChild()
+    {
+         org.semanticwb.process.model.GraphicalElement ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasChildInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
     public void setCreator(org.semanticwb.model.User value)
     {
         getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
@@ -374,5 +412,10 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.process.model.GraphicalElement)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public org.semanticwb.process.model.ProcessSite getProcessSite()
+    {
+        return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
