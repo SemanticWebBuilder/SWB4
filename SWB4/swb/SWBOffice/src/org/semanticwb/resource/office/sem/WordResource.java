@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
@@ -128,6 +129,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             read = in.read(buffer);
                         }
                         String htmlOut = null;
+                        html = new StringBuilder(replaceHtml(html.toString()));
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -175,6 +177,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         {
                             iswordcontent = false;
                         }
+                        
                         if (iswordcontent)
                         { //Contenido MsWord
                             htmlOut = contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
@@ -190,7 +193,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
                         // eliminar <head><body>, etc
 
-                        htmlOut = replaceHtml(htmlOut);
+                        
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
@@ -238,6 +241,47 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
                     {
                         continue;
+                    }
+                    if (tag.getTagString().toLowerCase().equals("a"))
+                    {
+                        String value=tag.getParam("href");
+                        if(value!=null && value.startsWith("docrep://")) // liga al repositorio
+                        {
+                            value=value.substring(8);
+                            if(value.startsWith("//"))
+                            {
+                                value=value.substring(1);
+                            }
+                            String path=SWBPortal.getDistributorPath()+value;
+                            ret.append("<a ");
+                            Enumeration names=tag.getParamNames();
+                            while(names.hasMoreElements())
+                            {
+                                String name=names.nextElement().toString();
+                                String svalue=tag.getParam(name);
+                                if(!name.toLowerCase().equals("href"))
+                                {
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    ret.append(svalue);
+                                    ret.append("\" ");
+                                }
+                                else
+                                {
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    ret.append(path);
+                                    ret.append("\" ");
+                                }
+
+
+                            }
+                            ret.append(">");
+                        }
+                        else
+                        {
+                            ret.append(tok.getRawString());
+                        }
                     }
                     else
                     {
