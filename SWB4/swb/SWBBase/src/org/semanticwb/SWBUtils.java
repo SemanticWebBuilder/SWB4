@@ -2618,15 +2618,18 @@ public class SWBUtils {
                     zip(files[i], base, zos);
                 } else
                 {
-                    FileInputStream in = new FileInputStream(files[i]);
-                    ZipEntry entry = new ZipEntry(files[i].getPath().substring(base.getPath().length() + 1));
-                    zos.putNextEntry(entry);
-                    while (-1 != (read = in.read(buffer)))
+                    try
                     {
-                        zos.write(buffer, 0, read);
-                    }
-                    zos.closeEntry();
-                    in.close();
+                        FileInputStream in = new FileInputStream(files[i]);
+                        ZipEntry entry = new ZipEntry(files[i].getPath().substring(base.getPath().length() + 1));
+                        zos.putNextEntry(entry);
+                        while (-1 != (read = in.read(buffer)))
+                        {
+                            zos.write(buffer, 0, read);
+                        }
+                        zos.closeEntry();
+                        in.close();
+                    }catch(FileNotFoundException e){log.error(e);}
                 }
             }
         }
