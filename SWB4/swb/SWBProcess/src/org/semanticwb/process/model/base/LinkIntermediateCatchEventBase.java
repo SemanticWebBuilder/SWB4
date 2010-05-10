@@ -83,13 +83,13 @@ public abstract class LinkIntermediateCatchEventBase extends org.semanticwb.proc
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> listLinkIntermediateCatchEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> listLinkIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> listLinkIntermediateCatchEventByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> listLinkIntermediateCatchEventByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.LinkIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;

@@ -83,13 +83,13 @@ public abstract class ServiceTaskBase extends org.semanticwb.process.model.Task 
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.ServiceTask> listServiceTaskByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ServiceTask> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;

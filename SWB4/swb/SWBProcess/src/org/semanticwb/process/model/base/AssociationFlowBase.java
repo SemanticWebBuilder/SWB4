@@ -59,13 +59,13 @@ public abstract class AssociationFlowBase extends org.semanticwb.process.model.C
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.AssociationFlow> listAssociationFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.AssociationFlow> listAssociationFlowBySource(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AssociationFlow> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_source, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.AssociationFlow> listAssociationFlowByOutputConnectionObject(org.semanticwb.process.model.GraphicalElement value)
+        public static java.util.Iterator<org.semanticwb.process.model.AssociationFlow> listAssociationFlowBySource(org.semanticwb.process.model.GraphicalElement value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.AssociationFlow> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_source,value.getSemanticObject(),sclass));
             return it;

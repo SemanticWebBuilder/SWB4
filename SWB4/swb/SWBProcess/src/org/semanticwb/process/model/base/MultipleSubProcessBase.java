@@ -95,13 +95,13 @@ public abstract class MultipleSubProcessBase extends org.semanticwb.process.mode
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.MultipleSubProcess> listMultipleSubProcessByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.MultipleSubProcess> listMultipleSubProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MultipleSubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.MultipleSubProcess> listMultipleSubProcessByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.MultipleSubProcess> listMultipleSubProcessByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.MultipleSubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;

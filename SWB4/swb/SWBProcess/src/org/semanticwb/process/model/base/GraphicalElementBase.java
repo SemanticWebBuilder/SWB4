@@ -76,13 +76,13 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+        public static java.util.Iterator<org.semanticwb.process.model.GraphicalElement> listGraphicalElementByOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasOutputConnectionObjectInv,value.getSemanticObject(),sclass));
             return it;
@@ -269,12 +269,12 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
         getSemanticObject().setIntProperty(swp_height, value);
     }
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> listOutputConnectionObjectInvs()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject> listOutputConnectionObjects()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ConnectionObject>(getSemanticObject().listObjectProperties(swp_hasOutputConnectionObjectInv));
     }
 
-    public boolean hasOutputConnectionObjectInv(org.semanticwb.process.model.ConnectionObject value)
+    public boolean hasOutputConnectionObject(org.semanticwb.process.model.ConnectionObject value)
     {
         boolean ret=false;
         if(value!=null)
@@ -284,7 +284,7 @@ public abstract class GraphicalElementBase extends org.semanticwb.model.SWBClass
         return ret;
     }
 
-    public org.semanticwb.process.model.ConnectionObject getOutputConnectionObjectInv()
+    public org.semanticwb.process.model.ConnectionObject getOutputConnectionObject()
     {
          org.semanticwb.process.model.ConnectionObject ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasOutputConnectionObjectInv);
