@@ -1,5 +1,5 @@
 /*
- * ORGateWay.fx
+ * InclusiveGateway.fx
  *
  * Created on 13/02/2010, 11:24:44 AM
  */
@@ -12,13 +12,11 @@ import javafx.scene.Cursor;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-import javafx.scene.image.ImageView;
-import javafx.scene.effect.ColorAdjust;
 /**
  * @author javier.solis
  */
 
-public class InterORGateWay extends ORGateWay
+public class InclusiveGateway extends Gateway
 {
     public override function create(): Node
     {
@@ -34,24 +32,6 @@ public class InterORGateWay extends ORGateWay
             //smooth: true;
         };
 
-        var colorAdjust=ColorAdjust
-        {
-            hue:0.25
-            brightness:0.28
-            contrast:0.25
-            saturation:1
-        }
-
-        var message=ImageView
-        {
-            image:Styles.ICO_EVENT_W_MULTIPLE
-            x: 14
-            y: 13
-            scaleX: 1
-            scaleY: 1
-            effect: colorAdjust
-        };
-
         return Group
         {
             content: [
@@ -59,18 +39,10 @@ public class InterORGateWay extends ORGateWay
                 {
                     centerX: w/2
                     centerY: h/2
-                    radius: w/3.5
-                    style: Styles.style_simbol2
+                    radius: w/4
+                    style: Styles.style_simbol
                     //smooth: true;
-                }, Circle
-                {
-                    centerX: w/2
-                    centerY: h/2
-                    radius: w/3.5-3
-                    style: Styles.style_simbol2
-                    //smooth: true;
-                },
-                message
+                }
             ]
             translateX: bind x - w/2
             translateY: bind y - w/2

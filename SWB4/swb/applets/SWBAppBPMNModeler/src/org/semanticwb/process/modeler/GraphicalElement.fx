@@ -1,5 +1,5 @@
 /*
- * GraphElement.fx
+ * GraphicalElement.fx
  *
  * Created on 13/02/2010, 10:54:18 AM
  */
@@ -14,6 +14,7 @@ import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.Group;
+import javafx.scene.CacheHint;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.ConnectionObject;
 import javafx.geometry.Point2D;
@@ -24,7 +25,7 @@ import javafx.scene.control.Tooltip;
  * @author javier.solis
  */
 
-public class GraphElement extends CustomNode
+public class GraphicalElement extends CustomNode
 {
     public var modeler:Modeler;
     public var x : Number;
@@ -76,14 +77,14 @@ public class GraphElement extends CustomNode
 
     protected var zindex=0;
 
-    var graphParent:GraphElement;
-    protected var graphChilds:GraphElement[];
+    protected var graphParent:GraphicalElement;
+    protected var graphChilds:GraphicalElement[];
 
     protected var dpx : Number;                     //diference of parent
     protected var dpy : Number;                     //diference of parent
 
-    protected var container:GraphElement;                 //Container Element
-    protected var containerChilds:GraphElement[];         //Container Childs
+    protected var container:GraphicalElement;                 //Container Element
+    protected var containerChilds:GraphicalElement[];         //Container Childs
     public var containerable:Boolean=false;               //can contains
 
     public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
@@ -121,6 +122,7 @@ public class GraphElement extends CustomNode
     protected function initializeCustomNode():Void
     {
         cache=true;
+        cacheHint=CacheHint.SPEED;
         if(toolTipText==null)toolTipText=title;
         text=EditableText
         {
@@ -252,16 +254,16 @@ public class GraphElement extends CustomNode
         snapToGrid();
 
         //check drop over node
-        var overNode:GraphElement;
+        var overNode:GraphicalElement;
         for(node in modeler.contents)
         {
-            if(node instanceof GraphElement)
+            if(node instanceof GraphicalElement)
             {
-                if(node != this and (node as GraphElement).over)
+                if(node != this and (node as GraphicalElement).over)
                 {
-                    if(canAttach(node as GraphElement))
+                    if(canAttach(node as GraphicalElement))
                     {
-                        overNode=node as GraphElement;
+                        overNode=node as GraphicalElement;
                         if(not(this instanceof Lane) and overNode instanceof Pool)  //check lanes in pool
                         {
                             var p=overNode as Pool;
@@ -284,12 +286,12 @@ public class GraphElement extends CustomNode
         //println("onMouseRelease {overNode.title}");
     }
 
-    public function getGraphParent() : GraphElement
+    public function getGraphParent() : GraphicalElement
     {
         return graphParent;
     }
 
-    public function setGraphParent(parent:GraphElement):Void
+    public function setGraphParent(parent:GraphicalElement):Void
     {
         //println("{this} setGraphParent {parent}");
         if(parent!=null)
@@ -309,12 +311,12 @@ public class GraphElement extends CustomNode
         }
     }
 
-    public function getContainer():GraphElement
+    public function getContainer():GraphicalElement
     {
         return container;
     }
 
-    public function setContainer(contain:GraphElement)
+    public function setContainer(contain:GraphicalElement)
     {
         if(contain!=null)
         {
@@ -328,7 +330,7 @@ public class GraphElement extends CustomNode
         }
     }
 
-    public function getContainerChilds():GraphElement[]
+    public function getContainerChilds():GraphicalElement[]
     {
         return containerChilds;
     }
@@ -447,7 +449,7 @@ public class GraphElement extends CustomNode
         this.type=type;
     }
 
-    public function canAttach(parent:GraphElement):Boolean
+    public function canAttach(parent:GraphicalElement):Boolean
     {
         return false;
     }

@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class EndEvent extends Event
+public class EndEvent extends ThrowEvent
 {
     public override function create(): Node
     {

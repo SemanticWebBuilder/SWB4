@@ -1,5 +1,5 @@
 /*
- * ORGateWay.fx
+ * ParallelEventGateway.fx
  *
  * Created on 13/02/2010, 11:24:44 AM
  */
@@ -18,7 +18,7 @@ import javafx.scene.effect.ColorAdjust;
  * @author javier.solis
  */
 
-public class EventANDGateWay extends ANDGateWay
+public class ParallelEventGateway extends EventBasedGateway
 {
     public override function create(): Node
     {

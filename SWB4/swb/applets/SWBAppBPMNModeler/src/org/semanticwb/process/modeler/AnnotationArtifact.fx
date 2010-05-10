@@ -19,12 +19,7 @@ import javafx.scene.shape.Rectangle;
  * @author javier.solis
  */
 
-public-read var TYPE_MULTIPLE="multiple";
-public-read var TYPE_INPUT="input";
-public-read var TYPE_OUTPUT="output";
-
-
-public class AnnotationArtifact extends GraphElement
+public class AnnotationArtifact extends Artifact
 {
     override public function create(): Node
     {
@@ -78,29 +73,4 @@ public class AnnotationArtifact extends GraphElement
         };
     }
 
-    override public function mouseEntered( e: MouseEvent )
-    {
-        super.mouseEntered(e);
-    }
-
-    override public function mouseExited( e: MouseEvent )
-    {
-        super.mouseExited(e);
-    }
-
-    override public function mousePressed( e: MouseEvent )
-    {
-       super.mousePressed(e);
-    }
-
-
-    public override function canAttach(parent:GraphElement):Boolean
-    {
-        var ret=false;
-        if(parent instanceof Pool or parent instanceof Lane)
-        {
-            ret=true;
-        }
-        return ret;
-    }
 }

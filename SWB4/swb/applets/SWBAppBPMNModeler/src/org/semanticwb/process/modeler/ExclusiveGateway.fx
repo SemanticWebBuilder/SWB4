@@ -1,22 +1,23 @@
 /*
- * ORGateWay.fx
+ * ExclusiveGateway.fx
  *
- * Created on 13/02/2010, 11:24:44 AM
+ * Created on 13/02/2010, 11:26:19 AM
  */
 
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.Group;
 import javafx.scene.Cursor;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 /**
  * @author javier.solis
  */
 
-public class ORGateWay extends GateWay
+public class ExclusiveGateway extends Gateway
 {
     public override function create(): Node
     {
@@ -35,13 +36,23 @@ public class ORGateWay extends GateWay
         return Group
         {
             content: [
-                shape, Circle
-                {
-                    centerX: w/2
-                    centerY: h/2
-                    radius: w/4
+                shape,
+                Line{
+                    startX: w/2-w/6
+                    startY: h/2-h/6
+                    endX: w/2+w/6
+                    endY: h/2+h/6
                     style: Styles.style_simbol
                     //smooth: true;
+                    strokeLineCap: StrokeLineCap.ROUND
+                }, Line{
+                    startX: w/2+w/6
+                    startY: h/2-h/6
+                    endX: w/2-w/6
+                    endY: h/2+h/6
+                    style: Styles.style_simbol
+                    //smooth: true;
+                    strokeLineCap: StrokeLineCap.ROUND
                 }
             ]
             translateX: bind x - w/2
@@ -50,7 +61,7 @@ public class ORGateWay extends GateWay
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
-            visible: bind canView()
+            visible:bind canView()
         };
     }
 }

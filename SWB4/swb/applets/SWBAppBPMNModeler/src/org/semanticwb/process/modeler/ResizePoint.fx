@@ -19,7 +19,7 @@ import javafx.util.Math;
 
 public class ResizePoint extends CustomNode
 {
-    public var attachedNode:GraphElement;
+    public var attachedNode:GraphicalElement;
     public var modeler:Modeler;
     public var type:Number;
 

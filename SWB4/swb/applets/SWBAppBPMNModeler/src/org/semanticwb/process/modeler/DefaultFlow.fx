@@ -15,7 +15,7 @@ import javafx.scene.shape.Line;
  * @author javier.solis
  */
 
-public class DefaultFlow extends ConnectionObject
+public class DefaultFlow extends SequenceFlow
 {
     public override function create(): Node
     {

@@ -1,5 +1,5 @@
 /*
- * FlowObject.fx
+ * FlowNode.fx
  *
  * Created on 13/02/2010, 10:59:22 AM
  */
@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
  * @author javier.solis
  */
 
-public class FlowObject extends GraphElement
+public class FlowNode extends GraphicalElement
 {
     override public function create(): Node
     {
@@ -31,7 +31,7 @@ public class FlowObject extends GraphElement
         super.mouseReleased(e);
     }
 
-    public override function canAttach(parent:GraphElement):Boolean
+    public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
         if(parent instanceof Pool or parent instanceof Lane)

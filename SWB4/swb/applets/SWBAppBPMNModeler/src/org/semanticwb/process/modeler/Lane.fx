@@ -18,7 +18,7 @@ import javafx.stage.Alert;
  * @author javier.solis
  */
 
-public class Lane extends GraphElement
+public class Lane extends GraphicalElement
 {
     var xh=bind h on replace
     {
@@ -158,7 +158,7 @@ public class Lane extends GraphElement
         return false;
     }
 
-    public override function canAttach(parent:GraphElement):Boolean
+    public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
         if(parent instanceof Pool or parent instanceof Lane)

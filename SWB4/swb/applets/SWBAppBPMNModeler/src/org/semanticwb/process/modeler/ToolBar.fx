@@ -23,7 +23,7 @@ import org.semanticwb.process.modeler.StartEvent;
 import org.semanticwb.process.modeler.SequenceFlow;
 import org.semanticwb.process.modeler.SubProcess;
 import org.semanticwb.process.modeler.ConditionalFlow;
-import org.semanticwb.process.modeler.ComplexGateWay;
+import org.semanticwb.process.modeler.ComplexGateway;
 import applets.commons.JSONArray;
 import javafx.stage.AppletStageExtension;
 import javafx.stage.Alert;
@@ -33,7 +33,7 @@ import java.io.ObjectOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.BufferedOutputStream;
-import org.semanticwb.process.modeler.GraphElement;
+import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
 
 public var counter: Integer;
@@ -191,9 +191,9 @@ public class ToolBar extends CustomNode
     function getJSONObject(node:Node):JSONObject
     {
         var ele:JSONObject=new JSONObject();
-        if(node instanceof GraphElement)
+        if(node instanceof GraphicalElement)
         {
-           var ge=node as GraphElement;
+           var ge=node as GraphicalElement;
            ele.put("class",ge.getClass().getName());
            ele.put("container",ge.getContainer().uri);
            ele.put("parent",ge.getGraphParent().uri);
@@ -257,10 +257,10 @@ public class ToolBar extends CustomNode
             var clss=getClass().forName(cls);
             var node=clss.newInstance() as Node;
 
-            var ge:GraphElement=null;
-            if(node instanceof GraphElement)
+            var ge:GraphicalElement=null;
+            if(node instanceof GraphicalElement)
             {
-                ge=node as GraphElement;
+                ge=node as GraphicalElement;
             }
 
             if(ge!=null and not (ge instanceof Lane))
@@ -334,8 +334,8 @@ public class ToolBar extends CustomNode
             var node=clss.newInstance() as Node;
 
             //Parents
-            var ge:GraphElement=null;
-            if(node instanceof GraphElement)
+            var ge:GraphicalElement=null;
+            if(node instanceof GraphicalElement)
             {
                 ge=modeler.getGraphElementByURI(uri);
             }
@@ -465,9 +465,9 @@ public class ToolBar extends CustomNode
                         var arr=[modeler.renderToImage(1)];
                         for(node in modeler.contents)
                         {
-                            if(node instanceof GraphElement)
+                            if(node instanceof GraphicalElement)
                             {
-                                var ge=node as GraphElement;
+                                var ge=node as GraphicalElement;
                                 if(ge.containerable)
                                 {
                                     modeler.containerElement=ge;
@@ -530,10 +530,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=AdhocTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_ADHOC
                             title:"Adhoc Task"
                             uri:"new:adhoctask:{counter++}"
                         }
@@ -548,10 +547,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=LoopTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_LOOP
                             title:"Loop Task"
                             uri:"new:looptask:{counter++}"
                         }
@@ -566,10 +564,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=CompensationTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_COMPENSATION
                             title:"Compensation Task"
                             uri:"new:compensationtask:{counter++}"
                         }
@@ -584,10 +581,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=MultipleTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_MULTIPLE
                             title:"Multiple Task"
                             uri:"new:multipletask:{counter++}"
                         }
@@ -602,10 +598,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=UserTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_USER
                             title:"User Task"
                             uri:"new:usertask:{counter++}"
                         }
@@ -620,10 +615,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=ServiceTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_SERVICE
                             title:"Service Task"
                             uri:"new:servicetask:{counter++}"
                         }
@@ -638,10 +632,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=ScriptTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_SCRIPT
                             title:"Script Task"
                             uri:"new:scripttask:{counter++}"
                         }
@@ -656,10 +649,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=ManualTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_MANUAL
                             title:"Manual Task"
                             uri:"new:manualtask:{counter++}"
                         }
@@ -674,10 +666,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=SendTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_SEND
                             title:"Send Task"
                             uri:"new:sendtask:{counter++}"
                         }
@@ -692,10 +683,9 @@ public class ToolBar extends CustomNode
                     {
                         //println("click");
                         modeler.disablePannable=true;
-                        modeler.tempNode=Task
+                        modeler.tempNode=ReceiveTask
                         {
                             modeler:modeler
-                            type:Task.TYPE_RECEIVE
                             title:"Receive Task"
                             uri:"new:receivetask:{counter++}"
                         }
@@ -990,28 +980,28 @@ public class ToolBar extends CustomNode
             imageOver:"images/inter_2.png"
             imageClicked: "images/inter_3.png"
             buttons: [
-                ImgButton {
-                    text:"Inter Event"
-                    image: "images/inter_normal1.png"
-                    imageOver: "images/inter_normal2.png"
-                    action: function():Void {
-                        modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
-                        {
-                            modeler:modeler
-                            title:"Inter Event"
-                            uri:"new:interevent:{counter++}"
-                            //type: Event.RULE;
-                        }
-                    }
-                },
+//                ImgButton {
+//                    text:"Inter Event"
+//                    image: "images/inter_normal1.png"
+//                    imageOver: "images/inter_normal2.png"
+//                    action: function():Void {
+//                        modeler.disablePannable=true;
+//                        modeler.tempNode=IntermediateCatchEvent
+//                        {
+//                            modeler:modeler
+//                            title:"Inter Event"
+//                            uri:"new:interevent:{counter++}"
+//                            //type: Event.RULE;
+//                        }
+//                    }
+//                },
                 ImgButton {
                     text:"Message Inter Event"
                     image: "images/inter_msj_b_1.png"
                     imageOver: "images/inter_msj_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Message Inter Event"
@@ -1026,7 +1016,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_msj_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Message Inter Event"
@@ -1042,7 +1032,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Timer Inter Event"
@@ -1058,7 +1048,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Error Inter Event"
@@ -1074,7 +1064,7 @@ public class ToolBar extends CustomNode
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Cancelation Inter Event"
@@ -1089,7 +1079,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_compensa_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Compensation Inter Event"
@@ -1104,7 +1094,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_compensa_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Compensation Inter Event"
@@ -1119,7 +1109,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_cond2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Conditional Inter Event"
@@ -1134,7 +1124,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_enlace_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Link Inter Event"
@@ -1149,7 +1139,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_enlace_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Link Inter Event"
@@ -1164,7 +1154,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_senal_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Signal Inter Event"
@@ -1179,7 +1169,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_senal_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Signal Inter Event"
@@ -1194,7 +1184,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_multi_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Multiple Inter Event"
@@ -1209,7 +1199,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_multi_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Multiple Inter Event"
@@ -1224,7 +1214,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_escala_b_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Scalation Inter Event"
@@ -1239,7 +1229,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_escala_n_2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Throwing Scalation Inter Event"
@@ -1254,7 +1244,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/inter_paralelo2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterEvent
+                        modeler.tempNode=IntermediateCatchEvent
                         {
                             modeler:modeler
                             title:"Parallel Inter Event"
@@ -1430,121 +1420,121 @@ public class ToolBar extends CustomNode
             imageClicked: "images/if_3.png"
             buttons: [
                 ImgButton {
-                    text:"Data XOR GateWay"
+                    text:"Gateway"
                     image: "images/gate_normal1.png"
                     imageOver: "images/gate_normal2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=GateWay
+                        modeler.tempNode=Gateway
                         {
                             modeler:modeler
-                            title:"GateWay"
+                            title:"Gateway"
                             uri:"new:gateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Data XOR GateWay"
+                    text:"Exclusive Gateway"
                     image: "images/gate_datos1.png"
                     imageOver: "images/gate_datos2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=XORGateWay
+                        modeler.tempNode=ExclusiveGateway
                         {
                             modeler:modeler
-                            title:"XOR GateWay"
-                            uri:"new:dataxorgateway:{counter++}"
+                            title:"Exclusive Gateway"
+                            uri:"new:exclusivegateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"OR GateWay"
+                    text:"Inclusive Gateway"
                     image: "images/gate_inclusiva_1.png"
                     imageOver: "images/gate_inclusiva_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ORGateWay
+                        modeler.tempNode=InclusiveGateway
                         {
                             modeler:modeler
-                            title:"OR GateWay"
-                            uri:"new:orgateway:{counter++}"
+                            title:"Inclusive Gateway"
+                            uri:"new:inclusivegateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Start Event OR GateWay"
+                    text:"Inclusive Start Event Gateway"
                     image: "images/gate_eventos_str_1.png"
                     imageOver: "images/gate_eventos_str_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=StartORGateWay
+                        modeler.tempNode=InclusiveStartEventGateway
                         {
                             modeler:modeler
-                            title:"Initial Event OR GateWay"
-                            uri:"new:initialeventorgateway:{counter++}"
+                            title:"Inclusive Start Event Gateway"
+                            uri:"new:inclusivestarteventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Inter Event OR GateWay"
+                    text:"Inclusive Intermediate Event Gateway"
                     image: "images/gate_eventos_int_1.png"
                     imageOver: "images/gate_eventos_int_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InterORGateWay
+                        modeler.tempNode=InclusiveIntermediateEventGateway
                         {
                             modeler:modeler
-                            title:"Inter Event OR GateWay"
-                            uri:"new:intereventorgateway:{counter++}"
+                            title:"Inclusive Intermediate Event Gateway"
+                            uri:"new:inclusiveintermediateeventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"AND GateWay"
+                    text:"Parallel Gateway"
                     image: "images/gate_paralela_n_1.png"
                     imageOver: "images/gate_paralela_n_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ANDGateWay
+                        modeler.tempNode=ParallelGateway
                         {
                             modeler:modeler
-                            title:"AND GateWay"
-                            uri:"new:andgateway:{counter++}"
+                            title:"Parallel Gateway"
+                            uri:"new:parallelgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Event AND GateWay"
+                    text:"Parallel Event Gateway"
                     image: "images/gate_paralela_b_1.png"
                     imageOver: "images/gate_paralela_b_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=EventANDGateWay
+                        modeler.tempNode=ParallelEventGateway
                         {
                             modeler:modeler
-                            title:"Event AND GateWay"
-                            uri:"new:eventandgateway:{counter++}"
+                            title:"Parallel Event Gateway"
+                            uri:"new:paralleleventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Complex GateWay"
+                    text:"Complex Gateway"
                     image: "images/gate_compleja_1.png"
                     imageOver: "images/gate_compleja_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ComplexGateWay
+                        modeler.tempNode=ComplexGateway
                         {
                             modeler:modeler
-                            title:"Complex GateWay"
+                            title:"Complex Gateway"
                             uri:"new:complexgateway:{counter++}"
                         }
                     }
@@ -1624,7 +1614,7 @@ public class ToolBar extends CustomNode
                     imageOver: "images/doc_dir_asocia2.png"
                     action: function():Void {
                         modeler.disablePannable=true;
-                        modeler.tempNode=Association
+                        modeler.tempNode=AssociationFlow
                         {
                             modeler:modeler
                             uri:"new:associationflow:{counter++}"

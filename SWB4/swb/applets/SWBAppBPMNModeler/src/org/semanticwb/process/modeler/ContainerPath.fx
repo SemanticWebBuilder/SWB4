@@ -49,7 +49,7 @@ public class ContainerPath extends CustomNode
     }
 
 
-    public function addContainer(container:GraphElement): Void
+    public function addContainer(container:GraphicalElement): Void
     {
         //println("addContainer:{container}");
         var button = ContainerButton

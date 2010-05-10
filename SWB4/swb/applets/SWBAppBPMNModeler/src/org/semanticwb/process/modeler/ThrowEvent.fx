@@ -1,7 +1,6 @@
 /*
- * FlowLink.fx
- *
- * Created on 13/02/2010, 10:51:55 AM
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 package org.semanticwb.process.modeler;
@@ -12,11 +11,11 @@ import javafx.scene.Node;
  * @author javier.solis
  */
 
-public class Activity extends FlowNode
+public class ThrowEvent extends Event
 {
     public override function create(): Node
     {
-        var ret=super.create();
-        return ret;
+        return super.create();
     }
+
 }

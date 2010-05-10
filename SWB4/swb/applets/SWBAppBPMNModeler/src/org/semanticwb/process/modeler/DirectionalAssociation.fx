@@ -1,5 +1,5 @@
 /*
- * FlowLink.fx
+ * DirectionalAssociation.fx
  *
  * Created on 13/02/2010, 10:51:55 AM
  */
@@ -12,7 +12,7 @@ import javafx.scene.Node;
  * @author javier.solis
  */
 
-public class DirectionalAssociation extends ConnectionObject
+public class DirectionalAssociation extends AssociationFlow
 {
     public override function create(): Node
     {

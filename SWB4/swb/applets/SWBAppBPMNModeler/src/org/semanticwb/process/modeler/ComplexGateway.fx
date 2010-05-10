@@ -1,5 +1,5 @@
 /*
- * ANDGateWay.fx
+ * ParallelGateway.fx
  *
  * Created on 13/02/2010, 11:26:19 AM
  */
@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * @author javier.solis
  */
 
-public class ANDGateWay extends GateWay
+public class ComplexGateway extends Gateway
 {
     public override function create(): Node
     {
@@ -50,6 +50,22 @@ public class ANDGateWay extends GateWay
                     startY: h/2-h/4
                     endX: w/2
                     endY: h/2+h/4
+                    style: Styles.style_simbol
+                    //smooth: true;
+                    strokeLineCap: StrokeLineCap.ROUND
+                }, Line{
+                    startX: w/2-w/6
+                    startY: h/2-h/6
+                    endX: w/2+w/6
+                    endY: h/2+h/6
+                    style: Styles.style_simbol
+                    //smooth: true;
+                    strokeLineCap: StrokeLineCap.ROUND
+                }, Line{
+                    startX: w/2+w/6
+                    startY: h/2-h/6
+                    endX: w/2-w/6
+                    endY: h/2+h/6
                     style: Styles.style_simbol
                     //smooth: true;
                     strokeLineCap: StrokeLineCap.ROUND
