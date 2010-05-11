@@ -205,6 +205,22 @@ public class DialogUpdateContent extends javax.swing.JDialog
 private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
     if (!updated)
     {
+        String contentID = document.getCustomProperties().get(OfficeDocument.CONTENT_ID_NAME);
+        String repositoryName = document.getCustomProperties().get(OfficeDocument.WORKSPACE_ID_NAME);
+        boolean canModify=false;
+        try
+        {
+            canModify=OfficeApplication.getOfficeDocumentProxy().canModify(repositoryName,contentID);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        if(!canModify)
+        {
+            JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("No_tiene_permisos_para_borrar_el_contenido"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         File zipFile = null;
         try
         {
