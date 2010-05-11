@@ -324,11 +324,26 @@ public abstract class OfficeDocument
         {
             if (isPublicated())
             {
+                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);                
+                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                boolean canModify=false;
+                try
+                {
+                    canModify=OfficeApplication.getOfficeDocumentProxy().canModify(repositoryName,contentID);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();                    
+                }
+                if(!canModify)
+                {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("No_tiene_permisos_para_borrar_el_contenido"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("¿DESEA_BORRAR_EL_CONTENIDO?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
-                    contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
-                    String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                    
                     try
                     {
                         IOpenOfficeDocument doc = OfficeApplication.getOfficeDocumentProxy();
@@ -1033,6 +1048,21 @@ public abstract class OfficeDocument
         String workspace = this.getCustomProperties().get(WORKSPACE_ID_NAME);
         if (workspace != null && OfficeApplication.tryLogin())
         {
+            boolean canModify=false;
+            try
+            {
+                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                canModify=OfficeApplication.getOfficeDocumentProxy().canModify(repositoryName,contentID);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            if(!canModify)
+            {
+                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("No_tiene_permisos_para_borrar_el_contenido"),java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("BORRADO_DE_CONTENIDO"),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             DialogUpdateContent summary = new DialogUpdateContent(workspace, contentID, this);
             summary.setVisible(true);
         }
