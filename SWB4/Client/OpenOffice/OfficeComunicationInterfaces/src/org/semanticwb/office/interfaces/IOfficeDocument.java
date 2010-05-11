@@ -220,6 +220,9 @@ public interface IOfficeDocument
 
     @XmlRpcMethod(methodName = "OfficeDocument.existContentOldVersion")
     public ContentInfo existContentOldVersion(String contentid,String topicmap,String topicid) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeDocument.canModify")
+    public boolean canModify(String repositoryName, String contentID) throws Exception;
 }
 
 
