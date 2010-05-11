@@ -214,5 +214,8 @@ namespace WBOffice4.Interfaces
         [XmlRpcMethod("OfficeDocument.canPublishToResourceContent")]
         bool canPublishToResourceContent(String type);
 
+        [XmlRpcMethod("OfficeDocument.canModify")]
+        bool canModify(String repositoryName, String contentID);
+
     }
 }

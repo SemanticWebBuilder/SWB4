@@ -523,6 +523,12 @@ namespace WBOffice4
             {
                 if (OfficeApplication.TryLogOn() && SetupDocument())
                 {
+                    bool canModify = OfficeDocument.OfficeDocumentProxy.canModify(reporitoryID, contentID);
+                    if (!canModify)
+                    {
+                        MessageBox.Show("¡No tiene permisos para modificar o borrar este contenido, debe ser el propietario o un super usuario quien lo puede realizar!", "Borrar contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                     DialogResult result = RtlAwareMessageBox.Show("¿Desea borrar el contenido del sitio web?", "Borrar contenido", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (result == DialogResult.Yes)
                     {
@@ -782,6 +788,14 @@ namespace WBOffice4
         {
             if (OfficeApplication.TryLogOn() && SetupDocument())
             {
+                String contentID = this.CustomProperties[CONTENT_ID_NAME];
+                String reporitoryID = this.CustomProperties[REPOSITORY_ID_NAME];
+                bool canModify=OfficeDocument.OfficeDocumentProxy.canModify(reporitoryID, contentID);
+                if (!canModify)
+                {
+                    MessageBox.Show("¡No tiene permisos para modificar o borrar este contenido, debe ser el propietario o un super usuario quien lo puede realizar!", "Actualizar contenido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 FormUpdateContent frm = new FormUpdateContent(this);
                 frm.ShowDialog();
             }
