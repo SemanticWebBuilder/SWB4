@@ -51,7 +51,6 @@ public class Modeler extends GenericResource {
     private static final String PROP_H = "h";
     private static final String PROP_START = "start";
     private static final String PROP_END = "end";
-    private static final String PROP_TYPE = "type";
     private static final String PROP_PARENT = "parent";
     private static final String PROP_CONTAINER = "container";
     private static final String PROCESS_PREFIX = "http://www.semanticwebbuilder.org/swb4/process";
@@ -233,7 +232,7 @@ public class Modeler extends GenericResource {
                 ele.put(PROP_X, obj.getX());
                 ele.put(PROP_Y, obj.getY());
                 ele.put(PROP_W, obj.getWidth());
-                ele.put(PROP_H, obj.getHeight());;
+                ele.put(PROP_H, obj.getHeight());
                 ele.put(PROP_CONTAINER, obj.getContainer().getURI());
                 ele.put(PROP_PARENT, obj.getParent().getURI());
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
