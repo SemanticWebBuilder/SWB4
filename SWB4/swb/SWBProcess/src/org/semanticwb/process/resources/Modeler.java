@@ -133,12 +133,12 @@ public class Modeler extends GenericResource {
         }
 
         org.semanticwb.process.model.Process process = null;
-        org.semanticwb.process.model.ProcessSite pross = null;
 
         if (sc.equals(org.semanticwb.process.model.Process.swp_Process)) {
             process = (org.semanticwb.process.model.Process) go;
-            pross = process.getProcessSite();
-        } else {
+        } 
+        else
+        {
             return null;
         }
 
