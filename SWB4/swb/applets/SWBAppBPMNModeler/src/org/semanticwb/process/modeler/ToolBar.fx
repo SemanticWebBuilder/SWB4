@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.BufferedOutputStream;
 import org.semanticwb.process.modeler.GraphicalElement;
 import org.semanticwb.process.modeler.ModelerUtils;
+import java.lang.Class;
 
 public var counter: Integer;
 public var conn:WBConnection = new WBConnection(FX.getArgument(WBConnection.PRM_JSESS).toString(),FX.getArgument(WBConnection.PRM_CGIPATH).toString(),FX.getProperty("javafx.application.codebase"));
@@ -146,7 +147,6 @@ public class ToolBar extends CustomNode
         {
             Alert.inform("Error",data);
         }
-
     }
 
     public function loadProcess(): Void
@@ -188,17 +188,31 @@ public class ToolBar extends CustomNode
         return obj.toString();
     }
 
+    function getClassName(cls:Class) : String
+    {
+        var name=cls.getSimpleName();
+        var i=name.indexOf("$");
+        if(i>0)     //por lo menos un caracter
+        {
+            name=name.substring(0,i);
+        }
+        println("name:{name}");
+        return name;
+    }
+
+
     function getJSONObject(node:Node):JSONObject
     {
         var ele:JSONObject=new JSONObject();
         if(node instanceof GraphicalElement)
         {
            var ge=node as GraphicalElement;
-           ele.put("class",ge.getClass().getName());
+           //println("{ge.getClass().getName()} {ge.getClass().getCanonicalName()} {ge.getClass().getPackage()} {ge.getClass().getSimpleName()}");
+           ele.put("class",getClassName(ge.getClass()));
            ele.put("container",ge.getContainer().uri);
            ele.put("parent",ge.getGraphParent().uri);
            ele.put("title",ge.title);
-           ele.put("type",ge.type);
+           //ele.put("type",ge.type);
            ele.put("uri",ge.uri);
            ele.put("x",ge.x);
            ele.put("y",ge.y);
@@ -208,14 +222,14 @@ public class ToolBar extends CustomNode
         if(node instanceof ConnectionObject)
         {
            var ge=node as ConnectionObject;
-           ele.put("class",ge.getClass().getName());
+           ele.put("class",getClassName(ge.getClass()));
            ele.put("uri",ge.uri);
            ele.put("title",ge.title);
            ele.put("start",ge.ini.uri);
            ele.put("end",ge.end.uri);
            if(node instanceof ConditionalFlow)
            {
-               var con=node as ConditionalFlow;
+               //var con=node as ConditionalFlow;
                ele.put("action", ge.action);
            }
         }
@@ -243,6 +257,8 @@ public class ToolBar extends CustomNode
     {
         println("Arguments:{FX.getArgument}");
 
+        var pkg:String="org.semanticwb.process.modeler";
+
         var jsobj=new JSONObject(json);
         var jsarr = jsobj.getJSONArray("nodes");
         var i=0;
@@ -251,7 +267,7 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String=js.getString("class");
+            var cls:String="{pkg}.{js.getString("class")}";
             var uri:String=validateUri(js.getString("uri"));
 
             var clss=getClass().forName(cls);
@@ -266,7 +282,7 @@ public class ToolBar extends CustomNode
             if(ge!=null and not (ge instanceof Lane))
             {
                 var title=js.getString("title");
-                var type=js.getString("type");
+                //var type=js.getString("type");
                 var x=js.getInt("x");
                 var y=js.getInt("y");
                 var w=js.getInt("w");
@@ -276,7 +292,7 @@ public class ToolBar extends CustomNode
                 ge.uri=uri;
                 //println("uri:{ge.uri}");
                 ge.title=title;
-                ge.setType(type);
+                //ge.setType(type);
                 ge.x=x;
                 ge.y=y;
                 if(w>0)ge.w=w;
@@ -294,7 +310,7 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String=js.getString("class");
+            var cls:String="{pkg}.{js.getString("class")}";
             var uri:String=validateUri(js.getString("uri"));
 
             var clss=getClass().forName(cls);
@@ -304,7 +320,7 @@ public class ToolBar extends CustomNode
             {
                 var parent=js.getString("parent");
                 var title=js.getString("title");
-                var type=js.getString("type");
+                //var type=js.getString("type");
                 var h=js.getInt("h");
                 var p=modeler.getGraphElementByURI(parent);
                 if(p instanceof Pool)
@@ -312,7 +328,7 @@ public class ToolBar extends CustomNode
                     var pool=p as Pool;
                     var lane=pool.addLane();
                     lane.title=title;
-                    lane.type=type;
+                    //lane.type=type;
                     lane.h=h;
                     lane.uri=uri;
                 }
@@ -327,7 +343,7 @@ public class ToolBar extends CustomNode
         {
             //generic
             var js = jsarr.getJSONObject(i);
-            var cls:String=js.getString("class");
+            var cls:String="{pkg}.{js.getString("class")}";
             var uri:String=validateUri(js.getString("uri"));
 
             var clss=getClass().forName(cls);

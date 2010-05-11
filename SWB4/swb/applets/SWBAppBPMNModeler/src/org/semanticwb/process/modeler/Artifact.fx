@@ -1,5 +1,5 @@
 /*
- * Pool.fx
+ * Artifact.fx
  *
  * Created on 13/02/2010, 10:55:36 AM
  */
