@@ -514,7 +514,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (Exception e)
         {
-            //handle exception
+            e.printStackTrace();
         }
     }
 
@@ -588,7 +588,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace();
                 throw e;
             }
             finally
@@ -603,7 +603,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         catch (LockException e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
             throw e;
         }
         catch (Exception e)
@@ -612,7 +612,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             {
                 //categoryNode.unlock();
             }
-            e.printStackTrace(System.out);
+            e.printStackTrace();
             throw e;
         }
         finally
@@ -703,6 +703,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
                                 officeResource.loadContent(in,wbuser);
+                                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
                             }
                         }
                     }
@@ -752,7 +753,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             String versionName = null;
             try
             {
-                if (requestParts.size() == 0)
+                if (requestParts.isEmpty())
                 {
                     throw new Exception("The content can not be updated, The content document was not found");
                 }
@@ -787,7 +788,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
             catch (RepositoryException e)
             {
-                e.printStackTrace(System.out);
+                e.printStackTrace();
                 throw e;
             }
             finally
@@ -856,6 +857,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                         InputStream in = getContent(repositoryName, contentId, versionToShow);
                                         final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
                                         officeResource.loadContent(in,wbuser);
+                                        SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
                                     }
                                 }
                             }
@@ -924,7 +926,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return exists;
 
     }
-
+    private boolean isSu()
+    {
+        UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
+        org.semanticwb.model.User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        return ((su!=null && ouser.hasUserGroup(su)));
+    }
     public void delete(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -932,24 +939,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
-            Node parent = nodeContent.getParent();
-            Iterator<WebSite> sites = SWBContext.listWebSites();
-            while (sites.hasNext())
+            String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+            Node resNode = nodeContent.addNode(JCR_CONTENT, swb_office.getPrefix() + ":" + swb_office.getName());
+            String userlogin=resNode.getProperty(cm_user).getString();
+            if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
             {
-                WebSite site = sites.next();
-                Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentID);
-                while (it.hasNext())
+                Node parent = nodeContent.getParent();
+                Iterator<WebSite> sites = SWBContext.listWebSites();
+                while (sites.hasNext())
                 {
-                    SemanticObject obj = it.next();
-                    if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
+                    WebSite site = sites.next();
+                    Iterator<SemanticObject> it = site.getSemanticObject().getModel().listSubjects(prop_content, contentID);
+                    while (it.hasNext())
                     {
-                        OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
-                        site.removeResource(officeResource.getId());
+                        SemanticObject obj = it.next();
+                        if (obj.getSemanticClass().isSubClass(OfficeResource.ClassMgr.sclass) || obj.getSemanticClass().equals(OfficeResource.ClassMgr.sclass))
+                        {
+                            OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
+                            site.removeResource(officeResource.getId());
+                        }
                     }
                 }
+                nodeContent.remove();
+                parent.save();
             }
-            nodeContent.remove();
-            parent.save();
 
         }
         catch (ItemNotFoundException infe)
@@ -1516,6 +1529,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 InputStream in = getContent(repositoryName, contentId, version);
                 final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
                 officeResource.loadContent(in,wbuser);
+                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
                 ResourceInfo info = getResourceInfo(officeResource);
                 return info;
             }
@@ -2117,6 +2131,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         InputStream in = getContent(officeResource.getRepositoryName(), officeResource.getContent(), newVersion);
         final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
         officeResource.loadContent(in,wbuser);
+        SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
 
     }
 
@@ -2715,6 +2730,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
         return null;
+    }    
+    public boolean canModify(String repositoryName, String contentID) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, this.user, this.password);
+            Node nodeContent = session.getNodeByUUID(contentID);
+            String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+            Node resNode = nodeContent.getNode(JCR_CONTENT);
+            String userlogin=resNode.getProperty(cm_user).getString();
+            return isSu() || (userlogin!=null && userlogin.equals(this.user));           
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 }
 

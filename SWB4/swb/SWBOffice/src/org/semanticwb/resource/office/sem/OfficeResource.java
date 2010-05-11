@@ -1,4 +1,4 @@
-/**  
+/**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
  * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
@@ -154,7 +154,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     }
                 }
                 zip.close();
-                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
+                
             }
         }
         catch (Exception e)
@@ -171,7 +171,8 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
-    public void loadContent(InputStream in, String dir, String type,User user)
+    
+    public static void loadContent(InputStream in, String dir, String type,User user)
     {
         File zipFile = null;
         try
@@ -187,14 +188,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                 {
                     ZipEntry entry = (ZipEntry) entries.nextElement();
                     if (!entry.isDirectory())
-                    {
-                        /*InputStream inEntry = zip.getInputStream(entry);
-                        int pos=file.lastIndexOf("/");
-                        if(pos!=-1)
-                        {
-                        file=file.substring(pos+1);
-                        }
-                        SWBPlatform.writeFileToWorkPath(dir + "/" + entry.getName(), inEntry, "");*/
+                    {                        
                         InputStream inEntry = zip.getInputStream(entry);
                         String file = entry.getName();
                         if (!type.equals("excel"))
@@ -209,7 +203,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                     }
                 }
                 zip.close();
-                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
+                //SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
             }
         }
         catch (Exception e)

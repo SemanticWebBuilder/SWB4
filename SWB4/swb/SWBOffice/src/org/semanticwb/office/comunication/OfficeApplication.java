@@ -87,6 +87,7 @@ import org.semanticwb.xmlrpc.XmlRpcObject;
 import org.semanticwb.office.interfaces.SemanticRepository;
 import org.semanticwb.office.interfaces.SemanticFolderRepository;
 import org.semanticwb.office.interfaces.SemanticFileRepository;
+import org.semanticwb.platform.SemanticClass;
 
 /**
  *
@@ -94,10 +95,12 @@ import org.semanticwb.office.interfaces.SemanticFileRepository;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
+    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.ClassMgr.swboffice_OfficeDocument;
     private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
     private static final String REP_FILE = "swbfilerep:RepositoryFile";
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
     private static SWBRepository rep = null;
+    public static final String JCR_CONTENT = "jcr:content";
     static Logger log = SWBUtils.getLogger(OfficeApplication.class);
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
@@ -389,7 +392,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            e.printStackTrace();
             throw e;
         }
         finally
@@ -501,7 +504,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return types.toArray(new ContentType[types.size()]);
     }
-
+    private boolean isSu()
+    {
+        UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
+        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        return ((su!=null && ouser.hasUserGroup(su)));
+    }
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
     {
         Session session = null;
@@ -521,21 +529,33 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
                 if (!(title.equals("") || title.equals("*")))
                 {
-                    statement.append(" ?x " + cm_title + " ?title . ");
-                    statement.append("FILTER regex(?title,\"" + title + "\") ");
+                    statement.append(" ?x ");
+                    statement.append(cm_title);
+                    statement.append(" ?title . ");
+                    statement.append("FILTER regex(?title,\"");
+                    statement.append(title);
+                    statement.append("\") ");
                 }
 
 
                 if (!(officeType.equals("") || officeType.equals("*")))
                 {
-                    statement.append(" ?x " + cm_officeType + " ?officetype . ");
-                    statement.append(" FILTER (?officetype=\"" + officeType + "\") ");
+                    statement.append(" ?x ");
+                    statement.append(cm_officeType);
+                    statement.append(" ?officetype . ");
+                    statement.append(" FILTER (?officetype=\"");
+                    statement.append(officeType);
+                    statement.append("\") ");
                 }
 
                 if (!(description.equals("") || description.equals("*")))
                 {
-                    statement.append(" ?x " + cm_description + " ?description . ");
-                    statement.append(" FILTER regex(?description, \"" + description + "\") ");
+                    statement.append(" ?x ");
+                    statement.append(cm_description);
+                    statement.append(" ?description . ");
+                    statement.append(" FILTER regex(?description, \"");
+                    statement.append(description);
+                    statement.append("\") ");
                 }
 
 
@@ -543,7 +563,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 if (!(type.equals("") || type.equals("*")))
                 {
                     statement.append(" ?x jcr:primaryType ?type . ");
-                    statement.append(" FILTER (?type=\"" + type + "\") ");
+                    statement.append(" FILTER (?type=\"");
+                    statement.append(type);
+                    statement.append("\") ");
                 }
                 statement.append(" } ");
                 query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
@@ -561,14 +583,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 if (category == null || category.equals("") || category.equals("*"))
                 {
                     Node parent = node.getParent();
-                    ContentInfo info = new ContentInfo();
-                    info.id = node.getUUID();
-                    info.title = node.getProperty(cm_title).getValue().getString();
-                    info.descripcion = node.getProperty(cm_description).getValue().getString();
-                    info.categoryId = parent.getUUID();
-                    info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                    info.created = node.getProperty("jcr:created").getDate().getTime();
-                    contents.add(info);
+                    String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                    Node resNode = node.addNode(JCR_CONTENT, swb_office.getPrefix() + ":" + swb_office.getName());
+                    String userlogin=resNode.getProperty(cm_user).getString();
+                    if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                    {
+                        ContentInfo info = new ContentInfo();
+                        info.id = node.getUUID();
+                        info.title = node.getProperty(cm_title).getValue().getString();
+                        info.descripcion = node.getProperty(cm_description).getValue().getString();
+                        info.categoryId = parent.getUUID();
+                        info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                        info.created = node.getProperty("jcr:created").getDate().getTime();
+                        contents.add(info);
+                    }
                 }
                 else
                 {
