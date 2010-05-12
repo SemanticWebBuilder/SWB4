@@ -51,6 +51,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RibbonMenuWord));
             this.tab1 = new Microsoft.Office.Tools.Ribbon.RibbonTab();
             this.group1 = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
             this.buttonInit = new Microsoft.Office.Tools.Ribbon.RibbonButton();
@@ -63,6 +64,8 @@
             this.buttonInformation = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonCleanPropeties = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonShowDocumentDetail = new Microsoft.Office.Tools.Ribbon.RibbonButton();
+            this.separator3 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
+            this.buttonAddLinkDo = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.separator2 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.buttonDelete = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.group3 = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
@@ -73,8 +76,6 @@
             this.groupHelp = new Microsoft.Office.Tools.Ribbon.RibbonGroup();
             this.buttonHelp = new Microsoft.Office.Tools.Ribbon.RibbonButton();
             this.buttonAbout = new Microsoft.Office.Tools.Ribbon.RibbonButton();
-            this.buttonAddLinkDo = new Microsoft.Office.Tools.Ribbon.RibbonButton();
-            this.separator3 = new Microsoft.Office.Tools.Ribbon.RibbonSeparator();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.group2.SuspendLayout();
@@ -188,6 +189,18 @@
             this.buttonShowDocumentDetail.ShowImage = true;
             this.buttonShowDocumentDetail.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonShowDocumentDetail_Click);
             // 
+            // separator3
+            // 
+            this.separator3.Name = "separator3";
+            // 
+            // buttonAddLinkDo
+            // 
+            this.buttonAddLinkDo.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddLinkDo.Image")));
+            this.buttonAddLinkDo.Label = "Agregar liga a documento del repositorio";
+            this.buttonAddLinkDo.Name = "buttonAddLinkDo";
+            this.buttonAddLinkDo.ShowImage = true;
+            this.buttonAddLinkDo.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAddLinkDo_Click);
+            // 
             // separator2
             // 
             this.separator2.Name = "separator2";
@@ -264,18 +277,6 @@
             this.buttonAbout.Label = "Acerca de ...";
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAbout_Click);
-            // 
-            // buttonAddLinkDo
-            // 
-            this.buttonAddLinkDo.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonAddLinkDo.Label = "Agregar liga a documento del repositorio";
-            this.buttonAddLinkDo.Name = "buttonAddLinkDo";
-            this.buttonAddLinkDo.ShowImage = true;
-            this.buttonAddLinkDo.Click += new System.EventHandler<Microsoft.Office.Tools.Ribbon.RibbonControlEventArgs>(this.buttonAddLinkDo_Click);
-            // 
-            // separator3
-            // 
-            this.separator3.Name = "separator3";
             // 
             // RibbonMenuWord
             // 
