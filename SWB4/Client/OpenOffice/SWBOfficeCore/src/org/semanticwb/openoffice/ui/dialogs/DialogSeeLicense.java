@@ -89,7 +89,8 @@ public class DialogSeeLicense extends javax.swing.JDialog
         jEditorPaneLicense = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Acuerdo de Licencia Semantic WebBuilder 4.0");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogSeeLicense"); // NOI18N
+        setTitle(bundle.getString("title")); // NOI18N
 
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 40));
 

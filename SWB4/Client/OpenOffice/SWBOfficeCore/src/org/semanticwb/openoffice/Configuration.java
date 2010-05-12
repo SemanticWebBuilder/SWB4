@@ -46,7 +46,7 @@ public final class Configuration
     public static final String PROXY_PORT = "ProxyPort";
     public static final String PROXY_SERVER = "ProxyServer";
     
-    private static final String COMMENT = "List of configurations of Semantic Webbuilder 4.0";
+    private static final String COMMENT = "List of configurations of Semanti Webbuilder";
     public static final String CONFIGURATION_PROPERTY_NAME = "org.semanticwb.openoffice.configuration.Configuration";
     private HashMap<String, String> userConfigurations = new HashMap<String, String>();
     private String path;
