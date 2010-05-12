@@ -123,7 +123,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         WBTreeNode enode=parser.parse(respxml);
         try
         {
-            if(enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
+            if(enode!=null && enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
             {
                 WBTreeNode dir=enode.getFirstNode().getFirstNode();
                 if(dir.getName().equals("dir"))
@@ -145,7 +145,10 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 }
             }
         }
-        catch(Exception e){}
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     private void loadDirectories(WBTreeNode dir,Directory root)
     {        
@@ -153,7 +156,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         while(it.hasNext())
         {
             WBTreeNode enode=(WBTreeNode)it.next();
-            if(enode.getName().equals("dir"))
+            if(enode!=null && enode.getName().equals("dir"))
             {                
                 Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"));                                                
                 root.add(child);                
