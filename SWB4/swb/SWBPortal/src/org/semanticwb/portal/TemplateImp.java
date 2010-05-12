@@ -99,6 +99,12 @@ public class TemplateImp extends Template
     public TemplateImp(Template base)
     {
         super(base.getSemanticObject());
+        webPath = SWBPortal.getWebWorkPath()+super.getWorkPath();
+        actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
+        workPath = SWBPortal.getWorkPath()+super.getWorkPath();
+        actWorkPath=workPath + "/" + getActualVersion().getVersionNumber();
+        actRelWorkPath=super.getWorkPath()+ "/" + getActualVersion().getVersionNumber();
+
         objects.put("template", this);
         objects.put("user", new User(null));
         objects.put("topic", new WebPage(null));
@@ -107,16 +113,12 @@ public class TemplateImp extends Template
         objects.put("response", HttpServletResponse.class);
         objects.put("webpath", SWBPlatform.getContextPath());
         objects.put("distpath", SWBPortal.getDistributorPath());
+        objects.put("templatepath", actPath);
         objects.put("if:user", SWBIFMethod.class);
         objects.put("if:topic", SWBIFMethod.class);
         objects.put("if:webpage", SWBIFMethod.class);
         objects.put("if:template", SWBIFMethod.class);
         
-        webPath = SWBPortal.getWebWorkPath()+super.getWorkPath();
-        actPath = webPath+ "/" + getActualVersion().getVersionNumber() + "/";
-        workPath = SWBPortal.getWorkPath()+super.getWorkPath();
-        actWorkPath=workPath + "/" + getActualVersion().getVersionNumber();
-        actRelWorkPath=super.getWorkPath()+ "/" + getActualVersion().getVersionNumber();
 
         if (isActive() && !isDeleted())
         {
