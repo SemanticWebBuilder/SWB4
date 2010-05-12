@@ -102,7 +102,12 @@ public class BlogResource extends GenericResource
             ResultSet tables = dbm.getTables(null, null, "wbblog", null);
             if (!tables.next())
             {
-                install(type);
+                tables = dbm.getTables(null, null, "WBBLOG", null);
+                if (!tables.next())
+                {
+                    install(type);
+                }
+                
             }           
 
         }
