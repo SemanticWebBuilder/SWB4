@@ -30,6 +30,8 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.lang.management.ThreadMXBean;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -39,6 +41,7 @@ import java.lang.management.ThreadMXBean;
  */
 public class SWBMonitorBeans
 {
+    private static Logger log = SWBUtils.getLogger(SWBMonitorBeans.class);
 
     /** The class loading m bean. */
     ClassLoadingMXBean classLoadingMBean = null;
@@ -108,6 +111,8 @@ public class SWBMonitorBeans
         } catch (IOException ex)
         {
             assert (false);
+        } catch (java.lang.SecurityException noSecEx) {
+            log.event("Alert: No security permission to access Platform MBeanServer, cpuInfo not available");
         }
     }
 }
