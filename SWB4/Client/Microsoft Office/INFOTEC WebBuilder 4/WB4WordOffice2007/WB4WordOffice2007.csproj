@@ -272,6 +272,7 @@
     <None Include="Resources\icon_candadoa.png" />
     <None Include="Resources\icon_docauto.png" />
     <Content Include="Resources\icon_guardar48.png" />
+    <None Include="Resources\link_doc.png" />
     <None Include="Resources\icon_llavea.png" />
     <None Include="Resources\icon_pass32.png" />
     <None Include="Resources\icon_liga32.png" />
