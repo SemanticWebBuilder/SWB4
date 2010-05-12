@@ -101,7 +101,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
     private static SWBRepository rep = null;
     public static final String JCR_CONTENT = "jcr:content";
-    static Logger log = SWBUtils.getLogger(OfficeApplication.class);
+    private static final Logger log = SWBUtils.getLogger(OfficeApplication.class);
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
     static {
