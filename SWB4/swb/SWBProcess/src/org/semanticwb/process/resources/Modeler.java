@@ -54,9 +54,7 @@ public class Modeler extends GenericResource {
     private static final String PROP_PARENT = "parent";
     private static final String PROP_CONTAINER = "container";
     private static final String PROCESS_PREFIX = "http://www.semanticwebbuilder.org/swb4/process";
-    private HashMap<String, JSONObject> hmjson = null;
-    private HashMap<String, String> hmnew = null;
-    private HashMap<String, String> hmori = null;
+
     private SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
     /**
@@ -121,9 +119,10 @@ public class Modeler extends GenericResource {
 
         GenericObject go = ont.getGenericObject(request.getParameter("suri"));
         SemanticClass sc = go.getSemanticObject().getSemanticClass();
-        if (hmjson == null) {
-            hmjson = new HashMap();
-        }
+        HashMap<String, JSONObject> hmjson = new HashMap();
+//        if (hmjson == null) {
+//            hmjson = new HashMap();
+//        }
 
         String tmpcmd = cmd, tm = null, id = null;
         if (null != cmd && cmd.indexOf('.') != -1) {
@@ -147,13 +146,28 @@ public class Modeler extends GenericResource {
 
             // Cargando los uris de los elementos existentes en el proceso
             // eliminando las conexiones entre ellos para generarlas nuevamente
-            loadProcessElements(process);
+            //loadProcessElements(process);
 
             Node node = src.getElementsByTagName("json").item(0);
             System.out.println("json:" + node.getTextContent());
 
+            String str_uri = null;
+
+            JSONArray jsarr = null;
+            JSONObject jsobj = null;
             try {
-                createProcessElements(process, request, response, paramRequest);
+                jsobj = new JSONObject(node.getTextContent());
+                jsarr = jsobj.getJSONArray("nodes");
+
+                //identificando los elementos asociados directamente al proceso
+
+                for (int i = 0; i < jsarr.length(); i++) {
+                    jsobj = jsarr.getJSONObject(i);
+                    str_uri = jsobj.getString(PROP_URI);
+                    hmjson.put(str_uri, jsobj);
+                }
+
+                createProcessElements(process, request, response, paramRequest, hmjson);
 
             } catch (Exception e) {
                 log.error("Error al leer JSON...", e);
@@ -174,19 +188,16 @@ public class Modeler extends GenericResource {
      * @param process, Modelo a cargar los elementos del proceso
      * @return Vector, con los uris de los elementos existentes.
      */
-    public void loadProcessElements(org.semanticwb.process.model.Process process) {
-        if (hmnew == null) {
-            hmnew = new HashMap();
-        }
+    public HashMap<String, String> loadProcessElements(org.semanticwb.process.model.Process process) {
+        HashMap<String, String> hmori = new HashMap();
+
         try {
             Iterator<GraphicalElement> it_fo = process.listContaineds();
             while (it_fo.hasNext()) {
                 GraphicalElement obj = it_fo.next();
-                hmnew.put(obj.getURI(), obj.getURI());
                 hmori.put(obj.getURI(), obj.getURI());
 
                 // Se eliminan las conexiones entre GraphicalElements
-
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
@@ -197,6 +208,7 @@ public class Modeler extends GenericResource {
         } catch (Exception e) {
             log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
         }
+        return hmori;
     }
 
     /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
@@ -398,7 +410,12 @@ public class Modeler extends GenericResource {
         return dom;
     }
 
-    public void createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) {
+    public void createProcessElements(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson) {
+
+
+        HashMap<String, String> hmori = loadProcessElements(process);
+        HashMap<String, String> hmnew = new HashMap();
+
         ProcessSite procsite = process.getProcessSite();
         System.out.println("CreateProcessElements........................." + hmjson.size());
         String uri = null, sclass = null, title = null, container = null, parent = null, start = null, end = null;
@@ -426,13 +443,15 @@ public class Modeler extends GenericResource {
                     w = json.getInt(PROP_W);
                     h = json.getInt(PROP_H);
 
-                    if (hmnew.get(uri) != null) {
+                    if (hmori.get(uri) != null) {
                         ge = procsite.getGraphicalElement(uri);
                         ge.setTitle(title);
                         ge.setX(x);
                         ge.setY(y);
                         ge.setWidth(w);
                         ge.setHeight(h);
+                        hmnew.put(uri, ge.getURI());
+                        hmori.remove(uri);
                     } else {
                         long id = model.getCounter(semclass);
                         GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
@@ -507,15 +526,7 @@ public class Modeler extends GenericResource {
             }
 
             // Eliminando elementos que fueron borrados en el applet Modeler
-
-            // conservando los elementos comunes de los dos HM
-            it = hmjson.keySet().iterator();
-            while (it.hasNext()) {
-                String key = it.next();
-                hmori.remove(key);
-            }
-
-            // eliminando elementos que se tenian en el original pero ya no se necesitan
+            // que se tenian en el original pero ya no se necesitan
             it = hmori.keySet().iterator();
             while (it.hasNext()) {
                 String key = it.next();
