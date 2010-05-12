@@ -29,6 +29,8 @@ import static org.semanticwb.portal.monitor.SWBFormatUtils.*;
 import java.lang.management.*;
 import java.util.*;
 import javax.management.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -38,6 +40,8 @@ import javax.management.*;
  */
 public class SWBSummary
 {
+
+    private static Logger log = SWBUtils.getLogger(SWBSummary.class);
 
     /** The class loading m bean. */
     private ClassLoadingMXBean classLoadingMBean = null;
@@ -89,6 +93,9 @@ public class SWBSummary
         } catch (IOException ex)
         {
             assert (false);
+        } catch (java.lang.SecurityException noSecEx)
+        {
+            log.event("Alert: No security permission to access Platform MBeanServer, local system info not available");
         }
     }
 
