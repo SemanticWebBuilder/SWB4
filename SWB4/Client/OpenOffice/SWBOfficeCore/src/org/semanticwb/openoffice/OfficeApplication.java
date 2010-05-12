@@ -378,6 +378,10 @@ public abstract class OfficeApplication
     private final static boolean logOn()
     {
         boolean logOn = false;
+        userInfo=null;
+        webAddress=null;
+        application=null;
+        document=null;
         DialogLogin frmlogin = new DialogLogin();        
         
         frmlogin.setVisible(true);
