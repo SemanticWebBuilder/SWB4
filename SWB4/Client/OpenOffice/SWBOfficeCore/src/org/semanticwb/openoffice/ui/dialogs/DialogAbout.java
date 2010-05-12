@@ -60,7 +60,8 @@ public class DialogAbout extends javax.swing.JDialog {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Acerca de Semantic WebBuilder 4");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogAbout"); // NOI18N
+        setTitle(bundle.getString("about_title")); // NOI18N
         setModal(true);
         setResizable(false);
 
