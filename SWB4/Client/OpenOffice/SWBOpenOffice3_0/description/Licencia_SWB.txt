@@ -1,1 +1,1 @@
-Semantic WebBuilder 4.0 for Open Office 3.0
+SemanticWebBuilder for Open Office 3.0
