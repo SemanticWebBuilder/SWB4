@@ -696,9 +696,14 @@ public abstract class OfficeDocument
         {
             if (OfficeApplication.tryLogin())
             {
-
+                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
+                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
                 try
                 {
+                    if(!OfficeApplication.getOfficeDocumentProxy().exists(repositoryName, contentID))
+                    {
+                        return;
+                    }
                     WebSiteInfo[] sites = OfficeApplication.getOfficeApplicationProxy().getSites();
                     if (sites == null || sites.length <= 0)
                     {
@@ -710,8 +715,7 @@ public abstract class OfficeDocument
                 {
                     e.printStackTrace();
                 }
-                contentID = this.getCustomProperties().get(CONTENT_ID_NAME);
-                String repositoryName = this.getCustomProperties().get(WORKSPACE_ID_NAME);
+                
                 PublishContentToWebPageResultProducer resultProducer = new PublishContentToWebPageResultProducer(contentID, repositoryName, title, description);
                 WizardPage[] clazz = new WizardPage[]
                 {
@@ -732,6 +736,10 @@ public abstract class OfficeDocument
             String siteid = null;
             try
             {
+                if(!OfficeApplication.getOfficeDocumentProxy().exists(repositoryName, contentID))
+                {
+                    return;
+                }
                 for (RepositoryInfo orepository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
                 {
                     if (orepository.name != null && orepository.name.equals(repositoryName))
@@ -932,9 +940,15 @@ public abstract class OfficeDocument
                         else
                         {
                             PublishResultProducer resultProducer = new PublishResultProducer(this);
-                            WizardPage[] pages = new WizardPage[]
+                            /*WizardPage[] pages = new WizardPage[]
                             {
                                 new SelectCategory(), new TitleAndDescription(true), new ContentProperties()
+                            };
+                            Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);*/
+
+                            Class[] pages = new Class[]
+                            {
+                                SelectCategory.class, TitleAndDescription.class, ContentProperties.class
                             };
                             Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);
                             wiz.show();
