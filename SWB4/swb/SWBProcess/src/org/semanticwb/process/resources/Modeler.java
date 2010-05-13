@@ -28,6 +28,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.ConditionalFlow;
 import org.semanticwb.process.model.ConnectionObject;
+import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SubProcess;
@@ -164,8 +165,10 @@ public class Modeler extends GenericResource {
                 for (int i = 0; i < jsarr.length(); i++) {
                     jsobj = jsarr.getJSONObject(i);
                     str_uri = jsobj.getString(PROP_URI);
+                    //System.out.println("cargando hmjson: "+str_uri);
                     hmjson.put(str_uri, jsobj);
                 }
+                System.out.println("hmjson size( "+hmjson.size()+" )");
 
                 createProcessElements(process, request, response, paramRequest, hmjson);
 
@@ -223,13 +226,11 @@ public class Modeler extends GenericResource {
         JSONObject ele = null;
         JSONObject coele = null;
 
-        System.out.println("getProcessJSON()");
-
         try {
             json_ret = new JSONObject();
             json_ret.put(PROP_URI, process.getURI());
             json_ret.put(PROP_TITLE, process.getTitle());
-            json_ret.put(PROP_CLASS, process.getClass().getName());
+            json_ret.put(PROP_CLASS, process.getSemanticObject().getSemanticClass().getClassCodeName());
             nodes = new JSONArray();
             json_ret.putOpt("nodes", nodes);
 
@@ -238,21 +239,27 @@ public class Modeler extends GenericResource {
                 GraphicalElement obj = it_fo.next();
                 ele = new JSONObject();
                 nodes.put(ele);
-                ele.put(PROP_CLASS, obj.getClass().getName());
+                ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
                 ele.put(PROP_TITLE, obj.getTitle());
                 ele.put(PROP_URI, obj.getURI());
                 ele.put(PROP_X, obj.getX());
                 ele.put(PROP_Y, obj.getY());
                 ele.put(PROP_W, obj.getWidth());
                 ele.put(PROP_H, obj.getHeight());
-                ele.put(PROP_CONTAINER, obj.getContainer().getURI());
-                ele.put(PROP_PARENT, obj.getParent().getURI());
+                if(obj.getContainer()!=null)
+                    ele.put(PROP_CONTAINER, obj.getContainer().getURI());
+                else
+                    ele.put(PROP_CONTAINER, "");
+                if(obj.getParent()!=null)
+                    ele.put(PROP_PARENT, obj.getParent().getURI());
+                else
+                    ele.put(PROP_PARENT, "");
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
                     coele = new JSONObject();
                     nodes.put(coele);
-                    coele.put(PROP_CLASS, connectionObject.getClass().getName());
+                    coele.put(PROP_CLASS, connectionObject.getSemanticObject().getSemanticClass().getClassCodeName());
                     //coele.put(PROP_TITLE, connectionObject.getTitle());
                     coele.put(PROP_URI, connectionObject.getURI());
                     coele.put(PROP_START, connectionObject.getSource().getURI());
@@ -263,6 +270,7 @@ public class Modeler extends GenericResource {
                         coele.put(PROP_TITLE, "");
                     }
                 }
+                
             }
 
         } catch (Exception e) {
@@ -417,14 +425,15 @@ public class Modeler extends GenericResource {
         HashMap<String, String> hmnew = new HashMap();
 
         ProcessSite procsite = process.getProcessSite();
-        System.out.println("CreateProcessElements........................." + hmjson.size());
+        GenericObject go = null;
+        //System.out.println("CreateProcessElements........................." + hmjson.size());
         String uri = null, sclass = null, title = null, container = null, parent = null, start = null, end = null;
         int x = 0, y = 0, w = 0, h = 0;
         SemanticClass semclass = null;
         SemanticModel model = procsite.getSemanticObject().getModel();
         GraphicalElement ge = null;
         ConnectionObject co = null;
-
+        HashMap<String, SemanticClass> hmclass = null;
         try {
             // Parte para crear y/o actualizar elementos
             Iterator<String> it = hmjson.keySet().iterator();
@@ -434,7 +443,26 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
-                semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+                if(hmclass==null)
+                {
+                    hmclass = new HashMap();
+                    Iterator<SemanticClass> itsc= procsite.getSemanticObject().getModel().listModelClasses();
+                    while (itsc.hasNext()) {
+                        SemanticClass semanticClass = itsc.next();
+                        hmclass.put(semanticClass.getURI() , semanticClass);
+                    }
+                }
+
+                //
+
+                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
+                if(null==semclass){
+                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+                }
+
+//                System.out.println(PROCESS_PREFIX + "#"+sclass);
+//                System.out.println("SemanticClass..."+semclass.getURI());
+                
 
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     title = json.getString(PROP_TITLE);
@@ -442,31 +470,44 @@ public class Modeler extends GenericResource {
                     y = json.getInt(PROP_Y);
                     w = json.getInt(PROP_W);
                     h = json.getInt(PROP_H);
+                    parent = json.getString(PROP_PARENT);
+                    container = json.getString(PROP_CONTAINER);
 
                     if (hmori.get(uri) != null) {
-                        ge = procsite.getGraphicalElement(uri);
-                        ge.setTitle(title);
-                        ge.setX(x);
-                        ge.setY(y);
-                        ge.setWidth(w);
-                        ge.setHeight(h);
-                        hmnew.put(uri, ge.getURI());
+                        go = ont.getGenericObject(uri);
+
+                        if(go instanceof GraphicalElement)
+                        {
+                            ge = (GraphicalElement) go;
+                            ge.setTitle(title);
+                            ge.setX(x);
+                            ge.setY(y);
+                            ge.setWidth(w);
+                            ge.setHeight(h);
+                            hmnew.put(uri, go.getURI());
+                        }
                         hmori.remove(uri);
+                        
                     } else {
+//                        System.out.println("Create Graphical Element..."+semclass);
                         long id = model.getCounter(semclass);
                         GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         ge = (GraphicalElement) gi;
-                        ge.setTitle(sclass);
+                        ge.setTitle(title);
                         ge.setX(x);
                         ge.setY(y);
                         ge.setHeight(h);
                         ge.setWidth(w);
-                        hmnew.put(uri, ge.getURI());
+                        //if(container.trim().equals("")) ge.setContainer(process);
+                        hmnew.put(uri, gi.getURI());
                     }
                 }
             }
 
+
             // Parte para relacionar elementos container y parents
+            System.out.println("Relacionando con container y parents...");
+            System.out.println("============================================================");
             it = hmjson.keySet().iterator();
             while (it.hasNext()) {
                 String key = it.next();
@@ -474,32 +515,49 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
-                semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
+                if(null==semclass){
+                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+                }
+
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     parent = json.getString(PROP_PARENT);
                     container = json.getString(PROP_CONTAINER);
-                    ge = procsite.getGraphicalElement(hmnew.get(uri));
+                    System.out.println("GE:"+hmnew.get(uri));
+                    go = ont.getGenericObject(hmnew.get(uri));
+                    ge=null;
+                    if(go instanceof GraphicalElement) ge = (GraphicalElement)go;
                     if (ge != null) {
                         if (container != null && container.trim().length() == 0) {
+                            System.out.println("Asociando al process...");
                             ge.setContainer(process);
                         } else {
-                            GenericObject subproc = procsite.getSemanticObject().getModel().getGenericObject(hmnew.get(container));
-                            if (subproc != null && subproc instanceof SubProcess) {
-                                ge.setContainer((SubProcess) subproc);
+                            System.out.println("Asociando a subproceso..."+hmnew.get(container));
+                            GenericObject subproc = ont.getGenericObject(hmnew.get(container));
+                            if (subproc != null) // && (subproc instanceof SubProcess || subproc.getSemanticObject().getSemanticClass().isSubClass(SubProcess.swp_SubProcess)))
+                            {
+                                System.out.println("Aplicando setContainer subproceso..."+subproc.getURI());
+                                System.out.println("clase..."+subproc.getSemanticObject().getSemanticClass().getClassCodeName());
+                                ge.setContainer((Containerable) subproc);
                             }
                         }
 
                         if (parent != null && parent.trim().length() > 0) {
-                            GenericObject go_ge = procsite.getSemanticObject().getModel().getGenericObject(hmnew.get(parent));
+                            System.out.println("Asociando a Parent..."+hmnew.get(parent));
+                            GenericObject go_ge = ont.getGenericObject(hmnew.get(parent));
                             if (go_ge != null && go_ge instanceof GraphicalElement) {
                                 ge.setParent((GraphicalElement) go_ge);
                             }
                         }
 
                     }
+                    else
+                        System.out.println("GraphicalElement es nulo");
                 }
             }
 
+            GenericObject gostart = null;
+            GenericObject goend = null;
             // Parte para generar el flujo del proceso
             it = hmjson.keySet().iterator();
             while (it.hasNext()) {
@@ -507,17 +565,25 @@ public class Modeler extends GenericResource {
                 JSONObject json = (JSONObject) hmjson.get(key);
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
-                semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+
+                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
+                if(null==semclass){
+                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
+                }
+                
                 if (semclass.isSubClass(ConnectionObject.swp_ConnectionObject)) {
                     start = json.getString(PROP_START);
                     end = json.getString(PROP_END);
 
+                    //System.out.println("creando connection object....from("+hmnew.get(start)+") to("+hmnew.get(end)+")");
                     if (hmnew.get(start) != null && hmnew.get(end) != null) {
                         long id = model.getCounter(semclass);
-                        GenericObject go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
+                        go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         co = (ConnectionObject) go;
-                        co.setSource(procsite.getGraphicalElement(hmnew.get(start)));
-                        co.setTarget(procsite.getGraphicalElement(hmnew.get(end)));
+                        gostart = ont.getGenericObject(hmnew.get(start));
+                        goend = ont.getGenericObject(hmnew.get(end));
+                        co.setSource((GraphicalElement)gostart);
+                        co.setTarget((GraphicalElement)goend);
                         if (go instanceof ConditionalFlow) {
                             ((ConditionalFlow) co).setFlowCondition(title);
                         }
@@ -530,7 +596,8 @@ public class Modeler extends GenericResource {
             it = hmori.keySet().iterator();
             while (it.hasNext()) {
                 String key = it.next();
-                procsite.getGraphicalElement(hmori.get(key)).remove();
+                go = ont.getGenericObject(hmori.get(key));
+                ((GraphicalElement)go).remove();
             }
 
         } catch (Exception e) {
