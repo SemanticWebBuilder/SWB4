@@ -26,12 +26,10 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.model.ConditionalFlow;
 import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.ProcessSite;
-import org.semanticwb.process.model.SubProcess;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -286,11 +284,8 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_URI, connectionObject.getURI());
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
-                    if (connectionObject instanceof ConditionalFlow) {
-                        coele.put(PROP_TITLE, ((ConditionalFlow) connectionObject).getFlowCondition());
-                    } else {
-                        coele.put(PROP_TITLE, "");
-                    }
+                    coele.put(PROP_TITLE, connectionObject.getTitle());
+                    
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
                 
@@ -340,11 +335,7 @@ public class Modeler extends GenericResource {
                     coele.put(PROP_URI, connectionObject.getURI());
                     coele.put(PROP_START, connectionObject.getSource().getURI());
                     coele.put(PROP_END, connectionObject.getTarget().getURI());
-                    if (connectionObject instanceof ConditionalFlow) {
-                        coele.put(PROP_TITLE, ((ConditionalFlow) connectionObject).getFlowCondition());
-                    } else {
-                        coele.put(PROP_TITLE, "");
-                    }
+                    coele.put(PROP_TITLE, connectionObject.getTitle());
                 }
                 if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
 
@@ -657,13 +648,12 @@ public class Modeler extends GenericResource {
                         long id = model.getCounter(semclass);
                         go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         co = (ConnectionObject) go;
+                        co.setTitle(title);
                         gostart = ont.getGenericObject(hmnew.get(start));
                         goend = ont.getGenericObject(hmnew.get(end));
                         co.setSource((GraphicalElement)gostart);
                         co.setTarget((GraphicalElement)goend);
-                        if (go instanceof ConditionalFlow) {
-                            ((ConditionalFlow) co).setFlowCondition(title);
-                        }
+                        
                     }
                 }
             }
