@@ -63,6 +63,6 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
                 def=(DefaultFlow)connectionObject;
             }
         }
-        if(!execute)def.execute(instance, user);
+        if(def!=null && !execute)def.execute(instance, user);
     }
 }
