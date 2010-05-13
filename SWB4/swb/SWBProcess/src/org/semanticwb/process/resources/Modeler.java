@@ -641,6 +641,7 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
+
                 semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
                 if(null==semclass){
                     semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
@@ -652,6 +653,7 @@ public class Modeler extends GenericResource {
 
                     //System.out.println("creando connection object....from("+hmnew.get(start)+") to("+hmnew.get(end)+")");
                     if (hmnew.get(start) != null && hmnew.get(end) != null) {
+                        title = json.getString(PROP_TITLE);
                         long id = model.getCounter(semclass);
                         go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         co = (ConnectionObject) go;
