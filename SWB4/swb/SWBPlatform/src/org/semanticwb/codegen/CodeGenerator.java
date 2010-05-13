@@ -1223,7 +1223,7 @@ public class CodeGenerator
             javaClassContent.append("" + ENTER);
         }
         HashSet<SemanticClass> interfaces = getInterfaces(tpc);
-        if (interfaces.size() == 0)
+        if (interfaces.isEmpty())
         {
             javaClassContent.append("public interface " + toUpperCase(tpc.getClassCodeName()) + "Base extends org.semanticwb.model.GenericObject" + ENTER);
         }
@@ -1388,14 +1388,30 @@ public class CodeGenerator
 
                     if (objectName.toLowerCase().startsWith("has"))
                     {
-                        // son varios
-                        objectName = objectName.substring(3);
-                        javaClassContent.append(ENTER);
-                        javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> list" + getNameInPlural(objectName) + "();" + ENTER);
-                        javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
-                        if (tpp.isInheritProperty())
+                       SemanticClass clsrange = tpp.getRangeClass();
+                        if (clsrange != null && clsrange.getURI() != null && clsrange.isSWB())
                         {
-                            javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> listInherit" + getNameInPlural(objectName) + "();" + ENTER);
+                            // son varios
+                            objectName = objectName.substring(3);
+                            javaClassContent.append(ENTER);
+                            javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> list" + getNameInPlural(objectName) + "();" + ENTER);
+                            javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
+                            if (tpp.isInheritProperty())
+                            {
+                                javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + pack + "." + valueToReturn + "> listInherit" + getNameInPlural(objectName) + "();" + ENTER);
+                            }
+                        }
+                        else
+                        {
+                            // son varios
+                            objectName = objectName.substring(3);
+                            javaClassContent.append(ENTER);
+                            javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + "> list" + getNameInPlural(objectName) + "();" + ENTER);
+                            javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
+                            if (tpp.isInheritProperty())
+                            {
+                                javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + pack + "." + valueToReturn + "> listInherit" + getNameInPlural(objectName) + "();" + ENTER);
+                            }
                         }
 
                         if (!tpp.hasInverse())
