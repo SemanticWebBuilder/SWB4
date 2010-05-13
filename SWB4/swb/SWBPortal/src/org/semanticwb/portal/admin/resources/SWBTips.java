@@ -84,7 +84,7 @@ public class SWBTips extends GenericAdmResource
             return dom;
         }
         catch (Exception e) {
-            log.error("Error while generating DOM in resource: "+base.getId() +"-"+ base.getTitle(), e);
+            //log.error("Error while generating DOM in resource: "+base.getId() +"-"+ base.getTitle(), e);
         }
         return null;
     }
@@ -125,7 +125,7 @@ public class SWBTips extends GenericAdmResource
            }
         }
         catch (Exception e) {
-            log.error("Error while processing RSS for: "+getResourceBase().getAttribute("url"), e);
+            //log.error("Error while processing RSS for: "+getResourceBase().getAttribute("url"), e);
         }
     }
 }
