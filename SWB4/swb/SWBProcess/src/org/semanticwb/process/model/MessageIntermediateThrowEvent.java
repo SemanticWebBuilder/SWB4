@@ -7,4 +7,6 @@ public class MessageIntermediateThrowEvent extends org.semanticwb.process.model.
     {
         super(base);
     }
+
+
 }

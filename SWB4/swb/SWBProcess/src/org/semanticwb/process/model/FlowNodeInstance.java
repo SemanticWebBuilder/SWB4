@@ -54,7 +54,8 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         super.close(user,status,action);
         abortDependencies(user);
-        nextObject(user);
+        FlowNode type=getFlowNodeType();
+        type.nextObject(this, user);
     }
 
     /**
@@ -90,22 +91,6 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         return ret;
     }
 
-
-    /**
-     * Continua el flujo al siguiente FlowNode
-     * @param user
-     */
-    private void nextObject(User user)
-    {
-        //System.out.println("nextObject:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
-        FlowNode type=getFlowNodeType();
-        Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
-        while (it.hasNext())
-        {
-            ConnectionObject connectionObject = it.next();
-            connectionObject.execute(this, user);
-        }
-    }
 
     /**
      * Cierra la instancia de objeto y continua el flujo al siguiente objeto
