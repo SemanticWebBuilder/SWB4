@@ -2,24 +2,30 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="html" version="1.0" encoding="ISO-8859-1" indent="yes"/>
     <xsl:template match="/admresource">
-        <DIV class="swbform">
-        <TABLE width="100%"  border="0" cellpadding="5" cellspacing="0">
+        <script type="text/javascript">
+            dojo.require("dijit.form.Form");
+            dojo.require("dijit.form.ValidationTextBox");
+            dojo.require("dijit.form.TextBox");
+            dojo.require("dijit.form.SimpleTextarea");
+        </script>
+        <div class="swbform">
+        <!--table width="100%"  border="0" cellpadding="5" cellspacing="0"-->
 		<xsl:apply-templates />
-	</TABLE>
-        </DIV>
+	<!--/table-->
+        </div>
     </xsl:template>
     <xsl:template match="statictext">
-	<TR>
-		<TD class="datos" width="200px" align="left" colspan="2">
+	<tr>
+		<td class="datos" width="200px" align="left" colspan="2">
             <xsl:value-of select="." disable-output-escaping="yes"/>
-        </TD>
-	</TR>
+        </td>
+	</tr>
     </xsl:template>
     <xsl:template match="wbmsg">
-	<TR>
-		<TD width="200px" align="right"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></TD>
-		<TD class="datos" width="200px" align="right"><xsl:value-of select="." disable-output-escaping="yes"/></TD>
-	</TR>
+	<tr>
+		<td width="200px" align="right"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
+		<td class="datos" width="200px" align="right"><xsl:value-of select="." disable-output-escaping="yes"/></td>
+	</tr>
     </xsl:template>
     <xsl:template match="script">
 	<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
@@ -58,12 +64,14 @@
 	<xsl:if test="string-length( @onreset    ) &gt; 0"> onreset=&quot;<xsl:value-of select="@onreset" />&quot;</xsl:if>
 	<xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
     <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <table width="100%"  border="0" cellpadding="5" cellspacing="0">
 		<xsl:apply-templates />
+                </table>
 	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
     <xsl:template match="fieldset">
-        <xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores" colspan="2"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+        <xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores" colspan="2"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
     	<xsl:if test="string-length( @id     ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
     	<xsl:if test="string-length( @name   ) &gt; 0"> name=&quot;<xsl:value-of select="@name" />&quot;</xsl:if>
@@ -96,32 +104,32 @@
     		<xsl:value-of select="@legend" />
     		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/legend<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	</xsl:if>
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>table<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	<xsl:apply-templates />
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TABLE<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/table<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    	<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
     <xsl:template match="label">
-	<TR>
-		<TD class="datos" width="200px" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" />
+	<tr>
+		<td class="datos" width="200px" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" />
             <xsl:if test="string-length( @required    ) &gt; 0">
-                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>FONT color="RED"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>font color="RED"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
                     <xsl:value-of select="@required" />
-                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>/FONT<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+                <xsl:text disable-output-escaping="yes">&lt;</xsl:text>/font<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
             </xsl:if>
-        </TD>
-        <TD class="valores"><xsl:apply-templates select="./*" /></TD>
-	</TR>
+        </td>
+        <td class="valores"><xsl:apply-templates select="./*" /></td>
+	</tr>
     </xsl:template>
     <xsl:template match="legend">
     		<legend><xsl:value-of select="node()" disable-output-escaping="yes" /></legend>
     </xsl:template>
     <xsl:template match="input[@type = 'submit' or @type = 'reset']">
     		<xsl:if test="@type = 'submit'">
-			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" /> type=&quot;<xsl:value-of select="@type" />&quot;
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -155,14 +163,14 @@
 	        <xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
 	        <xsl:text disable-output-escaping="yes">/&gt;</xsl:text>
 		<xsl:if test="@type = 'reset'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="button[@type = 'submit' or @type = 'reset']">
     		<xsl:if test="@type = 'submit'">
-			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td colspan="2" align="right"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" /> type=&quot;<xsl:value-of select="@type" />&quot;
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -200,14 +208,14 @@
 	         <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 
 		<xsl:if test="@type = 'reset'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="input[@type != 'submit' and @type != 'reset']">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	        <xsl:choose>
@@ -272,14 +280,14 @@
 	        	<br/><br/><xsl:if test="string-length( @msg ) &gt; 0"><xsl:value-of select="@msg" /></xsl:if>
 	        </xsl:if>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="textarea">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -319,14 +327,14 @@
 	        <xsl:value-of select="." disable-output-escaping="yes"/>
 	        <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="select">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -361,8 +369,8 @@
 		</xsl:for-each>
 		<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="option">
@@ -391,10 +399,10 @@
     </xsl:template>
    <xsl:template match="img">
 	<xsl:if test="name(parent::*)!='label'">
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD<xsl:text disable-output-escaping="yes">&gt;&amp;nbsp;</xsl:text>
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td<xsl:text disable-output-escaping="yes">&gt;&amp;nbsp;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 	</xsl:if>
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
         <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -431,14 +439,14 @@
         <xsl:if test="string-length( @moreattr) &gt; 0"><xsl:text> </xsl:text><xsl:value-of select="@moreattr" /></xsl:if>
         <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 	<xsl:if test="name(parent::*)!='label'">
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 	</xsl:if>
     </xsl:template>
     <xsl:template match="applet">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -479,14 +487,14 @@
 		<xsl:apply-templates />
 		<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="object">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -526,8 +534,8 @@
 		<xsl:apply-templates />
 		<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
     <xsl:template match="param">
@@ -623,8 +631,8 @@
     </xsl:template>
     <xsl:template match="calendar">
     		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>TD class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     		</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&lt;input type=&quot;text&quot;</xsl:text>
 	        <xsl:if test="string-length( @id    ) &gt; 0"> id=&quot;<xsl:value-of select="@id" />&quot;</xsl:if>
@@ -668,8 +676,8 @@
 		<xsl:if test="string-length( @script ) &gt; 0"> src=&quot;<xsl:value-of select="@script" />&quot;</xsl:if>
 	        <xsl:text disable-output-escaping="yes">&gt; &lt;/script&gt;</xsl:text>
 		<xsl:if test="name(parent::*)!='label'">
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TD<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/TR<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+    			<xsl:text disable-output-escaping="yes">&lt;</xsl:text>/tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
    		</xsl:if>
     </xsl:template>
 </xsl:stylesheet>
