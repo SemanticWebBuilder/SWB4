@@ -1,5 +1,6 @@
 package org.semanticwb.process.model;
 
+import java.util.Iterator;
 import org.semanticwb.model.User;
 
 
@@ -37,4 +38,31 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         //Implementar en subclases
     }
 
+    /**
+     * Continua el flujo al siguiente FlowNode
+     * @param user
+     */
+    public void nextObject(FlowNodeInstance instance, User user)
+    {
+        //System.out.println("nextObject:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        DefaultFlow def=null;
+        boolean execute=false;
+        Iterator<ConnectionObject> it=listOutputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(!(connectionObject instanceof DefaultFlow))
+            {
+                if(connectionObject.evaluate(instance, user))
+                {
+                    connectionObject.execute(instance, user);
+                    execute=true;
+                }
+            }else
+            {
+                def=(DefaultFlow)connectionObject;
+            }
+        }
+        if(!execute)def.execute(instance, user);
+    }
 }

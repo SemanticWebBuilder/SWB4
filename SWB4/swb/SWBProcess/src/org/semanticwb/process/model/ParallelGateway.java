@@ -23,7 +23,6 @@ public class ParallelGateway extends org.semanticwb.process.model.base.ParallelG
             GraphicalElement obj=connectionObject.getSource();
             if(obj instanceof FlowNode)
             {
-
                 FlowNodeInstance inst=instance.getRelatedFlowNodeInstance((FlowNode)obj);
                 if(inst==null)
                 {

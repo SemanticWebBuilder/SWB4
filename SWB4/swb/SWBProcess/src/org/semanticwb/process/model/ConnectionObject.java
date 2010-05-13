@@ -15,4 +15,9 @@ public class ConnectionObject extends org.semanticwb.process.model.base.Connecti
         //Implementar en subclases
     }
 
+    public boolean evaluate(FlowNodeInstance source, User user)
+    {
+        return true;
+    }
+
 }

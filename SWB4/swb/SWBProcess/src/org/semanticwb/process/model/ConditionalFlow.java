@@ -11,7 +11,7 @@ public class ConditionalFlow extends org.semanticwb.process.model.base.Condition
     }
 
     @Override
-    public void execute(FlowNodeInstance source, User user)
+    public boolean evaluate(FlowNodeInstance source, User user)
     {
         boolean cond=true;
         String scond=getFlowCondition();
@@ -20,10 +20,15 @@ public class ConditionalFlow extends org.semanticwb.process.model.base.Condition
         {
             if(!scond.equals(action))cond=false;
         }
-        if(cond)
-        {
-            super.execute(source,user);
-        }
+        return cond;
+    }
+
+
+
+    @Override
+    public void execute(FlowNodeInstance source, User user)
+    {
+        super.execute(source,user);
     }
 
 }
