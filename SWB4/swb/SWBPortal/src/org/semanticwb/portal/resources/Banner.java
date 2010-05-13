@@ -73,104 +73,111 @@ public class Banner extends GenericAdmResource
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //System.out.println("Banner.doView");
         StringBuffer ret = new StringBuffer("");
         Resource base = getResourceBase();
         try {
-            String local = base.getAttribute("txtLocal", "0").trim();
-            if (local.equals("0")) {
-                String img = base.getAttribute("img", "").trim();
-                if (!img.equals("")) {
+            String local = base.getAttribute("local", "0");
+            if(local.equals("0")) {
+                String img = base.getAttribute("img");
+                if( img!=null ){
                     String wburl = paramRequest.getActionUrl().toString();
                     String url = base.getAttribute("url", "").trim();                                        
-                    String width = base.getAttribute("width", "").trim();
-                    String height = base.getAttribute("height", "").trim();
-                    String styleClass = base.getAttribute("styleClass", "").trim();
-                    width=paramRequest.getArgument("width", width);
-                    height=paramRequest.getArgument("height", height);
+                    String width = paramRequest.getArgument("width", base.getAttribute("width"));
+                    String height = paramRequest.getArgument("height", base.getAttribute("height"));
+                    String cssClass = base.getAttribute("cssClass");
 
-                    if (url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:")) {
+                    if(url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:")) {
                         wburl = url.replaceAll("\"", "&#34;");
                     }
-                    if (img.endsWith(".swf")) {
+
+                    if(img.endsWith(".swf")) {
                         String schema = new URL(request.getRequestURL().toString()).getProtocol();
 
-                        ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0\"");
-                        if (!width.equals("")) {
-                            ret.append(" width=\"" + width + "\"");
+                        ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://get.adobe.com/flashplayer/\"");
+                        if( width!=null ) {
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         }
-                        if (!height.equals("")) {
-                            ret.append(" height=\"" + height + "\"");
+                        if( height!=null ) {
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         }
                         ret.append(">\n");
-                        ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />\n");
-                        ret.append("<param name=\"quality\" value=\"high\" />\n");
-                        ret.append("<param name=\"wmode\" value=\"transparent\" /> \n");
-                        ret.append("<param name=\"FlashVars\" value=\"liga=" + wburl + "\" />\n");
-                        ret.append("<embed id=\"" + img + "\" name=\"" + img + "\" src=\"");
-                        ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                        ret.append(" quality=\"high\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" type=\"application/x-shockwave-flash\" ");
-                        if (!width.equals("")) {
-                            ret.append(" width=\"" + width + "\"");
+                        ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />");
+                        ret.append("<param name=\"quality\" value=\"high\" />");
+                        ret.append("<param name=\"wmode\" value=\"transparent\" />");
+                        ret.append("<param name=\"FlashVars\" value=\"liga="+wburl+"\" />");
+                        ret.append("<embed id=\"bnr_"+base.getId()+"\" name=\"bnr_"+base.getId()+"\"");
+                        ret.append(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
+                        ret.append(" FlashVars=\"liga="+wburl+"\"");
+                        ret.append(" quality=\"high\" pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" ");
+                        if( width!=null ) {
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         }
-                        if (!height.equals("")) {
-                            ret.append(" height=\"" + height + "\"");
+                        if( height!=null ) {
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         }
                         ret.append(">");
-                        ret.append("</embed>\n");
+                        ret.append("</embed>");
                         ret.append("</object>");
-                    } else {
-                        String alt = base.getAttribute("alt", "").trim();
-                        if (!url.equals("")) {
+                    }else {
+                        if( !url.equals("") ){
                             String target = base.getAttribute("target", "0").trim();
                             
-                            ret.append("<a href=\"" + wburl + "\"");
-                            if (target.equals("1")) {
-                                ret.append(" target=\"_newbnr\"");
+                            ret.append("<a href=\""+wburl+"\"");
+                            if( target.equals("1") ) {
+                                ret.append(" target=\"_blank\"");
                             }
-                            if (!styleClass.equals("")) {
-                                ret.append(" class=\"" + styleClass + "\"");
+                            if( cssClass!=null ) {
+                                ret.append(" class=\""+cssClass+"\"");
                             }
                             ret.append(">");
-                            //System.out.println("liga: " + ret.toString());
                         }
+                        String longdesc = base.getAttribute("longdesc");
                         ret.append("<img src=\"");
                         ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                        ret.append(" alt=\"" + base.getAttribute("alt", "") + "\"");
 
-                       if (paramRequest.getArguments().containsKey("border")) {
-                            ret.append(" border=\"" + (String) paramRequest.getArguments().get("border") + "\"");
+                        if( width!=null ) {
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         }
-
-                       /*else {
-                            ret.append(" border=\"0\"");
-                        }*/
-                        /*if (!alt.equals("")) {
-                            ret.append(" alt=\"" + alt + "\"");
-                        }*/
-                        // El uso de alt es obligatorio
-                        ret.append(" alt=\"" + alt + "\"");
-                        if (!width.equals("")) {
-                            ret.append(" width=\"" + width + "\"");
+                        if( height!=null ) {
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         }
-                        if (!height.equals("")) {
-                            ret.append(" height=\"" + height + "\"");
+                        if( longdesc!=null ) {
+                            ret.append(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                         }
-
                         ret.append("/>");
 
-                        if (!url.equals("")) {
+                        if( !url.equals("") ) {
                             ret.append("</a>");
                         }
                     }
                 }
-            } else if (local.equals("1")) { //publicidad externa
+                String ld = base.getAttribute("longdesc");
+                if( ld!=null ) {
+                    ret.append("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
+                }
+            }else { //publicidad externa
                 ret.append(base.getAttribute("code", ""));
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             log.error("Error in resource Banner while bringing HTML", e);
         }
         PrintWriter out = response.getWriter();
         out.print(ret.toString());        
+    }
+
+    @Override
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base = getResourceBase();
+        PrintWriter out = response.getWriter();
+
+        out.println("<div style=\"position:relative;"+(base.getAttribute("width")==null?"":"width:"+base.getAttribute("width")+";")+(base.getAttribute("height")==null?"":"height:"+base.getAttribute("height")+";")+"\">");
+        out.println(base.getAttribute("longdesc", "Sin descripción"));
+        out.println("<hr size=\"1\" noshade=\"noshade\" />");
+        out.println("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString()+"\">Regresar</a>");
+        out.println("</div>");
+        out.flush();
+        out.close();
     }
 
     /**
@@ -182,13 +189,11 @@ public class Banner extends GenericAdmResource
      * @param webpage the webpage
      * @return the string
      */
-    public String replaceTags(String str, HttpServletRequest request, User user,WebPage webpage)
-    {
+    public String replaceTags(String str, HttpServletRequest request, User user,WebPage webpage) {
         if(str==null || str.trim().length()==0)
-            return "";
+            return null;
 
         str=str.trim();
-        //TODO: codificar cualquier atributo o texto
 
         Iterator it=SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
         while(it.hasNext())
@@ -238,14 +243,13 @@ public class Banner extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
+    public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
         String url = base.getAttribute("url", "").trim();
         url=replaceTags(url, request, response.getUser(), response.getWebPage());
-
-        if (!url.equals("")) response.sendRedirect(url);
+        System.out.println("action.. url="+url);
+        if( url!=null )
+            response.sendRedirect(url);
     }
-
 }
