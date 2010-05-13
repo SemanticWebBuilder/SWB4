@@ -108,7 +108,6 @@ public class FormFE extends WBContainerFE
     public FormFE(String name,String action) {
         this.name=name;
         this.action=action;
-        detectBrowser();
     }
 
     /**
@@ -123,7 +122,6 @@ public class FormFE extends WBContainerFE
         this.base=base;
         this.redirect=redirect;
         setAttributes();
-        detectBrowser();
     }
 
     /**
@@ -140,7 +138,6 @@ public class FormFE extends WBContainerFE
         this.redirect=redirect;
         setAttributes();
         this.request=request;
-        detectBrowser();
     }
 
     //Sets
@@ -369,7 +366,7 @@ public class FormFE extends WBContainerFE
      */
     private String getValHtml() {
         StringBuffer strb=new StringBuffer();
-        strb.append("\n<script  language=\"JavaScript\">");
+        strb.append("\n<script type=\"text/javascript\">");
         strb.append("\n<![CDATA[");
         strb.append("\nfunction valida_"+getName()+"(forma) {");
         strb.append("\n     "+getJsFE());
@@ -557,18 +554,4 @@ public class FormFE extends WBContainerFE
                 child.setAttribute("onsubmit","submitForm('"+id+"');return false;");
             }
     }
-
-
-    /**
-     * Detect browser.
-     */
-    private void detectBrowser(){
-        if(request!=null){
-           String browser=request.getHeader("User-Agent");
-           if(browser!=null && browser.indexOf("Firefox")>0) { //Ya que dojo no funciona en Firefox, TODO:Revisar si hay más navegadores con este problema
-               jsframework="";
-           }
-        }
-    }
-
 }
