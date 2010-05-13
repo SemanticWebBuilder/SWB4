@@ -366,7 +366,7 @@ public class TextAreaFE extends WBJsInputFEAbs
                 if(dbconnmgr!=null && dbconnmgr.getAttribute(name)!=null) child.appendChild(dom.createTextNode(dbconnmgr.getAttribute(name)));
                 else if(value!=null) child.appendChild(dom.createTextNode(value.trim()));
 
-                //setJsFrameworkAttributes(child);
+                setJsFrameworkAttributes(child);
 
                 if(root!=null) root.appendChild(child); 
                 else dom.appendChild(child);
@@ -451,7 +451,7 @@ public class TextAreaFE extends WBJsInputFEAbs
             String jsFramework=getFormFE().getJsFrameWork();
             if(jsFramework!=null){
                 if(jsFramework.equalsIgnoreCase("dojo")){
-                    child.setAttribute("dojoType","dijit.Editor");
+                    child.setAttribute("dojoType","dijit.form.SimpleTextarea");
                     if(required){
                         child.setAttribute("required","true");
                     }
