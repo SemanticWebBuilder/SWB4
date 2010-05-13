@@ -4,7 +4,7 @@ package org.semanticwb.process.model.base;
 public abstract class FlowNodeBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_FlowNodeInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNodeInstance");
-    public static final org.semanticwb.platform.SemanticProperty swp_hasFlowNodeInstansInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasFlowNodeInstansInv");
+    public static final org.semanticwb.platform.SemanticProperty swp_hasFlowNodeInstanceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#hasFlowNodeInstanceInv");
     public static final org.semanticwb.platform.SemanticClass swp_FlowNode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNode");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#FlowNode");
 
@@ -43,18 +43,6 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
             return (getFlowNode(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstansInv,value.getSemanticObject(),sclass));
-            return it;
-        }
-
         public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByContainer(org.semanticwb.process.model.Containerable value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_container, value.getSemanticObject(),sclass));
@@ -64,6 +52,18 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
         public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByContainer(org.semanticwb.process.model.Containerable value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_container,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.FlowNode> listFlowNodeByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNode> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -147,7 +147,7 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance> listFlowObjectInstances()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance>(getSemanticObject().listObjectProperties(swp_hasFlowNodeInstansInv));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.FlowNodeInstance>(getSemanticObject().listObjectProperties(swp_hasFlowNodeInstanceInv));
     }
 
     public boolean hasFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
@@ -155,7 +155,7 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
         boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swp_hasFlowNodeInstansInv,value.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swp_hasFlowNodeInstanceInv,value.getSemanticObject());
         }
         return ret;
     }
@@ -163,7 +163,7 @@ public abstract class FlowNodeBase extends org.semanticwb.process.model.Graphica
     public org.semanticwb.process.model.FlowNodeInstance getFlowObjectInstance()
     {
          org.semanticwb.process.model.FlowNodeInstance ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasFlowNodeInstansInv);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasFlowNodeInstanceInv);
          if(obj!=null)
          {
              ret=(org.semanticwb.process.model.FlowNodeInstance)obj.createGenericInstance();
