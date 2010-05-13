@@ -1,5 +1,7 @@
 package org.semanticwb.process.model;
 
+import org.semanticwb.model.User;
+
 
 public class ConnectionObject extends org.semanticwb.process.model.base.ConnectionObjectBase 
 {
@@ -7,4 +9,10 @@ public class ConnectionObject extends org.semanticwb.process.model.base.Connecti
     {
         super(base);
     }
+
+    public void execute(FlowNodeInstance source, User user)
+    {
+        //Implementar en subclases
+    }
+
 }

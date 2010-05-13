@@ -21,53 +21,51 @@ public class SWBProcessMgr
     public static List<ProcessInstance> getActiveProcessInstance(ProcessSite site, Process process)
     {
         ArrayList ret=new ArrayList();
-        //TODO
-//        Iterator<FlowNodeInstance> it=FlowNodeInstance.ClassMgr.listFlowNodeInstanceByFlowNodeType(process, site);
-//        while (it.hasNext())
-//        {
-//            ProcessInstance processInstance = (ProcessInstance)it.next();
-//            if(processInstance.getStatus()==Activity.STATUS_PROCESSING)
-//            {
-//                ret.add(processInstance);
-//            }
-//        }
+        
+        Iterator<ProcessInstance> it=process.listProcessInstances();
+        while (it.hasNext())
+        {
+            ProcessInstance processInstance = (ProcessInstance)it.next();
+            if(processInstance.getStatus()==Instance.STATUS_PROCESSING)
+            {
+                ret.add(processInstance);
+            }
+        }
         return ret;
     }
 
-    public static ProcessInstance createProcessInstance(ProcessSite site, Process process, User user)
+    public static ProcessInstance createProcessInstance(Process process, User user)
     {
-        ProcessInstance pinst=null;
-        //TODO
-//        pint=process.createProcessInstance(site);
-//        pinst.start(user);
+        ProcessInstance pinst=process.createInstance();
+        pinst.start(user);
         return pinst;
     }
 
-    public static List<FlowNodeInstance> getUserTaskInstances(ProcessInstance pinst, User user)
+    public static List<FlowNodeInstance> getUserTaskInstances(ContainerInstanceable pinst, User user)
     {
         ArrayList ret=new ArrayList();
-        //TODO
-//        Iterator<FlowNodeInstance> it=pinst.listFlowObjectInstances();
-//        while(it.hasNext())
-//        {
-//            FlowNodeInstance actins=it.next();
-//            FlowNode type=actins.getFlowNodeType();
-//            if(actins instanceof ProcessInstance)
-//            {
-//                ProcessInstance processInstance=(ProcessInstance)actins;
-//                if(processInstance.getStatus()==Process.STATUS_PROCESSING || processInstance.getStatus()==Process.STATUS_OPEN)
-//                {
-//                    List aux=getUserTaskInstances((ProcessInstance)actins, user);
-//                    ret.addAll(aux);
-//                }
-//            }else if(type instanceof Task)
-//            {
-//                if(actins.getStatus()==Process.STATUS_PROCESSING || actins.getStatus()==Process.STATUS_OPEN)
-//                {
-//                    if(user.haveAccess(type))ret.add(actins);
-//                }
-//            }
-//        }
+        Iterator<FlowNodeInstance> it=pinst.listFlowNodeInstances();
+        while(it.hasNext())
+        {
+            FlowNodeInstance actins=it.next();
+            FlowNode type=actins.getFlowNodeType();
+            if(actins instanceof SubProcessInstance)
+            {
+                SubProcessInstance processInstance=(SubProcessInstance)actins;
+                if(processInstance.getStatus()==Instance.STATUS_PROCESSING || processInstance.getStatus()==Instance.STATUS_OPEN)
+                {
+                    List aux=getUserTaskInstances((SubProcessInstance)actins, user);
+                    ret.addAll(aux);
+                }
+            }else if(type instanceof Task)
+            {
+                if(actins.getStatus()==Instance.STATUS_PROCESSING || actins.getStatus()==Instance.STATUS_OPEN)
+                {
+                    if(user.haveAccess(type))
+                        ret.add(actins);
+                }
+            }
+        }
         return ret;
     }
 
