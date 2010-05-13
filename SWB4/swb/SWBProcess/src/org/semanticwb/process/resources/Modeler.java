@@ -206,12 +206,34 @@ public class Modeler extends GenericResource {
                     ConnectionObject connectionObject = it.next();
                     connectionObject.remove();
                 }
+                if(obj instanceof Containerable) loadSubProcessElements((Containerable)obj, hmori);
             }
 
         } catch (Exception e) {
-            log.error("Error al general el JSON del Modelo.....getModelJSON(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
+            log.error("Error al general el JSON del Modelo.....loadProcessElements(" + process.getTitle() + ", uri:" + process.getURI() + ")", e);
         }
         return hmori;
+    }
+
+    public void loadSubProcessElements(org.semanticwb.process.model.Containerable subprocess, HashMap hmori) {
+        try {
+            Iterator<GraphicalElement> it_fo = subprocess.listContaineds();
+            while (it_fo.hasNext()) {
+                GraphicalElement obj = it_fo.next();
+                hmori.put(obj.getURI(), obj.getURI());
+
+                // Se eliminan las conexiones entre GraphicalElements
+                Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
+                while (it.hasNext()) {
+                    ConnectionObject connectionObject = it.next();
+                    connectionObject.remove();
+                }
+                if(obj instanceof Containerable) loadSubProcessElements((Containerable)obj, hmori);
+            }
+
+        } catch (Exception e) {
+            log.error("Error al general el JSON del Modelo.....loadSubProcessElements(" + subprocess.getId() + ", uri:" + subprocess.getURI() + ")", e);
+        }
     }
 
     /** Utilizado para generar un JSON del modelo, para la comunicacion con el applet
@@ -270,6 +292,7 @@ public class Modeler extends GenericResource {
                         coele.put(PROP_TITLE, "");
                     }
                 }
+                if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
                 
             }
 
@@ -278,6 +301,58 @@ public class Modeler extends GenericResource {
         }
 
         return json_ret;
+    }
+
+    public void getSubProcessJSON(org.semanticwb.process.model.Containerable subprocess,JSONArray nodes) {
+
+        JSONObject ele = null;
+        JSONObject coele = null;
+
+        try {
+
+            Iterator<GraphicalElement> it_fo = subprocess.listContaineds();
+            while (it_fo.hasNext()) {
+                GraphicalElement obj = it_fo.next();
+                ele = new JSONObject();
+                nodes.put(ele);
+                ele.put(PROP_CLASS, obj.getSemanticObject().getSemanticClass().getClassCodeName());
+                ele.put(PROP_TITLE, obj.getTitle());
+                ele.put(PROP_URI, obj.getURI());
+                ele.put(PROP_X, obj.getX());
+                ele.put(PROP_Y, obj.getY());
+                ele.put(PROP_W, obj.getWidth());
+                ele.put(PROP_H, obj.getHeight());
+                if(obj.getContainer()!=null)
+                    ele.put(PROP_CONTAINER, obj.getContainer().getURI());
+                else
+                    ele.put(PROP_CONTAINER, "");
+                if(obj.getParent()!=null)
+                    ele.put(PROP_PARENT, obj.getParent().getURI());
+                else
+                    ele.put(PROP_PARENT, "");
+                Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
+                while (it.hasNext()) {
+                    ConnectionObject connectionObject = it.next();
+                    coele = new JSONObject();
+                    nodes.put(coele);
+                    coele.put(PROP_CLASS, connectionObject.getSemanticObject().getSemanticClass().getClassCodeName());
+                    //coele.put(PROP_TITLE, connectionObject.getTitle());
+                    coele.put(PROP_URI, connectionObject.getURI());
+                    coele.put(PROP_START, connectionObject.getSource().getURI());
+                    coele.put(PROP_END, connectionObject.getTarget().getURI());
+                    if (connectionObject instanceof ConditionalFlow) {
+                        coele.put(PROP_TITLE, ((ConditionalFlow) connectionObject).getFlowCondition());
+                    } else {
+                        coele.put(PROP_TITLE, "");
+                    }
+                }
+                if(obj instanceof Containerable) getSubProcessJSON((Containerable)obj,nodes);
+
+            }
+
+        } catch (Exception e) {
+            log.error("Error al general el JSON del Modelo.....getSubProcessJSON(" +subprocess.getId() + ", uri:" + subprocess.getURI() + ")", e);
+        }
     }
 
     /**
