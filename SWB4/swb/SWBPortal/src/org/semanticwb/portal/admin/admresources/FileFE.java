@@ -553,6 +553,7 @@ public class FileFE extends WBJsInputFEAbs
                            child=dom.createElement("input");
                            child.setAttribute("type", "checkbox");
                            child.setAttribute("name", "wbNoFile_"+name);
+                           child.setAttribute("id", "wbNoFile_"+name);
                            child.setAttribute("value", "1");
                            input.appendChild(child);
                            root.appendChild(input);
