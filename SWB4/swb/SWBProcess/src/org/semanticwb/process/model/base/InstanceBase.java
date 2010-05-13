@@ -69,6 +69,18 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
             return it;
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByAssignedto(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_assignedto, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByAssignedto(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_assignedto,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.Instance> listInstanceByEndedby(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.Instance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_endedby, value.getSemanticObject(),sclass));
@@ -168,6 +180,16 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().setIntProperty(swp_status, value);
     }
 
+    public java.util.Date getAssigned()
+    {
+        return getSemanticObject().getDateProperty(swp_assigned);
+    }
+
+    public void setAssigned(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swp_assigned, value);
+    }
+
     public int getIteration()
     {
         return getSemanticObject().getIntProperty(swp_iteration);
@@ -192,6 +214,27 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
     {
          org.semanticwb.model.User ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setAssignedto(org.semanticwb.model.User value)
+    {
+        getSemanticObject().setObjectProperty(swp_assignedto, value.getSemanticObject());
+    }
+
+    public void removeAssignedto()
+    {
+        getSemanticObject().removeProperty(swp_assignedto);
+    }
+
+    public org.semanticwb.model.User getAssignedto()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_assignedto);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
