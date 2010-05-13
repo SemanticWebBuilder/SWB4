@@ -190,6 +190,34 @@ public abstract class ProcessBase extends org.semanticwb.process.model.ProcessEl
          return ret;
     }
 
+    public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses()
+    {
+        com.hp.hpl.jena.rdf.model.StmtIterator stit=getSemanticObject().getRDFResource().listProperties(swp_hasProcessClass.getRDFProperty());
+        return new org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject>(stit);
+    }
+
+    public void addProcessClass(org.semanticwb.platform.SemanticObject value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasProcessClass, value);
+    }
+
+    public void removeAllProcessClass()
+    {
+        getSemanticObject().removeProperty(swp_hasProcessClass);
+    }
+
+    public void removeProcessClass(org.semanticwb.platform.SemanticObject semanticobject)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasProcessClass,semanticobject);
+    }
+
+    public org.semanticwb.platform.SemanticObject getProcessClass()
+    {
+         org.semanticwb.platform.SemanticObject ret=null;
+         ret=getSemanticObject().getObjectProperty(swp_hasProcessClass);
+         return ret;
+    }
+
     public org.semanticwb.process.model.ProcessSite getProcessSite()
     {
         return (org.semanticwb.process.model.ProcessSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

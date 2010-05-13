@@ -1,6 +1,7 @@
 package org.semanticwb.process.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.model.User;
@@ -12,93 +13,178 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         super(base);
     }
-
+    
+    public ProcessInstance getProcessInstance()
+    {
+        Instance ins=getParentInstance();
+        while(ins!=null && !(ins instanceof ProcessInstance))
+        {
+            ins=((FlowNodeInstance)ins).getParentInstance();
+        }
+        return (ProcessInstance)ins;
+    }
+    
+    public Instance getParentInstance()
+    {
+        return (Instance)getContainerInstance();
+    }
+    
     /**
-     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
+     * Se ejecuta cada que se crea la intancia del objeto de flujo
      * @param user
      */
-    public void close(User user)
+    @Override
+    public void start(User user)
     {
-        close(user, STATUS_CLOSED, ACTION_ACCEPT);
+        super.start(user);
+        FlowNode type=getFlowNodeType();
+        //if(type instanceof Event)
+        {
+            execute(user);
+        }
+        
     }
 
     /**
      * Cierra la instancia de objeto y continua el flujo al siguiente objeto
      * @param user
      */
-    public void close(User user, String action)
-    {
-        close(user, STATUS_CLOSED, action);
-    }
-
-    /**
-     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
-     * @param user
-     */
-    public void abort(User user)
-    {
-        close(user, STATUS_ABORTED, ACTION_CANCEL);
-    }
-
-    /**
-     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
-     * @param user
-     */
+    @Override
     public void close(User user, int status, String action)
     {
-        //System.out.println("close:"+getId()+" "+getFlowObjectType().getClass().getName()+" "+getFlowObjectType().getTitle()+" "+status+" "+action);
-        //Thread.dumpStack();
-        //TODO
-//        FlowObject type=getFlowObjectType();
-//
-//        if(type instanceof Task && ((Task)type).isKeepOpen())
-//        {
-//            setStatus(STATUS_OPEN);
-//        }else
-//        {
-//            setStatus(status);
-//        }
-//        setAction(action);
-//        setEnded(new Date());
-//        setEndedby(user);
-//        abortDependencies(user);
-//        nextObject(user);
+        super.close(user,status,action);
+        abortDependencies(user);
+        nextObject(user);
     }
 
     /**
-     * Regresa todos los objetos del proceso y procesos padres
-     * @return
+     * Se ejecuta cada que obtiene el foco del flujo
+     * @param user
      */
-    public List<ProcessObject> getAllProcessObjects()
+    @Override
+    public void execute(User user)
     {
-        ArrayList ret=new ArrayList();
-        if(this instanceof SubProcessInstance)
-        {
-            Iterator<ProcessObject> it=((SubProcessInstance)this).listProcessObjects();
-            while (it.hasNext())
-            {
-                ProcessObject processObject = it.next();
-                ret.add(processObject);
-            }
-        }
+        super.execute(user);
+        FlowNode type=getFlowNodeType();
+        type.execute(this, user);
+    }
+
+    /**
+     * Regresa instancia del FlowNode pasado por parametro,
+     * busca dentro de los nodo hermanos detro del mismo proceso
+     */
+    public FlowNodeInstance getRelatedFlowNodeInstance(FlowNode node)
+    {
+        FlowNodeInstance ret=null;
         ContainerInstanceable parent=getContainerInstance();
-        if(parent!=null)
+        Iterator<FlowNodeInstance> it=parent.listFlowNodeInstances();
+        while (it.hasNext())
         {
-            if(parent instanceof FlowNodeInstance)
+            FlowNodeInstance flowNodeInstance = it.next();
+            if(flowNodeInstance.getFlowNodeType().equals(node))
             {
-                List p=((FlowNodeInstance)parent).getAllProcessObjects();
-                ret.addAll(p);
-            }else
-            {
-                Iterator<ProcessObject> it=((ProcessInstance)parent).listProcessObjects();
-                while (it.hasNext())
-                {
-                    ProcessObject processObject = it.next();
-                    ret.add(processObject);
-                }
+                ret=flowNodeInstance;
+                break;
             }
         }
         return ret;
     }
+
+
+    /**
+     * Continua el flujo al siguiente FlowNode
+     * @param user
+     */
+    private void nextObject(User user)
+    {
+        //System.out.println("nextObject:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        FlowNode type=getFlowNodeType();
+        Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            connectionObject.execute(this, user);
+        }
+    }
+
+    /**
+     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
+     * @param user
+     */
+    private void abortDependencies(User user)
+    {
+        //System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        FlowNode type=getFlowNodeType();
+
+        //Cerrar dependencias
+        Iterator<ConnectionObject> it=type.listInputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof SequenceFlow)
+            {
+                if(connectionObject.getClass().equals(SequenceFlow.class))
+                {
+                    //System.out.println(connectionObject);
+                    GraphicalElement obj=connectionObject.getSource();
+                    if(obj instanceof FlowNode)
+                    {
+                        FlowNode node=(FlowNode)obj;
+                        FlowNodeInstance inst=this.getRelatedFlowNodeInstance(node);
+                        if(inst==null)
+                        {
+                            inst=node.createInstance(getContainerInstance());
+                        }
+                        if(inst.getStatus()<Instance.STATUS_ABORTED)
+                        {
+                            inst.setStatus(Instance.STATUS_ABORTED);
+                            inst.setAction(Instance.ACTION_CANCEL);
+                            inst.setEnded(new Date());
+                            inst.setEndedby(user);
+                            inst.abortDependencies(user);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reinicia la instancia del objeto de flujo y sus sucesores
+     */
+    protected void reset()
+    {
+        //System.out.println("reset:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        //Thread.dumpStack();
+        setStatus(Instance.STATUS_INIT);
+        setAction(null);
+        setEnded(null);
+        removeEndedby();
+
+        FlowNode type=getFlowNodeType();
+        //resetear subsecuentes
+        Iterator<ConnectionObject> it=type.listOutputConnectionObjects();
+        while (it.hasNext())
+        {
+            ConnectionObject connectionObject = it.next();
+            if(connectionObject instanceof SequenceFlow)
+            {
+                if(connectionObject.getClass().equals(SequenceFlow.class))
+                {
+                    GraphicalElement obj=connectionObject.getTarget();
+                    if(obj instanceof FlowNode)
+                    {
+                        FlowNode node=(FlowNode)obj;
+                        FlowNodeInstance inst=this.getRelatedFlowNodeInstance(node);
+                        if(inst!=null && inst.getStatus()>Instance.STATUS_PROCESSING)
+                        {
+                            inst.reset();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 }
