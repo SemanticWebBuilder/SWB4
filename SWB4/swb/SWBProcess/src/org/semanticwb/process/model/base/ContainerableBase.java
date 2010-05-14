@@ -12,7 +12,7 @@ public interface ContainerableBase extends org.semanticwb.model.GenericObject
     public boolean hasContained(org.semanticwb.process.model.GraphicalElement value);
 
     public org.semanticwb.platform.SemanticIterator<org.semanticwb.platform.SemanticObject> listProcessClasses();
-    public boolean hasProcessClass(org.semanticwb.platform.SemanticObject value);
+    //public boolean hasProcessClass(org.semanticwb.platform.SemanticObject value);
 
     public void addProcessClass(org.semanticwb.platform.SemanticObject value);
 
