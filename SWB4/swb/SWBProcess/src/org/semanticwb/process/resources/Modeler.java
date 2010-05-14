@@ -499,7 +499,6 @@ public class Modeler extends GenericResource {
         SemanticModel model = procsite.getSemanticObject().getModel();
         GraphicalElement ge = null;
         ConnectionObject co = null;
-        HashMap<String, SemanticClass> hmclass = null;
         try {
             // Parte para crear y/o actualizar elementos
             Iterator<String> it = hmjson.keySet().iterator();
@@ -509,26 +508,10 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
-                if(hmclass==null)
-                {
-                    hmclass = new HashMap();
-                    Iterator<SemanticClass> itsc= procsite.getSemanticObject().getModel().listModelClasses();
-                    while (itsc.hasNext()) {
-                        SemanticClass semanticClass = itsc.next();
-                        hmclass.put(semanticClass.getURI() , semanticClass);
-                    }
-                }
+                //System.out.println("sclass:"+sclass);
 
-                //
-
-                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
-                if(null==semclass){
-                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
-                }
-
-//                System.out.println(PROCESS_PREFIX + "#"+sclass);
-//                System.out.println("SemanticClass..."+semclass.getURI());
-                
+                semclass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(PROCESS_PREFIX + "#" + sclass);
+                if(semclass==null)continue;
 
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     title = json.getString(PROP_TITLE);
@@ -581,10 +564,8 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
-                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
-                if(null==semclass){
-                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
-                }
+                semclass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(PROCESS_PREFIX + "#" + sclass);
+                if(semclass==null)continue;
 
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     parent = json.getString(PROP_PARENT);
@@ -632,11 +613,8 @@ public class Modeler extends GenericResource {
                 uri = json.getString(PROP_URI);
                 sclass = json.getString(PROP_CLASS);
 
-
-                semclass = hmclass.get(PROCESS_PREFIX + "#" + sclass);
-                if(null==semclass){
-                    semclass = ont.getSemanticObject(PROCESS_PREFIX + "#" + sclass).getSemanticClass();
-                }
+                semclass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(PROCESS_PREFIX + "#" + sclass);
+                if(semclass==null)continue;
                 
                 if (semclass.isSubClass(ConnectionObject.swp_ConnectionObject)) {
                     start = json.getString(PROP_START);
