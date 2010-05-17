@@ -14,6 +14,8 @@ import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.stage.Alert;
+import org.semanticwb.process.modeler.MessageFlow;
+import org.semanticwb.process.modeler.AssociationFlow;
 
 /**
  * @author javier.solis
@@ -165,6 +167,28 @@ public class Pool extends GraphicalElement
             if(lane.uri.equals(uri))return lane;
         }
         return null;
+    }
+
+    override public function canStartLink(link:ConnectionObject) : Boolean
+    {
+        var ret = false;
+        //Sólo pueden salir de un pool flujos de mensaje o asociaciones
+        if (link instanceof MessageFlow or link instanceof AssociationFlow) {
+            ret = true;
+        }        
+        return ret;
+    }
+
+    override public function canEndLink(link:ConnectionObject) : Boolean
+    {
+        var ret = false;
+        if (link.ini != this) {//No se permiten lazos
+            //Sólo pueden llegar al pool flujos de mensaje o asociaciones
+            if (link instanceof MessageFlow or link instanceof AssociationFlow) {
+                ret = true;
+            }
+        }
+        return ret;
     }
 
 }
