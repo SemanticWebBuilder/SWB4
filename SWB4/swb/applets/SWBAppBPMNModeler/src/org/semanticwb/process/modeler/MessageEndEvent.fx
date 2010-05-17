@@ -19,4 +19,15 @@ public class MessageEndEvent extends EndEvent
         type=THROW_MESSAGE;
         return super.create();
     }
+
+    override public function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = false;
+        //De un evento final de mensaje sólo pueden salir flujos de mensaje
+        if (link instanceof MessageFlow) {
+            ret = true;
+        } else {
+            ModelerUtils.setErrorMessage("MessageEndEvent can only have outgoing Message flows");
+        }
+        return ret;
+    }
 }
