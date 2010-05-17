@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import org.semanticwb.process.modeler.MessageFlow;
 
 /**
  * @author javier.solis
@@ -31,5 +32,21 @@ public class StartEvent extends CatchEvent
     override public function canEndLink(link:ConnectionObject) : Boolean
     {
         return false;
+    }
+
+    override public function canStartLink(link:ConnectionObject) : Boolean
+    {
+        if(link instanceof MessageFlow)
+        {
+            return false;
+        }else
+        {
+            return true;
+        }
+    }
+
+    override public function canAttach(parent:GraphicalElement):Boolean
+    {
+        return super.canAttach(parent);
     }
 }

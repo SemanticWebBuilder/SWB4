@@ -135,7 +135,7 @@ public class Modeler extends CustomNode
                         if(ModelerUtils.clickedNode instanceof GraphicalElement)
                         {
                             var ge=ModelerUtils.clickedNode as GraphicalElement;
-                            if(ge.canIniLink(a))
+                            if(ge.canStartLink(a))
                             {
                                 a.ini=ge;
                                 add(tempNode);
