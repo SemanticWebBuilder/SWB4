@@ -24,6 +24,13 @@ var toolTip=ToolTip
     visible:false
 }
 
+var errorMessage:String;
+
+public function setErrorMessage(message:String)
+{
+    errorMessage=message;
+}
+
 public var splash=Splash{ };
 
 // Primer menu flotante

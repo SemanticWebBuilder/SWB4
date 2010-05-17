@@ -234,7 +234,7 @@ public class GraphicalElement extends CustomNode
                 uri:"new:flowlink:{ToolBar.counter++}"
                 visible:false
             }
-            if(canIniLink(link))modeler.tempNode=link;
+            if(canStartLink(link))modeler.tempNode=link;
         }
     }
 
@@ -424,7 +424,7 @@ public class GraphicalElement extends CustomNode
     /**
     * Indica si puede o no establecer una coneccion del tipo "link"
     */
-    public function canIniLink(link:ConnectionObject) : Boolean
+    public function canStartLink(link:ConnectionObject) : Boolean
     {
         return true;
     }
@@ -462,6 +462,40 @@ public class GraphicalElement extends CustomNode
     public function updateSize()
     {
         
+    }
+
+    public function getInputConnectionObjects(): ConnectionObject[]
+    {
+        var ret:ConnectionObject[];
+        for(ele in modeler.contents)
+        {
+            if(ele instanceof ConnectionObject)
+            {
+                var con= ele as ConnectionObject;
+                if(con.ini == this)
+                {
+                    insert con into ret;
+                }
+            }
+        }
+        return ret;
+    }
+
+    public function getOutputConnectionObjects(): ConnectionObject[]
+    {
+        var ret:ConnectionObject[];
+        for(ele in modeler.contents)
+        {
+            if(ele instanceof ConnectionObject)
+            {
+                var con= ele as ConnectionObject;
+                if(con.end == this)
+                {
+                    insert con into ret;
+                }
+            }
+        }
+        return ret;
     }
 
 }

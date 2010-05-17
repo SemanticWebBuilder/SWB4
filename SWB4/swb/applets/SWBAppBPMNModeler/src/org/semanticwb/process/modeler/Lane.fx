@@ -148,7 +148,7 @@ public class Lane extends GraphicalElement
        }
     }
 
-    override public function canIniLink(link:ConnectionObject) : Boolean
+    override public function canStartLink(link:ConnectionObject) : Boolean
     {
         return false;
     }

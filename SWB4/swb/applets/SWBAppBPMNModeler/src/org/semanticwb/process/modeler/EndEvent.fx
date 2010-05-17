@@ -31,7 +31,7 @@ public class EndEvent extends ThrowEvent
          return ret;
     }
 
-    override public function canIniLink(link:ConnectionObject) : Boolean
+    override public function canStartLink(link:ConnectionObject) : Boolean
     {
         return false;
     }
