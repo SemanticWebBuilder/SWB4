@@ -209,7 +209,7 @@ public class SWBNewsLite extends GenericResource
         }
         // ordena por fecha de creación
         New[] elements = news.toArray(new New[news.size()]);
-        Arrays.sort(elements);
+        Arrays.sort(elements,new ComparatorNews());
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
@@ -395,7 +395,7 @@ public class SWBNewsLite extends GenericResource
         }
         // ordena por fecha de creación
         New[] elements = news.toArray(new New[news.size()]);
-        Arrays.sort(elements);
+        Arrays.sort(elements,new ComparatorNews());
 
         int max = -1;
         if (smax != null && !smax.trim().equals(""))
