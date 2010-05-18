@@ -82,25 +82,26 @@ public class IntermediateThrowEvent extends ThrowEvent
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = true;
-        //Un evento intermedio tipo throw sólo puede tener un flujo de secuencia entrante
-        if (link instanceof SequenceFlow) {
-            var c = sizeof getInputConnectionObjects();
-            if (c != 0) {
-                ret = false;
+        var ret = false;
+        var c = sizeof getInputConnectionObjects();
+
+        //Un evento intermedio sólo puede tener un flujo de secuencia de entrada
+        if (link instanceof SequenceFlow and c == 0) {
+            //Siempre y cuando no esté adherido a una actividad
+            if (not(this.getGraphParent() instanceof Activity)) {
+                ret = true;
             }
         }
         return ret;
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
-        var ret = true;
-        //Un evento intermedio tipo throw sólo puede tener un flujo de secuencia de salida
-        if (link instanceof SequenceFlow) {
-            var c = sizeof getOutputConnectionObjects();
-            if (c != 0) {
-                ret = false;
-            }
+        var ret = false;
+        var c = sizeof getOutputConnectionObjects();
+
+        //Un evento intermedio sólo puede tener un flujo de secuencia de salida
+        if (link instanceof SequenceFlow and c == 0) {
+            ret = true;
         }
         return ret;
     }
