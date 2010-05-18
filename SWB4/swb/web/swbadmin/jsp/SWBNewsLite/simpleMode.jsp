@@ -9,7 +9,7 @@
     {
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setMode("detail");
-        url.setParameter("uri", onew.getEncodedURI());
+        url.setParameter("uri", onew.getURI());
         String title=onew.getTitle();
         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/sinfoto.png";
         String path = onew.getWorkPath();
@@ -26,9 +26,10 @@
         %>
             <div class="nota_prima">
                     <a href="<%=url%>" >
-                    <img alt="Imagen noticia" src="<%=pathPhoto%>" />
-                    <%=title%>
+                        <img width="50" height="50" border="0" alt="Imagen noticia" src="<%=pathPhoto%>" />
                     </a>
+                    <%=title%>
+                    
 
             </div>
         <%
