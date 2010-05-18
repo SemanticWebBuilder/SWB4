@@ -23,10 +23,14 @@
     SWBResourceURL urlConfig=paramRequest.getRenderUrl();
     urlConfig.setMode("config");
 
+    SWBResourceURL urlAddCategory=paramRequest.getRenderUrl();
+    urlConfig.setMode("addCategory");
+
     
 %>
 <a href="<%=urlAdd%>">Agregar una noticia</a><br>
 <a href="<%=urlExpired%>">Ver noticias expiradas</a><br>
+<a href="<%=urlAddCategory%>">Agregar una categoria</a><br>
 <a href="<%=urlConfig%>">Configurar recurso</a><br>
 <%
     // muestra listado de noticias con eliminar y editar
