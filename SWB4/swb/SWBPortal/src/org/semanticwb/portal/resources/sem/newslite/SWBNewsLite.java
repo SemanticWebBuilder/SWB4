@@ -102,7 +102,7 @@ public class SWBNewsLite extends GenericResource
                     File file = new File(realpath + params.get("filename"));
                     if (file.exists())
                     {
-                        FileInputStream in = new FileInputStream(file);
+                        //FileInputStream in = new FileInputStream(file);
                         String filename = file.getName();
                         String finalpath = rec.getWorkPath() + "/";
                         String target = realpath + finalpath + filename;
@@ -114,9 +114,9 @@ public class SWBNewsLite extends GenericResource
                             filename=filename.substring(0,pos);
                         }
                         filename+=".jpg";
-                        ImageResizer.shrinkTo(ftarget, 150,150, ftarget, "jpeg");
-                        FileOutputStream out = new FileOutputStream(ftarget);
-                        SWBUtils.IO.copyStream(in, out);
+                        ImageResizer.shrinkTo(file, 150,150, ftarget, "jpeg");
+                        /*FileOutputStream out = new FileOutputStream(ftarget);
+                        SWBUtils.IO.copyStream(in, out);*/
                         file.delete();
                         params.put("filename", finalpath + filename);
                     }
@@ -615,6 +615,6 @@ class ComparatorNews implements Comparator<New>
 
     public int compare(New o1, New o2)
     {
-        return o2.getExpiration().compareTo(o1.getExpiration());
+        return o2.getCreated().compareTo(o1.getCreated());
     }
 }
