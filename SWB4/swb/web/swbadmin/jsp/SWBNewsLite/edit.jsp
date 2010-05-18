@@ -149,6 +149,7 @@
             %>
             <p>
                 Categoria: <%=categoria%>
+                <input type="hidden" name="category" id="category" value="<%=category.getURI()%>">
             </p>
             <%
             }
