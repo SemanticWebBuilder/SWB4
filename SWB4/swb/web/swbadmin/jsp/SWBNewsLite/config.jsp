@@ -8,6 +8,7 @@
     String value=paramRequest.getResourceBase().getAttribute("simplemode","false");
     simplemode=Boolean.parseBoolean(value);
     String nummax=paramRequest.getResourceBase().getAttribute("numax","-1");
+    String categoryUri=paramRequest.getResourceBase().getAttribute("category","");
     int inummax=-1;
     if(nummax!=null && !nummax.trim().equals(""))
     {
@@ -35,6 +36,46 @@
 <form method="post" action="<%=action%>">
     <input type="hidden" name="act" value="config"/>
     <table width="100%" cellpadding="2" cellspacing="2">
+        <tr>
+            <td>
+                Categoria despluegar:
+            </td>
+            <td>
+                <select name="category">
+                    <%
+                        if(categoryUri==null || categoryUri.equals(""))
+                        {
+                            %>
+                            <option selected value="all">Todas</option>
+                            <%
+                        }
+                        else
+                        {
+                            %>
+                            <option value="all">Todas</option>
+                            <%
+                        }
+                    %>
+                    
+                    <%
+                        Iterator<Category> categories=Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
+                        while(categories.hasNext())
+                        {
+                            Category category=categories.next();
+                            String selected="";
+
+                            if(category.getURI().equals(categoryUri))
+                            {
+                                selected="selected";
+                            }
+                            %>
+                            <option <%=selected%> value="<%=category.getURI()%>"><%=category.getTitle()%></option>
+                            <%
+                        }
+                    %>
+                </select>
+            </td>
+        </tr>
         <tr>
             <td>
                 Número máximos de noticias a despluegar:
