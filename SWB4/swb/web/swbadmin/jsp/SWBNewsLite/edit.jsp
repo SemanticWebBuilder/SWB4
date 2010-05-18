@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.platform.*,org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <script type="text/javascript">
 
     dojo.require("dijit.Editor");
@@ -116,6 +116,43 @@
     <input type="hidden" name="uri" id="uri" value="<%=onew.getURI()%>">
     <fieldset>
         <legend>Editar Noticia</legend>
+
+
+        <%
+            if(paramRequest.getResourceBase().getAttribute("category")==null)
+            {
+                %>
+                <p>
+        <label for="title">Categoria:&nbsp;</label><br />
+                        <select name="category">
+                    <%
+                        Iterator<Category> categories=Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
+                        while(categories.hasNext())
+                        {
+                            Category category=categories.next();
+                            %>
+                            <option value="<%=category.getURI()%>"><%=category.getTitle()%></option>
+                            <%
+                        }
+                    %>
+                </select>
+
+    </p>
+                <%
+            }
+        else
+            {
+            String uri=paramRequest.getResourceBase().getAttribute("category");
+            Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            String categoria=category.getTitle();
+
+            %>
+            <p>
+                Categoria: <%=categoria%>
+            </p>
+            <%
+            }
+        %>
     <p>
         <img src="<%=pathPhoto%>" width="150" height="150"><br>
         <label for="foto">Imagen de la noticia:&nbsp;</label><br />
