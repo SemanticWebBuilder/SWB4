@@ -2,9 +2,25 @@
 <%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    SWBResourceURL action=paramRequest.getActionUrl();
-    paramRequest.getResourceBase().getAttribute("nummax");
+    SWBResourceURL action=paramRequest.getActionUrl();    
     SWBResourceURL cancel=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN);
+    boolean simplemode=false;
+    String value=paramRequest.getResourceBase().getAttribute("simplemode","false");
+    simplemode=Boolean.parseBoolean(value);
+    String nummax=paramRequest.getResourceBase().getAttribute("numax","-1");
+    int inummax=-1;
+    if(nummax!=null && !nummax.trim().equals(""))
+    {
+        try
+        {
+            inummax=Integer.parseInt(nummax);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 %>
 <script type="text/javascript">
     <!--
@@ -24,13 +40,32 @@
                 Número máximos de noticias a despluegar:
             </td>
             <td>
-                <select name="nummax">
-                    <option value="all">Todas</option>
+                <select name="numax">
+                    <%
+                        if(inummax<1)
+                        {
+                            %>
+                            <option selected value="all">Todas</option>
+                            <%
+                        }
+                        else
+                        {
+                            %>
+                            <option value="all">Todas</option>
+                            <%
+                        }
+                    %>
+                    
                     <%
                         for(int i=1;i<=50;i++)
                         {
+                            String selected="";
+                            if(i==inummax)
+                            {
+                                selected="selected";
+                            }
                             %>
-                            <option value="<%=i%>"><%=i%></option>
+                            <option <%=selected%> value="<%=i%>"><%=i%></option>
                             <%
                         }
                     %>
@@ -42,8 +77,24 @@
                 Modo simple:
             </td>
             <td>
-                <input type="radio" name="modo" value="simplemode">Sí&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="modo" value="content">No
+                <%
+                    if(simplemode)
+                        {
+                        %>
+                            <input checked type="radio" name="modo" value="simplemode">Sí&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="modo" value="content">No
+                        <%
+                        }
+                        else
+                        {
+                            %>
+                            <input type="radio" name="modo" value="simplemode">Sí&nbsp;&nbsp;&nbsp;
+                            <input checked type="radio" name="modo" value="content">No
+                            <%
+                        }
+                %>
+                
+                
             </td>
         </tr>
         <tr>
