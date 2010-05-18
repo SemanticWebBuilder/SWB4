@@ -472,7 +472,7 @@ public class GraphicalElement extends CustomNode
             if(ele instanceof ConnectionObject)
             {
                 var con= ele as ConnectionObject;
-                if(con.ini == this)
+                if(con.end == this)
                 {
                     insert con into ret;
                 }
@@ -489,7 +489,7 @@ public class GraphicalElement extends CustomNode
             if(ele instanceof ConnectionObject)
             {
                 var con= ele as ConnectionObject;
-                if(con.end == this)
+                if(con.ini == this)
                 {
                     insert con into ret;
                 }
