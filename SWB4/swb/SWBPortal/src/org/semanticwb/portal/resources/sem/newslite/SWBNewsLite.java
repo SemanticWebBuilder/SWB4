@@ -14,10 +14,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,8 +155,8 @@ public class SWBNewsLite extends GenericResource
             if(title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
             {
                 Category category=Category.ClassMgr.createCategory(response.getWebPage().getWebSite());
-                category.setTitle(title);
-                category.setTitle(description);
+                category.setTitle(SWBUtils.XML.replaceXMLChars(title));
+                category.setTitle(SWBUtils.XML.replaceXMLChars(description));
             }
         }
         else if ("editCategory".equals(action))
@@ -169,10 +167,10 @@ public class SWBNewsLite extends GenericResource
             if(uri!=null && !uri.trim().equals(""))
             {
                 Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if(title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
+                if(category!=null && title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
                 {                    
-                    category.setTitle(title);
-                    category.setTitle(description);
+                    category.setTitle(SWBUtils.XML.replaceXMLChars(title));
+                    category.setTitle(SWBUtils.XML.replaceXMLChars(description));
                 }
             }
         }
@@ -227,9 +225,14 @@ public class SWBNewsLite extends GenericResource
         {
             doDetail(request, response, paramRequest);
         }
+
         if (paramRequest.getMode().equals("addCategory"))
         {
             doAddCategory(request, response, paramRequest);
+        }
+        if (paramRequest.getMode().equals("editCategory"))
+        {
+            doEditCategory(request, response, paramRequest);
         }
         else if (paramRequest.getMode().equals("rss"))
         {
@@ -254,6 +257,20 @@ public class SWBNewsLite extends GenericResource
         else
         {
             super.processRequest(request, response, paramRequest);
+        }
+    }
+    public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String path = "/swbadmin/jsp/SWBNewsLite/editCategory.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
         }
     }
     public void doAddCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -437,11 +454,18 @@ public class SWBNewsLite extends GenericResource
         {
             news.add(onew);
         }
+        List<Category> cats=new ArrayList<Category>();
+        Iterator<Category> categories=Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
+        while(categories.hasNext())
+        {
+            cats.add(categories.next());
+        }
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("news", news);
+            request.setAttribute("news", cats);
             dis.include(request, response);
         }
         catch (Exception e)
