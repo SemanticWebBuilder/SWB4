@@ -343,6 +343,48 @@ public class SWBNewsLite extends GenericResource
 
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        List<New> news = new ArrayList<New>();
+        String categoryId = this.getResourceBase().getAttribute("category");
+        Iterator<New> itNews = null;
+
+        if (categoryId == null || categoryId.trim().equals(""))
+        {
+            itNews = New.ClassMgr.listNews(paramRequest.getWebPage().getWebSite());
+        }
+        else
+        {
+            Category ocategory = (Category) SemanticObject.createSemanticObject(categoryId).createGenericInstance();
+            if (ocategory == null)
+            {
+                itNews = New.ClassMgr.listNews(paramRequest.getWebPage().getWebSite());
+            }
+            else
+            {
+                itNews = New.ClassMgr.listNewByCategory(ocategory, paramRequest.getWebPage().getWebSite());
+            }
+        }
+        // Elimina las expiradas
+        while (itNews.hasNext())
+        {
+            New onew = itNews.next();
+            if (onew.getExpiration().after(new Date(System.currentTimeMillis())))
+            {
+                news.add(onew);
+            }
+        }
+        String path = "/swbadmin/jsp/SWBNewsLite/rss.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("news", news);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        
     }
 
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
