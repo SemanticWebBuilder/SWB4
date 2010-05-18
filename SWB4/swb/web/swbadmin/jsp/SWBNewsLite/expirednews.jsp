@@ -57,6 +57,8 @@
     {
         String title=onew.getTitle();        
         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/sinfoto.png";
+        String editarImg = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/editar.png";
+        String eliminarImg = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/eliminar.png";
         String path = onew.getWorkPath();
         if (onew.getNewsThumbnail() != null)
         {
@@ -94,10 +96,10 @@
             <%=title%>
             </td>           
             <td align="center">
-                <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="editar" /></a>
+                <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=editarImg%>" /></a>
             </td>
             <td align="center">
-                <a href="<%=deleteUrl%>"><img width="20"  height="20" alt="Imagen noticia" src="Eliminar" /></a>
+                <a href="<%=deleteUrl%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=eliminarImg%>" /></a>
             </td>
             </tr>
         <%
