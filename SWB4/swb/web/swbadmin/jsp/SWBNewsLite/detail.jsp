@@ -12,7 +12,7 @@
     {
         author=null;
     }
-    String source=onew.getAuthor();
+    String source=onew.getSource();
     if(source!=null && source.trim().equals(""))
     {
         source=null;
