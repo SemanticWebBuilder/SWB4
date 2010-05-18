@@ -11,6 +11,19 @@
         return;
         }    
 %>
+
+<script type="text/javascript">
+    <!--
+    function validateremove(url, title,uri)
+    {
+        if(confirm('¿Esta seguro de borrar la noticia con título '+title+'?'))
+        {
+            var url=url+'&amp;uri='+escape(uri);
+            window.location.href=url;
+        }
+    }
+    -->
+</script>
 <div class="columnaIzquierda">
  <div class="adminTools">
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
