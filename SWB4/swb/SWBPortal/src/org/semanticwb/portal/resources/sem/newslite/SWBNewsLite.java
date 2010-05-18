@@ -76,6 +76,19 @@ public class SWBNewsLite extends GenericResource
             }
             if (rec != null)
             {
+                if(params.containsKey("category"))
+                {
+                    String uri=params.get("category");
+                    try
+                    {
+                        Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                        rec.setCategory(category);
+                    }
+                    catch(NullPointerException npe)
+                    {
+                        log.error(npe);
+                    }
+                }
                 rec.setTitle(SWBUtils.XML.replaceXMLChars(params.get("title")));
                 rec.setDescription(SWBUtils.XML.replaceXMLChars(params.get("description")));
                 rec.setBody(SWBUtils.XML.replaceXMLChars(params.get("body")));
