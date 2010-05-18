@@ -42,12 +42,11 @@
             Fecha de creación
             </th>
             <th>
-            Título
+            Fecha de expiración
             </th>
             <th>
-            Descripción
-            </th>
-
+            Título
+            </th>           
             <th>
             Editar
             </th>
@@ -81,6 +80,7 @@
         removeUrl.setParameter("uri", onew.getEncodedURI());
         removeUrl.setParameter("act", "remove");
         String created=formatview.format(onew.getCreated());
+        String expired=formatview.format(onew.getExpiration());
 
         String deleteUrl = "javascript:validateremove('" + removeUrl + "','" + onew.getTitle() + "','" + onew.getURI() + "')";
         %>
@@ -92,11 +92,11 @@
             <%=created%>
             </td>
             <td>
-            <%=title%>
+            <%=expired%>
             </td>
             <td>
-            <%=description%>
-            </td>
+            <%=title%>
+            </td>            
             <td align="center">
                 <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="editar" /></a>
             </td>
