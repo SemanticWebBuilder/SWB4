@@ -88,7 +88,7 @@
         %>
         <tr>
             <td align="center">
-                <img width="20"  height="20" alt="Imagen noticia" src="<%=pathPhoto%>" />
+                <img width="40"  height="40" alt="Imagen noticia" src="<%=pathPhoto%>" />
             </td>
             <td>
             <%=created%>
