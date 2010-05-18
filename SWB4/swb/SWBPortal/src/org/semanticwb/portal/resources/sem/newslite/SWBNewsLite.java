@@ -615,6 +615,6 @@ class ComparatorNews implements Comparator<New>
 
     public int compare(New o1, New o2)
     {
-        return o1.getExpiration().compareTo(o2.getExpiration());
+        return o2.getExpiration().compareTo(o1.getExpiration());
     }
 }
