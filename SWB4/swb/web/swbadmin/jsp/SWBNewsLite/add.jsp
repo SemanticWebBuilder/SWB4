@@ -68,7 +68,7 @@
 <div class="columnaIzquierda">
  <div class="adminTools">
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
-        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN)%>">Cancelar</a>
     </div>
 <form name="frmaddNew" id="frmaddNew" enctype="multipart/form-data" method="post" action="<%=action%>">
     <input type="hidden" name="act" value="add"/>
@@ -109,6 +109,6 @@
 </form>
     <div class="adminTools">
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
-        <a class="adminTool" href="<%=paramRequest.getRenderUrl()%>">Cancelar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN)%>">Cancelar</a>
     </div>
 </div>

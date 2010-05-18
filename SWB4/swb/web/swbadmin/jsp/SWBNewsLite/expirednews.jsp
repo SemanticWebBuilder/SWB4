@@ -8,9 +8,14 @@
         %>
         <p>No hay noticias expiradas</p>
         <%
+        return;
         }    
 %>
-
+<div class="columnaIzquierda">
+ <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN)%>">Cancelar</a>
+    </div>
     <h1>Noticias expiradas</h1><br>
     <table cellpadding="2" cellspacing="2">
         <tr>
@@ -21,12 +26,11 @@
             Fecha de creación
             </th>
             <th>
-            Título
+            Fecha de expiración
             </th>
             <th>
-            Descripción
+            Título
             </th>
-
             <th>
             Editar
             </th>
@@ -38,8 +42,7 @@
     SimpleDateFormat formatview = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
     for(New onew : news)
     {
-        String title=onew.getTitle();
-        String description=onew.getDescription();
+        String title=onew.getTitle();        
         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/sinfoto.png";
         String path = onew.getWorkPath();
         if (onew.getNewsThumbnail() != null)
@@ -60,6 +63,7 @@
         removeUrl.setParameter("uri", onew.getEncodedURI());
         removeUrl.setParameter("act", "remove");
         String created=formatview.format(onew.getCreated());
+        String expireted=formatview.format(onew.getExpiration());
 
         String deleteUrl = "javascript:validateremove('" + removeUrl + "','" + onew.getTitle() + "','" + onew.getURI() + "')";
         %>
@@ -70,12 +74,12 @@
             <td>
             <%=created%>
             </td>
+             <td>
+            <%=expireted%>
+            </td>
             <td>
             <%=title%>
-            </td>
-            <td>
-            <%=description%>
-            </td>
+            </td>           
             <td align="center">
                 <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="editar" /></a>
             </td>
@@ -90,3 +94,9 @@
     <%
 
 %>
+
+ <div class="adminTools">
+        <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
+        <a class="adminTool" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN)%>">Cancelar</a>
+    </div>
+</div>
