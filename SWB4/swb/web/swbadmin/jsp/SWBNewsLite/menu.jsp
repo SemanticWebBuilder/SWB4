@@ -24,7 +24,7 @@
     urlConfig.setMode("config");
 
     SWBResourceURL urlAddCategory=paramRequest.getRenderUrl();
-    urlConfig.setMode("addCategory");
+    urlAddCategory.setMode("addCategory");
 
     
 %>
