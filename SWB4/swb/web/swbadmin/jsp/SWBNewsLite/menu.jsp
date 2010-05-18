@@ -25,14 +25,24 @@
 
     SWBResourceURL urlAddCategory=paramRequest.getRenderUrl();
     urlAddCategory.setMode("addCategory");
-
+    Iterator<Category> categories=Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
+    if(categories.hasNext())
+    {
+        %>
+        <a href="<%=urlAdd%>">Agregar una noticia</a><br><br>
+        <%
+    }
     
 %>
-<a href="<%=urlAdd%>">Agregar una noticia</a><br><br>
+
 <a href="<%=urlExpired%>">Ver noticias expiradas</a><br><br>
 <a href="<%=urlAddCategory%>">Agregar una categoria</a><br><br>
 <a href="<%=urlConfig%>">Configurar recurso</a><br><br>
 <%
+    if(categories.hasNext())
+    {
+
+
     // muestra listado de noticias con eliminar y editar
     List<New> news=(List) request.getAttribute("news");
     List<Category> cats=(List) request.getAttribute("cats");
@@ -115,6 +125,13 @@
     }
     %>
     </table><br>
+    <%
+    }
+    %>
+
+
+
+
     
 <h1>Categorias</h1><br>
 <table cellpadding="2" cellspacing="2">
@@ -169,3 +186,4 @@
     }
     %>
     </table><br>
+
