@@ -41,8 +41,8 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBNewsLite extends GenericResource
 {
-    private static final String NUMMAX = "numax";
 
+    private static final String NUMMAX = "numax";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final Logger log = SWBUtils.getLogger(SWBNewsLite.class);
 
@@ -65,7 +65,7 @@ public class SWBNewsLite extends GenericResource
                 rec.setCreator(response.getUser());
                 rec.setCreated(new Date(System.currentTimeMillis()));
 
-            }            
+            }
             else if (params.containsValue("edit"))
             {
                 String uri = params.get("uri");
@@ -106,13 +106,13 @@ public class SWBNewsLite extends GenericResource
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
-                        int pos=filename.lastIndexOf('.');
-                        if(pos!=-1)
+                        int pos = filename.lastIndexOf('.');
+                        if (pos != -1)
                         {
-                            filename=filename.substring(0,pos);
+                            filename = filename.substring(0, pos);
                         }
-                        filename+=".jpg";
-                        ImageResizer.shrinkTo(file, 150,150, ftarget, "jpeg");
+                        filename += ".jpg";
+                        ImageResizer.shrinkTo(file, 150, 150, ftarget, "jpeg");
                         /*FileOutputStream out = new FileOutputStream(ftarget);
                         SWBUtils.IO.copyStream(in, out);*/
                         file.delete();
@@ -150,25 +150,25 @@ public class SWBNewsLite extends GenericResource
         }
         else if ("addCategory".equals(action))
         {
-            String title=request.getParameter("title");
-            String description=request.getParameter("description");
-            if(title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
+            String title = request.getParameter("title");
+            String description = request.getParameter("description");
+            if (title != null && !title.trim().equals("") && description != null && !description.trim().equals(""))
             {
-                Category category=Category.ClassMgr.createCategory(response.getWebPage().getWebSite());
+                Category category = Category.ClassMgr.createCategory(response.getWebPage().getWebSite());
                 category.setTitle(SWBUtils.XML.replaceXMLChars(title));
                 category.setDescription(SWBUtils.XML.replaceXMLChars(description));
             }
         }
         else if ("editCategory".equals(action))
         {
-            String title=request.getParameter("title");
-            String description=request.getParameter("description");
+            String title = request.getParameter("title");
+            String description = request.getParameter("description");
             String uri = request.getParameter("uri");
-            if(uri!=null && !uri.trim().equals(""))
+            if (uri != null && !uri.trim().equals(""))
             {
                 Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
-                if(category!=null && title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
-                {                    
+                if (category != null && title != null && !title.trim().equals("") && description != null && !description.trim().equals(""))
+                {
                     category.setTitle(SWBUtils.XML.replaceXMLChars(title));
                     category.setDescription(SWBUtils.XML.replaceXMLChars(description));
                 }
@@ -181,17 +181,38 @@ public class SWBNewsLite extends GenericResource
             rec.remove();
             return;
         }
-        else if("config".equals(action))
+        else if ("config".equals(action))
         {
-            String nummax=request.getParameter(NUMMAX);
-            if(nummax!=null && !nummax.trim().equals(""))
+            String nummax = request.getParameter(NUMMAX);
+            if (nummax != null && !nummax.trim().equals(""))
             {
-                this.getResourceBase().setAttribute( NUMMAX, nummax);
+                this.getResourceBase().setAttribute(NUMMAX, nummax);
             }
-            String mode=request.getParameter("modo");
-            if(mode!=null && !mode.trim().equals(""))
+            String uri = request.getParameter("category");
+            if (uri != null && !uri.trim().equals(""))
             {
-                if("simplemode".equals(mode))
+                try
+                {
+                    Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                    if (category == null)
+                    {
+                        this.getResourceBase().setAttribute("category", null);
+                    }
+                    else
+                    {
+                        this.getResourceBase().setAttribute("category", category.getURI());
+                    }
+                }
+                catch(NullPointerException npe)
+                {
+                    this.getResourceBase().setAttribute("category", null);
+                }
+            }
+
+            String mode = request.getParameter("modo");
+            if (mode != null && !mode.trim().equals(""))
+            {
+                if ("simplemode".equals(mode))
                 {
                     this.getResourceBase().setAttribute("simplemode", "true");
                 }
@@ -204,12 +225,12 @@ public class SWBNewsLite extends GenericResource
             {
                 this.getResourceBase().updateAttributesToDB();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 log.error(e);
             }
         }
-        else if("remove".equals(action))
+        else if ("remove".equals(action))
         {
             String uri = request.getParameter("uri");
             New rec = (New) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -258,6 +279,7 @@ public class SWBNewsLite extends GenericResource
             super.processRequest(request, response, paramRequest);
         }
     }
+
     public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String uri = request.getParameter("uri");
@@ -286,6 +308,7 @@ public class SWBNewsLite extends GenericResource
             log.error(e);
         }
     }
+
     public void doAddCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/addCategory.jsp";
@@ -300,17 +323,18 @@ public class SWBNewsLite extends GenericResource
             log.error(e);
         }
     }
+
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        
     }
+
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/config.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
-            request.setAttribute("paramRequest", paramRequest);            
+            request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         }
         catch (Exception e)
@@ -318,6 +342,7 @@ public class SWBNewsLite extends GenericResource
             log.error(e);
         }
     }
+
     public void doExpired(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         List<New> news = new ArrayList<New>();
@@ -352,12 +377,12 @@ public class SWBNewsLite extends GenericResource
         }
         // ordena por fecha de creación
         New[] elements = news.toArray(new New[news.size()]);
-        Arrays.sort(elements,new ComparatorNews());
-        
-        news=new ArrayList<New>();
-        for(New onew : elements)
+        Arrays.sort(elements, new ComparatorNews());
+
+        news = new ArrayList<New>();
+        for (New onew : elements)
         {
-            news.add(onew);            
+            news.add(onew);
         }
 
 
@@ -462,14 +487,14 @@ public class SWBNewsLite extends GenericResource
         New[] elements = news.toArray(new New[news.size()]);
         Arrays.sort(elements, new ComparatorNews());
 
-        news=new ArrayList<New>();
-        for(New onew : elements)
+        news = new ArrayList<New>();
+        for (New onew : elements)
         {
             news.add(onew);
         }
-        List<Category> cats=new ArrayList<Category>();
-        Iterator<Category> categories=Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
-        while(categories.hasNext())
+        List<Category> cats = new ArrayList<Category>();
+        Iterator<Category> categories = Category.ClassMgr.listCategories(paramRequest.getWebPage().getWebSite());
+        while (categories.hasNext())
         {
             cats.add(categories.next());
         }
@@ -519,7 +544,7 @@ public class SWBNewsLite extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        if(this.getResourceBase().getProperty("mode")!=null && "rss".equals(this.getResourceBase().getProperty("mode")))
+        if (this.getResourceBase().getProperty("mode") != null && "rss".equals(this.getResourceBase().getProperty("mode")))
         {
             doRss(request, response, paramRequest);
             return;
@@ -541,7 +566,7 @@ public class SWBNewsLite extends GenericResource
         }
         else
         {
-            Category ocategory = Category.ClassMgr.getCategory(categoryId, paramRequest.getWebPage().getWebSite());
+            Category ocategory = (Category) SemanticObject.createSemanticObject(categoryId).createGenericInstance();
             if (ocategory == null)
             {
                 itNews = New.ClassMgr.listNews(paramRequest.getWebPage().getWebSite());
@@ -562,7 +587,7 @@ public class SWBNewsLite extends GenericResource
         }
         // ordena por fecha de creación
         New[] elements = news.toArray(new New[news.size()]);
-        Arrays.sort(elements,new ComparatorNews());
+        Arrays.sort(elements, new ComparatorNews());
 
         int max = -1;
         if (smax != null && !smax.trim().equals(""))
@@ -578,7 +603,7 @@ public class SWBNewsLite extends GenericResource
         }
 
         news = new ArrayList<New>();
-        if (elements.length <= max || max==-1)
+        if (elements.length <= max || max == -1)
         {
 
             for (New onew : elements)
@@ -677,8 +702,8 @@ public class SWBNewsLite extends GenericResource
                             }
                             image = new File(realpath + filename);
                             File thumbnail = new File(realpath + "thumbn_" + filename);
-                            currentFile.write(image);                            
-                            ImageResizer.shrinkTo(image, 150,150, thumbnail, "jpeg");
+                            currentFile.write(image);
+                            ImageResizer.shrinkTo(image, 150, 150, thumbnail, "jpeg");
 
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
