@@ -225,12 +225,11 @@ public class SWBNewsLite extends GenericResource
         {
             doDetail(request, response, paramRequest);
         }
-
-        if (paramRequest.getMode().equals("addCategory"))
+        else if (paramRequest.getMode().equals("addCategory"))
         {
             doAddCategory(request, response, paramRequest);
         }
-        if (paramRequest.getMode().equals("editCategory"))
+        else if (paramRequest.getMode().equals("editCategory"))
         {
             doEditCategory(request, response, paramRequest);
         }
@@ -479,7 +478,7 @@ public class SWBNewsLite extends GenericResource
         {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("news", news);
-            request.setAttribute("news", cats);
+            request.setAttribute("cats", cats);
             dis.include(request, response);
         }
         catch (Exception e)
