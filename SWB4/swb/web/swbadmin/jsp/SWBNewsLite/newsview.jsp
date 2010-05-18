@@ -24,11 +24,12 @@
         }
         %>
             <div class="nota">
-                    <a href="<%=url%>" >
-                    <img alt="Imagen noticia" src="<%=pathPhoto%>" />
-                    <%=title%>
-                    <%=description%>
-                    </a>
+                    <a href="<%=url%>">
+                        <img border="0" alt="Imagen noticia" src="<%=pathPhoto%>" />
+                    </a><br>
+                    <a href="<%=url%>"><%=title%></a><br>
+                    <p><i><%=description%></i></p>
+                    
 
             </div>
         <%
