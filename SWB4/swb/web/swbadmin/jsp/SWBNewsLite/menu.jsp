@@ -4,7 +4,7 @@
     <!--
     function validateremove(url, title,uri)
     {
-        if(confirm('¿Esta seguro de borrar la noticia con título '+title+'?'))
+        if(confirm('¿Esta seguro de borrar la categoria '+title+'?'))
         {
             var url=url+'&amp;uri='+escape(uri);
             window.location.href=url;
@@ -28,13 +28,14 @@
 
     
 %>
-<a href="<%=urlAdd%>">Agregar una noticia</a><br>
-<a href="<%=urlExpired%>">Ver noticias expiradas</a><br>
-<a href="<%=urlAddCategory%>">Agregar una categoria</a><br>
-<a href="<%=urlConfig%>">Configurar recurso</a><br>
+<a href="<%=urlAdd%>">Agregar una noticia</a><br><br>
+<a href="<%=urlExpired%>">Ver noticias expiradas</a><br><br>
+<a href="<%=urlAddCategory%>">Agregar una categoria</a><br><br>
+<a href="<%=urlConfig%>">Configurar recurso</a><br><br>
 <%
     // muestra listado de noticias con eliminar y editar
     List<New> news=(List) request.getAttribute("news");
+    List<Category> cats=(List) request.getAttribute("cats");
     %>
     <h1>Noticias no expiradas</h1><br>
     <table cellpadding="2" cellspacing="2">
@@ -113,7 +114,58 @@
         <%
     }
     %>
-    </table>
-    <%
+    </table><br>
+    
+<h1>Categorias</h1><br>
+<table cellpadding="2" cellspacing="2">
+        <tr>
 
-%>
+            <th>
+            Título
+            </th>
+            <th>
+            Descripción
+            </th>
+            <th>
+            Editar
+            </th>
+            <th>
+            Eliminar
+            </th>
+            </tr>
+<%
+    for(Category category : cats)
+    {
+        String title=category.getTitle();
+        String description=category.getDescription();
+        
+        String editarImg = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/editar.png";
+        String eliminarImg = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/eliminar.png";        
+        SWBResourceURL  urlEdit=paramRequest.getRenderUrl();
+        urlEdit.setParameter("uri", category.getURI());
+        urlEdit.setMode("editCategory");
+
+        SWBResourceURL  removeUrl=paramRequest.getActionUrl();
+        removeUrl.setParameter("uri", category.getEncodedURI());
+        removeUrl.setParameter("act", "removeCategory");
+
+        String deleteUrl = "javascript:validateremove('" + removeUrl + "','" + category.getTitle() + "','" + category.getURI() + "')";
+        %>
+        <tr>            
+            <td>
+            <%=title%>
+            </td>
+            <td>
+            <%=description%>
+            </td>
+            <td align="center">
+                <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=editarImg%>" /></a>
+            </td>
+            <td align="center">
+                <a href="<%=deleteUrl%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=eliminarImg%>" /></a>
+            </td>
+            </tr>
+        <%
+    }
+    %>
+    </table><br>
