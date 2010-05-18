@@ -261,11 +261,25 @@ public class SWBNewsLite extends GenericResource
     }
     public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String uri = request.getParameter("uri");
+        if (uri == null || uri.trim().equals(""))
+        {
+            response.sendError(404);
+            return;
+        }
         String path = "/swbadmin/jsp/SWBNewsLite/editCategory.jsp";
+        SemanticObject obj = SemanticObject.getSemanticObject(uri);
+        if (obj == null || !obj.getSemanticClass().equals(Category.sclass))
+        {
+            response.sendError(404);
+            return;
+        }
+        Category category = new Category(obj);
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("category", category);
             dis.include(request, response);
         }
         catch (Exception e)
