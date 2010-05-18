@@ -30,7 +30,7 @@
 <a href="<%=urlConfig%>">Configurar recurso</a><br>
 <%
     // muestra listado de noticias con eliminar y editar
-    Set<New> news=(Set) request.getAttribute("news");
+    List<New> news=(List) request.getAttribute("news");
     %>
     <h1>Noticias no expiradas</h1><br>
     <table cellpadding="2" cellspacing="2">
