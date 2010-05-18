@@ -19,4 +19,18 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
         type=THROW_MESSAGE;
         return super.create();
     }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = false;
+
+        //Un evento intermedio de mensaje (throw) sólo puede tener flujos de mensaje de salida
+        if (link instanceof MessageFlow) {
+            ret = true;
+        } else {
+            ret = super.canStartLink(link);
+        }
+
+        return ret;
+    }
+
 }
