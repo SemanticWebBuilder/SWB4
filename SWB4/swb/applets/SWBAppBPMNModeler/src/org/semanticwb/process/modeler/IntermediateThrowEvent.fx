@@ -74,9 +74,33 @@ public class IntermediateThrowEvent extends ThrowEvent
     public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
-        if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane)
+        if(parent instanceof Pool or parent instanceof Lane)
         {
             ret=true;
+        }
+        return ret;
+    }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = true;
+        //Un evento intermedio tipo throw sólo puede tener un flujo de secuencia entrante
+        if (link instanceof SequenceFlow) {
+            var c = sizeof getInputConnectionObjects();
+            if (c != 0) {
+                ret = false;
+            }
+        }
+        return ret;
+    }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = true;
+        //Un evento intermedio tipo throw sólo puede tener un flujo de secuencia de salida
+        if (link instanceof SequenceFlow) {
+            var c = sizeof getOutputConnectionObjects();
+            if (c != 0) {
+                ret = false;
+            }
         }
         return ret;
     }
