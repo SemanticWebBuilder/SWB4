@@ -64,6 +64,17 @@
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     SWBResourceURL action=paramRequest.getActionUrl();
+    String uri=paramRequest.getResourceBase().getAttribute("category");
+    Category ocategory=null;
+    try
+    {
+        ocategory = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    }
+    catch(Exception e)
+    {
+        e.printStackTrace();
+    }
+
 %>
 <div class="columnaIzquierda">
  <div class="adminTools">
@@ -77,7 +88,7 @@
         <legend>Agregar Noticia</legend>
 
         <%
-            if(paramRequest.getResourceBase().getAttribute("category")==null)
+            if(paramRequest.getResourceBase().getAttribute("category")==null || ocategory==null)
             {
                 %>
                 <p>
@@ -100,13 +111,13 @@
             }
         else
             {
-            String uri=paramRequest.getResourceBase().getAttribute("category");
-            Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            String categoria=category.getTitle();
+            
+            String categoria=ocategory.getTitle();
 
             %>
             <p>
                 Categoria: <%=categoria%>
+                <input type="hidden" name="category" id="category" value="<%=ocategory.getURI()%>">
             </p>
             <%
             }

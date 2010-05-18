@@ -65,6 +65,16 @@
 <%
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+    String uri=paramRequest.getResourceBase().getAttribute("category");
+    Category ocategory=null;
+    try
+    {
+        ocategory = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+    }
+    catch(Exception e)
+    {
+        e.printStackTrace();
+    }
     New onew=(New) request.getAttribute("new");
     String expiration=dateFormat.format(onew.getExpiration());
     String title=onew.getTitle();
@@ -119,7 +129,7 @@
 
 
         <%
-            if(paramRequest.getResourceBase().getAttribute("category")==null)
+            if(paramRequest.getResourceBase().getAttribute("category")==null || ocategory==null)
             {
                 %>
                 <p>
@@ -142,14 +152,13 @@
             }
         else
             {
-            String uri=paramRequest.getResourceBase().getAttribute("category");
-            Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            String categoria=category.getTitle();
+            
+            String categoria=ocategory.getTitle();
 
             %>
             <p>
                 Categoria: <%=categoria%>
-                <input type="hidden" name="category" id="category" value="<%=category.getURI()%>">
+                <input type="hidden" name="category" id="category" value="<%=ocategory.getURI()%>">
             </p>
             <%
             }
