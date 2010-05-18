@@ -190,8 +190,12 @@ public class SWBNewsLite extends GenericResource
         else if ("removeCategory".equals(action))
         {
             String uri = request.getParameter("uri");
-            Category rec = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
-            rec.remove();
+            Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            boolean canDelete=!New.ClassMgr.listNewByCategory(category).hasNext();
+            if(canDelete)
+            {
+                category.remove();
+            }
             return;
         }
         else if ("config".equals(action))
