@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
+import org.semanticwb.process.modeler.SequenceFlow;
 
 /**
  * @author javier.solis
@@ -74,12 +75,42 @@ public class IntermediateCatchEvent extends CatchEvent
     public override function canAttach(parent:GraphicalElement):Boolean
     {
         var ret=false;
-        if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane)
+        if(parent instanceof Pool or parent instanceof Lane)
         {
             ret=true;
         }
         return ret;
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = true;
+        //Si el evento intermedio está adherido a los límites de una actividad, no puede tener flujos entrantes
+        if (this.getGraphParent() instanceof Activity) {
+            ret = false;
+        } else {
+            //Un evento intermedio tipo catch sólo puede tener un flujo de secuencia entrante
+            if (link instanceof SequenceFlow) {
+                var c = sizeof getInputConnectionObjects();
+                if (c != 0) {
+                    ret = false;
+                }
+            }
+        }
+        return ret;
+    }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = true;
+        //Un evento intermedio tipo catch sólo puede tener un flujo de secuencia de salida
+        if (link instanceof SequenceFlow) {
+            var c = sizeof getOutputConnectionObjects();
+            if (c != 0) {
+                ret = false;
+            }
+        }
+        return ret;
+    }
+
 }
 
 
