@@ -6,6 +6,7 @@
     Category category=(Category)request.getAttribute("category");
     String title=category.getTitle();
     String description=category.getDescription();
+
     if(title==null)
     {
         title="";
@@ -40,8 +41,9 @@
         <a class="adminTool" onclick="validaForma()" href="#">Guardar</a>
         <a class="adminTool" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMIN)%>">Cancelar</a>
     </div>
-<form name="frmaddNew" id="frmaddNew" enctype="multipart/form-data" method="post" action="<%=action%>">
+<form name="frmaddNew" id="frmaddNew" method="post" action="<%=action%>">
     <input type="hidden" name="act" value="editCategory"/>
+    <input type="hidden" name="uri" value="<%=category.getURI()%>"/>
     <fieldset>
         <legend>Editar Categoria</legend>
 
