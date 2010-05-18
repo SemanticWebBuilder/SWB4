@@ -42,6 +42,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBNewsLite extends GenericResource
 {
+    private static final String NUMMAX = "numax";
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final Logger log = SWBUtils.getLogger(SWBNewsLite.class);
@@ -150,10 +151,10 @@ public class SWBNewsLite extends GenericResource
         }
         else if("config".equals(action))
         {
-            String nummax=request.getParameter("nummax");
+            String nummax=request.getParameter(NUMMAX);
             if(nummax!=null && !nummax.trim().equals(""))
             {
-                this.getResourceBase().setAttribute("numax", nummax);
+                this.getResourceBase().setAttribute( NUMMAX, nummax);
             }
             String mode=request.getParameter("modo");
             if(mode!=null && !mode.trim().equals(""))
@@ -166,9 +167,17 @@ public class SWBNewsLite extends GenericResource
                 {
                     this.getResourceBase().setAttribute("simplemode", "false");
                 }
-            }            
+            }
+            try
+            {
+                this.getResourceBase().updateAttributesToDB();
+            }
+            catch(Exception e)
+            {
+                log.error(e);
+            }
         }
-        else if("remove".equals("action"))
+        else if("remove".equals(action))
         {
             String uri = request.getParameter("uri");
             New rec = (New) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -416,7 +425,7 @@ public class SWBNewsLite extends GenericResource
         }
         Set<New> news = new HashSet<New>();
         String path = "/swbadmin/jsp/SWBNewsLite/newsview.jsp";
-        String smax = this.getResourceBase().getAttribute("nummax");
+        String smax = this.getResourceBase().getAttribute(NUMMAX);
         String simpleMode = this.getResourceBase().getAttribute("simplemode");
         if (Boolean.parseBoolean(simpleMode))
         {
