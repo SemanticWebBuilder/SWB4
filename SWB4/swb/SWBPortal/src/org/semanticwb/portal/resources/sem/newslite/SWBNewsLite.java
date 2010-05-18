@@ -67,7 +67,7 @@ public class SWBNewsLite extends GenericResource
                 rec.setCreator(response.getUser());
                 rec.setCreated(new Date(System.currentTimeMillis()));
 
-            }
+            }            
             else if (params.containsValue("edit"))
             {
                 String uri = params.get("uri");
@@ -150,6 +150,39 @@ public class SWBNewsLite extends GenericResource
                 }
             }
         }
+        else if ("addCategory".equals(action))
+        {
+            String title=request.getParameter("title");
+            String description=request.getParameter("description");
+            if(title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
+            {
+                Category category=Category.ClassMgr.createCategory(response.getWebPage().getWebSite());
+                category.setTitle(title);
+                category.setTitle(description);
+            }
+        }
+        else if ("editCategory".equals(action))
+        {
+            String title=request.getParameter("title");
+            String description=request.getParameter("description");
+            String uri = request.getParameter("uri");
+            if(uri!=null && !uri.trim().equals(""))
+            {
+                Category category = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+                if(title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
+                {                    
+                    category.setTitle(title);
+                    category.setTitle(description);
+                }
+            }
+        }
+        else if ("removeCategory".equals(action))
+        {
+            String uri = request.getParameter("uri");
+            Category rec = (Category) SemanticObject.createSemanticObject(uri).createGenericInstance();
+            rec.remove();
+            return;
+        }
         else if("config".equals(action))
         {
             String nummax=request.getParameter(NUMMAX);
@@ -194,6 +227,10 @@ public class SWBNewsLite extends GenericResource
         {
             doDetail(request, response, paramRequest);
         }
+        if (paramRequest.getMode().equals("addCategory"))
+        {
+            doAddCategory(request, response, paramRequest);
+        }
         else if (paramRequest.getMode().equals("rss"))
         {
             doRss(request, response, paramRequest);
@@ -217,6 +254,20 @@ public class SWBNewsLite extends GenericResource
         else
         {
             super.processRequest(request, response, paramRequest);
+        }
+    }
+    public void doAddCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String path = "/swbadmin/jsp/SWBNewsLite/addCategory.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
         }
     }
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -597,6 +648,7 @@ public class SWBNewsLite extends GenericResource
                         }
                         catch (StringIndexOutOfBoundsException iobe)
                         {
+                            log.error(iobe);
                         }
                     }
                 }
