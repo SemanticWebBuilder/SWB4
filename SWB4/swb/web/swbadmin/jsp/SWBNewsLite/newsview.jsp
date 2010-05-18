@@ -7,7 +7,7 @@
     {
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setMode("detail");
-        url.setParameter("uri", onew.getEncodedURI());
+        url.setParameter("uri", onew.getURI());
         String title=onew.getTitle();
         String description=onew.getDescription();
         String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/noevent.jpg";
