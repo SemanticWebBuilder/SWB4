@@ -411,7 +411,7 @@ public class SWBNewsLite extends GenericResource
         }
 
         news = new HashSet<New>();
-        if (elements.length <= max)
+        if (elements.length <= max || max==-1)
         {
 
             for (New onew : elements)
