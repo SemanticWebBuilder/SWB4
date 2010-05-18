@@ -106,6 +106,13 @@ public class SWBNewsLite extends GenericResource
                         String target = realpath + finalpath + filename;
                         File ftarget = new File(target);
                         ftarget.getParentFile().mkdirs();
+                        int pos=filename.lastIndexOf('.');
+                        if(pos!=-1)
+                        {
+                            filename=filename.substring(0,pos);
+                        }
+                        filename+=".jpg";
+                        ImageResizer.shrinkTo(ftarget, 150,150, ftarget, "jpeg");
                         FileOutputStream out = new FileOutputStream(ftarget);
                         SWBUtils.IO.copyStream(in, out);
                         file.delete();
@@ -141,7 +148,27 @@ public class SWBNewsLite extends GenericResource
                 }
             }
         }
-        else
+        else if("config".equals(action))
+        {
+            String nummax=request.getParameter("nummax");
+            if(nummax!=null && !nummax.trim().equals(""))
+            {
+                this.getResourceBase().setAttribute("numax", nummax);
+            }
+            String mode=request.getParameter("modo");
+            if(mode!=null && !mode.trim().equals(""))
+            {
+                if("simplemode".equals(mode))
+                {
+                    this.getResourceBase().setAttribute("simplemode", "true");
+                }
+                else
+                {
+                    this.getResourceBase().setAttribute("simplemode", "false");
+                }
+            }            
+        }
+        else if("remove".equals("action"))
         {
             String uri = request.getParameter("uri");
             New rec = (New) SemanticObject.createSemanticObject(uri).createGenericInstance();
@@ -157,6 +184,10 @@ public class SWBNewsLite extends GenericResource
         {
             doDetail(request, response, paramRequest);
         }
+        else if (paramRequest.getMode().equals("rss"))
+        {
+            doRss(request, response, paramRequest);
+        }
         else if (paramRequest.getMode().equals("add"))
         {
             doAdd(request, response, paramRequest);
@@ -169,12 +200,33 @@ public class SWBNewsLite extends GenericResource
         {
             doEditNew(request, response, paramRequest);
         }
+        else if (paramRequest.getMode().equals("config"))
+        {
+            doConfig(request, response, paramRequest);
+        }
         else
         {
             super.processRequest(request, response, paramRequest);
         }
     }
-
+    public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        
+    }
+    public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String path = "/swbadmin/jsp/SWBNewsLite/config.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(path);
+        try
+        {
+            request.setAttribute("paramRequest", paramRequest);            
+            dis.include(request, response);
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
     public void doExpired(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Set<New> news = new HashSet<New>();
@@ -357,6 +409,11 @@ public class SWBNewsLite extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        if(this.getResourceBase().getProperty("mode")!=null && "rss".equals(this.getResourceBase().getProperty("mode")))
+        {
+            doRss(request, response, paramRequest);
+            return;
+        }
         Set<New> news = new HashSet<New>();
         String path = "/swbadmin/jsp/SWBNewsLite/newsview.jsp";
         String smax = this.getResourceBase().getAttribute("nummax");
@@ -510,9 +567,9 @@ public class SWBNewsLite extends GenericResource
                             }
                             image = new File(realpath + filename);
                             File thumbnail = new File(realpath + "thumbn_" + filename);
-                            currentFile.write(image);
-                            //ImageResizer.resize(image, 150, true, thumbnail, "jpeg" );
-                            ImageResizer.resizeCrop(image, 150, thumbnail, "jpeg");
+                            currentFile.write(image);                            
+                            ImageResizer.shrinkTo(image, 150,150, thumbnail, "jpeg");
+
                             params.put("filename", path + filename);
                             params.put("thumbnail", path + "thumbn_" + filename);
                         }
