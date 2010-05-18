@@ -4,7 +4,7 @@
 <div class="titulo_seccion">Noticias <span class="titulo_seccion_b">Recientes</span></div>
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-    Set<New> news=(Set) request.getAttribute("news");    
+    List<New> news=(List) request.getAttribute("news");
     for(New onew : news)
     {
         SWBResourceURL url=paramRequest.getRenderUrl();
