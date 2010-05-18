@@ -26,7 +26,7 @@ public class MessageStartEvent extends StartEvent
         var ret=false;
         if(link instanceof MessageFlow)
         {
-            var c=sizeof getOutputConnectionObjects();
+            var c=sizeof getInputConnectionObjects();
             if(c==0)
             {
                 ret=true;
