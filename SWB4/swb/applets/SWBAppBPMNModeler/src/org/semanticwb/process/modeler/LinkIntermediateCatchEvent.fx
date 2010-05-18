@@ -19,4 +19,10 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
         type=CATCH_LINK;
         return super.create();
     }
+
+    public override function canEndLink(link:ConnectionObject) {
+        //El evento intermedio de enlace tipo catch no puede tener flujos de entrada
+        return false;
+    }
+
 }
