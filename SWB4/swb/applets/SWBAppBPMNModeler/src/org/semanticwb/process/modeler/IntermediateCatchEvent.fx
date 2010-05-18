@@ -87,22 +87,23 @@ public class IntermediateCatchEvent extends CatchEvent
         //Si el evento intermedio está adherido a los límites de una actividad, no puede tener flujos entrantes
         if (this.getGraphParent() instanceof Activity) {
             ret = false;
-        } else {
-            //Un evento intermedio tipo catch sólo puede tener un flujo de secuencia entrante
-            if (link instanceof SequenceFlow) {
+        } else if (link instanceof MessageFlow) {//Por defecto no puede tener flujos de mensaje entrantes
+            ret = false;
+        } else if (link instanceof SequenceFlow) {//Sólo puede tener un flujo de secuencia entrante
                 var c = sizeof getInputConnectionObjects();
                 if (c != 0) {
                     ret = false;
                 }
             }
-        }
         return ret;
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
         var ret = true;
-        //Un evento intermedio tipo catch sólo puede tener un flujo de secuencia de salida
-        if (link instanceof SequenceFlow) {
+        //Un evento intermedio de tipo catch por defecto no puede tener flujos de mensaje de salida
+        if (link instanceof MessageFlow) {
+            ret = false;
+        } else if (link instanceof SequenceFlow) {//Sólo puede tener un flujo de secuencia de salida
             var c = sizeof getOutputConnectionObjects();
             if (c != 0) {
                 ret = false;
@@ -110,7 +111,6 @@ public class IntermediateCatchEvent extends CatchEvent
         }
         return ret;
     }
-
 }
 
 
