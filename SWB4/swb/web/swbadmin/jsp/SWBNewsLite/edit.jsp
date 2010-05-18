@@ -115,7 +115,7 @@
     <input type="hidden" name="body" id="body" value="">
     <input type="hidden" name="uri" id="uri" value="<%=onew.getURI()%>">
     <fieldset>
-        <legend>Agregar Noticia</legend>
+        <legend>Editar Noticia</legend>
     <p>
         <img src="<%=pathPhoto%>" width="150" height="150"><br>
         <label for="foto">Imagen de la noticia:&nbsp;</label><br />
