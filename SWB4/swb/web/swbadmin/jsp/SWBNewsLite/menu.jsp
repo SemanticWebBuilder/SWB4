@@ -127,7 +127,7 @@
                 <td>
                 <%=title%>
                 </td>
-                <td align="center">
+                <td ;align="center">
                     <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=editarImg%>" /></a>
                 </td>
                 <td align="center">
@@ -175,7 +175,7 @@
         SWBResourceURL  urlEdit=paramRequest.getRenderUrl();
         urlEdit.setParameter("uri", category.getURI());
         urlEdit.setMode("editCategory");
-
+        boolean canDelete=!New.ClassMgr.listNewByCategory(category).hasNext();
         SWBResourceURL  removeUrl=paramRequest.getActionUrl();
         removeUrl.setParameter("uri", category.getEncodedURI());
         removeUrl.setParameter("act", "removeCategory");
@@ -193,7 +193,21 @@
                 <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=editarImg%>" /></a>
             </td>
             <td align="center">
-                <a href="<%=deleteUrl%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=eliminarImg%>" /></a>
+                <%
+                    if(canDelete)
+                    {
+                    %>
+                        <a href="<%=deleteUrl%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=eliminarImg%>" /></a>
+                    <%
+                    }
+                    else
+                    {
+                        %>
+                        Tiene noticias
+                        <%
+                    }
+                %>
+                
             </td>
             </tr>
         <%
