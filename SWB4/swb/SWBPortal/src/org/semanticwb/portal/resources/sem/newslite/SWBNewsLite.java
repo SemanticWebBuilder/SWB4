@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -238,7 +239,7 @@ public class SWBNewsLite extends GenericResource
     }
     public void doExpired(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Set<New> news = new HashSet<New>();
+        List<New> news = new ArrayList<New>();
         String path = "/swbadmin/jsp/SWBNewsLite/expirednews.jsp";
         String categoryId = this.getResourceBase().getAttribute("category");
         Iterator<New> itNews = null;
@@ -271,6 +272,13 @@ public class SWBNewsLite extends GenericResource
         // ordena por fecha de creación
         New[] elements = news.toArray(new New[news.size()]);
         Arrays.sort(elements,new ComparatorNews());
+        
+        news=new ArrayList<New>();
+        for(New onew : elements)
+        {
+            news.add(onew);            
+        }
+
 
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
@@ -332,7 +340,7 @@ public class SWBNewsLite extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        Set<New> news = new HashSet<New>();
+        List<New> news = new ArrayList<New>();
         String path = "/swbadmin/jsp/SWBNewsLite/menu.jsp";
         String categoryId = this.getResourceBase().getAttribute("category");
         Iterator<New> itNews = null;
@@ -373,6 +381,11 @@ public class SWBNewsLite extends GenericResource
         New[] elements = news.toArray(new New[news.size()]);
         Arrays.sort(elements, new ComparatorNews());
 
+        news=new ArrayList<New>();
+        for(New onew : elements)
+        {
+            news.add(onew);
+        }
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -423,7 +436,7 @@ public class SWBNewsLite extends GenericResource
             doRss(request, response, paramRequest);
             return;
         }
-        Set<New> news = new HashSet<New>();
+        List<New> news = new ArrayList<New>();
         String path = "/swbadmin/jsp/SWBNewsLite/newsview.jsp";
         String smax = this.getResourceBase().getAttribute(NUMMAX);
         String simpleMode = this.getResourceBase().getAttribute("simplemode");
@@ -476,7 +489,7 @@ public class SWBNewsLite extends GenericResource
             }
         }
 
-        news = new HashSet<New>();
+        news = new ArrayList<New>();
         if (elements.length <= max || max==-1)
         {
 
@@ -602,6 +615,6 @@ class ComparatorNews implements Comparator<New>
 
     public int compare(New o1, New o2)
     {
-        return o2.getExpiration().compareTo(o1.getExpiration());
+        return o1.getExpiration().compareTo(o2.getExpiration());
     }
 }
