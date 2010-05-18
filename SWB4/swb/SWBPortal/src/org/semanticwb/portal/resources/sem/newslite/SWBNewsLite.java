@@ -156,7 +156,7 @@ public class SWBNewsLite extends GenericResource
             {
                 Category category=Category.ClassMgr.createCategory(response.getWebPage().getWebSite());
                 category.setTitle(SWBUtils.XML.replaceXMLChars(title));
-                category.setTitle(SWBUtils.XML.replaceXMLChars(description));
+                category.setDescription(SWBUtils.XML.replaceXMLChars(description));
             }
         }
         else if ("editCategory".equals(action))
@@ -170,7 +170,7 @@ public class SWBNewsLite extends GenericResource
                 if(category!=null && title!=null && !title.trim().equals("") && description!=null && !description.trim().equals(""))
                 {                    
                     category.setTitle(SWBUtils.XML.replaceXMLChars(title));
-                    category.setTitle(SWBUtils.XML.replaceXMLChars(description));
+                    category.setDescription(SWBUtils.XML.replaceXMLChars(description));
                 }
             }
         }
