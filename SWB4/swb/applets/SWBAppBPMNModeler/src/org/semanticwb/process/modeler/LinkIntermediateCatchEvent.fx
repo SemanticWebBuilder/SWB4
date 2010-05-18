@@ -25,4 +25,14 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
         return false;
     }
 
+    public override function canStartLink(link:ConnectionObject) {
+        //El evento intermedio de enlace tipo catch no puede tener más de un flujo de
+        //secuencia de salida y no puede tener flujos de mensaje de salida
+        var ret = super.canStartLink(link);
+        if (link instanceof MessageFlow) {
+            ret = false;
+        }
+
+        return false;
+    }
 }
