@@ -25,7 +25,7 @@ SWBResourceURL addUrl = paramRequest.getRenderUrl().setMode("ADD");
         <%
             while(services.hasNext()) {
                 Service service = services.next();
-                SWBResourceURL delUrl = paramRequest.getRenderUrl().setMode("DEL").setParameter("uri", service.getEncodedURI());
+                SWBResourceURL delUrl = paramRequest.getActionUrl().setAction("DEL").setParameter("uri", service.getEncodedURI());
                 %>
                 <li>
                     <a href="<%=service.getUrl()%>"><span class="<%=service.getCssIcon()%>">&nbsp;</span><%=service.getTitle()%></a>
