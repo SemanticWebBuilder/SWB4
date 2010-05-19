@@ -2303,6 +2303,8 @@
     <rdfs:label xml:lang="en">Version comment</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="webPageIconClass">
+    <rdfs:label xml:lang="es">Clase CSS del Icono</rdfs:label>
+    <rdfs:label xml:lang="en">CSS Icon Class</rdfs:label>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >iconClass</swb:propertyCodeName>
     <swb:displayProperty>
