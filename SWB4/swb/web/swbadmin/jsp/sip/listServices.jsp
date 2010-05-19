@@ -9,6 +9,8 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.Iterator"%>
 
+<%! private static int maxServices = 4;%>
+
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 WebPage servWp = paramRequest.getWebPage().getWebSite().getWebPage("Tramites_y_Servicios");
@@ -28,7 +30,9 @@ if (paramRequest.getUser() != null) {
             %>
             <ul class="listaTramites">
                 <%
-                while(childs.hasNext()) {
+                int c = 0;
+                while(childs.hasNext() && c < maxServices) {
+                    c++;
                     WebPage child = childs.next();
                     String iconClass = child.getIconClass();
                     if (iconClass == null || iconClass.trim().equals("") || iconClass.equals("null")) {
