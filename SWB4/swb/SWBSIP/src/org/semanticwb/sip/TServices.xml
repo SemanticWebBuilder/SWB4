@@ -4,12 +4,9 @@
     <form name="frmTServices" action="true" method="POST">
     <admdbconnmgr defconn="true"/>
     <fieldset>
-        <statictext name="txtMaxViewa">Servicios visibles:</statictext>
-        <input type="TEXT" name="maxviews" size="50"/>
-        <statictext name="txtParentSec">Sección padre:</statictext>
-        <input type="TEXT" name="parentwp" size="50"/>
-        <statictext name="txtDefCss">Icono CSS por defecto:</statictext>
-        <input type="TEXT" name="defclass" size="50"/>
+        <statictext name="txtMaxViewa">Servicios visibles:</statictext><input type="TEXT" name="maxviews" size="50"/>
+        <statictext name="txtParentSec">Sección padre:</statictext><input type="TEXT" name="parentwp" size="50"/>
+        <statictext name="txtDefCss">Icono CSS por defecto:</statictext><input type="TEXT" name="defclass" size="50"/>
     </fieldset>
     <fieldset>
         <statictext name="cmd">
