@@ -128,7 +128,7 @@
     </p>
     <p>
         <label for="title">Título:&nbsp;</label><br />
-        <input id="title" type="text" name="title" maxlength="50" size="45" />
+        <input id="title" type="text" name="title" maxlength="80" size="60" />
     </p>
     <p>
         <label for="description">Resumen:&nbsp;</label><br />
