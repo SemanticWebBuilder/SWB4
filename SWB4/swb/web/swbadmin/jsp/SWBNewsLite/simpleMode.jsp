@@ -1,6 +1,6 @@
 <%@page contentType="text/html"%>
 <%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
-<%
+<%    
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     List<New> news=(List) request.getAttribute("news");    
     for(New onew : news)
@@ -23,9 +23,13 @@
         }
         %>
           <div class="mainNews">
-          <p><%=title%></p>
-          <img src="<%=pathPhoto%>" alt="Imagen noticia" />
+          <p><a href="#"><%=title%></a></p>
+          <img width="92" height="60" src="<%=pathPhoto%>" alt="Imagen noticia" />
           <div class="clear">&nbsp;</div>
+          <ul class="underline">
+              <li>&nbsp;</li>
+          </ul>
+          <p>&nbsp;</p>
         </div>
           
         <%
