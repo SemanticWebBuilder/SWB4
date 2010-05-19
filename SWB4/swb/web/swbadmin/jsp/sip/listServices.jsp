@@ -18,7 +18,7 @@ int callMethod = paramRequest.getCallMethod();
     <h2 class="tituloBloque">Consulta<span class="titulo_seccion_b">&nbsp;Tr&aacute;mites y servicios</span></h2>
     <%
     if (servWp != null) {
-        Iterator<WebPage> childs = servWp.listChilds();
+        Iterator<WebPage> childs = servWp.listChilds("es", true, false, false, false, true);
         if (callMethod == paramRequest.Call_STRATEGY) {
             %>
             <ul class="listaTramites">
@@ -27,7 +27,7 @@ int callMethod = paramRequest.getCallMethod();
                     WebPage child = childs.next();
                     String iconClass = child.getIconClass();
                     if (iconClass == null || iconClass.trim().equals("") || iconClass.equals("null")) {
-                        iconClass="icono_8";
+                        iconClass="icono_6";
                     }
                     %>
                     <li><a href="<%=child.getUrl()%>"><span class="<%=iconClass%>">&nbsp;</span><%=child.getTitle()%></a></li>
