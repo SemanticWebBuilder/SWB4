@@ -16,7 +16,7 @@
         <input type="text" id="width"  name="width" label="Ancho:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho del banner. Ejemplo: 500em, 600px, 100%" />
         <input type="text" id="height" name="height" label="Alto:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura del banner. Ejemplo: 120em, 75px, 100%" />
         <input type="text" name="cssClass" id="cssClass" label="Atributo class del ancla:" size="30" promptMessage="Valor del atributo class del ancho del banner" />
-        <input type="text" id="url" name="url" label="Dirección web" size="50" promptMessage="Dirección web del promotor" />
+        <input type="text" id="url" name="url" label="Dirección web:" size="50" promptMessage="Dirección web del patrocinador" />
         <statictext name="txtTarget">Dirigir a una nueva ventana:</statictext>
         <input type="radio" id="target1" name="target" label="Si" value="1"/>
         <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
@@ -64,7 +64,7 @@
         );
 
         function jsValida(frm) {
-            if(dojo.byId('local0').checked && !dojo.byId(wbNoFile_img).checked ) {
+            if(dojo.byId('local0').checked && dojo.byId('wbNoFile_img') && !dojo.byId('wbNoFile_img').checked ) {
                 if( dojo.byId('img').value==null || dojo.byId('img').value=='' || dojo.byId('img').value==' ' )
                 {
                     alert('Especifique una imagen para el banner');
