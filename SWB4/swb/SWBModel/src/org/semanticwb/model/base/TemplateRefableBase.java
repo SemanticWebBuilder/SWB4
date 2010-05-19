@@ -7,14 +7,14 @@ public interface TemplateRefableBase extends org.semanticwb.model.Referensable
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs();
-    public boolean hasTemplateRef(org.semanticwb.model.TemplateRef templateref);
+    public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value);
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs();
 
-    public void addTemplateRef(org.semanticwb.model.TemplateRef templateref);
+    public void addTemplateRef(org.semanticwb.model.TemplateRef value);
 
     public void removeAllTemplateRef();
 
-    public void removeTemplateRef(org.semanticwb.model.TemplateRef templateref);
+    public void removeTemplateRef(org.semanticwb.model.TemplateRef value);
 
     public org.semanticwb.model.TemplateRef getTemplateRef();
 }

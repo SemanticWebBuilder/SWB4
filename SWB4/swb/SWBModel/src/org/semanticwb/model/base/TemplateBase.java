@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Deviceable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable
+public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.Versionable
 {
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_templateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#templateGroup");
@@ -51,147 +51,147 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             return (getTemplate(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByUserGroupRef(org.semanticwb.model.UserGroupRef hasusergroupref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByUserGroupRef(org.semanticwb.model.UserGroupRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, hasusergroupref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByUserGroupRef(org.semanticwb.model.UserGroupRef hasusergroupref)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByUserGroupRef(org.semanticwb.model.UserGroupRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(hasusergroupref.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,hasusergroupref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroupRef,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByGroup(org.semanticwb.model.TemplateGroup templategroup,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByGroup(org.semanticwb.model.TemplateGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_templateGroup, templategroup.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_templateGroup, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByGroup(org.semanticwb.model.TemplateGroup templategroup)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByGroup(org.semanticwb.model.TemplateGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(templategroup.getSemanticObject().getModel().listSubjectsByClass(swb_templateGroup,templategroup.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_templateGroup,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLastVersion(org.semanticwb.model.VersionInfo lastversion,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLastVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion, lastversion.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLastVersion(org.semanticwb.model.VersionInfo lastversion)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLastVersion(org.semanticwb.model.VersionInfo value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(lastversion.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion,lastversion.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_lastVersion,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLanguage(org.semanticwb.model.Language language,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLanguage(org.semanticwb.model.Language value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, language.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_language, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLanguage(org.semanticwb.model.Language language)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByLanguage(org.semanticwb.model.Language value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(language.getSemanticObject().getModel().listSubjectsByClass(swb_language,language.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, hascalendarref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCalendarRef(org.semanticwb.model.CalendarRef hascalendarref)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCalendarRef(org.semanticwb.model.CalendarRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(hascalendarref.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,hascalendarref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByModifiedBy(org.semanticwb.model.User modifiedby)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByActualVersion(org.semanticwb.model.VersionInfo actualversion,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByActualVersion(org.semanticwb.model.VersionInfo value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion, actualversion.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByActualVersion(org.semanticwb.model.VersionInfo actualversion)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByActualVersion(org.semanticwb.model.VersionInfo value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(actualversion.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,actualversion.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_actualVersion,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRoleRef(org.semanticwb.model.RoleRef hasroleref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRoleRef(org.semanticwb.model.RoleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, hasroleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRoleRef(org.semanticwb.model.RoleRef hasroleref)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRoleRef(org.semanticwb.model.RoleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(hasroleref.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,hasroleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRoleRef,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByDevice(org.semanticwb.model.Device device,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByDevice(org.semanticwb.model.Device value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_device, device.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_device, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByDevice(org.semanticwb.model.Device device)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByDevice(org.semanticwb.model.Device value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(device.getSemanticObject().getModel().listSubjectsByClass(swb_device,device.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_device,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByTemplateRefInv(org.semanticwb.model.TemplateRef hastemplaterefinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByTemplateRefInv(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRefInv, hastemplaterefinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRefInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByTemplateRefInv(org.semanticwb.model.TemplateRef hastemplaterefinv)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByTemplateRefInv(org.semanticwb.model.TemplateRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(hastemplaterefinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRefInv,hastemplaterefinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRefInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCreator(org.semanticwb.model.User creator)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjectsByClass(swb_creator,creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRuleRef(org.semanticwb.model.RuleRef hasruleref,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, hasruleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRuleRef(org.semanticwb.model.RuleRef hasruleref)
+        public static java.util.Iterator<org.semanticwb.model.Template> listTemplateByRuleRef(org.semanticwb.model.RuleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(hasruleref.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,hasruleref.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -206,12 +206,12 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listObjectProperties(swb_hasUserGroupRef));
     }
 
-    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
         boolean ret=false;
-        if(usergroupref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
         }
         return ret;
     }
@@ -231,9 +231,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swb_hasUserGroupRef);
     }
 
-    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref)
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
-        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,usergroupref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasUserGroupRef,value.getSemanticObject());
     }
 
     public org.semanticwb.model.UserGroupRef getUserGroupRef()
@@ -335,12 +335,12 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
     }
 
-    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef calendarref)
+    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
     {
         boolean ret=false;
-        if(calendarref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
         }
         return ret;
     }
@@ -355,9 +355,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swb_hasCalendarRef);
     }
 
-    public void removeCalendarRef(org.semanticwb.model.CalendarRef calendarref)
+    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
     {
-        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,calendarref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
     }
 
     public org.semanticwb.model.CalendarRef getCalendarRef()
@@ -473,12 +473,12 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listObjectProperties(swb_hasRoleRef));
     }
 
-    public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref)
+    public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
     {
         boolean ret=false;
-        if(roleref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasRoleRef,value.getSemanticObject());
         }
         return ret;
     }
@@ -498,9 +498,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swb_hasRoleRef);
     }
 
-    public void removeRoleRef(org.semanticwb.model.RoleRef roleref)
+    public void removeRoleRef(org.semanticwb.model.RoleRef value)
     {
-        getSemanticObject().removeObjectProperty(swb_hasRoleRef,roleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasRoleRef,value.getSemanticObject());
     }
 
     public org.semanticwb.model.RoleRef getRoleRef()
@@ -540,12 +540,12 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listObjectProperties(swb_hasTemplateRefInv));
     }
 
-    public boolean hasTemplateRefInv(org.semanticwb.model.TemplateRef templateref)
+    public boolean hasTemplateRefInv(org.semanticwb.model.TemplateRef value)
     {
         boolean ret=false;
-        if(templateref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasTemplateRefInv,templateref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasTemplateRefInv,value.getSemanticObject());
         }
         return ret;
     }
@@ -587,12 +587,12 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listObjectProperties(swb_hasRuleRef));
     }
 
-    public boolean hasRuleRef(org.semanticwb.model.RuleRef ruleref)
+    public boolean hasRuleRef(org.semanticwb.model.RuleRef value)
     {
         boolean ret=false;
-        if(ruleref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasRuleRef,value.getSemanticObject());
         }
         return ret;
     }
@@ -612,9 +612,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swb_hasRuleRef);
     }
 
-    public void removeRuleRef(org.semanticwb.model.RuleRef ruleref)
+    public void removeRuleRef(org.semanticwb.model.RuleRef value)
     {
-        getSemanticObject().removeObjectProperty(swb_hasRuleRef,ruleref.getSemanticObject());
+        getSemanticObject().removeObjectProperty(swb_hasRuleRef,value.getSemanticObject());
     }
 
     public org.semanticwb.model.RuleRef getRuleRef()

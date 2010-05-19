@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Priorityable,org.semanticwb.model.Activeable
+public abstract class ResourceRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resource");
@@ -49,15 +49,15 @@ public abstract class ResourceRefBase extends org.semanticwb.model.Reference imp
             return (getResourceRef(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_resource, resource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_resource, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource resource)
+        public static java.util.Iterator<org.semanticwb.model.ResourceRef> listResourceRefByResource(org.semanticwb.model.Resource value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(resource.getSemanticObject().getModel().listSubjectsByClass(swb_resource,resource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_resource,value.getSemanticObject(),sclass));
             return it;
         }
     }

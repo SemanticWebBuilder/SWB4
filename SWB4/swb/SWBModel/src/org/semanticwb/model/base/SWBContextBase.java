@@ -10,6 +10,27 @@ import org.semanticwb.platform.SemanticClass;
 public class SWBContextBase
 {
     private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+    public static final SemanticClass swb_Ontology=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Ontology");
+
+    public static org.semanticwb.model.Ontology getOntology(String name)
+    {
+        return org.semanticwb.model.Ontology.ClassMgr.getOntology(name);
+    }
+
+    public static java.util.Iterator<org.semanticwb.model.Ontology> listOntologies()
+    {
+        return (java.util.Iterator<org.semanticwb.model.Ontology>)swb_Ontology.listGenericInstances();
+    }
+
+    public static void removeOntology(String name)
+    {
+        org.semanticwb.model.Ontology.ClassMgr.removeOntology(name);
+    }
+
+    public static org.semanticwb.model.Ontology createOntology(String name, String namespace)
+    {
+       return org.semanticwb.model.Ontology.ClassMgr.createOntology(name, namespace);
+    }
     public static final SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
 
     public static org.semanticwb.model.WebSite getWebSite(String name)

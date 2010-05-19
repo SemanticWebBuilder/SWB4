@@ -7,14 +7,14 @@ public interface RoleRefableBase extends org.semanticwb.model.Referensable
     public static final org.semanticwb.platform.SemanticClass swb_RoleRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listRoleRefs();
-    public boolean hasRoleRef(org.semanticwb.model.RoleRef roleref);
+    public boolean hasRoleRef(org.semanticwb.model.RoleRef value);
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs();
 
-    public void addRoleRef(org.semanticwb.model.RoleRef roleref);
+    public void addRoleRef(org.semanticwb.model.RoleRef value);
 
     public void removeAllRoleRef();
 
-    public void removeRoleRef(org.semanticwb.model.RoleRef roleref);
+    public void removeRoleRef(org.semanticwb.model.RoleRef value);
 
     public org.semanticwb.model.RoleRef getRoleRef();
 }

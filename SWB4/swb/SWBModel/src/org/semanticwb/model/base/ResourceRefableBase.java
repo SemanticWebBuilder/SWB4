@@ -7,13 +7,13 @@ public interface ResourceRefableBase extends org.semanticwb.model.Referensable
     public static final org.semanticwb.platform.SemanticClass swb_ResourceRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceRef> listResourceRefs();
-    public boolean hasResourceRef(org.semanticwb.model.ResourceRef resourceref);
+    public boolean hasResourceRef(org.semanticwb.model.ResourceRef value);
 
-    public void addResourceRef(org.semanticwb.model.ResourceRef resourceref);
+    public void addResourceRef(org.semanticwb.model.ResourceRef value);
 
     public void removeAllResourceRef();
 
-    public void removeResourceRef(org.semanticwb.model.ResourceRef resourceref);
+    public void removeResourceRef(org.semanticwb.model.ResourceRef value);
 
     public org.semanticwb.model.ResourceRef getResourceRef();
 }

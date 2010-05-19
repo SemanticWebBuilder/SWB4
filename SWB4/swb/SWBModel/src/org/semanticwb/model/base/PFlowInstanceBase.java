@@ -55,27 +55,27 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
             return (getPFlowInstance(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPfinstResource(org.semanticwb.model.Resource pfinstresource,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPfinstResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_pfinstResource, pfinstresource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_pfinstResource, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPfinstResource(org.semanticwb.model.Resource pfinstresource)
+        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPfinstResource(org.semanticwb.model.Resource value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(pfinstresource.getSemanticObject().getModel().listSubjectsByClass(swb_pfinstResource,pfinstresource.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_pfinstResource,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPflow(org.semanticwb.model.PFlow pfipflow,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPflow(org.semanticwb.model.PFlow value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_pfiPFlow, pfipflow.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_pfiPFlow, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPflow(org.semanticwb.model.PFlow pfipflow)
+        public static java.util.Iterator<org.semanticwb.model.PFlowInstance> listPFlowInstanceByPflow(org.semanticwb.model.PFlow value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(pfipflow.getSemanticObject().getModel().listSubjectsByClass(swb_pfiPFlow,pfipflow.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowInstance> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_pfiPFlow,value.getSemanticObject(),sclass));
             return it;
         }
     }

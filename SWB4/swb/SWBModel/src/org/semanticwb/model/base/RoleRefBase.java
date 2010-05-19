@@ -49,15 +49,15 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
             return (getRoleRef(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefByRole(org.semanticwb.model.Role role,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_role, role.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_role, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefByRole(org.semanticwb.model.Role role)
+        public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefByRole(org.semanticwb.model.Role value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> it=new org.semanticwb.model.GenericIterator(role.getSemanticObject().getModel().listSubjectsByClass(swb_role,role.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_role,value.getSemanticObject(),sclass));
             return it;
         }
     }

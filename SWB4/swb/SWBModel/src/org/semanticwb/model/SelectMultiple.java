@@ -187,7 +187,7 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
                 ret.append(" style=\"width:300px;\"");
 
                 if (DOJO) {
-                    ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
+                    //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
                 }
 
                 ret.append(" " + ext + ">");
