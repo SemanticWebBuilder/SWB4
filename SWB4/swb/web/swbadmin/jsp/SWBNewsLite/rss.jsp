@@ -8,29 +8,62 @@
         return n;
     }
 %><%
-        SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-        List<New> news=(List)request.getAttribute("news");
-        String url=(String) request.getAttribute("url");
-        response.setContentType("application/rss+xml");
-        Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
-        Element rss = doc.createElement("rss");
-        rss.setAttribute("version", "2.0");
-        doc.appendChild(rss);
-
-        Element channel = doc.createElement("channel");
-        rss.appendChild(channel);
-        addAtribute(channel, "title", "Noticias");
-        addAtribute(channel, "link",paramRequest.getWebPage().getUrl());
-        addAtribute(channel, "description", "Canal de noticias en formato RSS");
-        for(New element : news)
+        if(request.getAttribute("paramRequest")!=null)
         {
-            Element item = doc.createElement("item");
-            channel.appendChild(item);            
-            addAtribute(item, "title", element.getTitle());            
-            addAtribute(item, "link", url+"?uri="+element.getEncodedURI()+"&amp;act=detail");
-            addAtribute(item, "description", element.getDescription());
-            addAtribute(item, "pubDate", element.getCreated().toGMTString());
-            //addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+            SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
+            List<New> news=(List)request.getAttribute("news");
+            String url=(String) request.getAttribute("url");
+            response.setContentType("application/rss+xml");
+            Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
+            Element rss = doc.createElement("rss");
+            rss.setAttribute("version", "2.0");
+            doc.appendChild(rss);
+
+            Element channel = doc.createElement("channel");
+            rss.appendChild(channel);
+            addAtribute(channel, "title", "Noticias");
+            addAtribute(channel, "link",paramRequest.getWebPage().getUrl());
+            addAtribute(channel, "description", "Canal de noticias en formato RSS");
+            for(New element : news)
+            {
+                Element item = doc.createElement("item");
+                channel.appendChild(item);
+                addAtribute(item, "title", element.getTitle());
+                addAtribute(item, "link", url+"?uri="+element.getEncodedURI()+"&amp;act=detail");
+                addAtribute(item, "description", element.getDescription());
+                addAtribute(item, "pubDate", element.getCreated().toGMTString());
+                //addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
+            }
+            out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
         }
-        out.write(org.semanticwb.SWBUtils.XML.domToXml(doc));
+        else
+        {
+            WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
+            Iterator<ResourceType> resourceTypes=ResourceType.ClassMgr.listResourceTypes(site);
+            while(resourceTypes.hasNext())
+            {
+                ResourceType resourceType=resourceTypes.next();
+                if(resourceType.getResourceClassName().equals("org.semanticwb.portal.resources.sem.newslite.SWBNewsLite"))
+                {
+                    Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType,site);
+                    if(resources.hasNext())
+                    {
+                        Resource resource=resources.next();
+                        if(resource.getResourceable() instanceof WebPage)
+                        {
+                            WebPage resourcewp=(WebPage)resource.getResourceable();                            
+                            SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
+                            url.setCallMethod(url.Call_DIRECT);                            
+                            url.setMode("rss");
+                            //String url="#";
+                            
+                            %>
+                            | <a href="<%=url%>">RSS </a>
+                            <%
+                        }
+                    }
+                }
+            }
+            
+        }
 %>
