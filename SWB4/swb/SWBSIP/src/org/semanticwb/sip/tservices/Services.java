@@ -2,6 +2,7 @@ package org.semanticwb.sip.tservices;
 
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -83,7 +84,7 @@ public class Services extends org.semanticwb.sip.tservices.base.ServicesBase
                 addService(srv);
             }
         } else if (action.equals("DEL")) {
-            String uri = request.getParameter("uri");
+            String uri = URLDecoder.decode(request.getParameter("uri"));
             SemanticObject so = SemanticObject.createSemanticObject(uri);
             if (so != null) {
                 Service srv = (Service)so.createGenericInstance();
