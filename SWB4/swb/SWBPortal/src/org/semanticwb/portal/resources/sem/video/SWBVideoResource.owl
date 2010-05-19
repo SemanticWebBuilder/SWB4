@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:swbv="http://www.semanticwb.org/SWBVideo#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+  xml:base="http://www.semanticwb.org/SWBVideo">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="SWBVideoResource">
+    <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >SWBVideoResource</swb:classCodeName>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.video</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#hasVideo">
+    <rdfs:domain rdf:resource="#SWBVideoResource"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="VideoElement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Viewable"/>
+        <swb:classCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >VideoElement</swb:classCodeName>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.portal.resources.sem.video</swb:classCodePackage>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Searchable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Priorityable"/>
+      </swb:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="videoWebPage">
+    <rdfs:domain rdf:resource="#VideoElement"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >webPage</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasWPVideosInv">
+    <rdfs:range rdf:resource="#VideoElement"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:notCodeGeneration>
+    <owl:inverseOf rdf:resource="#videoWebPage"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="videoDuration">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >duration</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#VideoElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="videoPreview">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >preview</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VideoElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="videoCode">
+    <rdfs:domain rdf:resource="#VideoElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="videoType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VideoElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="videoSize">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >size</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#VideoElement"/>
+  </owl:DatatypeProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_notifyThreadCreation">
+    <rdfs:label xml:lang="en">Notify Thread Creation</rdfs:label>
+    <rdfs:label xml:lang="es">Notificar Creación de Temas</rdfs:label>
+  </swbxf:DisplayProperty>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.forum</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >frm</swb:prefix>
+  </swb:CodePackage>
+  <swbxf:DisplayProperty rdf:ID="dp_adminRole">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_FileUpload">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >30</swb:index>
+    <rdfs:label xml:lang="es">Subir Archivo</rdfs:label>
+    <rdfs:label xml:lang="en">Upload file</rdfs:label>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_pstBody">
+    <rdfs:label xml:lang="es">Mensaje</rdfs:label>
+    <rdfs:label xml:lang="en">Body</rdfs:label>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >20</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_acceptGuestUsers">
+    <rdfs:label xml:lang="es">Aceptar usuarios anónimos</rdfs:label>
+    <rdfs:label xml:lang="en">Accept anonymouse users</rdfs:label>
+  </swbxf:DisplayProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
