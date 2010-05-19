@@ -13,26 +13,24 @@
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 Iterator<Service> services = (Iterator<Service>) request.getAttribute("servList");
+SWBResourceURL addUrl = paramRequest.getRenderUrl().setMode("ADD");
 %>
 <div class="bloqueNotas">
-    <h2 class="tituloBloque">
-        Consulta
-        <span class="span_tituloBloque"> Tr&aacute;mites y servicios</span>
-    </h2>
+    <h2 class="tituloBloque">Consulta<span class="span_tituloBloque"> Tr&aacute;mites y servicios</span></h2>
     <p>
-        <a href="">Agregar tr&aacute;mite o servicio</a>
+        <a href="<%=addUrl%>">Agregar tr&aacute;mite o servicio</a>
     </p>
     <ul class="listaTramites">
         <%
             while(services.hasNext()) {
                 Service service = services.next();
                 %>
-                <a href="<%=service.getUrl()%>">
-                    <span class="<%=service.getImg()%>">&nbsp;</span>
-                    <%=service.getTitle()%>
-                </a>
+                <li>
+                    <a href="<%=service.getUrl()%>"><span class="<%=service.getCssIcon()%>">&nbsp;</span><%=service.getTitle()%></a>
+                </li>
                 <%
             }
         %>
     </ul>
+    <p class="vermas"><a href="#">Ver m&aacute;s tr&aacute;mites y servicios</a></p>
 </div>
