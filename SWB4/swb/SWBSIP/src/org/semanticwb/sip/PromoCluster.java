@@ -103,32 +103,37 @@ public class PromoCluster extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base = paramRequest.getResourceBase();
+        
         response.setContentType("text/html; charset=utf-8");
-        String out = renderWithStyle();
         PrintWriter pw = response.getWriter();
-        pw.println(out);
+
+        Iterator<String> it = base.getAttributeNames();
+        while(it.hasNext()) {
+            String p = it.next();
+            System.out.println("param="+p+", value="+base.getAttribute(p));
+            pw.println("param="+p+", value="+base.getAttribute(p));
+        }
+        //pw.println(renderWithStyle());
+
+        pw.flush();
     }
 
-    /**
-     * Render with style.
-     * 
-     * @return the string
-     */
     private String renderWithStyle() {
         StringBuilder out = new StringBuilder();
         Resource base=getResourceBase();
 
         int width;
         try {
-            width = Integer.parseInt(base.getAttribute("width","0"));
+            width = Integer.parseInt(base.getAttribute("width","143"));
         }catch(NumberFormatException nfe) {
-            width = 0;
+            width = 143;
         }
         int height;
         try {
-            height = Integer.parseInt(base.getAttribute("height","0"));
+            height = Integer.parseInt(base.getAttribute("height","208"));
         }catch(NumberFormatException nfe) {
-            height = 0;
+            height = 208;
         }
 
         String textcolor = base.getAttribute("textcolor");
@@ -284,6 +289,10 @@ public class PromoCluster extends GenericResource {
 
         w.println("<a href=\""+urlAdd+"\">Agregar una viñeta</a><br />");
         w.println("<a href=\""+urlConfig+"\">Configurar recurso</a><br />");
+
+
+
+
         
     }
 
