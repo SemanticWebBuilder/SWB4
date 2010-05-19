@@ -1,4 +1,4 @@
-<%@page import="org.semanticwb.process.*"%>
+<%@page import="org.semanticwb.process.model.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.portal.*"%>
 <%@page import="java.util.*"%>
@@ -6,22 +6,23 @@
 <%@page import="org.semanticwb.model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
-    public void printActivityInstance(FlowObjectInstance ai, JspWriter out) throws IOException
+    public void printActivityInstance(FlowNodeInstance ai, JspWriter out) throws IOException
     {
         out.println("<li>");
-        out.println("Activity: "+ai.getFlowObjectType().getTitle()+" "+ai.getId());
+        out.println("Activity: "+ai.getFlowNodeType().getTitle()+" "+ai.getId());
         out.println("Status:"+ai.getStatus());
+        out.println("Action:"+ai.getAction());
         out.println("</li>");
-        if(ai instanceof ProcessInstance)
+        if(ai instanceof SubProcessInstance)
         {
-            ProcessInstance pi=(ProcessInstance)ai;
-            Iterator<FlowObjectInstance> acit=pi.listFlowObjectInstances();
+            SubProcessInstance pi=(SubProcessInstance)ai;
+            Iterator<FlowNodeInstance> acit=pi.listFlowNodeInstances();
             if(acit.hasNext())
             {
                 out.println("<ul>");
                 while(acit.hasNext())
                 {
-                    FlowObjectInstance actinst =  acit.next();
+                    FlowNodeInstance actinst =  acit.next();
                     printActivityInstance(actinst,out);
                 }
                 out.println("</ul>");
@@ -29,41 +30,42 @@
         }
     }
 
-    public org.semanticwb.process.Process createSubProcess(org.semanticwb.process.Process process,String name)
+    public SubProcess createSubProcess(Containerable process,String name)
     {
-        org.semanticwb.process.Process sps=process.getProcessSite().createProcess();
+        SubProcess sps=process.getProcessSite().createSubProcess();
         sps.setTitle(name);
-        process.addFlowObject(sps);
+        sps.setContainer(process);
         return sps;
     }
 
-    public UserTask createTask(org.semanticwb.process.Process process,String name)
+    public UserTask createTask(Containerable process, String name)
     {
-        UserTask task=process.getProcessSite().createUserTask(SWBPlatform.getIDGenerator().getID(name, null, true));
+        UserTask task=process.getProcessSite().createUserTask();
         task.setTitle(name);
-        task.setActive(true);
-        process.addFlowObject(task);
-        Resource res=task.getWebSite().createResource();
-        res.setTitle(name);
-        res.setActive(true);
-        res.setResourceType(task.getWebSite().getResourceType("ProcessForm"));
-        task.addResource(res);
+        //task.setActive(true);
+        //process.addFlowObject(task);
+        task.setContainer(process);
+        //Resource res=task.getWebSite().createResource();
+        //res.setTitle(name);
+        //res.setActive(true);
+        //res.setResourceType(task.getWebSite().getResourceType("ProcessForm"));
+        //task.addResource(res);
         return task;
     }
 
-    public SequenceFlow linkObject(FlowObject from, FlowObject to)
+    public SequenceFlow linkNode(GraphicalElement source, GraphicalElement target)
     {
-        SequenceFlow seq=from.getProcessSite().createSequenceFlow();
-        from.addToConnectionObject(seq);
-        seq.setToFlowObject(to);
+        SequenceFlow seq=source.getProcessSite().createSequenceFlow();
+        seq.setSource(source);
+        seq.setTarget(target);
         return seq;
     }
 
-    public SequenceFlow linkConditionObject(FlowObject from, FlowObject to, String condition)
+    public SequenceFlow linkConditionNode(GraphicalElement source, GraphicalElement target, String condition)
     {
-        ConditionalFlow seq=from.getProcessSite().createConditionalFlow();
-        from.addToConnectionObject(seq);
-        seq.setToFlowObject(to);
+        ConditionalFlow seq=source.getProcessSite().createConditionalFlow();
+        seq.setSource(source);
+        seq.setTarget(target);
         seq.setFlowCondition(condition);
         return seq;
     }
@@ -95,43 +97,43 @@
 %>
 
 <%
-        ProcessSite site=ProcessSite.ClassMgr.getProcessSite("oqp");
-        UserRepository urep=SWBContext.getAdminRepository();
+        ProcessSite site=ProcessSite.ClassMgr.getProcessSite("process");
+        //UserRepository urep=SWBContext.getAdminRepository();
 
-        org.semanticwb.process.Process process=null;
-        Iterator<org.semanticwb.process.Process> psit=site.listProcesses();
+        org.semanticwb.process.model.Process process=null;
+        Iterator<org.semanticwb.process.model.Process> psit=site.listProcesses();
         if(psit.hasNext())process=psit.next();
         if(process==null)
         {
             process=site.createProcess();
             process.setTitle("Gestion de Negocios");
-            process.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#GestionNegocios").getSemanticObject());
+            //process.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#GestionNegocios").getSemanticObject());
 
-            InitEvent ini=site.createInitEvent();
-            process.addFlowObject(ini);
+            StartEvent ini=site.createStartEvent();
+            ini.setContainer(process);
 
-            org.semanticwb.process.Process plan=createSubProcess(process, "Plan Estrategico");
-            plan.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanEstrategico").getSemanticObject());
-            org.semanticwb.process.Process com=createSubProcess(process, "Plan Comunicación");
-            com.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanComunicacion").getSemanticObject());
+            SubProcess plan=createSubProcess(process, "Plan Estrategico");
+            //plan.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanEstrategico").getSemanticObject());
+            SubProcess com=createSubProcess(process, "Plan Comunicación");
+            //com.addProcessClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/oqp#PlanComunicacion").getSemanticObject());
 
             EndEvent end=site.createEndEvent();
-            process.addFlowObject(end);
+            end.setContainer(process);
 
-            linkObject(ini, plan);
-            linkObject(plan, com);
-            linkObject(com, end);
+            linkNode(ini, plan);
+            linkNode(plan, com);
+            linkNode(com, end);
 
             //*******************************************************************
 
             {
-                InitEvent pini=site.createInitEvent();
-                plan.addFlowObject(pini);
+                StartEvent pini=site.createStartEvent();
+                pini.setContainer(plan);
 
-                GateWay gtw1=site.createANDGateWay();
-                plan.addFlowObject(gtw1);
-                GateWay gtw2=site.createANDGateWay();
-                plan.addFlowObject(gtw2);
+                Gateway gtw1=site.createParallelGateway();
+                gtw1.setContainer(plan);
+                Gateway gtw2=site.createParallelGateway();
+                gtw2.setContainer(plan);
 
                 Task mision=createTask(plan, "Misión");
                 Task vision=createTask(plan, "Vision");
@@ -140,32 +142,32 @@
                 Task fin=createTask(plan, "Fin");
 
                 EndEvent pend=site.createEndEvent();
-                plan.addFlowObject(pend);
+                pend.setContainer(plan);
 
-                linkObject(pini, gtw1);
-                linkObject(gtw1, mision);
-                linkObject(gtw1, vision);
-                linkObject(gtw1, valores);
+                linkNode(pini, gtw1);
+                linkNode(gtw1, mision);
+                linkNode(gtw1, vision);
+                linkNode(gtw1, valores);
 
-                linkObject(mision, gtw2);
-                linkObject(vision, gtw2);
-                linkObject(valores, gtw2);
+                linkNode(mision, gtw2);
+                linkNode(vision, gtw2);
+                linkNode(valores, gtw2);
 
-                linkObject(gtw2, objetivos);
-                linkObject(objetivos, fin);
-                linkObject(fin, pend);
+                linkNode(gtw2, objetivos);
+                linkNode(objetivos, fin);
+                linkNode(fin, pend);
             }
 
             //*******************************************************************
 
             {
-                InitEvent pini2=site.createInitEvent();
-                com.addFlowObject(pini2);
+                StartEvent pini2=site.createStartEvent();
+                pini2.setContainer(com);
 
-                GateWay gtw3=site.createORGateWay();
-                com.addFlowObject(gtw3);
-                GateWay gtw4=site.createORGateWay();
-                com.addFlowObject(gtw4);
+                Gateway gtw3=site.createInclusiveGateway();
+                gtw3.setContainer(com);
+                Gateway gtw4=site.createInclusiveGateway();
+                gtw4.setContainer(com);
 
                 Task t1=createTask(com, "Tarea 1");
                 Task t2=createTask(com, "Tarea 2");
@@ -177,22 +179,22 @@
                 Task t8=createTask(com, "Tarea 8");
 
                 EndEvent pend2=site.createEndEvent();
-                com.addFlowObject(pend2);
+                pend2.setContainer(com);
 
-                linkObject(pini2, t1);
-                linkObject(t1,gtw3);
-                linkObject(gtw3,t2);
-                linkObject(gtw3,t3);
-                linkObject(gtw3,t4);
-                linkObject(t2,t5);
-                linkObject(t3,t6);
-                linkObject(t4,gtw4);
-                linkObject(t5,gtw4);
-                linkObject(t6,gtw4);
-                linkObject(gtw4,t7);
-                linkConditionObject(t7,t1,Activity.ACTION_REJECT);
-                linkConditionObject(t7,t8,Activity.ACTION_ACCEPT);
-                linkObject(t8, pend2);
+                linkNode(pini2, t1);
+                linkNode(t1,gtw3);
+                linkNode(gtw3,t2);
+                linkNode(gtw3,t3);
+                linkNode(gtw3,t4);
+                linkNode(t2,t5);
+                linkNode(t3,t6);
+                linkNode(t4,gtw4);
+                linkNode(t5,gtw4);
+                linkNode(t6,gtw4);
+                linkNode(gtw4,t7);
+                linkConditionNode(t7,t1,Instance.ACTION_REJECT);
+                linkConditionNode(t7,t8,Instance.ACTION_ACCEPT);
+                linkNode(t8, pend2);
                 //objetives.addUserGroup(urep.getUserGroup("Gerentes"));
             }
         }
@@ -208,34 +210,35 @@
             }
             if(act.equals("cpi"))
             {
-                SWBProcessMgr.createProcessInstance(site, process, user);
+                SWBProcessMgr.createProcessInstance(process, user);
             }
             if(act.equals("accept") || act.equals("reject"))
             {
                 String id=request.getParameter("id");
-                FlowObjectInstance inst=FlowObjectInstance.ClassMgr.getFlowObjectInstance(id, site);
+                FlowNodeInstance inst=FlowNodeInstance.ClassMgr.getFlowNodeInstance(id, site);
                 inst.close(user,act);
             }
         }
 
-        Iterator<ProcessInstance> it=SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
+        //Iterator<ProcessInstance> it=SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
+        Iterator<ProcessInstance> it=site.listProcessInstances();
         while(it.hasNext())
         {
             ProcessInstance pi =  it.next();
 %>
-            <h2>Proceso Instance: <%=pi.getFlowObjectType().getTitle()%> <%=pi.getId()%> <a href="?act=rpi&id=<%=pi.getId()%>">remove</a></h2>
+            <h2>Proceso Instance: <%=pi.getProcessType().getTitle()%> <%=pi.getId()%> <a href="?act=rpi&id=<%=pi.getId()%>">remove</a></h2>
 <%
             user=SWBContext.getAdminRepository().getUserByLogin("admin");
 %>
             <h3>Tareas del usuario (<%=user.getFullName()%>)</h3>
 <%
             out.println("<ul>");
-            Iterator<FlowObjectInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
+            Iterator<FlowNodeInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
             while(utkit.hasNext())
             {
-                FlowObjectInstance tkinst =  utkit.next();
+                FlowNodeInstance tkinst =  utkit.next();
     %>
-                <li>User Task: <%=tkinst.getFlowObjectType().getTitle()%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%> <a href="?id=<%=tkinst.getId()%>&act=accept&user=<%=user.getLogin()%>">accept</a> <a href="?id=<%=tkinst.getId()%>&act=reject&user=<%=user.getLogin()%>">reject</a></li>
+                <li>User Task: <%=tkinst.getFlowNodeType().getTitle()%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%> <a href="?id=<%=tkinst.getId()%>&act=accept&user=<%=user.getLogin()%>">accept</a> <a href="?id=<%=tkinst.getId()%>&act=reject&user=<%=user.getLogin()%>">reject</a></li>
     <%
             }
             out.println("</ul>");
@@ -245,7 +248,7 @@
         <h3>Artefactos</h3>
 <%
             out.println("<ul>");
-            Iterator<ProcessObject> objit=pi.getAllProcessObjects().iterator();
+            Iterator<ProcessObject> objit=pi.listProcessObjects();
             while(objit.hasNext())
             {
                 ProcessObject obj =  objit.next();
@@ -261,10 +264,10 @@
         <h3>Detalle de Proceso</h3>
 <%
             out.println("<ul>");
-            Iterator<FlowObjectInstance> actit=pi.listFlowObjectInstances();
+            Iterator<FlowNodeInstance> actit=pi.listFlowNodeInstances();
             while(actit.hasNext())
             {
-                FlowObjectInstance obj =  actit.next();
+                FlowNodeInstance obj =  actit.next();
                 printActivityInstance(obj, out);
             }
             out.println("</ul>");
