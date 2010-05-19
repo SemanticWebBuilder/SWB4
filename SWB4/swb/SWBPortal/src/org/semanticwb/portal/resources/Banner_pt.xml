@@ -1,25 +1,34 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
+    <form name="frmWBBanner" action="true" method="post" enctype="multipart/form-data" >
     <admdbconnmgr defconn="true"/>
     <fieldset>
         <statictext name="txtLocal">Banner local ou externo:</statictext>
-        <input type="RADIO" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
-        <input type="RADIO" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
-        <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
-        <input type="FILE" id="img" name="img" label="** Imagem (gif, jpg, jpeg, png, swf):" size="40" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" />
-        <input type="TEXT" id="alt" name="alt" label="Texto alternativo:" size="50"/>
+        <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
+        <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
+        <textarea id="code" name="code" label="* CÃ³digo:" rows="5" cols="50" wrap="virtual"/>
+        <input type="FILE" name="img" label="** Imagem (gif, jpg, jpeg, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
+        <input type="text" id="alt" name="alt" label="Texto alternativo:" size="50" promptMessage="DescriÃ§Ã£o indicativa do banner. Acessibilidade OrientaÃ§Ã£o" />
 
-        <textarea id="longdesc" name="longdesc" label="Descrição long:" rows="5" cols="50" wrap="virtual"/>
+        <textarea id="longdesc" name="longdesc" label="DescriÃ§Ã£o Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da aÃ§Ã£o. Acessibilidade OrientaÃ§Ã£o" />
 
-        <input type="TEXT" id="width" name="width" label="Largura (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-        <input type="TEXT" id="height" name="height" label="Altura (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-        <input type="TEXT" name="cssClass" id="cssClass" label="Classe attribute anchor:" size="30"/>
-        <input type="TEXT" id="url" name="url" label="Endereço web" size="50"/>
-        <statictext name="txtTarget">Gerir uma nova janela:</statictext>
-        <input type="RADIO" id="target1" name="target" label="Sim" value="1"/>
-        <input type="RADIO" id="target0" name="target" label="Não" value="0" checked="true"/>
+        <input type="text" id="width"  name="width" label="Anchura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura invÃ¡lido" promptMessage="Largura do banner. Exemplo: 500em, 600px, 100%" />
+        <input type="text" id="height" name="height" label="Altura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura invÃ¡lido" promptMessage="Altura do banner. Exemplo: 120em, 75px, 100%" />
+        <input type="text" name="cssClass" id="cssClass" label="Classe Attribute Anchor:" size="30" promptMessage="Classe valor do atributo da largura da faixa" />
+        <input type="text" id="url" name="url" label="Site:" size="50" promptMessage="Website patrocinador" />
+        <statictext name="txtTarget">Dirigir a una nueva ventana:</statictext>
+        <input type="radio" id="target1" name="target" label="Se" value="1"/>
+        <input type="radio" id="target0" name="target" label="NÃ£o" value="0" checked="true"/>
+
+        <statictext name="note">
+        <![CDATA[
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Dato requerido para publicidad externa
+            ** Dato requerido para publicidad local
+            </font>
+        ]]>
+        </statictext>
 
     </fieldset>
     <fieldset>
@@ -32,36 +41,30 @@
     </fieldset>
     </form>
 
-    <statictext name="note">
-        <![CDATA[
-            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Dato requerido para publicidad externa
-            ** Dato requerido para publicidad local
-            </font>
-        ]]>
-    </statictext>
-
     <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
+        dojo.require("dijit.form.ValidationTextBox");
 
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick", function(){ if(jsValida(dojo.byId("frmWBBanner"))){ dojo.byId("frmWBBanner").submit(); } } );
-            dojo.connect(dijit.byId("btnReset"), "onClick", function(){ dojo.byId("frmWBBanner").reset(); } );
+        dojo.addOnLoad(
+            function() {
+                dojo.connect(dijit.byId("btnSave"), "onClick", function(){ if(jsValida(dojo.byId("frmWBBanner"))){ dojo.byId("frmWBBanner").submit(); } } );
+                dojo.connect(dijit.byId("btnReset"), "onClick", function(){ dojo.byId("frmWBBanner").reset(); } );
 
-            if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {
-                dojo.byId('local0').checked=true;
+                if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {
+                    dojo.byId('local0').checked=true;
+                }
+                if(!dojo.byId('local1').checked) {
+                    dojo.byId('code').disabled=true;
+                }
+                if(!dojo.byId('target0').checked && !dojo.byId('target1').checked) {
+                    dojo.byId('target0').checked=true;
+                }
             }
-            if(!dojo.byId('local1').checked) {
-                dojo.byId('code').disabled=true;
-            }
-            if(!dojo.byId('target0').checked && !dojo.byId('target1').checked) {
-                dojo.byId('target0').checked=true;
-            }
-        });
+        );
 
         function jsValida(frm) {
-            if(dojo.byId('local0').checked) {
+            if(dojo.byId('local0').checked && dojo.byId('wbNoFile_img') && !dojo.byId('wbNoFile_img').checked ) {
                 if( dojo.byId('img').value==null || dojo.byId('img').value=='' || dojo.byId('img').value==' ' )
                 {
                     alert('Especifique una imagen para el banner');
@@ -72,7 +75,7 @@
             else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
-                    alert('Defina la codificación para incluir la publicidad externa.');
+                    alert('Defina la codificaciÃ³n para incluir la publicidad externa.');
                     dojo.byId('code').focus();
                     return false;
                 }
@@ -81,119 +84,4 @@
         }
         ]]>
     </script>
-</admresource>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmWBBanner" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>
-        <fieldset>
-            <statictext name="txtLocal">Banner local ou externo:</statictext>
-            <input type="RADIO" name="local" label="Externo" value="1"/>
-            <input type="RADIO" name="local" label="Local" value="0"/>
-            <textarea name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
-            <input type="FILE" name="img" label="** Imagem (bmp, gif, jpg, jpeg, png, swf):" size="40" showfile="true" filetype="bmp|jpg|jpeg|gif|png|swf" isshowfiletype="true" />
-            <input type="TEXT" name="alt" label="Texto alternativo:" size="50"/>
-            <input type="TEXT" name="width" label="Largura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="height" label="Altura (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="url" label="Endereço web" size="50"/>
-            <statictext name="txtTarget">Em uma nova janela:</statictext>
-            <input type="RADIO" name="target" label="Sim" value="1"/>
-            <input type="RADIO" name="target" label="Não" value="0"/>
-            <input type="TEXT" name="styleClass" id="styleClass" label="Nombre de clase de estilo para liga:" size="30"/>
-        </fieldset>
-
-        <fieldset>
-            <statictext name="b">
-            <![CDATA[
-            <button id="btnSave" dojoType="dijit.form.Button">Salvar</button>
-            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
-            ]]>
-            </statictext>
-        </fieldset>
-	</form>
-	<statictext name="txtNote1">
-		<![CDATA[
-        <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Dado obrigatório para publicidade externa
-        </font>
-		]]>
-	</statictext>
-	<statictext name="txtNote2">
-		<![CDATA[
-        <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-            ** Dado requerido para publicidade local
-        </font>
-		]]>
-	</statictext>
-
-    <script type="text/javascript">
-        <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmWBBanner"))) {
-                        dojo.byId("frmWBBanner").submit();
-                    }
-                }
-            );
-        });
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmWBBanner").reset();
-                }
-            );
-        });
-        ]]>
-    </script>
-
-	<script language="JavaScript">
-		<![CDATA[
-			if(!document.frmWBBanner.local[0].checked && !document.frmWBBanner.local[1].checked)
-				document.frmWBBanner.local[1].checked=true;
-			if(!document.frmWBBanner.target[0].checked && !document.frmWBBanner.target[1].checked)
-				document.frmWBBanner.target[1].checked=true;
-			function jsValida(frm)
-			{
-				if(frm.local[1].checked)
-				{
-					if(frm.wbfile_img==undefined && (frm.img.value==null || frm.img.value=='' || frm.img.value==' '))
-					{
-						alert('Informe uma imagem para o banner.');
-						frm.img.focus();
-						return false;
-					}
-				}
-				if(frm.local[0].checked)
-				{
-					if(frm.code.value==null || frm.code.value=='' || frm.code.value==' ')
-					{
-						alert('Defina o código para incluir a publicidade externa.');
-						frm.code.focus();
-						return false;
-					}
-				}			
-				return true;
-			}
-		]]>			
-	</script>
 </admresource>
