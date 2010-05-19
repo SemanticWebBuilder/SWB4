@@ -31,7 +31,7 @@ public class TServices extends GenericAdmResource {
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("maxServices", base.getAttribute("maxviews", "6").trim());
-            request.setAttribute("parentSection", base.getAttribute("parentwp", "").trim());
+            request.setAttribute("parentSection", base.getAttribute("parentwp", "Tramites_y_Servicios").trim());
             request.setAttribute("defCssIcon", base.getAttribute("defclass", "icono_8").trim());
             dis.include(request, response);
         } catch (Exception e) {
