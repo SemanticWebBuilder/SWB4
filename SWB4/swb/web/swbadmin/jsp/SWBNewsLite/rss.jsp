@@ -10,6 +10,7 @@
 %><%
         SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
         List<New> news=(List)request.getAttribute("news");
+        String url=(String) request.getAttribute("url");
         response.setContentType("application/rss+xml");
         Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
         Element rss = doc.createElement("rss");
@@ -24,10 +25,9 @@
         for(New element : news)
         {
             Element item = doc.createElement("item");
-            channel.appendChild(item);
-            String url="";
+            channel.appendChild(item);            
             addAtribute(item, "title", element.getTitle());            
-            addAtribute(item, "link", url);
+            addAtribute(item, "link", url+"?uri="+element.getEncodedURI()+"&amp;act=detail");
             addAtribute(item, "description", element.getDescription());
             addAtribute(item, "pubDate", element.getCreated().toGMTString());
             //addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
