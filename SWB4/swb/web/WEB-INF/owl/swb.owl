@@ -543,7 +543,6 @@
       <owl:Class rdf:about="#Trashable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#CalendarRefable"/>
-    <rdfs:subClassOf rdf:resource="#Iconable"/>
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="PFlowRefable">
         <rdfs:subClassOf rdf:resource="#Referensable"/>
@@ -2303,6 +2302,18 @@
     <rdfs:label xml:lang="es">Comentario de versión</rdfs:label>
     <rdfs:label xml:lang="en">Version comment</rdfs:label>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="webPageIconClass">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >iconClass</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_iconClass">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >87</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#WebPage"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="usrSecondLastName">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_usrSecondLastName">
@@ -2647,12 +2658,7 @@
     <rdfs:label xml:lang="en">CSS Icon Class</rdfs:label>
     <rdfs:label xml:lang="es">Clase CSS del Icono</rdfs:label>
     <rdfs:domain rdf:resource="#Iconable"/>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_iconClass">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >87</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <swb:displayProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_iconClass"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="removeDependency">
