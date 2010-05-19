@@ -46,20 +46,24 @@
                 if(resourceType.getResourceClassName().equals("org.semanticwb.portal.resources.sem.newslite.SWBNewsLite"))
                 {
                     Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType,site);
-                    if(resources.hasNext())
+                    while(resources.hasNext())
                     {
                         Resource resource=resources.next();
                         if(resource.getResourceable() instanceof WebPage)
                         {
-                            WebPage resourcewp=(WebPage)resource.getResourceable();                            
-                            SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
-                            url.setCallMethod(url.Call_DIRECT);                            
-                            url.setMode("rss");
-                            //String url="#";
-                            
-                            %>
-                            | <a href="<%=url%>">RSS </a>
-                            <%
+                            WebPage resourcewp=(WebPage)resource.getResourceable();
+                            if(resourcewp.getId().equals("Noticias"))
+                            {
+                                SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
+                                url.setCallMethod(url.Call_DIRECT);
+                                url.setMode("rss");
+                                //String url="#";
+
+                                %>
+                                | <a href="<%=url%>">RSS </a>
+                                <%
+                                break;
+                            }
                         }
                     }
                 }
