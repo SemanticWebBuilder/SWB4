@@ -2547,7 +2547,7 @@ public class SWBPortal
 
                     //Mediante inputStream creado generar sitio
                     InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                    SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
+                    SemanticModel model = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId, newNs, io, "N-TRIPLE");
                     WebSite website = SWBContext.getWebSite(model.getName());
                     website.setTitle(newTitle);
                     website.setDescription(oldDescription);
@@ -2580,7 +2580,7 @@ public class SWBPortal
                                     xmodelID = xmodelID.substring(0, pos);
                                     rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                     io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                    SemanticModel usermodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
+                                    SemanticModel usermodel = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io, "N-TRIPLE");
                                     if (usermodel != null)
                                     {
                                         UserRepository userRep = SWBContext.getUserRepository(usermodel.getName());
@@ -2597,7 +2597,7 @@ public class SWBPortal
                                     xmodelID = xmodelID.substring(0, pos);
                                     rdfmodel = SWBUtils.TEXT.replaceAll(rdfmodel, xmodelID, newId);
                                     io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                    SemanticModel repomodel = SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
+                                    SemanticModel repomodel = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId + "_rep", "http://repository." + newId + ".swb#", io, "N-TRIPLE");
                                     if (repomodel != null)
                                     {
                                         Workspace repo = SWBContext.getWorkspace(repomodel.getName());
@@ -2616,19 +2616,22 @@ public class SWBPortal
                         while (it.hasNext())
                         {
                             ResourceType resourceType = it.next();
-                            try
+                            if(resourceType!=null)
                             {
-                                //Runtime.getRuntime().loadLibrary(oldTitle)
-                                Class cls=SWBPortal.getResourceMgr().createSWBResourceClass(resourceType.getResourceClassName());
-                                if(cls!=null)
+                                try
                                 {
-                                    SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls.newInstance()));
-                                    if(res!=null)
+                                    //Runtime.getRuntime().loadLibrary(oldTitle)
+                                    Class cls=SWBPortal.getResourceMgr().createSWBResourceClass(resourceType.getResourceClassName());
+                                    if(cls!=null)
                                     {
-                                        res.install(resourceType);
+                                        SWBResource res=((SWBResource)SWBPortal.getResourceMgr().convertOldWBResource(cls.newInstance()));
+                                        if(res!=null)
+                                        {
+                                            res.install(resourceType);
+                                        }
                                     }
-                                }
-                            }catch(Exception e){log.error(e);}
+                                }catch(Exception e){log.error(""+resourceType,e);}
+                            }
                         }
                     }
                     return website;

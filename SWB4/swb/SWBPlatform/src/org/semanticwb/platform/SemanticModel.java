@@ -111,19 +111,6 @@ public class SemanticModel
      */
     private void init()
     {
-        m_ont=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
-        //Load Ontology from file
-        //TODO:extraer es de un modelo ya existente
-//        String owls=SWBPlatform.getEnv("swb/ontologyFiles","/WEB-INF/owl/swb.owl");
-//        StringTokenizer st=new StringTokenizer(owls,",;");
-//        while(st.hasMoreTokens())
-//        {
-//            String file=st.nextToken();
-//            String swbowl="file:"+SWBUtils.getApplicationPath()+file;
-//            Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
-//            m_ont.add(model);
-//        }
-        m_ont.addSubModel(m_model,true);
     }
     
 
@@ -224,6 +211,21 @@ public class SemanticModel
      */
     public OntModel getRDFOntModel()
     {
+        if(m_ont==null)
+        {
+            m_ont=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
+            //Load Ontology from file
+            //TODO:extraer es de un modelo ya existente
+//            StringTokenizer st=new StringTokenizer(owls,",;");
+//            while(st.hasMoreTokens())
+//            {
+//                String file=st.nextToken();
+//                String swbowl="file:"+SWBUtils.getApplicationPath()+file;
+//                Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
+//                m_ont.add(model);
+//            }
+            m_ont.addSubModel(m_model,true);
+        }
         return m_ont;
     }
     
@@ -749,7 +751,7 @@ public SemanticObject getSemanticObject(String uri)
     {
         log.debug("sparQLOntologyQuery:"+queryString);
         Query query = QueryFactory.create(queryString);
-        return QueryExecutionFactory.create(query, m_ont);
+        return QueryExecutionFactory.create(query, getRDFOntModel());
     }
 
     /**

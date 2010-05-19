@@ -36,7 +36,7 @@ public class ParallelGateway extends org.semanticwb.process.model.base.ParallelG
         }
         if(ret)
         {
-            instance.close(user);
+            instance.close(user,instance.getSourceInstance().getAction());
         }
     }
 

@@ -119,7 +119,7 @@ public class SemanticClass
 //    private Boolean isdragSupport=null;
 
     /** The disp object. */
-private boolean dispObject=false;
+    private boolean dispObject=false;
     
     /** The display object. */
     private SemanticObject displayObject=null;
@@ -159,7 +159,7 @@ private boolean dispObject=false;
      */
     public SemanticObject getSemanticObject()
     {
-        return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
+        return SemanticObject.createSemanticObject(getURI());
     }
 
     /**

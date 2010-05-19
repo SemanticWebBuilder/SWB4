@@ -507,7 +507,7 @@ public class SWBDocRep extends GenericResource {
 
                 //Mediante inputStream creado generar repositorio de usuarios
                 InputStream io = SWBUtils.IO.getStreamFromString(rdfcontent);
-                SemanticModel model = SWBPlatform.getSemanticMgr().createModelByRDF(newId, newNs, io, "N-TRIPLE");
+                SemanticModel model = SWBPlatform.getSemanticMgr().createDBModelByRDF(newId, newNs, io, "N-TRIPLE");
                 Workspace website = SWBContext.getWorkspace(model.getName());
                 website.setTitle(newTitle);
                 website.setDescription(oldDescription);
@@ -543,7 +543,7 @@ public class SWBDocRep extends GenericResource {
                                 xmodelID = xmodelID.substring(0, pos);
                                 rdfmodel = rdfmodel.replaceAll(xmodelID, newId);
                                 io = SWBUtils.IO.getStreamFromString(rdfmodel);
-                                SWBPlatform.getSemanticMgr().createModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io);
+                                SWBPlatform.getSemanticMgr().createDBModelByRDF(newId + "_usr", "http://user." + newId + ".swb#", io);
                             }
                         }if (key.endsWith("_rep")) { //Para los submodelos de dosumentos
                             //TODO
