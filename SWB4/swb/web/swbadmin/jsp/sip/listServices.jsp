@@ -25,8 +25,12 @@ int callMethod = paramRequest.getCallMethod();
                 <%
                 while(childs.hasNext()) {
                     WebPage child = childs.next();
+                    String iconClass = child.getIconClass();
+                    if (iconClass == null || iconClass.trim().equals("") || iconClass.equals("null")) {
+                        iconClass="icono_8";
+                    }
                     %>
-                    <li><a href="<%=child.getUrl()%>"><span class="icono_6">&nbsp;</span><%=child.getTitle()%></a></li>
+                    <li><a href="<%=child.getUrl()%>"><span class="<%=iconClass%>">&nbsp;</span><%=child.getTitle()%></a></li>
                     <%
                 }
                 %>
