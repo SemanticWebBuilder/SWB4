@@ -498,5 +498,34 @@ public class GraphicalElement extends CustomNode
         return ret;
     }
 
+    /**
+    *  Regresa el primer padre si es un pool de lo contrario regresa null
+    */
+    public function getFirstGraphParent(): GraphicalElement
+    {
+        var ele=getGraphParent();
+        if(ele==null)
+        {
+            return ele;
+        }
+        else
+        {
+            return ele.getFirstParent();
+        }
+    }
+
+
+
+    /**
+    *  Regresa el primer padre si es un pool de lo contrario regresa null
+    */
+    public function getPool(): Pool
+    {
+        var ele=getFirstGraphParent();
+        if(ele instanceof Pool)return ele as Pool;
+        else return null;
+    }
+
+
 }
 
