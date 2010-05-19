@@ -29,7 +29,7 @@
                 Element item = doc.createElement("item");
                 channel.appendChild(item);
                 addAtribute(item, "title", element.getTitle());
-                addAtribute(item, "link", url+"?uri="+element.getEncodedURI()+"&mode=detail");
+                addAtribute(item, "link", url+"?uri="+element.getEncodedURI());
                 addAtribute(item, "description", element.getDescription());
                 addAtribute(item, "pubDate", element.getCreated().toGMTString());
                 //addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
