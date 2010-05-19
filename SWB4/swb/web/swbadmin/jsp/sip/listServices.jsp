@@ -13,12 +13,17 @@
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 WebPage servWp = paramRequest.getWebPage().getWebSite().getWebPage("Tramites_y_Servicios");
 int callMethod = paramRequest.getCallMethod();
+String lang = "es";
+if (paramRequest.getUser() != null) {
+    lang = paramRequest.getUser().getLanguage();
+}
+
 %>
 <div class="bloqueNotas">
     <h2 class="tituloBloque">Consulta<span class="titulo_seccion_b">&nbsp;Tr&aacute;mites y servicios</span></h2>
     <%
     if (servWp != null) {
-        Iterator<WebPage> childs = servWp.listChilds("es", true, false, false, false, true);
+        Iterator<WebPage> childs = servWp.listChilds(lang, true, false, false, false, true);
         if (callMethod == paramRequest.Call_STRATEGY) {
             %>
             <ul class="listaTramites">
