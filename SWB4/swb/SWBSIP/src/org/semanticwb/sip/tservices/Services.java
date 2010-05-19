@@ -93,5 +93,4 @@ public class Services extends org.semanticwb.sip.tservices.base.ServicesBase
         }
         response.setMode(response.Mode_VIEW);
     }
-
 }
