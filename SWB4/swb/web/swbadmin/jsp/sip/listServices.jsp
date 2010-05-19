@@ -9,7 +9,6 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.Iterator"%>
 
-
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
 WebPage servWp = paramRequest.getWebPage().getWebSite().getWebPage("Tramites_y_Servicios");
@@ -27,19 +26,12 @@ int callMethod = paramRequest.getCallMethod();
                 while(childs.hasNext()) {
                     WebPage child = childs.next();
                     %>
-                    <li>
-                        <a href="<%=child.getUrl()%>">
-                            <span class="icono_6">&nbsp;</span>
-                            <%=child.getTitle()%>
-                        </a>
-                    </li>
+                    <li><a href="<%=child.getUrl()%>"><span class="icono_6">&nbsp;</span><%=child.getTitle()%></a></li>
                     <%
                 }
                 %>
             </ul>
-                <p class="vermas">
-                    <a href="<%=servWp.getUrl()%>">Ver m&aacute;s tr&aacute;mites y servicios</a>
-                </p>
+            <p class="vermas"><a href="<%=servWp.getUrl()%>">Ver m&aacute;s tr&aacute;mites y servicios</a></p>
             <%
         }
     }
