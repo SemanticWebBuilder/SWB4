@@ -9,13 +9,22 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.Iterator"%>
 
-<%! private static int maxServices = 4;%>
-
 <%
 SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
-WebPage servWp = paramRequest.getWebPage().getWebSite().getWebPage("Tramites_y_Servicios");
-int callMethod = paramRequest.getCallMethod();
+String parentWp = (String)request.getAttribute("parentSection");
+String defcss = (String)request.getAttribute("defCssIcon");
+String maxViews = (String)request.getAttribute("maxServices");
 String lang = "es";
+int callMethod = paramRequest.getCallMethod();
+int maxServices = 6;
+
+WebPage servWp = paramRequest.getWebPage().getWebSite().getWebPage(parentWp);
+
+if (maxViews != null) {
+    maxServices = Integer.parseInt(maxViews);
+}
+
+
 if (paramRequest.getUser() != null) {
     lang = paramRequest.getUser().getLanguage();
 }
@@ -36,7 +45,7 @@ if (paramRequest.getUser() != null) {
                     WebPage child = childs.next();
                     String iconClass = child.getIconClass();
                     if (iconClass == null || iconClass.trim().equals("") || iconClass.equals("null")) {
-                        iconClass="icono_6";
+                        iconClass = defcss;
                     }
                     %>
                     <li><a href="<%=child.getUrl()%>"><span class="<%=iconClass%>">&nbsp;</span><%=child.getTitle()%></a></li>
