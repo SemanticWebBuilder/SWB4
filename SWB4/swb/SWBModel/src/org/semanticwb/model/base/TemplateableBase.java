@@ -7,13 +7,13 @@ public interface TemplateableBase extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_Templateable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Templateable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Template> listTemplates();
-    public boolean hasTemplate(org.semanticwb.model.Template template);
+    public boolean hasTemplate(org.semanticwb.model.Template value);
 
-    public void addTemplate(org.semanticwb.model.Template template);
+    public void addTemplate(org.semanticwb.model.Template value);
 
     public void removeAllTemplate();
 
-    public void removeTemplate(org.semanticwb.model.Template template);
+    public void removeTemplate(org.semanticwb.model.Template value);
 
     public org.semanticwb.model.Template getTemplate();
 }

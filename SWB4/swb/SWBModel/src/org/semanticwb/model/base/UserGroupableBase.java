@@ -7,13 +7,13 @@ public interface UserGroupableBase extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups();
-    public boolean hasUserGroup(org.semanticwb.model.UserGroup usergroup);
+    public boolean hasUserGroup(org.semanticwb.model.UserGroup value);
 
-    public void addUserGroup(org.semanticwb.model.UserGroup usergroup);
+    public void addUserGroup(org.semanticwb.model.UserGroup value);
 
     public void removeAllUserGroup();
 
-    public void removeUserGroup(org.semanticwb.model.UserGroup usergroup);
+    public void removeUserGroup(org.semanticwb.model.UserGroup value);
 
     public org.semanticwb.model.UserGroup getUserGroup();
 }

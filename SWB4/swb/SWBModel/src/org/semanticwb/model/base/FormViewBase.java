@@ -53,15 +53,15 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
             return (getFormView(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByFormViewRefInv(org.semanticwb.model.FormViewRef hasformviewrefinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByFormViewRefInv(org.semanticwb.model.FormViewRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFormViewRefInv, hasformviewrefinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasFormViewRefInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByFormViewRefInv(org.semanticwb.model.FormViewRef hasformviewrefinv)
+        public static java.util.Iterator<org.semanticwb.model.FormView> listFormViewByFormViewRefInv(org.semanticwb.model.FormViewRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(hasformviewrefinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasFormViewRefInv,hasformviewrefinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.FormView> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasFormViewRefInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -157,12 +157,12 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.FormViewRef>(getSemanticObject().listObjectProperties(swb_hasFormViewRefInv));
     }
 
-    public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef formviewref)
+    public boolean hasFormViewRefInv(org.semanticwb.model.FormViewRef value)
     {
         boolean ret=false;
-        if(formviewref!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,formviewref.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasFormViewRefInv,value.getSemanticObject());
         }
         return ret;
     }

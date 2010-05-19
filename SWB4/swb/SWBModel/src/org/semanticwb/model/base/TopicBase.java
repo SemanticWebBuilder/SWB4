@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Tagable,org.semanticwb.model.Descriptiveable
+public abstract class TopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Tagable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
     public static final org.semanticwb.platform.SemanticProperty swb_hasAssMemberInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasAssMemberInv");
@@ -46,63 +46,63 @@ public abstract class TopicBase extends org.semanticwb.model.SWBClass implements
             return (getTopic(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByModifiedBy(org.semanticwb.model.User modifiedby,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByModifiedBy(org.semanticwb.model.User modifiedby)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(modifiedby.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,modifiedby.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByAssMember(org.semanticwb.model.AssMember hasassmemberinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, hasassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByAssMember(org.semanticwb.model.AssMember hasassmemberinv)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByAssMember(org.semanticwb.model.AssMember value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(hasassmemberinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,hasassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasAssMemberInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisRoleAssMember(org.semanticwb.model.AssMember hasthisroleassmemberinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisRoleAssMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv, hasthisroleassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisRoleAssMember(org.semanticwb.model.AssMember hasthisroleassmemberinv)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisRoleAssMember(org.semanticwb.model.AssMember value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(hasthisroleassmemberinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv,hasthisroleassmemberinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisRoleAssMemberInv,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByCreator(org.semanticwb.model.User creator,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByCreator(org.semanticwb.model.User creator)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(creator.getSemanticObject().getModel().listSubjectsByClass(swb_creator,creator.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisTypeAssociation(org.semanticwb.model.Association hasthistypeassociationinv,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisTypeAssociation(org.semanticwb.model.Association value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, hasthistypeassociationinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisTypeAssociation(org.semanticwb.model.Association hasthistypeassociationinv)
+        public static java.util.Iterator<org.semanticwb.model.Topic> listTopicByThisTypeAssociation(org.semanticwb.model.Association value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(hasthistypeassociationinv.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,hasthistypeassociationinv.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Topic> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasThisTypeAssociationInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -148,12 +148,12 @@ public abstract class TopicBase extends org.semanticwb.model.SWBClass implements
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember>(getSemanticObject().listObjectProperties(swb_hasAssMemberInv));
     }
 
-    public boolean hasAssMember(org.semanticwb.model.AssMember assmember)
+    public boolean hasAssMember(org.semanticwb.model.AssMember value)
     {
         boolean ret=false;
-        if(assmember!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasAssMemberInv,assmember.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasAssMemberInv,value.getSemanticObject());
         }
         return ret;
     }
@@ -219,12 +219,12 @@ public abstract class TopicBase extends org.semanticwb.model.SWBClass implements
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember>(getSemanticObject().listObjectProperties(swb_hasThisRoleAssMemberInv));
     }
 
-    public boolean hasThisRoleAssMember(org.semanticwb.model.AssMember assmember)
+    public boolean hasThisRoleAssMember(org.semanticwb.model.AssMember value)
     {
         boolean ret=false;
-        if(assmember!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasThisRoleAssMemberInv,assmember.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasThisRoleAssMemberInv,value.getSemanticObject());
         }
         return ret;
     }
@@ -291,12 +291,12 @@ public abstract class TopicBase extends org.semanticwb.model.SWBClass implements
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Association>(getSemanticObject().listObjectProperties(swb_hasThisTypeAssociationInv));
     }
 
-    public boolean hasThisTypeAssociation(org.semanticwb.model.Association association)
+    public boolean hasThisTypeAssociation(org.semanticwb.model.Association value)
     {
         boolean ret=false;
-        if(association!=null)
+        if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(swb_hasThisTypeAssociationInv,association.getSemanticObject());
+           ret=getSemanticObject().hasObjectProperty(swb_hasThisTypeAssociationInv,value.getSemanticObject());
         }
         return ret;
     }

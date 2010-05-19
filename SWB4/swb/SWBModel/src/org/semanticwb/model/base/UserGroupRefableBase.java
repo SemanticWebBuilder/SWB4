@@ -7,14 +7,14 @@ public interface UserGroupRefableBase extends org.semanticwb.model.Referensable
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRefable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs();
-    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref);
+    public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value);
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs();
 
-    public void addUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref);
+    public void addUserGroupRef(org.semanticwb.model.UserGroupRef value);
 
     public void removeAllUserGroupRef();
 
-    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef usergroupref);
+    public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value);
 
     public org.semanticwb.model.UserGroupRef getUserGroupRef();
 }

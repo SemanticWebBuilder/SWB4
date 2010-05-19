@@ -7,13 +7,13 @@ public interface ResourceableBase extends org.semanticwb.model.GenericObject
     public static final org.semanticwb.platform.SemanticClass swb_Resourceable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resourceable");
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources();
-    public boolean hasResource(org.semanticwb.model.Resource resource);
+    public boolean hasResource(org.semanticwb.model.Resource value);
 
-    public void addResource(org.semanticwb.model.Resource resource);
+    public void addResource(org.semanticwb.model.Resource value);
 
     public void removeAllResource();
 
-    public void removeResource(org.semanticwb.model.Resource resource);
+    public void removeResource(org.semanticwb.model.Resource value);
 
     public org.semanticwb.model.Resource getResource();
 }
