@@ -373,11 +373,13 @@ public class SWBNewsLite extends GenericResource
             }
         }
         String path = "/swbadmin/jsp/SWBNewsLite/rss.jsp";
+        String url=paramRequest.getWebPage().getUrl();
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("news", news);
+            request.setAttribute("url", url);
             dis.include(request, response);
         }
         catch (Exception e)
@@ -625,15 +627,23 @@ public class SWBNewsLite extends GenericResource
         }
         else
         {
-            Category ocategory = (Category) SemanticObject.createSemanticObject(categoryId).createGenericInstance();
-            if (ocategory == null)
+            try
+            {
+                Category ocategory = (Category) SemanticObject.createSemanticObject(categoryId).createGenericInstance();
+                if (ocategory == null)
+                {
+                    itNews = New.ClassMgr.listNews(paramRequest.getWebPage().getWebSite());
+                }
+                else
+                {
+                    itNews = New.ClassMgr.listNewByCategory(ocategory, paramRequest.getWebPage().getWebSite());
+                }
+            }
+            catch(NullPointerException npe)
             {
                 itNews = New.ClassMgr.listNews(paramRequest.getWebPage().getWebSite());
             }
-            else
-            {
-                itNews = New.ClassMgr.listNewByCategory(ocategory, paramRequest.getWebPage().getWebSite());
-            }
+
         }
         // Elimina las expiradas
         while (itNews.hasNext())
