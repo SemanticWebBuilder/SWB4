@@ -1,9 +1,7 @@
 package org.semanticwb.process.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import org.semanticwb.model.User;
 
 
@@ -28,7 +26,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         return (Instance)getContainerInstance();
     }
-    
+
     /**
      * Se ejecuta cada que se crea la intancia del objeto de flujo
      * @param user
@@ -37,12 +35,19 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     public void start(User user)
     {
         super.start(user);
-        FlowNode type=getFlowNodeType();
-        //if(type instanceof Event)
-        {
-            execute(user);
-        }
-        
+        execute(user);
+    }
+    
+    /**
+     * Se ejecuta cada que se crea la intancia del objeto de flujo
+     * @param user
+     */
+    public void start(FlowNodeInstance sourceInstance, ConnectionObject sourceConnection, User user)
+    {
+        super.start(user);
+        setSourceInstance(sourceInstance);
+        setFromConnection(sourceConnection);
+        execute(user);
     }
 
     /**

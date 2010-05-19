@@ -39,6 +39,7 @@ import com.hp.hpl.jena.db.impl.Driver_MySQL_SWB;
 import com.hp.hpl.jena.db.impl.Driver_Oracle_SWB;
 import com.hp.hpl.jena.db.impl.Driver_PostgreSQL_SWB;
 import com.hp.hpl.jena.db.impl.IRDBDriver;
+import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -49,6 +50,7 @@ import com.hp.hpl.jena.sdb.StoreDesc;
 import com.hp.hpl.jena.sdb.Store;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.NsIterator;
+import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
@@ -72,6 +74,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.db.DBConnectionPool;
+import org.semanticwb.rdf.GraphCached;
 import org.semanticwb.rdf.RemoteGraph;
 
 // TODO: Auto-generated Javadoc
@@ -88,17 +91,20 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public enum ModelSchema
     {
-
+        /** The OW l_ me m_ */
+        OWL_MEM,
         /** The OW l_ me m_ tran s_ inf. */
-        OWL_MEM_TRANS_INF, /** The OW l_ lit e_ me m_ rdf s_ inf. */
- OWL_LITE_MEM_RDFS_INF, /** The OW l_ me m_ min i_ rul e_ inf. */
- OWL_MEM_MINI_RULE_INF, /** The RDF s_ me m_ rdf s_ inf. */
- RDFS_MEM_RDFS_INF,
-        
+        OWL_MEM_TRANS_INF,
+        /** The OW l_ lit e_ me m_ rdf s_ inf. */
+        OWL_LITE_MEM_RDFS_INF,
+        /** The OW l_ me m_ min i_ rul e_ inf. */
+        OWL_MEM_MINI_RULE_INF,
+        /** The RDF s_ me m_ rdf s_ inf. */
+        RDFS_MEM_RDFS_INF,
         /** The DAM l_ me m_ rdf s_ inf. */
         DAML_MEM_RDFS_INF, 
- /** The OW l_ d l_ me m_ rdf s_ inf. */
- OWL_DL_MEM_RDFS_INF;
+        /** The OW l_ d l_ me m_ rdf s_ inf. */
+        OWL_DL_MEM_RDFS_INF;
     }
     
     /** The model schema. */
@@ -128,10 +134,10 @@ public class SemanticMgr implements SWBInstanceObject
     
     /** The m_ontology. */
     private SemanticOntology m_ontology;
-//    private SemanticModel m_system;
+    //private SemanticModel m_system;
     //private HashMap<String,SemanticModel> m_schemas;
     /** The m_schema. */
-private SemanticOntology m_schema;
+    private SemanticOntology m_schema;
     
     /** The m_models. */
     private HashMap<String,SemanticModel>m_models=null;
@@ -182,6 +188,9 @@ private SemanticOntology m_schema;
         //Create Schema
         switch (modelSchema)
         {
+            case OWL_MEM:
+                model = OntModelSpec.OWL_MEM;
+                break;
             case OWL_DL_MEM_RDFS_INF:
                 model = OntModelSpec.OWL_DL_MEM_RDFS_INF;
                 break;
@@ -663,6 +672,18 @@ private SemanticOntology m_schema;
             }
         }
     }
+
+    /**
+     * Load a Model, if the model don't exist, it will be created.
+     *
+     * @param name the name
+     * @return the semantic model
+     * @return
+     */
+    private SemanticModel loadDBModel(String name)
+    {
+        return loadDBModel(name, false);
+    }
     
     /**
      * Load a Model, if the model don't exist, it will be created.
@@ -671,9 +692,13 @@ private SemanticOntology m_schema;
      * @return the semantic model
      * @return
      */
-    private SemanticModel loadDBModel(String name)
+    private SemanticModel loadDBModel(String name, boolean cached)
     {
         Model model=loadRDFDBModel(name);
+        if(cached)
+        {
+            model=new ModelCom(new GraphCached((model.getGraph())));
+        }
         if(name.equals(SWBAdmin) && !SWBPlatform.createInstance().isAdminDev())
         {
             //System.out.println(model);
@@ -776,7 +801,20 @@ private SemanticOntology m_schema;
         m_ontology.addSubModel(m,false);
         return m;
     }    
-    
+
+
+    /**
+     * Creates the model.
+     *
+     * @param name the name
+     * @param nameSpace the name space
+     * @return the semantic model
+     */
+    public SemanticModel createModel(String name, String nameSpace)
+    {
+        return createDBModel(name,nameSpace,false);
+    }
+
     /**
      * Creates the model.
      * 
@@ -784,10 +822,10 @@ private SemanticOntology m_schema;
      * @param nameSpace the name space
      * @return the semantic model
      */
-    public SemanticModel createModel(String name, String nameSpace)
+    public SemanticModel createDBModel(String name, String nameSpace, boolean cached)
     {
         //System.out.println("createModel:"+name+" "+nameSpace);
-        SemanticModel ret=loadDBModel(name);
+        SemanticModel ret=loadDBModel(name,cached);
         Model model=ret.getRDFModel();
 //        model.setNsPrefix(name+"_"+SemanticVocabulary.SWB_NS, nameSpace);
 //        model.setNsPrefix(name, SemanticVocabulary.URI+SemanticVocabulary.SWB_NS);
@@ -804,9 +842,9 @@ private SemanticOntology m_schema;
      * @param in the in
      * @return the semantic model
      */
-    public SemanticModel createModelByRDF(String name, String namespace, InputStream in)
+    public SemanticModel createDBModelByRDF(String name, String namespace, InputStream in)
     {
-        return createModelByRDF(name, namespace, in, null);
+        return createDBModelByRDF(name, namespace, in, null);
     }
 
     /**
@@ -818,7 +856,7 @@ private SemanticOntology m_schema;
      * @param lang the lang
      * @return the semantic model
      */
-    public SemanticModel createModelByRDF(String name, String namespace, InputStream in,String lang)
+    public SemanticModel createDBModelByRDF(String name, String namespace, InputStream in,String lang)
     {
         SemanticModel ret=createModel(name, namespace);
         Model model=ret.getRDFModel();

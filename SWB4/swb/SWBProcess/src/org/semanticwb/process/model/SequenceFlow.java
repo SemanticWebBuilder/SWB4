@@ -32,9 +32,11 @@ public class SequenceFlow extends org.semanticwb.process.model.base.SequenceFlow
             }
             if(inst.getStatus()==Instance.STATUS_INIT)
             {
-                inst.start(user);
+                inst.start(source,this,user);
             }else
             {
+                inst.setFromConnection(this);
+                inst.setSourceInstance(source);
                 inst.execute(user);
             }
         }

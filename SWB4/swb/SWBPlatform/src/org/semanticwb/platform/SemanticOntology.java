@@ -236,12 +236,12 @@ public class SemanticOntology
 //    }
     
     /**
- * Gets the semantic object.
- * 
- * @param uri the uri
- * @return the semantic object
- */
-public SemanticObject getSemanticObject(String uri)
+     * Gets the semantic object.
+     *
+     * @param uri the uri
+     * @return the semantic object
+     */
+    public SemanticObject getSemanticObject(String uri)
     {
         SemanticObject ret=SemanticObject.createSemanticObject(uri);
         return ret;        

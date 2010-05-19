@@ -16,9 +16,9 @@ public class SubProcessInstance extends org.semanticwb.process.model.base.SubPro
      * @param user
      */
     @Override
-    public void start(User user)
+    public void start(FlowNodeInstance sourceInstance, ConnectionObject sourceConnection, User user)
     {
-        super.start(user);
+        super.start(sourceInstance,sourceConnection,user);
         SubProcess process=(SubProcess)getFlowNodeType();
         Iterator<GraphicalElement> actit=process.listContaineds();
         while (actit.hasNext())

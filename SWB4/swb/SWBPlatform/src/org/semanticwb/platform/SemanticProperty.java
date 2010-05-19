@@ -178,7 +178,7 @@ public class SemanticProperty
      */
     public SemanticObject getSemanticObject()
     {
-        return SWBPlatform.getSemanticMgr().getSchema().getSemanticObject(getURI());
+        return SemanticObject.createSemanticObject(getURI());
     }
 
     /**

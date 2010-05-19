@@ -14,25 +14,25 @@ public class ExclusiveGateway extends org.semanticwb.process.model.base.Exclusiv
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
-        boolean ret=false;
-        Iterator<ConnectionObject> it=listInputConnectionObjects();
-        while (it.hasNext())
+//        boolean ret=false;
+//        Iterator<ConnectionObject> it=listInputConnectionObjects();
+//        while (it.hasNext())
+//        {
+//            ConnectionObject connectionObject = it.next();
+//            GraphicalElement obj=connectionObject.getSource();
+//            if(obj instanceof FlowNode)
+//            {
+//                FlowNodeInstance inst=instance.getRelatedFlowNodeInstance((FlowNode)obj);
+//                if(inst!=null && inst.getStatus()>=Instance.STATUS_CLOSED)
+//                {
+//                    ret=true;
+//                    break;
+//                }
+//            }
+//        }
+//        if(ret)
         {
-            ConnectionObject connectionObject = it.next();
-            GraphicalElement obj=connectionObject.getSource();
-            if(obj instanceof FlowNode)
-            {
-                FlowNodeInstance inst=instance.getRelatedFlowNodeInstance((FlowNode)obj);
-                if(inst!=null && inst.getStatus()>=Instance.STATUS_CLOSED)
-                {
-                    ret=true;
-                    break;
-                }
-            }
-        }
-        if(ret)
-        {
-            instance.close(user);
+            instance.close(user,instance.getSourceInstance().getAction());
         }
     }
 
