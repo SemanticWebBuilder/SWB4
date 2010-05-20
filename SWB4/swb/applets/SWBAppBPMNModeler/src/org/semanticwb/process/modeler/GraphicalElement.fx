@@ -510,7 +510,7 @@ public class GraphicalElement extends CustomNode
         }
         else
         {
-            return ele.getFirstParent();
+            return ele.getFirstGraphParent();
         }
     }
 
@@ -522,8 +522,11 @@ public class GraphicalElement extends CustomNode
     public function getPool(): Pool
     {
         var ele=getFirstGraphParent();
-        if(ele instanceof Pool)return ele as Pool;
-        else return null;
+        if(ele instanceof Pool){
+            return ele as Pool;
+        } else {
+            return null;
+        }
     }
 
 
