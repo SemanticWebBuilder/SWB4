@@ -97,7 +97,7 @@ public class Lane extends GraphicalElement
         }
     }
 
-    public function getPool():Pool
+    public override function getPool():Pool
     {
         var ret:Pool;
         var a=getGraphParent();
