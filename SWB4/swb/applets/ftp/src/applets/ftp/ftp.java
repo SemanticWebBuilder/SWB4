@@ -64,6 +64,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     /** Initializes the applet ftp */
     @Override
     public void init() {
+
         locale=Locale.getDefault();
         if(this.getParameter("locale")!=null && !this.getParameter("locale").equals(""))
         {
@@ -89,7 +90,8 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         choices[1]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si_todo");
         choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
         choices[3]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("cancel");
-        initComponents();        
+        initComponents();
+        jTreeDirs.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.jTableFiles.setDefaultRenderer(JLabel.class, new TableFileRender());
         this.jTableFiles.getSelectionModel().addListSelectionListener(this);
         jsess=this.getParameter(PRM_JSESS);
