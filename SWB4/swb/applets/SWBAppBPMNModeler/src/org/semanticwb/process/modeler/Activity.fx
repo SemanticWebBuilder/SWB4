@@ -19,4 +19,16 @@ public class Activity extends FlowNode
         var ret=super.create();
         return ret;
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = false;
+        if (link.ini.getPool() == getPool()) {
+            if (link instanceof SequenceFlow) {
+                ret = true;
+            }
+        } else if (link instanceof MessageFlow) {
+            ret = true;
+        }
+        return ret;
+    }
 }
