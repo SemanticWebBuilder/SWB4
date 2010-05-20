@@ -26,6 +26,8 @@ package org.semanticwb.sip;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,6 +45,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.ResourceSubType;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -69,7 +73,13 @@ public class PromoCluster extends GenericResource {
     private static Logger log = SWBUtils.getLogger(PromoCluster.class);
     
     /** The web work path. */
-    String webWorkPath= "/work";
+    private static final String webWorkPath= SWBPortal.getWebWorkPath();
+    private static final String _PFX_ = "vnt_";
+    private Long serial = new Long(0);
+//    private static final String _CPT_ = "caption";
+//    private static final String _RMN_ = "info";
+//    private static final String _URL_ = "url";
+//    private static final String _IMG_ = "img";
     
     /**
      * Sets the resource base.
@@ -80,7 +90,7 @@ public class PromoCluster extends GenericResource {
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+            //webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath() + "/";
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  
         }
@@ -104,19 +114,90 @@ public class PromoCluster extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = paramRequest.getResourceBase();
-        
+
+//        String cluster = base.getAttribute("cluster","carrusel");
+//        Iterator<ResourceType> itResourceTypes=paramRequest.getWebPage().getWebSite().listResourceTypes();
+//        while( itResourceTypes.hasNext() ) {
+//            ResourceType rt = itResourceTypes.next();
+//            if( rt.getId().equalsIgnoreCase("Banner") ) {
+//                Iterator<ResourceSubType> itResSubTypes=rt.listSubTypes();
+//                while( itResSubTypes.hasNext() ) {
+//                    ResourceSubType st = itResSubTypes.next();
+//                    if( st.getId().equalsIgnoreCase(cluster) ) {
+//                        Iterator<Resource> itRes = Resource.ClassMgr.listResourceByResourceSubType(st, paramRequest.getWebPage().getWebSite());
+//                        while( itRes.hasNext() ) {
+//                            Resource r = itRes.next();
+//                            r.getAttribute("");
+//                        }
+//                        break;
+//                    }
+//                }
+//                break;
+//            }
+//        }
+
+
+
         response.setContentType("text/html; charset=utf-8");
-        PrintWriter pw = response.getWriter();
+        PrintWriter w = response.getWriter();
 
-        Iterator<String> it = base.getAttributeNames();
-        while(it.hasNext()) {
-            String p = it.next();
-            System.out.println("param="+p+", value="+base.getAttribute(p));
-            pw.println("param="+p+", value="+base.getAttribute(p));
-        }
-        //pw.println(renderWithStyle());
+        w.println("<script type=\"text/javascript\">");
+        w.println("    dojo.require('dojox.fx');");
+        
+        w.println("    function expande(domId) {");
+        w.println("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:174} );");
+        w.println("      a.play();");
+        w.println("    }");
 
-        pw.flush();
+        w.println("    function collapse(domId) {");
+        w.println("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:34} );");
+        w.println("      a.play();");
+        w.println("    }");
+        w.println("</script>");
+
+//        ArrayList<String> vnts = new ArrayList();
+//        Iterator<String> it = base.getAttributeNames();
+//        while(it.hasNext()) {
+//            String p = it.next();
+//            if(p.startsWith(_PFX_)) {
+//                vnts.add(p);
+//            }
+//        }
+//        Collections.sort(vnts);
+
+        int idx=0;
+        w.println("<div class=\"swb-promo-cluster\" style=\"border:1px solid #FF3300; width:auto; height:202px; overflow-x:scroll; overflow-y:hidden; position:relative; float:left;\">");
+        w.println("<div style=\"width:auto; height:175px;\">");
+//        it = vnts.iterator();
+//        while(it.hasNext()) {
+//            String p = it.next();
+//            if(p.startsWith(_PFX_)) {
+        w.println("<div class=\"swb-promo-cluster-ci\" style=\"position:relative; float:left; width:181px;height:174px;border:1px solid #000; margin:4px;\" onclick=\"window.location.href='"+base.getAttribute("vnt_1-url")+"'\">");
+        w.println("<div style=\"position:absolute;bottom:0px; width:178px;height:34px; overflow:hidden;border:1px solid #345; background-color:#CCCCCC\" id=\""+base.getId()+"_"+(idx++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
+        w.println("<p>"+base.getAttribute("vnt_1-caption")+"</p>");
+        w.println("<p>"+base.getAttribute("vnt_1-info")+"</p>");
+        w.println("</div>");
+        w.println("<div><img src=\""+webWorkPath+base.getAttribute("vnt_1-img")+"\" alt=\"\" /></div>");
+        w.println("</div>");
+        w.println("<div class=\"swb-promo-cluster-ci\" style=\"position:relative; float:left; width:181px;height:174px;border:1px solid #000; margin:4px;\" onclick=\"window.location.href='"+base.getAttribute("vnt_2-url")+"'\">");
+        w.println("<div style=\"position:absolute;bottom:0px; width:178px;height:34px; overflow:hidden;border:1px solid #345; background-color:#CCCCCC\" id=\""+base.getId()+"_"+(idx++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
+        w.println("<p>"+base.getAttribute("vnt_2-caption")+"</p>");
+        w.println("<p>"+base.getAttribute("vnt_2-info")+"</p>");
+        w.println("</div>");
+        w.println("<div><img src=\""+webWorkPath+base.getAttribute("vnt_2-img")+"\" alt=\"\" /></div>");
+        w.println("</div>");
+        w.println("<div class=\"swb-promo-cluster-ci\" style=\"position:relative; float:left; width:181px;height:174px;border:1px solid #000; margin:4px;\" onclick=\"window.location.href='"+base.getAttribute("vnt_1-url")+"'\">");
+        w.println("<div style=\"position:absolute;bottom:0px; width:178px;height:34px; overflow:hidden;border:1px solid #345; background-color:#CCCCCC\" id=\""+base.getId()+"_"+(idx++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
+        w.println("<p>"+base.getAttribute("vnt_1-caption")+"</p>");
+        w.println("<p>"+base.getAttribute("vnt_1-info")+"</p>");
+        w.println("</div>");
+        w.println("<div><img src=\""+webWorkPath+base.getAttribute("vnt_1-img")+"\" alt=\"\" /></div>");
+        w.println("</div>");
+//            }
+//        }
+        w.println("</div>");
+        w.println("</div>");
+        w.flush();
     }
 
     private String renderWithStyle() {
@@ -244,32 +325,56 @@ public class PromoCluster extends GenericResource {
      */    
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String action = request.getParameter("act");
+        //String action = request.getParameter("act");
+        Resource base = response.getResourceBase();
+        String action = response.getAction();
         response.setMode(response.Mode_ADMIN);
+        System.out.println("\n\naction "+action);
         if(action == null) {
             HashMap<String, String> params = upload(request);
 
             if(params.containsValue("add")) {
-                System.out.println("\n\nprocessAction.... adding.....");
-                Resource base = response.getResourceBase();
-                int idx;
-                try {
-                    idx = Integer.parseInt(base.getAttribute("idx", "0"));
-                }catch(NumberFormatException nfe) {
-                    idx=0;
+                System.out.println("processAction.... adding.....");
+                long idx = 0;
+                synchronized(serial) {
+                    idx = serial;
+                    serial++;
                 }
-                String pf = "vnt_"+idx+"_";
+//                int idx;
+//                try {
+//                    idx = Integer.parseInt(base.getAttribute("idx", "0"));
+//                }catch(NumberFormatException nfe) {
+//                    idx=0;
+//                }
+                String pf = _PFX_ + idx + "-";
                 base.setAttribute(pf+"caption", params.get("caption"));
                 base.setAttribute(pf+"info", params.get("info"));
                 base.setAttribute(pf+"url", params.get("lru"));
                 base.setAttribute(pf+"img", params.get("filename"));
-                base.setAttribute("idx", Integer.toString(++idx));
+//                base.setAttribute("idx", Integer.toString(++idx));
                 try {
                     base.updateAttributesToDB();
                 }catch(SWBException swbe) {
                     System.out.println("\n\nerror\n"+swbe);
                     log.error("Error while write attributes to resource: "+base.getTitle() +" with id = "+ base.getTitle(), swbe);
                 }
+            }
+        }else if(response.Action_REMOVE.equalsIgnoreCase(action)) {
+            System.out.println("remove");
+            System.out.println("pf="+request.getParameter("vnt"));
+            String pf = request.getParameter("vnt");
+            Iterator<String> it = base.getAttributeNames();
+            while(it.hasNext()) {
+                String param = it.next();
+                if(param.startsWith(pf)) {
+                    base.removeAttribute(param);
+                }
+            }
+            try {
+                base.updateAttributesToDB();
+            }catch(SWBException swbe) {
+                System.out.println("\n\nerror\n"+swbe);
+                log.error("Error while remove attributes to resource: "+base.getTitle() +" with id = "+ base.getTitle(), swbe);
             }
         }
     }
@@ -280,6 +385,10 @@ public class PromoCluster extends GenericResource {
         PrintWriter w = response.getWriter();
         StringBuilder out = new StringBuilder();
 
+        SWBResourceURL  remove = paramRequest.getActionUrl();
+        remove.setAction(paramRequest.Action_REMOVE);
+//        SWBResourceURL action = paramRequest.getActionUrl();
+//        action.setAction(paramRequest.Action_REMOVE);
 
         SWBResourceURL urlAdd=paramRequest.getRenderUrl();
         urlAdd.setMode("add");
@@ -287,12 +396,62 @@ public class PromoCluster extends GenericResource {
         SWBResourceURL urlConfig=paramRequest.getRenderUrl();
         urlConfig.setMode("config");
 
-        w.println("<a href=\""+urlAdd+"\">Agregar una viñeta</a><br />");
-        w.println("<a href=\""+urlConfig+"\">Configurar recurso</a><br />");
+        w.println("<script type=\"text/javascript\">");
+        w.println("<!--");
+        w.println("    function validateRemove(url) {");
+        w.println("        if(confirm('¿Esta seguro de borrar la vineta?')) {");
+        w.println("            window.location.href=url;");
+        w.println("        }");
+        w.println("    }");
+        w.println("-->");
+        w.println("</script>");
+        
+        w.println("<div class=\"swbadmin\">");
+        w.println("<fieldset>");
+        w.println("<legend></legend>");
+        w.println("  <a href=\""+urlAdd+"\">Agregar una viñeta</a><br />");
+        w.println("  <a href=\""+urlConfig+"\">Configurar recurso</a><br />");
+        w.println("</fieldset>");
 
+        ArrayList<String> vnts = new ArrayList();
+        Iterator<String> it = base.getAttributeNames();
+        while(it.hasNext()) {
+            String p = it.next();
+            if(p.startsWith(_PFX_)) {
+                vnts.add(p);
+            }
+        }
+        Collections.sort(vnts);
+        w.println("<fieldset>");
+        w.println("<legend>Listado de Vinetas</legend>");
+        w.println("<table class=\"\">");
+        w.println("    <tr>");
+        w.println("        <th>Acción</th>");
+        w.println("        <th>Título</th>");
+        w.println("        <th>Imagen</th>");
+        w.println("        <th>Resumen</th>");
+        w.println("        <th>URL</th>");
+        w.println("    </tr>");
+        it = vnts.iterator();
+        while(it.hasNext()) {
+            String vnt = it.next();
+            String pf = vnt.substring(0, vnt.indexOf("-"));
+            System.out.println("vnt="+vnt+", pf="+pf);
 
+            remove.setParameter("vnt", pf);            
+            String removeUrl = "validateRemove('" + remove + "')";
 
-
+            w.println("<tr>");
+            w.println("<td><a href=\"\">Editar</a>|<a href=\"#\" onclick=\""+removeUrl+"\">Eliminar</a></td>");
+            w.println("<td>"+base.getAttribute(vnt)+"</td>");
+            w.println("<td><img alt=\"\" src=\""+webWorkPath+base.getAttribute(it.next())+"\" /></td>");
+            w.println("<td>"+base.getAttribute(it.next())+"</td>");
+            w.println("<td>"+base.getAttribute(it.next())+"</td>");
+            w.println("</tr>");
+        }
+        w.println("</table>");
+        w.println("</fieldset>");
+        w.println("</div>");
         
     }
 
@@ -300,7 +459,6 @@ public class PromoCluster extends GenericResource {
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         SWBResourceURL action=paramRequest.getActionUrl();
         PrintWriter w = response.getWriter();
-        StringBuilder out = new StringBuilder();
 
         w.println("<script type=\"text/javascript\">");
         w.println("<!--");
