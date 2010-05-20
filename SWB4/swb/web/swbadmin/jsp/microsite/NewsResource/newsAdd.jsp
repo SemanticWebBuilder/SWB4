@@ -21,6 +21,13 @@
 
     function validaForma()
     {
+        var foto = document.frmaaddnews.foto.value;
+        if(!foto)
+        {
+            alert('¡Debe ingresar la imagen de la noticia!');
+            document.frmaaddnews.foto.focus();
+            return;
+        }
         var new_title = document.frmaaddnews.new_title.value;
         if(!new_title)
         {
