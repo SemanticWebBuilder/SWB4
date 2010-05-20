@@ -7,7 +7,7 @@
             WebPage wpage = paramRequest.getWebPage();
 
             String uri = request.getParameter("uri");
-            out.print(uri);
+            //out.print(uri);
             if (uri == null || uri.equals(""))
             {
                 response.sendError(404);
