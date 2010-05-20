@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1005,7 +1006,8 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 {
                     try
                     {
-                        float currentVersion = Float.parseFloat(version.getName());
+                        DecimalFormat format = new DecimalFormat("#.0");
+                        float currentVersion = format.parse(version.getName()).floatValue();
                         if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
                         {
                             getLastVersionOfcontent = version.getName();
