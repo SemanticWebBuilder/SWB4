@@ -127,7 +127,7 @@
                 <td>
                 <%=title%>
                 </td>
-                <td ;align="center">
+                <td align="center">
                     <a href="<%=urlEdit%>"><img width="20"  height="20" alt="Imagen noticia" src="<%=editarImg%>" /></a>
                 </td>
                 <td align="center">
