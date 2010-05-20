@@ -12,6 +12,7 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import org.semanticwb.process.modeler.AdhocSubProcess;
 
 /**
  * @author javier.solis
@@ -86,9 +87,29 @@ public class Task extends Activity
         };
     }
 
+    override public function canStartLink(link:ConnectionObject) : Boolean
+    {
+        var ret = true;
+        if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
+            if (link instanceof SequenceFlow) {
+                ret = false;
+            }
+        } else {
+            ret = super.canStartLink(link);
+        }
+        return ret;
+    }
+
     override public function canEndLink(link:ConnectionObject) : Boolean
     {
-        var ret=super.canEndLink(link);
+        var ret = true;
+        if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
+            if (link instanceof SequenceFlow) {
+                ret = false;
+            }
+        } else {
+            ret = super.canEndLink(link);
+        }
         return ret;
     }
 
