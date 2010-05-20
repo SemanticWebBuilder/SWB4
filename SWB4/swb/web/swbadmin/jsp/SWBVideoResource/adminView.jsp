@@ -33,7 +33,7 @@
             User user = paramRequest.getUser();
             Resource res = paramRequest.getResourceBase();
             WebPage wpage = paramRequest.getResourceBase().getWebSite().getWebPage(res.getAttribute("idwp"));
-            out.println("uri:"+request.getParameter("suri")+wpage.getTitle());
+            //out.println("uri:"+request.getParameter("suri")+wpage.getTitle());
             
             //String suscribeURL = paramRequest.getActionUrl().setParameter("act", "subscribe").toString();
             //String unsuscribeURL = paramRequest.getActionUrl().setParameter("act", "unsubscribe").toString();
