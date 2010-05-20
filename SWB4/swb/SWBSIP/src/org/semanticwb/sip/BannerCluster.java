@@ -40,17 +40,17 @@ public class BannerCluster extends GenericAdmResource
         {
             h = 100;
         }
-        out.append("<script type=\"text/javascript\">\n");
-        out.append("    dojo.require('dojox.fx');\n");
-        out.append("    function expande(domId) {\n");
-        out.append((new StringBuilder()).append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:").append(h - 5).append("} );\n").toString());
-        out.append("     a.play();\n");
-        out.append("   }\n");
-        out.append("    function collapse(domId) {\n");
-        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:34} );\n");
-        out.append("      a.play();\n");
-        out.append("    }\n");
-        out.append("</script>\n");
+//        out.append("<script type=\"text/javascript\">\n");
+//        out.append("    dojo.require('dojox.fx');\n");
+//        out.append("    function expande(domId) {\n");
+//        out.append((new StringBuilder()).append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:").append(h - 5).append("} );\n").toString());
+//        out.append("     a.play();\n");
+//        out.append("   }\n");
+//        out.append("    function collapse(domId) {\n");
+//        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:34} );\n");
+//        out.append("      a.play();\n");
+//        out.append("    }\n");
+//        out.append("</script>\n");
 
         String cluster = base.getAttribute("cluster", "carrusel");
         Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
@@ -68,9 +68,8 @@ public class BannerCluster extends GenericAdmResource
                             String desc = r.getDisplayDescription(lang);
                             String url = r.getAttribute("url");
                             String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-                            //out.append("<div class=\"temasBottom\">");
                             out.append("<div class=\"temasBottom\">");
-                            out.append("  <img alt=\"\" src=\""+img+"\" />");
+                            out.append("  <a href=\""+url+"\"><img alt=\"\" src=\""+img+"\" /></a>");
                             out.append("  <p class=\"infoTemasBottom\">"+title+"</p>");
                             out.append("</div>\n");
                         }
