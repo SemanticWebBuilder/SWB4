@@ -77,9 +77,10 @@ class ComparatorNews implements Comparator<New>
                                 }
                                 pathPhoto = SWBPortal.getWebWorkPath() + path + "/" + onew.getNewsThumbnail();
                             }
+                            String href=url+"?uri="+onew.getEncodedURI();
                             %>
                               <div class="mainNews">
-                              <p><a href="<%=url%>"><%=title%></a></p>
+                              <p><a href="<%=href%>"><%=title%></a></p>
                               <img width="92" height="60" src="<%=pathPhoto%>" alt="Imagen noticia" />
                               <div class="clear">&nbsp;</div>
                               <ul class="underline">
