@@ -64,15 +64,11 @@
         );
 
         function jsValida(frm) {
-            if(dojo.byId('local0').checked && dojo.byId('wbNoFile_img') && !dojo.byId('wbNoFile_img').checked ) {
-                if( dojo.byId('img').value==null || dojo.byId('img').value=='' || dojo.byId('img').value==' ' )
-                {
-                    alert('Specify an image for the banner');
-                    document.getElementById('img').focus();
-                    return false;
-                }
-            }
-            else if(dojo.byId('local1').checked) {
+            if(dojo.byId('local0').checked && !dojo.byId('img').value && !dojo.byId('wbNoFile_img')) {
+                alert('Specify an image for the banner');
+                document.getElementById('img').focus();
+                return false;
+            }else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
                     alert('Set the encoding to include outdoor advertising');
