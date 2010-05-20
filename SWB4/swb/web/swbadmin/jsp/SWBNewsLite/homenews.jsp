@@ -1,5 +1,5 @@
 <%@page contentType="text/html"%>
-<%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,java.text.SimpleDateFormat, org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
+<%@page import="org.semanticwb.portal.resources.sem.newslite.*,java.util.*,org.semanticwb.portal.api.*,org.semanticwb.*,org.semanticwb.model.*,java.util.*"%>
 <%!
 
 class ComparatorNews implements Comparator<New>
@@ -11,6 +11,7 @@ class ComparatorNews implements Comparator<New>
     }
 }
 %>
+
 <%
     WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
     Iterator<ResourceType> resourceTypes=ResourceType.ClassMgr.listResourceTypes(site);
@@ -28,10 +29,13 @@ class ComparatorNews implements Comparator<New>
                     WebPage resourcewp=(WebPage)resource.getResourceable();
                     if(resourcewp.getId().equals("Noticias"))
                     {
+                        %>
+                        aaa
+                        <%
                         List<New> news = new ArrayList<New>();
                         SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
-                        url.setCallMethod(url.Call_DIRECT);
-                        url.setMode("rss");
+                        url.setCallMethod(url.Call_CONTENT);
+                        url.setMode("detail");
                         Iterator<New> itNews = New.ClassMgr.listNews(site);
                         while (itNews.hasNext())
                         {
@@ -62,8 +66,7 @@ class ComparatorNews implements Comparator<New>
                         }
                         for(New onew : news)
                         {
-                            url.setCallMethod(url.Call_CONTENT);
-                            url.setMode("detail");
+                            
                             String title=onew.getTitle();
                             String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNewsLite/sinfoto.png";
                             String path = onew.getWorkPath();
