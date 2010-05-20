@@ -375,6 +375,7 @@ public class SWBNewsLite extends GenericResource
         }
         String path = "/swbadmin/jsp/SWBNewsLite/rss.jsp";
         SWBResourceURL url=paramRequest.getRenderUrl();
+        url.setCallMethod(url.Call_CONTENT);
         url.setMode("detail");
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
