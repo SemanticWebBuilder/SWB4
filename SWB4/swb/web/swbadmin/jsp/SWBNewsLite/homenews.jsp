@@ -14,6 +14,17 @@ class ComparatorNews implements Comparator<New>
 
 <%
     WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
+    HashMap params=(HashMap)request.getAttribute("params");
+    String newid=null;
+    if(params.containsKey("idtopic"))
+    {
+        newid=params.get("idtopic").toString();
+    }
+    if(newid==null)
+    {
+        newid="Noticias";
+    }
+    
     Iterator<ResourceType> resourceTypes=ResourceType.ClassMgr.listResourceTypes(site);
     while(resourceTypes.hasNext())
     {
@@ -27,7 +38,7 @@ class ComparatorNews implements Comparator<New>
                 if(resource.getResourceable() instanceof WebPage)
                 {
                     WebPage resourcewp=(WebPage)resource.getResourceable();
-                    if(resourcewp.getId().equals("Noticias"))
+                    if(resourcewp.getId().equals(newid))
                     {                        
                         List<New> news = new ArrayList<New>();
                         SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
