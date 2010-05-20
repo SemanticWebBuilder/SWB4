@@ -28,10 +28,7 @@ class ComparatorNews implements Comparator<New>
                 {
                     WebPage resourcewp=(WebPage)resource.getResourceable();
                     if(resourcewp.getId().equals("Noticias"))
-                    {
-                        %>
-                        aaa
-                        <%
+                    {                        
                         List<New> news = new ArrayList<New>();
                         SWBResourceURLImp url=new SWBResourceURLImp(request, resource, resourcewp, SWBResourceURLImp.UrlType_RENDER);
                         url.setCallMethod(url.Call_CONTENT);
@@ -90,7 +87,6 @@ class ComparatorNews implements Comparator<New>
                               </ul>
                               <p>&nbsp;</p>
                             </div>
-
                             <%
                         }
                         break;
