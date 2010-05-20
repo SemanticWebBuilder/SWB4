@@ -41,17 +41,20 @@ public class BannerCluster extends GenericAdmResource
         {
             h = 100;
         }
-//        out.append("<script type=\"text/javascript\">\n");
-//        out.append("    dojo.require('dojox.fx');\n");
-//        out.append("    function expande(domId) {\n");
-//        out.append((new StringBuilder()).append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:").append(h - 5).append("} );\n").toString());
-//        out.append("     a.play();\n");
-//        out.append("   }\n");
-//        out.append("    function collapse(domId) {\n");
-//        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:34} );\n");
-//        out.append("      a.play();\n");
-//        out.append("    }\n");
-//        out.append("</script>\n");
+        out.append("<script type=\"text/javascript\">\n");
+        out.append("    dojo.require('dojox.fx');\n");
+        out.append("    function expande(domId) {\n");
+        out.append((new StringBuilder()).append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:").append(h - 5).append("} );\n").toString());
+        out.append("     a.play();\n");
+        out.append("   }\n");
+        out.append("    function collapse(domId) {\n");
+        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:46} );\n");
+        out.append("      a.play();\n");
+        out.append("    }\n");
+        out.append("</script>\n");
+
+        out.append("<div class=\"swb-promo-cluster\">\n");
+        out.append("<div id=\"promoHolder\" style=\"width:auto; height:175px;\">\n");
 
         String cluster = base.getAttribute("cluster", "carrusel");
         Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
@@ -70,9 +73,11 @@ public class BannerCluster extends GenericAdmResource
                                 String desc = r.getDisplayDescription(lang);
                                 String url = r.getAttribute("url");
                                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-                                out.append("<div class=\"temasBottom\">");
-                                out.append("  <a href=\""+url+"\"><img alt=\"\" src=\""+img+"\" /></a>");
-                                out.append("  <p class=\"infoTemasBottom\">"+title+"</p>");
+                                out.append("<div class=\"swb-promo-cluster-ci\" style=\"background:url("+img+")\" onclick=\"window.location.href='"+url+"'\"  >\n");
+                                out.append("  <div class=\"swb-cluster-despliega\" id=\""+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
+                                out.append("    <p class=\"swb-cluster-titulo\">"+title+"</p>\n");
+                                out.append("    <p>"+desc+"</p>");
+                                out.append("  </div>\n");
                                 out.append("</div>\n");
                             }
                         }
@@ -82,6 +87,9 @@ public class BannerCluster extends GenericAdmResource
                 break;
             }
         }
+
+        out.append("</div>\n");
+        out.append("</div>\n");
 
         PrintWriter pw = response.getWriter();
         pw.println(out);
