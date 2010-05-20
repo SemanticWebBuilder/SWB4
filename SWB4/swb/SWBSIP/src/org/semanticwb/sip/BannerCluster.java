@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
-import org.semanticwb.model.base.ResourceBase;
 import org.semanticwb.portal.api.*;
 
 // Referenced classes of package org.semanticwb.sip:
@@ -33,8 +32,8 @@ label0:
             String lang = paramRequest.getUser().getLanguage();
             out = new StringBuilder();
             int i = 0;
-            String width = base.getAttribute("width", "208px");
-            String height = base.getAttribute("height", "143px");
+            String width = base.getAttribute("width", "143px");
+            String height = base.getAttribute("height", "208px");
             int h;
             try
             {
@@ -55,9 +54,9 @@ label0:
             out.append("      a.play();\n");
             out.append("    }\n");
             out.append("</script>\n");
-            out.append("<div class=\"swb-promo-cluster\" style=\"border:1px solid #FF3300; height:202px; overflow-x:scroll; overflow-y:hidden; position:relative; float:left;\">\n");
-            out.append("<div class=\"promoHolder\" style=\"width:auto; height:175px;\">\n");
-            System.out.println((new StringBuilder()).append("\n\n\n webWorkPath=").append(webWorkPath).append("\nbase.getWorkPath()=").append(base.getWorkPath()).toString());
+
+//            out.append("<div class=\"swb-promo-cluster\" style=\"border:1px solid #FF3300; height:202px; overflow-x:scroll; overflow-y:hidden; position:relative; float:left;\">\n");
+//            out.append("<div class=\"promoHolder\" style=\"width:auto; height:175px;\">\n");
             String cluster = base.getAttribute("cluster", "carrusel");
             Iterator itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
             ResourceType rt;
@@ -82,17 +81,15 @@ label0:
                 String desc = r.getDisplayDescription(lang);
                 String url = r.getAttribute("url");
                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-                out.append((new StringBuilder()).append("<div class=\"swb-cb-holder\" style=\"position:relative; float:left; width:").append(width).append(";height:").append(height).append(";border:1px solid #000; margin:4px;\" onclick=\"window.location.href='").append(url).append("'\">\n").toString());
-                out.append((new StringBuilder()).append("<div class=\"swb-cb-desc\" style=\"position:absolute;bottom:0px; width:").append(width).append(";height:34px; overflow:hidden;border:1px solid #345; background-color:#CCCCCC; opacity:0.8;filter:alpha(opacity=80);\" id=\"").append(base.getId()).append("_").append(i++).append("\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">\n").toString());
-                out.append((new StringBuilder()).append("<p>").append(title).append("</p>\n").toString());
-                out.append((new StringBuilder()).append("<p>").append(desc).append("</p>\n").toString());
+                out.append("<div class=\"temasBottom\">");
+                out.append("<img src=\""+img+"\" alt=\"\" />");
+                out.append("<p class=\"infoTemasBottom\">"+title+"</p>");
                 out.append("</div>\n");
-                out.append((new StringBuilder()).append("<div class=\"swb-cb-ih\"><img class=\"swb-cb-img\" src=\"").append(img).append("\" alt=\"\" width=\"").append(width.replaceAll("\\D", "")).append("\" height=\"").append(height).append("\" /></div>\n").toString());
             }
 
         }
-        out.append("</div>\n");
-        out.append("</div>\n");
+//        out.append("</div>\n");
+//        out.append("</div>\n");
         PrintWriter pw = response.getWriter();
         pw.println(out);
         pw.flush();
