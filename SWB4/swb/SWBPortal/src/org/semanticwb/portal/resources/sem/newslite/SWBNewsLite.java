@@ -34,6 +34,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 /**
  *
@@ -373,7 +374,8 @@ public class SWBNewsLite extends GenericResource
             }
         }
         String path = "/swbadmin/jsp/SWBNewsLite/rss.jsp";
-        String url=paramRequest.getWebPage().getUrl();
+        SWBResourceURL url=paramRequest.getRenderUrl();
+        url.setMode("detail");
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
