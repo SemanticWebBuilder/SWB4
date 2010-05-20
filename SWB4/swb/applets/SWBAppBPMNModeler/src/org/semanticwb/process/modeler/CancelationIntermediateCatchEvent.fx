@@ -22,7 +22,7 @@ public class CancelationIntermediateCatchEvent extends IntermediateCatchEvent
 
     public override function canAttach(parent:GraphicalElement) : Boolean {
         var ret=false;
-        if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane) {
+        if(parent instanceof TransactionSubProcess or parent instanceof Pool or parent instanceof Lane) {
             ret=true;
         }
         return ret;
