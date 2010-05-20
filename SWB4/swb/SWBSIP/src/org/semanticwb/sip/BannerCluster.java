@@ -26,7 +26,8 @@ public class BannerCluster extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder out;
         Resource base = paramRequest.getResourceBase();
-        String lang = paramRequest.getUser().getLanguage();
+        User user = paramRequest.getUser();
+        String lang = user.getLanguage();
         out = new StringBuilder();
         int i = 0;
         String width = base.getAttribute("width", "143px");
@@ -62,16 +63,18 @@ public class BannerCluster extends GenericAdmResource
                     ResourceSubType st = itResSubTypes.next();
                     if( st.getId().equalsIgnoreCase(cluster) ) {
                         Iterator<Resource> itRes = ResourceBase.ClassMgr.listResourceByResourceSubType(st, paramRequest.getWebPage().getWebSite());
-                        while( itRes.hasNext() ) {
+                        while( itRes.hasNext() ) {                            
                             Resource r = itRes.next();
-                            String title = r.getDisplayTitle(lang);
-                            String desc = r.getDisplayDescription(lang);
-                            String url = r.getAttribute("url");
-                            String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-                            out.append("<div class=\"temasBottom\">");
-                            out.append("  <a href=\""+url+"\"><img alt=\"\" src=\""+img+"\" /></a>");
-                            out.append("  <p class=\"infoTemasBottom\">"+title+"</p>");
-                            out.append("</div>\n");
+                            if( r.isActive()&&user.haveAccess(r) ) {
+                                String title = r.getDisplayTitle(lang);
+                                String desc = r.getDisplayDescription(lang);
+                                String url = r.getAttribute("url");
+                                String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
+                                out.append("<div class=\"temasBottom\">");
+                                out.append("  <a href=\""+url+"\"><img alt=\"\" src=\""+img+"\" /></a>");
+                                out.append("  <p class=\"infoTemasBottom\">"+title+"</p>");
+                                out.append("</div>\n");
+                            }
                         }
                         break;
                     }
