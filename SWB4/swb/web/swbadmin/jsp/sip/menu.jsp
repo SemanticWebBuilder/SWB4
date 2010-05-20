@@ -3,36 +3,43 @@
 <div id="mainMenu">
     <ul id="MenuBar1" class="MenuBarHorizontal">
 <%
-WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
+    WebSite site = ((WebPage) request.getAttribute("webpage")).getWebSite();
+    User user = (User) request.getAttribute("user");
     Iterator<WebPage> childs=site.getHomePage().listVisibleChilds("es");
     while(childs.hasNext())
     {
         WebPage chanel=childs.next();
-        String title=chanel.getTitle();
-        String url=chanel.getUrl();
-        Iterator<WebPage> pages=chanel.listVisibleChilds("es");
-        if(pages.hasNext())
+        if(user.haveAccess(chanel))
         {
-            %>
-                <li><a class="MenuBarItemSubmenu" href="<%=url%>"><%=title%></a>
-                <ul>
-            <%
-            while(pages.hasNext())
+            String title=chanel.getTitle();
+            String url=chanel.getUrl();
+            Iterator<WebPage> pages=chanel.listVisibleChilds("es");
+            if(pages.hasNext())
             {
-                WebPage child=pages.next();
                 %>
-                <li><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
+                    <li><a class="MenuBarItemSubmenu" href="<%=url%>"><%=title%></a>
+                    <ul>
+                <%
+                while(pages.hasNext())
+                {
+                    WebPage child=pages.next();
+                    if(user.haveAccess(child))
+                    {
+                        %>
+                        <li><a href="<%=child.getUrl()%>"><%=child.getTitle()%></a></li>
+                        <%
+                    }
+                }
+                %>
+                </ul>
                 <%
             }
+            else
+            {
             %>
-            </ul>
+                <li><a href="<%=url%>"><%=title%></a></li>
             <%
-        }
-        else
-        {
-        %>
-            <li><a href="<%=url%>"><%=title%></a></li>
-        <%
+            }
         }
     }
 %>      
