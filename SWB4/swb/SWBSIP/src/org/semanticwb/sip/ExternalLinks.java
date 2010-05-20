@@ -51,7 +51,7 @@ public class ExternalLinks extends GenericResource{
         SWBResourceURL addLink = paramRequest.getRenderUrl();
         SWBResourceURL urltitle = paramRequest.getActionUrl();
         SWBResourceURL urlremov = paramRequest.getActionUrl();
-        SWBResourceURL urlact=paramRequest.getActionUrl();
+        SWBResourceURL urlact=paramRequest.getRenderUrl();
         Iterator<String> it = base.getAttributeNames();
         String title="";
         addLink.setMode("addLink");
@@ -82,30 +82,33 @@ public class ExternalLinks extends GenericResource{
         out.println("         <label for=\"title\">T&iacute;tulo del Bloque: </label>");
         out.println("         <input name=\"title\" id=\"title\" type=\"text\" size=\"45\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" value=\""+title+"\">");
         out.println("</p>");
+        out.println("<p>");
         out.println("        <input type=\"submit\" name=\"Cambiar titulo\" >");
-        
-        out.println("<a href=\""+addLink+"\">Agregar Links</a><br />");
+        out.println("</p>");
+        out.println("        <a href=\""+addLink+"\">Agregar Links</a><br />");
         it = base.getAttributeNames();
-        out.println("<table dojoType=\"dojox.Grid\">");
-        out.println("<th>Url </th>");
-        out.println("<th> Nombre de la Url </th>");
+        out.println("        <table dojoType=\"dojox.Grid\" CELLSPACING=6 CELLPADDING=8>");
+        out.println("           <tr><th width=\"250\">Url</th>");
+        out.println("               <th width=\"250\"> Nombre de la Url</th>");
+        out.println("               <th> Eliminar</th>");
+        out.println("               <th> Actualizar</th></tr>");
         while(it.hasNext()){
             String attr = it.next();
             if(attr.startsWith("name")){
                 String x = attr.substring(4);
-                out.println("<tr>");
+                out.println("                 <tr>");
                 String name = base.getAttribute(attr);
                 String url=base.getAttribute("link"+x);
-                urlremov.setParameter("name", name);
-                out.println("<td>"+url+"</td>");
-                out.println("<td></td>");
-                out.println("<td>"+name+"</td>");
-                out.println("<td><a href=\""+urlremov+"\">Eliminar</a></td>");
-                out.println("<td><a href=\""+urlact+"\">Actualizar</a></td>");
-                out.println("</tr>");
+                urlremov.setParameter("name", attr);
+                urlact.setParameter("name", attr);
+                out.println("                   <td>"+url+"</td>");
+                out.println("                   <td>"+name+"</td>");
+                out.println("                   <td><a href=\""+urlremov+"\">Eliminar</a></td>");
+                out.println("                   <td><a href=\""+urlact+"\">Actualizar</a></td>");
+                out.println("                 </tr>");
             }
         }
-        out.println("</table>");
+        out.println("        </table>");
         out.println("</form>");
     }
 
@@ -122,9 +125,49 @@ public class ExternalLinks extends GenericResource{
 
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        super.doEdit(request, response, paramRequest);
+        PrintWriter out = response.getWriter();
+        Resource base = paramRequest.getResourceBase();
+        SWBResourceURL urlacts= paramRequest.getActionUrl();
+        urlacts.setAction("update");
+        String attrib = request.getParameter("name");
+        urlacts.setParameter("name", attrib);
+        String x = attrib.substring(4);
+        String name = base.getAttribute(attrib);
+        String url=base.getAttribute("link"+x);
+        out.println("<script type=\"text/javascript\">");
+        out.println(" dojo.require(\"dijit.form.ValidationTextBox\");");
+        out.println(" dojo.require(\"dijit.form.Button\");");
+        out.println("function validaForma() {");
+        out.println("    var val = true;");
+        out.println("    if(document.getElementById(\"nameLink\").value==\"\") {");
+        out.println("        alert('¡Debe ingresar el nombre de la Liga!');");
+        out.println("        document.getElementById(\"nameLink\").focus();");
+        out.println("        val false;");
+        out.println("    }");
+        out.println("    if(document.getElementById(\"link\").value==\"\") {");
+        out.println("        alert('¡Debe ingresar la Liga!');");
+        out.println("        document.getElementById(\"link\").focus();");
+        out.println("        val false;");
+        out.println("    }");
+        out.println("    return val");
+        out.println("}");
+        out.println("</script>");
+        out.println("<form name=\"frmEditLink\" id=\"frmEditLink\" class=\"swbform\" method=\"post\" action=\""+urlacts+"\" onsubmit=\"return validaForma(this);\">");
+        out.println("    <input type=\"hidden\" name=\"title\" value=\""+request.getParameter("title")+"\"/>");
+        out.println("    <fieldset>");
+        out.println("        <legend>Modificar Link</legend>");
+        out.println("        <p>");
+        out.println("         <label for nameLink>Nombre de la Liga: </label><br/>");
+        out.println("         <input name=\"nameLink\" type=\"text\" size=\"45\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" value=\""+name+"\">");
+        out.println("        </p>");
+        out.println("        <p>");
+        out.println("         <label for link>Liga: </label><br/>");
+        out.println("         <input name=\"link\" type=\"text\" size=\"45\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\"  value=\""+url+"\">");
+        out.println("        </p>");
+        out.println("        <input type=\"submit\" name=\"Enviar\" value=\"Enviar\">");
+        out.println("    </fieldset>");
+        out.println("</form>");
     }
-
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
@@ -155,12 +198,31 @@ public class ExternalLinks extends GenericResource{
             }catch(Exception e){
             }
         }else if(action.equals("removLink")){
-            String attrib = request.getParameter("name");//getAttribute("name").toString();
-            
+            String attrib = request.getParameter("name");
+            String x = attrib.substring(4);
+            String url="link"+x;
+            base.removeAttribute(attrib);
+            base.removeAttribute(url);
+            base.removeAttribute(x);
+            try{
+                base.updateAttributesToDB();
+            }catch(SWBException e){
+                log.error(e);
+            }
+        }else if(action.equals("update")){
+            String attrib = request.getParameter("name");
+            String x = attrib.substring(4);
+            String nlink="link"+x;
+            base.setAttribute(attrib, request.getParameter("nameLink"));
+            base.setAttribute(nlink, request.getParameter("link"));
+            try{
+                base.updateAttributesToDB();
+            }catch(SWBException e){
+                log.error(e);
+            }
         }
         response.setMode(response.Mode_ADMIN);
     }
-
 
     public void addLink(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -200,5 +262,4 @@ public class ExternalLinks extends GenericResource{
         out.println("    </fieldset>");
         out.println("</form>");
     }
-
 }
