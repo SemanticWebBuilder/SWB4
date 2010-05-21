@@ -37,16 +37,7 @@ public class Activity extends FlowNode
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = true;
-        
-        //No se puede terminar un flujo de secuencia si no están en el mismo pool
-        if (link instanceof SequenceFlow) {
-            
-            if (not(link.ini.getPool() == getPool())) {
-                ret = false;
-                ModelerUtils.setErrorMessage("SequenceFlow cannot cross pool boundary");
-            }
-        }
+        var ret = super.canEndLink(link);
 
         //No se puede terminar un flujo de mensaje si están en el mismo pool
         if (link instanceof MessageFlow) {
