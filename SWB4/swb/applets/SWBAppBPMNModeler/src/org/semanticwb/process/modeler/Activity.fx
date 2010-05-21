@@ -7,6 +7,7 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
+import org.semanticwb.process.modeler.Artifact;
 
 /**
  * @author javier.solis
@@ -22,31 +23,44 @@ public class Activity extends FlowNode
 
     override public function canStartLink(link:ConnectionObject) : Boolean
     {
-        var ret = true;
-        if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
-            if (link instanceof SequenceFlow) {
+        var ret = true;        
+        //No se puede iniciar un flujo de secuencia si la actividad está
+        //dentro de un subproceso adhoc
+        if (link instanceof SequenceFlow) {
+            if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
                 ret = false;
+                ModelerUtils.setErrorMessage("SequenceFlow is not allowed in AdHoc Subprocess");
             }
-        } else {
-            ret = super.canStartLink(link);
         }
+        
         return ret;
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = true;
-        if (link.ini.getPool() != getPool()) {
-            if (link instanceof SequenceFlow) {
+        
+        //No se puede terminar un flujo de secuencia si no están en el mismo pool
+        if (link instanceof SequenceFlow) {
+            
+            if (not(link.ini.getPool() == getPool())) {
                 ret = false;
+                ModelerUtils.setErrorMessage("SequenceFlow cannot cross pool boundary");
             }
-        } else {
-            if (link instanceof MessageFlow) {
-                ret= false;
+        }
+
+        //No se puede terminar un flujo de mensaje si están en el mismo pool
+        if (link instanceof MessageFlow) {
+            if (link.ini.getPool() == getPool()) {
+                ret = false;
+                ModelerUtils.setErrorMessage("MessageFlow must cross pool boundary");
             }
-            if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
-                if (link instanceof SequenceFlow) {
-                    ret = false;
-                }
+        }
+
+        //No se puede terminar una asociación si no viene de un artefacto
+        if (link instanceof AssociationFlow) {
+            if (not(link.ini instanceof Artifact)) {
+                ret = false;
+                ModelerUtils.setErrorMessage("Association cannot link activities");
             }
         }
         return ret;
