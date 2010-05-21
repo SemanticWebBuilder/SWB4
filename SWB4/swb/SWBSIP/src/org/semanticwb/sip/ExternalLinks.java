@@ -34,14 +34,42 @@ public class ExternalLinks extends GenericResource{
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        try{
-            RequestDispatcher dis= request.getRequestDispatcher(SWBPlatform.getContextPath()+"/swbadmin/jsp/sip/externalLinks/ExternalLinks.jsp");
-            request.setAttribute("paramRequest", paramRequest);
-            dis.include(request, response);
-        }catch(Exception e){
-            log.error(e);
+        PrintWriter out = response.getWriter();
+        ArrayList list=new ArrayList();
+        Resource base = paramRequest.getResourceBase();
+        String title="";
+        Iterator atrib = base.getAttributeNames();
+        while(atrib.hasNext()){
+            String attr = atrib.next().toString();
+            if(attr.startsWith("name")){
+                String x = attr.substring(4);
+                String name = base.getAttribute(attr);
+                String url=base.getAttribute("link"+x);
+                list.add(url);
+                list.add(name);
+            }
+            if(attr.equals("title")){
+                title=base.getAttribute("title");
+            }
         }
-
+        int pos=title.indexOf(' ');
+        String title1 =title.substring(0,pos);
+        String title2 = title.substring(pos);
+        Iterator it = list.iterator();
+        int count=0;
+        out.println("<div class=\"masLigas\">");
+        out.println("    <h2 class=\"tituloBloque\">"+title1+"<span class=\"span_tituloBloque\">"+title2+"</span></h2>");
+        out.println("      <ul>");
+        while(it.hasNext()){
+           if(count<8){
+              count=count+1;
+              String ref = it.next().toString();
+              String titleRef = it.next().toString();
+              out.println("         <li><a href=\""+ref+"\">"+titleRef+"</a></li>");
+            }
+         }
+         out.println("      </ul>");
+         out.println("</div>");
     }
 
     @Override
