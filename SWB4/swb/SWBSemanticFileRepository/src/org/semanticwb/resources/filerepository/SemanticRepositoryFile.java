@@ -151,7 +151,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 out.println(doShowDirs(request, response, paramRequest));
             }
         } else {
-            out.println("Debes de estar firmado para utilizar el repositorio de documentos.");
+            out.println(paramRequest.getLocaleString("mustBeSigned"));
         }
         out.println("</fieldset>");
         out.println("</div>");
