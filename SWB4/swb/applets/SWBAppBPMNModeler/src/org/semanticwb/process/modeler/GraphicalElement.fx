@@ -506,7 +506,7 @@ public class GraphicalElement extends CustomNode
         var ele=getGraphParent();
         if(ele==null)
         {
-            return ele;
+            return this;
         }
         else
         {
