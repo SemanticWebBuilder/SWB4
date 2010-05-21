@@ -48,7 +48,7 @@ public class BannerCluster extends GenericAdmResource
         out.append("     a.play();\n");
         out.append("   }\n");
         out.append("    function collapse(domId) {\n");
-        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:46} );\n");
+        out.append("      var a=dojox.fx.wipeTo( {node:domId, duration:200, height:60} );\n");
         out.append("      a.play();\n");
         out.append("    }\n");
         out.append("</script>\n");
@@ -76,6 +76,7 @@ public class BannerCluster extends GenericAdmResource
                                 out.append("<div class=\"swb-promo-cluster-ci\" style=\"background:url("+img+")\" onclick=\"window.location.href='"+url+"'\"  >\n");
                                 out.append("  <div class=\"swb-cluster-despliega\" id=\""+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
                                 out.append("    <p class=\"swb-cluster-titulo\">"+title+"</p>\n");
+                                out.append("    <br />\n");
                                 out.append("    <p>"+desc+"</p>");
                                 out.append("  </div>\n");
                                 out.append("</div>\n");
