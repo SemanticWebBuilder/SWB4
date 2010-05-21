@@ -52,7 +52,6 @@ public class FlowNode extends GraphicalElement
                 ModelerUtils.setErrorMessage("SequenceFlow cannot cross pool boundary");
             }
         }
-
         return ret;
     }
 }
