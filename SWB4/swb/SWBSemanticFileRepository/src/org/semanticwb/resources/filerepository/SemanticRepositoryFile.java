@@ -1329,7 +1329,7 @@ public class SemanticRepositoryFile extends org.semanticwb.resources.filereposit
                 out.println("<fieldset>");
                 SWBResourceURL ub = paramRequest.getRenderUrl();
                 ub.setAction("edit");
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_back\" onclick=\"window.location='" + ub + "';\">Regresar</button>");
+                out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" name=\"btn_back\" onclick=\"window.location='" + ub + "';\">"+paramRequest.getLocaleString("btnBack")+"</button>");
                 out.println("</fieldset>");
             } catch (Exception e) {
                 log.error("Error al traer los folders/archivos eliminados. doAdmin.showold", e);
