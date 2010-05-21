@@ -74,7 +74,7 @@ public class BannerCluster extends GenericAdmResource
                                 String url = r.getAttribute("url");
                                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
                                 out.append("<div class=\"swb-promo-cluster-ci\" style=\"background:url("+img+")\" onclick=\"window.location.href='"+url+"'\"  >\n");
-                                out.append("  <div class=\"swb-cluster-despliega\" id=\""+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
+                                out.append("  <div class=\"swb-cluster-despliega\" id=\"r"+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
                                 out.append("    <p class=\"swb-cluster-titulo\">"+title+"</p>\n");
                                 out.append("    <br />\n");
                                 out.append("    <p>"+desc+"</p>");
