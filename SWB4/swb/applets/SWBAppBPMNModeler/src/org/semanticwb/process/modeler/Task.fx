@@ -12,7 +12,6 @@ import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
-import org.semanticwb.process.modeler.AdhocSubProcess;
 
 /**
  * @author javier.solis
