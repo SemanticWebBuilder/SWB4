@@ -1735,8 +1735,10 @@
                     if(!MigrateOfficeContents.isOfficeDocument(wbresource,siteid))
                     {
                         org.semanticwb.model.Resource resource = ws.getResource(idElement);
+
                         if(resource!=null)
                         {
+                            resource.setActive(occ.isActive());
                             wp.addResource(resource);
                         }
                     }
