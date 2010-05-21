@@ -5,8 +5,8 @@
     <admdbconnmgr defconn="true"/>
     <fieldset>
         <input type="text" id="cluster" name="cluster" label="Subtipo de Banner:" size="50" required="true" promptMessage="Nombre del Subtipo de Banners que se incluyen en el carrusel" />
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho del banner. Ejemplo: 500em, 600px, 100%" />
-        <input type="text" id="height" name="height" label="Alto:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura del banner. Ejemplo: 120em, 75px, 100%" />
+        <input type="text" id="width"  name="width" label="Width of images:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho del banner. Ejemplo: 500em, 600px, 100%" />
+        <input type="text" id="height" name="height" label="Height of images:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura del banner. Ejemplo: 120em, 75px, 100%" />
     </fieldset>
     <fieldset>
         <statictext name="cmd">
