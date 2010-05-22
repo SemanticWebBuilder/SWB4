@@ -35,5 +35,15 @@ public class EndEvent extends ThrowEvent
     {
         return false;
     }
+
+    override public function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = true;
+        if (not(link instanceof SequenceFlow)) {
+            ret = false;
+            ModelerUtils.setErrorMessage("EndEvent must have only incoming SequenceFlow");
+        }
+        return ret;
+    }
+
 }
 
