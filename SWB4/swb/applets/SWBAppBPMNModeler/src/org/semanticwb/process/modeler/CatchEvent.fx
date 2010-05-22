@@ -16,5 +16,5 @@ public class CatchEvent extends Event
     public override function create(): Node
     {
         return super.create();
-    }
+    }    
 }
