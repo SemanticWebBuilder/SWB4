@@ -19,4 +19,14 @@ public class ParallelIntermediateCatchEvent extends IntermediateCatchEvent
         type=CATCH_PARALLEL;
         return super.create();
     }
+
+    public override function canAttach(parent:GraphicalElement) : Boolean {
+        var ret = super.canAttach(parent);
+
+        if (parent instanceof Activity) {
+            ret = false;
+            ModelerUtils.setErrorMessage("ParallelEvent cannot be attached to Activities");
+        }
+        return ret;
+    }
 }
