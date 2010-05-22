@@ -74,35 +74,50 @@ public class IntermediateCatchEvent extends CatchEvent
 
     public override function canAttach(parent:GraphicalElement):Boolean
     {
-        var ret=false;
-        if(parent instanceof Pool or parent instanceof Lane)
-        {
-            ret=true;
+        var ret = false;
+        if(parent instanceof Pool or parent instanceof Lane or parent instanceof Activity) {
+            ret = true;
         }
         return ret;
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = false;
-        var c = sizeof getInputConnectionObjects();
+        var ret = super.canEndLink(link);
+        var c = 0;
 
-        //Un evento intermedio sólo puede tener un flujo de secuencia de entrada
-        if (link instanceof SequenceFlow and c == 0) {
-            //Siempre y cuando no esté adherido a una actividad
-            if (not(this.getGraphParent() instanceof Activity)) {
-                ret = true;
+        for(ele in getInputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                c++;
+            }
+        }
+
+        if (this.getGraphParent() instanceof Activity) {
+            ret = false;
+            ModelerUtils.setErrorMessage("BoundaryEvents cannot have incoming SequenceFlow");
+        } else if (link instanceof SequenceFlow) {
+            if (c != 0) {
+                ret = false;
+                ModelerUtils.setErrorMessage("IntermediateEvent can have only one incoming SequenceFlow");
             }
         }
         return ret;
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
-        var ret = false;
-        var c = sizeof getOutputConnectionObjects();
+        var ret = super.canStartLink(link);
+        var c = 0;
 
-        //Un evento intermedio sólo puede tener un flujo de secuencia de salida
-        if (link instanceof SequenceFlow and c == 0) {
-            ret = true;
+        for(ele in getOutputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                c++;
+            }
+        }
+        
+        if (link instanceof SequenceFlow) {
+            if (c != 0) {
+                ret = false;
+                ModelerUtils.setErrorMessage("IntermediateEvent can have only one outgoing SequenceFlow");
+            }
         }
         return ret;
     }
