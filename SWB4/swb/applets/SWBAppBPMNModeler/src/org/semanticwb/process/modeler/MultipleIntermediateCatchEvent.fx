@@ -19,12 +19,4 @@ public class MultipleIntermediateCatchEvent extends IntermediateCatchEvent
         type=CATCH_MULTIPLE;
         return super.create();
     }
-
-    public override function canAttach(parent:GraphicalElement) : Boolean {
-        var ret=false;
-        if(parent instanceof Activity or parent instanceof Pool or parent instanceof Lane) {
-            ret=true;
-        }
-        return ret;
-    }
 }
