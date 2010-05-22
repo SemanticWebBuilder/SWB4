@@ -51,5 +51,32 @@ public class Gateway extends FlowNode
             visible: bind canView()
         };
     }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+        
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("Gateway cannot have outgoing MessageFlow");
+        }
+        return ret;
+    }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("Gateway cannot have incoming MessageFlow");
+        }
+        if (link instanceof AssociationFlow) {
+            if (not(link.ini instanceof Artifact)) {
+                ret = false;
+            }
+            ModelerUtils.setErrorMessage("Gateway cannot have incoming AssociationFlow if it does not come from an Artifact");
+        }
+        return ret;
+    }
+
 }
 
