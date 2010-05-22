@@ -21,18 +21,26 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
     }
 
     public override function canEndLink(link:ConnectionObject) {
-        //El evento intermedio de enlace tipo catch no puede tener flujos de entrada
         return false;
     }
 
     public override function canStartLink(link:ConnectionObject) {
-        //El evento intermedio de enlace tipo catch no puede tener más de un flujo de
-        //secuencia de salida y no puede tener flujos de mensaje de salida
         var ret = super.canStartLink(link);
         if (link instanceof MessageFlow) {
             ret = false;
+            ModelerUtils.setErrorMessage("LinkEvent cannot have outgoing MessageFlow");
         }
-
-        return false;
+        return ret;
     }
+
+    public override function canAttach(parent:GraphicalElement) : Boolean {
+        var ret = super.canAttach(parent);
+
+        if (parent instanceof Activity) {
+            ret = false;
+            ModelerUtils.setErrorMessage("LinkEvent cannot be attached to activities");
+        }
+        return ret;
+    }
+
 }
