@@ -171,21 +171,25 @@ public class Pool extends GraphicalElement
 
     override public function canStartLink(link:ConnectionObject) : Boolean
     {
-        var ret = false;
-        //Sólo pueden salir de un pool flujos de mensaje o asociaciones
-        if (link instanceof MessageFlow or link instanceof AssociationFlow) {
-            ret = true;
+        var ret = true;
+        if (link instanceof SequenceFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("Pool cannot have outgoing SequenceFlow");
         }        
         return ret;
     }
 
     override public function canEndLink(link:ConnectionObject) : Boolean
     {
-        var ret = false;
-        if (link.ini != this) {//No se permiten lazos
-            //Sólo pueden llegar al pool flujos de mensaje o asociaciones
-            if (link instanceof MessageFlow or link instanceof AssociationFlow) {
-                ret = true;
+        var ret = true;
+        if (link instanceof SequenceFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("Pool cannot have incoming SequenceFlow");
+        }
+        if (link instanceof MessageFlow) {
+            if (link.ini.getPool() == this) {
+                ret = false;
+                ModelerUtils.setErrorMessage("Cannot link MessageFlow from within the Pool");
             }
         }
         return ret;
