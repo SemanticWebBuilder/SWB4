@@ -23,7 +23,7 @@ public class Activity extends FlowNode
 
     override public function canStartLink(link:ConnectionObject) : Boolean
     {
-        var ret = true;        
+        var ret = super.canStartLink(link);
         //No se puede iniciar un flujo de secuencia si la actividad está
         //dentro de un subproceso adhoc
         if (link instanceof SequenceFlow) {
@@ -32,7 +32,6 @@ public class Activity extends FlowNode
                 ModelerUtils.setErrorMessage("SequenceFlow is not allowed in AdHoc Subprocess");
             }
         }
-        
         return ret;
     }
 
@@ -45,15 +44,7 @@ public class Activity extends FlowNode
                 ret = false;
                 ModelerUtils.setErrorMessage("MessageFlow must cross pool boundary");
             }
-        }
-
-        //No se puede terminar una asociación si no viene de un artefacto
-        if (link instanceof AssociationFlow) {
-            if (not(link.ini instanceof Artifact)) {
-                ret = false;
-                ModelerUtils.setErrorMessage("Association cannot link activities");
-            }
-        }
+        }        
         return ret;
     }
 }
