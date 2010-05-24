@@ -303,6 +303,7 @@ public class GraphicalElement extends CustomNode
             graphParent=parent;
             insert this into parent.graphChilds;
             //println("add {uri} parent:{parent.uri}");
+            modeler.moveFront(this, parent);
         }else
         {
             delete this from graphParent.graphChilds;
