@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import javafx.scene.control.ScrollView;
 import javafx.scene.layout.LayoutInfo;
 import javafx.scene.Cursor;
+import javafx.util.Sequences;
 
 /**
  * @author javier.solis
@@ -275,6 +276,18 @@ public class Modeler extends CustomNode
     {
         insert obj before contents[0];
     }
+
+    public function moveFront(fobj:Node, tobj:Node)
+    {
+        var f=Sequences.indexOf(contents,fobj);
+        var t=Sequences.indexOf(contents,tobj);
+        if(f>-1 and f<t)
+        {
+            delete fobj from contents;
+            insert fobj after contents[t-1];
+        }
+    }
+
 
     public function remove(obj:Node)
     {

@@ -29,6 +29,8 @@ var errorMessage:String;
 public function setErrorMessage(message:String)
 {
     errorMessage=message;
+    startToolTip(message, 0, getToolTip().scene.height-20);
+    //startToolTip(message, getToolTip().scene.width/2, getToolTip().scene.height/2);
 }
 
 public var splash=Splash{ };

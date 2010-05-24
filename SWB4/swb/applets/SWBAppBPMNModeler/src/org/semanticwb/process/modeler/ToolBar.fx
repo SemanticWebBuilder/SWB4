@@ -297,7 +297,14 @@ public class ToolBar extends CustomNode
                 ge.y=y;
                 if(w>0)ge.w=w;
                 if(h>0)ge.h=h;
-                modeler.add(ge);
+//                if(ge instanceof Pool)
+//                {
+//                    modeler.addFirst(ge);
+//                }else
+//                {
+                    modeler.add(ge);
+//                }
+
                 //println("jsobj:{js.toString()}, i: {i}");
             }
             i++;
