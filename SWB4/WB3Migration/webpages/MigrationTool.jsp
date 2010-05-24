@@ -1732,14 +1732,18 @@
                     // no debe repetir los contenidos de office
                     String siteid=tp.getMap().getId();
                     WBResource wbresource=ResourceMgr.getInstance().getResource(siteid, Long.parseLong(idElement));
-                    if(!MigrateOfficeContents.isOfficeDocument(wbresource,siteid))
+                    if(null!=wbresource&&!MigrateOfficeContents.isOfficeDocument(wbresource,siteid))
                     {
                         org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
                         if(resource!=null)
                         {
-                            resource.setActive(occ.isActive());
                             wp.addResource(resource);
+                            try {
+                                resource.setActive(occ.isActive());
+                            } catch (Exception e) {
+                                System.out.println("Error al activar el recurso..."+resource.getId());
+                                                       }
                         }
                     }
                 } else if(occType.equals(TopicMap.CNF_WBPFlow))
