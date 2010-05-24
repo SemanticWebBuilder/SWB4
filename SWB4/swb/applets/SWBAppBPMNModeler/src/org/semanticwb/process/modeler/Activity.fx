@@ -24,27 +24,12 @@ public class Activity extends FlowNode
     override public function canStartLink(link:ConnectionObject) : Boolean
     {
         var ret = super.canStartLink(link);
-        //No se puede iniciar un flujo de secuencia si la actividad está
-        //dentro de un subproceso adhoc
         if (link instanceof SequenceFlow) {
             if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
                 ret = false;
                 ModelerUtils.setErrorMessage("SequenceFlow is not allowed in AdHoc Subprocess");
             }
         }
-        return ret;
-    }
-
-    public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = super.canEndLink(link);
-
-        //No se puede terminar un flujo de mensaje si están en el mismo pool
-        if (link instanceof MessageFlow) {
-            if (link.ini.getPool() == getPool()) {
-                ret = false;
-                ModelerUtils.setErrorMessage("MessageFlow must cross pool boundary");
-            }
-        }        
         return ret;
     }
 }
