@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.shape.Path;
