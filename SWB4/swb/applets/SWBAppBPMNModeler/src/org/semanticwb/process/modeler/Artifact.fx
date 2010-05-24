@@ -150,24 +150,23 @@ public class Artifact extends GraphicalElement
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
-        var ret = true;
-        if (link instanceof SequenceFlow or link instanceof MessageFlow) {
+        var ret = super.canStartLink(link);
+        if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifacts must be linked using AssociationFlows");
+            ModelerUtils.setErrorMessage("Artifact must be linked using AssociationFlow");
         }
         return ret;
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = true;
+        var ret = super.canEndLink(link);
         if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifacts must be linked using AssociationFlows");
+            ModelerUtils.setErrorMessage("Artifact must be linked using AssociationFlow");
         } else if (link.ini instanceof Artifact) {
             ret = false;
             ModelerUtils.setErrorMessage("Artifacts cannot be linked to artifacts");
         }
         return ret;
     }
-
 }
