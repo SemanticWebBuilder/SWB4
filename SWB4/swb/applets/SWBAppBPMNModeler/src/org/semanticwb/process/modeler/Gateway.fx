@@ -54,29 +54,64 @@ public class Gateway extends FlowNode
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
         var ret = super.canStartLink(link);
+        var ci = 0;
+        var co = 0;
+
+        for(ele in getInputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                ci++;
+            }
+        }
+
+        for(ele in getOutputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                co++;
+            }
+        }
         
         if (link instanceof MessageFlow) {
             ret = false;
             ModelerUtils.setErrorMessage("Gateway cannot have outgoing MessageFlow");
+        }
+
+        if (link instanceof SequenceFlow) {
+            if (ci > 1 and co != 0) {
+                ret = false;
+                ModelerUtils.setErrorMessage("Converging Gateway must have only one outgoing SequenceFlow");
+            }
         }
         return ret;
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
+        var ci = 0;
+        var co = 0;
 
+        for(ele in getInputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                ci++;
+            }
+        }
+
+        for(ele in getOutputConnectionObjects()) {
+            if(ele instanceof SequenceFlow) {
+                co++;
+            }
+        }
+        
         if (link instanceof MessageFlow) {
             ret = false;
             ModelerUtils.setErrorMessage("Gateway cannot have incoming MessageFlow");
         }
-        if (link instanceof AssociationFlow) {
-            if (not(link.ini instanceof Artifact)) {
+
+        if (link instanceof SequenceFlow) {
+            if (co > 1 and ci != 0) {
                 ret = false;
+                ModelerUtils.setErrorMessage("Diverging Gateway must have only one incoming SequenceFlow");
             }
-            ModelerUtils.setErrorMessage("Gateway cannot have incoming AssociationFlow if it does not come from an Artifact");
         }
         return ret;
     }
-
 }
 
