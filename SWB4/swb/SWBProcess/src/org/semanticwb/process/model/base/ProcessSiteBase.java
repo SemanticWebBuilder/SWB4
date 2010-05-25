@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable
+public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable
 {
     public static final org.semanticwb.platform.SemanticClass swp_InclusiveIntermediateEventGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#InclusiveIntermediateEventGateway");
     public static final org.semanticwb.platform.SemanticClass swp_AdhocSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#AdhocSubProcess");
@@ -47,8 +47,8 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
     public static final org.semanticwb.platform.SemanticClass swp_ComplexGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateway");
     public static final org.semanticwb.platform.SemanticClass swp_ErrorEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ErrorEndEvent");
-    public static final org.semanticwb.platform.SemanticClass swp_TerminationEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TerminationEndEvent");
     public static final org.semanticwb.platform.SemanticClass swp_LoopSubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#LoopSubProcess");
+    public static final org.semanticwb.platform.SemanticClass swp_TerminationEndEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TerminationEndEvent");
     public static final org.semanticwb.platform.SemanticClass swp_TimerIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass swp_Event=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Event");
     public static final org.semanticwb.platform.SemanticClass swp_Process=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Process");
@@ -1543,36 +1543,6 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.ErrorEndEvent.ClassMgr.hasErrorEndEvent(id, this);
     }
 
-    public org.semanticwb.process.model.TerminationEndEvent getTerminationEndEvent(String id)
-    {
-        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.getTerminationEndEvent(id, this);
-    }
-
-    public java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEvents()
-    {
-        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.listTerminationEndEvents(this);
-    }
-
-    public org.semanticwb.process.model.TerminationEndEvent createTerminationEndEvent(String id)
-    {
-        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.createTerminationEndEvent(id,this);
-    }
-
-    public org.semanticwb.process.model.TerminationEndEvent createTerminationEndEvent()
-    {
-        long id=getSemanticObject().getModel().getCounter(swp_TerminationEndEvent);
-        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.createTerminationEndEvent(String.valueOf(id),this);
-    } 
-
-    public void removeTerminationEndEvent(String id)
-    {
-        org.semanticwb.process.model.TerminationEndEvent.ClassMgr.removeTerminationEndEvent(id, this);
-    }
-    public boolean hasTerminationEndEvent(String id)
-    {
-        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.hasTerminationEndEvent(id, this);
-    }
-
     public org.semanticwb.process.model.LoopSubProcess getLoopSubProcess(String id)
     {
         return org.semanticwb.process.model.LoopSubProcess.ClassMgr.getLoopSubProcess(id, this);
@@ -1601,6 +1571,36 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     public boolean hasLoopSubProcess(String id)
     {
         return org.semanticwb.process.model.LoopSubProcess.ClassMgr.hasLoopSubProcess(id, this);
+    }
+
+    public org.semanticwb.process.model.TerminationEndEvent getTerminationEndEvent(String id)
+    {
+        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.getTerminationEndEvent(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.process.model.TerminationEndEvent> listTerminationEndEvents()
+    {
+        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.listTerminationEndEvents(this);
+    }
+
+    public org.semanticwb.process.model.TerminationEndEvent createTerminationEndEvent(String id)
+    {
+        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.createTerminationEndEvent(id,this);
+    }
+
+    public org.semanticwb.process.model.TerminationEndEvent createTerminationEndEvent()
+    {
+        long id=getSemanticObject().getModel().getCounter(swp_TerminationEndEvent);
+        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.createTerminationEndEvent(String.valueOf(id),this);
+    } 
+
+    public void removeTerminationEndEvent(String id)
+    {
+        org.semanticwb.process.model.TerminationEndEvent.ClassMgr.removeTerminationEndEvent(id, this);
+    }
+    public boolean hasTerminationEndEvent(String id)
+    {
+        return org.semanticwb.process.model.TerminationEndEvent.ClassMgr.hasTerminationEndEvent(id, this);
     }
 
     public org.semanticwb.process.model.TimerIntermediateCatchEvent getTimerIntermediateCatchEvent(String id)
