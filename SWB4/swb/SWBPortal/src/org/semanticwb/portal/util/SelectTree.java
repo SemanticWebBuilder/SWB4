@@ -30,7 +30,6 @@ import java.util.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.model.SWBContext;
@@ -176,14 +175,14 @@ public class SelectTree {
         boolean toggleopen;
         
         StringBuilder html = new StringBuilder("<ul class=\"treeres\">");
-        Iterator<WebPage> childs=pageroot.listVisibleChilds(lang);
+        Iterator<WebPage> childs=pageroot.listChilds();
         while(childs.hasNext()) {
             WebPage webpage = childs.next();
             if(webpage.getId()!=null) {
                                 
                 toggleopen = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
                 
-                if(webpage.listVisibleChilds(lang).hasNext()) {
+                if(webpage.listChilds().hasNext()) {
                     html.append("<li>");
                     if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                         style=" style=\"color:#FF6600; font-weight:bold\" ";
