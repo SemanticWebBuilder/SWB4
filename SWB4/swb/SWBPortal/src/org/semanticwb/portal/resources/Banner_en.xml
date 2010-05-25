@@ -13,7 +13,7 @@
 
         <textarea id="longdesc" name="longdesc" label="Long Description:" rows="5" cols="50" wrap="virtual" promptMessage="Indicative outline banner Help mode of action. Accessibility Guideline" />
 
-        <input type="text" id="width"  name="width" label="Widht:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid "promptMessage =" width banner. Example: 500em, 600px, 100%" />
+        <input type="text" id="width"  name="width" label="Widht:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid " promptMessage =" width banner. Example: 500em, 600px, 100%" />
         <input type="text" id="height" name="height" label="Height:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Height of the banner. Example: 120em, 75px, 100%" />
         <input type="text" name="cssClass" id="cssClass" label="Anchor Class attribute:" size="30" promptMessage="Class attribute value of the width of the banner" />
         <input type="text" id="url" name="url" label="Web Address: " size="50" promptMessage="Website Sponsor" />
