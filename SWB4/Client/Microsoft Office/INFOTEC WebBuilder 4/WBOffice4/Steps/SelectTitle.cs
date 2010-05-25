@@ -37,9 +37,14 @@ namespace WBOffice4.Steps
         public SelectTitle(String title)
         {
             InitializeComponent();
-            if (title != null && !title.Equals(""))
+            if (title != null && title.EndsWith("\r"))
+            {
+                title=title.Substring(0,title.Length-1);
+            }
+            if (title != null && !title.Equals("") && !title.Equals("\r"))
             {
                 this.textBoxTitle.Text = title;
+                this.textBoxTitle.Enabled = false;
             }
         }
 
