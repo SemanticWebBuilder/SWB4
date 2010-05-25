@@ -19,6 +19,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     public final static String ACTION_ACCEPT="accept";
     public final static String ACTION_REJECT="reject";
     public final static String ACTION_CANCEL="cancel";
+    public final static String ACTION_EVENT="event";
 
     public Instance(org.semanticwb.platform.SemanticObject base)
     {
@@ -93,6 +94,7 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
     public void execute(User user)
     {
         System.out.println("execute:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
+        setExecution(getExecution()+1);
     }
 
 

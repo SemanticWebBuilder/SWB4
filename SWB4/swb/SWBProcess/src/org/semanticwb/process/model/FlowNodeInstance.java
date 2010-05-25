@@ -46,7 +46,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     {
         super.start(user);
         setSourceInstance(sourceInstance);
-        setFromConnection(sourceConnection);
+        if(sourceConnection!=null)setFromConnection(sourceConnection);
         execute(user);
     }
 
@@ -96,12 +96,46 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         return ret;
     }
 
+    /**
+     * Regresa instancia del FlowNode pasado por parametro,
+     * busca dentro de los nodo hermanos detro del mismo proceso
+     * Si la instancia no esta creada la crea, la inicia y la executa
+     * Si la instancia ya existe, la resetea y la executa
+     */
+    public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, FlowNodeInstance ref, ConnectionObject con, User user)
+    {
+        FlowNodeInstance inst=getRelatedFlowNodeInstance(node);
+        if(inst==null)
+        {
+            inst=node.createInstance(getContainerInstance());
+        }else
+        {
+            //recrear instancia en ciclos
+            int status=inst.getStatus();
+            if(status==Instance.STATUS_ABORTED || status==Instance.STATUS_CLOSED)
+            {
+                inst.reset();
+            }
+        }
+        if(inst.getStatus()==Instance.STATUS_INIT)
+        {
+            inst.start(ref,con,user);
+        }else
+        {
+            if(con!=null)inst.setFromConnection(con);
+            inst.setSourceInstance(ref);
+            inst.execute(user);
+        }
+        return inst;
+    }
+
+
 
     /**
-     * Cierra la instancia de objeto y continua el flujo al siguiente objeto
+     * Aborta las instancias anteriores ene el flujo a esta instancia
      * @param user
      */
-    private void abortDependencies(User user)
+    public void abortDependencies(User user)
     {
         //System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         FlowNode type=getFlowNodeType();
@@ -147,6 +181,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         //System.out.println("reset:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         //Thread.dumpStack();
         setStatus(Instance.STATUS_INIT);
+        setIteration(getIteration()+1);
         setAction(null);
         setEnded(null);
         removeEndedby();
