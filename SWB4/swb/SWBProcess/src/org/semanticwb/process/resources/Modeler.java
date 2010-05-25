@@ -641,7 +641,7 @@ public class Modeler extends GenericResource {
             while (it.hasNext()) {
                 String key = it.next();
                 so = ont.getSemanticObject(hmori.get(key));
-                so.remove();
+                so.remove();   
             }
 
         } catch (Exception e) {
