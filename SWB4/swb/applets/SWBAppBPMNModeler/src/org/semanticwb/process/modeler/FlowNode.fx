@@ -44,7 +44,6 @@ public class FlowNode extends GraphicalElement
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
 
-        //No se puede terminar un flujo de secuencia si no están en el mismo pool
         if (link instanceof SequenceFlow) {
             if (not(link.ini.getPool() == getPool())) {
                 ret = false;
@@ -52,11 +51,17 @@ public class FlowNode extends GraphicalElement
             }
         }
 
-        //No se puede terminar una asociación si no viene de un artefacto
         if (link instanceof AssociationFlow) {
             if (not(link.ini instanceof Artifact)) {
                 ret = false;
                 ModelerUtils.setErrorMessage("Association cannot link FlowNodes");
+            }
+        }
+
+        if (link instanceof MessageFlow) {
+            if (link.ini.getPool() == getPool()) {
+                ret = false;
+                ModelerUtils.setErrorMessage("MessageFlow must cross pool boundary");
             }
         }
         return ret;
