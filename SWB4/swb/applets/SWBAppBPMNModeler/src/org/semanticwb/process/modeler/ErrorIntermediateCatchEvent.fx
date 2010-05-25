@@ -19,4 +19,15 @@ public class ErrorIntermediateCatchEvent extends IntermediateCatchEvent
         type=CATCH_ERROR;
         return super.create();
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link instanceof SequenceFlow and link.ini instanceof EventBasedGateway) {
+            ret = false;
+            ModelerUtils.setErrorMessage("ErrorEvent cannot be linked to EventBasedGateway");
+        }
+        return ret;
+    }
+
 }
