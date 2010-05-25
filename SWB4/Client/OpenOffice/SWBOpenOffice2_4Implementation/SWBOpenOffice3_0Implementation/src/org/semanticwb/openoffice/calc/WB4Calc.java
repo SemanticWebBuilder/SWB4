@@ -873,4 +873,10 @@ public class WB4Calc extends OfficeDocument
 
         return images;
     }
+
+    @Override
+    public String getSelectedText()
+    {
+        return null;
+    }
 }

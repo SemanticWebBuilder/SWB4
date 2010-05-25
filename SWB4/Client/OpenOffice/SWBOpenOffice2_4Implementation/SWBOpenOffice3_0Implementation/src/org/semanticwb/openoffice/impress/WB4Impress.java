@@ -1124,4 +1124,10 @@ public class WB4Impress extends OfficeDocument
         }
         return images;
     }
+
+    @Override
+    public String getSelectedText()
+    {
+        return null;
+    }
 }
