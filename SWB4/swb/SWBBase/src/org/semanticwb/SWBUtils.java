@@ -2093,28 +2093,27 @@ public class SWBUtils {
          * <p>Lee el archivo correspondiente a la ruta especificada por {@code path}.</p>
          * 
          * @param path a string representing the path of the file to read.
-         * @return a string with the file's content read.
+         * @return a string with the file's content read, null if the file don't exist
          * 
          */
         public static String getFileFromPath(String path)
         {
-            StringBuffer ret = new StringBuffer(SWBUtils.bufferSize);
-            try
+            String ret=null;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            File f=new File(path);
+            if(f.exists())
             {
-                InputStream file = null;
-                file = new FileInputStream(path);
-                byte[] bfile = new byte[SWBUtils.bufferSize];
-                int x;
-                while ((x = file.read(bfile, 0, SWBUtils.bufferSize)) > -1)
+                try
                 {
-                    ret.append(new String(bfile, 0, x));
+                    FileInputStream in = new FileInputStream(f);
+                    copyStream(in, out);
+                    ret=out.toString();
+                } catch (Exception e)
+                {
+                    log.error("Can't retreive file:"+path,e);
                 }
-                file.close();
-            } catch (Exception e)
-            {
-                log.error("Can't retreive file:"+path,e);
             }
-            return ret.toString();
+            return ret;
         }
 
         /**
