@@ -88,21 +88,21 @@ public class ToolBar extends CustomNode
             {
                 file=new File("{file.getPath()}.png");
             }
-            println(file);
+            //println(file);
             var bufferedImage=modeler.renderToImage(25);
-            println(bufferedImage);
+            //println(bufferedImage);
             try
             {
                 var out=new FileOutputStream(file);
                 def bufferedOutputStream = new BufferedOutputStream(out);
-                println(bufferedOutputStream);
+                //println(bufferedOutputStream);
                 javax.imageio.ImageIO.write( bufferedImage, "PNG", bufferedOutputStream );
                 bufferedOutputStream.close();
                 out.close();
-                println("end");
+                //println("end");
             }catch(e:Exception)
             {
-                println(e.getMessage());
+                //println(e.getMessage());
                 Alert.inform("Error",e.getMessage());
             }
         }
@@ -196,7 +196,7 @@ public class ToolBar extends CustomNode
         {
             name=name.substring(0,i);
         }
-        println("name:{name}");
+        //println("name:{name}");
         return name;
     }
 
@@ -255,7 +255,7 @@ public class ToolBar extends CustomNode
     */
     public function createProcess(json:String): Void
     {
-        println("Arguments:{FX.getArgument}");
+        //println("Arguments:{FX.getArgument}");
 
         var pkg:String="org.semanticwb.process.modeler";
 
@@ -297,14 +297,13 @@ public class ToolBar extends CustomNode
                 ge.y=y;
                 if(w>0)ge.w=w;
                 if(h>0)ge.h=h;
-//                if(ge instanceof Pool)
-//                {
-//                    modeler.addFirst(ge);
-//                }else
-//                {
+                if(ge instanceof Pool)
+                {
+                    modeler.addFirst(ge);
+                }else
+                {
                     modeler.add(ge);
-//                }
-
+                }
                 //println("jsobj:{js.toString()}, i: {i}");
             }
             i++;
@@ -369,7 +368,7 @@ public class ToolBar extends CustomNode
                 ge.setGraphParent(modeler.getGraphElementByURI(parent));
                 var container=js.getString("container");
                 ge.setContainer(modeler.getGraphElementByURI(container));
-                println("{ge} parent:{ge.getGraphParent()}");
+                //println("{ge} parent:{ge.getGraphParent()}");
             }
 
             //Connections
@@ -499,7 +498,7 @@ public class ToolBar extends CustomNode
                             }
                         }
                         modeler.containerElement=aux;
-                        print.print(arr);
+                        //print.print(arr);
                         //TODO:
                     }
                 },
