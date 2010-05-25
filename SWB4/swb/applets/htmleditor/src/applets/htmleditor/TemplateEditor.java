@@ -101,9 +101,25 @@ public class TemplateEditor extends javax.swing.JApplet
     private java.awt.datatransfer.Clipboard clipboard;
     
     public static File curDir=null;
-    
+
+    /** Initializes the applet HtmlEditor */
+//    @Override
+//    public void init()
+//    {
+//        Thread t=new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                init2();
+//            }
+//        };
+//        t.start();
+//    }
+
     
     /** Initializes the applet HtmlEditor */
+    @Override
     public void init()
     {
         System.out.println("Applet Template Editor initialized...");
