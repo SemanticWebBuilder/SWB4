@@ -19,6 +19,7 @@ import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.ConnectionObject;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
+import javafx.util.Sequences;
 
 
 /**
@@ -281,7 +282,6 @@ public class GraphicalElement extends CustomNode
                 }
             }
         }
-
         setGraphParent(overNode);
         //println("onMouseRelease {overNode.title}");
     }
@@ -402,22 +402,29 @@ public class GraphicalElement extends CustomNode
 
     public function remove(validate:Boolean) : Void
     {
+        var del:Node[];
         //println("remove {this} {validate}");
         setGraphParent(null);
         setContainer(null);
-        modeler.remove(this);
+        insert this into del;
         for(connection in modeler.contents where connection instanceof ConnectionObject)
         {
             var c=connection as ConnectionObject;
-            if(c.end == this)c.remove();
-            if(c.ini == this)c.remove();
+            if(c.end == this)insert c into del;
+            if(c.ini == this)insert c into del;
         }
 
-        for(child in graphChilds)
+        var ch=Sequences.shuffle(graphChilds);
+        for(child in ch)
         {
-            child.remove(false);
+            (child as GraphicalElement).remove(false);
         }
-        delete graphChilds;
+        //delete graphChilds;
+
+        for(node in del)
+        {
+            modeler.remove(node);
+        }
         
         ModelerUtils.setResizeNode(null);
     }
