@@ -72,4 +72,23 @@ public class AnnotationArtifact extends Artifact
         };
     }
 
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+
+        if (link instanceof DirectionalAssociation) {
+            ret = false;
+            ModelerUtils.setErrorMessage("AnnotationArtifact must be linked using non-directional association");
+        }        
+        return ret;
+    }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link instanceof DirectionalAssociation) {
+            ret = false;
+            ModelerUtils.setErrorMessage("AnnotationArtifact must be linked using non-directional association");
+        }
+        return ret;
+    }
 }
