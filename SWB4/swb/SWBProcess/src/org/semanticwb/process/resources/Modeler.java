@@ -359,13 +359,14 @@ public class Modeler extends GenericResource {
         out.println("<script src=\"http://dl.javafx.com/1.3/dtfx.js\"></script>");
         out.println("</head>");
         out.println(" <body style=\"margin-top:0; margin-left:0;\">");
+        out.println("  <div style=\"width: 100%; height: 100%\">");
         out.println("    <script>");
         out.println("    javafx(");
         out.println("        {");
         out.println("              archive: \"" + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAppBPMNModeler.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/json.jar," + SWBPlatform.getContextPath() + "/swbadmin/lib/SWBAplCommons.jar\",");
         out.println("              draggable: true,");
-        out.println("              width: 900,");
-        out.println("              height: 700,");
+        out.println("              width: document.body.scrollWidth,");
+        out.println("              height: document.body.scrollHeight,");
         out.println("              code: \"org.semanticwb.process.modeler.Main\",");
         out.println("              name: \"SWBAppBPMNModeler\"");
         out.println("        },");
@@ -375,6 +376,7 @@ public class Modeler extends GenericResource {
         out.println("        }");
         out.println("    );");
         out.println("    </script>");
+        out.println("  </div>");
         out.println(" </body>");
         out.println("</html>");
     }
@@ -390,8 +392,9 @@ public class Modeler extends GenericResource {
         urlapp.setParameter("suri", suri);
 
         out.println("<div class=\"applet\">");
-        String idframe = "ifr_" + getResourceBase().getId();
-        out.println("<iframe alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" name==\"" + idframe + "\" id=\"" + idframe + "\" src=\"" + urlapp + "\" width=\"100%\" onload=\"this.style.height = " + idframe + ".document.body.scrollHeight + 5\" ></iframe>"); //height=\"100%\"
+        out.println("<iframe dojoType_=\"dijit.layout.ContentPane\" src=\"" + urlapp + "\" width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"no\"></iframe>");
+        //String idframe = "ifr_" + getResourceBase().getId();
+        //out.println("<iframe alt=\"Modeler\" scrolling=\"no\" frameborder=\"0\" name==\"" + idframe + "\" id=\"" + idframe + "\" src=\"" + urlapp + "\" width=\"100%\" onload=\"this.style.height = " + idframe + ".document.body.scrollHeight + 5\" ></iframe>"); //height=\"100%\"
         out.println("</div>");
     }
 
