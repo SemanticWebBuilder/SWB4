@@ -62,6 +62,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     String[] choices =new String[4];
     Locale locale;
     /** Initializes the applet ftp */
+
+    /** Initializes the applet HtmlEditor */
+//    @Override
+//    public void init()
+//    {
+//        Thread t=new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                init2();
+//            }
+//        };
+//        t.start();
+//    }
+
     @Override
     public void init() {
 
