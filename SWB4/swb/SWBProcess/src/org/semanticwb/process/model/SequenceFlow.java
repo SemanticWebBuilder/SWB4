@@ -17,28 +17,7 @@ public class SequenceFlow extends org.semanticwb.process.model.base.SequenceFlow
         if(target instanceof FlowNode)
         {
             FlowNode node=(FlowNode)target;
-            FlowNodeInstance inst=source.getRelatedFlowNodeInstance(node);
-            if(inst==null)
-            {
-                inst=node.createInstance(source.getContainerInstance());
-            }else
-            {
-                //recrear instancia en ciclos
-                int status=inst.getStatus();
-                if(status==Instance.STATUS_ABORTED || status==Instance.STATUS_CLOSED)
-                {
-                    inst.reset();
-                }
-            }
-            if(inst.getStatus()==Instance.STATUS_INIT)
-            {
-                inst.start(source,this,user);
-            }else
-            {
-                inst.setFromConnection(this);
-                inst.setSourceInstance(source);
-                inst.execute(user);
-            }
+            source.executeRelatedFlowNodeInstance(node,source,this, user);
         }
 
     }    
