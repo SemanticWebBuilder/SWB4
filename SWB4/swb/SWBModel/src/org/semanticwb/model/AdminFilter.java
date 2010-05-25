@@ -22,8 +22,8 @@
  **/
 package org.semanticwb.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import org.semanticwb.SWBPlatform;
@@ -52,25 +52,25 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
     public static String ACTION_ACTIVE = "active";
     
     /** The pages. */
-    private ArrayList<WebPage> pages = null;
+    private HashSet<WebPage> pages = null;
     
     /** The vpages. */
-    private ArrayList<WebPage> vpages = null;
+    private HashSet<WebPage> vpages = null;
     
     /** The classes. */
-    private HashMap<SemanticClass, ArrayList> classes = null;
+    private HashMap<SemanticClass, HashSet> classes = null;
     
     /** The sobjects. */
-    private ArrayList<String> sobjects = null;
+    private HashSet<String> sobjects = null;
     
     /** The vsobjects. */
-    private ArrayList<String> vsobjects = null;
+    private HashSet<String> vsobjects = null;
     
     /** The hnodes. */
-    private HashMap<String, ArrayList<HerarquicalNode>> hnodes = null;
+    private HashMap<String, HashSet<HerarquicalNode>> hnodes = null;
     
     /** The sobject classes. */
-    private ArrayList<SemanticClass> sobjectClasses = null;
+    private HashSet<SemanticClass> sobjectClasses = null;
     
     /** The all classes. */
     private boolean allClasses = false;
@@ -94,11 +94,11 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
     public void init() {
         allClasses = false;
         allSites = false;
-        pages = new ArrayList();
-        vpages = new ArrayList();
-        sobjectClasses = new ArrayList();
-        sobjects = new ArrayList();
-        vsobjects = new ArrayList();
+        pages = new HashSet();
+        vpages = new HashSet();
+        sobjectClasses = new HashSet();
+        sobjects = new HashSet();
+        vsobjects = new HashSet();
         classes = new HashMap();
         hnodes = new HashMap();
 
@@ -120,9 +120,9 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                     String act = st.nextToken();
                     SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
                     if (cls != null) {
-                        ArrayList arr = classes.get(cls);
+                        HashSet arr = classes.get(cls);
                         if (arr == null) {
-                            arr = new ArrayList();
+                            arr = new HashSet();
                             classes.put(cls, arr);
                             //Se agregan subclases x performance en busqueda
                             Iterator<SemanticClass> it = cls.listSubClasses();
@@ -139,9 +139,9 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                     String clsid = val.substring(12);
                     SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
                     if (cls != null) {
-                        ArrayList arr = classes.get(cls);
+                        HashSet arr = classes.get(cls);
                         if (arr == null) {
-                            arr = new ArrayList();
+                            arr = new HashSet();
                             classes.put(cls, arr);
                             //Se agregan subclases x performance en busqueda
                             Iterator<SemanticClass> it = cls.listSubClasses();
@@ -219,9 +219,9 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                             vsobjects.add(modeluri);
                         }
                         HerarquicalNode node = (HerarquicalNode) obj.createGenericInstance();
-                        ArrayList<HerarquicalNode> arr = hnodes.get(modeluri);
+                        HashSet<HerarquicalNode> arr = hnodes.get(modeluri);
                         if (arr == null) {
-                            arr = new ArrayList();
+                            arr = new HashSet();
                             hnodes.put(modeluri, arr);
                         }
                         arr.add(node);
@@ -258,9 +258,9 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                                         }
                                     } else if (aobj.instanceOf(HerarquicalNode.sclass)) {
                                         HerarquicalNode node = (HerarquicalNode) aobj.createGenericInstance();
-                                        ArrayList<HerarquicalNode> arr = hnodes.get(modeluri);
+                                        HashSet<HerarquicalNode> arr = hnodes.get(modeluri);
                                         if (arr == null) {
-                                            arr = new ArrayList();
+                                            arr = new HashSet();
                                             hnodes.put(modeluri, arr);
                                         }
                                         arr.add(node);
@@ -311,7 +311,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                 //no esta seleccionado
                 ret=false;
             } else {
-                ArrayList<HerarquicalNode> arr = hnodes.get(modelUri);
+                HashSet<HerarquicalNode> arr = hnodes.get(modelUri);
                 if (arr != null) {
                     ret = arr.contains(node);
                 }
@@ -374,7 +374,39 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
     }
 
     /**
-     * Have access to semantic object.
+     * Alguno de los hijos de este nodo tiene acceso
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public boolean haveChildAccessToSemanticObject(SemanticObject obj)
+    {
+        boolean ret = false;
+        if (!allSites) {
+            if (vsobjects.contains(obj.getURI())) {
+                ret = true;
+            }
+        } else {
+            ret = true;
+        }
+        return ret;
+    }
+
+    /**
+     * Tiene acceso este nodo o algun padre o algun hijo
+     *
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public boolean haveTreeAccessToSemanticObject(SemanticObject obj) {
+        boolean ret = false;
+        ret=haveChildAccessToSemanticObject(obj);
+        if(!ret)ret=haveAccessToSemanticObject(obj);
+        return ret;
+    }
+
+    /**
+     * Tiene acceso este nodo o algun padre
      * 
      * @param obj the obj
      * @return true, if successful
@@ -390,8 +422,8 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
                 ret=false;
             } else if (sobjects.contains(obj.getURI())) {
                 ret = true;
-            } else if (vsobjects.contains(obj.getURI())) {
-                ret = true;
+//            } else if (vsobjects.contains(obj.getURI())) {
+//                ret = true;
             } else if (sobjectClasses.contains(obj.getSemanticClass())) {
                 ret = true;
             } else {
@@ -414,7 +446,7 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
         boolean ret = false;
         if (!allClasses) {
             if (cls.isSubClass(FilterableClass.swb_FilterableClass)) {
-                ArrayList arr = classes.get(cls);
+                HashSet arr = classes.get(cls);
                 if (arr != null && arr.contains(act)) {
                     ret = true;
                 }
@@ -435,28 +467,28 @@ public class AdminFilter extends org.semanticwb.model.base.AdminFilterBase {
      */
     public boolean haveAccessToWebPage(WebPage page) {
         boolean ret = false;
-//        //System.out.print("haveAccessToWebPage:"+page);
-//        Iterator<WebPage> it = pages.iterator();
-//        while (it.hasNext()) {
-//            WebPage webPage = it.next();
-//            if (page.equals(webPage) || page.isChildof(webPage)) {
-//                ret = true;
-//                break;
-//            }
-//        }
-//        //System.out.print(" retet1:"+ret);
-//        if (!ret) {
-//            Iterator<WebPage> it2 = vpages.iterator();
-//            while (it2.hasNext()) {
-//                WebPage webPage = it2.next();
-//                if (page.equals(webPage)) {
-//                    ret = true;
-//                    break;
-//                }
-//            }
-//        }
-//        //System.out.println(" retet2:"+ret);
-        ret = haveAccessToSemanticObject(page.getSemanticObject());
+        //System.out.print("haveAccessToWebPage:"+page);
+        Iterator<WebPage> it = pages.iterator();
+        while (it.hasNext()) {
+            WebPage webPage = it.next();
+            if (page.equals(webPage) || page.isChildof(webPage)) {
+                ret = true;
+                break;
+            }
+        }
+        //System.out.print(" retet1:"+ret);
+        if (!ret) {
+            Iterator<WebPage> it2 = vpages.iterator();
+            while (it2.hasNext()) {
+                WebPage webPage = it2.next();
+                if (page.equals(webPage)) {
+                    ret = true;
+                    break;
+                }
+            }
+        }
+        //System.out.println(" retet2:"+ret);
+//        ret = haveAccessToSemanticObject(page.getSemanticObject());
         return ret;
     }
 
