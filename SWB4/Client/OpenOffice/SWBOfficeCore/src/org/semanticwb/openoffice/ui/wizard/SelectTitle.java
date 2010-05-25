@@ -55,6 +55,7 @@ public class SelectTitle extends WizardPage
         if(title!=null && !title.trim().equals(""))
         {
             this.jTextFieldTitle.setText(title);
+            this.jTextFieldTitle.setEnabled(false);
         }
     }
     public SelectTitle()
