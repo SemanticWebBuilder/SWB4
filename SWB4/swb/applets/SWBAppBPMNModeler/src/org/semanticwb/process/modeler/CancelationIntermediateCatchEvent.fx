@@ -21,9 +21,12 @@ public class CancelationIntermediateCatchEvent extends IntermediateCatchEvent
     }
 
     public override function canAttach(parent:GraphicalElement) : Boolean {
-        var ret=false;
-        if(parent instanceof TransactionSubProcess or parent instanceof Pool or parent instanceof Lane) {
-            ret=true;
+        var ret = false;
+        
+        if(parent instanceof Pool or parent instanceof Lane or parent instanceof TransactionSubProcess) {
+            ret = true;
+        } else {
+            ModelerUtils.setErrorMessage("Cancelation event can only be attached to transactions");
         }
         return ret;
     }
