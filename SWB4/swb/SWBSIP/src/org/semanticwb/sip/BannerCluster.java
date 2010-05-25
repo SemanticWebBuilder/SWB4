@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8e2. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://kpdus.tripod.com/jad.html
-// Decompiler options: packimports(3)
-// Source File Name:   BannerCluster.java
-
 package org.semanticwb.sip;
 
 import java.io.*;
@@ -13,9 +8,6 @@ import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.model.base.ResourceBase;
 import org.semanticwb.portal.api.*;
-
-// Referenced classes of package org.semanticwb.sip:
-//            PromoCluster
 
 public class BannerCluster extends GenericAdmResource
 {
@@ -32,14 +24,18 @@ public class BannerCluster extends GenericAdmResource
         int i = 0;
         String width = base.getAttribute("width", "143px");
         String height = base.getAttribute("height", "208px");
-        int h;
-        try
-        {
-            h = Integer.parseInt(height.replaceAll("\\D", ""));
+
+        int w;
+        try {
+            w = Integer.parseInt(width.replaceAll("\\D", ""));
+        }catch(NumberFormatException nfe) {
+            w = 143;
         }
-        catch(NumberFormatException nfe)
-        {
-            h = 100;
+        int h;
+        try {
+            h = Integer.parseInt(height.replaceAll("\\D", ""));
+        }catch(NumberFormatException nfe) {
+            h = 208;
         }
         out.append("<script type=\"text/javascript\">\n");
         out.append("    dojo.require('dojox.fx');\n");
@@ -54,7 +50,7 @@ public class BannerCluster extends GenericAdmResource
         out.append("</script>\n");
 
         out.append("<div class=\"swb-promo-cluster\">\n");
-        out.append("<div id=\"promoHolder\" style=\"width:auto; height:175px;\">\n");
+        out.append("<div id=\"promoHolder\" style=\"width:auto; height:"+height+";\">\n");
 
         String cluster = base.getAttribute("cluster", "carrusel");
         Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
@@ -73,7 +69,9 @@ public class BannerCluster extends GenericAdmResource
                                 String desc = r.getDisplayDescription(lang);
                                 String url = r.getAttribute("url");
                                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-                                out.append("<div class=\"swb-promo-cluster-ci\" style=\"background:url("+img+")\" onclick=\"window.location.href='"+url+"'\"  >\n");
+                                String alt = r.getAttribute("alt", title);
+                                out.append("<div class=\"swb-promo-cluster-ci\" onclick=\"window.location.href='"+url+"'\" >\n");
+                                out.append("  <div class=\"swb-cluster-img\"><img src=\""+img+"\" alt=\""+alt+"\" width=\""+w+"\" height=\""+h+"\" /></div> ");
                                 out.append("  <div class=\"swb-cluster-despliega\" id=\"r"+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
                                 out.append("    <p class=\"swb-cluster-titulo\">"+title+"</p>\n");
                                 out.append("    <br />\n");
