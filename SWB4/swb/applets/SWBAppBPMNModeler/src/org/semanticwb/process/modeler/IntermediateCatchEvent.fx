@@ -74,8 +74,8 @@ public class IntermediateCatchEvent extends CatchEvent
 
     public override function canAttach(parent:GraphicalElement):Boolean
     {
-        var ret = false;
-        if(parent instanceof Pool or parent instanceof Lane or parent instanceof Activity) {
+        var ret = super.canAttach(parent);
+        if(ret or parent instanceof Activity) {
             ret = true;
         }
         return ret;
