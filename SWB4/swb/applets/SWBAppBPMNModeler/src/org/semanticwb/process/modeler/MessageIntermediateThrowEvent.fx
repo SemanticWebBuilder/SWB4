@@ -21,16 +21,29 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
-        var ret = false;
+        var ret = super.canStartLink(link);
+        var c = 0;
 
-        //Un evento intermedio de mensaje (throw) sólo puede tener flujos de mensaje de salida
-        if (link instanceof MessageFlow) {
-            ret = true;
-        } else {
-            ret = super.canStartLink(link);
+        for(ele in getOutputConnectionObjects()) {
+            if(ele instanceof MessageFlow) {
+                c++;
+            }
         }
 
+        if (link instanceof MessageFlow and c != 0) {
+            ret = false;
+            ModelerUtils.setErrorMessage("MessageIntermediateThrowEvent can have only one outgoing MessageFlow");
+        }
         return ret;
     }
 
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("MessageIntermediateThrowEvent cannot have incoming MessageFlow");
+        }
+        return ret;
+    }
 }
