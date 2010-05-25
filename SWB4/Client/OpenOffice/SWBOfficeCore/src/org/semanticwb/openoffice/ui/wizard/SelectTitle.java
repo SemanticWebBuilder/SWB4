@@ -49,9 +49,17 @@ public class SelectTitle extends WizardPage
     public static final String TITLE = "title";
 
     /** Creates new form SelectTitle */
-    public SelectTitle()
+    public SelectTitle(String title)
     {
         initComponents();
+        if(title!=null && !title.trim().equals(""))
+        {
+            this.jTextFieldTitle.setText(title);
+        }
+    }
+    public SelectTitle()
+    {
+        this(null);
     }
 
     public static String getDescription()

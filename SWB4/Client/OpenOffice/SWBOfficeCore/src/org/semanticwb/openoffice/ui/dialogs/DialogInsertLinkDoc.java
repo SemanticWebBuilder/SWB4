@@ -20,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -462,7 +460,16 @@ public class DialogInsertLinkDoc extends javax.swing.JDialog {
         //String url="wbrelpath://"+file.uuid+"/"+file.name;
         String url="docrep://"+ site.id +"/"+ sr.pageid +"/_rid/"+ sr.resid +"/_mto/3/_act/inline/_mod/getFile/_wst/maximized/"+file.uuid+"/"+file.name;
         //http://localhost:8080/swb/es/demo/home/_rid/45/_mto/3/_act/inline/_mod/getFile/_wst/maximized/33a923a1-8e02-4123-9cb4-86901fe62ec1/Asley%20005.jpg
-        this.officeDocument.insertLink(url, title);
+        if(officeDocument.getSelectedText()==null || officeDocument.getSelectedText().equals(""))
+        {
+            this.officeDocument.insertLink(url, title);
+        }
+        else
+        {
+            title=officeDocument.getSelectedText();
+            this.officeDocument.insertLink(url, title);
+        }
+        
         
 
     }//GEN-LAST:event_jButtonInsertActionPerformed
