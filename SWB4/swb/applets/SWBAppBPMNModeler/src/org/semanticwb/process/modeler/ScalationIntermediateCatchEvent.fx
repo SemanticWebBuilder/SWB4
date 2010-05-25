@@ -31,7 +31,7 @@ public class ScalationIntermediateCatchEvent extends IntermediateCatchEvent
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
 
-        if (link.ini instanceof EventBasedGateway) {
+        if (link instanceof SequenceFlow and link.ini instanceof EventBasedGateway) {
             ret = false;
             ModelerUtils.setErrorMessage("EscalationEvent cannot be linked to EventBasedGateway");
         }
