@@ -196,8 +196,16 @@ public class Admin implements InternalServlet
         {
             response.setBufferSize(SWBUtils.IO.getBufferSize());
         }catch(Exception noe){}
-        
-        SWBUtils.IO.copyStream(file.getInputStream(), out);
+
+        if(file.hasCache())
+        {
+            out.write(file.getCache());
+            out.flush();
+            out.close();
+        }else
+        {
+            SWBUtils.IO.copyStream(file.getInputStream(), out);
+        }
         //out.close();
         //System.out.println("Sent:"+path);
     }

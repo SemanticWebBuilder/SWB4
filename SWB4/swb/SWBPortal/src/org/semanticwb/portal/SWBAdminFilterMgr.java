@@ -115,8 +115,50 @@ public class SWBAdminFilterMgr
     }
 
     /**
-     * Have access to semantic object.
+     * Alguno de los hijos de este nodo tiene acceso
+     *
+     * @param user the user
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public boolean haveChildAccessToSemanticObject(User user, SemanticObject obj)
+    {
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveChildAccessToSemanticObject(obj);
+            if(ret==true)break;
+        }
+        return ret;
+    }
+
+    /**
+     * Tiene acceso este nodo o algun padre o algun hijo
      * 
+     * @param user the user
+     * @param obj the obj
+     * @return true, if successful
+     */
+    public boolean haveTreeAccessToSemanticObject(User user, SemanticObject obj)
+    {
+        boolean ret=false;
+        Iterator<AdminFilter> it=user.listAdminFilters();
+        if(!it.hasNext())ret=true;
+        while (it.hasNext())
+        {
+            AdminFilter adminFilter = it.next();
+            ret=adminFilter.haveTreeAccessToSemanticObject(obj);
+            if(ret==true)break;
+        }
+        return ret;
+    }
+
+    /**
+     * Tiene acceso este nodo o algun padre
+     *
      * @param user the user
      * @param obj the obj
      * @return true, if successful
@@ -134,6 +176,7 @@ public class SWBAdminFilterMgr
         }
         return ret;
     }
+
 
     /**
      * Have access to herarquical node.

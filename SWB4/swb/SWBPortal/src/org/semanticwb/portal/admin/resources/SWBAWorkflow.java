@@ -790,12 +790,13 @@ public class SWBAWorkflow extends GenericResource
 //                System.out.println("Con APPLET");
 
                 out.println("<div class=\"applet\">");
-                out.println("<APPLET id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
-                out.println("<PARAM NAME =\"idworkflow\" VALUE=\"" + id + "\">");
-                out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
-                out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
-                out.println("<PARAM NAME =\"tm\" VALUE=\"" + tm + "\">");
-                out.println("</APPLET>");
+                out.println("<applet id=\"apptree\" name=\"editrole\" code=\"applets.workflowadmin.EditWorkflow.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" archive=\"swbadmin/lib/SWBAplWorkFlowAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"350\">");
+                out.println("<param name =\"idworkflow\" value=\"" + id + "\">");
+                out.println("<param name =\"jsess\" value=\""+request.getSession().getId()+"\">");
+                out.println("<param name =\"cgipath\" value=\"" + url + "\">");
+                out.println("<param name =\"locale\" value=\"" + user.getLanguage() + "\">");
+                out.println("<param name =\"tm\" value=\"" + tm + "\">");
+                out.println("</applet>");
                 out.println("</div>");
             }
         }

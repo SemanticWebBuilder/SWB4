@@ -360,7 +360,7 @@ public class SWBATemplateEdit extends GenericResource {
             if (obj != null) {
                 //User user=SWBPortal.getSessionUser();
                 out.println("<div class=\"applet\">");
-                SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), Integer.parseInt(vnum), user);
+                SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), Integer.parseInt(vnum), user, request.getSession().getId());
                 SWBResourceURL urlb = paramRequest.getRenderUrl();
                 urlb.setMode(SWBResourceURL.Mode_VIEW);
                 urlb.setParameter("act", "");

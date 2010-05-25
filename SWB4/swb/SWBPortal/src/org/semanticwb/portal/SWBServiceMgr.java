@@ -205,6 +205,16 @@ public class SWBServiceMgr implements SemanticObserver {
                     }catch(Exception e){log.error(e);}
                 }
 
+                //System.out.println("obj2:"+obj+" "+Resource.sclass+"="+Resource.sclass+" prop:"+prop+"="+Resource.swb_resourceSubType);
+                if(obj.instanceOf(ResourceType.sclass) && prop.equals(ResourceType.swb_resourceOWL))
+                {
+                    try
+                    {
+                        SWBPortal.getResourceMgr().loadResourceTypeModel((ResourceType)obj.createGenericInstance());
+                        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                    }catch(Exception e){log.error(e);}
+                }
+
                 if(obj.instanceOf(Resource.sclass) && prop.equals(Resource.swb_resourceSubType))
                 {
                     Resource res=(Resource)obj.createGenericInstance();

@@ -203,6 +203,7 @@ public class SWBVirtualHostFilter implements Filter
                                     loginInternalServlet.doProcess(_request, _response, dparams);
                                     break;
                                 default:
+                                    log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
                                     _response.sendError(resp.getError(), resp.getErrorMsg());
                             }
                         }
@@ -391,7 +392,7 @@ public class SWBVirtualHostFilter implements Filter
 
     /**
      * Process error.
-     * 
+     *
      * @param err the err
      * @param errMsg the err msg
      * @param response the response
@@ -418,6 +419,7 @@ public class SWBVirtualHostFilter implements Filter
             {
                 msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
             }
+            //System.out.println("msg:"+msg);
             if(msg==null)
             {
                 msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
@@ -431,9 +433,10 @@ public class SWBVirtualHostFilter implements Filter
         response.setContentType("text/html");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
-        PrintWriter out = response.getWriter();
-        out.println(msg);
-        out.close();
+        OutputStream out = response.getOutputStream();
+        out.write(msg.getBytes());
+        //out.flush();
+        //out.close();
     }
 
     /**

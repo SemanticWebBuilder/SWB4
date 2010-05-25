@@ -92,6 +92,7 @@ public class SWBACacheMonitor extends GenericResource {
             SWBResourceURL url = paramsRequest.getRenderUrl();
             url.setCallMethod(url.Call_DIRECT);
             url.setMode("getData");
+            out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
             out.println("</APPLET>");

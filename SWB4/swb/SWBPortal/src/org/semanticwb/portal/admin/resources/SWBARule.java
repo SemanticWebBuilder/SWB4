@@ -101,23 +101,24 @@ public class SWBARule extends GenericResource {
             tmparam = request.getParameter("tm");
         }
         ret.append("\n<div class=\"applet\">");
-        ret.append("\n<APPLET id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\"  ARCHIVE=\"swbadmin/lib/SWBAplModeler.jar, swbadmin/lib/SWBAplCommons.jar, swbadmin/lib/SWBAplRules.jar\" width=\"100%\" height=\"500\">");  //ARCHIVE=\"wbadmin/lib/SWBAplGenericTree.jar, wbadmin/lib/SWBAplCommons.jar\"
+        ret.append("\n<applet id=\"rulesApplet\" name=\"rulesApplet\" code=\"applets.rules.RuleApplet.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\"  ARCHIVE=\"swbadmin/lib/SWBAplModeler.jar, swbadmin/lib/SWBAplCommons.jar, swbadmin/lib/SWBAplRules.jar\" width=\"100%\" height=\"500\">");  //ARCHIVE=\"wbadmin/lib/SWBAplGenericTree.jar, wbadmin/lib/SWBAplCommons.jar\"
         SWBResourceURL urlapp = paramRequest.getRenderUrl();
         urlapp.setMode("gateway");
         urlapp.setCallMethod(urlapp.Call_DIRECT);
         urlapp.setParameter("id", suri);
         urlapp.setParameter("suri", suri);
-        ret.append("\n<PARAM NAME =\"cgipath\" VALUE=\"" + urlapp + "\">");
-        ret.append("\n<PARAM NAME =\"tm\" VALUE=\"" + rRule.getWebSite().getId() + "\">");
+        ret.append("\n<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
+        ret.append("\n<param name =\"cgipath\" value=\"" + urlapp + "\">");
+        ret.append("\n<param name =\"tm\" value=\"" + rRule.getWebSite().getId() + "\">");
         if (null != request.getParameter("suri")) {
-            ret.append("\n<PARAM NAME =\"id\" VALUE=\"" + rRule.getId() + "\">");
-            ret.append("\n<PARAM NAME =\"suri\" VALUE=\"" + rRule.getId() + "\">");
+            ret.append("\n<param name =\"id\" value=\"" + rRule.getId() + "\">");
+            ret.append("\n<param name =\"suri\" value=\"" + rRule.getId() + "\">");
         } else {
-            ret.append("\n<PARAM NAME =\"id\" VALUE=\"0\">");
+            ret.append("\n<param name =\"id\" value=\"0\">");
         }
-        ret.append("\n<PARAM NAME =\"act\" VALUE=\"edit\">");
-        ret.append("\n<PARAM NAME =\"locale\" VALUE=\"" + paramRequest.getUser().getLanguage() + "\">");
-        ret.append("\n</APPLET>");
+        ret.append("\n<param name =\"act\" value=\"edit\">");
+        ret.append("\n<param name =\"locale\" value=\"" + paramRequest.getUser().getLanguage() + "\">");
+        ret.append("\n</applet>");
         ret.append("\n</div>");
         return ret.toString();
     }

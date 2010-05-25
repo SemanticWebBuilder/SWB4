@@ -87,41 +87,44 @@ public class SWBAHitsMonitor extends GenericResource {
             out.println("<table width=100% cellpadding=10 cellspacing=0 border=0>");
             out.println("<tr><td>");
             out.println("<div class=\"applet\">");
-            out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
+            out.println("<applet code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
             SWBResourceURL url = paramsRequest.getRenderUrl();
             url.setCallMethod(url.Call_DIRECT);
             url.setMode("hitsMonitor");
+            out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
-            out.println("</APPLET>");
+            out.println("</applet>");
             out.println("</div>");
             out.println("</td></tr>");
             out.println("<tr><td>");
             out.println("<div class=\"applet\">");
-            out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
+            out.println("<applet code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
             url = paramsRequest.getRenderUrl();
             url.setCallMethod(url.Call_DIRECT);
             url.setMode("hitsTime");
+            out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
             out.println("<param name=\"cgi\" value=\"" + url + "\">");
             out.println("<param name=\"reload\" value=\"5\">");
-            out.println("</APPLET>");
+            out.println("</applet>");
             out.println("</div>");
             out.println("</td></tr>");
             out.println("<tr><td>");
             out.println("<div class=\"applet\">");
-            out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""
+            out.println("<applet code=\"applets.graph.WBGraph.class\" archive=\""
                     + SWBPlatform.getContextPath()
                     + "/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
             url = paramsRequest.getRenderUrl();
             url.setCallMethod(url.Call_DIRECT);
             url.setMode("hitsXSec");
+            out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
             out.println("<param name=\"cgi\" value=\"" + url + "\">");            
             out.println("<param name=\"reload\" value=\"5\">");
-            out.println("</APPLET>");
+            out.println("</applet>");
             out.println("</div>");
             out.println("</td></tr>");            
             out.println("</table>");
