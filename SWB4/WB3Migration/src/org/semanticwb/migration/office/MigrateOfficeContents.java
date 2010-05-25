@@ -22,15 +22,17 @@
  **/
 package org.semanticwb.migration.office;
 
-import com.infotec.appfw.util.AFUtils;
+import com.infotec.topicmaps.Occurrence;
+import com.infotec.topicmaps.Topic;
+import com.infotec.topicmaps.TopicMap;
+import com.infotec.topicmaps.bean.TopicMgr;
 import com.infotec.wb.core.db.DBResourceType;
 import com.infotec.wb.core.db.RecResourceType;
 import com.infotec.wb.lib.WBResource;
 import com.infotec.wb.util.WBUtils;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -121,46 +123,52 @@ public class MigrateOfficeContents
 
     }
 
+    private static String getTopics(final com.infotec.wb.core.Resource resource,final Topic topic)
+    {
+        final Iterator occs=topic.getOccurrencesOfType("REC_WBContent");
+        while(occs.hasNext())
+        {
+            final Occurrence occ=(Occurrence)occs.next();
+            if(occ.getResourceData().equals(String.valueOf(resource.getId())))
+            {
+                return topic.getId();
+            }
+        }
+        final Iterator ctopics=topic.getChildAll().iterator();
+        while(ctopics.hasNext())
+        {
+            final Topic childtopic=(Topic)ctopics.next();
+            final String id=getTopics(resource,childtopic);
+            if(id!=null)
+            {
+                return id;
+            }
+
+        }
+        return null;
+    }
+    private static String getTopics(final com.infotec.wb.core.Resource resource,final String siteid)
+    {
+        final TopicMap map=TopicMgr.getInstance().getTopicMap(siteid);
+        final HashMap topics= map.getTopics();
+        final Iterator ctopics=topics.values().iterator();
+        while(ctopics.hasNext())
+        {
+            final Topic topic=(Topic)ctopics.next();
+            final String id=getTopics(resource,topic);
+            if(id!=null)
+            {
+                return id;
+            }
+
+        }
+        return null;       
+    }
+
     private static String getTopics(WBResource resource, String siteid)
     {
-        String webpageId = null;
-        Connection con = AFUtils.getDBConnection("wb");
-        String search = "#REC_WBContent\"/>%<resourceData>" + resource.getResourceBase().getId() + "</resourceData>";
-        try
-        {
-            String sql = "Select idtp from wboccurrence where xml like '%" + search + "%' and idtm='" + siteid + "'";            
-            PreparedStatement pt = con.prepareStatement(sql);
-            ResultSet rs = pt.executeQuery();
-            if (rs.next())
-            {
-                webpageId = rs.getString("idtp");
-            }
-            else
-            {
-                log.debug("No se encontro donde esta publicado el contenido de office " + resource.getResourceBase().getId());
-                log.debug("CONSULTA: "+sql);
-            }
-            rs.close();
-            pt.close();
-        }
-        catch (Exception e)
-        {
-            AFUtils.log(e);
-            log.error(e);
-        }
-        finally
-        {
-            try
-            {
-                con.close();
-            }
-            catch (Exception ue)
-            {
-                AFUtils.log(ue);
-                log.error(ue);
-            }
-        }
-        return webpageId;
+        com.infotec.wb.core.Resource base=resource.getResourceBase();
+        return getTopics(base, siteid);
     }
 
     public static boolean isOfficeDocument(WBResource resource, String siteid)
