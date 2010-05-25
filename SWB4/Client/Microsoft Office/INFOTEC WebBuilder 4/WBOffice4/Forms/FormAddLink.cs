@@ -42,7 +42,7 @@ namespace WBOffice4.Forms
 
         private void FormAddLink_LoadSteps(object sender, EventArgs e)
         {
-            this.AddStep(new SelectTitle());
+            this.AddStep(new SelectTitle(document.SelectedText));
             this.AddStep(new SelectSiteInsertLink(document));
         }
     }
