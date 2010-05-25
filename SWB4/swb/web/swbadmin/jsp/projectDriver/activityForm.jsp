@@ -18,6 +18,8 @@
             Activity act = (Activity)obj.createGenericInstance();
             ArrayList responsible = listUserRepository(act.getWebSite());
             validAct(act);
+            proBar.add(act.getCurrentPercentage());
+            proBar.add(act.getPlannedHour());
             if(paramRequest.getUser()!=null)
               lang=paramRequest.getUser().getLanguage();
 
@@ -96,7 +98,7 @@
           <tr>
             <td>Proyecto: </td>
             <td><%=parent%></td></tr>
-          <tr><td>Procentaje de Avance: </td>
+          <tr><td>Porcentaje de Avance: </td>
             <td>
             <%=getProgressBar(getListLeaf(act,user),"66CCFF",null)%>
             </td></tr>
@@ -106,8 +108,6 @@
           if(!webPage.isEmpty())
             out.println(printPage(webPage,"Secciones"));
           }else{//Sino tiene hijos
-            proBar.add(act.getCurrentPercentage());
-            proBar.add(act.getPlannedHour());
             if(user.isRegistered()){//Si esta registrado
               SWBFormMgr mgr = new SWBFormMgr(act.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
               mgr.setLang(lang);
@@ -198,7 +198,6 @@
                             }
                        }
                 %></select></td><%
-
                 }%>
               </tr>
               <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_hasPredecessor, mgr.MODE_EDIT)%></td>
@@ -238,8 +237,7 @@
               <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_EDIT)%></td>
                   <td><%
                   res = responsible.iterator();
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
-                   %><select name="<%=act.swbproy_responsible.getName()%>" disabled><%
+                   %><select name="<%=act.swbproy_responsible.getName()%>"<%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){ %>disabled><%}
                         String uri="";
                         if(act.getResponsible()!=null)
                            uri = act.getResponsible().getURI();
@@ -255,24 +253,6 @@
                             }
                         }
                     %></select><%
-                }else{
-                   %><select name="<%=act.swbproy_responsible.getName()%>"><%
-                    String uri="";
-                        if(act.getResponsible()!=null)
-                           uri = act.getResponsible().getURI();
-                        while(res.hasNext()){
-                            String uri1 = res.next().toString();
-                            SemanticObject sob = SemanticObject.createSemanticObject(uri1);
-                            if (sob.getURI() != null) {
-                             %><option value="<%=sob.getURI()%>"<%
-                                if (sob.getURI().equals(uri)) {
-                                    %>selected<%
-                                }
-                                    %>><%=sob.getDisplayName(user.getLanguage())%></option><%
-                            }
-                         }
-                   %></select><%
-                }
     %>             </td>
               </tr>
               <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_hasParticipants, mgr.MODE_EDIT)%></td>
