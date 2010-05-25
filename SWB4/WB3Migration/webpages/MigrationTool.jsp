@@ -1148,6 +1148,7 @@
                                                 }
                                                 org.semanticwb.model.ResourceType restype = ws.getResourceType(idName);
 
+                                                if(restype!=null)out.println("restype: "+restype.getTitle()+" "+restype.getResourceClassName());
                                                 if (restype == null)
                                                 {
                                                     restype = ws.createResourceType("HTMLContent");
