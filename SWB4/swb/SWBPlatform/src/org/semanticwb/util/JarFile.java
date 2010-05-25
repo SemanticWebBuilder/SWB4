@@ -26,6 +26,7 @@ package org.semanticwb.util;
 
 import java.io.*;
 import java.util.zip.*;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 
 // TODO: Auto-generated Javadoc
@@ -34,7 +35,8 @@ import org.semanticwb.SWBUtils;
  */
 public class JarFile
 {
-    
+    private static Logger log=SWBUtils.getLogger(JarFile.class);
+
     /** The path. */
     private String path;
 
@@ -51,7 +53,7 @@ public class JarFile
     private long lastModified;
     
     /** The in. */
-    private InputStream in=null;
+    //private InputStream in=null;
     
     /** The f. */
     private File f=null;
@@ -59,6 +61,8 @@ public class JarFile
     /** The zip path. */
     private String zipPath=null;
 
+    /** The zip path. */
+    private byte[] cache=null;
 
     /**
      * Instantiates a new jar file.
@@ -89,10 +93,22 @@ public class JarFile
                 length=f.getSize();
                 lastModified=f.getTime();
             }
+            loadCache();
         }else
         {
 
         }            
+    }
+
+    private void loadCache()
+    {
+        try
+        {
+            InputStream in=getInputStream();
+            ByteArrayOutputStream out=new ByteArrayOutputStream((int)length);
+            SWBUtils.IO.copyStream(in, out);
+            cache=out.toByteArray();
+        }catch(Exception e){log.error(e);}
     }
 
     /**
@@ -118,6 +134,12 @@ public class JarFile
         {
             return null;
         }
+    }
+
+
+    public byte[] getCache()
+    {
+        return cache;
     }
 
     /**
@@ -192,5 +214,10 @@ public class JarFile
         {
 
         }
-    }    
+    }
+
+    public boolean hasCache()
+    {
+        return cache!=null;
+    }
 }    
