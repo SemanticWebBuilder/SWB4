@@ -352,7 +352,13 @@ namespace WB4Office2007Library
                 return links.ToArray();
             }
         }
-
+        public override String SelectedText
+        {
+            get
+            {
+                return null;
+            }
+        }
         public override int Images
         {
             get

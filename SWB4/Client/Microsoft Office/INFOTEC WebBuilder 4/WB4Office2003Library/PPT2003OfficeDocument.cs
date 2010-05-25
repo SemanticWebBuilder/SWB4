@@ -303,7 +303,13 @@ namespace WB4Office2003Library
                 return links.ToArray();
             }
         }
-
+        public override String SelectedText
+        {
+            get
+            {
+                return null;
+            }
+        }
         public override int Images
         {
             get
