@@ -1,6 +1,5 @@
 package org.semanticwb.portal.resources.projectdriver;
 
-
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -81,32 +80,32 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
             path="/swbadmin/jsp/projectDriver/containerUser.jsp";
         }else if(obj.instanceOf(WebPage.sclass)&&wp.isActive()&&!haveParent)
         {
-            parent=wp.getParent();
-            if(parent!=null){
-                haveParent=false;
-                if(!checkParents(wp,"WebPage"))
-                    haveParent=true;
-                if(!haveParent){
-                    if(act)
-                        action="hasAct";
-                    else if(us)
-                        action="hasUs";
-                    else
-                        action="hasAll";
-                    path="/swbadmin/jsp/projectDriver/wpForm.jsp";
-                }else
-                    path="/swbadmin/jsp/projectDriver/pageInvalid.jsp";
-            }
-            else{
-                action="hasAll";
+          //  parent=wp.getParent();
+          //  if(parent!=null){
+          //      haveParent=false;
+          //      if(!checkParents(wp,"WebPage"))
+          //          haveParent=true;
+          //      if(!haveParent){
+          //          if(act)
+          //              action="hasAct";
+          //          else if(us)
+          //              action="hasUs";
+          //          else
+          //              action="hasAll";
+          //          path="/swbadmin/jsp/projectDriver/wpForm.jsp";
+          //      }else
+          //          path="/swbadmin/jsp/projectDriver/pageInvalid.jsp";
+          //  }
+          //  else{
+          //      action="hasAll";
                 path="/swbadmin/jsp/projectDriver/wpForm.jsp";
-            }
+         //   }
         }//else{
         //    Path="/swbadmin/jsp/projectDriver/pageInvalid.jsp";
         //}
         RequestDispatcher dis = request.getRequestDispatcher(SWBPlatform.getContextPath()+path);
         try {
-            request.setAttribute("action", action);
+        //    request.setAttribute("action", action);
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         }catch(Exception e){
@@ -137,7 +136,7 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
             }
             return haveParent;
     }*/
-    private boolean checkParents(WebPage wp,String currentPage){
+   /* private boolean checkParents(WebPage wp,String currentPage){
         ArrayList parents=new ArrayList();
         WebPage wp1,parent;
         SemanticObject obj1;
@@ -208,7 +207,7 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
         else if(currentPage.equals("WebPage"))
             ret=w;
         return ret;
-    }
+    }*/
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
