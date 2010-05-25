@@ -272,11 +272,11 @@ public class GraphicalElement extends CustomNode
                                 if(lane.over)
                                 {
                                     overNode=lane;
-                                    break;
+                                    //break;
                                 }
                             }
                         }
-                        break;
+                        //break;
                     }
                 }
             }
