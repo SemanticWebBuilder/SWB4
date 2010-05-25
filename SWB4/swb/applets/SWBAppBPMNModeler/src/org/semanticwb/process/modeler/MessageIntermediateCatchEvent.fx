@@ -18,5 +18,33 @@ public class MessageIntermediateCatchEvent extends IntermediateCatchEvent
     {
         type=CATCH_MESSAGE;
         return super.create();
-    }    
+    }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+        var c = 0;
+
+        for(ele in getInputConnectionObjects()) {
+            if(ele instanceof MessageFlow) {
+                c++;
+            }
+        }
+
+        if (link instanceof MessageFlow and c != 0) {
+            ret = false;
+            ModelerUtils.setErrorMessage("MessageIntermediateCatchEvent can have only one incoming MessageFlow");
+        }
+        return ret;
+    }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+
+        if(link instanceof MessageFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage("MessageIntermediateCatchEvent cannot have outgoing MessageFlow");
+        }
+        return ret;
+    }
+
 }
