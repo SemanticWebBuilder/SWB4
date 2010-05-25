@@ -27,4 +27,14 @@ public class ScalationIntermediateCatchEvent extends IntermediateCatchEvent
         }
         return ret;
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link.ini instanceof EventBasedGateway) {
+            ret = false;
+            ModelerUtils.setErrorMessage("EscalationEvent cannot be linked to EventBasedGateway");
+        }
+        return ret;
+    }
 }
