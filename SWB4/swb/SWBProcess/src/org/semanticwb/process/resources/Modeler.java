@@ -20,6 +20,7 @@ import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -636,10 +637,11 @@ public class Modeler extends GenericResource {
             // Eliminando elementos que fueron borrados en el applet Modeler
             // que se tenian en el original pero ya no se necesitan
             it = hmori.keySet().iterator();
+            SemanticObject so = null;
             while (it.hasNext()) {
                 String key = it.next();
-                go = ont.getGenericObject(hmori.get(key));
-                ((GraphicalElement)go).remove();
+                so = ont.getSemanticObject(hmori.get(key));
+                so.remove();
             }
 
         } catch (Exception e) {
