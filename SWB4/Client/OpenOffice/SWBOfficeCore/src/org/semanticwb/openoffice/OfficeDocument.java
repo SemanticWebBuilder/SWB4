@@ -189,6 +189,7 @@ public abstract class OfficeDocument
      */
     public abstract boolean isNewDocument();
 
+    public abstract String getSelectedText();
     /**
      * Gets true if the document is readonly
      * @return true is the document is readonly, false otherwise
@@ -1096,12 +1097,26 @@ public abstract class OfficeDocument
         if (OfficeApplication.tryLogin())
         {
             AddLinkProducer resultProducer = new AddLinkProducer(this);
-            WizardPage[] clazz = new WizardPage[]
+            String selectedText=this.getSelectedText();
+            if(selectedText==null)
             {
-                new SelectPage(null), new SelectTitle()
-            };
-            Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
-            wiz.show();
+                WizardPage[] clazz = new WizardPage[]
+                {
+                    new SelectPage(null), new SelectTitle()
+                };
+                Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
+                wiz.show();
+            }
+            else
+            {
+                WizardPage[] clazz = new WizardPage[]
+                {
+                    new SelectPage(null), new SelectTitle(selectedText)
+                };
+                Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
+                wiz.show();
+            }
+            
         }
     }
 
