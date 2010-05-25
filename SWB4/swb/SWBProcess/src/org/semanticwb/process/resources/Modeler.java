@@ -189,7 +189,8 @@ public class Modeler extends GenericResource {
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
-                    connectionObject.remove();
+                    hmori.put(connectionObject.getURI(), connectionObject.getURI());
+                    //connectionObject.remove();
                 }
                 if(obj instanceof Containerable) loadSubProcessElements((Containerable)obj, hmori);
             }
@@ -211,7 +212,8 @@ public class Modeler extends GenericResource {
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
                     ConnectionObject connectionObject = it.next();
-                    connectionObject.remove();
+                    hmori.put(connectionObject.getURI(), connectionObject.getURI());
+                    //connectionObject.remove();
                 }
                 if(obj instanceof Containerable) loadSubProcessElements((Containerable)obj, hmori);
             }
@@ -501,11 +503,16 @@ public class Modeler extends GenericResource {
                         if(go instanceof GraphicalElement)
                         {
                             ge = (GraphicalElement) go;
-                            ge.setTitle(title);
-                            ge.setX(x);
-                            ge.setY(y);
-                            ge.setWidth(w);
-                            ge.setHeight(h);
+                            if(!ge.getTitle().equals(title))
+                                ge.setTitle(title);
+                            if(ge.getX()!=x)
+                                ge.setX(x);
+                            if(ge.getY()!=y)
+                                ge.setY(y);
+                            if(ge.getWidth()!=w)
+                                ge.setWidth(w);
+                            if(ge.getHeight()!=h)
+                                ge.setHeight(h);
                             hmnew.put(uri, go.getURI());
                         }
                         hmori.remove(uri);
@@ -570,6 +577,7 @@ public class Modeler extends GenericResource {
                 String key = it.next();
                 JSONObject json = (JSONObject) hmjson.get(key);
                 uri = json.getString(PROP_URI);
+
                 sclass = json.getString(PROP_CLASS);
 
                 semclass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(PROCESS_PREFIX + "#" + sclass);
@@ -578,17 +586,46 @@ public class Modeler extends GenericResource {
                 if (semclass.isSubClass(ConnectionObject.swp_ConnectionObject)) {
                     start = json.getString(PROP_START);
                     end = json.getString(PROP_END);
+                    title = json.getString(PROP_TITLE);
 
-                    if (hmnew.get(start) != null && hmnew.get(end) != null) {
-                        title = json.getString(PROP_TITLE);
-                        long id = model.getCounter(semclass);
-                        go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
+                    if (hmori.get(uri) != null) 
+                    {    
+                        go = ont.getGenericObject(hmori.get(uri));
                         co = (ConnectionObject) go;
-                        co.setTitle(title);
-                        gostart = ont.getGenericObject(hmnew.get(start));
-                        goend = ont.getGenericObject(hmnew.get(end));
-                        co.setSource((GraphicalElement)gostart);
-                        co.setTarget((GraphicalElement)goend);                        
+                        if(!co.getTitle().equals(title))
+                            co.setTitle(title);
+                        
+                        if(!co.getSource().getURI().equals(start))
+                        {
+                            if (hmnew.get(start) != null)
+                            {
+                                gostart = ont.getGenericObject(hmnew.get(start));
+                                co.setSource(ge);
+                            }
+                        }
+                        if(!co.getTarget().getURI().equals(end))
+                        {        
+                            if (hmnew.get(end) != null) 
+                            {
+                                goend = ont.getGenericObject(hmnew.get(end));
+                                co.setTarget((GraphicalElement)goend);                        
+                            }
+                        }
+                        hmori.remove(uri);
+                    }
+                    else
+                    {
+                        if (hmnew.get(start) != null && hmnew.get(end) != null)
+                        {
+                            long id = model.getCounter(semclass);
+                            go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
+                            co = (ConnectionObject) go;
+                            co.setTitle(title);
+                            gostart = ont.getGenericObject(hmnew.get(start));
+                            goend = ont.getGenericObject(hmnew.get(end));
+                            co.setSource((GraphicalElement)gostart);
+                            co.setTarget((GraphicalElement)goend);
+                        }
                     }
                 }
             }
