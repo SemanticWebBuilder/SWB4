@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.servlet.Filter;
@@ -163,7 +164,7 @@ public class SWBPortal
      * <p>Contiene los nombres y el contenido de todos los archivos dentro de los
      * archivos SWBAdmin.jar y dojo.jar.</p>
      */
-    private static HashMap admFiles = new HashMap();
+    private static ConcurrentHashMap admFiles = null;
     /**
      * Is the manager for the user objects in this portal.
      * <p>Es el administrador de los objetos de usuarios en este portal.</p>
@@ -493,6 +494,10 @@ public class SWBPortal
 
         //System.out.println("Checking Predef Sites...");
 
+        loadAdminFiles();
+
+        resmgr = new SWBResourceMgr();
+
         try
         {
 
@@ -667,7 +672,6 @@ public class SWBPortal
         monitor = new SWBMonitor();
         monitor.init();
 
-        resmgr = new SWBResourceMgr();
         resmgr.init();
 
         pflowMgr = new PFlowManager();
@@ -699,7 +703,11 @@ public class SWBPortal
 
         //Inicializa el RuleMgr
         Rule.getRuleMgr();
+    }
 
+    public void loadAdminFiles()
+    {
+        admFiles = new ConcurrentHashMap();
         try
         {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
@@ -2613,6 +2621,19 @@ public class SWBPortal
                     if(website!=null)
                     {
                         Iterator<ResourceType> it=website.listResourceTypes();
+                        while (it.hasNext())
+                        {
+                            ResourceType resourceType = it.next();
+                            if(resourceType!=null)
+                            {
+                                try
+                                {
+                                    getResourceMgr().loadResourceTypeModel(resourceType);
+                                }catch(Exception e){log.error(""+resourceType,e);}
+                            }
+                        }
+                        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                        it=website.listResourceTypes();
                         while (it.hasNext())
                         {
                             ResourceType resourceType = it.next();

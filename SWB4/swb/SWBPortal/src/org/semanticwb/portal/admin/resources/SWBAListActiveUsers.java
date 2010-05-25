@@ -82,13 +82,14 @@ public class SWBAListActiveUsers extends GenericResource {
             {
                 out.println("<tr><td colspan='2'>");
                 out.println("<div class=\"applet\">");
-                out.println("<APPLET code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
+                out.println("<applet code=\"applets.graph.WBGraph.class\" archive=\""+SWBPlatform.getContextPath()+"/swbadmin/lib/SWBAplGraph.jar\" width=\"100%\" height=\"200\">");
                 SWBResourceURL url=paramRequest.getRenderUrl();
                 url.setCallMethod(SWBResourceURL.Call_DIRECT);
                 url.setMode("getData");
+                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
                 out.println("<param name=\"cgi\" value=\""+url+"\">");
                 out.println("<param name=\"reload\" value=\"5\">");
-                out.println("</APPLET>");
+                out.println("</applet>");
                 out.println("</div>");
                 out.println("</td></tr>");
                 out.println("<tr><td colspan='2'><HR size=\"1\" noshade></td></tr>");

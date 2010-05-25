@@ -157,8 +157,8 @@ private SWBResourceCachedMgr cache;
         String cls=type.getResourceOWL();
         if(cls!=null)
         {
-            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
-            if(model==null)
+//            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(cls);
+//            if(model==null)
             {
                 try
                 {
@@ -172,10 +172,10 @@ private SWBResourceCachedMgr cache;
                             log.debug("Reading:"+path);
                             Model m=ModelFactory.createDefaultModel();
                             m.read(in, null);
-                            model=new SemanticModel(cls,m);
+                            SemanticModel model=new SemanticModel(cls,m);
                             SWBPlatform.getSemanticMgr().getSchema().addSubModel(model,false);
                             //SWBPlatform.getSemanticMgr().loadBaseVocabulary();
-                            //System.out.println(cls);
+                            System.out.println(cls);
                         }
                     }
                 }catch(Exception e){log.error("Error loading OWL File:"+cls,e);}

@@ -217,6 +217,7 @@ public class SWBADBPool extends GenericResource {
                 url.setCallMethod(url.Call_DIRECT);
                 url.setParameter("dbcon", dbcon);
                 url.setMode("getData");
+                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
                 out.println("<param name=\"cgi\" value=\"" + url + "\">");
                 out.println("<param name=\"reload\" value=\"5\">");
                 out.println("</APPLET>");
@@ -233,6 +234,7 @@ public class SWBADBPool extends GenericResource {
                 url.setCallMethod(url.Call_DIRECT);
                 url.setParameter("dbcon", dbcon);
                 url.setMode("hitsTime");
+                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
                 out.println("<param name=\"cgi\" value=\"" + url + "\">");
                 out.println("<param name=\"reload\" value=\"5\">");
                 out.println("</APPLET>");
@@ -248,6 +250,7 @@ public class SWBADBPool extends GenericResource {
                 url.setCallMethod(url.Call_DIRECT);
                 url.setParameter("dbcon", dbcon);
                 url.setMode("getData2");
+                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
                 out.println("<param name=\"cgi\" value=\"" + url + "\">");
                 out.println("<param name=\"reload\" value=\"5\">");
                 out.println("</APPLET>");

@@ -1065,13 +1065,13 @@ public class SWBATree extends GenericResource
     {
         PrintWriter out=response.getWriter();
         out.println("<div class=\"applet\">");
-        out.println("<APPLET id=\"apptree\" name=\"apptree\" code=\"applets.generictree.GenericTree.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplGenericTree.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
+        out.println("<applet id=\"apptree\" name=\"apptree\" code=\"applets.generictree.GenericTree.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplGenericTree.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setMode("gateway");
         url.setCallMethod(url.Call_DIRECT);
-        out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");
-        //out.println("<PARAM NAME =\"jsess\" VALUE=\""+request.getSession().getId()+"\">");
-        out.println("</APPLET>");
+        out.println("<param name =\"cgipath\" value=\""+url+"\">");
+        out.println("<param name =\"jsess\" value=\""+request.getSession().getId()+"\">");
+        out.println("</applet>");
         out.println("</div>");
     }
 

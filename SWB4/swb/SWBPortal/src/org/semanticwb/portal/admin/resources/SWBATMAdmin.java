@@ -1172,24 +1172,24 @@ public class SWBATMAdmin extends GenericResource
         PrintWriter out=response.getWriter();
         String act=request.getParameter("act");
         //out.println("<table border=\"0\" cellspacing=\"0\" height=\"100%\" cellpadding=\"0\" width=\"100%\"><tr><td width=\"100%\" height=\"100%\">");
-        out.println("<APPLET id=\"appttmadmin\" name=\"appttmadmin\" code=\"applets.mapsadm.TMWBAdmin.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplTMAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
+        out.println("<applet id=\"appttmadmin\" name=\"appttmadmin\" code=\"applets.mapsadm.TMWBAdmin.class\" codebase=\""+SWBPlatform.getContextPath()+"/\" ARCHIVE=\"swbadmin/lib/SWBAplTMAdmin.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
         SWBResourceURL url=paramsRequest.getRenderUrl();
         url.setMode("gateway");
         url.setCallMethod(url.Call_DIRECT);
         //url.setParameter("id",request.getParameter("id"));
         //url.setParameter("tp",paramsRequest.getTopic().getId());
-        out.println("<PARAM NAME =\"cgipath\" VALUE=\""+url+"\">");
-        //out.println("<PARAM NAME =\"jsess\" VALUE=\""+request.getSession().getId()+"\">");
-        out.println("<PARAM NAME=\"foreground\" VALUE=\"3f88b4\">");
-        out.println("<PARAM NAME=\"background\" VALUE=\"edf2f3\">");
-        out.println("<PARAM NAME=\"foregroundSelection\" VALUE=\"ffffff\">");
-        out.println("<PARAM NAME=\"backgroundSelection\" VALUE=\"666699\">");
-        out.println("<PARAM NAME=\"locale\" VALUE=\""+paramsRequest.getUser().getLanguage()+"\">");
+        out.println("<param name =\"cgipath\" value=\""+url+"\">");
+        out.println("<param name =\"jsess\" value=\""+request.getSession().getId()+"\">");
+        out.println("<param name=\"foreground\" value=\"3f88b4\">");
+        out.println("<param name=\"background\" value=\"edf2f3\">");
+        out.println("<param name=\"foregroundSelection\" value=\"ffffff\">");
+        out.println("<param name=\"backgroundSelection\" value=\"666699\">");
+        out.println("<param name=\"locale\" value=\""+paramsRequest.getUser().getLanguage()+"\">");
         if(request.getParameter("tm")!=null)
-            out.println("<PARAM NAME=\"TM\" VALUE=\""+request.getParameter("tm")+"\">");
+            out.println("<param name=\"TM\" value=\""+request.getParameter("tm")+"\">");
         if(request.getParameter("tp")!=null)
-            out.println("<PARAM NAME=\"TP\" VALUE=\""+request.getParameter("tp")+"\">");
-        out.println("</APPLET>");
+            out.println("<param name=\"TP\" value=\""+request.getParameter("tp")+"\">");
+        out.println("</applet>");
         //out.println("</td></tr></table>");
     }
     

@@ -985,7 +985,7 @@ public class SWBAEditor extends GenericResource
     {
         PrintWriter out=response.getWriter();
         out.println("HTML Editor...");
-        getTemplateApplet(out, "sep", "1", 1, paramsRequest.getUser());
+        getTemplateApplet(out, "sep", "1", 1, paramsRequest.getUser(), request.getSession().getId());
 /*        
         //String act=request.getParameter("act");
         String sid=request.getParameter("id");
@@ -1054,11 +1054,12 @@ public class SWBAEditor extends GenericResource
      * @param user the user
      * @return the template applet
      */    
-    public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user)
+    public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user, String session)
     {
         out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"/\" archive=\"swbadmin/lib/SWBAplHtmlEditor.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">");
         String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
+        out.println("<param name=\"jsess\" value=\""+session+"\">");
         out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
         out.println("<param name=\"download\" value=\""+url+"download"+"\">");
         out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");

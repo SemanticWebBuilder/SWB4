@@ -537,21 +537,22 @@ public class SWBAFilterResource extends SWBATree {
                     pfil.setXml("<resource><filter/></resource>");
                 }
                 out.println("<div class=\"applet\">");
-                out.println("<APPLET id=\"editfilter\" name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
+                out.println("<applet id=\"editfilter\" name=\"editfilter\" code=\"applets.filterSection.FilterSection.class\" codebase=\"" + SWBPlatform.getContextPath() + "/\" ARCHIVE=\"swbadmin/lib/SWBAplFilterSection.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"100%\">");
                 SWBResourceURL url = paramRequest.getRenderUrl();
                 url.setMode("gateway");
                 url.setCallMethod(url.Call_DIRECT);
-                out.println("<PARAM NAME =\"idfilter\" VALUE=\"" + id + "\">");
-                out.println("<PARAM NAME =\"cgipath\" VALUE=\"" + url + "\">");
-                out.println("<PARAM NAME =\"locale\" VALUE=\"" + user.getLanguage() + "\">");
-                out.println("<PARAM NAME =\"tm\" VALUE=\"" + map.getId() + "\">");
-                out.println("<PARAM NAME =\"idresource\" VALUE=\"" + id + "\">");
+                out.println("<param name=\"jsess\" value=\""+request.getSession().getId()+"\">");
+                out.println("<param name =\"idfilter\" value=\"" + id + "\">");
+                out.println("<param name =\"cgipath\" value=\"" + url + "\">");
+                out.println("<param name =\"locale\" value=\"" + user.getLanguage() + "\">");
+                out.println("<param name =\"tm\" value=\"" + map.getId() + "\">");
+                out.println("<param name =\"idresource\" value=\"" + id + "\">");
                 boolean global = false;
                 if (map.getId().equalsIgnoreCase(SWBContext.getGlobalWebSite().getId())) {
                     global = true;
                 }
-                out.println("<PARAM NAME =\"isGlobalTM\" VALUE=\"" + global + "\">");
-                out.println("</APPLET>");
+                out.println("<param name =\"isGlobalTM\" value=\"" + global + "\">");
+                out.println("</applet>");
                 out.println("</div>");
             } catch (Exception e) {
                 log.error("Error while getting resource with id:" + id + "- SWBAFilterResource:getIniForm()", e);
