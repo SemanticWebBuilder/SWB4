@@ -121,6 +121,10 @@ namespace WBOffice4.Forms
             SemanticRepository repository = (SemanticRepository)this.comboBoxRepository.SelectedItem;
             SemanticFileRepository file = ((SemanticFileItem)this.listView1.SelectedItems[0]).SemanticFileRepository;
             String title = file.title;
+            if (officeDocument.SelectedText != null && officeDocument.SelectedText != "")
+            {
+                title = officeDocument.SelectedText;
+            }
             String path = "wbrelpath://"+ site.id +"/"+ repository.pageid +"/_rid/"+ repository.resid +"/_mto/3/_act/inline/_mod/getFile/_wst/maximized/"+ file.uuid +"/"+file.name;
             officeDocument.InsertLink(path, title);
             //http://localhost:8080/swb/es/demo/home/_rid/45/_mto/3/_act/inline/_mod/getFile/_wst/maximized/33a923a1-8e02-4123-9cb4-86901fe62ec1/Asley%20005.jpg

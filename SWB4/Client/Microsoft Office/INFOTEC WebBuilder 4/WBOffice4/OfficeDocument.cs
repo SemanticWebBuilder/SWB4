@@ -122,6 +122,11 @@ namespace WBOffice4
             get;
         }
 
+        public abstract String SelectedText
+        {
+            get;
+        }
+
         /// <summary>
         /// Gets the Images of document
         /// </summary> 

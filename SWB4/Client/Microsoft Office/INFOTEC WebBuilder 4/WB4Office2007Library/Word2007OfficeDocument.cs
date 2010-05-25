@@ -398,6 +398,13 @@ namespace WB4Office2007Library
             }
         }
 
+        public override String SelectedText
+        {
+            get
+            {
+                return this.document.Application.Selection.Text;
+            }
+        }
         public override int Images
         {
             get 

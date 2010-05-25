@@ -363,7 +363,13 @@ namespace WB4Office2003Library
                 return links.ToArray();
             }
         }
-
+        public override String SelectedText
+        {
+            get
+            {
+                return this.document.Application.Selection.Text;
+            }
+        }
         public override int Images
         {
             get 
