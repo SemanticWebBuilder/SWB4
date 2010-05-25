@@ -67,4 +67,11 @@ public class GroupArtifact extends Artifact
         };
     }
 
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        return false;
+    }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        return false;
+    }
 }
