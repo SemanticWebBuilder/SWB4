@@ -301,7 +301,7 @@
                 }
                 if(listAct.hasNext()){
                     Activity act1 = (Activity)listAct.next();
-                    System.out.println(act1.getDisplayName());
+                    //System.out.println(act1.getDisplayName());
                     if(act1.getStartDate()!=null){
                     time2=act1.getStartDate().getTime();
                     stime2=act1.getStartDate().toString();
