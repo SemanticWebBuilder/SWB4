@@ -18,4 +18,13 @@ public class ThrowEvent extends Event
         return super.create();
     }
 
+    public override function canEndLink(link:ConnectionObject) : Boolean{
+        var ret = super.canEndLink(link);
+        
+        if (link.ini instanceof EventBasedGateway) {
+            ret = false;
+            ModelerUtils.setErrorMessage("ThrowEvent cannot be linked to EventBasedGateway");
+        }
+        return ret;
+    }
 }
