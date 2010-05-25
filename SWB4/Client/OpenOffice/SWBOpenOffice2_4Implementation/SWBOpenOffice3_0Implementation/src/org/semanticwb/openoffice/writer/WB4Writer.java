@@ -735,19 +735,35 @@ public class WB4Writer extends OfficeDocument
             XController xController = xModel.getCurrentController();
             XTextViewCursorSupplier xViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
             XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
-            XText xDocumentText = xViewCursor.getText();
-            XTextCursor xTextCursor = xDocumentText.createTextCursorByRange(xViewCursor.getStart());
-            XText xText = xTextCursor.getText();
-            XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
-                    XPropertySet.class, xTextCursor);
-            try
+            if(xViewCursor.getString()==null || xViewCursor.getString().equals(""))
             {
-                xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
-                xText.insertString(xTextCursor, text, false);
+                XText xDocumentText = xViewCursor.getText();
+                XTextCursor xTextCursor = xDocumentText.createTextCursorByRange(xViewCursor.getStart());
+                XText xText = xTextCursor.getText();
+                XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                        XPropertySet.class, xTextCursor);
+                try
+                {
+                    xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+                    xText.insertString(xTextCursor, text, false);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
-            catch (Exception e)
+            else
             {
-                e.printStackTrace();
+                try
+                {
+                    XPropertySet xTextCursorProps = (XPropertySet) UnoRuntime.queryInterface(
+                            XPropertySet.class, xViewCursor);
+                    xTextCursorProps.setPropertyValue(HYPERLINK_VALUE, url);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -831,5 +847,30 @@ public class WB4Writer extends OfficeDocument
             images += allImages.length;
         }
         return images;
+    }
+
+    @Override
+    public String getSelectedText()
+    {
+       XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, this.document);
+
+        Object selection = xTextDocument.getCurrentSelection();
+        XTextRange xTextRange = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, selection);
+        if (xTextRange == null)
+        {
+            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, this.document);
+            XController xController = xModel.getCurrentController();
+            XTextViewCursorSupplier xViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
+            XTextViewCursor xViewCursor = xViewCursorSupplier.getViewCursor();
+            if(xViewCursor!=null)
+            {
+                return xViewCursor.getString();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return null;
     }
 }
