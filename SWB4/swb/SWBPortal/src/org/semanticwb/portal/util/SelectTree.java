@@ -112,7 +112,10 @@ public class SelectTree {
             html.append("<div class=\"sitesectiontree\" id=\"tree_"+site+"\">");
             html.append("<ul class=\"treeres\">");
             html.append("<li>");
-            html.append("<img src=\""+pathImages+"/icon_sitea.gif\" />");
+            if(tmit.isActive())
+                html.append("<img src=\""+pathImages+"/icon_siteb.gif\" alt=\"seleccionar sitio\" />");
+            else
+                html.append("<img src=\""+pathImages+"/icon_sitein.png\" alt=\"seleccionar sitio\" />");
             html.append("<span style=\"padding-left:5px\">"+tmit.getDisplayTitle(lang)+"</span>");
             html.append("<ul class=\"treeres\">");
             html.append("<li>");
@@ -121,26 +124,29 @@ public class SelectTree {
                 style=" style=\"color:#FF6600; font-weight:bold\" ";                
                 if(toggleopen) {
                     params.append("&"+tmhome.getId()+"=0");
-                    html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
+                    html.append("<img src=\""+pathImages+"/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
                     toggleopen = false;
                 }else {
                     params.append("&"+tmhome.getId()+"=1");
-                    html.append("<img src=\""+pathImages+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
+                    html.append("<img src=\""+pathImages+"/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
                     toggleopen = true;
                 }
             }else {
                 style="";
                 if(toggleopen) {
                     params.append("&"+tmhome.getId()+"=1");
-                    html.append("<img src=\""+pathImages+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
+                    html.append("<img src=\""+pathImages+"/minus.gif\" alt=\"cerrar nodo\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
                 }else {
                     params.append("&"+tmhome.getId()+"=0");
-                    html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
+                    html.append("<img src=\""+pathImages+"/plus.gif\" alt=\"abrir nodo\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+site+"')\" />");
                 }
             }
             
             html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+site+"')\" "+style+">");
-            html.append("<img src=\""+pathImages+"/icon_homea.gif\" />");
+            if(tmhome.isActive())
+                html.append("<img src=\""+pathImages+"/icon_homeac.png\" alt=\"seleccionar inicio\" />");
+            else
+                html.append("<img src=\""+pathImages+"/icon_homein.png\" alt=\"seleccionar inicio\" />");
             html.append("<span style=\"padding-left:5px\">"+tmhome.getDisplayTitle(lang)+"</span>");
             html.append("</a>");
             
@@ -188,26 +194,29 @@ public class SelectTree {
                         style=" style=\"color:#FF6600; font-weight:bold\" ";
                         if(toggleopen) {
                             params.append("&"+webpage.getId()+"=0");
-                            html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
+                            html.append("<img src=\""+pathImages+"/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
                             toggleopen = false;
                         }else {
                             params.append("&"+webpage.getId()+"=1");
-                            html.append("<img src=\""+pathImages+"/minus.gif\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
+                            html.append("<img src=\""+pathImages+"/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
                             toggleopen = true;
                         }
                     }else {
                         style="";
                         if(toggleopen) {
                             params.append("&"+webpage.getId()+"=1");
-                            html.append("<img src=\""+pathImages+"/minus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
+                            html.append("<img src=\""+pathImages+"/minus.gif\" alt=\"cerrar nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
                         }else {
                             params.append("&"+webpage.getId()+"=0");
-                            html.append("<img src=\""+pathImages+"/plus.gif\"  onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
+                            html.append("<img src=\""+pathImages+"/plus.gif\" alt=\"abrir nodo\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" />");
                         }                        
                     }                            
 
                     html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
-                    html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
+                    if(webpage.isActive())
+                        html.append("<img src=\""+pathImages+"/icon_secac.png\" alt=\"seleccionar sección\" />");
+                    else
+                        html.append("<img src=\""+pathImages+"/icon_secin.png\" alt=\"seleccionar sección\" />");
                     html.append("<span style=\"padding-left:5px\">"+webpage.getDisplayTitle(lang)+"</span>");
                     html.append("</a>");
 
@@ -226,7 +235,10 @@ public class SelectTree {
                     html.append("<li>");
                     html.append("<img src=\""+pathImages+"/trans.gif\" />");
                     html.append("<a class=\"treeres\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\" "+style+">");
-                    html.append("<img src=\""+pathImages+"/icon-section.gif\" />");
+                    if(webpage.isActive())
+                        html.append("<img src=\""+pathImages+"/icon_secac.png\" alt=\"seleccionar sección\" />");
+                    else
+                        html.append("<img src=\""+pathImages+"/icon_secin.png\" alt=\"seleccionar sección\" />");
                     html.append("<span style=\"padding-left:5px\">"+webpage.getDisplayTitle(lang)+"</span>");
                     html.append("</a>");
                     html.append("</li>");
