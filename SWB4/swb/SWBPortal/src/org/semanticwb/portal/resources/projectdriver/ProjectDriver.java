@@ -3,7 +3,6 @@ package org.semanticwb.portal.resources.projectdriver;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.RequestDispatcher;
@@ -21,7 +20,7 @@ import org.semanticwb.portal.api.*;
 
 public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver.base.ProjectDriverBase 
 {
-    private boolean act,us;
+    //private boolean act,us;
     public static Logger log=SWBUtils.getLogger(ProjectDriver.class);
     public ProjectDriver()
     {
@@ -36,7 +35,7 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path="";
-        String action="";
+        //String action="";
         WebPage wp=paramRequest.getWebPage();
 
 
