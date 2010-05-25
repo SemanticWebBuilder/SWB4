@@ -34,9 +34,13 @@ namespace WBOffice4.Steps
     public partial class SelectTitle : TSWizards.BaseInteriorStep
     {
         public static readonly String TITLE = "TITLE";
-        public SelectTitle()
+        public SelectTitle(String title)
         {
             InitializeComponent();
+            if (title != null && !title.Equals(""))
+            {
+                this.textBoxTitle.Text = title;
+            }
         }
 
         private void SelectTitle_ValidateStep(object sender, CancelEventArgs e)

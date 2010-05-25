@@ -371,6 +371,11 @@ namespace WB4Office2007Library
             object missing = Type.Missing;
             object text = titulo;
             object address = path;
+            if (!(this.document.Application.Selection.Range.Text == null || this.document.Application.Selection.Range.Text == ""))            
+            {
+                text = this.document.Application.Selection.Range.Text;
+                
+            }
             this.document.Hyperlinks.Add(this.document.Application.Selection.Range, ref address, ref missing, ref missing, ref text, ref missing);
         }
 
