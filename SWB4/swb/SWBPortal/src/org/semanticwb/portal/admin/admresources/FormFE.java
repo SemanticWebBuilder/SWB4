@@ -86,7 +86,7 @@ public class FormFE extends WBContainerFE
     
     /** The request. */
     HttpServletRequest request=null;
-    //TODO:Detectar el navegador, Para el caso de que sea firefox hacer que el jsframework no sea dojo
+
     /** The jsframework. */
     private String jsframework="dojo";
 
@@ -204,7 +204,7 @@ public class FormFE extends WBContainerFE
 
     /**
      * Sets the js frame work.
-     * 
+     *
      * @param jsframework the new js frame work
      */
     public void setJsFrameWork(String jsframework){
@@ -294,7 +294,7 @@ public class FormFE extends WBContainerFE
 
     /**
      * Gets the js frame work.
-     * 
+     *
      * @return the js frame work
      */
     protected String getJsFrameWork(){
@@ -326,9 +326,9 @@ public class FormFE extends WBContainerFE
                         child.setAttribute("id",id);
                     }
                 }
-                if(action!=null) child.setAttribute("action",action);
+                if(action!=null)
+                    child.setAttribute("action",action);
                 else {
-                    //child.setAttribute("action","#");
                     child.setAttribute("action",redirect);
                 }
                 if(method!=null) child.setAttribute("method",method);
@@ -339,13 +339,15 @@ public class FormFE extends WBContainerFE
                 if(styleclass!=null) child.setAttribute("class",styleclass);
                 if(moreattr!=null) child.setAttribute("moreattr",moreattr);
 
-                //setJsFrameworkAttributes(child);
+                setJsFrameworkAttributes(child);
 
                 dom.appendChild(child);
 
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
-                if(xml!=null && !"".equals(xml.trim())) xml=xml.substring(xml.indexOf("<form"), xml.indexOf("/>", xml.indexOf("<form"))) + ">";
-                else xml="";
+                if( xml!=null && !"".equals(xml.trim()) )
+                    xml=xml.substring(xml.indexOf("<form"), xml.indexOf("/>", xml.indexOf("<form"))) + ">";
+                else
+                    xml="";
             }
         }
         catch(Exception e) { log.error(e); }
@@ -511,7 +513,7 @@ public class FormFE extends WBContainerFE
                 for(int i=0;i<nnodemap.getLength();i++){
                     String attrName=nnodemap.item(i).getNodeName();
                     String attrValue=nnodemap.item(i).getNodeValue();
-                    if(attrValue!=null && !attrValue.equals("")){
+                    if(attrValue!=null && !attrValue.equals("")){                        
                         //defecto
                         if(attrName.equalsIgnoreCase("name")) name=attrValue;
                         if(attrName.equalsIgnoreCase("id")) id=attrValue;
@@ -522,7 +524,6 @@ public class FormFE extends WBContainerFE
                         else if(attrName.equalsIgnoreCase("action")){
                             action=attrValue;
                             if(action.equalsIgnoreCase("true")){
-                               //action=WBUtils.getInstance().getWebPath()+AFUtils.getInstance().getEnv("wb/admresource")+"/"+base.getId()+"/update";
                                 action=redirect;
                             }
                         }
@@ -545,13 +546,13 @@ public class FormFE extends WBContainerFE
      * 
      * @param child the new js framework attributes
      */
-    private void setJsFrameworkAttributes(Element child){
-            String jsFramework=getJsFrameWork();
-            if(jsFramework!=null){
-                if(jsFramework.equalsIgnoreCase("dojo")){
-                    child.setAttribute("dojoType","dijit.form.Form");
-                }
-                child.setAttribute("onsubmit","submitForm('"+id+"');return false;");
+    private void setJsFrameworkAttributes(Element child) {
+        String jsFramework=getJsFrameWork();
+        if(jsFramework!=null){
+            if(jsFramework.equalsIgnoreCase("dojo")){
+                child.setAttribute("dojoType","dijit.form.Form");
             }
+//            child.setAttribute("onsubmit","submitForm('"+id+"');return false;");
+        }
     }
 }
