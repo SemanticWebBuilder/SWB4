@@ -42,7 +42,7 @@ public class PublishPage extends SelectPage {
             String type=document.getDocumentType().toString().toUpperCase();
             if (!OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type,info))
             {
-                JOptionPane.showMessageDialog(this, "No tiene permisos para publicar en esta página",PublishPage.getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR);
+                JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("NO_PERMISSION_TO_PUBLISH"),PublishPage.getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
         }
