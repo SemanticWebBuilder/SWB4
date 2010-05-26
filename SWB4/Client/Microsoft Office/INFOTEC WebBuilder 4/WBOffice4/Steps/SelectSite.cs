@@ -36,9 +36,11 @@ namespace WBOffice4.Steps
         public static readonly String WEB_PAGE = "WEB_PAGE";
         protected String m_title;
         protected String m_description;
-        public SelectSite()
+        protected OfficeDocument document;
+        public SelectSite(OfficeDocument document)
         {
-            InitializeComponent();            
+            InitializeComponent();
+            this.document = document;
             foreach (WebSiteInfo site in OfficeApplication.OfficeApplicationProxy.getSites())
             {
                 TreeNode siteNode = new TreeNode(site.title, 1, 1);
@@ -47,11 +49,12 @@ namespace WBOffice4.Steps
                 addHomePage(siteNode, site);
             }
         }
-        public SelectSite(String title,String description)
+        public SelectSite(String title, String description, OfficeDocument document)
         {
 
             InitializeComponent();
             this.m_title = title;
+            this.document = document;
             this.m_description = description;
             foreach (WebSiteInfo site in OfficeApplication.OfficeApplicationProxy.getSites())
             {

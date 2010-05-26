@@ -35,7 +35,7 @@ namespace WBOffice4.Steps
     {
         ResourceInfo resourceInfo;
         public SelectSiteMoveContent(ResourceInfo resourceInfo)
-            : base()
+            : base(null)
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
             this.resourceInfo = resourceInfo;

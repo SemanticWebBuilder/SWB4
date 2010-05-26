@@ -35,15 +35,15 @@ namespace WBOffice4.Steps
 {
     public class SelectSitePublish : SelectSite
     {
-        private OfficeDocument document;
+        
         public SelectSitePublish(OfficeDocument document)
-            : base()
+            : base(document)
         {            
             this.ValidateStep+=new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
-            this.document = document;
+            
         }        
         public SelectSitePublish(String title, String description,OfficeDocument document)
-            : base(title, description)
+            : base(title, description,document)
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
             this.document = document;
