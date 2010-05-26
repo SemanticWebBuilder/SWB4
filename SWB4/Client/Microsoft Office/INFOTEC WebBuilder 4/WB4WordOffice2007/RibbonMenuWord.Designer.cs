@@ -90,7 +90,7 @@
             this.tab1.Groups.Add(this.group2);
             this.tab1.Groups.Add(this.group3);
             this.tab1.Groups.Add(this.groupHelp);
-            this.tab1.Label = "Semantic WebBuilder 4";
+            this.tab1.Label = "SemanticWebBuilder";
             this.tab1.Name = "tab1";
             // 
             // group1

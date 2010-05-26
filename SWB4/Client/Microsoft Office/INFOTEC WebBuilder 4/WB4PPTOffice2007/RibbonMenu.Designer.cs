@@ -87,7 +87,7 @@
             this.infowb.Groups.Add(this.group1);
             this.infowb.Groups.Add(this.groupTools);
             this.infowb.Groups.Add(this.groupHelp);
-            this.infowb.Label = "Semantic INFOTEC WebBuilder";
+            this.infowb.Label = "SemanticWebBuilder";
             this.infowb.Name = "infowb";
             // 
             // groupSession

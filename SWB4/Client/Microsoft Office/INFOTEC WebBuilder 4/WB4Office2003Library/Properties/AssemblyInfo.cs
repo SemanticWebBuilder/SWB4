@@ -29,11 +29,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Semantic INFOTEC WebBuilder for Office 2003")]
-[assembly: AssemblyDescription("Semantic INFOTEC WebBuilder for Office 2003")]
+[assembly: AssemblyTitle("SemanticWebBuilder for Office 2003")]
+[assembly: AssemblyDescription("SemanticWebBuilder for Office 2003")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("INFOTEC")]
-[assembly: AssemblyProduct("Semantic INFOTEC WebBuilder for Office 2003")]
+[assembly: AssemblyProduct("SemanticWebBuilder for Office 2003")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
