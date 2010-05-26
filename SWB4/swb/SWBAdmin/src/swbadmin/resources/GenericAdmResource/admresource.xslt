@@ -230,6 +230,7 @@
             <xsl:if test="string-length( @trim ) &gt; 0"> trim=&quot;<xsl:value-of select="@trim" />&quot;</xsl:if>
             <xsl:if test="string-length( @regExp ) &gt; 0"> regExp=&quot;<xsl:value-of select="@regExp" />&quot;</xsl:if>
             <xsl:if test="string-length( @dojoType ) &gt; 0"> dojoType=&quot;<xsl:value-of select="@dojoType" />&quot;</xsl:if>
+            <xsl:if test="string-length( @required ) &gt; 0"> required=&quot;<xsl:value-of select="@required" />&quot;</xsl:if>
             <xsl:if test="string-length( @value ) &gt; 0"> value=&quot;<xsl:value-of select="@value" disable-output-escaping="yes"/>&quot;</xsl:if>
 	        <xsl:if test="string-length( @class ) &gt; 0"> class=&quot;<xsl:value-of select="@class" />&quot;</xsl:if>
 	        <xsl:if test="string-length( @style ) &gt; 0"> style=&quot;<xsl:value-of select="@style" />&quot;</xsl:if>
