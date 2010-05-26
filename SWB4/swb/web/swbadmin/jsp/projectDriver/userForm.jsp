@@ -136,7 +136,6 @@
                         </div>
            </form><%
         }else{
-            //Solo se muestran los datos del usuario
  %>
             <br>
             <!--label for="name">Nombre : </label>
@@ -145,7 +144,6 @@
             <span name="speciality"><%=userwp.getSpeciality()%></span>
             <br>
 <%
-
         }
         %>
          <%=avanTot%>
@@ -189,13 +187,11 @@
 <%!
 private ArrayList listUserRepository(WebSite wp){
     ArrayList usrs =new ArrayList();
-
     UserRepository urep=wp.getUserRepository();
     Iterator users = urep.listUsers();
     while(users.hasNext()){
         User us = (User)users.next();
         usrs.add(us.getURI());
-
     }
     return usrs;
 }
