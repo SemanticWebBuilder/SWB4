@@ -1768,7 +1768,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WBOffice4, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:WBOffice4, Version=4.0.1.4, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_20F957399CF74B518C53C970BA3E25E0"
@@ -2759,7 +2759,7 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Semantic WebBuilder 4 para Office2007"
+        "ProductName" = "8:SemanticWebBuilde para Office2007"
         "ProductCode" = "8:{58B5565A-6E1F-483D-9854-01382996F722}"
         "PackageCode" = "8:{0A6ADA11-D559-4C31-8416-C169CC55877D}"
         "UpgradeCode" = "8:{5497AC65-2B5B-4E54-8D49-481DD9C35015}"
@@ -2771,11 +2771,11 @@
         "Manufacturer" = "8:INFOTEC"
         "ARPHELPTELEPHONE" = "8:+52-55-56242800"
         "ARPHELPLINK" = "8:http://www.webbuilder.org.mx"
-        "Title" = "8:Semantic WebBuilder 4 para Office2007"
+        "Title" = "8:SemanticWebBuilder para Office 2007"
         "Subject" = "8:"
         "ARPCONTACT" = "8:INFOTEC"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Semantic WebBuilder 4 para Office2007"
+        "ARPCOMMENTS" = "8:SemanticWebBuilder para Office2007"
         "ARPURLINFOABOUT" = "8:http://www.infotec.com.mx"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
