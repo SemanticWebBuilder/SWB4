@@ -112,6 +112,8 @@ public class UserRegistration extends GenericAdmResource
 //        {
 //            jspfile = "/resources/jsp/UserRegistration/view.jsp";
 //        }
+        String btn_Save=(paramsRequest.getUser().getLanguage().equalsIgnoreCase("en")?"Save":"Guardar");
+        String usrTypelbl=(paramsRequest.getUser().getLanguage().equalsIgnoreCase("en")?"User types":"Tipos de usuario");
         UserRepository urep = paramsRequest.getWebPage().getWebSite().getUserRepository();
 //        User currUser = paramsRequest.getUser();
 //        System.out.println("isRegistered:"+currUser.isRegistered());
@@ -231,13 +233,13 @@ public class UserRegistration extends GenericAdmResource
             }
             if (paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes().hasNext())
             {
-                String tipoUsu = "Tipos de usuario";
+                String tipoUsu = usrTypelbl;
                 writt.println("    <fieldset>");
                 writt.println("        <legend>" + tipoUsu + "</legend>");
                 writt.println("	    <table>");
 
                 Iterator itusrTypes = paramsRequest.getWebPage().getWebSite().getUserRepository().getUserTypes();
-                String labTU = "Tipo de usuario";
+                String labTU = usrTypelbl;
                 writt.println("<tr><td><label>" + labTU + "</label></td><td>");
                 writt.println("            <select name=\"wb_usr_type\" id=\"wb_usr_type\" multiple=\"yes\">");
                 writt.println("                <option value=\"\"></option>");
@@ -257,7 +259,7 @@ public class UserRegistration extends GenericAdmResource
                 writt.println("</select></td></tr></table></fieldset>");
             } //else {System.out.println("Sin tipos");}
 
-            writt.println("            <fieldset><span align=\"center\"><input type=\"submit\" value=\"Guardar\" /></span></fieldset>");
+            writt.println("            <fieldset><span align=\"center\"><input type=\"submit\" value=\""+btn_Save+"\" /></span></fieldset>");
             writt.println("</form>");
         }
     }
@@ -268,6 +270,8 @@ public class UserRegistration extends GenericAdmResource
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        String btn_Save=(paramsRequest.getUser().getLanguage().equalsIgnoreCase("en")?"Save":"Guardar");
+        String adicionalAttlbl=(paramsRequest.getUser().getLanguage().equalsIgnoreCase("en")?"Aditional Data":"Datos Adicionales");
         if (null != paramsRequest.getUser().getSemanticObject().getId())
         {
             String jspfile = super.getResourceBase().getAttribute("extraJsp");
@@ -334,7 +338,7 @@ public class UserRegistration extends GenericAdmResource
                         paramsRequest.getUser().getSemanticObject().getId() +
                         "\" />");
                 writt.println("    <fieldset>");
-                writt.println("        <legend>Atributos Adicionales</legend>");
+                writt.println("        <legend>"+adicionalAttlbl+"</legend>");
                 writt.println("	    <table>");
                 Iterator<String> it = datos.keySet().iterator();
                 while (it.hasNext())
@@ -346,7 +350,7 @@ public class UserRegistration extends GenericAdmResource
                 }
                 writt.println("	    </table>");
                 writt.println("	</fieldset>");
-                writt.println("            <fieldset><span align=\"center\"><input type=\"submit\" value=\"Guardar\" /></span></fieldset>");
+                writt.println("            <fieldset><span align=\"center\"><input type=\"submit\" value=\""+btn_Save+"\" /></span></fieldset>");
                 writt.println("</form>");
             }
 
