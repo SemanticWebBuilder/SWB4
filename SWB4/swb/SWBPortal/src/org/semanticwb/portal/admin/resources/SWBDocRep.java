@@ -80,7 +80,7 @@ public class SWBDocRep extends GenericResource {
     String MODELS = PATH + "models/";
     
     /** The ZIPDIRECTORY. */
-    String ZIPDIRECTORY = PATH + "sitetemplates/";
+    String ZIPDIRECTORY = PATH + "sitetemplates/repsdocs";
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
@@ -114,7 +114,7 @@ public class SWBDocRep extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
             StringBuffer strbf = new StringBuffer();
-            File file = new File(SWBPortal.getWorkPath() + "/sitetemplates/");
+            File file = new File(ZIPDIRECTORY);
             File[] files = file.listFiles();
             urlAction.setAction("upload");
             //out.println("<iframe id=\"templates\">");
@@ -135,7 +135,7 @@ public class SWBDocRep extends GenericResource {
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
                 String fileName = filex.getName();
-                if (filex.isFile() && fileName.endsWith("_rep.zip")) {
+                if (filex.isFile() && fileName.endsWith(".zip")) {
                     int pos = fileName.lastIndexOf(".");
                     if (pos > -1) {
                         fileName = fileName.substring(0, pos);
@@ -338,10 +338,7 @@ public class SWBDocRep extends GenericResource {
                 try {
                 String uri = request.getParameter("docRepid");
                 Workspace site = SWBContext.getWorkspace(uri);
-                String path = SWBPortal.getWorkPath() + "/";
-                String modelspath = path + "models/";
-                String zipdirectory = path + "sitetemplates/";
-                String zipFile = zipdirectory + site.getId() + ".zip";
+                String zipFile = ZIPDIRECTORY + site.getId() + ".zip";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
                 //java.io.File directory = new File(modelspath + site.getId() + "/");
@@ -359,7 +356,7 @@ public class SWBDocRep extends GenericResource {
 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
-                    File file = new File(zipdirectory + site.getId() + ".nt");
+                    File file = new File(ZIPDIRECTORY + site.getId() + ".nt");
                     FileOutputStream out = new FileOutputStream(file);
                     site.getSemanticObject().getModel().write(out,"N-TRIPLE");
                     out.flush();
@@ -369,7 +366,7 @@ public class SWBDocRep extends GenericResource {
                 }
                 //----------Generación de archivo siteInfo.xml del sitio especificado-----------
                 ArrayList aFiles = new ArrayList();
-                File file = new File(zipdirectory + "siteInfo.xml");
+                File file = new File(ZIPDIRECTORY + "siteInfo.xml");
                 FileOutputStream out = new FileOutputStream(file);
                 StringBuffer strbr = new StringBuffer();
                 try {
@@ -389,8 +386,8 @@ public class SWBDocRep extends GenericResource {
 
 
                 //--------------Agregar archivo rdf y xml generados a arraylist---------------------
-                aFiles.add(new File(zipdirectory + site.getId() + ".nt"));
-                aFiles.add(new File(zipdirectory + "siteInfo.xml"));
+                aFiles.add(new File(ZIPDIRECTORY + site.getId() + ".nt"));
+                aFiles.add(new File(ZIPDIRECTORY + "siteInfo.xml"));
                 //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
                 File[] files2add = new File[aFiles.size()];
                 int cont = 0;
@@ -408,8 +405,8 @@ public class SWBDocRep extends GenericResource {
                     filetmp.delete();
                 }
 
-                new File(zipdirectory + site.getId() + ".nt").delete();
-                new File(zipdirectory + "siteInfo.xml").delete();
+                new File(ZIPDIRECTORY + site.getId() + ".nt").delete();
+                new File(ZIPDIRECTORY + "siteInfo.xml").delete();
 
 
                 //Envia mensage de estatus en admin de wb
