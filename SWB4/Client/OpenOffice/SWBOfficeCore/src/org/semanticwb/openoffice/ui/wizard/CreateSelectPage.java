@@ -5,6 +5,7 @@
 package org.semanticwb.openoffice.ui.wizard;
 
 import java.util.Map;
+import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.WebPageInfo;
@@ -37,6 +38,7 @@ public class CreateSelectPage extends SelectPage
             info.id=pageSelected.getID();
             if (!OfficeApplication.getOfficeApplicationProxy().canCreatePage(info))
             {
+                JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("NO_PERMISOS"),getDescription(),JOptionPane.ERROR_MESSAGE | JOptionPane.OK_OPTION);
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
             }
         }
