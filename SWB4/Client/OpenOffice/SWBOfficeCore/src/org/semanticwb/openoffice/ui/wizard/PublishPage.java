@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
+import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
 
@@ -33,9 +34,13 @@ public class PublishPage extends SelectPage {
     {
         
         try
-        {            
+        {
+            WebPage page=(WebPage)map.get(WEBPAGE);
+            WebPageInfo info=new WebPageInfo();
+            info.siteID=page.getSite();
+            info.id=page.getID();
             String type=document.getDocumentType().toString().toUpperCase();
-            if (!OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type))
+            if (!OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type,info))
             {
                 JOptionPane.showMessageDialog(this, "No tiene permisos para publicar en esta página",PublishPage.getDescription(),JOptionPane.OK_OPTION | JOptionPane.ERROR);
                 return WizardPanelNavResult.REMAIN_ON_PAGE;
@@ -47,5 +52,25 @@ public class PublishPage extends SelectPage {
         }
         return super.allowNext(stepName, map, wizardData);
     }
+    @Override
+    protected void onAdd(WebPage page)
+    {
+        WebPageInfo info=new WebPageInfo();
+        info.siteID=page.getSite();
+        info.id=page.getID();
+        String type=document.getDocumentType().toString().toUpperCase();
+        page.setEnabled(false);
+        try
+        {
+            if (OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type,info))
+            {
+                page.setEnabled(true);
 
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
