@@ -53,7 +53,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  *
  * @author  victor.lorenzana
  */
-public class SelectPage extends WizardPage
+public abstract class SelectPage extends WizardPage
 {
 
     private static final String NL = "\r\n";
@@ -71,6 +71,11 @@ public class SelectPage extends WizardPage
         loadTree();
         jTreeSite.setRootVisible(false);
         jTreeSite.updateUI();
+    }
+    
+    protected void onAdd(WebPage page)
+    {
+        
     }
 
     @Override
@@ -509,7 +514,10 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         private String webSite;
         private String url;
         private boolean active;
-
+        public void setEnabled(boolean enabled)
+        {
+            this.component.setEnabled(enabled);
+        }
         public WebPage(String id, String title, String description, String webSite, String url, boolean active)
         {
             this.id = id;

@@ -46,4 +46,24 @@ public class CreateSelectPage extends SelectPage
         }
         return super.allowNext(stepName, map, wizardData);
     }
+    @Override
+    protected void onAdd(WebPage page)
+    {
+        WebPageInfo info=new WebPageInfo();
+        info.siteID=page.getSite();
+        info.id=page.getID();
+        page.setEnabled(false);
+        try
+        {
+            if (OfficeApplication.getOfficeApplicationProxy().canCreatePage(info))
+            {
+                page.setEnabled(true);
+
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
