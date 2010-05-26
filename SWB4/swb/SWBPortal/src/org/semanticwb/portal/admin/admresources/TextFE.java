@@ -407,8 +407,10 @@ public class TextFE extends WBJsInputFEAbs
                 xml=SWBUtils.XML.domToXml(dom, "ISO-8859-1", true);
                 if(xml!=null && !"".equals(xml.trim())) 
                 {
-                    if(xml.indexOf("<label")!=-1 && xml.indexOf("<label") < xml.indexOf("<input")) xml=xml.substring(xml.indexOf("<label"));
-                    else xml=xml.substring(xml.indexOf("<input"));
+                    if( xml.indexOf("<label")!=-1 && xml.indexOf("<label") < xml.indexOf("<input") )
+                        xml=xml.substring(xml.indexOf("<label"));
+                    else
+                        xml=xml.substring(xml.indexOf("<input"));
                 }
                 else xml="";
             }
@@ -466,10 +468,13 @@ public class TextFE extends WBJsInputFEAbs
                         else if(attrName.equalsIgnoreCase("trim")) trim=Boolean.valueOf(attrValue).booleanValue();
                     }
                 }
-                if(minsize>0) setJsMinSize(minsize); 
-                if(required) setJsIsRequired(true); 
-                if(sjsvalchars!=null) setJsValidChars(isvalchars,sjsvalchars, isshowchars);
-                if(regExp!=null){
+                if(minsize>0)
+                    setJsMinSize(minsize);
+                if(required)
+                    setJsIsRequired(true);
+                if(sjsvalchars!=null)
+                    setJsValidChars(isvalchars,sjsvalchars, isshowchars);
+                if( regExp!=null ) {
                     if(regExp.equals("\\d+")){ //Expresión regular para números
                         setJsValType("js_numbers");
                     }else if(regExp.equals("\\w+")){ //Expresión regular para alfanuméricos
@@ -478,8 +483,10 @@ public class TextFE extends WBJsInputFEAbs
                 }
                 if(svaltype!=null) {
                     setJsValType(svaltype);
-                    if(svaltype.equals("js_numbers")) regExp="\\d+";
-                    else if(svaltype.equals("js_alphabetic")) regExp="\\w+";
+                    if(svaltype.equals("js_numbers"))
+                        regExp="\\d+";
+                    else if(svaltype.equals("js_alphabetic"))
+                        regExp="\\w+";
                 }
                 if(sjspatron!=null) {
                     setJsPatron(sjspatron,isshowpatron);
@@ -494,26 +501,27 @@ public class TextFE extends WBJsInputFEAbs
      * 
      * @param child the new js framework attributes
      */
-    private void setJsFrameworkAttributes(Element child){
-            String jsFramework=getFormFE().getJsFrameWork();
-            if(jsFramework!=null){
-                if(jsFramework.equalsIgnoreCase("dojo")){
-                    child.setAttribute("dojoType","dijit.form.ValidationTextBox");
-                    if(required){
-                        child.setAttribute("required","true");
-                    }
-                    if(promptMessage!=null){
-                        child.setAttribute("promptMessage",promptMessage);
-                    }
-                    if(invalidMessage!=null){
-                        child.setAttribute("invalidMessage",invalidMessage);
-                    }
-                    if(trim){
-                        child.setAttribute("trim","true");
-                    }
-                    if(regExp!=null) child.setAttribute("regExp",regExp);
+    private void setJsFrameworkAttributes(Element child) {
+        String jsFramework = getFormFE().getJsFrameWork();
+        if( jsFramework!=null ) {
+            if( jsFramework.equalsIgnoreCase("dojo") ) {
+                child.setAttribute("dojoType","dijit.form.ValidationTextBox");
+                if(required) {
+                    child.setAttribute("required","true");
                 }
+                if(promptMessage!=null){
+                    child.setAttribute("promptMessage",promptMessage);
+                }
+                if(invalidMessage!=null){
+                    child.setAttribute("invalidMessage",invalidMessage);
+                }
+                if(trim){
+                    child.setAttribute("trim","true");
+                }
+                if(regExp!=null)
+                    child.setAttribute("regExp",regExp);
             }
+        }
     }
     
 }
