@@ -227,24 +227,4 @@ public class Event extends FlowNode
              message.visible=false;
         }
     }
-
-    public override function canStartLink(link:ConnectionObject) : Boolean {
-        var ret = super.canStartLink(link);
-
-        /*if (link instanceof MessageFlow) {
-            ret = false;
-            ModelerUtils.setErrorMessage("Events cannot have outgoing MessageFlows");
-        }*/
-        return ret;
-    }
-
-    public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = super.canEndLink(link);
-
-        /*if (link instanceof MessageFlow) {
-            ret = false;
-            ModelerUtils.setErrorMessage("Events cannot have incoming MessageFlows");
-        }*/
-        return ret;
-    }
 }
