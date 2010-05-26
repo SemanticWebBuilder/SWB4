@@ -91,7 +91,7 @@ public class IntermediateThrowEvent extends ThrowEvent
                 c++;
             }
         }
-
+     
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
             ModelerUtils.setErrorMessage("IntermediateThrowEvent can have only one incoming SequenceFlow");
@@ -116,6 +116,3 @@ public class IntermediateThrowEvent extends ThrowEvent
         return ret;
     }
 }
-
-
-
