@@ -522,6 +522,7 @@ private void jTreeSiteTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)th
         public void setEnabled(boolean enabled)
         {
             this.component.setEnabled(enabled);
+            this.component.updateUI();
         }
         public WebPage(String id, String title, String description, String webSite, String url, boolean active)
         {
