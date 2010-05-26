@@ -50,8 +50,8 @@
            hourPlan = c.next().toString();
            hourCurren = c.next().toString();
            percen = c.next().toString();
-       }System.out.println("aqui bien");
-       dates=calculateDates(wp,user);System.out.println("aqui bien");
+       }
+       dates=calculateDates(wp,user);
        c=dates.iterator();
        while(c.hasNext()){
            start = c.next().toString();
@@ -113,7 +113,7 @@
                             </p>
                         </div>
            </form>
-       <%}else{System.out.println("aqui bien");
+       <%}else{
        %>
                 <br>
                 <label for="project">Líder : </label>
@@ -128,7 +128,7 @@
                 <label for="progress">Porcentaje de Avance: </label>
                 <span name="progress"><%=getProgressBar(getListLeaf(wp,user,false),"66CCFF",null)%></span>
                 <br>
-<%System.out.println("aqui bien");
+<%
       if(!proPage.isEmpty())
        out.println(printPage(proPage,"Subproyectos",user,true));
       if(!actPageCon.isEmpty())
@@ -254,7 +254,7 @@
         String stime1="",stime2="",stime="",stimeE="",stimeE1="",stimeE2="";
         long time1=0,time2=0,time=0,timeE=0,timeE1=0,timeE2=0;
         //Valida Actividades
-       // System.out.println("aqui bien calculate date");
+       
         while(listAct.hasNext()){
             WebPage wp1=(WebPage)listAct.next();
              boolean valid=true;
@@ -279,22 +279,22 @@
                  valid=false;
               if(valid)
                   validAct.add(wp1);
-        }//System.out.println("aqui bien calculate date");
-        listAct = validAct.iterator();System.out.println("aqui bien calculate date");
+        }
+        listAct = validAct.iterator();
         boolean validEnd=true;
-        while(listAct.hasNext()){System.out.println("aqui bien calculate dentro de while");
+        while(listAct.hasNext()){
             Activity acts = (Activity)listAct.next();
-          //  System.out.println(acts.getDisplayName() + acts.getStatus());
+         
             if(acts.getStatus()==null)
                 acts.setStatus("unassigned");
             if(acts.getStatus().equals("assigned")||acts.getStatus().equals("unassigned")||acts.getStatus().equals("develop")||acts.getStatus().equals("paused")||acts.getEndDate()==null){
-                validEnd=false;System.out.println("entre en acts");
+                validEnd=false;
             
             }
 
 
         }
-       // System.out.println("aqui bien calculate date 4...");
+      
         listAct = validAct.iterator();
         while(listAct.hasNext()){
             Activity act = (Activity)listAct.next();
@@ -309,7 +309,7 @@
                 }
                 if(listAct.hasNext()){
                     Activity act1 = (Activity)listAct.next();
-                    //System.out.println(act1.getDisplayName());
+                    
                     if(act1.getStartDate()!=null){
                     time2=act1.getStartDate().getTime();
                     stime2=act1.getStartDate().toString();
@@ -382,7 +382,7 @@
                     }
                 }
             }
-        }//System.out.println("aqui bien calculate date");
+        }
         Dates.add(stime);
         Dates.add(stimeE);
         return Dates;
