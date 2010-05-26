@@ -19,7 +19,7 @@ public class CreateSelectPage extends SelectPage
 
     public CreateSelectPage(String siteid)
     {
-        super(siteid);
+        super(siteid,null);
     }
 
     public static String getDescription()

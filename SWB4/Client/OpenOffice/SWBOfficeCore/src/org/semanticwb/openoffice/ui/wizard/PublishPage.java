@@ -19,11 +19,11 @@ import org.semanticwb.openoffice.OfficeDocument;
  */
 public class PublishPage extends SelectPage {
 
-    OfficeDocument document;
+    
     public PublishPage(String siteid,OfficeDocument document)
     {
-        super(siteid);
-        this.document=document;
+        super(siteid,document);
+    
     }
     public static String getDescription()
     {

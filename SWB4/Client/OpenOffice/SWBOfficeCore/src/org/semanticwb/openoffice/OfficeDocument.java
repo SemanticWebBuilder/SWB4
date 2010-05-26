@@ -1102,7 +1102,7 @@ public abstract class OfficeDocument
             {
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(null), new SelectTitle()
+                    new SelectPage(null,this), new SelectTitle()
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
                 wiz.show();
@@ -1111,7 +1111,7 @@ public abstract class OfficeDocument
             {
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(null), new SelectTitle(selectedText)
+                    new SelectPage(null,this), new SelectTitle(selectedText)
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
                 wiz.show();

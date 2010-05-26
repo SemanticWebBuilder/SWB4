@@ -1026,7 +1026,7 @@ public class DialogContentInformation extends javax.swing.JDialog
         {
             ResourceInfo resourceInfo = (ResourceInfo) jTablePages.getModel().getValueAt(jTablePages.getSelectedRow(), 0);
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            DialogEditResource dialogEditPorlet = new DialogEditResource(resourceInfo, repository, contentId);
+            DialogEditResource dialogEditPorlet = new DialogEditResource(resourceInfo, repository, contentId,this.document);
             this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             dialogEditPorlet.setVisible(true);
             if (!dialogEditPorlet.isCancel)

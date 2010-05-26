@@ -51,9 +51,10 @@ import org.semanticwb.office.interfaces.LanguageInfo;
 import org.semanticwb.office.interfaces.VersionInfo;
 import org.semanticwb.openoffice.MoveContentResultProducer;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.OfficeDocument;
 import org.semanticwb.openoffice.components.PanelPropertyEditor;
 import org.semanticwb.openoffice.ui.icons.ImageLoader;
-import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.PublishPage;
 
 /**
  *
@@ -69,12 +70,13 @@ public class DialogEditResource extends javax.swing.JDialog
     public ResourceInfo pageInformation;
     public boolean isCancel = true;
     ArrayList<CalendarInfo> added = new ArrayList<CalendarInfo>();
-
+    OfficeDocument document;
     /** Creates new form DialogContentPublicationInformation */
-    public DialogEditResource(ResourceInfo pageInformation, String repositoryName, String contentID)
+    public DialogEditResource(ResourceInfo pageInformation, String repositoryName, String contentID,OfficeDocument document)
     {
         super((Frame) null, ModalityType.TOOLKIT_MODAL);
         initComponents();
+        this.document=document;
         this.jSpinnerEndDate.setEditor(new JSpinner.DateEditor(jSpinnerEndDate, DATE_FORMAT));
         this.jPanelProperties.add(panelPropertyEditor1);
         this.setIconImage(ImageLoader.images.get("semius").getImage());
@@ -1131,7 +1133,7 @@ private void jButtonMoveActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIR
         MoveContentResultProducer resultProducer = new MoveContentResultProducer(this);
         WizardPage[] clazz = new WizardPage[]
         {
-            new SelectPage(this.pageInformation.page.site.id)
+            new PublishPage(this.pageInformation.page.site.id,this.document)
         };
         Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogEditResource").getString("MOVER_CONTENIDO_DE_PÁGINA"), clazz, resultProducer);
         wiz.show();
