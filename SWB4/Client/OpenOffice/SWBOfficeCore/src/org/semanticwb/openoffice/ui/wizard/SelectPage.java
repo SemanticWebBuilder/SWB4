@@ -48,22 +48,24 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.OfficeDocument;
 
 /**
  *
  * @author  victor.lorenzana
  */
-public abstract class SelectPage extends WizardPage
+public class SelectPage extends WizardPage
 {
 
     private static final String NL = "\r\n";
     public static final String WEBPAGE = "WEBPAGE";
     String siteId;
-
+    protected OfficeDocument document;
     /** Creates new form SelectPage */
-    public SelectPage(String siteid)
+    public SelectPage(String siteid,OfficeDocument document)
     {
         initComponents();
+        this.document=document;
         this.siteId = siteid;
         DefaultTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -205,6 +207,7 @@ public abstract class SelectPage extends WizardPage
                         DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                         child.add(dummy);
                     }
+                    onAdd(child);
                     TreeNode[] path = site.getPath();
                     jTreeSite.expandPath(new TreePath(path));
                 }
@@ -222,6 +225,7 @@ public abstract class SelectPage extends WizardPage
                             DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                             child.add(dummy);
                         }
+                        onAdd(child);
                         TreeNode[] path = site.getPath();
                         jTreeSite.expandPath(new TreePath(path));
                     }
@@ -260,6 +264,7 @@ public abstract class SelectPage extends WizardPage
                     DefaultMutableTreeNode dummy = new DefaultMutableTreeNode();
                     child.add(dummy);
                 }
+                onAdd(child);
             }
         }
         catch (Exception e)
