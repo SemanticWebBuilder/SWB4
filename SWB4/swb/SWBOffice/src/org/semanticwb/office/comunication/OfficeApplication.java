@@ -694,8 +694,8 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
             String siteid=site.getId();
             if (!(siteid.equals(SWBContext.WEBSITE_ADMIN) || siteid.equals(SWBContext.WEBSITE_GLOBAL) || siteid.equals(SWBContext.WEBSITE_ONTEDITOR)))
             {
-                WebPage home = site.getHomePage();
-                if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, site.getSemanticObject()) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, home.getSemanticObject()))
+                WebPage home = site.getHomePage();                
+                if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, site.getSemanticObject()) && SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, home.getSemanticObject()))
                 {
                     WebSiteInfo info = new WebSiteInfo();
                     info.title = site.getTitle();
@@ -740,7 +740,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         {
             WebPage page = pages.next();
             User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-            if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, page.getSemanticObject()))
+            if (SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(ouser, page.getSemanticObject()))
             {
                 WebPageInfo info = new WebPageInfo();
                 info.id = page.getId();
@@ -1159,7 +1159,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-        return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD);
+        return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, parent.getSemanticObject());
     }
 
     public boolean canCreateCategory(String repositoryName) throws Exception

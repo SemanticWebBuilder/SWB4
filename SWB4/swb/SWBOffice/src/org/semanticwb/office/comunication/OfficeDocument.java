@@ -1558,24 +1558,26 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
-    public boolean canPublishToResourceContent(String type) throws Exception
+    public boolean canPublishToResourceContent(String type,WebPageInfo info) throws Exception
     {
+        WebSite site = SWBContext.getWebSite(info.siteID);
+        WebPage page=site.getWebPage(info.id);
         org.semanticwb.model.User wbuser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
         if (type.equalsIgnoreCase("EXCEL"))
         {
             SemanticClass clazz = ExcelResource.ClassMgr.sclass;
-            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(wbuser, page.getSemanticObject());
         }
         else if (type.equalsIgnoreCase("PPT"))
         {
             SemanticClass clazz = PPTResource.ClassMgr.sclass;
-            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(wbuser, page.getSemanticObject());
 
         }
         else
         {
             SemanticClass clazz = WordResource.ClassMgr.sclass;
-            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD);
+            return SWBPortal.getAdminFilterMgr().haveClassAction(wbuser, clazz, AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(wbuser, page.getSemanticObject());
         }
     }
 
