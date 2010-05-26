@@ -19,4 +19,17 @@ public class CompensationIntermediateCatchEvent extends IntermediateCatchEvent
         type=CATCH_COMPENSATION;
         return super.create();
     }
+
+    public override function canStartLink(link:ConnectionObject) : Boolean {
+        var ret = super.canStartLink(link);
+
+        if (getGraphParent() instanceof Activity) {
+            if (not(link instanceof DirectionalAssociation)) {
+                ret = false;
+                ModelerUtils.setErrorMessage("Compensation Boundary Event can have only one outgoing DirectionalAssociation");
+            }
+        }
+        return ret;
+    }
+
 }
