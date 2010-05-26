@@ -54,7 +54,6 @@ public class CodeGeneratorProcess2
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path+"../../../SWBProcess/src");
-            //System.out.println(dir);
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("swp", false, dir);
             System.out.println("Generación de clases completa");
