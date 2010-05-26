@@ -236,6 +236,9 @@
     <rdfs:subClassOf rdf:resource="#IntermediateCatchEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ProcessRuleable"/>
+    </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="CancelationEndEvent">
@@ -255,6 +258,12 @@
   <owl:Class rdf:about="#CatchEvent">
     <rdfs:subClassOf>
       <swb:Class rdf:ID="Event">
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="ActionCodeable">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#FlowNode"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
@@ -487,6 +496,9 @@
     <rdfs:subClassOf rdf:resource="#StartEvent"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ProcessRuleable"/>
+    </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="ServiceTask">
@@ -819,6 +831,10 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="#ProcessRuleable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:about="#SignalStartEvent">
     <swb:displayObject rdf:resource="#do_StartEvent"/>
     <rdfs:subClassOf rdf:resource="#StartEvent"/>
@@ -1134,18 +1150,6 @@
     <rdfs:range rdf:resource="#ProcessClass"/>
     <rdfs:domain rdf:resource="#Containerable"/>
   </owl:ObjectProperty>
-  <owl:DatatypeProperty rdf:ID="execution">
-    <rdfs:domain rdf:resource="#Instance"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="height">
-    <rdfs:domain rdf:resource="#GraphicalElement"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="action">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Instance"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="iteration">
     <rdfs:domain rdf:resource="#Instance"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -1154,9 +1158,17 @@
     <rdfs:domain rdf:resource="#GraphicalElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="y">
-    <rdfs:domain rdf:resource="#GraphicalElement"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  <owl:DatatypeProperty rdf:ID="actionCode">
+    <rdfs:label xml:lang="en">Action Code</rdfs:label>
+    <rdfs:label xml:lang="es">Código de la acción</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_actionCode">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >45</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ActionCodeable"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="processPriority">
     <rdfs:domain rdf:resource="#ProcessInstance"/>
@@ -1165,6 +1177,35 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="width">
+    <rdfs:domain rdf:resource="#GraphicalElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rule">
+    <rdfs:domain rdf:resource="#ProcessRuleable"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rule">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Regla</rdfs:label>
+    <rdfs:label xml:lang="en">Rule</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="height">
+    <rdfs:domain rdf:resource="#GraphicalElement"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="execution">
+    <rdfs:domain rdf:resource="#Instance"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="action">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Instance"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="y">
     <rdfs:domain rdf:resource="#GraphicalElement"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
