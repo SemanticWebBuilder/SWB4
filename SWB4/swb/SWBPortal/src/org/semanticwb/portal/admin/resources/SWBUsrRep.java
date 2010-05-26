@@ -80,7 +80,7 @@ public class SWBUsrRep extends GenericResource {
     String MODELS = PATH + "models/";
     
     /** The ZIPDIRECTORY. */
-    String ZIPDIRECTORY = PATH + "sitetemplates/";
+    String ZIPDIRECTORY = PATH + "sitetemplates/repsusers/";
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#processRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
@@ -114,58 +114,61 @@ public class SWBUsrRep extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl();
             SWBResourceURL urlAction = paramRequest.getActionUrl();
             StringBuffer strbf = new StringBuffer();
-            File file = new File(SWBPortal.getWorkPath() + "/sitetemplates/");
-            File[] files = file.listFiles();
-            urlAction.setAction("upload");
-            //out.println("<iframe id=\"templates\">");
-            //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-            out.println("<div class=\"swbform\">");
-            out.println("<fieldset>");
-            out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
-            out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
-            out.println("<table width=\"100%\">");
-            out.println("<tr align=\"left\">");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("tpl") + "</b></th>");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("size") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("install") +"</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("download") + "</b></th>");
-            out.println("<th><b>"+paramRequest.getLocaleLogString("delete") + "</b></th>");
-            out.println("<th><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></th>");
-            out.println("</tr>");
-            for (int i = 0; i < files.length; i++) {
-                File filex = files[i];
-                String fileName = filex.getName();
-                if (filex.isFile() && fileName.endsWith("_usr.zip")) {
-                    int pos = fileName.lastIndexOf(".");
-                    if (pos > -1) {
-                        fileName = fileName.substring(0, pos);
+            File file = new File(ZIPDIRECTORY);
+            if(file.exists() && file.isDirectory())
+            {
+                File[] files = file.listFiles();
+                urlAction.setAction("upload");
+                //out.println("<iframe id=\"templates\">");
+                //out.println("<div id=\"vtemplates\" dojoType=\"dijit.TitlePane\" title=\"Templates existentes de Sitios \" class=\"admViewTemplates\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+                out.println("<div class=\"swbform\">");
+                out.println("<fieldset>");
+                out.println("<legend>" + paramRequest.getLocaleLogString("existTpls") + "</legend>");
+                out.println("<form action=\"" + urlAction.toString() + "\" method=\"post\" enctype='multipart/form-data'>");
+                out.println("<table width=\"100%\">");
+                out.println("<tr align=\"left\">");
+                out.println("<th><b>" + paramRequest.getLocaleLogString("tpl") + "</b></th>");
+                out.println("<th><b>" + paramRequest.getLocaleLogString("size") + "</b></th>");
+                out.println("<th><b>"+paramRequest.getLocaleLogString("install") +"</b></th>");
+                out.println("<th><b>"+paramRequest.getLocaleLogString("download") + "</b></th>");
+                out.println("<th><b>"+paramRequest.getLocaleLogString("delete") + "</b></th>");
+                out.println("<th><b>" + paramRequest.getLocaleLogString("up2comunity") + "</b></th>");
+                out.println("</tr>");
+                for (int i = 0; i < files.length; i++) {
+                    File filex = files[i];
+                    String fileName = filex.getName();
+                    if (filex.isFile() && fileName.endsWith(".zip")) {
+                        int pos = fileName.lastIndexOf(".");
+                        if (pos > -1) {
+                            fileName = fileName.substring(0, pos);
+                        }
+                        out.println("<tr align=\"left\"><td>");
+                        url.setParameter("zipName", filex.getAbsolutePath());
+                        url.setMode("viewmodel");
+                        out.println("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + fileName + "</a>");
+                        out.println("</td><td>");
+                        out.println(filex.length() + " bytes");
+                        out.println("</td>");
+                        url.setMode("installmodel");
+                        url.setAction("form");
+                        out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
+                        out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
+                        urlAction.setParameter("zipName", filex.getAbsolutePath());
+                        urlAction.setAction("delete");
+                        out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleLogString("delete") + "\"/></a></td>");
+                        out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleLogString("up2comunity") + "\"/></td>");
+                        out.println("</tr>");
                     }
-                    out.println("<tr align=\"left\"><td>");
-                    url.setParameter("zipName", filex.getAbsolutePath());
-                    url.setMode("viewmodel");
-                    out.println("<a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\">" + fileName + "</a>");
-                    out.println("</td><td>");
-                    out.println(filex.length() + " bytes");
-                    out.println("</td>");
-                    url.setMode("installmodel");
-                    url.setAction("form");
-                    out.println("<td align=\"center\"><a href=\"" + url.toString() + "\" onclick=\"submitUrl('" + url.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconinst.png\" alt=\""+paramRequest.getLocaleLogString("install") + "\"/></a></td>");
-                    out.println("<td align=\"center\"><a href=\"" + WEBPATH + filex.getName() + "\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/icondesin.png\" alt=\""+paramRequest.getLocaleLogString("download") + "\"/></a></td>");
-                    urlAction.setParameter("zipName", filex.getAbsolutePath());
-                    urlAction.setAction("delete");
-                    out.println("<td align=\"center\"><a href=\"" + urlAction.toString() + "\" onclick=\"submitUrl('" + urlAction.toString() + "',this);return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconelim.png\" alt=\""+paramRequest.getLocaleLogString("delete") + "\"/></a></td>");
-                    out.println("<td align=\"left\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/iconsubcom.png\" alt=\""+paramRequest.getLocaleLogString("up2comunity") + "\"/></td>");
-                    out.println("</tr>");
                 }
+                out.println("</table>");
+                out.println("</fieldset>");
+                out.println("<fieldset><span align=\"center\">");
+                out.println("" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/><br/>");
+                out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
+                out.println("</fieldset>");
+                out.println("</form>");
+                out.println("</div>");
             }
-            out.println("</table>");
-            out.println("</fieldset>");
-            out.println("<fieldset><span align=\"center\">");
-            out.println("" + paramRequest.getLocaleLogString("upload") + "<input type=\"file\" name=\"zipmodel\" value=\"" + paramRequest.getLocaleLogString("new") + "\"/><br/>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id=\"send\" dojoType=\"dijit.form.Button\" type=\"submit\">"+paramRequest.getLocaleLogString("up")+"</button>");
-            out.println("</fieldset>");
-            out.println("</form>");
-            out.println("</div>");
 
             out.println("<div class=\"swbform\" id=\"vsites\" dojoType=\"dijit.TitlePane\" title=\""+paramRequest.getLocaleLogString("usrRep")+"\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
             out.println("<fieldset>");
@@ -338,10 +341,14 @@ public class SWBUsrRep extends GenericResource {
                 try {
                 String uri = request.getParameter("usrRepid");
                 UserRepository site = SWBContext.getUserRepository(uri);
-                String path = SWBPortal.getWorkPath() + "/";
-                String modelspath = path + "models/";
-                String zipdirectory = path + "sitetemplates/";
-                String zipFile = zipdirectory + site.getId() + ".zip";
+                //String path = SWBPortal.getWorkPath() + "/";
+                //String modelspath = path + "models/";
+                //String zipdirectory = path + "sitetemplates/";
+                
+                File file2Save=new File(ZIPDIRECTORY);
+                if(!file2Save.exists()) file2Save.mkdirs();
+
+                String zipFile = ZIPDIRECTORY + site.getId() + ".zip";
                 //---------Generación de archivo zip de carpeta work de sitio especificado-------------
                 java.util.zip.ZipOutputStream zos = new java.util.zip.ZipOutputStream(new FileOutputStream(zipFile));
                 //java.io.File directory = new File(modelspath + site.getId() + "/");
@@ -359,7 +366,7 @@ public class SWBUsrRep extends GenericResource {
 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
-                    File file = new File(zipdirectory + site.getId() + ".nt");
+                    File file = new File(ZIPDIRECTORY + site.getId() + ".nt");
                     FileOutputStream out = new FileOutputStream(file);
                     site.getSemanticObject().getModel().write(out,"N-TRIPLE");
                     out.flush();
@@ -369,7 +376,7 @@ public class SWBUsrRep extends GenericResource {
                 }
                 //----------Generación de archivo siteInfo.xml del sitio especificado-----------
                 ArrayList aFiles = new ArrayList();
-                File file = new File(zipdirectory + "siteInfo.xml");
+                File file = new File(ZIPDIRECTORY + "siteInfo.xml");
                 FileOutputStream out = new FileOutputStream(file);
                 StringBuffer strbr = new StringBuffer();
                 try {
@@ -389,8 +396,8 @@ public class SWBUsrRep extends GenericResource {
 
 
                 //--------------Agregar archivo rdf y xml generados a arraylist---------------------
-                aFiles.add(new File(zipdirectory + site.getId() + ".nt"));
-                aFiles.add(new File(zipdirectory + "siteInfo.xml"));
+                aFiles.add(new File(ZIPDIRECTORY + site.getId() + ".nt"));
+                aFiles.add(new File(ZIPDIRECTORY + "siteInfo.xml"));
                 //--------------Barrer archivos de arrayList para pasar a arreglo de Files y eliminar---
                 File[] files2add = new File[aFiles.size()];
                 int cont = 0;
@@ -408,8 +415,8 @@ public class SWBUsrRep extends GenericResource {
                     filetmp.delete();
                 }
 
-                new File(zipdirectory + site.getId() + ".nt").delete();
-                new File(zipdirectory + "siteInfo.xml").delete();
+                new File(ZIPDIRECTORY + site.getId() + ".nt").delete();
+                new File(ZIPDIRECTORY + "siteInfo.xml").delete();
 
 
                 //Envia mensage de estatus en admin de wb
@@ -465,15 +472,15 @@ public class SWBUsrRep extends GenericResource {
                         } else {
                             if (file.getName().endsWith("_usr") || file.getName().endsWith("_rep")) {
                                 //las carpetas de los submodelos, predefinidos en wb
-                                String wbmodelType = "";
+                                String wbmodelType = "";
                                 if (file.getName().endsWith("_usr")) {
-                                    wbmodelType = "_usr";
+                                    wbmodelType = "_usr";
                                 }
                                 if (file.getName().endsWith("_rep")) {
-                                    wbmodelType = "_rep";
+                                    wbmodelType = "_rep";
                                 }
 
-                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
+                                SWBUtils.IO.copyStructure(file.getAbsolutePath(), extractTo.getAbsolutePath() + wbmodelType + "/");
                                 SWBUtils.IO.removeDirectory(file.getAbsolutePath());
                             } else { //Puede ser un submodelo tipo sitio
                                 //TODO
