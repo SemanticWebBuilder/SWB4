@@ -56,7 +56,7 @@ public class SWBNewOntology extends GenericResource {
                     SemanticClass sclass=mgr.getVocabulary().getSemanticClassById(wstype);
                     if(sclass!=null)
                     {
-                        SemanticModel model=mgr.createModel(id+"_ont", ns);
+                        SemanticModel model=mgr.createModel(id, ns);
                         ontology=(Ontology)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
                     }
                 }
