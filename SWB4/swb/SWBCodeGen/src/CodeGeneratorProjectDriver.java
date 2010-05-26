@@ -45,9 +45,7 @@ public class CodeGeneratorProjectDriver
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../SWBPortal/src/org/semanticwb/portal/resources/projectdriver/swb_proy.owl");
-        //SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../SWBPortal/src/org/semanticwb/portal/resources/sem/video/SWBVideoResource.owl");
-        //SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_proy.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb_proy.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -57,8 +55,8 @@ public class CodeGeneratorProjectDriver
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
             File dir = new File(path+"../../../SWBPortal/src");
             CodeGenerator codeGeneration = new CodeGenerator();
-            codeGeneration.generateCode("swbproy",true,dir);
-            System.out.println("GeneraciÃ³n de clases completa");
+            codeGeneration.generateCode("swbproy",false,dir);
+            System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
         {
