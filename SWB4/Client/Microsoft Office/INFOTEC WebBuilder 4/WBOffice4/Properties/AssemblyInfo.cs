@@ -29,11 +29,11 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Semantic Webbuilder 4 for Office")]
-[assembly: AssemblyDescription("Semantic Webbuilder 4 for Office")]
+[assembly: AssemblyTitle("SemanticWebbuilder for Office")]
+[assembly: AssemblyDescription("SemanticWebbuilder for Office")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("INFOTEC")]
-[assembly: AssemblyProduct("Semantic Webbuilder 4 for Office")]
+[assembly: AssemblyProduct("SemanticWebbuilder for Office")]
 [assembly: AssemblyCopyright("Copyright ©  2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
