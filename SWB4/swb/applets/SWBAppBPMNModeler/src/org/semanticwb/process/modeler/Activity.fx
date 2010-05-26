@@ -32,4 +32,14 @@ public class Activity extends FlowNode
         }
         return ret;
     }
+
+    public override function canEndLink(link:ConnectionObject) : Boolean {
+        var ret = super.canEndLink(link);
+
+        if (link instanceof DirectionalAssociation and link.ini instanceof CompensationIntermediateCatchEvent) {
+            ret = true;            
+        }
+        return ret;
+    }
+
 }
