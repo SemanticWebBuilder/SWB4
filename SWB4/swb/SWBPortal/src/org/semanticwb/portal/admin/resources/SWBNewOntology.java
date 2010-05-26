@@ -42,10 +42,11 @@ public class SWBNewOntology extends GenericResource {
             if (action != null && action.trim().equals("step2")) {
                 String title = request.getParameter("wstitle");
                 String id = request.getParameter("wsid");
+                String ns = request.getParameter("ns");
                 String wstype = request.getParameter("wstype");
 
                 Ontology ontology = null;
-                String ns="http://ont." + id + ".swb#";
+                //String ns="http://ont." + id + ".swb#";
                 if(wstype==null)
                 {
                     ontology = SWBContext.createOntology(id, ns);
@@ -67,8 +68,8 @@ public class SWBNewOntology extends GenericResource {
                 //Envia estatus a pantalla
                 out.println("<script type=\"text/javascript\">");
                 out.println("hideDialog();");
-                out.println("addItemByURI(mtreeStore, null, '" + ontology.getURI() + "');");
-                out.println("showStatus('Sitio Creado');");
+                out.println("addItemByURI(montStore, null, '" + ontology.getURI() + "');");
+                out.println("showStatus('Ontologia Creada');");
                 out.println("</script>");
 
                 ontology.getSemanticObject().getModel().setTraceable(false);
@@ -101,14 +102,21 @@ public class SWBNewOntology extends GenericResource {
             out.println(paramRequest.getLocaleString("msgwsTitle")+" <em>*</em>");
             out.println("</td>");
             out.append("<td>");
-            out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
+            out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate();dojo.byId('swb_create_ns').value='http://ont.'+replaceChars4Id(this.textbox.value)+'.swb#';dijit.byId('swb_create_ns').validate()\" trim=\"true\" >");
             out.println("</td>");
             out.append("</tr>");
             out.append("<tr><td align=\"right\">");
             out.println(paramRequest.getLocaleString("msgwsID")+" <em>*</em>");
             out.println("</td>");
             out.append("<td>");
-            out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
+            out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\"  onkeyup=\";dojo.byId('swb_create_ns').value='http://ont.'+this.textbox.value+'.swb#';dijit.byId('swb_create_ns').validate()\" >");
+            out.println("</td>");
+            out.append("</tr>");
+            out.append("<tr><td align=\"right\">");
+            out.println(paramRequest.getLocaleString("msgwsNS")+" <em>*</em>");
+            out.println("</td>");
+            out.append("<td>");
+            out.println("<input type=\"text\" id=\"swb_create_ns\" name=\"ns\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Namespace.\" isValid_=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Namespace invalido.\" trim=\"true\" >");
             out.println("</td>");
             out.append("</tr>");
            
