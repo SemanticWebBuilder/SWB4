@@ -127,11 +127,21 @@ private Vector<SWBMonitorData> buffer;
         {
             SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
             String priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            if (null==priv)
+            {
+                org.semanticwb.SWBPlatform.getSemanticMgr().createKeyPair();
+                priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            }
             if (priv != null)
             {
                 priv = priv.substring(priv.indexOf("|") + 1);
                 byte[] PKey = SFBase64.decode(priv);
-                byte[] pKey = SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", null));
+                byte[] pKey = SFBase64.decode(SWBPlatform.getEnv("swbMonitor/PublicKey", 
+                        "MIHfMIGXBgkqhkiG9w0BAwEwgYkCQQCLxCFm00uKxKmedeD9XqiJ1SZ/DoXRtdibiTIv" +
+                        "Ciz2MfNzu+TnGkrgsBhTpfZN00nLopd80oPFvpBZTGIUTX2FAkBxDxzqmO0rG7TMQf4b" +
+                        "q5o7lIlf0DM1qcaVvFGjCt6t/NcFcko2S//V/58sqrzcyfBQKqZr0yTyqD6J4gCL4EN/" +
+                        "AgIB/wNDAAJAAwR0XE5XXl4xiTpZaF2jlLvp9YRSskMWOWPa/h3Bn+ovSpEuuMwnJ8yg" +
+                        "aj5/fcFNFLj5TaIRNDqTPQgbkMUI3A=="));
                 if (null != pKey)
                 {
                     java.security.spec.X509EncodedKeySpec pK = new java.security.spec.X509EncodedKeySpec(pKey);
