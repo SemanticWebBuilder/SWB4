@@ -39,7 +39,11 @@ namespace WBOffice4.Steps
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
             this.resourceInfo = resourceInfo;
-        }        
+        }
+        protected override void onAddNode(TreeNode node)
+        {
+            
+        }
         private void SelectSite_ValidateStep(object sender, CancelEventArgs e)
         {
             if (this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)

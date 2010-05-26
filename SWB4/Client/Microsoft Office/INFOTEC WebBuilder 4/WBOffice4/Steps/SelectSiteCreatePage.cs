@@ -28,6 +28,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using WBOffice4.Interfaces;
+using System.Drawing;
 namespace WBOffice4.Steps
 {
     public class SelectSiteCreatePage: SelectSite
@@ -80,6 +81,19 @@ namespace WBOffice4.Steps
                 {
                     this.toolStripButtonAddPage.Enabled = false;
                 }
+            }
+        }
+        protected override void onAddNode(TreeNode node)
+        {
+            if (node.Tag != null && node.Tag is WebPageInfo)
+            {
+                WebPageInfo page = node.Tag as WebPageInfo;
+                
+                if (!OfficeApplication.OfficeApplicationProxy.canCreatePage(page))
+                {
+                    node.ForeColor = Color.Gray;
+                }
+                
             }
         }
     }

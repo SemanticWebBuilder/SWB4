@@ -31,7 +31,7 @@ using System.Windows.Forms;
 using WBOffice4.Interfaces;
 namespace WBOffice4.Steps
 {
-    public partial class SelectSite : TSWizards.BaseInteriorStep
+    public abstract partial class SelectSite : TSWizards.BaseInteriorStep
     {
         public static readonly String WEB_PAGE = "WEB_PAGE";
         protected String m_title;
@@ -61,6 +61,8 @@ namespace WBOffice4.Steps
                 addHomePage(siteNode,site);
             }
         }
+        protected abstract void onAddNode(TreeNode node);
+       
         private void addHomePage(TreeNode siteNode, WebSiteInfo site)
         {
             WebPageInfo home=OfficeApplication.OfficeApplicationProxy.getHomePage(site);
@@ -78,6 +80,7 @@ namespace WBOffice4.Steps
                 TreeNode dummy = new TreeNode("");
                 homeNode.Nodes.Add(dummy);
             }
+            onAddNode(homeNode);
             //addChilds(homeNode, home);
         }
         private void addWebPage(TreeNode pageNode, WebPageInfo page)
@@ -98,6 +101,7 @@ namespace WBOffice4.Steps
                     TreeNode dummy = new TreeNode("");
                     childPageNode.Nodes.Add(dummy);
                 }
+                onAddNode(childPageNode);
             }
         }
 

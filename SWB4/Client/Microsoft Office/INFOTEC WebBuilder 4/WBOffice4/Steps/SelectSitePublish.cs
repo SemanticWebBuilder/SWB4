@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using WBOffice4.Interfaces;
 using WBOffice4.Forms;
+using System.Drawing;
 
 namespace WBOffice4.Steps
 {
@@ -47,14 +48,25 @@ namespace WBOffice4.Steps
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
             this.document = document;
         }
+        protected override void onAddNode(TreeNode node)
+        {
+            if (node.Tag != null && node.Tag is WebPageInfo)
+            {
+                WebPageInfo page = node.Tag as WebPageInfo;
+                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(document.DocumentType.ToString(),page))
+                {
+                    node.ForeColor = Color.Gray;
+                }
 
+            }
+        }
         private void SelectSitePublish_ValidateStep(object sender, CancelEventArgs e)
         {
             if (this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)
             {
                 WebPageInfo webpage = this.treeView1.SelectedNode.Tag as WebPageInfo;
                 String type = document.DocumentType.ToString();
-                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type))
+                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type,webpage))
                 {
                     MessageBox.Show(this, "No tiene permisos para publicar en esta página", this.Wizard.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;
