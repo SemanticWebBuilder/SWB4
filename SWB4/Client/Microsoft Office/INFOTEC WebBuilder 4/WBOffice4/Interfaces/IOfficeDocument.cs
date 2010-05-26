@@ -212,7 +212,7 @@ namespace WBOffice4.Interfaces
         ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid);
 
         [XmlRpcMethod("OfficeDocument.canPublishToResourceContent")]
-        bool canPublishToResourceContent(String type);
+        bool canPublishToResourceContent(String type, WebPageInfo page);
 
         [XmlRpcMethod("OfficeDocument.canModify")]
         bool canModify(String repositoryName, String contentID);
