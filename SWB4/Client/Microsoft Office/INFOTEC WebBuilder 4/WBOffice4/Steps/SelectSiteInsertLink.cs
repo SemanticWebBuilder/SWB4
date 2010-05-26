@@ -32,12 +32,12 @@ namespace WBOffice4.Steps
 {
     public class SelectSiteInsertLink : SelectSite
     {
-        OfficeDocument document;
+        
         public SelectSiteInsertLink(OfficeDocument document)
-            : base()
+            : base(document)
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
-            this.document = document;
+            
         }
         protected override void onAddNode(TreeNode node)
         {

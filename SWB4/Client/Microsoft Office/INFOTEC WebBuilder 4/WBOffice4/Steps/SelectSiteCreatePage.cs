@@ -33,12 +33,12 @@ namespace WBOffice4.Steps
 {
     public class SelectSiteCreatePage: SelectSite
     {
-        public SelectSiteCreatePage() : base()
+        public SelectSiteCreatePage(OfficeDocument document) : base(document)
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);            
         }
-        public SelectSiteCreatePage(String title, String description)
-            : base(title, description)
+        public SelectSiteCreatePage(String title, String description,OfficeDocument document)
+            : base(title, description,document)
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
         }
