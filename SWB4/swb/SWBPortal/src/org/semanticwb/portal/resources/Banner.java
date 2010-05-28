@@ -77,7 +77,8 @@ public class Banner extends GenericAdmResource
         Resource base = getResourceBase();
         try {
             String local = base.getAttribute("local", "0");
-            if(local.equals("0")) {
+            String code =base.getAttribute("code");
+            if(local.equals("0")||(local.equals("1")&&code==null)) {
                 String img = base.getAttribute("img");
                 if( img!=null ){
                     String wburl = paramRequest.getActionUrl().toString();
@@ -158,7 +159,7 @@ public class Banner extends GenericAdmResource
                     ret.append("<a class=\"swb-banner-hlp\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
                 }
             }else { //publicidad externa
-                ret.append(base.getAttribute("code", ""));
+                ret.append(code);
             }
         }catch (Exception e) {
             log.error("Error in resource Banner while bringing HTML", e);
