@@ -8,7 +8,7 @@
         <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
         <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
-        <input type="FILE" name="img" label="** Imagem (gif, jpg, jpeg, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
+        <input type="FILE" name="img" label="** Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
         <input type="text" id="alt" name="alt" label="Texto alternativo:" size="50" promptMessage="Descrição indicativa do banner. Acessibilidade Orientação" />
 
         <textarea id="longdesc" name="longdesc" label="Descrição Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
