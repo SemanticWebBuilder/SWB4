@@ -15,8 +15,10 @@
 
         <input type="text" id="width"  name="width" label="Widht:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid " promptMessage =" width banner. Example: 500em, 600px, 100%" />
         <input type="text" id="height" name="height" label="Height:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Height of the banner. Example: 120em, 75px, 100%" />
-        <input type="text" name="cssClass" id="cssClass" label="Anchor Class attribute:" size="30" promptMessage="Class attribute value of the width of the banner" />
+        <input type="text" name="cssClass" id="cssClass" label="Anchor Class attribute:" size="30" promptMessage="CSS class name of the anchor" />
         <input type="text" id="url" name="url" label="Web Address:" maxlength="50" regExp="(http|https):\/\/.+" invalidMessage="Invalid URL" promptMessage="Website Sponsor" />
+        <input type="text" id="axn" name="axn" label="Acción:" maxlength="50" promptMessage="Action in javascript" />
+        
         <statictext name="txtTarget">Send to new Window:</statictext>
         <input type="radio" id="target1" name="target" label="Yes" value="1"/>
         <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
