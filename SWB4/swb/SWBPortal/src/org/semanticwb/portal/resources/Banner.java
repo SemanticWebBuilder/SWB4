@@ -86,7 +86,7 @@ public class Banner extends GenericAdmResource
                     String height = paramRequest.getArgument("height", base.getAttribute("height"));
                     String cssClass = base.getAttribute("cssClass");
 
-                    if( url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:") ) {
+                    if( url.toLowerCase().startsWith("mailto:") ) {
                         wburl = url.replaceAll("\"", "&#34;");
                     }
 
@@ -95,10 +95,10 @@ public class Banner extends GenericAdmResource
 
                         ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://get.adobe.com/flashplayer/\"");
                         if( width!=null ) {
-                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
+                            ret.append(" width=\""+width+"\"");
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
+                            ret.append(" height=\""+height+"\"");
                         }
                         ret.append(">\n");
                         ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />");
@@ -110,10 +110,10 @@ public class Banner extends GenericAdmResource
                         ret.append(" FlashVars=\"liga="+wburl+"\"");
                         ret.append(" quality=\"high\" pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" ");
                         if( width!=null ) {
-                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
+                            ret.append(" width=\""+width+"\"");
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
+                            ret.append(" height=\""+height+"\"");
                         }
                         ret.append(">");
                         ret.append("</embed>");
@@ -139,9 +139,9 @@ public class Banner extends GenericAdmResource
                         if( action!=null )
                             ret.append(" onfocus=\""+action+"\"");
                         if( width!=null )
-                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
+                            ret.append(" width=\""+width+"\"");
                         if( height!=null )
-                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
+                            ret.append(" height=\""+height+"\"");
                         if( longdesc!=null )
                             ret.append(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                         ret.append("/>");
@@ -170,7 +170,7 @@ public class Banner extends GenericAdmResource
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
-        out.println("<div style=\"position:relative;"+(base.getAttribute("width")==null?"":"width:"+base.getAttribute("width")+";")+(base.getAttribute("height")==null?"":"height:"+base.getAttribute("height")+";")+"\">");
+        out.println("<div style=\"position:relative;"+(base.getAttribute("width")==null?"":"width:"+base.getAttribute("width")+"px;")+(base.getAttribute("height")==null?"":"height:"+base.getAttribute("height")+"px;")+"\">");
         out.println(base.getAttribute("longdesc", "Sin descripción"));
         out.println("<hr size=\"1\" noshade=\"noshade\" />");
         out.println("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString()+"\">Regresar</a>");
@@ -247,7 +247,6 @@ public class Banner extends GenericAdmResource
         base.addHit(request, response.getUser(), response.getWebPage());
         String url = base.getAttribute("url", "").trim();
         url=replaceTags(url, request, response.getUser(), response.getWebPage());
-        System.out.println("action.. url="+url);
         if( url!=null )
             response.sendRedirect(url);
     }
