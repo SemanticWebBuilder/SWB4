@@ -2,26 +2,31 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
 
-    <form name="frmContact" action="true" method="POST" enctype="multipart/form-data">
+    <form name="frmAddNew" id="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo">
     <fieldset legend="Datos">
-        <input type="TEXT" name="name" label="Nombre completo del contacto:" size="50" jsrequired="true" />
-        <input type="TEXT" name="email" label="Dirección de correo electrónico del contacto:" size="50" jsrequired="true" />
-        <input type="TEXT" name="title" label="Título, puesto o razón social:" size="50" />
-        <input type="TEXT" name="phone" label="Teléfono del contacto:" size="50" />
-        <input type="TEXT" name="address" label="Dirección del contacto o de la razón social:" size="50" />
+        <input type="text" name="name" label="Nombre del contacto:"  maxlength="40" jsrequired="true" promptMessage="Nombre completo del contacto" />
+        <input type="text" name="email" label="Correo electrónico del contacto:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Correo electrónico del contacto" invalidMessage="Correo electrónico inválido" />
+        <input type="text" name="title" label="Título, cargo o razón social:" maxlength="40" jsrequired="true" promptMessage="Título, cargo del contacto o razón social" />
+        <input type="text" name="phone" label="Teléfono del contacto:" maxlength="12" jsrequired="true" promptMessage="Número telefónico del contacto" />
+        <input type="text" name="address" label="Domicilio del contact o de la razón social:" maxlength="60" promptMessage="Domicilio del contact o de la razón social" />
 
         <statictext name="txtTarget">¿Cómo desea mostrar el recurso de contacto?:</statictext>
-        <input type="RADIO" name="modal" label="Modal" value="true"/>
-        <input type="RADIO" name="modal" label="No Modal" value="false" checked="true" />
-
+        <input type="radio" name="modal" label="Modal" value="true"/>
+        <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
+        <input type="text" name="secid" label="ID Sección de contacto:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID de la sección que muestra el formulario de contacto" invalidMessage="Identificador inválido" />
+    </fieldset>
+    <fieldset legend="Modo">
         <statictext name="txtTarget">¿Cómo desea acceder al recurso de contacto?:</statictext>
-        <input type="TEXT" name="link" label="Texto de la liga:" size="50"/>
-        <input type="TEXT" name="label" label="Etiqueta del botón:" size="50"/>
-        <input type="FILE" name="image" label="Imagen (bmp, gif, jpg, jpeg, png):" showfile="true" filetype="bmp|jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+        <input type="text" name="link" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
+
+        <input type="text" name="label" label="Etiqueta del botón:" maxlength="50" promptMessage="Etiqueta del botón" />
+
+        <input type="file" name="image" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+        <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno de la imagen" />
     </fieldset>
 
     <fieldset>
-        <statictext name="b">
+        <statictext name="cmd">
         <![CDATA[
         <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
         <button id="btnReset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
@@ -29,42 +34,71 @@
         </statictext>
     </fieldset>
     </form>
-    
+
     <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
 
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    dojo.byId("frmContact").submit();
-                }
-            );
-        });
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmContact").reset();
-                }
-            );
-        });
-        ]]>
-    </script>
-
-    <script type="text/javascript">
-        <![CDATA[
-            if(!document.frmContact.modal[0].checked && !document.frmContact.modal[1].checked)
-                    document.frmContact.modal[1].checked=true;
-                    
-            function jsValida(frm) {
-                if(frm.email.value==null || frm.email.value=='' || frm.email.value==' ') {
-                    alert('Indique la dirección de correo electrónico del contacto.');
-                    frm.email.focus();
-                    return false;
-                }
-                return true;
+        dojo.addOnLoad (
+            function() {
+                dojo.connect(dijit.byId("btnSave"), "onClick",
+                    function() {
+                        if( jsValida(dojo.byId("frmAddNew")) )
+                            dojo.byId("frmAddNew").submit();
+                    }
+                );
+                dojo.connect(dijit.byId("btnReset"), "onClick",
+                    function() {
+                        dojo.byId("frmAddNew").reset();
+                    }
+                );
             }
+        );
+
+        if(!document.frmAddNew.modal[0].checked && !document.frmAddNew.modal[1].checked)
+                document.frmAddNew.modal[1].checked=true;
+
+        var regemail = new RegExp('^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$');
+
+        function jsValida(frm) {
+            if( !frm.name.value ) {
+                alert('Indique el nombre del contacto.');
+                frm.name.focus();
+                return false;
+            }
+            if( !regemail.test(frm.email.value) ) {
+                alert('Indique la dirección de correo electrónico del contacto.');
+                frm.email.focus();
+                return false;
+            }
+            if( !frm.title.value ) {
+                alert('Indique el título o cargo del contacto o razón social.');
+                frm.title.title();
+                return false;
+            }
+            if( !frm.phone.value ) {
+                alert('Indique el teléfono del contacto o razón social.');
+                frm.phone.focus();
+                return false;
+            }
+            if( frm.modal[1].checked&&!frm.secid.value ) {
+                alert('Indique el identificador de la sección que muestra el formulario de contacto.');
+                frm.secid.focus();
+                return false;
+            }
+
+            if( !frm.link.value && !frm.label.value && !frm.image.value ) {
+                alert('Indique el mecanismo para acceder al recurso de contacto.');
+                frm.link.focus();
+                return false;
+            }
+            if( frm.image.value && !frm.alt.value ) {
+                alert('Indique el texto alterno para la imagen.');
+                frm.alt.focus();
+                return false;
+            }
+            return true;
+        }
         ]]>
     </script>
 </admresource>
