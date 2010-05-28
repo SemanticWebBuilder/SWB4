@@ -119,9 +119,15 @@ public class Banner extends GenericAdmResource
                         ret.append("</embed>");
                         ret.append("</object>");
                     }else {
-                        if( !url.equals("") ) {
-                            ret.append("<a href=\""+wburl+"\"");
-                            String target = base.getAttribute("target", "0").trim();
+                        String action = base.getAttribute("axn");
+                        String target = base.getAttribute("target", "0").trim();
+
+                        if( !url.equals("")||action!=null ) {
+                            ret.append("<a");
+                            if( !url.equals("") )
+                                ret.append(" href=\""+wburl+"\"");
+                            if( action!=null )
+                                ret.append(" onfocus=\""+action+"\"");
                             if( target.equals("1") )
                                 ret.append(" target=\"_blank\"");
                             if( cssClass!=null )
@@ -130,14 +136,10 @@ public class Banner extends GenericAdmResource
                                 ret.append(" class=\"swb-banner\"");
                             ret.append(">");
                         }
-                        String longdesc = base.getAttribute("longdesc");
-                        String action = base.getAttribute("axn");
+                        String longdesc = base.getAttribute("longdesc");                        
                         ret.append("<img src=\"");
                         ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                         ret.append(" alt=\"" + base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+url) + "\"");
-
-                        if( action!=null )
-                            ret.append(" onfocus=\""+action+"\"");
                         if( width!=null )
                             ret.append(" width=\""+width+"\"");
                         if( height!=null )
@@ -146,7 +148,7 @@ public class Banner extends GenericAdmResource
                             ret.append(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                         ret.append("/>");
 
-                        if( !url.equals("") ) {
+                        if( !url.equals("")||action!=null ) {
                             ret.append("</a>");
                         }
                     }
