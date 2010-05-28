@@ -81,12 +81,12 @@ public class Banner extends GenericAdmResource
                 String img = base.getAttribute("img");
                 if( img!=null ){
                     String wburl = paramRequest.getActionUrl().toString();
-                    String url = base.getAttribute("url", "").trim();                                        
+                    String url = base.getAttribute("url","");
                     String width = paramRequest.getArgument("width", base.getAttribute("width"));
                     String height = paramRequest.getArgument("height", base.getAttribute("height"));
                     String cssClass = base.getAttribute("cssClass");
 
-                    if(url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:")) {
+                    if( url.toLowerCase().startsWith("mailto:") || url.toLowerCase().startsWith("javascript:") ) {
                         wburl = url.replaceAll("\"", "&#34;");
                     }
 
@@ -119,32 +119,31 @@ public class Banner extends GenericAdmResource
                         ret.append("</embed>");
                         ret.append("</object>");
                     }else {
-                        if( !url.equals("") ){
-                            String target = base.getAttribute("target", "0").trim();
-                            
+                        if( !url.equals("") ) {
                             ret.append("<a href=\""+wburl+"\"");
-                            if( target.equals("1") ) {
+                            String target = base.getAttribute("target", "0").trim();
+                            if( target.equals("1") )
                                 ret.append(" target=\"_blank\"");
-                            }
-                            if( cssClass!=null ) {
+                            if( cssClass!=null )
                                 ret.append(" class=\""+cssClass+"\"");
-                            }
+                            else
+                                ret.append(" class=\"swb-banner\"");
                             ret.append(">");
                         }
                         String longdesc = base.getAttribute("longdesc");
+                        String action = base.getAttribute("axn");
                         ret.append("<img src=\"");
                         ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                        ret.append(" alt=\"" + base.getAttribute("alt", "") + "\"");
+                        ret.append(" alt=\"" + base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+url) + "\"");
 
-                        if( width!=null ) {
+                        if( action!=null )
+                            ret.append(" onfocus=\""+action+"\"");
+                        if( width!=null )
                             ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
-                        }
-                        if( height!=null ) {
+                        if( height!=null )
                             ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
-                        }
-                        if( longdesc!=null ) {
+                        if( longdesc!=null )
                             ret.append(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
-                        }
                         ret.append("/>");
 
                         if( !url.equals("") ) {
@@ -154,7 +153,7 @@ public class Banner extends GenericAdmResource
                 }
                 String ld = base.getAttribute("longdesc");
                 if( ld!=null ) {
-                    ret.append("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
+                    ret.append("<a class=\"swb-banner-hlp\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\">"+paramRequest.getLocaleString("longDesc")+"</a>");
                 }
             }else { //publicidad externa
                 ret.append(base.getAttribute("code", ""));
