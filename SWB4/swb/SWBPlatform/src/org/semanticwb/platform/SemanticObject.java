@@ -56,9 +56,13 @@ import org.w3c.dom.Document;
  */
 public class SemanticObject
 {
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
+
+    public static final String ACT_REMOVE="REMOVE";
+    public static final String ACT_ADD="ADD";
+    public static final String ACT_SET="SET";
+    public static final String ACT_CLONE="CLONE";
 
     /** The m_objs. */
     private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap();
@@ -82,10 +86,10 @@ public class SemanticObject
     private HashMap m_virtprops;
 
     /** The m_cacheprops. */
-    private Map m_cacheprops;
+    private Map m_cacheprops;                           //Cache de propiedades
     
     /** The m_cachepropsrel. */
-    private Map m_cachepropsrel;
+    private Map m_cachepropsrel;                        //Cache de objetos relacionados a la propiedad
 
     /** The NULL. */
     private static String NULL="__NULL__";
@@ -311,7 +315,7 @@ public class SemanticObject
 
 
     /**
-     * Elimina el todos los SemanticObject del cache.
+     * Elimina todos los SemanticObject del cache.
      */
     public static void clearCache()
     {
@@ -369,7 +373,7 @@ public class SemanticObject
      * @param lang the lang
      * @return the property value cache
      */
-    private Object getPropertyValueCache(SemanticProperty prop, String lang)
+    public Object getPropertyValueCache(SemanticProperty prop, String lang)
     {
         Object ret=null;
         if(hasPropertyCache)
@@ -385,7 +389,7 @@ public class SemanticObject
      * @param prop the prop
      * @param lang the lang
      */
-    private void removePropertyValueCache(SemanticProperty prop, String lang)
+    public void removePropertyValueCache(SemanticProperty prop, String lang)
     {
         //System.out.println("removePropertyValueCache:"+this+" "+prop+" "+lang);
         if(prop.isInverseOf())
@@ -724,7 +728,7 @@ public class SemanticObject
      */
     public void addSemanticClass(SemanticClass cls)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, cls, "ADD");
+        SWBPlatform.getSemanticMgr().notifyChange(this, cls, null, ACT_ADD);
         if (m_virtual)
         {
             //TODO:
@@ -743,7 +747,7 @@ public class SemanticObject
      */
     public SemanticObject removeSemanticClass(SemanticClass cls)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, cls, "REMOVE");
+        SWBPlatform.getSemanticMgr().notifyChange(this, cls, null, ACT_REMOVE);
         if (m_virtual)
         {
             //TODO:
@@ -1079,11 +1083,11 @@ public Document getDomProperty(SemanticProperty prop)
         }else if(replace)
         {
             setPropertyValueCache(prop, literal.getLanguage(), literal);
-            SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
+            SWBPlatform.getSemanticMgr().notifyChange(this, prop, literal.getLanguage(), ACT_SET);
         }else
         {
             addPropertyValueCache(prop, literal.getLanguage(), literal);
-            SWBPlatform.getSemanticMgr().notifyChange(this, prop, "ADD");
+            SWBPlatform.getSemanticMgr().notifyChange(this, prop, literal.getLanguage(), ACT_ADD);
         }
     }
 
@@ -1095,7 +1099,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject removeProperty(SemanticProperty prop)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, null, ACT_REMOVE);
         if (!m_virtual)
         {
             try
@@ -1131,7 +1135,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject removeProperty(SemanticProperty prop, String lang)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, lang, ACT_REMOVE);
         if (!m_virtual)
         {
             StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
@@ -1196,7 +1200,7 @@ public Document getDomProperty(SemanticProperty prop)
                 if(old!=null && old instanceof SemanticObject)((SemanticObject)old).removePropertyValueCache(prop.getInverse(), "list");
             }
         }
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "SET");
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, null, ACT_SET);
         return this;
     }
 
@@ -1209,7 +1213,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject addObjectProperty(SemanticProperty prop, SemanticObject object)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "ADD");
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_ADD);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1236,7 +1240,7 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public SemanticObject removeObjectProperty(SemanticProperty prop, SemanticObject object)
     {
-        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "REMOVE");
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, "list", ACT_REMOVE);
         if (m_virtual)
         {
             ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
@@ -1820,7 +1824,7 @@ public Document getDomProperty(SemanticProperty prop)
         {
             removeDependencies(stack);
             SWBPlatform.getSemanticMgr().removeModel(getId());
-            SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
+            SWBPlatform.getSemanticMgr().notifyChange(this, null, null, ACT_REMOVE);
         }else                                           //es un objeto
         {
             //TODO:revisar esto de vic
@@ -1834,7 +1838,7 @@ public Document getDomProperty(SemanticProperty prop)
                     removeProperty(prop);
                 }
             }
-            SWBPlatform.getSemanticMgr().notifyChange(this, null, "REMOVE");
+            SWBPlatform.getSemanticMgr().notifyChange(this, null, null, ACT_REMOVE);
 
             resetRelatedsCache();
 
@@ -3071,7 +3075,7 @@ public Document getDomProperty(SemanticProperty prop)
         }
 
         SemanticObject ret=SemanticObject.createSemanticObject(res);
-        SWBPlatform.getSemanticMgr().notifyChange(ret, null, "Clone");
+        SWBPlatform.getSemanticMgr().notifyChange(ret, null, null, ACT_CLONE);
         return ret;
     }
     
