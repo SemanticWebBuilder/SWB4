@@ -272,77 +272,83 @@ public class SWBVirtualHostFilter implements Filter
      */
     public void init(FilterConfig filterConfig) throws ServletException
     {
-        log.event("************************************");
-        log.event("Initializing SemanticWebBuilder...");
-        this.filterConfig = filterConfig;
-        if (filterConfig != null)
-        {
-            log.event("Initializing VirtualHostFilter...");
-            String prefix = filterConfig.getServletContext().getRealPath("/");
-            SWBUtils.createInstance(prefix);
-            swbPortal = SWBPortal.createInstance(filterConfig.getServletContext(),this);
-        }
-
-        InternalServlet monitor = new Monitor();
-        intServlets.put("swbmonitor.ssl", monitor);
-        monitor.init(filterConfig.getServletContext());
-
-        InternalServlet serv = new Distributor();
-        intServlets.put("swb", serv);
-        intServlets.put("wb", serv);
-        intServlets.put("wb2", serv);
-        serv.init(filterConfig.getServletContext());
-        dist=serv;
-
-        InternalServlet login = new Login();
-        intServlets.put("login", login);
-        login.init(filterConfig.getServletContext());
-        loginInternalServlet.init(filterConfig.getServletContext());
-        loginInternalServlet.setHandleError(true);
-
         try
         {
-            Class gtwOfficeClass = Class.forName("org.semanticwb.servlet.internal.GateWayOffice");
-            InternalServlet gtwOffice = (InternalServlet) gtwOfficeClass.newInstance();
-            intServlets.put("gtw", gtwOffice);
-            gtwOffice.init(filterConfig.getServletContext());
-        }
-        catch (Exception cnfe)
+            log.event("************************************");
+            log.event("Initializing SemanticWebBuilder...");
+            this.filterConfig = filterConfig;
+            if (filterConfig != null)
+            {
+                log.event("Initializing VirtualHostFilter...");
+                String prefix = filterConfig.getServletContext().getRealPath("/");
+                SWBUtils.createInstance(prefix);
+                swbPortal = SWBPortal.createInstance(filterConfig.getServletContext(),this);
+            }
+
+            InternalServlet monitor = new Monitor();
+            intServlets.put("swbmonitor.ssl", monitor);
+            monitor.init(filterConfig.getServletContext());
+
+            InternalServlet serv = new Distributor();
+            intServlets.put("swb", serv);
+            intServlets.put("wb", serv);
+            intServlets.put("wb2", serv);
+            serv.init(filterConfig.getServletContext());
+            dist=serv;
+
+            InternalServlet login = new Login();
+            intServlets.put("login", login);
+            login.init(filterConfig.getServletContext());
+            loginInternalServlet.init(filterConfig.getServletContext());
+            loginInternalServlet.setHandleError(true);
+
+            try
+            {
+                Class gtwOfficeClass = Class.forName("org.semanticwb.servlet.internal.GateWayOffice");
+                InternalServlet gtwOffice = (InternalServlet) gtwOfficeClass.newInstance();
+                intServlets.put("gtw", gtwOffice);
+                gtwOffice.init(filterConfig.getServletContext());
+            }
+            catch (Exception cnfe)
+            {
+                log.error(cnfe);
+            }
+
+            InternalServlet upload = new Upload();
+            intServlets.put("wbupload", upload);
+            upload.init(filterConfig.getServletContext());
+
+            InternalServlet editFile = new EditFile();
+            intServlets.put("editfile", editFile);
+            editFile.init(filterConfig.getServletContext());
+
+            InternalServlet UploadFormElement = new UploadFormElement();
+            intServlets.put("Upload", UploadFormElement);
+            UploadFormElement.init(filterConfig.getServletContext());
+
+            InternalServlet frmprocess = new FrmProcess();
+            intServlets.put("frmprocess", frmprocess);
+            frmprocess.init(filterConfig.getServletContext());
+
+            //TODO:Admin servlet
+            InternalServlet admin = new Admin();
+            intServlets.put("wbadmin", admin);
+            intServlets.put("swbadmin", admin);
+            admin.init(filterConfig.getServletContext());
+            log.event("SemanticWebBuilder started...");
+            log.event("************************************");
+
+            InternalServlet googleMap = new GoogleSiteMap();
+            intServlets.put("sitemap.txt", googleMap);
+            googleMap.init(filterConfig.getServletContext());
+
+            InternalServlet fileUploader = new MultipleFileUploader();
+            intServlets.put("multiuploader", fileUploader);
+            fileUploader.init(filterConfig.getServletContext());
+        }catch(Exception e)
         {
-            log.error(cnfe);
+            log.error("Error initializing SemanticWebBuilder...",e);
         }
-
-        InternalServlet upload = new Upload();
-        intServlets.put("wbupload", upload);
-        upload.init(filterConfig.getServletContext());
-
-        InternalServlet editFile = new EditFile();
-        intServlets.put("editfile", editFile);
-        editFile.init(filterConfig.getServletContext());
-
-        InternalServlet UploadFormElement = new UploadFormElement();
-        intServlets.put("Upload", UploadFormElement);
-        UploadFormElement.init(filterConfig.getServletContext());
-
-        InternalServlet frmprocess = new FrmProcess();
-        intServlets.put("frmprocess", frmprocess);
-        frmprocess.init(filterConfig.getServletContext());
-
-        //TODO:Admin servlet
-        InternalServlet admin = new Admin();
-        intServlets.put("wbadmin", admin);
-        intServlets.put("swbadmin", admin);
-        admin.init(filterConfig.getServletContext());
-        log.event("SemanticWebBuilder started...");
-        log.event("************************************");
-
-        InternalServlet googleMap = new GoogleSiteMap();
-        intServlets.put("sitemap.txt", googleMap);
-        googleMap.init(filterConfig.getServletContext());
-
-        InternalServlet fileUploader = new MultipleFileUploader();
-        intServlets.put("multiuploader", fileUploader);
-        fileUploader.init(filterConfig.getServletContext());
 
     }
 

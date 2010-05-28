@@ -600,12 +600,21 @@ public class SWBFormMgr
             ret.append("	    </td></tr></table>\n");
             ret.append("	</fieldset>\n");
 
+            boolean first=true;
             Iterator<PropertyGroup> itgp=SWBComparator.sortSortableObject(groups.keySet().iterator());
             while(itgp.hasNext())
             {
                 PropertyGroup group=itgp.next();
-                ret.append("	<fieldset>\n");
-                ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>\n");
+//                if(DOJO)
+//                {
+//                    ret.append("	<fieldset dojoType=\"dijit.TitlePane\" title=\""+group.getSemanticObject().getDisplayName(m_lang)+"\" open=\""+first+"\">\n");
+//                    first=false;
+//                }
+//                else
+//                {
+                    ret.append("	<fieldset >\n");
+                    ret.append("	    <legend>"+group.getSemanticObject().getDisplayName(m_lang)+"</legend>\n");
+//                }
                 ret.append("	    <table>\n");
 
                 Iterator<SemanticProperty> it=groups.get(group).iterator();

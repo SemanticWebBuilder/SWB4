@@ -145,6 +145,11 @@ public class SWBPortal
      */
     private static boolean client = false;
     /**
+     * Indicates if this portal instance is stand alone.
+     * <p>Indica si esta instancia de portal esta sola (no en balanceo).</p>
+     */
+    private static boolean standalone = true;
+    /**
      * Creates the messages to the log files.
      * <p>Crea los mensajes hacia los archivos de bit&aacute;cora.</p>
      */
@@ -337,6 +342,9 @@ public class SWBPortal
         SWBUtils.EMAIL.setSMTPUser(getEnv("swb/smtpUser"));
         SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
         SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
+
+        standalone=getEnv("swb/clientServer","SASC").equalsIgnoreCase("SASC");
+        client=!getEnv("swb/clientServer","SASC").equalsIgnoreCase("Server") && !standalone;
 
         try
         {
@@ -680,9 +688,6 @@ public class SWBPortal
         templatemgr = new SWBTemplateMgr();
         templatemgr.init();
 
-        servicemgr = new SWBServiceMgr();
-        servicemgr.init();
-
         admlog = new SWBDBAdmLog();
         admlog.init();
 
@@ -697,6 +702,9 @@ public class SWBPortal
 
         adminfiltermgr = new SWBAdminFilterMgr();
         adminfiltermgr.init();
+
+        servicemgr = new SWBServiceMgr();
+        servicemgr.init();
 
         indmgr = new SWBIndexMgr();
         indmgr.init();
@@ -1237,6 +1245,18 @@ public class SWBPortal
     public static boolean isClient()
     {
         return client;
+    }
+
+    //TODO:
+    /**
+     * Indicates if the SemanticWebBuilder instance is configured as standalone.
+     * <p>Indica si esta instancia de SemanticWebBuilder (SWB) est&aacute;
+     * configurada como una sola maquina.</p>
+     * @return a boolean that indicates if the SWB instance is configured as a stand alone.
+     */
+    public static boolean isStandAlone()
+    {
+        return standalone;
     }
 
     /**
