@@ -420,7 +420,7 @@ public class SWBVirtualHostFilter implements Filter
                 msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
             }
             //System.out.println("msg:"+msg);
-            if(msg==null)
+            if(msg!=null)
             {
                 msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
             }else msg="";
