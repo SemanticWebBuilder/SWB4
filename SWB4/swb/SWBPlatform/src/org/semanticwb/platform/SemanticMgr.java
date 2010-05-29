@@ -935,6 +935,7 @@ public class SemanticMgr implements SWBInstanceObject
 
         log.trace("notifyExternalChange: obj:" + uri + " prop:" + prop + " " + action);
         SemanticObject obj=SemanticObject.getSemanticObject(uri);
+        if(prop!=null && prop.isInverseOf() && obj==null)obj=SemanticObject.createSemanticObject(uri);
         if (obj != null)
         {
             if(prop!=null)           //Is a property
