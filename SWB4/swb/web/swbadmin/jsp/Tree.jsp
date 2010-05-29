@@ -1,4 +1,8 @@
-<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
+<%@page import="com.hp.hpl.jena.ontology.OntModelSpec"%>
+<%@page import="com.hp.hpl.jena.ontology.OntDocumentManager"%>
+<%@page import="com.hp.hpl.jena.ontology.OntProperty"%>
+<%@page import="com.hp.hpl.jena.ontology.OntClass"%>
+<%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
 <%@page contentType="text/html" %><%@page pageEncoding="UTF-8" %>
 <%!
     int nullnode=0;
@@ -41,7 +45,7 @@
             //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/ontology", OntModelSpec.OWL_MEM_RDFS_INF));
             //sont.getRDFOntModel().addLoadedImport("http://www.w3.org/2002/07/owl");
             //sont.getRDFOntModel().addSubModel(mgr.getModel("http://www.w3.org/2002/07/owl"), true);
-            sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/community", OntModelSpec.OWL_MEM_TRANS_INF));
+            sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/process", OntModelSpec.OWL_MEM_RDFS_INF));
     /*
             swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl";
             owlf=new java.io.File(swbowl);
@@ -148,6 +152,20 @@
             //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
             //rep=SWBContext.getUserRepository(rep.getURI());
             addSemanticObject(arr, rep.getSemanticObject(),false,true,user);
+            //addWebSite(arr, site);
+        }
+    }
+
+    public void addOntologies(JSONArray arr, User user)  throws JSONException
+    {
+        //System.out.println("addWebSites");
+        Iterator<Ontology> it=SWBComparator.sortSermanticObjects(user.getLanguage(), SWBContext.listOntologies());
+        while(it.hasNext())
+        {
+            Ontology ont=it.next();
+            //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
+            //rep=SWBContext.getUserRepository(rep.getURI());
+            addSemanticObject(arr, ont.getSemanticObject(),false,true,user);
             //addWebSite(arr, site);
         }
     }
@@ -345,7 +363,7 @@
     //TODO:Separar en una clase treeController
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, User user) throws JSONException
     {
-        if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))return;
+        if(!SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(user, obj))return;
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -533,7 +551,8 @@
 
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SemanticObject virparent, User user) throws JSONException
     {
-        if(!SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj))return;
+        boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
+        if(!fullaccess && !SWBPortal.getAdminFilterMgr().haveChildAccessToSemanticObject(user, obj))return;
 
         String lang=user.getLanguage();
         boolean hasChilds=false;
@@ -597,7 +616,7 @@
         jobj.putOpt("menus", menus);
 
         //TODO:separar treeController
-        if(!cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
+        if(fullaccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
         {
             //menus creacion
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
@@ -664,7 +683,7 @@
 
 
         //Active
-        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ACTIVE))
+        if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ACTIVE))
         {
             if(activeprop!=null && !virtual)
             {
@@ -685,7 +704,7 @@
         //menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
         //menu remove
 
-        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
+        if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
         {
             if(!virtual)
             {
@@ -916,6 +935,7 @@
         obj.putOpt("items", items);
         if(id.equals("mtree"))addWebSites(items,user);
         if(id.equals("muser"))addUserReps(items,user);
+        if(id.equals("mont"))addOntologies(items,user);
         if(id.equals("mfavo"))addFavorites(items,user);
         if(id.equals("mtra")) addWebSitesTrash(items,user);
         if(id.equals("mdoc")) addDocRepositories(items,user);

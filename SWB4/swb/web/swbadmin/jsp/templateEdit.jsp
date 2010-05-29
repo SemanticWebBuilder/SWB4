@@ -8,7 +8,7 @@
     {
         User user=SWBContext.getSessionUser();
         out.println("<div class=\"applet\">");
-        SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), 1, user);
+        SWBAEditor.getTemplateApplet(new java.io.PrintWriter(out), obj.getModel().getName(), obj.getId(), 1, user, request.getSession().getId());
         out.println("</div>");
         //System.out.println("Template");
         //java.io.PrintWriter p=new java.io.PrintWriter(System.out,true);

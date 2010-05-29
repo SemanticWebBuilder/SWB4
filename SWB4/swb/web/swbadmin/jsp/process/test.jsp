@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page import="org.semanticwb.process.model.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.portal.*"%>
@@ -89,20 +90,38 @@
     </head>
     <body class="soria">
         <h1>Test de Procesos</h1>
-        <a href="?act=cpi">Crear Instancia de Proceso</a>
 <%
+        User user=SWBContext.getAdminUser();
         String login=request.getParameter("user");
-        if(login==null)login="admin";
-        User user=SWBContext.getAdminRepository().getUserByLogin(login);
+        if(login!=null)
+        {
+            user=SWBContext.getAdminRepository().getUserByLogin(login);
+        }
+        if(user==null)
+        {
+            login="admin";
+            user=SWBContext.getAdminRepository().getUserByLogin(login);
+        }
+        String lang=user.getLanguage();
+
+        ProcessSite site=ProcessSite.ClassMgr.getProcessSite("process");
+        org.semanticwb.process.model.Process process=null;
+
+        Iterator<org.semanticwb.process.model.Process> psit=SWBComparator.sortByDisplayName(site.listProcesses(),lang);
+        while (psit.hasNext())
+        {
+            Object elem = psit.next();
+            process=(org.semanticwb.process.model.Process)elem;
+            if(!process.isValid())continue;
+%>
+        <a href="?act=cpi&id=<%=process.getEncodedURI()%>">Crear Instancia del Proceso (<%=process.getDisplayTitle(lang)%>)</a><br/>
+<%
+        }
 %>
 
 <%
-        ProcessSite site=ProcessSite.ClassMgr.getProcessSite("process");
         //UserRepository urep=SWBContext.getAdminRepository();
 
-        org.semanticwb.process.model.Process process=null;
-        Iterator<org.semanticwb.process.model.Process> psit=site.listProcesses();
-        if(psit.hasNext())process=psit.next();
         if(process==null)
         {
             process=site.createProcess();
@@ -210,6 +229,8 @@
             }
             if(act.equals("cpi"))
             {
+                String id=request.getParameter("id");
+                process=(org.semanticwb.process.model.Process)SemanticObject.createSemanticObject(id).createGenericInstance();
                 SWBProcessMgr.createProcessInstance(process, user);
             }
             if(act.equals("accept") || act.equals("reject"))

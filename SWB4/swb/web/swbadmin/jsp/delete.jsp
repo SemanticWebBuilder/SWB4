@@ -35,8 +35,23 @@
         return;
     }
 
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+
     SemanticOntology ont=SWBPlatform.getSemanticMgr().getOntology();
     SemanticObject obj=ont.getSemanticObject(suri);
+
+    boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
+    if(!fullaccess || !SWBPortal.getAdminFilterMgr().haveClassAction(user, obj.getSemanticClass(), AdminFilter.ACTION_DELETE))
+    {
+        response.sendError(403);
+        return;
+    }
+
     if(obj!=null)
     {
         if(virp!=null)

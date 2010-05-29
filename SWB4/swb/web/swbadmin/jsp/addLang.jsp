@@ -12,9 +12,13 @@
     }
 %>
 <%
-    User user=SWBContext.getSessionUser();
-    String lang="es";
-    if(user!=null)lang=user.getLanguage();
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+    String lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     String scls=request.getParameter("scls");
