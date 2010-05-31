@@ -87,7 +87,7 @@
                 return false;
             }
 
-            if( !frm.link.value && !frm.label.value && !frm.image.value ) {
+            if( !frm.link.value && !frm.label.value && !frm.image.value  && !dojo.byId('wbNoFile_image') ) {
                 alert('Provide the mechanism to access the resource contacts.');
                 frm.link.focus();
                 return false;
