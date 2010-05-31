@@ -156,8 +156,13 @@ public class SWBSparqlTranslator {
                     } else {
                         res = res + varList + "\nWHERE \n{\n";
                     }
-                    String etype = lex.getLexicon(lang).getWord(t.getText(), true).getTag().getId();
+                    System.out.println("BEFORE");
+                    String etype = "";
+                    if (lex.getLexicon(lang).getWord(t.getText(), true) != null) {
+                        etype = lex.getLexicon(lang).getWord(t.getText(), true).getTag().getId();
+                    }
                     //String etype = lex.getObjWordTag(t.getText()).getType();
+                    System.out.println("AFTER");
                     if (!etype.equals("")) {
                         patterns = patterns + "?" + t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "") + " rdf:type " + etype + ".\n";
                         patterns += startParsing(t);
