@@ -78,7 +78,7 @@ public class Banner extends GenericAdmResource
         try {
             String local = base.getAttribute("local", "0");
             String code =base.getAttribute("code");
-            if(local.equals("0")||(local.equals("1")&&code==null)) {
+            if( local.equals("0")||code==null ) {
                 String img = base.getAttribute("img");
                 if( img!=null ){
                     String wburl = paramRequest.getActionUrl().toString();
@@ -96,10 +96,10 @@ public class Banner extends GenericAdmResource
 
                         ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://get.adobe.com/flashplayer/\"");
                         if( width!=null ) {
-                            ret.append(" width=\""+width+"\"");
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height+"\"");
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         }
                         ret.append(">\n");
                         ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />");
@@ -111,10 +111,10 @@ public class Banner extends GenericAdmResource
                         ret.append(" FlashVars=\"liga="+wburl+"\"");
                         ret.append(" quality=\"high\" pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" ");
                         if( width!=null ) {
-                            ret.append(" width=\""+width+"\"");
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height+"\"");
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         }
                         ret.append(">");
                         ret.append("</embed>");
@@ -142,9 +142,9 @@ public class Banner extends GenericAdmResource
                         ret.append(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                         ret.append(" alt=\"" + base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+url) + "\"");
                         if( width!=null )
-                            ret.append(" width=\""+width+"\"");
+                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
                         if( height!=null )
-                            ret.append(" height=\""+height+"\"");
+                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
                         if( longdesc!=null )
                             ret.append(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                         ret.append("/>");
@@ -173,7 +173,7 @@ public class Banner extends GenericAdmResource
         Resource base = getResourceBase();
         PrintWriter out = response.getWriter();
 
-        out.println("<div style=\"position:relative;"+(base.getAttribute("width")==null?"":"width:"+base.getAttribute("width")+"px;")+(base.getAttribute("height")==null?"":"height:"+base.getAttribute("height")+"px;")+"\">");
+        out.println("<div style=\"position:relative;"+(base.getAttribute("width")==null?"":"width:"+base.getAttribute("width")+";")+(base.getAttribute("height")==null?"":"height:"+base.getAttribute("height")+";")+"\">");
         out.println(base.getAttribute("longdesc", "Sin descripción"));
         out.println("<hr size=\"1\" noshade=\"noshade\" />");
         out.println("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString()+"\">Regresar</a>");

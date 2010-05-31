@@ -13,8 +13,8 @@
 
         <textarea id="longdesc" name="longdesc" label="Descripción larga:" rows="5" cols="50" wrap="virtual" promptMessage="Descripción indicativa del banner en modo Help del recurso. Pauta de accesibilidad" />
 
-        <input type="text" id="width"  name="width" label="Ancho (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del banner" />
-        <input type="text" id="height" name="height" label="Alto (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Altura del banner" />
+        <input type="text" id="width"  name="width" label="Ancho:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho del banner. Ejemplo: 500em, 600px, 100%" />
+        <input type="text" id="height" name="height" label="Alto:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura del banner. Ejemplo: 120em, 75px, 100%" />
         <input type="text" name="cssClass" id="cssClass" label="Atributo class del ancla:" size="30" promptMessage="Nombre de la clase CSS del ancla" />
         <input type="text" id="url" name="url" label="Dirección web:" maxlength="50" regExp="(http|https):\/\/.+" invalidMessage="URL inválida" promptMessage="Dirección web del patrocinador" />
         <input type="text" id="axn" name="axn" label="Acción:" maxlength="50" promptMessage="Acción en javascript" />
