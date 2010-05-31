@@ -357,12 +357,13 @@ public class SWBSparqlTranslator {
         boolean ret = false;
         SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTag().getURI());
         if (sc != null) {
-            SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getTag().getURI());
-            if (sp != null && sc.getProperty(sp.getName()) != null) {
-                ret = true;
+            if (lex.getLexicon(lang).getWord(propertyName, false) != null) {
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getTag().getURI());
+                if (sp != null && sc.getProperty(sp.getName()) != null) {
+                    ret = true;
+                }
             }
         }
-
         return ret;
     }
 
