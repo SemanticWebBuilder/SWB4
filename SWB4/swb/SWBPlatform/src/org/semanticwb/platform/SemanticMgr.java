@@ -228,9 +228,9 @@ public class SemanticMgr implements SWBInstanceObject
             //Revisar si las tablas existen
             List list = store.getConnection().getTableNames();
             //System.out.println("list:"+list);
-            if (!(list.contains("nodes") || list.contains("NODES"))
-                    && !(list.contains("triples") || list.contains("TRIPLES"))
-                    && !(list.contains("quads") || list.contains("QUADS"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS
+            if (!(list.contains("nodes") || list.contains("NODES") || list.contains("Nodes"))
+                    && !(list.contains("triples") || list.contains("TRIPLES") || list.contains("Triples"))
+                    && !(list.contains("quads") || list.contains("QUADS") || list.contains("Quads"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS, MySQL usa Capitalizados
             {
                 log.event("Formating Database Tables...");
                 store.getTableFormatter().create();
