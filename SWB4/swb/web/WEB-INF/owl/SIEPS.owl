@@ -1,51 +1,89 @@
 <?xml version="1.0"?>
 <rdf:RDF
-    xmlns:sieps="http://www.semanticwebbuilder.org/swb4/SIEPS#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:sieps="http://www.semanticwebbuilder.org/swb4/SIEPS#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/SIEPS" > 
-  <rdf:Description rdf:about="#producto">
+  <rdf:Description rdf:about="#address">
+    <rdfs:label xml:lang="es">Calle</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Gamesa">
+    <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">045785</sieps:clavesiem>
+    <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Janitzio</sieps:municipio>
+    <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10111</sieps:cp>
+    <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Braulio Carrera #27</sieps:address>
+    <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mártires de Sabino&#xD;
+</sieps:colonia>
+    <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EOM-97-08-01-D2L</sieps:rfc>
+    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Gamesa S.A.</sieps:name>
+    <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pablito@embjaniz.com&#xD;
+</sieps:email>
+    <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">123-4321</sieps:telefono>
+    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Guanajuato</sieps:estado>
+    <rdf:type rdf:resource="#Empresa"/>
+    <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+    <sieps:hasProducto rdf:resource="#Marias"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#name">
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#rfc">
+    <rdfs:label xml:lang="es">RFC</rdfs:label>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#clase">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#address">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Calle</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#Producto">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#colonia">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Colonia</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#email">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">E-mail</rdfs:label>
-  </rdf:Description>
   <rdf:Description rdf:about="#municipio">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:label xml:lang="es">Municipio</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#scian">
+    <rdfs:label xml:lang="es">SCIAN</rdfs:label>
+    <rdfs:range rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#producto">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#clavesiem">
+    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#CocaCola">
+    <sieps:fabrica rdf:resource="#CocaColaCuernavaca"/>
+    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto de prueba</swb:description>
+    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola</sieps:pname>
+    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
+    <rdf:type rdf:resource="#Producto"/>
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola</swb:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="#telefono">
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#CocaColaCuernavaca">
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Motolinia 24</sieps:address>
+    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Morelos</sieps:estado>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2342342</sieps:telefono>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#111110"/>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">11110</sieps:clavesiem>
@@ -55,33 +93,31 @@
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mmmmmm</sieps:municipio>
     <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REGILSA</sieps:rfc>
-    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola Cuernavaca</sieps:name>
+    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
     <rdf:type rdf:resource="#Empresa"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#telefono">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
+  <rdf:Description rdf:about="#cp">
+    <rdfs:label xml:lang="es">Código postal</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#scian">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
     <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
-    <rdfs:label xml:lang="es">SCIAN</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#unspsc">
-    <rdfs:domain rdf:resource="#Producto"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
-    <rdfs:label xml:lang="es">UNSPSC</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#pname">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Nombre</rdfs:label>
-    <rdfs:domain rdf:resource="#Producto"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Producto">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Marias">
+    <sieps:fabrica rdf:resource="#Gamesa"/>
+    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#014017"/>
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas de sabor tradicional</swb:description>
+    <rdf:type rdf:resource="#Producto"/>
+    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
+    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas Marías</sieps:pname>
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas Marías</swb:title>
   </rdf:Description>
   <rdf:Description rdf:about="#Galletas_y_Refrescos_SA">
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ayala</sieps:municipio>
@@ -98,72 +134,103 @@
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Heredia</sieps:colonia>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#111110"/>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">103</sieps:clavesiem>
+    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Distrito Federal</sieps:estado>
+  </rdf:Description>
+  <rdf:Description rdf:about="#colonia">
+    <rdfs:label xml:lang="es">Colonia</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Empresa">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Empresa</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Empresa</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="#email">
+    <rdfs:label xml:lang="es">E-mail</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#unspsc">
+    <rdfs:label xml:lang="es">UNSPSC</rdfs:label>
+    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#pname">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Carbonatados">
+    <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cortázar No 45</sieps:address>
+    <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">025412</sieps:clavesiem>
+    <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+    <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string">contacto_ficticio@yumail.com</sieps:email>
+    <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CAR-85-11-23-WS1</sieps:rfc>
+    <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Villalpando</sieps:colonia>
+    <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cotiyac de Suazo</sieps:municipio>
+    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Carbonatados de Sureste S.A. de C.V.</sieps:name>
+    <rdf:type rdf:resource="#Empresa"/>
+    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Veracruz</sieps:estado>
+    <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17762</sieps:cp>
+    <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">711-1111</sieps:telefono>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Aguas">
+    <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">99992</sieps:cp>
+    <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Irapuato</sieps:municipio>
+    <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AUG-71-06-17-MP3</sieps:rfc>
+    <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string">elratonloco@progidy.mx</sieps:email>
+    <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+    <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Azúcar No. 16</sieps:address>
+    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Michoacán</sieps:estado>
+    <rdf:type rdf:resource="#Empresa"/>
+    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Aguas el Raton Loco S. de R.L.</sieps:name>
+    <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fraccionamiento el Salitre</sieps:colonia>
+    <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">212-2121</sieps:telefono>
+  </rdf:Description>
+  <rdf:Description rdf:about="#class">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fabrica">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <owl:inverseOf rdf:resource="#hasProducto"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="#Empresa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Pascual">
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Refresco Pascual varios sabores</swb:description>
+    <rdf:type rdf:resource="#Producto"/>
+    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Refresco Pascual</sieps:pname>
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Refresco Pascual</swb:title>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.inegi.gob.mx/2002/scian"/>
+    <owl:imports rdf:resource="http://ontoview.org/schema/unspsc/1"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#hasProducto">
+    <owl:inverseOf rdf:resource="#fabrica"/>
+    <rdfs:label xml:lang="es">Producto</rdfs:label>
+    <rdfs:range rdf:resource="#Producto"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#rfc">
+  <rdf:Description rdf:about="#estado">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:label xml:lang="es">RFC</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#class">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="">
-    <owl:imports rdf:resource="http://ontoview.org/schema/unspsc/1"/>
-    <owl:imports rdf:resource="http://www.inegi.gob.mx/2002/scian"/>
-    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#clavesiem">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#Marias">
-    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas Marías</swb:title>
-    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas Marías</sieps:pname>
-    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
-    <rdf:type rdf:resource="#Producto"/>
-    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas de sabor tradicional</swb:description>
-    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#000112"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#name">
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Nombre</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#cp">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:label xml:lang="es">Código postal</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#hasProducto">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="#Producto"/>
-    <rdfs:label xml:lang="es">Producto</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#CocaCola">
-    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola</swb:title>
-    <rdf:type rdf:resource="#Producto"/>
-    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#000012"/>
-    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola</sieps:pname>
-    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto de prueba</swb:description>
-    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
   </rdf:Description>
 </rdf:RDF>
 
