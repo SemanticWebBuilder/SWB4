@@ -138,7 +138,7 @@ public class SWBACreateUser extends GenericResource {
     {
         StringBuffer ret = new StringBuffer();
         ret.append("<script type=\"text/javascript\">\ndijit.byId('swbDialog').hide();\nshowStatus('"+paramRequest.getLocaleString("userOkMsg")+"');\n");
-        ret.append("addNewTab('"+request.getParameter("suri")+"','/"+SWBPlatform.getContextPath()+"swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
+        ret.append("addNewTab('"+request.getParameter("suri")+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp','"+request.getParameter("login")+"');\n");
         ret.append("</script>");
         response.getWriter().write(ret.toString());
 
