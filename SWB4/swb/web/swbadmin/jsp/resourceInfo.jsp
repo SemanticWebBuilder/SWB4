@@ -18,8 +18,7 @@
     //System.out.println("isbase:"+isbase);
 
 %>
-
-<form id="<%=suri%>/form" dojoType="dijit.form.Form" class="swbform">
+<form dojoType="dijit.form.Form" id="<%=suri%>/form"  class="swbform">
     <input type="hidden" name="suri" value="<%=suri%>"/>
     <fieldset>
         <table>
@@ -46,9 +45,11 @@
         <table>
 <%
     //System.out.println("paso 2");
+    int num=0;
     Iterator<Property> it=SWBPlatform.JENA_UTIL.getClassProperties(res, ont.getRDFOntModel());
     while(it.hasNext())
     {
+        num++;
         Property prop=it.next();
         OntProperty oprop=null;
         try{oprop=(OntProperty)prop.as(OntProperty.class);}catch(Exception noe){}
@@ -56,7 +57,29 @@
         out.print("<tr><td width=\"200px\" align=\"right\"><label>"+SWBPlatform.JENA_UTIL.getLink(prop,pathView)+"&nbsp;</label></td><td><span>");
         if(isbase)
         {
-            out.print("<a href=\"\">add empty</a>");
+        String elemid = "val_"+suri+"_"+prop.getLocalName()+"_"+num;
+        out.print("<div dojoType=\"dijit.form.DropDownButton\">");
+        out.print("     <span>add empty</span>");
+        out.print("    <div dojoType=\"dijit.TooltipDialog\">");
+        out.print("         <label for=\""+elemid+"\">"+prop.getLocalName()+"</label>");
+        out.print("         <input dojoType=\"dijit.form.TextBox\" name=\"val\" id=\""+elemid+"\" style=\"width:400px;font-size:12;\">");
+        out.print("         <button dojoType=\"dijit.form.Button\" type=\"submit\">");
+        out.print("<script type=\"dojo/method\" event=\"onClick\">");
+        out.print("    var self = document.getElementById(\""+elemid+"\");");
+        out.print("    submitUrl(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceUpdProp.jsp?suri=");
+        out.print(URLEncoder.encode(res.getURI())+"&prop="+URLEncoder.encode(prop.getURI())+"&act=add&val=\"+escape(self.value));");
+        out.print("</script>");
+        out.print("    save");
+        out.print("</button>");
+        out.print("</div>");
+        out.print("</div>");
+
+            //out.print("<input type=\"button\" value=\"add empty\" onClick=\"document.getElementById('showbox_"+num+"').style.visibility='visible';\">");
+            //out.print("<script type=\"dojo/connect\" event=\"onClick\">");
+            //out.print(" document.getElementById('showbox_"+num+"').style.visibility=visible;");
+            //out.print("</script>");
+            //out.print("</input>");
+            //out.print("<div id=\"showbox_"+num+"\" style=\"visibility:hidden;\" ><input dojoType='dijit.form.TextBox' style='width:400px;font-size:12;' type=\"text\" value=\"\" name=\"val"+num+"\"/></div>");
             if(oprop!=null && oprop.isObjectProperty())
             {
                 out.print(" | ");
@@ -64,6 +87,7 @@
                 out.print(" | ");
                 out.print("<a href=\"\">create and add</a>");
             }
+
         }
         out.print("</span></td></tr>");
         Iterator<Statement> itp=res.listProperties(prop);
@@ -73,9 +97,11 @@
             {
                 Statement stmt=itp.next();
                 RDFNode node=stmt.getObject();
+
                 String val="";
                 String link1=null;
                 String link2="";
+                String nuri = node.toString();
                 if(node.isResource())
                 {
                     val=SWBPlatform.JENA_UTIL.getId(stmt.getResource());
@@ -89,7 +115,16 @@
                 }
                 if(isbase)
                 {
-                    out.println("<tr><td width=\"200px\" align=\"right\"></td><td><input type='text' dojoType='dijit.form.ValidationTextBox' style=\"width:400px;font-size:12;\" value='"+val+"'/> <a href=\"\">remove</a> "+link2+" </td></tr>");
+                    System.out.println("base..");
+                    out.println("<tr><td width=\"200px\" align=\"right\"></td><td><input type='text' dojoType='dijit.form.ValidationTextBox' style=\"width:400px;font-size:12;\" value='"+val+"'/>"); // <a href=\"#\">");
+                    out.print("         <button dojoType=\"dijit.form.Button\" type=\"button\">");
+                    out.print("<script type=\"dojo/method\" event=\"onClick\">");
+                    out.print("    submitUrl(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceUpdProp.jsp?suri=");
+                    out.print(URLEncoder.encode(res.getURI())+"&prop="+URLEncoder.encode(prop.getURI())+"&act=remove&val="+val+"&nuri="+URLEncoder.encode(nuri)+"\");");
+                    out.print("</script>");
+                    out.print("remove");
+                    out.print("</button>");
+                    out.print(" "+link2+" </td></tr>");
                 }else
                 {
                     if(link1!=null)
@@ -106,13 +141,16 @@
         {
             if(isbase)
             {
+                System.out.println("base..onchange");
                 out.println("<tr><td width=\"200px\" align=\"right\"></td><td>");
-                out.print("<input type='text' dojoType='dijit.form.TextBox' style=\"width:400px;font-size:12;\" value='' onChange=\"submitUrl('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceUpdProp.jsp?");
-                out.print("suri="+URLEncoder.encode(res.getURI()));
-                out.print("&prop="+URLEncoder.encode(prop.getURI()));
-                out.print("&val='+this.value+'");
-                out.println("');\"/>");
-                out.println("<a href=\"\">remove</a></td></tr>");
+                //out.print("<input type='text' dojoType='dijit.form.TextBox' style=\"width:400px;font-size:12;\" value='' >");
+                //out.print("<input id=\"val\" name=\"val\" type='text' dojoType='dijit.form.TextBox' style=\"width:400px;font-size:12;\" value='' onChange=\"submitUrl('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceUpdProp.jsp?");
+                //out.print("suri="+URLEncoder.encode(res.getURI()));
+                //out.print("&prop="+URLEncoder.encode(prop.getURI()));
+                //out.print("&val='+this.value+'");
+                //out.print("');\">");
+                //out.print("<a href=\"\">remove</a>");
+            out.println("</td></tr>");
             }else
             {
                 out.println("<tr><td width=\"200px\" align=\"right\"></td><td></td></tr>");
