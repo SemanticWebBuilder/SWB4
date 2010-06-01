@@ -7,12 +7,6 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/swb4/SIEPS" > 
-  <rdf:Description rdf:about="#address">
-    <rdfs:label xml:lang="es">Calle</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
   <rdf:Description rdf:about="#Gamesa">
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">045785</sieps:clavesiem>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Janitzio</sieps:municipio>
@@ -29,6 +23,12 @@
     <rdf:type rdf:resource="#Empresa"/>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
     <sieps:hasProducto rdf:resource="#Marias"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#address">
+    <rdfs:label xml:lang="es">Calle</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#name">
     <rdfs:label xml:lang="es">Nombre</rdfs:label>
@@ -67,7 +67,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#CocaCola">
-    <sieps:fabrica rdf:resource="#CocaColaCuernavaca"/>
     <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto de prueba</swb:description>
     <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola</sieps:pname>
@@ -111,7 +110,6 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="#Marias">
-    <sieps:fabrica rdf:resource="#Gamesa"/>
     <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#014017"/>
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas de sabor tradicional</swb:description>
     <rdf:type rdf:resource="#Producto"/>
@@ -177,12 +175,15 @@
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Carbonatados de Sureste S.A. de C.V.</sieps:name>
     <rdf:type rdf:resource="#Empresa"/>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Veracruz</sieps:estado>
+    <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17762</sieps:cp>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">711-1111</sieps:telefono>
   </rdf:Description>
   <rdf:Description rdf:about="#Aguas">
+    <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">045458</sieps:clavesiem>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">99992</sieps:cp>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Irapuato</sieps:municipio>
+    <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AUG-71-06-17-MP3</sieps:rfc>
     <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string">elratonloco@progidy.mx</sieps:email>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
@@ -196,12 +197,6 @@
   <rdf:Description rdf:about="#class">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#fabrica">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <owl:inverseOf rdf:resource="#hasProducto"/>
-    <rdfs:domain rdf:resource="#Producto"/>
-    <rdfs:range rdf:resource="#Empresa"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Pascual">
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Refresco Pascual varios sabores</swb:description>
@@ -218,7 +213,7 @@
     <owl:imports rdf:resource="http://ontoview.org/schema/unspsc/1"/>
   </rdf:Description>
   <rdf:Description rdf:about="#hasProducto">
-    <owl:inverseOf rdf:resource="#fabrica"/>
+    <owl:inverseOf rdf:resource="#fabricaInv"/>
     <rdfs:label xml:lang="es">Producto</rdfs:label>
     <rdfs:range rdf:resource="#Producto"/>
     <rdfs:domain rdf:resource="#Empresa"/>
@@ -226,6 +221,10 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#fabricaInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fabrica</swb:propertyCodeName>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="#estado">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
