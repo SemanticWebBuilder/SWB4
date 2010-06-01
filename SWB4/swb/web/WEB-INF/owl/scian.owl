@@ -10,30 +10,30 @@
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
-  <rdfs:Class rdf:ID="Rama">
+  <owl:Class rdf:ID="Rama">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdfs:Class>
-  <rdfs:Class rdf:ID="SubRama">
+  </owl:Class>
+  <owl:Class rdf:ID="SubRama">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdfs:Class>
-  <rdfs:Class rdf:ID="SubSector">
+  </owl:Class>
+  <owl:Class rdf:ID="SubSector">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdfs:Class>
-  <rdfs:Class rdf:ID="Sector">
+  </owl:Class>
+  <owl:Class rdf:ID="Sector">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdfs:Class>
-  <rdfs:Class rdf:ID="Clase">
+  </owl:Class>
+  <owl:Class rdf:ID="Clase">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdfs:Class>
+  </owl:Class>
   <rdf:Property rdf:ID="code">
     <rdfs:domain>
       <owl:Class>
         <owl:unionOf rdf:parseType="Collection">
-          <rdfs:Class rdf:about="#Clase"/>
-          <rdfs:Class rdf:about="#Rama"/>
-          <rdfs:Class rdf:about="#Sector"/>
-          <rdfs:Class rdf:about="#SubRama"/>
-          <rdfs:Class rdf:about="#SubSector"/>
+          <owl:Class rdf:about="#Clase"/>
+          <owl:Class rdf:about="#Rama"/>
+          <owl:Class rdf:about="#Sector"/>
+          <owl:Class rdf:about="#SubRama"/>
+          <owl:Class rdf:about="#SubSector"/>
         </owl:unionOf>
       </owl:Class>
     </rdfs:domain>
