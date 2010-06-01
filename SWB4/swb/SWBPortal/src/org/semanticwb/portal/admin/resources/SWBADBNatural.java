@@ -593,6 +593,7 @@ public class SWBADBNatural extends GenericResource {
         boolean rPar = false;
         int idCounter = 0;
 
+        System.out.println("--Suggesting " + (props?" properties":"") + " for word " + word);
         word = URLDecoder.decode(word, "iso-8859-1");
 
         response.setContentType("text/html; charset=iso-8859-1");
@@ -612,6 +613,7 @@ public class SWBADBNatural extends GenericResource {
         word = word.replace("]", "");
         word = word.trim();
 
+        //No properties queried, user searching for objects or properties
         if (!props) {
             Iterator<SemanticClass> cit = SWBPlatform.getSemanticMgr().getVocabulary().listSemanticClasses();
 
@@ -674,8 +676,8 @@ public class SWBADBNatural extends GenericResource {
                 }
                 sbf.append("</ul>");
             }
-        } else {
-            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
+        } else { //User has queried property of an object
+            String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getId();
             //String tag = lex.getObjWordTag(word).getObjId();
 
             sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -699,7 +701,7 @@ public class SWBADBNatural extends GenericResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getLexicon(lang).getWord(word, false).getTag().getId();
+                tag = lex.getLexicon(lang).getWord(word, false).getSelectedTag().getId();
                 SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(tag);
                 tag = sc.getPrefix() + ":" + sc.getName();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
