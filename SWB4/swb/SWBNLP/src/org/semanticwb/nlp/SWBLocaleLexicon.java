@@ -120,6 +120,7 @@ public class SWBLocaleLexicon {
                     t.setURI(sc.getURI());
                     t.setId(sc.getPrefix() + ":" + sc.getName());
 
+                    //Word objects have just one tag
                     w.setTag(t);
                     objHash.put(wLemma, w);
                 }
@@ -133,7 +134,21 @@ public class SWBLocaleLexicon {
                     if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
 
                     wLemma = getSnowballForm(sp.getDisplayName(langCode));
-                    if (propHash.get(wLemma) == null) {
+                    Word pw = propHash.get(wLemma);
+
+                    //If property already exists, add tag to the word
+                    if (pw != null) {
+                        Tag t = new Tag();
+                        if (sp.isObjectProperty()) {
+                            t.setTag(OBT_TAG);
+                        } else {
+                            t.setTag(DTT_TAG);
+                        }
+
+                        t.setURI(sp.getURI());
+                        t.setId(sp.getPrefix() + ":" + sp.getName());
+                        pw.addTag(t);
+                    } else {
                         Word w = new Word(sp.getDisplayName(langCode));
                         w.setLemma(wLemma);
 
@@ -156,9 +171,12 @@ public class SWBLocaleLexicon {
                             t.setRangeURI(rg.getPrefix() + ":" + rg.getName());
                         }*/
 
-                        w.setTag(t);
+                        w.addTag(t);
                         propHash.put(wLemma, w);
                     }
+                    //if (propHash.get(wLemma) == null) {
+                        
+                    //}
                 }
             }
         }
