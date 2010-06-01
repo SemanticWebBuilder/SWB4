@@ -27,9 +27,6 @@
                 document.getElementById(objDIV).style.visibility = 'visible';
             }
 </script>
-<div id="fondoGrande">
-  <div id="subgral">
-    <h1><%=wp.getDisplayName()%></h1>
 <%
    if(it.hasNext())
    {
@@ -89,8 +86,8 @@
            %>
            <form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
                         <table class="detail">
-                            <tr><td width="200px" align="right"><%=mgr.renderLabel(request, wpPro.swbproy_leader,mgr.MODE_EDIT)%></td>
-                                <td><select name="<%=wpPro.swbproy_leader.getName()%>"><%
+                            <tr><td width="80px" align="left"><b><%=mgr.renderLabel(request, wpPro.swbproy_leader,mgr.MODE_EDIT)%></b></td>
+                                <td width="120px"><select name="<%=wpPro.swbproy_leader.getName()%>"><%
                                 String uri="";
                                 if(wpPro.getLeader()!=null)
                                     uri = wpPro.getLeader().getURI();
@@ -106,27 +103,39 @@
                                  }
                                %></select>
                                 </td>
+                                <td>
+                                    <%= SWBFormButton.newSaveButton().renderButton(request,SWBFormMgr.TYPE_XHTML,mgr.getLang())%>
+                                </td>
+                             </tr>
                         </table>
-                        <div>
-                            <p align="center">
-                                <%= SWBFormButton.newSaveButton().renderButton(request,SWBFormMgr.TYPE_XHTML,mgr.getLang())%>
-                            </p>
-                        </div>
            </form>
        <%}else{
        %>
-                <br>
-                <label for="project">Líder : </label>
-                <span name="project"><%=wpPro.getLeader()!=null?wpPro.getLeader().getFullName():"Sin Asignar"%></span><br><br>
+                <p class="indentation">
+                <label for="project"><b>  Líder :         </b></label>
+                <span name="project"><%=wpPro.getLeader()!=null?wpPro.getLeader().getFullName():"Sin Asignar"%></span><br>
+                </p>
 <%    }%>
-                <label for="startDate">Fecha Inicial: </label>
-                <span name="startDate"><%=start%></span>
-                <label for="endDate">Fecha Final: </label>
-                <span name="endDate"><%=end%></span><br><br>
-                <label for="currentHour">Horas Actuales:</label>
-                <span name="currentHour"><%=hourCurren%></span>
-                <label for="progress">Porcentaje de Avance: </label>
-                <span name="progress"><%=getProgressBar(getListLeaf(wp,user,false),"66CCFF",null)%></span>
+                <table class="dates" width="90%">
+                    <tr>
+                        <th><b>Fecha Inicial:</b></th>
+                        <td><%=start%></td>
+                        <th><b>Horas Actuales:</b></th>
+                        <td width="20%"><%=hourCurren%></td>
+                    </tr>
+                    <tr>
+                        <th><b>Fecha Final:</b></th>
+                        <td><%=end%></td>
+                        <th><b>Avance:</b></th>
+                        <td></td>
+                    </tr>
+                </table>
+                <table width="95%">
+                    <tr>
+                        <td width="5%"></td>
+                        <td><%=getProgressBar(getListLeaf(wp,user,false),"66CCFF",null)%></td>
+                    </tr>
+                </table>
                 <br>
 <%
       if(!proPage.isEmpty())
@@ -136,41 +145,34 @@
           Iterator itA=actPageCon.iterator();
           while(itA.hasNext()){
             WebPage tp=(WebPage)itA.next();
-            ArrayList listActs = new ArrayList();
-            Iterator itList=tp.listVisibleChilds(user.getLanguage());
-            while(itList.hasNext()){
-                WebPage tpChild= (WebPage)itList.next();
-                ArrayList tem=getListLeaf(tpChild,user,false);
-                Iterator tem1= tem.iterator();
-                while(tem1.hasNext())
-                    listActs.add(tem1.next());
-            }
-            out.println("<h2>"+tp.getDisplayName()+"</h2>");
-            String buff=getProgressBar(listActs,null,null);
-            if(buff==null)
-                out.println("<h4>No contiene Actividades</h4>");
-            else{
-                out.println("<a href=\""+tp.getUrl()+"\">Ver Actividades</a>");
-                out.println(buff);
-            }
-        }
+            out.println(getWebPageListLevel(tp,user,"Lista de Actividades"));
+          }
       }
-      if(!usPageCon.isEmpty()){
+      if(!usPageCon.isEmpty()){%><br><%
           WebPage tp;Iterator itList;WebPage tpChild;
           UserWebPage uwpi;
           Iterator itUs=usPageCon.iterator();
           Iterator itA;
-
           while(itUs.hasNext()){
+            tp = (WebPage)itUs.next();
+            out.println(getListUser(tp,user));
+          }
+      }%><br><%
+      if(!webPage.isEmpty())
+       out.println(printPage(webPage,"Secciones",user,false));
+   }
+%>
+<%!
+        public String getListUser(WebPage wpUs,User user){
+            StringBuffer buff = new StringBuffer();
               ArrayList listUser=new ArrayList();
+              UserWebPage uwpi;
+              Iterator itA;
               ArrayList listActu = new ArrayList();
               ArrayList listActiv =new ArrayList();
-              ArrayList list=new ArrayList();
-              //Obtiene los usuarios validos
-              WebPage wpUs = (WebPage) itUs.next();
               Iterator<UserWebPage> itU = UserWebPage.ClassMgr.listUserWebPageByParent(wpUs, wpUs.getWebSite());
               while(itU.hasNext()){
-                  uwpi = itU.next();
+                   uwpi= itU.next();
                   if(uwpi.isActive()&& uwpi!=null && uwpi.isVisible()&& uwpi.getChild()==null && !uwpi.isHidden() && uwpi.isValid() && !uwpi.isDeleted())
                     listUser.add(uwpi);
               }
@@ -200,7 +202,7 @@
                   //Hijos inactivos
                   if(wp1.getChild()!=null)
                   {
-                      itA = wp1.listVisibleChilds(paramRequest.getUser().getLanguage());
+                      itA = wp1.listVisibleChilds(user.getLanguage());
                       while(itA.hasNext()){
                           WebPage ch = (WebPage)itA.next();
                           if(ch.isActive())
@@ -213,30 +215,62 @@
                   if(valid)
                       listActiv.add(wp1);
               }
-              itA = listActiv.iterator();
-              while(itA.hasNext())
-              {
-                  Activity acts = (Activity)itA.next();
-                  list.add(acts.getCurrentPercentage());
-                  list.add(acts.getPlannedHour());
+              itU = listUser.iterator();
+              if(itU.hasNext()){
+                  buff.append("<h2>Personal Asociado</h2>\n");
+                  buff.append("<br>\n");
+                  buff.append("    <ul>\n");
+                  while(itU.hasNext()){
+                    UserWebPage wpu=(UserWebPage)itU.next();
+                    itA = listActiv.iterator();
+                    listActiv = new ArrayList();
+                    while(itA.hasNext()){
+                        Activity actU = (Activity)itA.next();
+                        if(actU.getResponsible().equals(wpu.getUserWP()))
+                        {
+                            listActiv.add(actU.getCurrentPercentage());
+                            listActiv.add(actU.getPlannedHour());
+                        }
+                    }
+                    String avan=getProgressBar(listActiv,null,null);
+                    if(avan==null)
+                        avan="Sin avance";
+                    buff.append("<li><a href=\""+wpu.getUrl()+"\">"+wpu.getDisplayName()+"</a></li>\n");
+                    buff.append(avan+"\n");
+                  }
+                  buff.append("</ul>\n");
               }
-              String buff=getProgressBar(list,null,null);
-              out.println("<h2>"+wpUs.getDisplayName()+"</h2>");
-              if(buff==null)
-                out.println("<h4>No contiene Personal Asociado</h4>");
-              else{
-                out.println("<a href=\""+wpUs.getUrl()+"\">Ver Personal Asociado</a>");
-                out.println(buff);
-              }
-          }
-      }
-      if(!webPage.isEmpty())
-       out.println(printPage(webPage,"Secciones",user,false));
-   }
-%>
-  </div>
-</div>
-<%!
+              return buff.toString();
+        }
+        public String getWebPageListLevel(WebPage wp,User user, String title)
+        {
+            Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(wp,wp.getWebSite());
+            ArrayList ChildVisible=new ArrayList();
+            it = Activity.ClassMgr.listActivityByParent(wp,wp.getWebSite());
+            while(it.hasNext())
+            {
+                Activity wp1=(Activity)it.next();
+                if(wp1.isVisible())
+                    ChildVisible.add(wp1);
+            }
+            it=ChildVisible.iterator();
+            StringBuffer st=new StringBuffer();
+            if(it.hasNext()){
+                st.append("<h2>"+title+"</h2>\n");
+                st.append("<br>\n");
+                st.append("   <ul>\n");
+                while(it.hasNext())
+                {
+                    wp = (WebPage)it.next();
+                    st.append("      <li><a href=\""+wp.getUrl()+"\">"+wp.getDisplayName()+"</a></li>\n");
+                    st.append( getProgressBar(getListLeaf(wp,user,false),null,null));
+                }
+                st.append("   </ul>\n");
+            }
+            return st.toString();
+        }
+
+
     private ArrayList listUserRepository(WebSite wp){
         ArrayList usrs =new ArrayList();
         UserRepository urep=wp.getUserRepository();
@@ -254,7 +288,6 @@
         String stime1="",stime2="",stime="",stimeE="",stimeE1="",stimeE2="";
         long time1=0,time2=0,time=0,timeE=0,timeE1=0,timeE2=0;
         //Valida Actividades
-       
         while(listAct.hasNext()){
             WebPage wp1=(WebPage)listAct.next();
              boolean valid=true;
@@ -289,12 +322,8 @@
                 acts.setStatus("unassigned");
             if(acts.getStatus().equals("assigned")||acts.getStatus().equals("unassigned")||acts.getStatus().equals("develop")||acts.getStatus().equals("paused")||acts.getEndDate()==null){
                 validEnd=false;
-            
             }
-
-
         }
-      
         listAct = validAct.iterator();
         while(listAct.hasNext()){
             Activity act = (Activity)listAct.next();
@@ -477,9 +506,9 @@
                 colorBarra = "006BD7";
             if (colorFondoBarra == null)
                 colorFondoBarra = "EFEFEF";
-            ret.append("        <table border=0 width=\"100%\" bgcolor=\"#FFFFFF\">\n");
+            ret.append("        <table border=0 width=\"91%\" bgcolor=\"#FFFFFF\">\n");
             ret.append("           <tr >\n");
-            ret.append("              <td align=\"left\" width=\"70%\">\n");
+            ret.append("              <td align=\"left\" width=\"75%\">\n");
             ret.append("                 <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
             ret.append("                        style=\"position: absolute; border: 1px none #000000;\n");
             ret.append("                        visibility:hidden; background-color:#008040;\n");
