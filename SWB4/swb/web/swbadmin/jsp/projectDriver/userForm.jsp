@@ -17,6 +17,9 @@
         Iterator<UserWebPage> it = UserWebPage.ClassMgr.listUserWebPageByParent(userwp, userwp.getWebSite());
         Iterator<WebPage> childPag=paramRequest.getWebPage().listVisibleChilds(paramRequest.getUser().getLanguage());
         SWBResourceURL url=paramRequest.getActionUrl();
+        String speciality = "Sin Asignar";
+        if(userwp.getSpeciality()!=null)
+            speciality = userwp.getSpeciality();
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
@@ -25,14 +28,11 @@
         document.getElementById(objDIV).style.visibility = 'visible';
     }
 </script>
-<div id="fondoGrande">
-   <div id="subgral">
-      <h1><%=userwp.getDisplayName()%></h1>
 <%
    if(it.hasNext())
    {
 
-   }else{
+   }else{//que hacer en caso de que no exista asociado un usuario a esta pagina
         Iterator<Activity> actResp=Activity.ClassMgr.listActivityByResponsible(userwp.getUserWP(),userwp.getWebSite());
         ArrayList actValid=new ArrayList();
         //Obtener las Actividades validas
@@ -94,7 +94,7 @@
         String avanTot=getProgressBar(listAct,null,null);
         if(avanTot==null)
           avanTot="Sin Avance";%>
-        <!--fieldset><legend>Avance Total</legend--><%
+        <%
          if(user.isRegistered()){
              ArrayList responsible = listUserRepository(wp.getWebSite());
              Iterator res=responsible.iterator();
@@ -138,16 +138,13 @@
         }else{
  %>
             <br>
-            <!--label for="name">Nombre : </label>
-            <span name="name"><//%=userwp.getUserWP()!=null?userwp.getUserWP().getFullName():"Sin Asignar"%></span><br><br-->
             <label for="speciality">Especialidad: </label>
-            <span name="speciality"><%=userwp.getSpeciality()%></span>
+            <span name="speciality"><%=speciality%></span>
             <br>
 <%
         }
         %>
          <%=avanTot%>
-        <!--/fieldset-->
         <%
         if(!assig.isEmpty()){
         %>
@@ -182,8 +179,6 @@
 
    }
 %>
-   </div>
-</div>
 <%!
 private ArrayList listUserRepository(WebSite wp){
     ArrayList usrs =new ArrayList();
@@ -227,37 +222,7 @@ private ArrayList checkVisibleChild(Iterator array){
     }
     return ChildVisible;
 }
-private ArrayList listProgressUser(UserWebPage uwp,ArrayList listAct){
-    Iterator<Activity> array=Activity.ClassMgr.listActivityByResponsible(uwp.getUserWP(),uwp.getWebSite());
-    ArrayList ChildVisible=checkVisibleChild(array);
-    array=ChildVisible.iterator();
-    while(array.hasNext())
-    {
-        Activity act = array.next();
-        listAct.add(act.getCurrentPercentage());
-        listAct.add(act.getPlannedHour());
-    }
-    return listAct;
-}
 
-private String printPage(HashMap mpag, String title)
-{
-    Iterator itpr=mpag.values().iterator();
-    StringBuffer strb = new StringBuffer();
-    WebPage wpage;
-    strb.append("");
-    if(itpr.hasNext())
-    {
-        strb.append("<h2>"+title+"</h2>\n");
-        strb.append("         <ul>\n");
-        while(itpr.hasNext()){
-            wpage=(WebPage)itpr.next();
-            strb.append("            <li>\n               <a href=\""+wpage.getUrl()+"\">"+wpage.getDisplayName()+"</a>\n            </li>\n");
-        }
-        strb.append("         </ul>");
-    }
-    return strb.toString();
-}
 private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
 {
     String porcentaje = "", horas = "";
