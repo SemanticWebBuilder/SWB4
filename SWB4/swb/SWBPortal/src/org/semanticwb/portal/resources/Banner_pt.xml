@@ -13,8 +13,8 @@
 
         <textarea id="longdesc" name="longdesc" label="Descrição Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
 
-        <input type="text" id="width"  name="width" label="Anchura:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura do banner. Exemplo: 500em, 600px, 100%" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="4" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura do banner. Exemplo: 120em, 75px, 100%" />
+        <input type="text" id="width"  name="width" label="Anchura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura do banner. Exemplo: 500em, 600px, 100%" />
+        <input type="text" id="height" name="height" label="Altura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura do banner. Exemplo: 120em, 75px, 100%" />
         <input type="text" name="cssClass" id="cssClass" label="Classe Attribute Anchor:" size="30" promptMessage="CSS nome da classe da âncora" />
         <input type="text" id="url" name="url" label="Site:" maxlength="50" regExp="(http|https):\/\/.+" invalidMessage="URL inválido" promptMessage="Website patrocinador" />
         <input type="text" id="axn" name="axn" label="Acción:" maxlength="50" promptMessage="Javascript ação" />
