@@ -773,7 +773,7 @@ public class AdvancedSearch extends GenericAdmResource {
             }
         } else {
             System.out.println("Suggesting for " + word);
-            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getId();
             //String tag = lex.getObjWordTag(word).getObjId();
 
             if (!tag.equals("")) {
@@ -797,7 +797,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 }
                 sbf.append("</ul>");
             } else {
-                tag = lex.getLexicon(lang).getWord(word, false).getTag().getRangeURI();
+                tag = lex.getLexicon(lang).getWord(word, false).getSelectedTag().getRangeURI();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
                 if (!tag.equals("")) {
                     sbf.append("<ul id=\"resultlist\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
