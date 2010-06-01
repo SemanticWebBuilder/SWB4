@@ -4460,6 +4460,7 @@ public class SWBUtils {
          * <p>Identificador para la base de datos de Microsoft SQL Server.</p>
          */
         public static final String DBTYPE_MsSQL = "MsSQL";
+        public static final String DBTYPE_MsSQL2008 = "Microsoft SQL Server";
         /**
          * Identifier for the Oracle database.
          * <p>Identificador para la base de datos de Oracle.</p>
