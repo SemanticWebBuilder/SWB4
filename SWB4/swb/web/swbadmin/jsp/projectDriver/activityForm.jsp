@@ -79,9 +79,7 @@
                     }
                 }
     </script>
-    <div id="fondoGrande">
-      <div id="subgral">
-        <h1><%=wp.getDisplayName()%></h1><%
+<%
           if(it.hasNext())
           {//Si tiene hijos muestra una lista de ellos
             HashMap webPage=new HashMap();
@@ -94,17 +92,18 @@
               webPage.put(page1, page1);
             }
     %>
-        <table width="100%">
+        <div>
+        <table  width="100%">
           <tr>
-            <td>Proyecto: </td>
+              <td width="180px">Proyecto: </td>
             <td><%=parent%></td></tr>
-          <tr><td>Porcentaje de Avance: </td>
-            <td>
-            <%=getProgressBar(getListLeaf(act,user),"66CCFF",null)%>
-            </td></tr>
+          <tr><td width="180px">Avance Actividad:</td>
+            <td><%=getProgressBar(getListLeaf(act,user),"66CCFF",null)%></td>
+          </tr>
         </table>
+        </div>
       <%
-          out.println(getWebPageListLevel(act,user,4,"Subactividades"));
+          out.println(getWebPageListLevel(act,user,4,"Subactividades",""));
           if(!webPage.isEmpty())
             out.println(printPage(webPage,"Secciones"));
           }else{//Sino tiene hijos
@@ -117,13 +116,14 @@
               url.setAction("update");
               mgr.addHiddenParameter(Activity.swb_active.getName(), Boolean.toString(act.isActive()));
               boolean checkPrede=checkPredecesor(act);%>
+        <fieldset><legend>Seguimiento</legend>
         <form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
-          <fieldset><legend>Seguimiento</legend>
             <%=mgr.getFormHiddens()%>
 
             <input type="hidden" name="status_ini" value="<%=act.getStatus()%>">
             <table class="detail">
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request,act.swbproy_critical,mgr.MODE_EDIT)%></td>
+              <tbody>
+              <tr><td width="200px"><%=mgr.renderLabel(request,act.swbproy_critical,mgr.MODE_EDIT)%></td>
                   <td><%
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){String checked="";
                       if(act.isCritical()){checked="checked=\"checked\"";}
@@ -132,7 +132,7 @@
                        out.println(mgr.renderElement(request, act.swbproy_critical,mgr.MODE_EDIT));
     %>             </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_EDIT)%></td>
                   <td><%
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      String value=act.getActType();
@@ -142,7 +142,7 @@
                    out.println(mgr.renderElement(request, act.swbproy_actType,mgr.MODE_EDIT));
     %>             </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_EDIT)%></td>
             <%  boolean un,as,ca,de,pa,en; un=as=ca=de=pa=en=false;
                 SemanticObject sobj=act.swbproy_status.getDisplayProperty();
                 String selectValues=null;
@@ -200,7 +200,7 @@
                 %></select></td><%
                 }%>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_hasPredecessor, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_hasPredecessor, mgr.MODE_EDIT)%></td>
                   <td><%
                     //Obtiene las actividades predecesoras relacionadas a la actividad y que sean validas
                     ArrayList actPre=new ArrayList();
@@ -223,7 +223,8 @@
                     }
                     listAll = validActivities(listAll);
                     listActall = listAll.iterator();
-                   %><select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true" style="width:300px;" <%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||act.getStatus().equals("unassigned")||checkPrede){%>disabled<%}%>><%
+                   %><select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true" size="4" style="width:300px;" <%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){%>disabled<%}%>><%
+                   if(listActall.hasNext())%><option value=""<%
                     while (listActall.hasNext()) {
                         WebPage sob = (WebPage)listActall.next();
                         if (!sob.isParentof(act) &&sob.getURI() != null) {
@@ -234,10 +235,10 @@
                     }%></select><%
     %>               </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_EDIT)%></td>
                   <td><%
                   res = responsible.iterator();
-                   %><select name="<%=act.swbproy_responsible.getName()%>"<%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){ %>disabled><%}
+                   %><select name="<%=act.swbproy_responsible.getName()%>"<%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){ %>disabled<%}%>><%
                         String uri="";
                         if(act.getResponsible()!=null)
                            uri = act.getResponsible().getURI();
@@ -255,17 +256,17 @@
                     %></select><%
     %>             </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_hasParticipants, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_hasParticipants, mgr.MODE_EDIT)%></td>
                   <td><%
                     ArrayList<String> vals=new ArrayList();
                     listobj=act.listParticipantses();
                     while(listobj.hasNext())
                         vals.add(listobj.next().toString());
                     res = responsible.iterator();
-                  %><select name="<%=act.swbproy_hasParticipants.getName()%>" multiple="true" style="width:300px;"<%
-                    if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||act.getStatus().equals("unassigned")||checkPrede){
+                  %><select name="<%=act.swbproy_hasParticipants.getName()%>" multiple="true"  size="4" style="width:300px;"<%
+                    if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                             %>disabled<%
-                    }%>><%
+                    }%>><%if(res.hasNext())%><option value=""<%
                     while (res.hasNext()) {
                         SemanticObject sob = SemanticObject.createSemanticObject(res.next().toString());//SemanticObject.createSemanticObject(res.next().toString());
                         if (sob.getURI() != null) {
@@ -275,68 +276,71 @@
                             %>><%=sob.getDisplayName(user.getLanguage())%></option><%}
                     }%></select><%
     %>               </td>
-              </tr><tr>
-                  <td><%=mgr.renderLabel(request, act.swb_created, mgr.MODE_VIEW)%></td>
+              </tr>
+              <tr>
+                  <td width="200px"><%=mgr.renderLabel(request, act.swb_created, mgr.MODE_VIEW)%></td>
                   <td><%=mgr.renderElement(request, act.swb_created,mgr.MODE_VIEW)%></td>
               </tr><%         if(act.getStatus().equals("develop")||act.getStatus().equals("ended")||act.getStatus().equals("canceled")||act.getStatus().equals("paused")){%>
-               <tr><td><%=mgr.renderLabel(request, act.swbproy_startDate, mgr.MODE_VIEW)%></td>
+               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_startDate, mgr.MODE_VIEW)%></td>
                    <td><%=mgr.renderElement(request, act.swbproy_startDate,mgr.MODE_VIEW)%></td>
                </tr>
     <%         }%>
     <%         if(act.getStatus().equals("ended")||act.getStatus().equals("canceled")){%>
-               <tr><td><%=mgr.renderLabel(request, act.swbproy_endDate, mgr.MODE_VIEW)%></td>
+               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_endDate, mgr.MODE_VIEW)%></td>
                    <td><%=mgr.renderElement(request, act.swbproy_endDate,mgr.MODE_VIEW)%></td>
                </tr>
     <%         }%>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_plannedHour, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_plannedHour, mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||act.getStatus().equals("unassigned")||act.getStatus().equals("unassigned")||checkPrede){
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
                    out.println(mgr.renderElement(request, act.swbproy_plannedHour,mgr.MODE_EDIT));
     %>             </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_currentHour, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentHour, mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||act.getStatus().equals("unassigned")||act.getStatus().equals("unassigned")||checkPrede){
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
                    out.println(mgr.renderElement(request, act.swbproy_currentHour,mgr.MODE_EDIT));
     %>             </td>
               </tr>
-              <tr><td width="200px" align="right"><%=mgr.renderLabel(request, act.swbproy_currentPercentage, mgr.MODE_EDIT)%></td>
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentPercentage, mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||act.getStatus().equals("unassigned")||checkPrede){
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
                    out.println(mgr.renderElement(request, act.swbproy_currentPercentage,mgr.MODE_EDIT));
         %>              </td>
               </tr>
-              <tr><td width="200px" align="right">
-    <%            if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")||checkPrede){%><br><%
-
-                    out.println("<button type=\"submit\" onclick=\"calcular(this.form)\">Calcular Porcentaje</button>");%><br><br><%
+              <tr><td width="200px">
+    <%            if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")||checkPrede){%><%
+                    out.println("<button type=\"submit\" onclick=\"calcular(this.form)\">Calcular</button>");%><br><%
                     out.println("<button type=\"submit\" onclick=\"return validar(this.form)\">Actualizar</button>");
                    }
                 %></td>
                   <td><%=getProgressBar(proBar,null,null)%></td>
               </tr><%
-           %></table>
-          </fieldset>
-        </form>
+           %></tbody>
+           </table>
+           </form>
+        </fieldset>
     <%      }else{//si no esta registrado
               SWBFormMgr mgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_VIEW);
               mgr.setLang(lang);
               mgr.setType(mgr.TYPE_XHTML);
     %>
         <fieldset><legend>Detalles de Actividad</legend><br>
-          <label for="project">Proyecto </label>
-          <span name="project"><%=parent%></span><br><br>
-          <label for="progress">Porcentaje de Avance </label>
+          <p class="indentation">
+          <label for="progress">Avance Actividad:</label>
           <span name="progress"><%=getProgressBar(proBar,null,null)%></span>
-          <br>
+          </p>
           <table class="detail">
             <tbody>
+                <tr><th width="150"><label for="proyect">Proyecto </label></th>
+                   <td><%=parent%></td>
+               </tr>
                <tr><th><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_VIEW)%></th>
                    <td><%=mgr.renderElement(request, act.swbproy_actType,mgr.MODE_VIEW)%></td>
                </tr>
@@ -347,7 +351,7 @@
                    <td>
                     <%GenericIterator <Activity> it1 = act.listPredecessors();
                     if(it1.hasNext()){%>
-                     <select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true">
+                     <select name="<%=act.swbproy_hasPredecessor.getName()%>"  size="4" multiple="true">
                       <%while(it1.hasNext()){
                        act1=it1.next();%>
                        <option value="<%=act1.getDisplayName()%>"><%=act1.getDisplayName()%></option>
@@ -373,7 +377,7 @@
                    <td>
                     <%GenericIterator<User> it2 = act.listParticipantses();
                     if(it2.hasNext()){%>
-                     <select name="<%=act.swbproy_hasParticipants.getName()%>" multiple="true">
+                     <select name="<%=act.swbproy_hasParticipants.getName()%>"  size="4" multiple="true">
                       <%while(it2.hasNext()){
                         us=it2.next();%>
                         <option value="<%=us.getFirstName()%>"><%=us.getFirstName()%></option>
@@ -411,8 +415,6 @@
         </fieldset>
     <%      }
           }%>
-      </div>
-    </div>
     <%!
         private void validAct(Activity act){
              if(act.getStatus()==null){
@@ -505,6 +507,7 @@
             if(itpr.hasNext())
             {
                 strb.append("<h2>"+title+"</h2>\n");
+                strb.append("<br>\n");
                 strb.append("   <ul>\n");
                 while(itpr.hasNext()){
                     wpage=(WebPage)itpr.next();
@@ -553,7 +556,7 @@
                     colorBarra = "006BD7";
                 if (colorFondoBarra == null)
                     colorFondoBarra = "EFEFEF";
-                ret.append("        <table border=0 width=\"100%\" bgcolor=\"#FFFFFF\">\n");
+                ret.append("        <table border=0 width=\"85%\" bgcolor=\"#FFFFFF\">\n");
                 ret.append("          <tr >\n");
                 ret.append("            <td align=\"left\" width=\"70%\">\n");
                 ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
@@ -591,7 +594,7 @@
             else
                 return null;
         }
-        public String getWebPageListLevel(Activity act,User user, int level, String title)
+        public String getWebPageListLevel(Activity act,User user, int level, String title, String indentation)
         {
             level=level+act.getLevel();
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
@@ -606,28 +609,51 @@
             StringBuffer st=new StringBuffer();
             if(it.hasNext()){
                 st.append("<h2>"+title+"</h2>\n");
-                st.append("   <ul>\n");
+                st.append("<br>\n");
+                st.append("<table width=\"91%\">\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
                         String pgrb = getProgressBar(getListLeaf(act,user),null,null);
                         if(level == act.getLevel()){
-                            st.append("      <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
+                            st.append("     <tr>\n");
+                            st.append("     <td colspan=3 width=\"100%\">\n");
+                            st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                            st.append("     </td>\n");
+                            st.append("     </tr>\n");
+                            st.append("     <tr>\n");
+                            st.append("     <td width=\"15%\">\n");
+                            st.append("     </td>\n");
+                            st.append("     <td width=\"70%\">\n");
                             st.append(pgrb);
+                            st.append("     </td>\n");
+                            st.append("     </tr>\n");
                         }
                         else if(pgrb!=null){
-                            st.append("      <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
+                            st.append("     <tr>\n");
+                            st.append("     <td colspan=3 width=\"100%\">\n");
+                            st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                            st.append("     </td>\n");
+                            st.append("     </tr>\n");
+                            st.append("     <tr>\n");
+                            st.append("     <td width=\"15%\">\n");
+                            st.append("     </td>\n");
+                            st.append("     <td width=\"70%\">\n");
                             st.append(pgrb);
+                            st.append("     </td>\n");
+                            st.append("     </tr>\n");
                             StringBuffer st1=new StringBuffer();
-                            String childp=getWebPageListLevel1(act,user,level,st1);
+                            indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                            String childp=getWebPageListLevel1(act,user,level,st1,indentation);
+                            indentation=indentation.substring(0, indentation.length()-24);
                             st.append(childp);
                         }
                 }
-                st.append("   </ul>\n");
+                st.append("</table>\n");
             }
             return st.toString();
         }
-        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1)
+        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation)
         {
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
             ArrayList ChildVisible=new ArrayList();
@@ -639,22 +665,42 @@
             }
             it=ChildVisible.iterator();
             if(it.hasNext()){
-                st1.append("         <ul>\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
                         String pgrb = getProgressBar(getListLeaf(act,user),null,null);
                         if(level == act.getLevel()){
-                            st1.append("            <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");//+itx.next()+"</li>");
+                            st1.append("     <tr>\n");
+                            st1.append("     <td colspan=3 width=\"100%\">\n");
+                            st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                            st1.append("     </td>\n");
+                            st1.append("     </tr>\n");
+                            st1.append("     <tr>\n");
+                            st1.append("     <td width=\"15%\">\n");
+                            st1.append("     </td>\n");
+                            st1.append("     <td width=\"70%\">\n");
                             st1.append(pgrb);
+                            st1.append("     </td>\n");
+                            st1.append("     </tr>\n");
                         }
                         else if (pgrb!=null){
-                            st1.append("            <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
+                            st1.append("     <tr>\n");
+                            st1.append("     <td colspan=3 width=\"100%\">\n");
+                            st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                            st1.append("     </td>\n");
+                            st1.append("     </tr>\n");
+                            st1.append("     <tr>\n");
+                            st1.append("     <td width=\"15%\">\n");
+                            st1.append("     </td>\n");
+                            st1.append("     <td width=\"70%\">\n");
                             st1.append(pgrb);
-                            getWebPageListLevel1(act,user,level,st1);
+                            st1.append("     </td>\n");
+                            st1.append("     </tr>\n");
+                            indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                            getWebPageListLevel1(act,user,level,st1,indentation);
+                            indentation=indentation.substring(0, indentation.length()-24);
                         }
                 }
-                st1.append("         </ul>\n");
             }
             return st1.toString();
         }
