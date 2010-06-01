@@ -38,6 +38,7 @@
     <rdfs:domain rdf:resource="#Empresa"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubRama">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#rfc">
@@ -107,6 +108,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Rama">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdf:type rdf:resource="http://www.inegi.gob.mx/2002/scian#Rama"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Producto">
@@ -142,6 +145,7 @@
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Distrito Federal</sieps:estado>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubSector">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#colonia">
@@ -151,6 +155,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Clase">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Empresa">
@@ -233,6 +238,7 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Sector">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
