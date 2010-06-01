@@ -19,9 +19,6 @@
         document.getElementById(objDIV).style.visibility = 'visible';
     }
 </script>
-<div id="fondoGrande">
-   <div id="subgral">
-      <h1><%=wp.getDisplayName()%></h1>
   <%if(it.hasNext())
    {
       ArrayList userValid= new ArrayList();//Lista los usuarios validos, paginas web
@@ -121,8 +118,6 @@
         if(!webPage.isEmpty())
             out.println(printPage(webPage,"Secciones"));
 }%>
-    </div>
-</div>
 <%!     private String printPage(ArrayList array, String title)
         {
             Iterator itpr=array.iterator();
@@ -180,9 +175,9 @@
                     colorBarra = "006BD7";
                 if (colorFondoBarra == null)
                     colorFondoBarra = "EFEFEF";
-                ret.append("        <table border=0 width=\"100%\" bgcolor=\"#FFFFFF\">\n");
+                ret.append("        <table border=0 width=\"90%\" bgcolor=\"#FFFFFF\">\n");
                 ret.append("          <tr >\n");
-                ret.append("            <td align=\"left\" width=\"70%\">\n");
+                ret.append("            <td align=\"left\" width=\"75%\">\n");
                 ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
                 ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
                 ret.append("                 visibility:hidden; background-color:#008040;\n");
