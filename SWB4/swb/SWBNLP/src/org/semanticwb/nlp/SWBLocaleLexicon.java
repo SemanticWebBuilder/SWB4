@@ -123,7 +123,6 @@ public class SWBLocaleLexicon {
                     w.setTag(t);
                     objHash.put(wLemma, w);
                 }
-
                 String pf = buildPrefixEntry(sc.getPrefix(), sc.getOntClass().getNameSpace());
                 if (prefixString.indexOf(pf) == -1) prefixString += pf + "\n";
 
@@ -166,7 +165,7 @@ public class SWBLocaleLexicon {
     }
 
     private String buildPrefixEntry(String prefix, String namespace) {
-        if (prefix.trim().equals("") || namespace.trim().equals(""))
+        if (prefix == null || prefix.trim().equals("") || namespace.trim().equals(""))
             return "";
         return "PREFIX " + prefix + ": " + "<" + namespace + ">";
     }
