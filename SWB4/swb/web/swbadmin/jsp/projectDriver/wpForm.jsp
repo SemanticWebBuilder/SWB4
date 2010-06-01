@@ -9,7 +9,6 @@
        Iterator it;
        WebPage wp=paramRequest.getWebPage();
        User user=paramRequest.getUser();
-       //String action=(String) request.getAttribute("action");
        it=wp.listVisibleChilds(user.getLanguage());
        HashMap actPage=new HashMap();
        HashMap webPage=new HashMap();
@@ -33,33 +32,14 @@
                usPage.put(page1, page1);
         }
 %>
- <div id="fondoGrande">
-     <div id="subgral">
-        <h1><%=wp.getDisplayName()%></h1>
 <%
- //  if(action.equals("hasAct"))
- //  {
- //      if(!webPage.isEmpty())
- //       out.println(printPage(webPage,"Secciones"));
- //  }else if(action.equals("hasUs"))
- //  {
- //      if(!usPage.isEmpty())
- //       out.println(printPage(usPage,"Personal Asociado"));
- //      if(!webPage.isEmpty())
- //       out.println(printPage(webPage,"Secciones"));
- //  }else if(action.equals("hasAll"))
- //  {
        if(!proPage.isEmpty())
         out.println(printPage(proPage,"Proyectos"));
        if(!usPage.isEmpty())
         out.println(printPage(usPage,"Personal Asociado"));
        if(!webPage.isEmpty())
         out.println(printPage(webPage,"Secciones"));
- //  }
-
 %>
-    </div>
-</div>
 <%!
     private String printPage(HashMap mpag, String title)
     {
@@ -69,7 +49,7 @@
         strb.append("");
         if(itpr.hasNext())
         {
-            strb.append("<h2>"+title+"</h2>\n");
+            strb.append("<h3>"+title+"</h3>\n");
             strb.append("   <ul>\n");
             while(itpr.hasNext()){
                 wpage=(WebPage)itpr.next();
