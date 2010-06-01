@@ -2,11 +2,18 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:scian="http://www.inegi.gob.mx/2002/scian#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:sieps="http://www.semanticwebbuilder.org/swb4/SIEPS#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/swb4/SIEPS" > 
+  <rdf:Description rdf:about="#address">
+    <rdfs:label xml:lang="es">Calle</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#Gamesa">
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">045785</sieps:clavesiem>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Janitzio</sieps:municipio>
@@ -24,17 +31,14 @@
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
     <sieps:hasProducto rdf:resource="#Marias"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#address">
-    <rdfs:label xml:lang="es">Calle</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Description>
   <rdf:Description rdf:about="#name">
     <rdfs:label xml:lang="es">Nombre</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubRama">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#rfc">
     <rdfs:label xml:lang="es">RFC</rdfs:label>
@@ -102,6 +106,9 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Rama">
+    <rdf:type rdf:resource="http://www.inegi.gob.mx/2002/scian#Rama"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#Producto">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
@@ -134,11 +141,17 @@
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">103</sieps:clavesiem>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Distrito Federal</sieps:estado>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubSector">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#colonia">
     <rdfs:label xml:lang="es">Colonia</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Clase">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Empresa">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -152,17 +165,17 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
-  <rdf:Description rdf:about="#unspsc">
-    <rdfs:label xml:lang="es">UNSPSC</rdfs:label>
-    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-    <rdfs:domain rdf:resource="#Producto"/>
-  </rdf:Description>
   <rdf:Description rdf:about="#pname">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
     <rdfs:domain rdf:resource="#Producto"/>
     <rdfs:label xml:lang="es">Nombre</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#unspsc">
+    <rdfs:label xml:lang="es">UNSPSC</rdfs:label>
+    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="#Producto"/>
   </rdf:Description>
   <rdf:Description rdf:about="#Carbonatados">
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cortázar No 45</sieps:address>
@@ -218,6 +231,9 @@
     <rdfs:range rdf:resource="#Producto"/>
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Sector">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
