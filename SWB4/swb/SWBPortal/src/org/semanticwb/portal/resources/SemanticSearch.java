@@ -588,7 +588,7 @@ public class SemanticSearch extends GenericAdmResource {
                 sbf.append("</ul>\n");
             }
         } else {
-            String tag = lex.getLexicon(lang).getWord(word, true).getTag().getId();
+            String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getId();
             //String tag = lex.getObjWordTag(word.toLowerCase()).getObjId();
 
             sbf.append("<ul id=\"" + createId("resultlist") + "\" class=\"resultlist\" style=\"background:white;list-style-type:none;" +
@@ -612,7 +612,7 @@ public class SemanticSearch extends GenericAdmResource {
                     idCounter++;
                 }
             } else {
-                tag = lex.getLexicon(lang).getWord(word, false).getTag().getRangeURI();
+                tag = lex.getLexicon(lang).getWord(word, false).getSelectedTag().getRangeURI();
                 SemanticClass sc = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(tag);
                 tag = sc.getPrefix() + ":" + sc.getName();
                 //tag = lex.getPropWordTag(word).getRangeClassId();
