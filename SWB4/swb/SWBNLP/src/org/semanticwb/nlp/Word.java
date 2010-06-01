@@ -24,6 +24,7 @@
 package org.semanticwb.nlp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Word. Palabra.
@@ -53,8 +54,9 @@ import java.util.ArrayList;
 public class Word {
     private String lemma; //raíz de la palabra
     private String lexicalForm;//displayname
-    private Tag wTag;   //POS-TAG
+    private ArrayList<Tag> wTags;   //POS-TAG
     private ArrayList<String> synSet; //Conjunto de sinónimos
+    private Tag selected;//Last selected tag
 
     /**
      * Creates a new instance of a Word with the given label (the word itself)
@@ -72,6 +74,16 @@ public class Word {
     public Word(String lexForm) {
         lexicalForm = lexForm;
         lemma = "";
+        wTags = new ArrayList<Tag>();
+        selected = null;
+    }
+
+    public void setSelectedTag(Tag selected) {
+        this.selected = selected;
+    }
+
+    public Tag getSelectedTag() {
+        return selected;
     }
 
     public void addSynonym (String syn) {
@@ -111,8 +123,12 @@ public class Word {
      * <p>
      * Obtiene el {@link WordTag} de la palabra.
      */
-    public Tag getTag() {
-        return wTag;
+    public ArrayList<Tag> getTags() {
+        return wTags;
+    }
+
+    public void addTag(Tag t) {
+        wTags.add(t);
     }
 
     /**
@@ -120,8 +136,18 @@ public class Word {
      * <p>
      * Establece el {@link WordTag} de la palabra.
      */
-    public void setTag(Tag tag) {
-        wTag = tag;
+    public void setTags(ArrayList<Tag> tags) {
+        wTags = tags;
+    }
+
+    /**
+     * Sets unique tag for Word Objects
+     * @param t tag
+     */
+    public void setTag(Tag t) {
+        wTags.clear();
+        wTags.add(t);
+        selected = t;
     }
 
     public void setLemma(String lem) {
