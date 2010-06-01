@@ -2,81 +2,73 @@
 <rdf:RDF
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:scian="http://www.inegi.gob.mx/2002/scian#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-  xml:base="http://www.inegi.gob.mx/2002/scian" > 
-  <rdf:Description rdf:about="#111110">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de soya</rdfs:label>
-    <rdf:type rdf:resource="#Clase"/>
-    <rdfs:subClassOf rdf:resource="#11111"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#111">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Agricultura</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#11"/>
-    <rdf:type rdf:resource="#SubSector"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#SubRama">
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xml:base="http://www.inegi.gob.mx/2002/scian">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <rdfs:Class rdf:ID="Rama">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#3121">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Industria de las bebidas</rdfs:label>
-    <rdf:type rdf:resource="#Rama"/>
-    <rdfs:subClassOf rdf:resource="#312"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#312111">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Elaboración de refrescos</rdfs:label>
-    <rdf:type rdf:resource="#Clase"/>
-    <rdfs:subClassOf rdf:resource="#31211"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#11111">
-    <rdf:type rdf:resource="#SubRama"/>
-    <rdfs:subClassOf rdf:resource="#1111"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de soya</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#31211">
-    <rdf:type rdf:resource="#SubRama"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eleboración de refrescos y hielo, y puricicación de agua</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#3121"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#312">
-    <rdf:type rdf:resource="#SubSector"/>
-    <rdfs:subClassOf rdf:resource="#31"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Industria de las bebidas y el tabaco</rdfs:label>
-  </rdf:Description>
-  <rdf:Description rdf:about="#31">
-    <rdf:type rdf:resource="#Sector"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#1111">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de granos y semillas oleaginosas</rdfs:label>
-    <rdfs:subClassOf rdf:resource="#111"/>
-    <rdf:type rdf:resource="#Rama"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#Rama">
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="SubSector">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#11">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Agicultura, ganaderia, aprovechamieto forestal, pesca y caza</rdfs:label>
-    <rdf:type rdf:resource="#Sector"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#SubSector">
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="SubRama">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#Sector">
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="Sector">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#Clase">
+  </rdfs:Class>
+  <rdfs:Class rdf:ID="Clase">
     <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
-    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Created with TopBraid Composer</owl:versionInfo>
-  </rdf:Description>
+  </rdfs:Class>
+  <scian:Clase rdf:ID="_111110">
+    <rdfs:label xml:lang="es">Cultivo de soya</rdfs:label>
+    <rdfs:subClassOf>
+      <scian:SubRama rdf:ID="_11111">
+        <rdfs:label xml:lang="es">Cultivo de soya</rdfs:label>
+        <rdfs:subClassOf>
+          <scian:Rama rdf:ID="_1111">
+            <rdfs:label xml:lang="es">Cultivo de granos y semillas oleaginosas</rdfs:label>
+            <rdfs:subClassOf>
+              <scian:SubSector rdf:ID="_111">
+                <rdfs:label xml:lang="es">Agricultura</rdfs:label>
+                <rdfs:subClassOf>
+                  <scian:Sector rdf:ID="_11">
+                    <rdfs:label xml:lang="es">Agicultura, ganaderia, aprovechamieto forestal, pesca y caza</rdfs:label>
+                  </scian:Sector>
+                </rdfs:subClassOf>
+              </scian:SubSector>
+            </rdfs:subClassOf>
+          </scian:Rama>
+        </rdfs:subClassOf>
+      </scian:SubRama>
+    </rdfs:subClassOf>
+  </scian:Clase>
+  <scian:Clase rdf:ID="_312111">
+    <rdfs:label xml:lang="es">Elaboración de refrescos</rdfs:label>
+    <rdfs:subClassOf>
+      <scian:SubRama rdf:ID="_31211">
+        <rdfs:label xml:lang="es">Eleboración de refrescos y hielo, y puricicación de agua</rdfs:label>
+        <rdfs:subClassOf>
+          <scian:Rama rdf:ID="_3121">
+            <rdfs:label xml:lang="es">Industria de las bebidas</rdfs:label>
+            <rdfs:subClassOf>
+              <scian:SubSector rdf:ID="_312">
+                <rdfs:label xml:lang="es">Industria de las bebidas y el tabaco</rdfs:label>
+                <rdfs:subClassOf>
+                  <scian:Sector rdf:ID="_31"/>
+                </rdfs:subClassOf>
+              </scian:SubSector>
+            </rdfs:subClassOf>
+          </scian:Rama>
+        </rdfs:subClassOf>
+      </scian:SubRama>
+    </rdfs:subClassOf>
+  </scian:Clase>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
