@@ -22,9 +22,7 @@
         document.getElementById(objDIV).style.visibility = 'visible';
     }
 </script>
-   <div id="fondoGrande">
-      <div id="subgral">
-        <h1><%=wp.getDisplayName()%></h1><%
+<%
           if(it.hasNext())
           {//Si tiene hijos muestra una lista de ellos
             HashMap webPage=new HashMap();
@@ -38,22 +36,19 @@
             }
 
     %>
-        <table width="100%">
+        <table width="91%">
           <tr>
-            <td>Proyecto: </td>
+              <td width="180">Proyecto: </td>
             <td><%=parent%></td></tr>
-          <tr><td>Procentaje de Avance: </td>
-            <td>
-            <%=getProgressBar(getListLeaf(wp,user),"66CCFF",null)%>
+          <tr><td width="180">Avance de Actividades: </td>
+            <td><%=getProgressBar(getListLeaf(wp,user),"66CCFF",null)%>
             </td></tr>
         </table>
       <%
-          out.println(getWebPageListLevel(wp,user,4,"Actividades"));
+          out.println(getWebPageListLevel(wp,user,4,"Actividades",""));
           if(!webPage.isEmpty())
             out.println(printPage(webPage,"Secciones"));
           }%>
-      </div>
-   </div>
 <%!
         private String printPage(HashMap mpag, String title)
         {
@@ -64,6 +59,7 @@
             if(itpr.hasNext())
             {
                 strb.append("<h2>"+title+"</h2>\n");
+                strb.append("<br>\n");
                 strb.append("   <ul>\n");
                 while(itpr.hasNext()){
                     wpage=(WebPage)itpr.next();
@@ -203,7 +199,7 @@
                 result = true;
            return result;
         }
-        public String getWebPageListLevel(WebPage wp1,User user, int level, String title)
+        public String getWebPageListLevel(WebPage wp1,User user, int level, String title, String indentation)
         {
             level=level+wp1.getLevel();
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(wp1,wp1.getWebSite());
@@ -219,31 +215,59 @@
             StringBuffer st=new StringBuffer();
             if(it.hasNext()){
                 st.append("<h2>"+title+"</h2>\n");
-                st.append("   <ul>\n");
+                st.append("<br>\n");
+                st.append("<table width=\"91%\">\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                        String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-                        if(level == act.getLevel()){
-                            st.append("      <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
-                            st.append(pgrb);
-                        }
-                        else if(pgrb!=null){
-                            st.append("      <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
-                            st.append(pgrb);
-                            StringBuffer st1=new StringBuffer();
-                            String childp=getWebPageListLevel1(act,user,level,st1);
-                            st.append(childp);
-                        }
+                    String pgrb = getProgressBar(getListLeaf(act,user),null,null);
+
+//                    if(act.getLevel()-1==level)//checar wp1
+//                        indentation="";
+                    if(level == act.getLevel()){
+                        st.append("     <tr>\n");
+                        st.append("     <td colspan=3 width=\"100%\">\n");
+                        st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                        st.append("     </td>\n");
+                        st.append("     </tr>\n");
+                        st.append("     <tr>\n");
+                        st.append("     <td width=\"15%\">\n");
+                        st.append("     </td>\n");
+                        st.append("     <td width=\"70%\">\n");
+                        st.append(pgrb);
+                        st.append("     </td>\n");
+                        st.append("     </tr>\n");
+                    }
+                    else if(pgrb!=null){
+                        st.append("     <tr>\n");
+                        st.append("     <td colspan=3 width=\"100%\">\n");
+                        st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                        st.append("     </td>\n");
+                        st.append("     </tr>\n");
+                        st.append("     <tr>\n");
+                        st.append("     <td width=\"15%\">\n");
+                        st.append("     </td>\n");
+                        st.append("     <td width=\"70%\">\n");
+                        st.append(pgrb);
+                        st.append("     </td>\n");
+                        st.append("     </tr>\n");
+                        StringBuffer st1=new StringBuffer();
+                        indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                        String childp=getWebPageListLevel1(act,user,level,st1,indentation);
+                        indentation=indentation.substring(0, indentation.length()-24);
+                        st.append(childp);
+                    }
+
                 }
-                st.append("   </ul>\n");
+                st.append("   </table>\n");
             }
             return st.toString();
         }
-        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1)
+        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation)
         {
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
             ArrayList ChildVisible=new ArrayList();
+            //int lvcurrent=0;
             while(it.hasNext())
             {
                 WebPage wp=(WebPage)it.next();
@@ -252,22 +276,42 @@
             }
             it=ChildVisible.iterator();
             if(it.hasNext()){
-                st1.append("         <ul>\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                        String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-                        if(level == act.getLevel()){
-                            st1.append("            <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");//+itx.next()+"</li>");
-                            st1.append(pgrb);
-                        }
-                        else if (pgrb!=null){
-                            st1.append("            <li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>\n");
-                            st1.append(pgrb);
-                            getWebPageListLevel1(act,user,level,st1);
-                        }
+                    String pgrb = getProgressBar(getListLeaf(act,user),null,null);
+                    if(level == act.getLevel()){
+                        st1.append("     <tr>\n");
+                        st1.append("     <td colspan=3 width=\"100%\">\n");
+                        st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                        st1.append("     </td>\n");
+                        st1.append("     </tr>\n");
+                        st1.append("     <tr>\n");
+                        st1.append("     <td width=\"15%\">\n");
+                        st1.append("     </td>\n");
+                        st1.append("     <td width=\"70%\">\n");
+                        st1.append(pgrb);
+                        st1.append("     </td>\n");
+                        st1.append("     </tr>\n");
+                    }
+                    else if (pgrb!=null){
+                        st1.append("     <tr>\n");
+                        st1.append("     <td colspan=3 width=\"100%\">\n");
+                        st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
+                        st1.append("     </td>\n");
+                        st1.append("     </tr>\n");
+                        st1.append("     <tr>\n");
+                        st1.append("     <td width=\"15%\">\n");
+                        st1.append("     </td>\n");
+                        st1.append("     <td width=\"70%\">\n");
+                        st1.append(pgrb);
+                        st1.append("     </td>\n");
+                        st1.append("     </tr>\n");
+                        indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                        getWebPageListLevel1(act,user,level,st1,indentation);
+                        indentation=indentation.substring(0, indentation.length()-24);
+                    }
                 }
-                st1.append("         </ul>\n");
             }
             return st1.toString();
         }
