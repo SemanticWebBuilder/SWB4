@@ -23,6 +23,8 @@
 
 package org.semanticwb.nlp.translation;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.semanticwb.nlp.analysis.ComplexParser;
 import java.util.List;
 import org.antlr.runtime.ANTLRStringStream;
@@ -31,6 +33,7 @@ import org.antlr.runtime.Lexer;
 import org.antlr.runtime.tree.CommonTree;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.nlp.SWBDictionary;
+import org.semanticwb.nlp.Tag;
 import org.semanticwb.nlp.analysis.EnglishLexer;
 import org.semanticwb.nlp.analysis.SpanishLexer;
 import org.semanticwb.nlp.spell.SWBSpellChecker;
@@ -158,7 +161,7 @@ public class SWBSparqlTranslator {
                     }
                     String etype = "";
                     if (lex.getLexicon(lang).getWord(t.getText(), true) != null) {
-                        etype = lex.getLexicon(lang).getWord(t.getText(), true).getTag().getId();
+                        etype = lex.getLexicon(lang).getWord(t.getText(), true).getTags().get(0).getId();
                     }
                     //String etype = lex.getObjWordTag(t.getText()).getType();
                     if (!etype.equals("")) {
@@ -338,9 +341,9 @@ public class SWBSparqlTranslator {
 
     private String getPropertyType(String propertyName, String className) {
         if (assertRelation(className, propertyName)) {
-            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTag().getURI());
+            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
             if (sc != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getTag().getURI());
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getURI());
                 if (sp != null) {
                     return sp.getPrefix() + ":" + sp.getName();
                 } else {
@@ -354,24 +357,40 @@ public class SWBSparqlTranslator {
     }
 
     public boolean assertRelation (String className, String propertyName) {
+        System.out.println("--Asserting " + propertyName + " from " + className);
         boolean ret = false;
-        SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTag().getURI());
+        SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
+
         if (sc != null) {
             if (lex.getLexicon(lang).getWord(propertyName, false) != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getTag().getURI());
-                if (sp != null && sc.getProperty(sp.getName()) != null) {
-                    ret = true;
+                //Check property for all posible tags
+                ArrayList<Tag> tags = lex.getLexicon(lang).getWord(propertyName, false).getTags();
+                Iterator<Tag> tit = tags.iterator();
+
+                while(tit.hasNext() && !ret) {
+                    Tag t = tit.next();
+
+                    SemanticProperty sp = vocabulary.getSemanticProperty(t.getURI());
+                    if (sp != null && sc.getProperty(sp.getName()) != null) {
+                        ret = true;
+                        lex.getLexicon(lang).getWord(propertyName, false).setSelectedTag(t);
+                    }
                 }
             }
+        }
+        if (ret) {
+            System.out.println("--Property " + propertyName + " belongs to " + className);
+        } else {
+            System.out.println("--Property " + propertyName + " does not belong to " + className);
         }
         return ret;
     }
 
     public SemanticClass getPropertyRangeClass(String propertyName, String className) {
         if (assertRelation(className, propertyName)) {
-            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTag().getURI());
+            SemanticClass sc = vocabulary.getSemanticClass(lex.getLexicon(lang).getWord(className, true).getTags().get(0).getURI());
             if (sc != null) {
-                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getTag().getURI());
+                SemanticProperty sp = vocabulary.getSemanticProperty(lex.getLexicon(lang).getWord(propertyName, false).getSelectedTag().getURI());
                 if (sp != null) {
                     SemanticClass rg = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(sp.getRangeClass().getURI());
                     if (rg != null) {
