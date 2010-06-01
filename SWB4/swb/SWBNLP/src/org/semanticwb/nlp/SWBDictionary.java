@@ -87,7 +87,7 @@ public class SWBDictionary {
     }
 
     public Tag getWordTag(String lexForm, boolean asObject) {
-        return getLexicon(defLang).getWord(lexForm, asObject).getTag();
+        return getLexicon(defLang).getWord(lexForm, asObject).getSelectedTag();
     }
 
     public void setWordTag(String lexForm, Tag tag, boolean asObject) {
