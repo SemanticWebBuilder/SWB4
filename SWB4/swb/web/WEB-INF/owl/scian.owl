@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:scian="http://www.inegi.gob.mx/2002/scian#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.inegi.gob.mx/2002/scian" > 
+  <rdf:Description rdf:about="#111110">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de soya</rdfs:label>
+    <rdf:type rdf:resource="#Clase"/>
+    <rdfs:subClassOf rdf:resource="#11111"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#111">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Agricultura</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#11"/>
+    <rdf:type rdf:resource="#SubSector"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#SubRama">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#3121">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Industria de las bebidas</rdfs:label>
+    <rdf:type rdf:resource="#Rama"/>
+    <rdfs:subClassOf rdf:resource="#312"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#312111">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Elaboración de refrescos</rdfs:label>
+    <rdf:type rdf:resource="#Clase"/>
+    <rdfs:subClassOf rdf:resource="#31211"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#11111">
+    <rdf:type rdf:resource="#SubRama"/>
+    <rdfs:subClassOf rdf:resource="#1111"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de soya</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="#31211">
+    <rdf:type rdf:resource="#SubRama"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Eleboración de refrescos y hielo, y puricicación de agua</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#3121"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#312">
+    <rdf:type rdf:resource="#SubSector"/>
+    <rdfs:subClassOf rdf:resource="#31"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Industria de las bebidas y el tabaco</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="#31">
+    <rdf:type rdf:resource="#Sector"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#1111">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cultivo de granos y semillas oleaginosas</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#111"/>
+    <rdf:type rdf:resource="#Rama"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Rama">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#11">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Agicultura, ganaderia, aprovechamieto forestal, pesca y caza</rdfs:label>
+    <rdf:type rdf:resource="#Sector"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#SubSector">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Sector">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="#Clase">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Created with TopBraid Composer</owl:versionInfo>
+  </rdf:Description>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
