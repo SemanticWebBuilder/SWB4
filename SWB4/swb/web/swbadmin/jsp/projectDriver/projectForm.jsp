@@ -113,7 +113,7 @@
        %>
                 <p class="indentation">
                 <label for="project"><b>  Líder :         </b></label>
-                <span name="project"><%=wpPro.getLeader()!=null?wpPro.getLeader().getFullName():"Sin Asignar"%></span><br>
+                <span name="project"><%=wpPro.getLeader()!=null?wpPro.getLeader().getFullName():"Sin Asignar"%></span>
                 </p>
 <%    }%>
                 <table class="dates" width="90%">
