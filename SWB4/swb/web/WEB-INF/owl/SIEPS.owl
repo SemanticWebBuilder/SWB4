@@ -57,6 +57,12 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
+  <rdf:Description rdf:about="#clavesiem">
+    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#scian">
     <rdfs:label xml:lang="es">SCIAN</rdfs:label>
     <rdfs:range rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
@@ -65,12 +71,6 @@
   </rdf:Description>
   <rdf:Description rdf:about="#producto">
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="#clavesiem">
-    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Description>
   <rdf:Description rdf:about="#CocaCola">
     <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
@@ -176,6 +176,11 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Empresa</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="#pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string">org.semanticwb.sieps</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sieps</swb:prefix>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CodePackage"/>
   </rdf:Description>
   <rdf:Description rdf:about="#email">
     <rdfs:label xml:lang="es">E-mail</rdfs:label>
