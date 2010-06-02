@@ -11,19 +11,19 @@
     >Created with TopBraid Composer</owl:versionInfo>
   </owl:Ontology>
   <owl:Class rdf:ID="Rama">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SubRama">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="SubSector">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Sector">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Clase">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </owl:Class>
   <rdf:Property rdf:ID="code">
     <rdfs:domain>
