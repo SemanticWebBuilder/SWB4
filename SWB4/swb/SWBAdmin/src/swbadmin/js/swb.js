@@ -16,15 +16,25 @@
       var act_store;
       var act_treeNode;
 
-      function getHtml(url, tagid)
+      function getHtml(url, tagid, parse, sync)
       {
+          var tag=dojo.byId(tagid);
+          return getHtmlByTag(url,tag,parse,sync);
+      }
+
+      function getHtmlByTag(url, tag, parse, sync)
+      {
+          if(!parse)parse=false;
+          if(!sync)sync=false;
           dojo.xhrGet({
               url: url,
+              sync: sync,
               load: function(response, ioArgs)
               {
-                  var tag=dojo.byId(tagid);
+                  //var tag=dojo.byId(tagid);
                   if(tag){
-                      var pan=dijit.byId(tagid);
+                      if(parse==true)destroyChilds(tag);
+                      var pan=dijit.byNode(tag);
                       //alert("-"+tagid+"-"+tag+"-"+pan+"-");
                       if(pan && pan.attr)
                       {
@@ -33,6 +43,7 @@
                       {
                           tag.innerHTML = response;
                       }
+                      if(parse==true)dojo.parser.parse(tag,true);
                   }else {
                       alert("No existe ningún elemento con id " + tagid);
                   }
@@ -1115,6 +1126,15 @@
         }
 
 
+   function destroyChilds(tag)
+   {
+      var widgets = dijit.findWidgets(tag);
+      //printObjProp(widgets,true);
+      dojo.forEach(widgets, function(w) {
+          //printObjProp(w,true);
+          w.destroyRecursive(true);
+      });
+   }
 
    function selectAll(name,val)
    {
