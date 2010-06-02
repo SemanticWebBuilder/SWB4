@@ -40,6 +40,8 @@ public class CodeGeneratorSIEPS {
             File dir = new File(path+"../../../../../swbproys/SIEPS/src");
             CodeGenerator codeGeneration = new CodeGenerator();
             codeGeneration.generateCode("sieps",false,dir);
+            codeGeneration.generateCode("scian",false,dir);
+            codeGeneration.generateCode("unspsc",false,dir);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
