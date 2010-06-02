@@ -17,7 +17,11 @@ import javax.servlet.http.HttpSessionBindingListener;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBRuntimeException;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.util.UploadFileRequest;
 import org.semanticwb.util.UploadedFile;
 import org.semanticwb.util.UploaderFileCacheUtils;
@@ -54,7 +58,7 @@ public class MultipleFileUploader implements InternalServlet
         String path = uri.substring(cntx.length());
         String iserv = "";
 
-        //System.out.println("url:"+_request.getRequestURL());
+        //System.out.println("url:"+request.getRequestURL());
 
         if (path == null || path.length() == 0)
         {
@@ -73,8 +77,29 @@ public class MultipleFileUploader implements InternalServlet
         String cad = path.substring(path.lastIndexOf("/") + 1);
 
         String auri = path.substring(iserv.length() + 1);
-        DistributorParams dparam = new DistributorParams(request, auri);
-//        System.out.println("user: " + dparam.getUser().getFullName() + ":" + dparam.getUser().isSigned());
+        //System.out.println("cad:"+cad+" auri:"+auri+" user:"+dparams.getUser().getLogin());
+        //DistributorParams dparam = null;
+        String smodel = auri.substring(1, auri.indexOf("/", 2));
+        //System.out.println("model:"+smodel);
+        WebSite website=SWBContext.getWebSite(smodel);
+        User user=SWBPortal.getUserMgr().getUser(request, website);
+        if (!user.isSigned()){
+            website=SWBContext.getWebSite("SWBAdmin");
+            user=SWBPortal.getUserMgr().getUser(request, website);
+        }
+//        if (dparams.getUser().isSigned()) {
+//            dparam=dparams;
+//        }
+//        else {
+//            dparam=new DistributorParams(request, auri);
+//            if (!dparam.getUser().isSigned()){
+//                DistributorParams dparamt=new DistributorParams(request, "/multiuploader/SWBAdmin/home");
+//                if (dparamt.getUser().isSigned()){
+//                    dparam=dparamt;
+//                }
+//            }
+//        }
+        //System.out.println("user: " + user.getFullName() + ":" + user.isSigned());
         if (ServletFileUpload.isMultipartContent(request))
         {
             List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad);
@@ -89,7 +114,10 @@ public class MultipleFileUploader implements InternalServlet
                 }
                 DiskFileItemFactory factory = new DiskFileItemFactory(3000, tmpplace);
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                upload.setSizeMax(UploaderFileCacheUtils.getRequest(cad).size());
+                if (UploaderFileCacheUtils.getRequest(cad).size()>0)
+                {
+                    upload.setSizeMax(UploaderFileCacheUtils.getRequest(cad).size());
+                }
                 try
                 {
 
@@ -122,7 +150,7 @@ public class MultipleFileUploader implements InternalServlet
             {
                 response.sendError(500, "UploadService not pre-registered");
             }
-        } else if (dparam.getUser().isSigned())
+        } else if (user.isSigned())
         {
             if (UploaderFileCacheUtils.get(cad) == null)
             {
