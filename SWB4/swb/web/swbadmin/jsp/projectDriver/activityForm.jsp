@@ -331,7 +331,7 @@
               mgr.setLang(lang);
               mgr.setType(mgr.TYPE_XHTML);
     %>
-        <fieldset><legend>Detalles de Actividad</legend><br>
+        <fieldset><legend>Detalles de Actividad</legend>
           <p class="indentation">
           <label for="progress">Avance Actividad:</label>
           <span name="progress"><%=getProgressBar(proBar,null,null)%></span>
