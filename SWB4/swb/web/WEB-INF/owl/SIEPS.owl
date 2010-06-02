@@ -187,6 +187,9 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#code">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#pkg">
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string">org.semanticwb.sieps</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sieps</swb:prefix>
