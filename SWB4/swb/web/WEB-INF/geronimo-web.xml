@@ -13,7 +13,7 @@ xmlns:web="http://geronimo.apache.org/xml/ns/j2ee/web-2.0.1">
         <dep:moduleId>
             <dep:groupId>default</dep:groupId>
             <dep:artifactId>swb</dep:artifactId>
-            <dep:version>4.0.1.3</dep:version>
+            <dep:version>4.0.1.4</dep:version>
             <dep:type>war</dep:type>
         </dep:moduleId>
         <dep:dependencies>
