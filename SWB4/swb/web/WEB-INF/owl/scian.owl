@@ -21,20 +21,6 @@
   </owl:Class>
   <owl:Class rdf:ID="Sector"/>
   <owl:Class rdf:ID="Clase"/>
-  <rdf:Property rdf:ID="code">
-    <rdfs:domain>
-      <owl:Class>
-        <owl:unionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="#Clase"/>
-          <owl:Class rdf:about="#Rama"/>
-          <owl:Class rdf:about="#Sector"/>
-          <owl:Class rdf:about="#SubRama"/>
-          <owl:Class rdf:about="#SubSector"/>
-        </owl:unionOf>
-      </owl:Class>
-    </rdfs:domain>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </rdf:Property>
   <scian:Clase rdf:ID="_111110">
     <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >111110</scian:code>
@@ -68,6 +54,10 @@
     </rdfs:subClassOf>
     <rdfs:label xml:lang="es">Cultivo de soya</rdfs:label>
   </scian:Clase>
+  <rdf:Description rdf:ID="code">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Clase"/>
+  </rdf:Description>
   <scian:Clase rdf:ID="_312111">
     <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >312111</scian:code>
