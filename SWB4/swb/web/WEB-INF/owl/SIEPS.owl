@@ -171,6 +171,9 @@
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubSector">
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#unspsc">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">codigo</rdfs:label>
+  </rdf:Description>
   <rdf:Description rdf:about="#colonia">
     <rdfs:label xml:lang="es">Colonia</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
@@ -184,10 +187,12 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Empresa</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#Clase">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Clase</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#code">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">codigo</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="#pkg">
@@ -283,6 +288,7 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Categoria</rdfs:label>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="#estado">
