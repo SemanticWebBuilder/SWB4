@@ -17,6 +17,7 @@
   <rdf:Description rdf:about="#Gamesa">
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">045785</sieps:clavesiem>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Janitzio</sieps:municipio>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">logo.jpg</sieps:logo>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">10111</sieps:cp>
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Braulio Carrera #27</sieps:address>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mártires de Sabino&#xD;
@@ -97,6 +98,7 @@
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string">mmmmmm</sieps:municipio>
     <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">REGILSA</sieps:rfc>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">logo.jpg</sieps:logo>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CocaCola Cuernavaca</sieps:name>
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swb:valid>
     <rdf:type rdf:resource="#Empresa"/>
@@ -119,6 +121,11 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Producto</rdfs:label>
   </rdf:Description>
+  <rdf:Description rdf:about="#descripcion">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+  </rdf:Description>
   <rdf:Description rdf:about="#Marias">
     <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#014017"/>
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas de sabor tradicional</swb:description>
@@ -139,10 +146,16 @@
     <sieps:hasProducto rdf:resource="#Marias"/>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Galletas y refrescos SA</sieps:name>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string">GAIRSA48473</sieps:rfc>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">logo.jpg</sieps:logo>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Heredia</sieps:colonia>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#111110"/>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string">103</sieps:clavesiem>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Distrito Federal</sieps:estado>
+  </rdf:Description>
+  <rdf:Description rdf:about="#logo">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#SubSector">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
@@ -193,6 +206,7 @@
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Carbonatados de Sureste S.A. de C.V.</sieps:name>
     <rdf:type rdf:resource="#Empresa"/>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Veracruz</sieps:estado>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">logo.jpg</sieps:logo>
     <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string">17762</sieps:cp>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">711-1111</sieps:telefono>
@@ -208,6 +222,7 @@
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Azúcar No. 16</sieps:address>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Michoacán</sieps:estado>
     <rdf:type rdf:resource="#Empresa"/>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">logo.jpg</sieps:logo>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Aguas el Raton Loco S. de R.L.</sieps:name>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fraccionamiento el Salitre</sieps:colonia>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string">212-2121</sieps:telefono>
