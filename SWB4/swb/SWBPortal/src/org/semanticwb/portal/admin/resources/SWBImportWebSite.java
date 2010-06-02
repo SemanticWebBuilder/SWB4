@@ -517,10 +517,11 @@ public class SWBImportWebSite extends GenericResource {
                     ptype.setTitle("DataBaseResource");
                 }
 
-                if (site.getResourceType("Blog") == null) {
-                    ResourceType ptype = site.createResourceType("Blog");
-                    ptype.setResourceClassName("org.semanticwb.portal.resources.blog.BlogResource");
-                    ptype.setResourceBundle("org.semanticwb.portal.resources.blog.BlogResource");
+                if (site.getResourceType("SWBBlog") == null) {
+                    ResourceType ptype = site.createResourceType("SWBBlog");
+                    ptype.setResourceClassName("org.semanticwb.portal.resources.sem.blog.SWBBlog");
+                    ptype.setResourceBundle("org.semanticwb.portal.resources.sem.blog.SWBBlog");
+                    ptype.setResourceOWL("org.semanticwb.portal.resources.sem.blog.SWBBlog");
                     ptype.setResourceMode(3);
                     ptype.setTitle("Blog");
                 }
