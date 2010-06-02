@@ -107,7 +107,7 @@
          %><form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
                         <%=mgr.getFormHiddens()%>
                         <table class="detail">
-                            <tr><td width="200px" align="right"><%=mgr.renderLabel(request, userwp.swbproy_userWP,mgr.MODE_EDIT)%></td>
+                            <tr><td width="200px" align="left"><%=mgr.renderLabel(request, userwp.swbproy_userWP,mgr.MODE_EDIT)%></td>
                                 <td><select name="<%=userwp.swbproy_userWP.getName()%>"><%
                                 String uri="";
                                 if(userwp.getUserWP()!=null)
@@ -125,7 +125,7 @@
                                  }
                                %></select>
                                 </td>
-                            <tr><td width="200px" align="right"><%=mgr.renderLabel(request, userwp.swbproy_speciality,mgr.MODE_EDIT)%></td>
+                            <tr><td width="200px" align="left"><%=mgr.renderLabel(request, userwp.swbproy_speciality,mgr.MODE_EDIT)%></td>
                                 <td><%=mgr.renderElement(request, userwp.swbproy_speciality,mgr.MODE_EDIT)%></td>
                             </tr>
                         </table>
