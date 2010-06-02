@@ -10,145 +10,147 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/SIEPS">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:imports rdf:resource="http://ontoview.org/schema/unspsc/1"/>
+    <owl:imports rdf:resource="http://www.inegi.gob.mx/2002/scian"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.inegi.gob.mx/2002/scian"/>
-    <owl:imports rdf:resource="http://ontoview.org/schema/unspsc/1"/>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="Empresa">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type>
+      <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#Class">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </rdf:Description>
+    </rdf:type>
+  </owl:Class>
   <owl:Class rdf:about="http://ontoview.org/schema/unspsc/1#Commodity">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Categoría</rdfs:label>
   </owl:Class>
-  <owl:ObjectProperty rdf:ID="clase"/>
-  <owl:ObjectProperty rdf:ID="hasProducto">
+  <owl:Class rdf:ID="Producto">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Producto</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="clase"/>
+  <owl:ObjectProperty rdf:ID="hasProducto">
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="#Producto"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="fabricaInv"/>
     </owl:inverseOf>
-    <rdfs:range>
-      <swb:Class rdf:ID="Producto">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Producto</rdfs:label>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain>
-      <swb:Class rdf:ID="Empresa">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Empresa</rdfs:label>
-      </swb:Class>
-    </rdfs:domain>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Producto</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="scian">
-    <rdfs:range>
-      <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#Clase">
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Clase</rdfs:label>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Clase</rdfs:label>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range>
+      <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#Clase">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Clase</rdfs:label>
+      </swb:Class>
+    </rdfs:range>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#fabricaInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >fabrica</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="unspsc">
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Categoría</rdfs:label>
-    <rdfs:range rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
-    <rdfs:domain rdf:resource="#Producto"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="producto"/>
   <owl:DatatypeProperty rdf:ID="email">
-    <rdfs:label xml:lang="es">E-mail</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">E-mail</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="address">
-    <rdfs:label xml:lang="es">Calle</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Calle</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="colonia">
-    <rdfs:label xml:lang="es">Colonia</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Colonia</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="municipio">
-    <rdfs:label xml:lang="es">Municipio</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Municipio</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.inegi.gob.mx/2002/scian#code">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >código</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="cname">
-    <rdfs:domain rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nombre</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="telefono">
-    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Teléfono</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pname">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Producto"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nombre</rdfs:label>
-    <rdfs:domain rdf:resource="#Producto"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="catname">
-    <rdfs:domain rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nombre</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="rfc">
-    <rdfs:label xml:lang="es">RFC</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">RFC</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="clavesiem">
-    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Clave siem</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="class">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
-    <rdfs:label xml:lang="es">Nombre</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Nombre</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="cp">
-    <rdfs:label xml:lang="es">Código postal</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:label xml:lang="es">Código postal</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="descripcion">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="estado">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="logo">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#unspsc">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -179,29 +181,31 @@
     >123-4321</sieps:telefono>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Guanajuato</sieps:estado>
-    <sieps:scian>
-      <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#_312111">
-        <sieps:cname xml:lang="es">Elaboración de refrescos</sieps:cname>
-      </rdf:Description>
-    </sieps:scian>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="Marias">
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Galletas Marías</swb:title>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Galletas Marías</sieps:pname>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Galletas de sabor tradicional</swb:description>
         <sieps:unspsc>
           <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#014017">
+            <rdfs:label xml:lang="en">Bisquits or cookies</rdfs:label>
             <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >bisquets o galletas</sieps:catname>
           </rdf:Description>
         </sieps:unspsc>
-        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Galletas de sabor tradicional</swb:description>
-        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:valid>
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Galletas Marías</sieps:pname>
-        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Galletas Marías</swb:title>
       </sieps:Producto>
     </sieps:hasProducto>
+    <sieps:scian>
+      <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#_312111">
+        <sieps:cname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Elaboración de refrescos</sieps:cname>
+      </rdf:Description>
+    </sieps:scian>
   </sieps:Empresa>
   <sieps:Empresa rdf:ID="CocaColaCuernavaca">
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -223,32 +227,32 @@
     >mmmmmm</sieps:municipio>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="CocaCola">
-        <sieps:unspsc>
-          <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#010123">
-            <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >010123</unspsc:unspsc>
-            <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Bebidas</sieps:catname>
-          </rdf:Description>
-        </sieps:unspsc>
-        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:valid>
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >CocaCola</sieps:pname>
-        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Producto de prueba</swb:description>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >CocaCola</swb:title>
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Producto de prueba</swb:description>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >CocaCola</sieps:pname>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc>
+          <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#010123">
+            <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Bebidas</sieps:catname>
+            <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >010123</unspsc:unspsc>
+          </rdf:Description>
+        </sieps:unspsc>
       </sieps:Producto>
     </sieps:hasProducto>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >REGILSA</sieps:rfc>
-    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >CocaCola Cuernavaca</sieps:name>
-    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >logo.jpg</sieps:logo>
     <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:valid>
+    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >logo.jpg</sieps:logo>
+    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >CocaCola Cuernavaca</sieps:name>
   </sieps:Empresa>
   <sieps:Empresa rdf:ID="Galletas_y_Refrescos_SA">
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -280,27 +284,31 @@
     >Distrito Federal</sieps:estado>
   </sieps:Empresa>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.sieps</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >sieps</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.sieps</swb:package>
   </swb:CodePackage>
   <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#SubRama"/>
   <sieps:Producto rdf:ID="Pascual">
-    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Refresco Pascual varios sabores</swb:description>
-    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
-    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Refresco Pascual</sieps:pname>
     <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Refresco Pascual</swb:title>
+    <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Refresco Pascual</sieps:pname>
+    <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+    <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Refresco Pascual varios sabores</swb:description>
   </sieps:Producto>
+  <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#_111110">
+    <sieps:cname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cultivo de soya</sieps:cname>
+  </rdf:Description>
   <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#Rama"/>
   <swb:CodePackage rdf:about="http://www.inegi.gob.mx/2002/scian#pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >scian</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.scian</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >scian</swb:prefix>
   </swb:CodePackage>
   <swb:Class rdf:about="http://ontoview.org/schema/unspsc/1#Family"/>
   <swb:Class rdf:about="http://ontoview.org/schema/unspsc/1#Segment"/>
@@ -335,10 +343,10 @@
   </sieps:Empresa>
   <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#SubSector"/>
   <swb:CodePackage rdf:about="http://ontoview.org/schema/unspsc/1#pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >unspsc</swb:prefix>
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.unspsc</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >unspsc</swb:prefix>
   </swb:CodePackage>
   <swb:Class rdf:about="http://ontoview.org/schema/unspsc/1#Class"/>
   <sieps:Empresa rdf:ID="Carbonatados">
@@ -367,9 +375,6 @@
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >711-1111</sieps:telefono>
   </sieps:Empresa>
-  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#Class">
-    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-  </rdf:Description>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
