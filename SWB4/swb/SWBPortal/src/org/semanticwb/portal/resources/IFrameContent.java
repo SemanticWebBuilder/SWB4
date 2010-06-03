@@ -41,14 +41,13 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 // TODO: Auto-generated Javadoc
 /**
- * IFrameContent se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
- * bajo ciertos criterios (configuraci�n de recurso).
+ * IFrameContent se encarga de desplegar y administrar un contenido de tipo remoto en una etiqueta objetc
+ * bajo ciertos criterios (configuración de recurso).
  *
  * IFrameContent is in charge to unfold and to administer a content of remote type in
- * independent frame under certain criteria (resource configuration). 
+ * object tag under certain criteria (resource configuration).
  *
- * @author : Vanessa Arredondo Nunez
- * @version 1.0
+ * @version 2.0
  */
 
 public class IFrameContent extends GenericAdmResource 
@@ -73,83 +72,83 @@ public class IFrameContent extends GenericAdmResource
      * @throws SWBResourceException the sWB resource exception
      */    
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        Resource base=getResourceBase();
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base = getResourceBase();
         if("".equals(base.getAttribute("url","").trim())) {          
             response.getWriter().print(""); return; 
         }
 
         StringBuffer ret = new StringBuffer("");        
         String ind = request.getParameter("WBIndexer");
-        if (!"indexing".equals(ind))
-        {
-            try
-            {
-                if (paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
+        if (!"indexing".equals(ind)) {
+            if (paramRequest.getCallMethod()==paramRequest.Call_CONTENT) {
+                System.out.println("\n\nmimetype="+base.getAttribute("mimetype"));
+                /*String align = base.getAttribute("align", "top");
+                if("center".equals(align)) {
+                    ret.append("<p align=\"center\">");
+                }*/
+                ret.append("<object standby=\""+paramRequest.getLocaleString("standby")+"\"");
+                ret.append(" data=\""+base.getAttribute("url"));
+                Enumeration<String> params = request.getParameterNames();
+                for(int i=0; params.hasMoreElements(); i++)
                 {
-                    String align=base.getAttribute("align", "top").trim();
-                    if("center".equals(align)) {
-                        ret.append("<p align=center>");
+                    String param = params.nextElement();
+                    if( param.equals("x")||param.equals("y") ) {
+                        continue;
                     }
-                    ret.append("<iframe id=\"WBIFrame_\""+base.getId()+" src=\"" + base.getAttribute("url").trim());
-                    Enumeration en = request.getParameterNames();
-                    for (int i=0; en.hasMoreElements(); i++)
-                    {
-                        String param = en.nextElement().toString();
-                        if (param.equals("x") || param.equals("y")) {
-                            continue;
+                    if( !request.getParameter(param).equals("") ) {
+                        if( i>0) {
+                            ret.append("&");
+                        }else {
+                            ret.append("?");
                         }
-                        if (request.getParameter(param).trim().length() > 0)
-                        {
-                            if ( i > 0) {
-                                ret.append("&");
-                            }
-                            else {
-                                ret.append("?");
-                            }
-                            ret.append(param +"=" + request.getParameter(param));
-                        }
+                        ret.append(param+"="+request.getParameter(param));
                     }
-                    ret.append("\" width=\""+base.getAttribute("width", "100%").trim() +"\"");
-                    ret.append(" height=\""+base.getAttribute("height", "100%").trim() +"\"");
-                    ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0").trim() +"\"");
-                    ret.append(" marginheight=\""+base.getAttribute("marginheight", "0").trim() +"\"");
-                    if(!"center".equals(align)) {
-                        ret.append(" align=\""+ align +"\"");
-                    }
-                    ret.append(" scrolling=\""+base.getAttribute("scrollbars", "auto").trim() +"\"");
-                    ret.append(" frameborder=\""+base.getAttribute("frameborder", "0").trim() +"\"");
-                    if (!"".equals(base.getAttribute("style", "").trim())) {
-                        ret.append(" style=\""+base.getAttribute("style").trim() +"\"");
-                    }
-                    ret.append(">");
-                    ret.append(paramRequest.getLocaleString("msgRequiredInternetExplorer"));
-                    ret.append("</iframe>");
-                    if("center".equals(align)) {
-                        ret.append("</p>");
-                    }
-                } 
-                else
-                {
-                    URL page = new URL(base.getAttribute("url").trim());
-                    URLConnection conn = page.openConnection();
-                    InputStream in = conn.getInputStream();
-                    ret.append(SWBUtils.IO.readInputStream(in));
                 }
-            } 
-            catch (Exception e) { log.error("Error in resource IFrameContent while bringing HTML.", e); }            
-        }
-        else 
-        {
-            try
+                ret.append("\"");
+                ret.append(" type=\""+base.getAttribute("mimetype")+"\"");
+                if( base.getAttribute("width")!=null )
+                    ret.append(" width=\""+base.getAttribute("width")+"\"");
+                if( base.getAttribute("height")!=null )
+                    ret.append(" height=\""+base.getAttribute("height")+"\"");
+                /*if( base.getAttribute("hspace")!=null )
+                    ret.append(" hspace=\""+base.getAttribute("hspace")+"\"");
+                if( base.getAttribute("vspace")!=null )
+                    ret.append(" vspace=\""+base.getAttribute("vspace")+"\"");*/
+                /*if(!"center".equals(align)) {
+                    ret.append(" align=\""+align+"\"");
+                }*/
+                /*ret.append(" border=\""+base.getAttribute("border","0")+"\"");*/
+                if( base.getAttribute("style")!=null ) {
+                    ret.append(" style=\""+base.getAttribute("style")+"\"");
+                }
+                if( base.getAttribute("cssclass")!=null ) {
+                    ret.append(" class=\""+base.getAttribute("cssclass")+"\"");
+                }
+                ret.append(">");
+                ret.append(paramRequest.getLocaleString("browserNoSupport"));
+                ret.append("<br /><a href=\""+base.getAttribute("url")+"\">"+paramRequest.getLocaleString("viewContent")+"</a>");
+                ret.append("</object>");
+                /*if("center".equals(align)) {
+                    ret.append("</p>");
+                }*/
+            }
+            else
             {
                 URL page = new URL(base.getAttribute("url").trim());
                 URLConnection conn = page.openConnection();
                 InputStream in = conn.getInputStream();
                 ret.append(SWBUtils.IO.readInputStream(in));
-            } 
-            catch (Exception e) { log.error("Error in resource IFrameContent while bringing HTML.", e); }
+            }
+        }else {
+            try {
+                URL page = new URL(base.getAttribute("url").trim());
+                URLConnection conn = page.openConnection();
+                InputStream in = conn.getInputStream();
+                ret.append(SWBUtils.IO.readInputStream(in));
+            }catch (Exception e) {
+                log.error("Error in resource IFrameContent while bringing HTML.", e);
+            }
         }
        PrintWriter out=response.getWriter();
        out.print(ret.toString());        
