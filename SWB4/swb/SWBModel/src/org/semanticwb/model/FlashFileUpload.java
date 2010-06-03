@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
@@ -21,6 +22,9 @@ import org.semanticwb.util.UploaderFileCacheUtils;
 
 public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBase 
 {
+    /** The log. */
+    private static Logger log = SWBUtils.getLogger(FlashFileUpload.class);
+
     public FlashFileUpload(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -30,14 +34,14 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
     public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String type, String mode, String lang)
     {
-//        System.out.println("obj: "+obj);
-//        System.out.println("objuri: "+obj.getURI());
-//        System.out.println("prop: "+prop);
-//        System.out.println("type: "+type);
-//        System.out.println("mode: "+mode);
-//        System.out.println("lang: "+lang);
-//        System.out.println("objcls: "+obj.getSemanticClass());
-//        System.out.println("propcls: "+prop.getDomainClass());
+        System.out.println("obj: "+obj);
+        System.out.println("objuri: "+obj.getURI());
+        System.out.println("prop: "+prop);
+        System.out.println("type: "+type);
+        System.out.println("mode: "+mode);
+        System.out.println("lang: "+lang);
+        System.out.println("objcls: "+obj.getSemanticClass());
+        System.out.println("propcls: "+prop.getDomainClass());
         if (null == obj)
         {
             throw new SWBRuntimeException("No Semantic Object present");
@@ -111,16 +115,24 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
         buffer.append("<table border=\"0\"><tr><td><iframe src=\"" + url + "\" frameborder=\"0\" width=\"305\" "
                 + "scrolling=\"no\" name=\"ifrupd" + cad + "\" id=\"ifrupd" + cad + "\" height=\"170\" ></iframe>\n");
         buffer.append("<input type=\"hidden\" name=\"" + prop.getName() + "\" value=\"" + cad + "\" /></td>\n");
+//        if (prop.getName().startsWith("has")){
         buffer.append("<td valign=\"top\">"+eliminar+":<br/><select dojoType=\"dijit.form.MultiSelect\" name=\""
                 + prop.getName() + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
         Iterator<SemanticLiteral>lista = obj.listLiteralProperties(prop);
         while (lista.hasNext()){
             SemanticLiteral lit = lista.next();
             String fname = lit.getString();
-            fname = fname.substring(prop.getName().length()+1);
+            if (fname.startsWith(prop.getName()))
+            {
+                fname = fname.substring(prop.getName().length()+1);
+            }
             buffer.append("<option>"+fname+"</option>");
         }
-        buffer.append("</select></td></tr></table>");
+//        buffer.append("</select></td>");
+//        } else {
+//            buffer.append("<td>"+obj.getProperty(prop)+"</td>");
+//        }
+        buffer.append("</tr></table>");
 
         if (prop.isRequired())
         {
@@ -221,8 +233,11 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
 
 
 
-    private UploadFileRequest configFileRequest(SemanticProperty prop)
+    protected UploadFileRequest configFileRequest(SemanticProperty prop)
     {
+        System.out.println("*Prop:"+prop.getName());
+        System.out.println("*FileMaxSize:"+getFileMaxSize());
+
         boolean multiple = prop.getName().startsWith("has");
 //        System.out.println("filter:"+getFileFilter());
         HashMap<String, String> filtros = new HashMap<String, String>();
