@@ -192,6 +192,7 @@ public class MultipleFileUploader implements InternalServlet
     {
         UploadFileRequest requested = UploaderFileCacheUtils.getRequest(cad);
         StringBuilder buffer = new StringBuilder();
+        if (null!=requested){
         buffer.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\">\n");
         buffer.append("<html lang=\"en\">\n");
         buffer.append("    <head>\n");
@@ -399,6 +400,9 @@ public class MultipleFileUploader implements InternalServlet
 //        buffer.append("             <button id=\"fsubm\" class=\"btn\" dojoType=\"dijit.form.Button\" onclick=\"cliked()\">Submit</button>\n");
         buffer.append("    </body>\n");
         buffer.append("</html>\n");
+        } else {
+            buffer.append("<html><head><script>alert('Session Error');</script></head></html>");
+        }
         return buffer.toString();
     }
 
