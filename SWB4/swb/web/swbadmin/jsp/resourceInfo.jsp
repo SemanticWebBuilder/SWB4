@@ -1,3 +1,4 @@
+<%@page import="com.hp.hpl.jena.datatypes.xsd.XSDDatatype"%>
 <%@page import="com.hp.hpl.jena.vocabulary.RDFS"%>
 <%@page import="java.io.IOException"%>
 <%@page contentType="text/html"%>
@@ -215,6 +216,26 @@
         Property prop=it.next();
         OntProperty oprop=null;
         try{oprop=(OntProperty)prop.as(OntProperty.class);}catch(Exception noe){}
+        if(oprop!=null&&oprop.getRange()!=null)
+        {
+            //System.out.println("xsddatatype.boolean: "+XSDDatatype.XSDboolean.getURI());
+            if(XSDDatatype.XSDboolean.getURI().equals(oprop.getRange().toString()))
+            {
+                System.out.println(prop.getLocalName()+" boolean");
+            } else if(XSDDatatype.XSDstring.getURI().equals(oprop.getRange().toString()))
+            {
+                System.out.println(prop.getLocalName()+" string");
+            }
+            //System.out.println("c/range..."+oprop.getRange().toString());
+
+            OntResource ores = oprop.getRange();
+            if(ores.isLiteral())
+            {
+
+                System.out.println("isDataRange"+ores.asDataRange().toString());
+            }
+
+        }
         //System.out.println("paso 3:"+prop+" "+oprop);
         out.println("<tr><td width=\"200px\" align=\"right\" valign=\"top\">");
         out.println("<label>"+SWBPlatform.JENA_UTIL.getLink(prop,pathView)+"&nbsp;</label>");
