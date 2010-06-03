@@ -137,14 +137,17 @@
            </form><%
         }else{
  %>
-            <br>
+            <p class="indentation">
             <label for="speciality">Especialidad: </label>
             <span name="speciality"><%=speciality%></span>
-            <br>
+            </p>
 <%
         }
         %>
-         <%=avanTot%>
+       <p class="indentation">
+            <label>Avance: </label>
+            <%=avanTot%>
+       </p>
         <%
         if(!assig.isEmpty()){
         %>
@@ -262,9 +265,9 @@ private String getProgressBar(ArrayList info, String colorBarra, String colorFon
             colorBarra = "006BD7";
         if (colorFondoBarra == null)
             colorFondoBarra = "EFEFEF";
-        ret.append("<table border=0 width=\"100%\" bgcolor=\"#FFFFFF\">\n");
+        ret.append("<table border=0 width=\"91%\" bgcolor=\"#FFFFFF\">\n");
         ret.append("          <tr >\n");
-        ret.append("            <td align=\"left\" width=\"70%\">\n");
+        ret.append("            <td align=\"left\" width=\"75%\">\n");
         ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
         ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
         ret.append("                 visibility:hidden; background-color:#008040;\n");
