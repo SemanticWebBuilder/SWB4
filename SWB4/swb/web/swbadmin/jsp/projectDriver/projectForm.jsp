@@ -86,7 +86,7 @@
            %>
            <form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
                         <table class="detail">
-                            <tr><td width="80px" align="left"><b><%=mgr.renderLabel(request, wpPro.swbproy_leader,mgr.MODE_EDIT)%></b></td>
+                            <tr><td width="80px" align="left"><%=mgr.renderLabel(request, wpPro.swbproy_leader,mgr.MODE_EDIT)%></td>
                                 <td width="120px"><select name="<%=wpPro.swbproy_leader.getName()%>"><%
                                 String uri="";
                                 if(wpPro.getLeader()!=null)
@@ -112,21 +112,21 @@
        <%}else{
        %>
                 <p class="indentation">
-                <label for="project"><b>  Líder :         </b></label>
+                <label for="project">Líder :         </label>
                 <span name="project"><%=wpPro.getLeader()!=null?wpPro.getLeader().getFullName():"Sin Asignar"%></span>
                 </p>
 <%    }%>
                 <table class="dates" width="90%">
                     <tr>
-                        <th><b>Fecha Inicial:</b></th>
+                        <th>Fecha Inicial:</th>
                         <td><%=start%></td>
-                        <th><b>Horas Actuales:</b></th>
+                        <th>Horas Actuales:</th>
                         <td width="20%"><%=hourCurren%></td>
                     </tr>
                     <tr>
-                        <th><b>Fecha Final:</b></th>
+                        <th>Fecha Final:</th>
                         <td><%=end%></td>
-                        <th><b>Avance:</b></th>
+                        <th>Avance:</th>
                         <td></td>
                     </tr>
                 </table>
