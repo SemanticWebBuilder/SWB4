@@ -33,7 +33,6 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -92,33 +91,33 @@ public class Banner extends GenericAdmResource
                     }
 
                     if(img.endsWith(".swf")) {
-                        String schema = new URL(request.getRequestURL().toString()).getProtocol();
+                        //String schema = new URL(request.getRequestURL().toString()).getProtocol();
 
-                        ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"" + schema + "://get.adobe.com/flashplayer/\"");
+                        ret.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab\"");
                         if( width!=null ) {
-                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
+                            width = " width=\""+width.replaceAll("\\D", "")+"\"";
+                            ret.append(width);
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
+                            height = " height=\""+height.replaceAll("\\D", "")+"\"";
+                            ret.append(height);
                         }
                         ret.append(">\n");
-                        ret.append("<param name=movie value=\"" + SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\" />");
+                        ret.append("<param name=\"movie\" value=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\" />");
                         ret.append("<param name=\"quality\" value=\"high\" />");
                         ret.append("<param name=\"wmode\" value=\"transparent\" />");
                         ret.append("<param name=\"FlashVars\" value=\"liga="+wburl+"\" />");
-                        ret.append("<embed id=\"bnr_"+base.getId()+"\" name=\"bnr_"+base.getId()+"\"");
+                        ret.append("<embed name=\"bnr_"+base.getId()+"\" quality=\"high\" pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" ");
                         ret.append(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
                         ret.append(" FlashVars=\"liga="+wburl+"\"");
-                        ret.append(" quality=\"high\" pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" ");
                         if( width!=null ) {
-                            ret.append(" width=\""+width.replaceAll("\\D", "")+"\"");
+                            ret.append(width);
                         }
                         if( height!=null ) {
-                            ret.append(" height=\""+height.replaceAll("\\D", "")+"\"");
+                            ret.append(height);
                         }
                         ret.append(">");
-                        ret.append("</embed>");
-                        ret.append("</object>");
+                        ret.append("</embed></object>");
                     }else {
                         String action = base.getAttribute("axn");
                         String target = base.getAttribute("target", "0").trim();
