@@ -23,6 +23,7 @@
 
     public synchronized SemanticOntology getOntology(HttpSession session)
     {
+        //System.out.println("getOntology");
         SemanticOntology sont=(SemanticOntology)session.getAttribute("ontology");
         if(sont==null)
         {
@@ -30,7 +31,7 @@
             //Model m=SWBPlatform.getSemanticMgr().loadRDFFileModel("file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
             //mgr.addModel("http://www.semanticwebbuilder.org/swb4/ontology", m);
 
-            System.out.println("file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/owl.owl");
+            //System.out.println("file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/owl.owl");
 
             //mgr.addAltEntry("http://www.w3.org/2002/07/owl", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/owl.owl");
             mgr.addAltEntry("http://www.semanticwebbuilder.org/swb4/ontology", "file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl");
@@ -808,6 +809,7 @@
 
     public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException
     {
+        //System.out.println("addClasses");
         Iterator<OntClass> it=ont.getRDFOntModel().listHierarchyRootClasses();
         while(it.hasNext())
         {
@@ -896,6 +898,7 @@
     }
 %>
 <%
+    //System.out.println("Inicio");
     String lang="es";
     if(user!=null)lang=user.getLanguage();
 
@@ -909,7 +912,6 @@
         sont=getOntology(session);
     }
 
-    //System.out.println("Inicio");
     //Iterator mit=sont.getRDFOntModel().listSubModels();
     //while(mit.hasNext())
     //{
@@ -928,11 +930,13 @@
     //System.out.println("suri:"+suri);
     if(suri==null)
     {
+        //System.out.println("gen1");
         JSONObject obj=new JSONObject();
         obj.put("identifier", "id");
         obj.put("label","title");
         JSONArray items=new JSONArray();
         obj.putOpt("items", items);
+        //System.out.println("gen2");
         if(id.equals("mtree"))addWebSites(items,user);
         if(id.equals("muser"))addUserReps(items,user);
         if(id.equals("mont"))addOntologies(items,user);
@@ -941,6 +945,7 @@
         if(id.equals("mdoc")) addDocRepositories(items,user);
         if(id.equals("mclass")) addClasses(items,sont);
         if(id.equals("mprop")) addProperties(items,sont);
+        //System.out.println("gen3");
         out.print(obj.toString());
         //System.out.print(id);
     }else
