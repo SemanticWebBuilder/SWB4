@@ -160,6 +160,7 @@
       }%><br><%
       if(!webPage.isEmpty())
        out.println(printPage(webPage,"Secciones",user,false));
+       
    }
 %>
 <%!
@@ -171,6 +172,7 @@
               ArrayList listActu = new ArrayList();
               ArrayList listActiv =new ArrayList();
               Iterator<UserWebPage> itU = UserWebPage.ClassMgr.listUserWebPageByParent(wpUs, wpUs.getWebSite());
+              
               while(itU.hasNext()){
                    uwpi= itU.next();
                   if(uwpi.isActive()&& uwpi!=null && uwpi.isVisible()&& uwpi.getChild()==null && !uwpi.isHidden() && uwpi.isValid() && !uwpi.isDeleted())
@@ -224,6 +226,7 @@
                     UserWebPage wpu=(UserWebPage)itU.next();
                     itA = listActiv.iterator();
                     listActiv = new ArrayList();
+                    if(wpu.getUserWP()!=null){
                     while(itA.hasNext()){
                         Activity actU = (Activity)itA.next();
                         if(actU.getResponsible().equals(wpu.getUserWP()))
@@ -231,6 +234,7 @@
                             listActiv.add(actU.getCurrentPercentage());
                             listActiv.add(actU.getPlannedHour());
                         }
+                    }
                     }
                     String avan=getProgressBar(listActiv,null,null);
                     if(avan==null)
