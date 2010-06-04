@@ -487,10 +487,34 @@ public class SWBPlatform
          */
         public static String getId(Resource res)
         {
+            if(res==null)return null;
             String ret="";
             ret+=res.getModel().getNsURIPrefix(res.getNameSpace());
             ret+=":";
             ret+=res.getLocalName();
+            return ret;
+        }
+
+        /**
+         * Gets the id.
+         *
+         * @param res the res
+         * @return the id
+         */
+        public static Resource getResourceFromId(Model model, String id)
+        {
+            Resource ret=null;
+            String p="";
+            String name="";
+            int i=id.indexOf(":");
+            if(i>-1)
+            {
+                p=id.substring(0,i-1);
+                name=id.substring(i);
+            }
+            String base=model.getNsPrefixURI(p);
+            String url=base+name;
+            ret=model.getResource(url);
             return ret;
         }
 

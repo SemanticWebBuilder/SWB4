@@ -2873,7 +2873,7 @@ public Document getDomProperty(SemanticProperty prop)
         }
         if(ret==null)
         {
-            ret = getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
+            ret = getLabel(lang);
             if(ret==null)
             {
                 if(getURI()!=null)
@@ -3121,5 +3121,45 @@ public Document getDomProperty(SemanticProperty prop)
         }
         return ret;
     }
+
+
+    /**
+     * Regresa el valor de la propiedad rdfs:label del objeto
+     * @return the label
+     */
+    public String getLabel()
+    {
+        return getLabel(null);
+    }
+    
+    /**
+     * Regresa el valor de la propiedad rdfs:label del objeto
+     * @param lang the lang
+     * @return the label
+     */
+    public String getLabel(String lang)
+    {
+        return getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_LABEL), lang);
+    }
+
+    /**
+     * Regresa el valor de la propiedad rdfs:comment del objeto
+     * @return the label
+     */
+    public String getComment()
+    {
+        return getComment(null);
+    }
+
+    /**
+     * Regresa el valor de la propiedad rdfs:comment del objeto
+     * @param lang the lang
+     * @return the label
+     */
+    public String getComment(String lang)
+    {
+        return getLocaleProperty(getModel().getSemanticProperty(SemanticVocabulary.RDFS_COMMENT), lang);
+    }
+
 }
 

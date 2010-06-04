@@ -646,7 +646,7 @@ public class SemanticClass
     }
 
     /**
-     * Gets the label.
+     * Regresa el valor de la propiedad rdf:label del la clase
      * 
      * @param lang the lang
      * @return the label
