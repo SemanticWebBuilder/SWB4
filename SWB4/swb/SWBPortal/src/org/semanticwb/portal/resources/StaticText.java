@@ -137,6 +137,7 @@ public class StaticText extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
         str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+        str=SWBUtils.TEXT.replaceAll(str, "{topicurl}", paramRequest.getWebPage().getUrl());
         if(str.indexOf("{templatepath}")>-1)
         {
             //TODO:pasar template por paramrequest
