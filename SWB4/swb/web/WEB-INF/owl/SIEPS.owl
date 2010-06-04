@@ -153,6 +153,8 @@
     <rdfs:domain rdf:resource="#Empresa"/>
   </owl:DatatypeProperty>
   <sieps:Empresa rdf:ID="Gamesa">
+    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa dedicada a la producción de Galletas</sieps:descripcion>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >045785</sieps:clavesiem>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -245,6 +247,8 @@
     >8768768</sieps:telefono>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >23423</sieps:cp>
+    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa dedicada a la producción de Galletas y refrescos</sieps:descripcion>
     <sieps:hasProducto rdf:resource="#Marias"/>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Galletas y refrescos SA</sieps:name>
@@ -286,6 +290,8 @@
     >Michoacán</sieps:estado>
     <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >logo.jpg</sieps:logo>
+    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa dedicada a la elaboración de Agua purificada</sieps:descripcion>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Aguas el Raton Loco S. de R.L.</sieps:name>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -312,6 +318,8 @@
     >2342342</sieps:telefono>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >11110</sieps:clavesiem>
+    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Centro</sieps:colonia>
     <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -361,6 +369,8 @@
     >17762</sieps:cp>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >711-1111</sieps:telefono>
+    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
   </sieps:Empresa>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#_111110">
     <sieps:cname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
