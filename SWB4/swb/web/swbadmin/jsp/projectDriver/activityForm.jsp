@@ -295,7 +295,8 @@
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                   out.println(mgr.renderElement(request, act.swbproy_plannedHour,mgr.MODE_EDIT));
+                     out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\"Sólo números\">");
+//                   out.println(mgr.renderElement(request, act.swbproy_plannedHour,mgr.MODE_EDIT));
     %>             </td>
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentHour, mgr.MODE_EDIT)%></td>
@@ -303,15 +304,15 @@
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                   out.println(mgr.renderElement(request, act.swbproy_currentHour,mgr.MODE_EDIT));
+                     out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\"Sólo números\">");
     %>             </td>
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentPercentage, mgr.MODE_EDIT)%></td>
-                  <td><%
+                  <td><%String form="\\d+([.])\\d+";
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                   out.println(mgr.renderElement(request, act.swbproy_currentPercentage,mgr.MODE_EDIT));
+                     out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\""+form+"\" invalidMessage=\"Sólo números flotantes\">");
         %>              </td>
               </tr>
               <tr><td width="200px">
