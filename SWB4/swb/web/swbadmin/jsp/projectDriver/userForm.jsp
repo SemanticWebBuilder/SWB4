@@ -33,65 +33,70 @@
    {
 
    }else{//que hacer en caso de que no exista asociado un usuario a esta pagina
-        Iterator<Activity> actResp=Activity.ClassMgr.listActivityByResponsible(userwp.getUserWP(),userwp.getWebSite());
-        ArrayList actValid=new ArrayList();
-        //Obtener las Actividades validas
-        while(actResp.hasNext()){
-          WebPage wp1=(WebPage)actResp.next();
-          boolean valid=true;
-          WebPage parent = wp1.getParent();
-          //Actividad sin papa desactivado
-          while(parent!=null){
-              if(!parent.isActive())
-                  valid=false;
-              parent=parent.getParent();
-          }
-          //Actividad con hijos activos
-          if(wp1.getChild()!=null){
-              Iterator itA = wp1.listVisibleChilds(paramRequest.getUser().getLanguage());
-              while(itA.hasNext()){
-                  WebPage ch = (WebPage)itA.next();
-                  if(ch.isActive())
-                     valid = false;
-              }
-          }
-          //La misma Actividad
-          if(!wp1.isActive()|| wp1==null || !wp1.isVisible()||wp1.isHidden() || !wp1.isValid() || wp1.isDeleted())
-             valid=false;
-          if(valid)
-              actValid.add(wp1);
-        }
-
+        ArrayList listAct = new ArrayList();
         ArrayList assig=new ArrayList();
         ArrayList canc=new ArrayList();
         ArrayList devel=new ArrayList();
         ArrayList paus=new ArrayList();
         ArrayList end =new ArrayList();
-        Iterator itActs = actValid.iterator();
 
-        while(itActs.hasNext()){
-            Activity actRes=(Activity)itActs.next();
-            if(actRes.getStatus().equals("assigned")){
-                assig.add(actRes.getURI());
+        if(userwp.getUserWP()!=null){
+            Iterator<Activity> actResp=Activity.ClassMgr.listActivityByResponsible(userwp.getUserWP(),userwp.getWebSite());
+            ArrayList actValid=new ArrayList();
+            //Obtener las Actividades validas
+            while(actResp.hasNext()){
+              WebPage wp1=(WebPage)actResp.next();
+              boolean valid=true;
+              WebPage parent = wp1.getParent();
+              //Actividad sin papa desactivado
+              while(parent!=null){
+                  if(!parent.isActive())
+                      valid=false;
+                  parent=parent.getParent();
+              }
+              //Actividad con hijos activos
+              if(wp1.getChild()!=null){
+                  Iterator itA = wp1.listVisibleChilds(paramRequest.getUser().getLanguage());
+                  while(itA.hasNext()){
+                      WebPage ch = (WebPage)itA.next();
+                      if(ch.isActive())
+                         valid = false;
+                  }
+              }
+              //La misma Actividad
+              if(!wp1.isActive()|| wp1==null || !wp1.isVisible()||wp1.isHidden() || !wp1.isValid() || wp1.isDeleted())
+                 valid=false;
+              if(valid)
+                  actValid.add(wp1);
             }
-            else if(actRes.getStatus().equals("canceled"))
-                canc.add(actRes.getURI());
-            else if(actRes.getStatus().equals("develop"))
-                devel.add(actRes.getURI());
-            else if(actRes.getStatus().equals("paused"))
-                paus.add(actRes.getURI());
-            else if(actRes.getStatus().equals("ended"))
-                end.add(actRes.getURI());
+
+            Iterator itActs = actValid.iterator();
+
+            while(itActs.hasNext()){
+                Activity actRes=(Activity)itActs.next();
+                if(actRes.getStatus().equals("assigned")){
+                    assig.add(actRes.getURI());
+                }
+                else if(actRes.getStatus().equals("canceled"))
+                    canc.add(actRes.getURI());
+                else if(actRes.getStatus().equals("develop"))
+                    devel.add(actRes.getURI());
+                else if(actRes.getStatus().equals("paused"))
+                    paus.add(actRes.getURI());
+                else if(actRes.getStatus().equals("ended"))
+                    end.add(actRes.getURI());
+            }
+            //Obtiene el porcentaje actual y las horas planeadas para obtener la barra de progreso de avance general
+            itActs=actValid.iterator();
+            while(itActs.hasNext()){
+              Activity acts = (Activity) itActs.next();
+              listAct.add(acts.getCurrentPercentage());
+              listAct.add(acts.getPlannedHour());
+            }
         }
-        //Obtiene el porcentaje actual y las horas planeadas para obtener la barra de progreso de avance general
-        ArrayList listAct = new ArrayList();
-        itActs=actValid.iterator();
-        while(itActs.hasNext()){
-          Activity acts = (Activity) itActs.next();
-          listAct.add(acts.getCurrentPercentage());
-          listAct.add(acts.getPlannedHour());
-        }
-        String avanTot=getProgressBar(listAct,null,null);
+
+
+        String avanTot=getProgressBar(listAct,"66CCFF",null);
         if(avanTot==null)
           avanTot="Sin Avance";%>
         <%
@@ -144,10 +149,11 @@
 <%
         }
         %>
-       <p class="indentation">
-            <label>Avance: </label>
-            <%=avanTot%>
-       </p>
+       <table width="91%">
+           <!--tr width="5%"><td></td></tr-->
+           <tr width="100%"><td width="2%"></td><td width="10%">Avance: </td>
+            <td><%=avanTot%></td></tr>
+       </table>
         <%
         if(!assig.isEmpty()){
         %>
