@@ -78,7 +78,7 @@
           listAct.add(acts.getCurrentPercentage());
           listAct.add(acts.getPlannedHour());
       }
-      String avanTot=getProgressBar(listAct,null,null);
+      String avanTot=getProgressBar(listAct,"66CCFF",null);
       if(avanTot==null)
           avanTot="Sin Avance";
         %>
