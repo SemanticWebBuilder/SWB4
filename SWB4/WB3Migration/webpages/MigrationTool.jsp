@@ -610,20 +610,22 @@
                                     String strObjClass = rrtyp.getObjclass();
                                     if(strObjClass.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjClass = "com.infotec.wb.resources.TematicIndexXSL";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Imprimir")) strObjClass = "com.infotec.wb.resources.Print";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "com.infotec.wb.resources.Recommend";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "org.semanticwb.portal.resources.Recommend";
                                     else if(strObjClass.equals("com.infotec.wb.resources.MenuMap")) strObjClass = "com.infotec.wb.resources.WBMenuMap";
                                     else if(strObjClass.equals("com.infotec.wb.resources.WBSearch")) strObjClass = "org.semanticwb.portal.resources.WBSearch";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Login")) strObjClass = "org.semanticwb.portal.resources.Login";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Content")) strObjClass = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.UserRegistration")) strObjClass = "org.semanticwb.portal.resources.UserRegistration";
                                     rtype.setResourceClassName(strObjClass);
                                     String strObjBundle = rrtyp.getObjclass();
                                     if(strObjBundle.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjBundle = "com.infotec.wb.resources.TematicIndexXSL";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.Imprimir")) strObjBundle = "com.infotec.wb.resources.Print";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "com.infotec.wb.resources.Recommend";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.MenuMap")) strObjBundle = "com.infotec.wb.resources.WBMenuMap";
-                                    else if(strObjBundle.equals("org.semanticwb.portal.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
-                                    else if(strObjBundle.equals("org.semanticwb.portal.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
-                                    else if(strObjBundle.equals("org.semanticwb.portal.resources.Content")) strObjBundle = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Content")) strObjBundle = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.UserRegistration")) strObjBundle = "org.semanticwb.portal.resources.UserRegistration";
                                     rtype.setResourceBundle(strObjBundle);
                                     rtype.setResourceMode(rrtyp.getType());
                                     rtype.setResourceCache(rrtyp.getCache());
@@ -867,7 +869,7 @@
                         }
                         if ("template".equals(arrCat[i])) {
                             idmax = 0;
-                            Enumeration enutpl = DBTemplate.getInstance().getTemplates(site);
+                            //Enumeration enutpl = DBTemplate.getInstance().getTemplates(site);
 
                             Collection colTpl = TemplateMgr.getInstance().getTemplates(site).values();
                             Iterator ittpl = colTpl.iterator();
@@ -887,8 +889,12 @@
                                     tpl.setGroup(tplgp);
                                 }
 
+
+                                System.out.println("filename: "+templ.getFileName(rtpl.getActualversion())+", version actual: "+rtpl.getActualversion());
+
+
                                 VersionInfo vi = ws.createVersionInfo();
-                                vi.setVersionFile(rtpl.getFilename());
+                                vi.setVersionFile(templ.getFileName(rtpl.getActualversion()));
                                 vi.setVersionNumber(1);
                                 vi.setVersionComment("Template importado");
 
@@ -918,11 +924,12 @@
                                         if (targetPath != null && targetPath.exists()) //si existe el target
                                         {
                                             String sourceWebPath =  AFUtils.getInstance().getEnv("wb/sourceWebPath");
-                                            //System.out.println("sourceWebPath:"+sourceWebPath);
-                                            if(null!=sourceWebPath&&sourceWebPath.trim().length()==0) sourceWebPath="";
+                                            System.out.println("sourceWebPath:"+sourceWebPath);
+                                            //if(null!=sourceWebPath&&sourceWebPath.trim().length()==0)
+                                                sourceWebPath="";
 
                                             String sourceParserPath = sourceWebPath+WBUtils.getInstance().getWebWorkPath() + sourceDirectory;
-                                            //System.out.println("Ruta origen:"+sourceParserPath);
+                                            System.out.println("Ruta origen:"+sourceParserPath);
 
                                             String destinationWebWorkPath =  AFUtils.getInstance().getEnv("swb/webWorkPath");
                                             if(null!=destinationWebWorkPath&&destinationWebWorkPath.trim().length()==0) destinationWebWorkPath="";
@@ -931,7 +938,7 @@
                                             if(null!=destinationWebPath&&destinationWebPath.trim().length()==0) destinationWebPath="";
 
                                             String targetParserPath = destinationWebPath+destinationWebWorkPath + destinationPath;
-                                            //System.out.println("Nueva Ruta:"+targetParserPath);
+                                            System.out.println("Nueva Ruta:"+targetParserPath);
 
                                             AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceParserPath, targetParserPath);
                                         }
@@ -1198,7 +1205,7 @@
                                                     String xmlTemp = rresb.getXml();
                                                     //Document domdoc = SWBUtils.XML.xmlToDom(xmlTemp);
                                                     String fileName = null;
-                                                    //xmlTemp = xmlTemp.replaceAll(sourceWebPath, targetWebPath);
+                                                    xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/", "/work/models/"+site+"/");
                                                     // validando tipo de contenido para obtener el nombre del archivo
 
                                                     if(idName.equals("HTMLContent")) //&& domdoc!=null
@@ -1248,7 +1255,7 @@
                                                         if (targetPath != null && targetPath.exists()) //si existe el target
                                                         {
 
-                                                            //System.out.println("AFUtils.getInstance().copyStructure("+WBUtils.getInstance().getWorkPath() + sourceDirectory+","+targetDirectory+",true,"+ WBUtils.getInstance().getWebWorkPath() + sourceDirectory+","+targetWebPath+")");
+                                                            System.out.println("AFUtils.getInstance().copyStructure("+WBUtils.getInstance().getWorkPath() + sourceDirectory+","+targetDirectory+",true,"+ WBUtils.getInstance().getWebWorkPath() + sourceDirectory+","+targetWebPath+")");
 
                                                             AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceWebPath, targetWebPath);
                                                         }
@@ -1891,6 +1898,7 @@
             java.util.Date dt=topic.getDbdata().getCreated();
             if(dt!=null)wp.setCreated(dt);
             wp.setUpdated(new java.util.Date());
+            if(topic.getSortName()!=null) wp.setSortName(topic.getSortName());
 
             //Revisando si tiene una ruta virtual o una ruta amigable asociada
             if(topic.getSubjectIdentity()!=null)
