@@ -136,6 +136,7 @@ public class TematicIndexXSL extends GenericAdmResource
                 {
                     org.semanticwb.model.Language lang=itLang.next();
                     String descr =paramRequest.getWebPage().getDescription(lang.getId());
+                    if(null==descr) descr="";
                     father.setAttribute("hasfatherdescription","0");
                     Element fatherlanguage = dom.createElement("fatherlanguage");
                     fatherlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -168,7 +169,9 @@ public class TematicIndexXSL extends GenericAdmResource
                     {
                         father.setAttribute("hassondescription","1");
                         Element fatherdescription = dom.createElement("sondescription");
-                        fatherdescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
+                        String sonDescr = hijo.getDescription(usrlanguage);
+                        if(null==sonDescr) sonDescr="";
+                        fatherdescription.appendChild(dom.createTextNode(sonDescr));
                         father.appendChild(fatherdescription);
                     }else{
                         Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
@@ -176,6 +179,7 @@ public class TematicIndexXSL extends GenericAdmResource
                         {
                             org.semanticwb.model.Language lang=itLang.next();
                             String descr =paramRequest.getWebPage().getDescription(lang.getId());
+                            if(null==descr) descr="";
                             son.setAttribute("hassondescription","0");
                             Element sonlanguage = dom.createElement("sonlanguage");
                             sonlanguage.appendChild(dom.createTextNode(lang.getId()));
@@ -199,14 +203,18 @@ public class TematicIndexXSL extends GenericAdmResource
                             grandson.setAttribute("grandsonref",nieto.getUrl());
                             grandson.setAttribute("path", path);
                             Element grandsontitle = dom.createElement("grandsontitle");
-                            grandsontitle.appendChild(dom.createTextNode(nieto.getDisplayName(usrlanguage)));
+                            String nietoDescr = nieto.getDisplayName(usrlanguage);
+                            if(null==nietoDescr) nietoDescr="";
+                            grandsontitle.appendChild(dom.createTextNode(nietoDescr));
                             grandson.appendChild(grandsontitle);
                             
                             if(usrlanguage!=null)
                             {
                                 grandson.setAttribute("hasgrandsondescription","1");
                                 Element grandsondescription = dom.createElement("grandsondescription");
-                                grandsondescription.appendChild(dom.createTextNode(hijo.getDescription(usrlanguage)));
+                                String hijoDescr = hijo.getDescription(usrlanguage);
+                                if(null==hijoDescr) hijoDescr="";
+                                grandsondescription.appendChild(dom.createTextNode(hijoDescr));
                                 grandson.appendChild(grandsondescription);
                             }else{
                                 Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
@@ -214,6 +222,7 @@ public class TematicIndexXSL extends GenericAdmResource
                                 {
                                     org.semanticwb.model.Language lang=itLang.next();
                                     String descr =paramRequest.getWebPage().getDescription(lang.getId());
+                                    if(descr==null) descr="";
                                     grandson.setAttribute("hasgrandsondescription","0");
                                     Element grandsonlanguage = dom.createElement("grandsonlanguage");
                                     grandsonlanguage.appendChild(dom.createTextNode(lang.getId()));
