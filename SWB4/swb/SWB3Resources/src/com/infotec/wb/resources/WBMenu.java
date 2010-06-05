@@ -146,7 +146,7 @@ public class WBMenu extends GenericAdmResource
             Element ehermanos = dom.createElement("brothers");
             if(!onlychilds && padre!=null)
             {
-                Iterator <WebPage>itehermanos=padre.listChilds();
+                Iterator <WebPage>itehermanos=padre.listChilds(lang,true,false,false,null);
                 while(itehermanos.hasNext())
                 {
                     WebPage tphermano=itehermanos.next();
@@ -161,7 +161,7 @@ public class WBMenu extends GenericAdmResource
                             ehermano.setAttribute("current", "1");
                             ehermanos.appendChild(ehermano);
 
-                            Iterator <WebPage> hijos = tpid.listChilds();
+                            Iterator <WebPage> hijos = tpid.listChilds(lang,true,false,false,null);
                             while (hijos.hasNext()) 
                             {
                                 WebPage hijo =  hijos.next();
@@ -193,7 +193,7 @@ public class WBMenu extends GenericAdmResource
                 ehermano.setAttribute("current", "1");
                 ehermanos.appendChild(ehermano);
 
-                Iterator <WebPage> hijos = tpid.listChilds();
+                Iterator <WebPage> hijos = tpid.listChilds(lang,true,false,false,null);
                 while (hijos.hasNext()) 
                 {
                     WebPage hijo = hijos.next();
