@@ -58,7 +58,7 @@ public class WBSiteMap extends GenericAdmResource
     String webWorkPath = "/work";  
     Vector vTopic = new Vector();
     int intMaxLevel = 1;
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBSiteMap/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
 
     public WBSiteMap() {
     }
@@ -249,9 +249,18 @@ public class WBSiteMap extends GenericAdmResource
             }
             else 
             {
-                SWBResourceURL url=paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-                url.setParameter("smp_act", "smp_step2");
-                surl=url.toString();
+                WebPage tmpWP = null;
+                if(base.getAttribute("home")!=null&&!base.getAttribute("home","").equals("")){
+                    tmpWP = paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("home"));
+                    if(tmpWP!=null) surl=tmpWP.getUrl()+"?smp_act=smp_step2";
+                }
+                else
+                {
+                    SWBResourceURL url= paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
+                    url.setParameter("smp_act", "smp_step2");
+                    surl=url.toString();
+                }
+                
             }
             if (!"".equals(base.getAttribute("img", "").trim()))
             {
