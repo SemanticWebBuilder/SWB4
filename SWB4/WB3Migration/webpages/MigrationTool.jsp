@@ -876,6 +876,8 @@
                             while (ittpl.hasNext()) {
                                 com.infotec.wb.core.Template templ = (com.infotec.wb.core.Template) ittpl.next();
 
+                                if(templ.getDeleted()==1) continue;
+
                                 RecTemplate rtpl = templ.getRecTemplate();
 
                                 org.semanticwb.model.Template tpl = ws.createTemplate(Integer.toString(rtpl.getId()));
