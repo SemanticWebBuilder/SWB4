@@ -119,7 +119,7 @@ public class Comment extends GenericResource {
         if (!"".equals(base.getAttribute("template", "").trim())) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(
-                        SWBPortal.getAdminFileStream(base.getWorkPath() + "/" 
+                        SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/"
                         + base.getAttribute("template").trim()));
                 path = webWorkPath + "/";
             } catch (Exception e) {
