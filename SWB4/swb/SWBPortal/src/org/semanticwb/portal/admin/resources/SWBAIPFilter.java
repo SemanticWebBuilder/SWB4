@@ -152,7 +152,7 @@ public class SWBAIPFilter extends GenericResource
         ret.append("<form id=\"" + IPFilter.swb_IPFilter.getClassName() + "/create\" dojoType=\"dijit.form.Form\" class=\"swbform\" ");
         ret.append("onSubmit=\"return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<label for=\"Sitios\">"+paramRequest.getLocaleString("ipsite")+"</label>");
-        Iterator<WebSite> itur = SWBContext.listWebSites();
+        Iterator<WebSite> itur = SWBContext.listWebSites(true);
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"Sitios\"  >");
         ret.append("\n\t\t\t\t\t<option value=\"\"></option>"); //todo Add Language
         while (itur.hasNext())
@@ -233,7 +233,7 @@ public class SWBAIPFilter extends GenericResource
         ret.append("onSubmit=\"submitForm('"+IPFilter.swb_IPFilter.getClassName()+"/create/"+got+"');return false;\" method=\"POST\">");
         ret.append("\t<fieldset>\n\t<table>\n\t\t<tr>\n\t\t\t<td align=\"right\">\n\t\t\t\t<label>"+paramRequest.getLocaleString("ipsite")+"</label>");
         ret.append("\n\t\t\t</td>\n\t\t\t<td>");
-        Iterator<WebSite> itur = SWBContext.listWebSites();
+        Iterator<WebSite> itur = SWBContext.listWebSites(true);
         ret.append("\n\t\t\t\t<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"webSite\" id=\"webSite\" >");
         while (itur.hasNext())
         {

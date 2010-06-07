@@ -523,11 +523,14 @@ public class DistributorParams
         }else
         {
             Dns dns=Dns.getDns(request.getServerName());
+
             //System.out.println("dns:"+dns);
-            if (dns == null)
+            if (dns == null && !Dns.containsDns(request.getServerName()))
             {
                 dns=SWBContext.getGlobalWebSite().getDefaultDns();
+                Dns.cacheDns(request.getServerName(), dns);
             }
+
             //System.out.println("dns:"+dns);
             if (dns != null)
             {
@@ -605,9 +608,23 @@ public class DistributorParams
         while (it.hasNext())
         {
             IPFilter ip =  it.next();
-            if (null!= ip.getIpNumber() && ipuser.indexOf(ip.getIpNumber()) > -1)
+            if(ip.isValid())
             {
-                return ip.getAction();
+                int action=ip.getAction();
+                String ipn=ip.getIpNumber();
+                if(action!=2)
+                {
+                    if (ipn!=null  && ipuser.startsWith(ipn))
+                    {
+                        return action;
+                    }
+                }else
+                {
+                    if (ipn!=null  && !ipuser.startsWith(ipn))
+                    {
+                        return action;
+                    }
+                }
             }
         }
         return -1;

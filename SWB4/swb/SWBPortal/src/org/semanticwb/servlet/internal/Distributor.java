@@ -153,7 +153,7 @@ public class Distributor implements InternalServlet
                 }
             }       
 
-            if (ipfilter == 1) 
+            if (ipfilter > 0)  //1:no access: 2:only access
             {
                 log.debug("Distributor: SendError 404");
                 response.sendError(404, "No tiene permiso para accesar a la pagina " + request.getRequestURI() + ", (IP Filter)... ");
