@@ -6,21 +6,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.*, org.semanticwb.*, org.semanticwb.*, org.semanticwb.portal.api.*, org.semanticwb.model.*"%>
 <%!
-    public String getUserLanguage()
-    {
-        String lang="es";
-        User user=SWBContext.getSessionUser();
-        if(user!=null)lang=user.getLanguage();
-        return lang;
-    }
-
     public String getLocaleString(String key, String lang)
     {
         return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
     }
 %>
 <%
-    String lang=getUserLanguage();
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+    String lang=user.getLanguage();
+
     String id;
     String showRoot;
     String rootLabel;
