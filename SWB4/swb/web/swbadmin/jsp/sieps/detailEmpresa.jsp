@@ -3,32 +3,65 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.semanticwb.SWBPortal"%>
+<%@page import="org.semanticwb.platform.*"%>
+<%@page import="org.semanticwb.model.*"%>
 
-<%@page import="org.semanticwb.sieps.Empresa"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.sieps.*"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
+<%!
+
+
+    public String getLabel(SemanticObject obj,SemanticClass clazz,User user)
+    {
+        String getLabel="";
+        org.semanticwb.platform.SemanticProperty prop=obj.getModel().getSemanticProperty(org.semanticwb.platform.SemanticVocabulary.RDFS_SUBCLASSOF);
+        org.semanticwb.platform.SemanticObject parent=null;
+        Iterator<org.semanticwb.platform.SemanticObject> parents=obj.listObjectProperties(prop);
+        while(parents.hasNext())
+        {
+            org.semanticwb.platform.SemanticObject temp=parents.next();
+            if(clazz.equals(temp.getSemanticClass()))
+            {
+                parent=temp;
+                break;
+            }
+        }
+
+        if(parent!=null)
+        {
+            getLabel=parent.getLabel(user.getLanguage());
+        }
+        return getLabel;
+    }
+%>
 <%
 	SWBResourceURL url = paramRequest.getRenderUrl().setParameter("act", "results");
 	Empresa e = (Empresa)request.getAttribute("obj");
 	Iterator<Empresa> iterEmpresasSimi	=	Empresa.ClassMgr.listEmpresaByScian(e.getScian());
-	String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+e.getLogo();
-	System.out.println("---> urllog = " + urllog);
+	String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
+        String scian=e.getScian().getCode();
+        String clase=e.getScian().getSemanticObject().getLabel(paramRequest.getUser().getLanguage());
+        String subrama=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.SubRama.sclass,paramRequest.getUser());
+        String rama=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.Rama.sclass,paramRequest.getUser());
+        String subsector=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.SubSector.sclass,paramRequest.getUser());
+        String sector=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.Sector.sclass,paramRequest.getUser());
 %>
-<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key="></script>
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAolpeBAG69pwV4I7Q2UbUGBS9-76TLlD3CjpiqwLbfvCHGabL2hTlSKx5Z3KGx9kvlzrwQIkIKQ28uA"></script>
 <script type="text/javascript" src="/swbadmin/jsp/sieps/googleMaps.js"></script>
 
 <div id="datos_empresa">
      	<img src="<%=urllog%>" width="104" height="89" alt="Grupo Plus"/>
         <div id="descripcion">
 	    	<h2><%=e.getName()%></h2>
-            <span id="clave">Clave: <%=e.getClavesiem()%></span>
-            <p><strong>Calle</strong><%="No disponible"%></p>
-            <p><strong>Colonia</strong><%=e.getColonia()%></p>
-            <p><strong>Municipio</strong>"No disponible"</p>
-            <p><strong>Estado</strong><%=e.getEstado()%></p>
-            <p><strong>C.P.</strong><%=e.getCp()%></p>
-            <p><strong>R.F.C.</strong><%=e.getRfc()%></p>
-            <p><strong>Correo electrónico</strong><%=e.getEmail()%></p>
-            <p><strong>Teléfono</strong><%=e.getTelefono()%></p>
+            <span id="clave">Clave SIEM: <%=e.getClavesiem()%></span>
+            <p><strong>Calle: </strong><%=e.getAddress()%></p>
+            <p><strong>Colonia: </strong><%=e.getColonia()%></p>
+            <p><strong>Municipio: </strong><%=e.getMunicipio()%></p>
+            <p><strong>Estado: </strong><%=e.getEstado()%></p>
+            <p><strong>C.P.: </strong><%=e.getCp()%></p>
+            <p><strong>R.F.C.: </strong><%=e.getRfc()%></p>
+            <p><strong>Correo electrónico: </strong><%=e.getEmail()%></p>
+            <p><strong>Teléfono: </strong><%=e.getTelefono()%></p>
         </div>
 </div>
 <div id="columnaCentro">
@@ -51,44 +84,64 @@
 <div class="panelDerechoB">
 	<h4>Empresas similares de la industria</h4>
 	<ul>
-		<% while (iterEmpresasSimi.hasNext()) {
-		Empresa emp = iterEmpresasSimi.next();
+		<%
+                int i=1;
+                while (iterEmpresasSimi.hasNext()) {
+			Empresa emp = iterEmpresasSimi.next();
+			SWBResourceURL urldetail=paramRequest.getRenderUrl();
+			urldetail.setParameter("act","detail");
+			urldetail.setParameter("uri",emp.getEncodedURI());
+                        i++;
+			if (!e.getURI().equals(emp.getURI())) {
 		%>
-			<li><a href="#"><%=emp.getName()%></a><span><%=emp.getEstado()%></span></li>
+			<li><a href="<%=urldetail%>"><%=emp.getName()%></a><span><%=emp.getEstado()%></span></li>
+			<%}
+                        if(i==5)
+                            {
+                            break;
+                            }
+                        %>
 		<%} %>
 		</ul>     
          <form action="#" >
-       		<input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Buscar" />
+       		<input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Ver más" />
          </form>
 </div>
- <div class="panelDerechoB">
- 	<h4>Ofertas relacionadas a tu empresa</h4>
+                <div class="panelDerechoB">
+ 	<h4>Ofertas relacionadas a la empresa</h4>
      <ul>
-         <li><a href="#">Botellas de vidrio</a></li>
-         <li><a href="#">Botellas de plástico</a></li>
-         <li><a href="#">Tarimas</a></li>
-         <li><a href="#">Cajas de cartón</a></li>
-         <li><a href="#">Papel</a></li>
-         <li><a href="#">Impresiones publicitarias</a></li>
-         <li><a href="#">Transporte de materia prima</a></li>
+                <%
+                GenericIterator<Producto> productos= e.listProductos();
+                while(productos.hasNext())
+                    {
+                    Producto producto=productos.next();
+                    SWBResourceURL urlProducto=paramRequest.getRenderUrl();
+                    urlProducto.setParameter("act","detail");
+                    urlProducto.setParameter("uri",producto.getURI());                    
+                    String name=producto.getPname();
+                    %>
+                    <li><a href="<%=urlProducto%>"><%=name%></a></li>
+                    <%
+                    }
+
+            %>
      </ul>
      <form action="#">
-   <input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Buscar" />
+   <input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Ver más" />
      </form>
  </div>
 <div id="industria">
        <h3>Industria a la que pertenece esta empresa</h3>
        <ul>
            <li class="first"><span class="codigo">Código SCIAN</span><span class="descripcion">DESCRIPCIÓN</span></li>
-           <li class="a"><span class="codigo">312</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a>
+           <li class="a"><span class="codigo">312</span><a href="#"><span class="descripcion"><%=sector%></span></a>
              <ul>
-               <li class="b"><span class="codigo">3121</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a>
+               <li class="b"><span class="codigo">3121</span><a href="#"><span class="descripcion"><%=subsector%></span></a>
                  <ul>
-                   <li class="a"><span class="codigo">31211</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a>
-                     <ul>
-                       <li class="b"><span class="codigo">312111</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a></li>
-                       <li class="a"><span class="codigo">312112</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a></li>
-                       <li class="b"><span class="codigo">312113</span><a href="#"><span class="descripcion">Industria de las bebidas y el tabaco</span></a></li>
+                   <li class="a"><span class="codigo">31211</span><a href="#"><span class="descripcion"><%=rama%></span></a>
+                     <ul>                       
+                       <li class="a"><span class="codigo">312112</span><a href="#"><span class="descripcion"><%=subrama%></span></a></li>
+                       <li class="b"><span class="codigo"><%=scian%></span><a href="#"><span class="descripcion"><%=clase%></span></a></li>
                      </ul>
                    </li>
                  </ul>
