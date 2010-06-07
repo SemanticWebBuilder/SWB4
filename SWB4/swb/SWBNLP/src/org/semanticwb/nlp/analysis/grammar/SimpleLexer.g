@@ -1,4 +1,4 @@
-lexer grammar sLexer;
+lexer grammar SimpleLexer;
 
 WHITESPACE
 	:	(' '|'\t'|'\f'|'\n'|'\r'){ $channel=HIDDEN; };
