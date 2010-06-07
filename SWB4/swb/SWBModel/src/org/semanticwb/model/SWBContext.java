@@ -183,10 +183,9 @@ public class SWBContext extends SWBContextBase {
      * @param direct the direct
      * @return the java.util. iterator
      */
-    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean direct)
+    public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean admin)
     {
-        boolean adminShow = !SWBPlatform.getEnv("swb/adminShow",
-                "false").equals("false");
+        boolean adminShow = !SWBPlatform.getEnv("swb/adminShow","false").equals("false");
         ArrayList<org.semanticwb.model.WebSite> arr = new ArrayList();
         Iterator<Entry<String, SemanticModel>> it = SWBPlatform.getSemanticMgr().getModels().iterator();
 
@@ -205,7 +204,7 @@ public class SWBContext extends SWBContextBase {
                     if (adminShow)
                     {
                         arr.add((WebSite) gen);
-                    } else if (!filtered.contains(gen.getId()))
+                    } else if ((admin && gen.getId().equals(SWBContext.WEBSITE_ADMIN)) || !filtered.contains(gen.getId()))
                     {
                         arr.add((WebSite) gen);
                     }
