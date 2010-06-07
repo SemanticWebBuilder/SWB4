@@ -167,7 +167,11 @@ public class SemanticClass
      */
     private void init()
     {
-        m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
+        //TODO
+        if(m_class.getURI()!=null)
+        {
+            m_ontclass=SWBPlatform.getSemanticMgr().getOntology().getRDFOntModel().getOntClass(m_class.getURI());
+        }
         //System.out.println(m_ontclass+" "+m_ontclass);
         m_props=new HashMap();
         herarquicalProps=new ArrayList();
@@ -1207,6 +1211,33 @@ public Iterator<SemanticObject> listInstances()
             }
         }
         return ret;
+    }
+
+    /**
+     * Regresa nivel de subclase o -1 si no es subclase
+     * @param cls
+     * @return
+     */
+    public int getSubClassLevel(SemanticClass cls)
+    {
+        return getSubClassLevel(cls,0);
+    }
+
+   
+    private int getSubClassLevel(SemanticClass cls, int l)
+    {
+        //System.out.println("ini:"+l+" root:"+this+" cls:"+cls);
+        int r=-1;
+        if(this==cls)return l;
+        Iterator<SemanticClass> it=listSubClasses(true);
+        while (it.hasNext())
+        {
+           SemanticClass c = it.next();
+           r=c.getSubClassLevel(cls,l+1);
+           if(r>-1)break;
+        }
+        //System.out.println("end:"+l+" r:"+r+" root:"+this+" cls:"+cls);
+        return r;
     }
 
 }
