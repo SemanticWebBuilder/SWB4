@@ -143,6 +143,14 @@ public class SWBSparqlTranslator {
                     order = order.trim() + "\n";
                 } else if (t.getText().equals("OFFSET")) {
                     limitoff = limitoff + " OFFSET " + t.getChild(0).getText() + "\n";
+                } else if (t.getText().equals("DEFINE")) {
+                    subject = t.getChild(0).getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
+                    res += " ?description \nWHERE \n{\n";
+                    String etype = "";
+                    if (lex.getLexicon(lang).getWord(subject, true) != null) {
+                        etype = lex.getLexicon(lang).getWord(subject, true).getTags().get(0).getId();
+                    }                    
+                    patterns += etype + " rdfs:comment ?description.\n";
                 } else {
                     subject = t.getText().replace(" ", "_").replaceAll("[\\(|\\)]", "");
                     if (hasPrede) {
