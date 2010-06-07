@@ -35,6 +35,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBObserver;
 import org.semanticwb.model.Dns;
+import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.IPFilter;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
@@ -156,6 +158,15 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         {
                             Dns.refresh();
                         }
+                        if(obj.instanceOf(IPFilter.sclass))
+                        {
+                            WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                            if(site!=null)
+                            {
+                                //Limpia cache de filtros
+                                site.clearCache();
+                            }
+                        }
                     } else //REMOVES
                     {
                         if (obj.instanceOf(SWBModel.sclass)) //Removes website
@@ -168,6 +179,15 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         if(obj.instanceOf(Dns.sclass))
                         {
                             Dns.refresh();
+                        }
+                        if(obj.instanceOf(IPFilter.sclass))
+                        {
+                            WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                            if(site!=null)
+                            {
+                                //Limpia cache de filtros
+                                site.clearCache();
+                            }
                         }
                         if(obj.instanceOf(WebPage.sclass))
                         {
@@ -244,6 +264,15 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                     if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
                     {
                         Dns.refresh();
+                    }
+                    if(obj.instanceOf(IPFilter.sclass)&& prop.equals(IPFilter.swb_ipFilterNumber))
+                    {
+                        WebSite site=SWBContext.getWebSite(obj.getModel().getName());
+                        if(site!=null)
+                        {
+                            //Limpia cache de filtros
+                            site.clearCache();
+                        }
                     }
                     if(obj.instanceOf(Template.sclass)&& prop.equals(Template.swb_active))
                     {
