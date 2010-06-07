@@ -121,13 +121,11 @@ public class SemanticProperty
     private Resource range = null;
     
     /** The restrictions. */
-    private HashMap<String, ArrayList<Restriction>> restrictions = null;
+    private HashMap<String, ArrayList<SemanticRestriction>> restrictions = null;
     
     /** The allvalues. */
-    private HashMap<String, SemanticClass> allvalues = null;
+    private HashMap<String, SemanticRestriction> frestrictions = null;
 
-    /** The somevalues. */
-    private HashMap<String, SemanticClass> somevalues = null;
 
     /**
      * Instantiates a new semantic property.
@@ -147,26 +145,30 @@ public class SemanticProperty
                 //System.out.println(prop+" hasInverse "+m_inverse);
             }
 
-            restrictions = new HashMap();
-            allvalues = new HashMap();
-            somevalues = new HashMap();
-            Iterator<Restriction> it = ((OntProperty) m_prop).listReferringRestrictions();
-            while (it.hasNext())
+        }
+    }
+
+    private void loadRestrictions()
+    {
+        restrictions = new HashMap();
+        frestrictions = new HashMap();
+        Iterator<Restriction> it = ((OntProperty) m_prop).listReferringRestrictions();
+        while (it.hasNext())
+        {
+            Restriction restriction = it.next();
+            //System.out.println(prop+" restriction "+restriction);
+            Iterator<OntClass> it2 = restriction.listSubClasses();
+            while (it2.hasNext())
             {
-                Restriction restriction = it.next();
-                Iterator<OntClass> it2 = restriction.listSubClasses();
-                while (it2.hasNext())
+                OntClass ontClass = it2.next();
+                ArrayList<SemanticRestriction> list = restrictions.get(ontClass.getURI());
+                if (list == null)
                 {
-                    OntClass ontClass = it2.next();
-                    ArrayList<Restriction> list = restrictions.get(ontClass.getURI());
-                    if (list == null)
-                    {
-                        list = new ArrayList();
-                        restrictions.put(ontClass.getURI(), list);
-                    }
-                    list.add(restriction);
-                    //System.out.println(prop+" restriction "+ontClass);
+                    list = new ArrayList();
+                    restrictions.put(ontClass.getURI(), list);
                 }
+                list.add(new SemanticRestriction(restriction));
+                //System.out.println(prop+" restrictioncls "+ontClass);
             }
         }
     }
@@ -1057,65 +1059,57 @@ public class SemanticProperty
     {
         return isInt() || isLong() || isByte() || isDouble() || isFloat() || isShort();
     }
-
+    
     /**
-     * Gets the all values from restriction class.
-     * 
-     * @param cls the cls
-     * @return the all values from restriction class
-     */
-    public SemanticClass getAllValuesFromRestrictionClass(SemanticClass cls)
-    {
-        SemanticClass rcls = allvalues.get(cls.getURI());
-        if (rcls == null)
-        {
-            ArrayList list = restrictions.get(cls.getURI());
-            if (list != null)
-            {
-                Iterator<Restriction> it = list.iterator();
-                while (it.hasNext())
-                {
-                    Restriction restriction = it.next();
-                    if (restriction.isAllValuesFromRestriction())
-                    {
-                        //rcls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(restriction.getProperty(m_prop.getModel().getProperty("http://www.w3.org/2002/07/owl#allValuesFrom")).getResource().getURI());
-                        rcls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(restriction.asAllValuesFromRestriction().getAllValuesFrom().getURI());
-                    }
-                }
-            }
-            allvalues.put(cls.getURI(), rcls);
-        }
-        return rcls;
-    }
-
-    /**
-     * Gets the some values from restriction class.
+     * Gets restrictions from the property an the class.
      *
      * @param cls the cls
-     * @return the all values from restriction class
+     * @return iterator of SemanticRestrictions
      */
-    public SemanticClass getSomeValuesFromRestrictionClass(SemanticClass cls)
+    public Iterator<SemanticRestriction>listRestrictions(SemanticClass cls)
     {
-        SemanticClass rcls = somevalues.get(cls.getURI());
-        if (rcls == null)
+        if(restrictions==null)loadRestrictions();
+        Iterator it=new ArrayList().iterator();
+        ArrayList list=restrictions.get(cls.getURI());
+        if(list!=null)it=list.iterator();
+        return it;
+    }
+
+    /**
+     * Gets restriction from the property an the class or null if don´t have
+     *
+     * @param cls the cls
+     * @return SemanticRestrictions
+     */
+    public SemanticRestriction getValuesFromRestriction(SemanticClass cls)
+    {
+        if(restrictions==null)loadRestrictions();
+        int level=-1;
+        SemanticRestriction rcls = frestrictions.get(cls.getURI());
+        if (rcls == null && !frestrictions.containsKey(cls.getURI()))
         {
             ArrayList list = restrictions.get(cls.getURI());
             if (list != null)
             {
-                Iterator<Restriction> it = list.iterator();
+                Iterator<SemanticRestriction> it = list.iterator();
                 while (it.hasNext())
                 {
-                    Restriction restriction = it.next();
-                    if (restriction.isSomeValuesFromRestriction())
+                    SemanticRestriction restriction = it.next();
+                    if(restriction.isAllValuesFromRestriction() || restriction.isSomeValuesFromRestriction() || restriction.isHasValueRestriction())
                     {
-                        //rcls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(restriction.getProperty(m_prop.getModel().getProperty("http://www.w3.org/2002/07/owl#allValuesFrom")).getResource().getURI());
-                        rcls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(restriction.asSomeValuesFromRestriction().getSomeValuesFrom().getURI());
+                        int l=restriction.getSubClassLevel(cls);
+                        if(level<0 || level>l)
+                        {
+                            rcls=restriction;
+                            level=l;
+                        }
                     }
                 }
             }
-            somevalues.put(cls.getURI(), rcls);
+            frestrictions.put(cls.getURI(), rcls);
         }
         return rcls;
     }
+
 
 }
