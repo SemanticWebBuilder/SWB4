@@ -1,7 +1,10 @@
 <%@page contentType="text/html;charset=windows-1252"%>
 <%@page import="java.io.*"%>
 <%@page import="org.semanticwb.*"%>
-
+<%
+   //Descomentar esto para utilizar
+   if(true)return;
+%>
 <html>
 <head><title>JSP Page</title></head>
 <body>
