@@ -57,10 +57,8 @@
         response.sendError(403);
         return;
     }
-%>
-<%
-    String lang="es";
-    if(user!=null)lang=user.getLanguage();
+    String lang=user.getLanguage();
+    
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache");
 %>

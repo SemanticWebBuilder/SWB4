@@ -528,25 +528,28 @@
         boolean ret=false;
         if(inv!=null)
         {
-            SemanticClass aux=inv.getAllValuesFromRestrictionClass(child); //Class and Subclasses
+            SemanticClass aux=null;
+            SemanticRestriction res=inv.getValuesFromRestriction(child);
+            if(res!=null)aux=res.getRestrictionValue();
+            //System.out.println("res:"+res+" aux:"+aux);
             if(aux!=null)
             {
-                if(cls.equals(aux) || cls.isSubClass(aux))ret=true;
-            }else
-            {
-                aux=inv.getSomeValuesFromRestrictionClass(child);   //Only class
-                if(aux!=null)
+                if(res.isAllValuesFromRestriction())
+                {
+                    if(cls.equals(aux) || cls.isSubClass(aux))ret=true;
+                }else if(res.isSomeValuesFromRestriction())
                 {
                     if(cls.equals(aux))ret=true;
-                }else
-                {
-                    ret=true;
                 }
+            }else
+            {
+                ret=true;
             }
         }else
         {
             ret=true;
         }
+        //System.out.println("cls:"+cls+" child:"+child+" inv:"+inv+" ret:"+ret);
         return ret;
     }
 
@@ -623,21 +626,19 @@
             Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
             while(pit.hasNext())
             {
-                boolean subclasses=true;
                 SemanticProperty prop=pit.next();
-                SemanticClass rcls=prop.getAllValuesFromRestrictionClass(cls);
-                if(rcls==null)
+                boolean subclasses=true;
+                SemanticClass rcls=null;
+                SemanticRestriction res=prop.getValuesFromRestriction(cls);
+                if(res!=null)rcls=res.getRestrictionValue();
+                if(rcls!=null)
                 {
-                    rcls=prop.getSomeValuesFromRestrictionClass(cls);
-                    if(rcls!=null)
-                    {
-                        subclasses=false;
-                    }else
-                    {
-                        rcls=prop.getRangeClass();
-                    }
+                    if(res.isSomeValuesFromRestriction())subclasses=false;
+                }else
+                {
+                    rcls=prop.getRangeClass();
                 }
-                //System.out.println("cls:"+cls+" "+rcls);
+                //System.out.println("obj:"+obj+" prop:"+prop+" cls:"+cls+" rcls:"+rcls);
                 //Restricciones inversas
                 SemanticProperty inv=prop.getInverse();
 
@@ -663,6 +664,7 @@
                             {
                                 if(checkInverse(cls, scls, inv))
                                 {
+                                    //System.out.println("addMenu");
                                     menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
                                     dropacc.put(scls.getClassId());
                                 }
