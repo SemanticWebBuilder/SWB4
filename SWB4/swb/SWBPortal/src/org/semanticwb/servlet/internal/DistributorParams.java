@@ -603,6 +603,7 @@ public class DistributorParams
 //        }
 
         //MAPS74
+        int ret=-1;
         String ipuser = request.getRemoteAddr().toString();
         Iterator<IPFilter> it = webpage.getWebSite().listIPFilters();
         while (it.hasNext())
@@ -616,18 +617,23 @@ public class DistributorParams
                 {
                     if (ipn!=null  && ipuser.startsWith(ipn))
                     {
-                        return action;
+                        ret=action;
+                        break;
                     }
                 }else
                 {
-                    if (ipn!=null  && !ipuser.startsWith(ipn))
+                    if (ipn!=null  && ipuser.startsWith(ipn))
                     {
-                        return action;
+                        ret=-1;
+                        break;
+                    }else
+                    {
+                        ret=action;
                     }
                 }
             }
         }
-        return -1;
+        return ret;
     }
     
     /**
