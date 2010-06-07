@@ -17,7 +17,14 @@
 
 %>
 <%
-    String lang="es";
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+    String lang=user.getLanguage();
+
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
     String suri=request.getParameter("suri");
@@ -32,13 +39,6 @@
     Error params not found...
     <a href="?suri=<%=uri%>">edit</a>
 <%
-        return;
-    }
-
-    User user=SWBContext.getAdminUser();
-    if(user==null)
-    {
-        response.sendError(403);
         return;
     }
 

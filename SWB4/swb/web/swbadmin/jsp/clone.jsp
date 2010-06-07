@@ -7,6 +7,12 @@ package swbadmin.jsp;
 
 %>
 <%
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
     String lang="es";
     response.setHeader("Cache-Control", "no-cache"); 
     response.setHeader("Pragma", "no-cache"); 
