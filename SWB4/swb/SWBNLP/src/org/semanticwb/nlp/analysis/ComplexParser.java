@@ -647,6 +647,7 @@ public class ComplexParser extends Parser {
 
     public static class limiter_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -719,6 +720,7 @@ public class ComplexParser extends Parser {
 
     public static class modifier_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -826,6 +828,7 @@ public class ComplexParser extends Parser {
 
     public static class offsetterm_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -904,6 +907,7 @@ public class ComplexParser extends Parser {
 
     public static class ordterm_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -996,6 +1000,7 @@ public class ComplexParser extends Parser {
 
     public static class oquery_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -1185,6 +1190,7 @@ public class ComplexParser extends Parser {
 
     public static class querylist_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -1307,6 +1313,7 @@ public class ComplexParser extends Parser {
 
     public static class pquery_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -1487,6 +1494,7 @@ public class ComplexParser extends Parser {
 
     public static class plist_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -1593,6 +1601,7 @@ public class ComplexParser extends Parser {
 
     public static class name_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -1648,6 +1657,7 @@ public class ComplexParser extends Parser {
 
     public static class sent_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
@@ -2372,6 +2382,7 @@ public class ComplexParser extends Parser {
 
     public static class val_return extends ParserRuleReturnScope {
         Object tree;
+        @Override
         public Object getTree() { return tree; }
     };
 
