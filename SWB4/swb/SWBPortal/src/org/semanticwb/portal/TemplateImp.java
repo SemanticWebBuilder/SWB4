@@ -1371,7 +1371,7 @@ public class TemplateImp extends Template
             logbuf.append(request.getRemoteAddr());
             logbuf.append("|");
             logbuf.append(SWBPortal.getMessageCenter().getAddress());
-            logbuf.append("_");
+            //logbuf.append("_");
             logbuf.append("|");
             String sess=request.getSession().getId();
             if(sess!=null)
