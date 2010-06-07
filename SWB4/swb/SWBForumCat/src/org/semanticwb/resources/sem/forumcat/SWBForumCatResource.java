@@ -53,7 +53,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        System.out.println("entra a processAction Jorge1");
         User user=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
         if(isAcceptGuessComments() || user.isSigned())
