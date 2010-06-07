@@ -97,4 +97,14 @@ public class Dns extends DnsBase {
 
         return names.get(serverName);
     }
+
+    public static void cacheDns(String serverName, Dns dns)
+    {
+        names.put(serverName, dns);
+    }
+
+    public static boolean containsDns(String serverName)
+    {
+        return names.containsKey(serverName);
+    }
 }
