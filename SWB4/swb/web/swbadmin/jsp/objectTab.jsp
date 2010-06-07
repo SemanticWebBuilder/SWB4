@@ -5,7 +5,7 @@
     {
         String ret=txt;
         ret=SWBUtils.TEXT.replaceAll(ret, "swb:", URLEncoder.encode(SemanticVocabulary.URI));
-        ret=SWBUtils.TEXT.replaceAll(ret, "eng:", URLEncoder.encode("http://www.owl-ontologies.com/oqp_engine.owl#"));
+        //ret=SWBUtils.TEXT.replaceAll(ret, "eng:", URLEncoder.encode("http://www.owl-ontologies.com/oqp_engine.owl#"));
         return ret;
     }    
 
