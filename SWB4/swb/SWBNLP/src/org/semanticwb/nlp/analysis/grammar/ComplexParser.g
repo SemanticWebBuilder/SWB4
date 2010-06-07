@@ -9,7 +9,7 @@ options {
 tokens {
 	LIMIT; SELECT; ASIGN; COMPL; COMPG; COMPLE; COMPGE; COMPAS;
 	PRECON; PREDE; OFFSET; ORDER; COMPNAME; MODTO; NAME; COMPRNG;
-	INTERVAL;
+	INTERVAL;DEFINE;
 }
 
 @members {
@@ -47,10 +47,16 @@ tokens {
 	}
 }
 
-/*Main query, it can be an object query or a properties query.*/
+/*Main query, it can be an object query or a properties query or a definition query*/
 squery
-:	limiter? oquery modifier? EOF -> ^(SELECT limiter? oquery modifier?)
+:	dquery EOF -> ^(DEFINE dquery)
+	|limiter? oquery modifier? EOF -> ^(SELECT limiter? oquery modifier?)
 	|limiter? pquery modifier? EOF -> ^(SELECT limiter? pquery modifier?)
+;
+
+/*A describe query are the words 'qué es' and a name enclosed in quotation marks*/
+dquery
+:	OQM? MODD name CQM -> ^(name)
 ;
 
 /*A limiter is a number*/
