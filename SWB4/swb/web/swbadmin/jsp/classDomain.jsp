@@ -1,7 +1,16 @@
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.model.User"%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,java.util.*,org.semanticwb.base.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.rdf.model.*"%>
 <%
+    User user=SWBContext.getAdminUser();
+    if(user==null)
+    {
+        response.sendError(403);
+        return;
+    }
+    String lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     String suri=request.getParameter("suri");
