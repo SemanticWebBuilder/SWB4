@@ -584,7 +584,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     Node parent = node.getParent();
                     String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-                    Node resNode = node.addNode(JCR_CONTENT, swb_office.getPrefix() + ":" + swb_office.getName());
+                    Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
                     String userlogin=resNode.getProperty(cm_user).getString();
                     if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
                     {
