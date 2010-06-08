@@ -5,7 +5,7 @@
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.model.*"%>
-
+<%@page import="org.semanticwb.scian.*"%>
 <%@page import="org.semanticwb.sieps.*"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%!
@@ -33,13 +33,42 @@
         }
         return getLabel;
     }
+    public String getCode(SemanticObject obj,SemanticClass clazz)
+    {
+        String getCode="";
+        org.semanticwb.platform.SemanticProperty prop=obj.getModel().getSemanticProperty(org.semanticwb.platform.SemanticVocabulary.RDFS_SUBCLASSOF);
+        org.semanticwb.platform.SemanticObject parent=null;
+        Iterator<org.semanticwb.platform.SemanticObject> parents=obj.listObjectProperties(prop);
+        while(parents.hasNext())
+        {
+            org.semanticwb.platform.SemanticObject temp=parents.next();
+            if(clazz.equals(temp.getSemanticClass()))
+            {
+                parent=temp;
+                break;
+            }
+        }
+
+        if(parent!=null)
+        {
+            Sector sector=new Sector(parent);
+            getCode=sector.getCode();
+        }
+        return getCode;
+    }
 %>
 <%
 	SWBResourceURL url = paramRequest.getRenderUrl().setParameter("act", "results");
 	Empresa e = (Empresa)request.getAttribute("obj");
 	Iterator<Empresa> iterEmpresasSimi	=	Empresa.ClassMgr.listEmpresaByScian(e.getScian());
 	String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
-        String scian=e.getScian().getCode();
+        
+        String numclase=e.getScian().getCode();
+        String numsubrama=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.SubRama.sclass);
+        String numrama=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.Rama.sclass);
+        String numsubsector=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.SubSector.sclass);
+        String numsector=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.Sector.sclass);
+
         String clase=e.getScian().getSemanticObject().getLabel(paramRequest.getUser().getLanguage());
         String subrama=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.SubRama.sclass,paramRequest.getUser());
         String rama=getLabel(e.getScian().getSemanticObject(), org.semanticwb.scian.Rama.sclass,paramRequest.getUser());
@@ -134,14 +163,16 @@
        <h3>Industria a la que pertenece esta empresa</h3>
        <ul>
            <li class="first"><span class="codigo">Código SCIAN</span><span class="descripcion">DESCRIPCIÓN</span></li>
-           <li class="a"><span class="codigo">312</span><a href="#"><span class="descripcion"><%=sector%></span></a>
+           <li class="a"><span class="codigo"><%=numsector%></span><a href="#"><span class="descripcion"><%=sector%></span></a>
              <ul>
-               <li class="b"><span class="codigo">3121</span><a href="#"><span class="descripcion"><%=subsector%></span></a>
+               <li class="b"><span class="codigo"><%=numsubsector%></span><a href="#"><span class="descripcion"><%=subsector%></span></a>
                  <ul>
-                   <li class="a"><span class="codigo">31211</span><a href="#"><span class="descripcion"><%=rama%></span></a>
+                   <li class="a"><span class="codigo"><%=numrama%></span><a href="#"><span class="descripcion"><%=rama%></span></a>
                      <ul>                       
-                       <li class="a"><span class="codigo">312112</span><a href="#"><span class="descripcion"><%=subrama%></span></a></li>
-                       <li class="b"><span class="codigo"><%=scian%></span><a href="#"><span class="descripcion"><%=clase%></span></a></li>
+                       <li class="a"><span class="codigo"><%=numsubrama%></span><a href="#"><span class="descripcion"><%=subrama%></span></a></li>
+                       <ul>
+                            <li class="b"><span class="codigo"><%=numclase%></span><a href="#"><span class="descripcion"><%=clase%></span></a></li>
+                       </ul>
                      </ul>
                    </li>
                  </ul>
