@@ -68,23 +68,17 @@
                             forma.currentPercentage.value=100;
                         }
                     }
-                    if(forma.plannedHour.value!=""){
-                        if(!isNan(forma.plannedHour.value)){
-                            alert('Agrega un valor númerico para Horas Planeadas');
-                            val=false;
-                        }
+                    if(forma.plannedHour.value!=""&&isNaN(forma.plannedHour.value)==true){
+                        alert('Agrega un valor númerico para Horas Planeadas');
+                        val=false;
                     }
-                    if(forma.currentHour.value!=""){
-                        if(!isNan(forma.currentHour.value)){
-                            alert('Agrega un valor númerico para Horas Actuales');
-                            val=false;
-                        }
+                    if(forma.currentHour.value!=""&&isNaN(forma.currentHour.value)==true){
+                        alert('Agrega un valor númerico para Horas Actuales');
+                        val=false;
                     }
-                    if(forma.currentPercentage.value!=""){
-                        if(!isNan(forma.currentPercentage.value)){
-                            alert('Agrega un valor númerico para Porcentaje Actual');
-                            val=false;
-                        }
+                    if(forma.currentPercentage.value!=""&&isNaN(forma.currentPercentage.value)==true){
+                        alert('Agrega un valor númerico para Porcentaje Actual');
+                        val=false;
                     }
                     return val;
                 }
