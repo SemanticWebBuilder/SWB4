@@ -1,83 +1,70 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <script type="text/javascript" language="JavaScript">
-        <![CDATA[
-            function jsValida(frm) {
-                if( isNaN(parseInt(frm.level.value, 10)) ) {
-                    alert('El nivel de despliegue debe ser numérico.');
-                    frm.level.focus();
-                    return false;
-                }
-                if( frm.width.value.length>0 && isNaN(parseInt(frm.width.value, 10)) ) {
-                    alert('El ancho debe ser numérico.');
-                    frm.width.focus();
-                    return false;
-                }
-                if( frm.height.value.length>0 && isNaN(parseInt(frm.height.value, 10)) ) {
-                    alert('El alto debe ser numérico.');
-                    frm.height.focus();
-                    return false;
-                }
-                if(frm.level.value < 0) {
-                    alert("El nivel de despliegue debe ser mayor que cero.");
-                    frm.level.focus();
-                    return false;
-                }
-                return true;
-            }
-        ]]>
-    </script>
-    <form name="frmSiteMap" action="true" method="POST" enctype="multipart/form-data">
+    <form name="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
-            <input type="FILE" name="img" label="Imagen para el botón (bmp, gif, jpg, jpeg):" showfile="true" filetype="bmp|jpg|jpeg|gif" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen para mapa de sitio" moreattr="onclick=&#34;jsClear(this.form);&#34;" size="40"/>
-            <input type="TEXT" name="alt" label="Texto alterno para la imagen:" size="50"/>
-            <input type="TEXT" name="btntexto" label="Texto del botón en caso de no definir imagen:" size="50"/>
-            <input type="TEXT" name="lnktexto" label="Texto de la liga en caso de no definir imagen ni botón:" size="50"/>
-            <input type="TEXT" name="title" label="Título:" size="50"/>
-            <input type="TEXT" name="level" label="Nivel de despliegue" value="1" size="2" jsvaltype="js_numbers" />
-            <input type="TEXT" name="url" label="Sección que despliega el mapa de sitio:" size="50"/>
-        </fieldset>
+            <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
+            <input type="text" name="level" label="Nivel de despliegue" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor numérico" promptMessage="Nivel de despliegue" />
+            <input type="text" name="url" label="Sección que despliega el mapa de sitio:" maxlength="50" jsrequired="true" regExp="^[a-zA-Z0-9_]+" promptMessage="Identificador de la sección que despliega el mapa de sitio" invalidMessage="Identificador de sección inválido" />
 
-        <fieldset legend="Forma y estilo">
-            <input type="TEXT" name="width" label="Ancho:" size="50" jsvaltype="js_numbers" />
-            <input type="TEXT" name="height" label="Alto:" size="50" jsvaltype="js_numbers" />
-            <input type="TEXT" name="blnstyle" label="Estilo del botón o de la liga según sea el caso:" size="50" />
+            <fieldset legend="Modo">
+                <statictext name="txtTarget">¿Cómo desea acceder al recurso de mapa de sitio?:</statictext>
+                <input type="text" name="lnktexto" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
+                <input type="text" name="btntexto" label="Etiqueta del botón:" maxlength="50" promptMessage="Etiqueta del botón" />
+                <input type="file" name="img" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" />
+                <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno para la imagen. Pauta de accesibilidad" />
+            </fieldset>
+
+            <statictext name="note">
+            <![CDATA[
+                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+                * Dato requerido
+                </font>
+            ]]>
+            </statictext>
         </fieldset>
 
         <fieldset>
-            <statictext name="b">
+            <statictext name="cmd">
             <![CDATA[
-            <button id="btnSave" type="submit" name="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" type="reset" name="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
+            <button id="btnSave" type="submit" dojoType="dijit.form.Button">Guardar</button>
+            <button id="btnReset" type="reset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
             ]]>
             </statictext>
         </fieldset>
     </form>
 
-
     <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
 
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmSiteMap"))) {
-                        dojo.byId("frmSiteMap").submit();
+        dojo.addOnLoad(
+            function(){
+                dojo.connect(dijit.byId("btnSave"), "onSubmit",
+                    function() {
+                        if( jsValida(dojo.byId("frmAddNew")) )
+                            return true;
+                        else
+                            return false;
                     }
-                }
-            );
-        });
+                );
+            }
+        );
 
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmSiteMap").reset();
-                }
-            );
-        });
+        function jsValida(frm) {
+            if( !frm.lnktexto.value && !frm.btntexto.value && !frm.img.value  && !dojo.byId('wbNoFile_img') ) {
+                alert('Indique el mecanismo para acceder al recurso de mapa de sitio.');
+                frm.lnktexto.focus();
+                return false;
+            }
+            if( frm.img.value && !frm.alt.value ) {
+                alert('Indique el texto alterno para la imagen.');
+                frm.alt.focus();
+                return false;
+            }
+            return true;
+        }
         ]]>
     </script>
 </admresource>
