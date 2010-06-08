@@ -68,6 +68,24 @@
                             forma.currentPercentage.value=100;
                         }
                     }
+                    if(forma.plannedHour.value!=""){
+                        if(!isNan(forma.plannedHour.value)){
+                            alert('Agrega un valor númerico para Horas Planeadas');
+                            val=false;
+                        }
+                    }
+                    if(forma.currentHour.value!=""){
+                        if(!isNan(forma.currentHour.value)){
+                            alert('Agrega un valor númerico para Horas Actuales');
+                            val=false;
+                        }
+                    }
+                    if(forma.currentPercentage.value!=""){
+                        if(!isNan(forma.currentPercentage.value)){
+                            alert('Agrega un valor númerico para Porcentaje Actual');
+                            val=false;
+                        }
+                    }
                     return val;
                 }
                 function calcular(forma){
@@ -93,7 +111,7 @@
             }
     %>
         <div>
-        <table  width="100%">
+        <table  width="91%">
           <tr>
               <td width="180px">Proyecto: </td>
             <td><%=parent%></td></tr>
@@ -114,7 +132,7 @@
               SWBResourceURL url=paramRequest.getActionUrl();
               url.setParameter("uri", obj.getURI());
               url.setAction("update");
-              mgr.addHiddenParameter(Activity.swb_active.getName(), Boolean.toString(act.isActive()));
+              mgr.addHiddenParameter(Activity.swb_active.getName(), Boolean.toString(act.isActive()));//dojoType="dijit.form.Form"
               boolean checkPrede=checkPredecesor(act);%>
         <fieldset><legend>Seguimiento</legend>
         <form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
