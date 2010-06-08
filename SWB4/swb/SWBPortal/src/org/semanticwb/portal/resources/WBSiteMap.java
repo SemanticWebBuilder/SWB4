@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerException;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -41,7 +42,9 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
-        
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -66,6 +69,8 @@ public class WBSiteMap extends GenericAdmResource
     /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
 
+    private javax.xml.transform.Templates tpl;
+
     /**
      * Instantiates a new wB site map.
      */
@@ -84,6 +89,25 @@ public class WBSiteMap extends GenericAdmResource
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
+
+        if( base.getAttribute("template")!=null )
+        {
+            try
+            {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+            }
+            catch(Exception e) {
+                log.error("Error while loading resource template: "+base.getId(), e);
+            }
+        }
+        if( tpl==null )
+        {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl"));
+            }catch(Exception e) {
+                log.error("Error while loading default resource template: "+base.getId(), e);
+            }
+        }
     }
      
     /* (non-Javadoc)
@@ -99,6 +123,53 @@ public class WBSiteMap extends GenericAdmResource
             super.processRequest(request, response, paramRequest);
         }
     }
+
+    /**
+     * Obtiene el resultado final del recurso en formato dom.
+     *
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
+     */
+    public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base=getResourceBase();
+        SWBResourceURL url=paramRequest.getRenderUrl();
+        url.setCallMethod(url.Call_DIRECT);
+        url.setMode("bind");
+        int level;
+        try {
+            level = Integer.parseInt(base.getAttribute("level"),10);
+        }catch(NumberFormatException e) {
+            level = 0;
+        }
+        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+        HashMap params = new HashMap();
+        Enumeration<String> names = request.getParameterNames();
+        while(names.hasMoreElements()) {
+            String name = names.nextElement();
+            params.put(name, request.getParameter(name));
+        }
+
+        String width = base.getAttribute("width");
+        String height = base.getAttribute("height");
+        if(width != null) {
+            if(!width.endsWith("%")) {
+                width += "px";
+            }
+            tree.setWidth(base.getAttribute("width"));
+        }
+        if(height != null) {
+            if(!height.endsWith("%")) {
+                height += "px";
+            }
+            tree.setHeight(base.getAttribute("height"));
+        }
+        return tree.renderXHTMLFirstTime(params);
+    }
+
 
     /**
      * Do bind.
@@ -127,8 +198,17 @@ public class WBSiteMap extends GenericAdmResource
             params.put(name, request.getParameter(name));
         }
         SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
-        String x = tree.renderXHTML(params);
-        out.println(x);
+        
+        Document dom = tree.renderXHTML(params);
+        if(dom != null)  {
+            try {
+                String x = SWBUtils.XML.transformDom(tpl, dom);
+                out.print(x);
+            }catch(TransformerException te) {
+                log.error("doBind Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
+            }
+        }
+//        out.println(x);
         out.flush();
     }
         
@@ -286,43 +366,52 @@ public class WBSiteMap extends GenericAdmResource
             }
         }else {
             // Mapa de sitio
-            try {
-                SWBResourceURL url=paramRequest.getRenderUrl();
-                url.setCallMethod(url.Call_DIRECT);
-                url.setMode("bind");
-                int level;
+            Document dom = getDom(request, response, paramRequest);
+            if(dom != null)  {
                 try {
-                    level = Integer.parseInt(base.getAttribute("level"),10);
-                }catch(NumberFormatException e) {
-                    level = 0;
+                    out.print(SWBUtils.XML.transformDom(tpl, dom));
+                }catch(TransformerException te) {
+                    log.error("doView Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
                 }
-                SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
-                HashMap params = new HashMap();
-                Enumeration<String> names = request.getParameterNames();
-                while(names.hasMoreElements()) {
-                    String name = names.nextElement();
-                    params.put(name, request.getParameter(name));
-                }
-
-                String width = base.getAttribute("width");
-                String height = base.getAttribute("height");
-                if(width != null) {
-                    if(!width.endsWith("%")) {
-                        width += "px";
-                    }
-                    tree.setWidth(base.getAttribute("width"));
-                }
-                if(height != null) {
-                    if(!height.endsWith("%")) {
-                        height += "px";
-                    }
-                    tree.setHeight(base.getAttribute("height"));
-                }
-                
-                out.println(tree.renderXHTMLFirstTime(params));
-            }catch(Exception e) {
-                log.error(e);
             }
+//            try {
+//                SWBResourceURL url=paramRequest.getRenderUrl();
+//                url.setCallMethod(url.Call_DIRECT);
+//                url.setMode("bind");
+//                int level;
+//                try {
+//                    level = Integer.parseInt(base.getAttribute("level"),10);
+//                }catch(NumberFormatException e) {
+//                    level = 0;
+//                }
+//                SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+//                HashMap params = new HashMap();
+//                Enumeration<String> names = request.getParameterNames();
+//                while(names.hasMoreElements()) {
+//                    String name = names.nextElement();
+//                    params.put(name, request.getParameter(name));
+//                }
+//
+//                String width = base.getAttribute("width");
+//                String height = base.getAttribute("height");
+//                if(width != null) {
+//                    if(!width.endsWith("%")) {
+//                        width += "px";
+//                    }
+//                    tree.setWidth(base.getAttribute("width"));
+//                }
+//                if(height != null) {
+//                    if(!height.endsWith("%")) {
+//                        height += "px";
+//                    }
+//                    tree.setHeight(base.getAttribute("height"));
+//                }
+//                String html = tree.renderXHTMLFirstTime(params);
+//                System.out.println("\n\nhtml="+html);
+//                out.println(html);
+//            }catch(Exception e) {
+//                log.error(e);
+//            }
         }
         out.flush();
     }
@@ -409,8 +498,11 @@ public class WBSiteMap extends GenericAdmResource
          * @throws SWBResourceException the sWB resource exception
          * @throws IOException Signals that an I/O exception has occurred.
          */
-        public String renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
-            StringBuilder html = new StringBuilder();
+        public Document renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
+//            StringBuilder html = new StringBuilder();
+            Document  dom = SWBUtils.XML.getNewDocument();
+            Element smE = dom.createElement("sitemap");
+
             StringBuilder params = new StringBuilder("&site="+website);
             String whoOpen = "";
             WebSite tm = null;
@@ -444,65 +536,85 @@ public class WBSiteMap extends GenericAdmResource
                 if(level>0) {
                     opened=true;
                 }
-                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
-                if(width!=null) {
-                    html.append("width:"+width+";");
-                }
-                if(height!=null) {
-                    html.append("height:"+height+";");
-                }
-                html.append("\" >");
-                if(title!=null) {
-                    html.append("<h1>"+title+"</h1>");
-                }
-                html.append("<ul>");
-                html.append("<li>");
+//                html.append("<div class=\"swb-mapa\" id=\"tree_"+website+"\" style=\"");
+//                if(width!=null) {
+//                    html.append("width:"+width+";");
+//                }
+//                if(height!=null) {
+//                    html.append("height:"+height+";");
+//                }
+//                html.append("\" >");
+//                if(title!=null) {
+//                    html.append("<h1>"+title+"</h1>");
+//                }
+                smE.setAttribute("class", "swb-mapa");
+                smE.setAttribute("id", "tree_"+website);
+                smE.setAttribute("title", title);
+                dom.appendChild(smE);
+
+//                html.append("<ul>");
+//                html.append("<li>");
+                Element node = dom.createElement("node");
+                smE.appendChild(node);
 
                 if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "+");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "-");
                         opened = true;
                     }
                 }else {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "-");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "+");
                     }
                 }
 
                 if(openOnClick) {
-                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\" "+style+">");
-                    html.append(tmhome.getDisplayTitle(this.language));
-                    html.append("</a>");
+//                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\" "+style+">");
+//                    html.append(tmhome.getDisplayTitle(this.language));
+//                    html.append("</a>");
                 }else {
-                    html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
-                    html.append(tmhome.getDisplayTitle(this.language));
-                    html.append("</a>");
+//                    html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
+//                    html.append(tmhome.getDisplayTitle(this.language));
+//                    html.append("</a>");
+                    node.setAttribute("title", tmhome.getDisplayTitle(this.language));
+                    node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
                 }
 
                 if(opened) {
-                    html.append(addChild(request, tmit, tmhome, tpid, params, 1, language));
+//                    html.append(addChild(request, tmit, tmhome, tpid, params, 1, language));
+                    addChild(request, tmit, tmhome, tpid, params, 1, language, node);
                 }
-                html.append("</li>");
-                html.append("</ul>");
-                html.append("</div>");
-
-
+//                html.append("</li>");
+//                html.append("</ul>");
+//                html.append("</div>");
+            }catch(Exception e) {
+                log.error("Error on method WebSiteSectionTree.renderXHTMLFirstTime()", e);
+//                html.append("\n\nError:"+e);
             }
-            catch(Exception e) {
-                log.error("Error on method WebSiteSectionTree.render()", e);
-                html.append("\n\nError:"+e);
-            }
-            return html.toString();
+//            return html.toString();
+            return dom;
         }
 
         /**
@@ -513,8 +625,11 @@ public class WBSiteMap extends GenericAdmResource
          * @throws SWBResourceException the sWB resource exception
          * @throws IOException Signals that an I/O exception has occurred.
          */
-        public String renderXHTML(HashMap request) throws SWBResourceException, IOException {
-            StringBuilder html = new StringBuilder();
+        public Document renderXHTML(HashMap request) throws SWBResourceException, IOException {
+//            StringBuilder html = new StringBuilder();
+            Document  dom = SWBUtils.XML.getNewDocument();
+            Element smE = dom.createElement("sitemap");
+
             StringBuilder params = new StringBuilder("&site="+website);
             String whoOpen = "";
             WebSite tm = null;
@@ -546,55 +661,76 @@ public class WBSiteMap extends GenericAdmResource
                 }
 
                 if(title!=null) {
-                    html.append("<h1>mapa de sitio</h1>");
+//                    html.append("<h1>mapa de sitio</h1>");
+                    smE.setAttribute("title", title);
                 }
-                html.append("<ul>");
-                html.append("<li>");
+                dom.appendChild(smE);
+
+//                html.append("<ul>");
+//                html.append("<li>");
+                Element node = dom.createElement("node");
+                smE.appendChild(node);
 
                 if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {                    
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "+");
                         if(level==0)
                             opened = false;
                     }else {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "-");
                         opened = true;
                     }
                 }else {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=1");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>-</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "-");
                     }else {
                         params.append("&"+tmhome.getId()+"=0");
-                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+//                        html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')\"><span>+</span></a>");
+                        node.setAttribute("class", "icomap");
+                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                        node.setAttribute("key", "+");
                     }
                 }
 
                 if(openOnClick) {
-                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\">");
-                    html.append(tmhome.getDisplayTitle(this.language));
-                    html.append("</a>");
+//                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\">");
+//                    html.append(tmhome.getDisplayTitle(this.language));
+//                    html.append("</a>");
                 }else {
-                    html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
-                    html.append(tmhome.getDisplayTitle(this.language));
-                    html.append("</a>");
+//                    html.append("<a onclick=\"window.location='"+tmhome.getUrl()+"'\">");
+//                    html.append(tmhome.getDisplayTitle(this.language));
+//                    html.append("</a>");
+                    node.setAttribute("title", tmhome.getDisplayTitle(this.language));
+                    node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
                 }
 
                 if(tpsite!=null && opened) {                
-                    html.append(addChild(request, tmit, tmhome, tpid, params, language));
+//                    html.append(addChild(request, tmit, tmhome, tpid, params, language));
+                    addChild(request, tmit, tmhome, tpid, params, language, node);
                 }
-                html.append("</li>");
-                html.append("</ul>");
-                html.append("</div>");
+//                html.append("</li>");
+//                html.append("</ul>");
+//                html.append("</div>");
 
 
             }
             catch(Exception e) {
                 log.error("Error on method WebSiteSectionTree.render()", e);
             }
-            return html.toString();
+//            return html.toString();
+            return dom;
         }
 
         /**
@@ -609,10 +745,15 @@ public class WBSiteMap extends GenericAdmResource
          * @param language the language
          * @return the string
          */
-        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language) {
+        //private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language) {
+        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language, Element node) {
             boolean opened;
 
-            StringBuilder html = new StringBuilder("<ul>");
+//            StringBuilder html = new StringBuilder("<ul>");
+            Document dom = node.getOwnerDocument();
+            Element branch = dom.createElement("branch");
+            node.appendChild(branch);
+
             Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
@@ -621,64 +762,81 @@ public class WBSiteMap extends GenericAdmResource
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
                     if(this.level>level)opened=true;else opened=false;
 
+                    Element child = dom.createElement("node");
+                    branch.appendChild(child);
                     if(webpage.listChilds(language, true, false, false, false).hasNext()) {
-                        html.append("<li>");
+//                        html.append("<li>");
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "+");
                                 if(this.level==level)
                                     opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "-");
                                 opened = true;
                             }
                         }else {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "-");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "+");
                             }
                         }
 
                         if(openOnClick) {
-                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
                         }else {
-                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
+                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
                         }
 
                         if(opened) {
-                            html.append(addChild(request, tmit, webpage, tpid, params, level+1, language));
+                            //html.append(addChild(request, tmit, webpage, tpid, params, level+1, language));
+                            addChild(request, tmit, webpage, tpid, params, level+1, language, child);
                         }
-
-                        html.append("</li>");
+//                        html.append("</li>");
                     }else {
-                        html.append("<li>");
-                        //html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                        html.append("<a class=\"icomap-trans\"><span></span></a>");
+//                        html.append("<li>");
+//                        html.append("<a class=\"icomap-trans\"><span></span></a>");
+                        child.setAttribute("class", "icomap-trans");
                         if(openOnClick) {
-                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
                         }else {
-                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
+                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
+                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
                         }
-                        html.append("</li>");
+//                        html.append("</li>");
                     }
                 }
             }
-            html.append("</ul>");
-
-            return html.toString();
+//            html.append("</ul>");
+//            return html.toString();
         }
 
         /**
@@ -692,10 +850,14 @@ public class WBSiteMap extends GenericAdmResource
          * @param language the language
          * @return the string
          */
-        private String addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, String language) {
+        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, String language, Element node) {
             boolean opened;
 
-            StringBuilder html = new StringBuilder("<ul>");
+//            StringBuilder html = new StringBuilder("<ul>");
+            Document dom = node.getOwnerDocument();
+            Element branch = dom.createElement("branch");
+            node.appendChild(branch);
+
             Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
@@ -703,63 +865,81 @@ public class WBSiteMap extends GenericAdmResource
 
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
 
+                    Element child = dom.createElement("node");
+                    branch.appendChild(child);
                     if(webpage.listChilds(language, true, false, false, false).hasNext()) {
-                        html.append("<li>");
+//                        html.append("<li>");
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "+");
                                 opened = false;
                             }else {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "-");
                                 opened = true;
                             }
                         }else {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=1");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>-</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "-");
                             }else {
                                 params.append("&"+webpage.getId()+"=0");
-                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+//                                html.append("<a class=\"icomap\" onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\"><span>+</span></a>");
+                                child.setAttribute("class", "icomap");
+                                child.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')");
+                                child.setAttribute("key", "+");
                             }
                         }
 
                         if(openOnClick) {
-                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
                         }else {
-                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
+                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
                         }
 
                         if(opened) {
-                            html.append(addChild(request, tmit, webpage, tpid, params, language));
+//                            html.append(addChild(request, tmit, webpage, tpid, params, language));
+                            addChild(request, tmit, webpage, tpid, params, language, child);
                         }
 
-                        html.append("</li>");
+//                        html.append("</li>");
                     }else {
-                        html.append("<li>");
-                        //html.append("<img src=\""+pathImages+"/trans.gif\" />");
-                        html.append("<a class=\"icomap-trans\"><span></span></a>");
+//                        html.append("<li>");
+//                        html.append("<a class=\"icomap-trans\"><span></span></a>");
+                        child.setAttribute("class", "icomap-trans");
                         if(openOnClick) {                            
-                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp="+webpage.getId()+params+"','tree_'+'"+tmit.getId()+"')\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
                         }else {                            
-                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
-                            html.append(webpage.getDisplayTitle(this.language));
-                            html.append("</a>");
+//                            html.append("<a onclick=\"window.location='"+webpage.getUrl()+"'\">");
+//                            html.append(webpage.getDisplayTitle(this.language));
+//                            html.append("</a>");
+                            child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
+                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
                         }
-                        html.append("</li>");
+//                        html.append("</li>");
                     }
                 }
             }
-            html.append("</ul>");
-
-            return html.toString();
+//            html.append("</ul>");
+//            return html.toString();
         }
 
         /**
