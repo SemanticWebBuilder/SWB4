@@ -15,6 +15,7 @@
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
         <input type="text" name="secid" label="ID Sección de contacto:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID de la sección que muestra el formulario de contacto" invalidMessage="Identificador inválido" />
     </fieldset>
+    
     <fieldset legend="Modo">
         <statictext name="txtTarget">¿Cómo desea acceder al recurso de contacto?:</statictext>
         <input type="text" name="link" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
@@ -23,13 +24,21 @@
 
         <input type="file" name="image" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
         <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno de la imagen" />
+
+        <statictext name="note">
+        <![CDATA[
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Dato requerido
+            </font>
+        ]]>
+        </statictext>
     </fieldset>
 
     <fieldset>
         <statictext name="cmd">
         <![CDATA[
-        <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
-        <button id="btnReset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
+        <button id="btnSave" type="submit" dojoType="dijit.form.Button">Guardar</button>
+        <button id="btnReset" type="reset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
         ]]>
         </statictext>
     </fieldset>
@@ -41,15 +50,12 @@
 
         dojo.addOnLoad (
             function() {
-                dojo.connect(dijit.byId("btnSave"), "onClick",
+                dojo.connect(dijit.byId("btnSave"), "onSubmit",
                     function() {
-                        if( jsValida(dojo.byId("frmAddNew")) )
-                            dojo.byId("frmAddNew").submit();
-                    }
-                );
-                dojo.connect(dijit.byId("btnReset"), "onClick",
-                    function() {
-                        dojo.byId("frmAddNew").reset();
+                        if(jsValida(dojo.byId("frmAddNew")))
+                            return true;
+                        else
+                            return false;
                     }
                 );
             }
