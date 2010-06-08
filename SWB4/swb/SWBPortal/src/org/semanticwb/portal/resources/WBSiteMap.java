@@ -39,6 +39,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.*;
@@ -145,7 +146,7 @@ public class WBSiteMap extends GenericAdmResource
         }catch(NumberFormatException e) {
             level = 0;
         }
-        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(), false, level, base.getAttribute("title"), paramRequest.getUser());
         HashMap params = new HashMap();
         Enumeration<String> names = request.getParameterNames();
         while(names.hasMoreElements()) {
@@ -197,7 +198,7 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser().getLanguage());
+        SelectTree tree = new SelectTree(paramRequest.getWebPage().getWebSite().getId(), url.toString(true), false, base.getAttribute("title"), paramRequest.getUser());
         
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
@@ -413,6 +414,8 @@ public class WBSiteMap extends GenericAdmResource
         /** The height. */
         private String width, height;
 
+        private User user;
+
         /**
          * Instantiates a new select tree.
          * 
@@ -422,12 +425,8 @@ public class WBSiteMap extends GenericAdmResource
          * @param title the title
          * @param language the language
          */
-        public SelectTree(String website, String url, boolean openOnClick, String title, String language) {
-            this.website = website;
-            this.url = url;
-            this.openOnClick = openOnClick;
-            this.title = title;
-            this.language = language;
+        public SelectTree(String website, String url, boolean openOnClick, String title, User user) {
+            this(website, url, openOnClick, 0, title, user);
         }
 
         /**
@@ -440,7 +439,7 @@ public class WBSiteMap extends GenericAdmResource
          * @param title the title
          * @param language the language
          */
-        public SelectTree(String website, String url, boolean openOnClick, int level, String title, String language) {
+        public SelectTree(String website, String url, boolean openOnClick, int level, String title, User user) {
             this.website = website;
             this.url = url;
             this.openOnClick = openOnClick;
@@ -448,7 +447,8 @@ public class WBSiteMap extends GenericAdmResource
                 this.level = level;
             }
             this.title = title;
-            this.language = language;
+            language = user.getLanguage();
+            this.user = user;
         }
 
         /**
@@ -459,7 +459,7 @@ public class WBSiteMap extends GenericAdmResource
          * @throws SWBResourceException the sWB resource exception
          * @throws IOException Signals that an I/O exception has occurred.
          */
-        public Document renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
+        private Document renderXHTMLFirstTime(HashMap request) throws SWBResourceException, IOException {
             Document  dom = SWBUtils.XML.getNewDocument();
             Element smE = dom.createElement("sitemap");
 
@@ -504,8 +504,14 @@ public class WBSiteMap extends GenericAdmResource
                 Element node = dom.createElement("node");
                 smE.appendChild(node);
 
-                if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
+                if(!user.haveAccess(tmhome))
+                    return dom;
+
+                System.out.println("\n\n");
+                /*if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
+                    System.out.println("1");
                     if(opened) {
+                        System.out.println("2");
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
                         node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
@@ -513,25 +519,29 @@ public class WBSiteMap extends GenericAdmResource
                         if(level==0)
                             opened = false;
                     }else {
+                        System.out.println("3");
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
                         node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
                         node.setAttribute("key", "-");
                         opened = true;
                     }
-                }else {
+                }else {*/
+                    System.out.println("4");
                     if(opened) {
+                        System.out.println("5");
                         params.append("&"+tmhome.getId()+"=1");
                         node.setAttribute("leaf", "0");
                         node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
                         node.setAttribute("key", "-");
                     }else {
+                        System.out.println("6");
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
                         node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
                         node.setAttribute("key", "+");
                     }
-                }
+                /*}*/
 
                 if(openOnClick) {
 //                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\" "+style+">");
@@ -559,7 +569,7 @@ public class WBSiteMap extends GenericAdmResource
          * @throws SWBResourceException the sWB resource exception
          * @throws IOException Signals that an I/O exception has occurred.
          */
-        public Document renderXHTML(HashMap request) throws SWBResourceException, IOException {
+        private Document renderXHTML(HashMap request) throws SWBResourceException, IOException {
             Document  dom = SWBUtils.XML.getNewDocument();
             Element smE = dom.createElement("sitemap");
 
@@ -601,7 +611,10 @@ public class WBSiteMap extends GenericAdmResource
                 Element node = dom.createElement("node");
                 smE.appendChild(node);
 
-                if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {                    
+                if(!user.haveAccess(tmhome))
+                    return dom;
+
+                if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
                     if(opened) {
                         params.append("&"+tmhome.getId()+"=0");
                         node.setAttribute("leaf", "0");
@@ -671,10 +684,13 @@ public class WBSiteMap extends GenericAdmResource
             Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
-                if(webpage.getId()!=null && webpage instanceof WebPage ) {
-
+                //if(webpage.getId()!=null && webpage instanceof WebPage ) {
+                if( user.haveAccess(webpage) ) {
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
-                    if(this.level>level)opened=true;else opened=false;
+                    if( this.level>level )
+                        opened=true;
+                    else
+                        opened=false;
 
                     Element child = dom.createElement("node");
                     branch.appendChild(child);
@@ -756,8 +772,8 @@ public class WBSiteMap extends GenericAdmResource
             Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
-                if(webpage.getId()!=null) {
-
+                //if(webpage.getId()!=null) {
+                if( user.haveAccess(webpage) ) {
                     opened = Boolean.parseBoolean(request.get(webpage.getId())==null?"false":((String)request.get(webpage.getId())).equals("1")?"true":"false");
 
                     Element child = dom.createElement("node");
