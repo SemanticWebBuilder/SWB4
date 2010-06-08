@@ -154,7 +154,7 @@ public class WBSiteMap extends GenericAdmResource
             params.put(name, request.getParameter(name));
         }
 
-        String width = base.getAttribute("width");
+        /*String width = base.getAttribute("width");
         String height = base.getAttribute("height");
         if(width != null) {
             if(!width.endsWith("%")) {
@@ -167,7 +167,7 @@ public class WBSiteMap extends GenericAdmResource
                 height += "px";
             }
             tree.setHeight(base.getAttribute("height"));
-        }
+        }*/
         return tree.renderXHTMLFirstTime(params);
     }
 
