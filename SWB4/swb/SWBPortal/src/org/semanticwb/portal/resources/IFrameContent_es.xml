@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmIFrameContent" action="true" method="post" jsframework="dojo">
+    <form name="frmAddNew" action="true" method="post" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
             <input type="text" name="url" label="Url del contenido:" size="50" jsrequired="true" promptMessage="URL del archivo, absoluta o relativa a la sección" />
@@ -45,13 +45,30 @@
         </fieldset>
     </form>
 
-    <script language="JavaScript">
+    <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
+
         dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"),  "onClick", function(){ dojo.byId("frmWBBanner").submit(); } );
-            dojo.connect(dijit.byId("btnReset"), "onClick", function(){ dojo.byId("frmWBBanner").reset(); } );
+            dojo.connect(dijit.byId("btnSave"),  "onSubmit", 
+                function() {
+                    if(jsValida(dojo.byId("frmAddNew")))
+                        return true;
+                    else
+                        return false;
+                }
+            );
+            dojo.byId('mimetype').selectedIndex=0;
         });
+
+        function jsValida(frm) {
+            if( frm.mimetype.selectedIndex<0 ) {
+                alert('Falta seleccionar un tipo MIME.');
+                frm.mimetype.focus();
+                return false;
+            }
+            return true;
+        }
     ]]>
     </script>
 </admresource>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmIFrameContent" action="true" method="post" jsframework="dojo">
+    <form name="frmAddNew" action="true" method="post" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
             <input type="text" name="url" label="Url del contenido:" size="50" jsrequired="true" promptMessage="URL del archivo, absoluta o relativa a la sección" />
         </fieldset>
+
         <fieldset legend="Forma y estilo">
             <input type="text" id="width"  name="width"  label="Ancho:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del recuadro considerado en pixeles" />
             <input type="text" id="height" name="height" label="Alto:"  maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Alto del recuadro considerado en pixeles" />
 
-            <select name="mimetype" label="Tipo de Mime:">
+            <select name="mimetype" id="mimetype" label="Tipo de Mime:" jsrequired="true">
                 <option value="text/html" />
                 <option value="text/richtext" />
                 <option value="text/rtf" />
@@ -45,13 +46,30 @@
         </fieldset>
     </form>
 
-    <script language="JavaScript">
+    <script type="text/javascript">
         <![CDATA[
         dojo.require("dijit.form.Button");
+        
         dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"),  "onClick", function(){ dojo.byId("frmWBBanner").submit(); } );
-            dojo.connect(dijit.byId("btnReset"), "onClick", function(){ dojo.byId("frmWBBanner").reset(); } );
+            dojo.connect(dijit.byId("btnSave"),  "onSubmit", 
+                function() {
+                    if(jsValida(dojo.byId("frmAddNew")))
+                        return true;
+                    else
+                        return false;
+                }
+            );
+            dojo.byId('mimetype').selectedIndex=0;
         });
+
+        function jsValida(frm) {
+            if( frm.mimetype.selectedIndex<0 ) {
+                alert('Falta seleccionar un tipo MIME.');
+                frm.mimetype.focus();
+                return false;
+            }
+            return true;
+        }
     ]]>
     </script>
 </admresource>
