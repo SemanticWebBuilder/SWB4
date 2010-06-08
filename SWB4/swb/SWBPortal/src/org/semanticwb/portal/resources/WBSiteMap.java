@@ -407,9 +407,6 @@ public class WBSiteMap extends GenericAdmResource
         
         /** The title. */
         private String title;
-        
-        /** The language. */
-        private String language;
 
         /** The height. */
         private String width, height;
@@ -447,7 +444,6 @@ public class WBSiteMap extends GenericAdmResource
                 this.level = level;
             }
             this.title = title;
-            language = user.getLanguage();
             this.user = user;
         }
 
@@ -464,12 +460,10 @@ public class WBSiteMap extends GenericAdmResource
             Element smE = dom.createElement("sitemap");
 
             StringBuilder params = new StringBuilder("&site="+website);
-            String whoOpen = "";
             WebSite tm = null;
 
             try {
                 WebPage tpsite=null, tpid=null;
-                //String style="";
 
                 if(request.containsKey("reptm") && request.get("reptm")!=null) {
                     tm=SWBContext.getWebSite((String)request.get("reptm"));
@@ -507,53 +501,29 @@ public class WBSiteMap extends GenericAdmResource
                 if(!user.haveAccess(tmhome))
                     return dom;
 
-                System.out.println("\n\n");
-                /*if(tpid!=null && tpid.getId().equalsIgnoreCase(tmhome.getId())) {
-                    System.out.println("1");
-                    if(opened) {
-                        System.out.println("2");
-                        params.append("&"+tmhome.getId()+"=0");
-                        node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
-                        node.setAttribute("key", "+");
-                        if(level==0)
-                            opened = false;
-                    }else {
-                        System.out.println("3");
-                        params.append("&"+tmhome.getId()+"=1");
-                        node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
-                        node.setAttribute("key", "-");
-                        opened = true;
-                    }
-                }else {*/
-                    System.out.println("4");
-                    if(opened) {
-                        System.out.println("5");
-                        params.append("&"+tmhome.getId()+"=1");
-                        node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
-                        node.setAttribute("key", "-");
-                    }else {
-                        System.out.println("6");
-                        params.append("&"+tmhome.getId()+"=0");
-                        node.setAttribute("leaf", "0");
-                        node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
-                        node.setAttribute("key", "+");
-                    }
-                /*}*/
+                if(opened) {
+                    params.append("&"+tmhome.getId()+"=1");
+                    node.setAttribute("leaf", "0");
+                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                    node.setAttribute("key", "-");
+                }else {
+                    params.append("&"+tmhome.getId()+"=0");
+                    node.setAttribute("leaf", "0");
+                    node.setAttribute("onclick", "getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+params+"','tree_'+'"+website+"')");
+                    node.setAttribute("key", "+");
+                }
 
                 if(openOnClick) {
 //                    html.append("<a onclick=\"getHtml('"+url+"?reptm="+tmit.getId()+"&reptp=" + tmhome.getId()+whoOpen+params+"','tree_'+'"+website+"')\" "+style+">");
 //                    html.append(tmhome.getDisplayTitle(this.language));
 //                    html.append("</a>");
                 }else {
-                    node.setAttribute("title", tmhome.getDisplayTitle(this.language));
+                    node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
                     node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
                 }
 
                 if(opened) {
-                    addChild(request, tmit, tmhome, tpid, params, 1, language, node);
+                    addChild(request, tmit, tmhome, tpid, params, 1, node);
                 }
             }catch(Exception e) {
                 log.error("Error on method WebSiteSectionTree.renderXHTMLFirstTime()", e);
@@ -574,7 +544,6 @@ public class WBSiteMap extends GenericAdmResource
             Element smE = dom.createElement("sitemap");
 
             StringBuilder params = new StringBuilder("&site="+website);
-            //String whoOpen = "";
             WebSite tm = null;
 
             try {
@@ -648,12 +617,12 @@ public class WBSiteMap extends GenericAdmResource
 //                    html.append(tmhome.getDisplayTitle(this.language));
 //                    html.append("</a>");
                 }else {
-                    node.setAttribute("title", tmhome.getDisplayTitle(this.language));
+                    node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
                     node.setAttribute("url", "window.location='"+tmhome.getUrl()+"'");
                 }
 
                 if(tpsite!=null && opened) {                
-                    addChild(request, tmit, tmhome, tpid, params, language, node);
+                    addChild(request, tmit, tmhome, tpid, params, node);
                 }
             }
             catch(Exception e) {
@@ -674,14 +643,14 @@ public class WBSiteMap extends GenericAdmResource
          * @param language the language
          * @return the string
          */
-        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, String language, Element node) {
+        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, Element node) {
             boolean opened;
 
             Document dom = node.getOwnerDocument();
             Element branch = dom.createElement("branch");
             node.appendChild(branch);
 
-            Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
+            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
                 //if(webpage.getId()!=null && webpage instanceof WebPage ) {
@@ -694,7 +663,7 @@ public class WBSiteMap extends GenericAdmResource
 
                     Element child = dom.createElement("node");
                     branch.appendChild(child);
-                    if(webpage.listChilds(language, true, false, false, false).hasNext()) {
+                    if(webpage.listChilds(user.getLanguage(), true, false, false, false).hasNext()) {
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
@@ -729,12 +698,12 @@ public class WBSiteMap extends GenericAdmResource
 //                            html.append(webpage.getDisplayTitle(this.language));
 //                            html.append("</a>");
                         }else {
-                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
                             child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
                         }
 
                         if(opened) {
-                            addChild(request, tmit, webpage, tpid, params, level+1, language, child);
+                            addChild(request, tmit, webpage, tpid, params, level+1, child);
                         }
                     }else {
                         child.setAttribute("leaf", "1");
@@ -744,7 +713,7 @@ public class WBSiteMap extends GenericAdmResource
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
-                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
                         }
                     }
                 }
@@ -762,14 +731,14 @@ public class WBSiteMap extends GenericAdmResource
          * @param language the language
          * @return the string
          */
-        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, String language, Element node) {
+        private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, Element node) {
             boolean opened;
 
             Document dom = node.getOwnerDocument();
             Element branch = dom.createElement("branch");
             node.appendChild(branch);
 
-            Iterator<WebPage> childs=pageroot.listChilds(language, true, false, false, false);
+            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, false);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
                 //if(webpage.getId()!=null) {
@@ -778,7 +747,7 @@ public class WBSiteMap extends GenericAdmResource
 
                     Element child = dom.createElement("node");
                     branch.appendChild(child);
-                    if(webpage.listChilds(language, true, false, false, false).hasNext()) {
+                    if(webpage.listChilds(user.getLanguage(), true, false, false, false).hasNext()) {
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
@@ -812,12 +781,12 @@ public class WBSiteMap extends GenericAdmResource
 //                            html.append(webpage.getDisplayTitle(this.language));
 //                            html.append("</a>");
                         }else {
-                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
                             child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
                         }
 
                         if(opened) {
-                            addChild(request, tmit, webpage, tpid, params, language, child);
+                            addChild(request, tmit, webpage, tpid, params, child);
                         }
                     }else {
                         child.setAttribute("leaf", "1");
@@ -827,7 +796,7 @@ public class WBSiteMap extends GenericAdmResource
 //                            html.append("</a>");
                         }else {                            
                             child.setAttribute("url", "window.location='"+webpage.getUrl()+"'");
-                            child.setAttribute("title", webpage.getDisplayTitle(this.language));
+                            child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
                         }
                     }
                 }
