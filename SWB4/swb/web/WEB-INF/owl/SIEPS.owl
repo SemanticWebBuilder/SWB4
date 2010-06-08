@@ -248,6 +248,8 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <sieps:Certificado rdf:ID="Certificado_1">
+    <sieps:certificado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ABC7F-XY4W-GTWER-1FDG</sieps:certificado>
     <sieps:empresa>
       <sieps:Empresa rdf:ID="Galletas_y_Refrescos_SA">
         <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -372,6 +374,44 @@
     <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.sieps</swb:package>
   </swb:CodePackage>
+  <sieps:Certificado rdf:ID="Certificado_2">
+    <sieps:certificado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ABC7F-XY4W-GTWER-1FDG</sieps:certificado>
+    <sieps:empresa>
+      <sieps:Empresa rdf:ID="CocaColaCuernavaca">
+        <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Motolinia 24</sieps:address>
+        <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Morelos</sieps:estado>
+        <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >2342342</sieps:telefono>
+        <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >11110</sieps:clavesiem>
+        <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
+        <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Centro</sieps:colonia>
+        <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >34534</sieps:cp>
+        <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >otro@empresa2.com</sieps:email>
+        <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+        <sieps:hasProducto rdf:resource="#CocaCola"/>
+        <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >REGILSA</sieps:rfc>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >logo.jpg</sieps:logo>
+        <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >CocaCola Cuernavaca</sieps:name>
+        <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Cuernavaca</sieps:municipio>
+      </sieps:Empresa>
+    </sieps:empresa>
+    <sieps:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2010-06-08</sieps:created>
+  </sieps:Certificado>
   <sieps:Empresa rdf:ID="Aguas">
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >045458</sieps:clavesiem>
@@ -409,70 +449,48 @@
     <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Refresco Pascual varios sabores</swb:description>
   </sieps:Producto>
+  <sieps:Certificado rdf:ID="Certificado_3">
+    <sieps:certificado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >ABC7F-XY4W-GTWER-1FDG</sieps:certificado>
+    <sieps:empresa>
+      <sieps:Empresa rdf:ID="Carbonatados">
+        <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Cortázar No 45</sieps:address>
+        <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >025412</sieps:clavesiem>
+        <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+        <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >contacto_ficticio@yumail.com</sieps:email>
+        <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >CAR-85-11-23-WS1</sieps:rfc>
+        <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Villalpando</sieps:colonia>
+        <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Cotiyac de Suazo</sieps:municipio>
+        <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Carbonatados de Sureste S.A. de C.V.</sieps:name>
+        <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Veracruz</sieps:estado>
+        <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >logo.jpg</sieps:logo>
+        <sieps:hasProducto rdf:resource="#CocaCola"/>
+        <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >17762</sieps:cp>
+        <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >711-1111</sieps:telefono>
+        <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
+      </sieps:Empresa>
+    </sieps:empresa>
+    <sieps:created rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2010-06-08</sieps:created>
+  </sieps:Certificado>
   <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#SubRama"/>
-  <sieps:Empresa rdf:ID="CocaColaCuernavaca">
-    <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Motolinia 24</sieps:address>
-    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Morelos</sieps:estado>
-    <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >2342342</sieps:telefono>
-    <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >11110</sieps:clavesiem>
-    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
-    <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Centro</sieps:colonia>
-    <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >34534</sieps:cp>
-    <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >otro@empresa2.com</sieps:email>
-    <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
-    <sieps:hasProducto rdf:resource="#CocaCola"/>
-    <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >REGILSA</sieps:rfc>
-    <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:valid>
-    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >logo.jpg</sieps:logo>
-    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >CocaCola Cuernavaca</sieps:name>
-    <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cuernavaca</sieps:municipio>
-  </sieps:Empresa>
   <swb:Class rdf:about="http://www.inegi.gob.mx/2002/scian#Rama"/>
   <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#unspsc">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >código</rdfs:label>
   </rdf:Description>
-  <sieps:Empresa rdf:ID="Carbonatados">
-    <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cortázar No 45</sieps:address>
-    <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >025412</sieps:clavesiem>
-    <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
-    <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >contacto_ficticio@yumail.com</sieps:email>
-    <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >CAR-85-11-23-WS1</sieps:rfc>
-    <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Villalpando</sieps:colonia>
-    <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cotiyac de Suazo</sieps:municipio>
-    <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Carbonatados de Sureste S.A. de C.V.</sieps:name>
-    <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Veracruz</sieps:estado>
-    <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >logo.jpg</sieps:logo>
-    <sieps:hasProducto rdf:resource="#CocaCola"/>
-    <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >17762</sieps:cp>
-    <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >711-1111</sieps:telefono>
-    <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Empresa dedicada a la producción de coca-cola</sieps:descripcion>
-  </sieps:Empresa>
   <rdf:Description rdf:about="http://www.inegi.gob.mx/2002/scian#_111110">
     <sieps:cname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Cultivo de soya</sieps:cname>
