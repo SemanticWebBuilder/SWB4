@@ -331,11 +331,11 @@ public class WebPage extends WebPageBase
                     break;
                 }
                 arr.add(tp);
-                tp = tp.getParent();
                 if (tphome == tp)
                 {
                     break;
                 }
+                tp = tp.getParent();
             }
         }
         return ret.toString();
