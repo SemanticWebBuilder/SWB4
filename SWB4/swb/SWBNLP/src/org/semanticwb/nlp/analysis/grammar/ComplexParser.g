@@ -49,14 +49,14 @@ tokens {
 
 /*Main query, it can be an object query or a properties query or a definition query*/
 squery
-:	dquery EOF -> ^(DEFINE dquery)
+:	dquery EOF -> ^(SELECT ^(dquery))
 	|limiter? oquery modifier? EOF -> ^(SELECT limiter? oquery modifier?)
 	|limiter? pquery modifier? EOF -> ^(SELECT limiter? pquery modifier?)
 ;
 
 /*A describe query are the words 'qué es' and a name enclosed in quotation marks*/
 dquery
-:	OQM? MODD name CQM -> ^(name)
+:	OQM? MODD name CQM -> ^(DEFINE name)
 ;
 
 /*A limiter is a number*/
