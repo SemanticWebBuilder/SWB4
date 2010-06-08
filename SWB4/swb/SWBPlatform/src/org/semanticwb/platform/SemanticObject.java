@@ -696,10 +696,19 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
-            Statement stm = m_res.getProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
-            if(stm!=null)
+            StmtIterator it=m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+            while(it.hasNext())
             {
-                m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                Statement stm=it.next();
+                //Statement stm = m_res.getProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+                if(stm!=null)
+                {
+                    m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                    if(m_cls.isSWBClass())
+                    {
+                        break;
+                    }
+                }
             }
         }
         //System.out.println(" m_cls:"+m_cls);
