@@ -7,14 +7,14 @@
             <input type="text" name="title" label="Title:" maxlength="60" promptMessage="Title" />
             <input type="text" name="level" label="Level of deployment:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Level must be a numeric value" promptMessage="Level of deployment" />
             <input type="text" name="url" label="Section that displays the site map:" maxlength="50" jsrequired="true" regExp="^[a-zA-Z0-9_]+" promptMessage="Section ID that displays the site map" invalidMessage="Section ID invalid" />
+        </fieldset>
 
-            <fieldset legend="Modo">
-                <statictext name="txtTarget">¿How do you want to access the resource site map?:</statictext>
-                <input type="text" name="lnktexto" label="Text link:" maxlength="50" promptMessage="Text link" />
-                <input type="text" name="btntexto" label="Button label:" maxlength="50" promptMessage="Button label" />
-                <input type="file" name="img" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" />
-                <input type="text" name="alt" label="Alternate Text:" maxlength="50" promptMessage="Image alternate text. Accessibility Guideline" />
-            </fieldset>
+        <fieldset legend="Modo">
+            <statictext name="txtTarget">¿How do you want to access the resource site map?:</statictext>
+            <input type="text" name="lnktexto" label="Text link:" maxlength="50" promptMessage="Text link" />
+            <input type="text" name="btntexto" label="Button label:" maxlength="50" promptMessage="Button label" />
+            <input type="file" name="img" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" />
+            <input type="text" name="alt" label="Alternate Text:" maxlength="50" promptMessage="Image alternate text. Accessibility Guideline" />
 
             <statictext name="note">
             <![CDATA[
