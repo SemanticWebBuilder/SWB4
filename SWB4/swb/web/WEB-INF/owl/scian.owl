@@ -7,93 +7,87 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.inegi.gob.mx/2002/scian">
   <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="Rama">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SubRama">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-  </owl:Class>
+  <owl:Class rdf:ID="Rama"/>
+  <owl:Class rdf:ID="SubRama"/>
   <owl:Class rdf:ID="Sector"/>
-  <owl:Class rdf:ID="SubSector">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-  </owl:Class>
+  <owl:Class rdf:ID="SubSector"/>
   <owl:Class rdf:ID="Clase"/>
   <scian:Clase rdf:ID="_111110">
-    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >111110</scian:code>
-    <rdfs:subClassOf>
-      <scian:SubRama rdf:ID="_11111">
-        <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >11111</scian:code>
-        <rdfs:subClassOf>
-          <scian:Rama rdf:ID="_1111">
-            <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >1111</scian:code>
-            <rdfs:subClassOf>
-              <scian:SubSector rdf:ID="_111">
-                <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >111</scian:code>
-                <rdfs:subClassOf>
-                  <scian:Sector rdf:ID="_11">
-                    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >11</scian:code>
-                    <rdfs:label xml:lang="es">Agicultura, ganaderia, aprovechamieto forestal, pesca y caza</rdfs:label>
-                  </scian:Sector>
-                </rdfs:subClassOf>
-                <rdfs:label xml:lang="es">Agricultura</rdfs:label>
-              </scian:SubSector>
-            </rdfs:subClassOf>
-            <rdfs:label xml:lang="es">Cultivo de granos y semillas oleaginosas</rdfs:label>
-          </scian:Rama>
-        </rdfs:subClassOf>
-        <rdfs:label xml:lang="es">Cultivo de soya</rdfs:label>
-      </scian:SubRama>
-    </rdfs:subClassOf>
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Cultivo de soya</rdfs:label>
-  </scian:Clase>
-  <rdf:Description rdf:ID="code">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Clase"/>
-  </rdf:Description>
-  <scian:Clase rdf:ID="_312111">
-    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >312111</scian:code>
     <rdfs:subClassOf>
-      <scian:SubRama rdf:ID="_31211">
-        <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >31211</scian:code>
+      <scian:SubRama rdf:ID="_11111">
+        <rdfs:label xml:lang="es">Cultivo de soya</rdfs:label>
         <rdfs:subClassOf>
-          <scian:Rama rdf:ID="_3121">
-            <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >3121</scian:code>
+          <scian:Rama rdf:ID="_1111">
+            <rdfs:label xml:lang="es">Cultivo de granos y semillas oleaginosas</rdfs:label>
             <rdfs:subClassOf>
-              <scian:SubSector rdf:ID="_312">
-                <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >312</scian:code>
+              <scian:SubSector rdf:ID="_111">
+                <rdfs:label xml:lang="es">Agricultura</rdfs:label>
                 <rdfs:subClassOf>
-                  <scian:Sector rdf:ID="_31">
-                    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >Industrias Manufactureras</rdfs:label>
+                  <scian:Sector rdf:ID="_11">
+                    <rdfs:label xml:lang="es">Agicultura, ganaderia, aprovechamieto forestal, pesca y caza</rdfs:label>
                     <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                    >31</scian:code>
+                    >11</scian:code>
                   </scian:Sector>
                 </rdfs:subClassOf>
-                <rdfs:label xml:lang="es">Industria de las bebidas y el tabaco</rdfs:label>
+                <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >111</scian:code>
               </scian:SubSector>
             </rdfs:subClassOf>
-            <rdfs:label xml:lang="es">Industria de las bebidas</rdfs:label>
+            <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >1111</scian:code>
           </scian:Rama>
         </rdfs:subClassOf>
-        <rdfs:label xml:lang="es">Eleboración de refrescos y hielo, y puricicación de agua</rdfs:label>
+        <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >11111</scian:code>
       </scian:SubRama>
     </rdfs:subClassOf>
+    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >111110</scian:code>
+  </scian:Clase>
+  <rdf:Description rdf:ID="code">
+    <rdfs:domain rdf:resource="#Sector"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <scian:Clase rdf:ID="_312111">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Elaboración de refrescos</rdfs:label>
+    <rdfs:subClassOf>
+      <scian:SubRama rdf:ID="_31211">
+        <rdfs:label xml:lang="es">Eleboración de refrescos y hielo, y puricicación de agua</rdfs:label>
+        <rdfs:subClassOf>
+          <scian:Rama rdf:ID="_3121">
+            <rdfs:label xml:lang="es">Industria de las bebidas</rdfs:label>
+            <rdfs:subClassOf>
+              <scian:SubSector rdf:ID="_312">
+                <rdfs:label xml:lang="es">Industria de las bebidas y el tabaco</rdfs:label>
+                <rdfs:subClassOf>
+                  <scian:Sector rdf:ID="_31">
+                    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >31</scian:code>
+                    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >Industrias Manufactureras</rdfs:label>
+                  </scian:Sector>
+                </rdfs:subClassOf>
+                <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >312</scian:code>
+              </scian:SubSector>
+            </rdfs:subClassOf>
+            <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >3121</scian:code>
+          </scian:Rama>
+        </rdfs:subClassOf>
+        <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31211</scian:code>
+      </scian:SubRama>
+    </rdfs:subClassOf>
+    <scian:code rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >312111</scian:code>
   </scian:Clase>
 </rdf:RDF>
 
