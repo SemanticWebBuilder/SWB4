@@ -171,7 +171,8 @@ public class User extends UserBase implements Principal
             this.login = getUserRepository().getBridge().validateCredential(getLogin(), credential);
         } else
         {
-            this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)));
+            String alg = getPassword().substring(1,getPassword().indexOf("}"));
+            this.login = getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg));
         }
 
     }
