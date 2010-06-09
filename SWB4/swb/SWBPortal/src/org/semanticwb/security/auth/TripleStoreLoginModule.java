@@ -154,7 +154,8 @@ public class TripleStoreLoginModule implements LoginModule
                         "\n" + SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential)) +
                         "\n" + (new String((char[]) credential))+
                         "\n"+ principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))));
-                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
+                String alg = principal.getPassword().substring(1,principal.getPassword().indexOf("}")); 
+                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg)))
                 {
                     throw new LoginException("Password Mistmatch:");
                 }
