@@ -152,7 +152,8 @@ public class ChangePassword extends GenericAdmResource {
         User user = response.getUser();
 
         try{
-            if( user.getPassword()!=null && !user.getPassword().trim().equals("") && !SWBUtils.CryptoWrapper.comparablePassword(curPassword).equals(user.getPassword()) ) {
+            String alg = user.getPassword().substring(1,user.getPassword().indexOf("}"));
+            if( user.getPassword()!=null && !user.getPassword().trim().equals("") && !SWBUtils.CryptoWrapper.comparablePassword(curPassword, alg).equals(user.getPassword()) ) {
                 msg = response.getLocaleString("msgErrCurrentPassword");
             }else if( newPassword!=null && rePassword!=null && newPassword.trim().equals(rePassword.trim()) && !newPassword.trim().equals("") ) {
                 user.setPassword(newPassword.trim());

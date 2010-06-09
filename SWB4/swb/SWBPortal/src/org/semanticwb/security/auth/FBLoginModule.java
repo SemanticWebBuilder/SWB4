@@ -176,8 +176,8 @@ public class FBLoginModule implements LoginModule
             } else
             {
 
-
-                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential))))
+                String alg = principal.getPassword().substring(1,principal.getPassword().indexOf("}"));
+                if (!principal.getPassword().equals(SWBUtils.CryptoWrapper.comparablePassword(new String((char[]) credential), alg)))
                 {
                     throw new LoginException("Password Mistmatch:");
                 }
