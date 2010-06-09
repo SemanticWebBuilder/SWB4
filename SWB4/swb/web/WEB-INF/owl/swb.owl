@@ -518,17 +518,6 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="IPFilter">
-    <rdfs:subClassOf rdf:resource="#Traceable"/>
-    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="#Activeable"/>
-    <rdfs:subClassOf rdf:resource="#SWBClass"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Filtros de IP</rdfs:label>
-    <rdfs:label xml:lang="en">IP Filters</rdfs:label>
-    <rdf:type rdf:resource="#Class"/>
-  </owl:Class>
   <owl:Class rdf:ID="WebPage">
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Hiddenable"/>
@@ -1500,7 +1489,20 @@
         <swb:hasClass rdf:resource="#ResourceType"/>
         <swb:hasClass rdf:resource="#Language"/>
         <rdfs:label xml:lang="es">Sitio Web</rdfs:label>
-        <swb:hasClass rdf:resource="#IPFilter"/>
+        <swb:hasClass>
+          <swb:Class rdf:ID="IPFilter">
+            <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+            <rdfs:subClassOf rdf:resource="#Traceable"/>
+            <rdfs:subClassOf rdf:resource="#CalendarRefable"/>
+            <rdfs:subClassOf rdf:resource="#SWBClass"/>
+            <rdfs:subClassOf rdf:resource="#Activeable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:label xml:lang="en">IP Filters</rdfs:label>
+            <rdfs:label xml:lang="es">Filtros de IP</rdfs:label>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+          </swb:Class>
+        </swb:hasClass>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices">
             <swbxf:heClass rdf:resource="#Device"/>
