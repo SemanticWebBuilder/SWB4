@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
+public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterNumber");
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterAction");
@@ -61,18 +61,6 @@ public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef impl
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendar(org.semanticwb.model.Calendar value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_calendar, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendar(org.semanticwb.model.Calendar value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_calendar,value.getSemanticObject(),sclass));
-            return it;
-        }
-
         public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
@@ -82,6 +70,18 @@ public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef impl
         public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendarRef(org.semanticwb.model.CalendarRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendarRef(org.semanticwb.model.CalendarRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasCalendarRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -167,6 +167,16 @@ public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef impl
         getSemanticObject().setProperty(swb_ipFilterNumber, value);
     }
 
+    public boolean isActive()
+    {
+        return getSemanticObject().getBooleanProperty(swb_active);
+    }
+
+    public void setActive(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_active, value);
+    }
+
     public int getAction()
     {
         return getSemanticObject().getIntProperty(swb_ipFilterAction);
@@ -194,6 +204,47 @@ public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef impl
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef> listCalendarRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.CalendarRef>(getSemanticObject().listObjectProperties(swb_hasCalendarRef));
+    }
+
+    public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public void addCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
+    }
+
+    public void removeAllCalendarRef()
+    {
+        getSemanticObject().removeProperty(swb_hasCalendarRef);
+    }
+
+    public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasCalendarRef,value.getSemanticObject());
+    }
+
+    public org.semanticwb.model.CalendarRef getCalendarRef()
+    {
+         org.semanticwb.model.CalendarRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasCalendarRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.CalendarRef)obj.createGenericInstance();
          }
          return ret;
     }
