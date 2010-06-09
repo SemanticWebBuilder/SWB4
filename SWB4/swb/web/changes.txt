@@ -1,7 +1,8 @@
   4.0.1.5  (En desarrollo)
     - Soporte a SQLServer 2008 (Jei)
     - Nuevo Blog con persitencia semantica (Victor L)
-
+    - Se agregó opción "solo acceso" al filtrado de ips (Jei)
+    - Se mejoró soporte a restricciones semánticas en el arbol de administración
 
   4.0.1.4  31/05/2010
 
