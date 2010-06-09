@@ -59,7 +59,7 @@ public class WBMenu extends GenericAdmResource
     
     javax.xml.transform.Templates tpl; 
     String webWorkPath = "/work";  
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenu/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenu/";
     
     /** Creates a new instance of WBMenu */
     public WBMenu() {
@@ -135,7 +135,7 @@ public class WBMenu extends GenericAdmResource
             topicCurrent.setAttribute("path", tpid.getUrl());
             el.appendChild(topicCurrent);
             WebPage padre=padre = tpid.getParent();
-            if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre))
+            if(!onlychilds && padre!=null && padre.isValid() && user.haveAccess(padre))
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
@@ -150,7 +150,7 @@ public class WBMenu extends GenericAdmResource
                 while(itehermanos.hasNext())
                 {
                     WebPage tphermano=itehermanos.next();
-                    if(user.haveAccess(tphermano)) 
+                    if(user.haveAccess(tphermano)&&tphermano.isValid())
                     {
                         Element ehermano = dom.createElement("brother");
                         ehermano.setAttribute("id", tphermano.getId());
@@ -165,7 +165,7 @@ public class WBMenu extends GenericAdmResource
                             while (hijos.hasNext()) 
                             {
                                 WebPage hijo =  hijos.next();
-                                if(user.haveAccess(hijo))
+                                if(user.haveAccess(hijo)&&hijo.isValid())
                                 {
                                     Element ehijo = dom.createElement("child");
                                     ehijo.setAttribute("id", hijo.getId());
@@ -197,7 +197,7 @@ public class WBMenu extends GenericAdmResource
                 while (hijos.hasNext()) 
                 {
                     WebPage hijo = hijos.next();
-                    if(user.haveAccess(hijo))
+                    if(user.haveAccess(hijo)&&hijo.isValid())
                     {
                         Element ehijo = dom.createElement("child");
                         ehijo.setAttribute("id", hijo.getId());
