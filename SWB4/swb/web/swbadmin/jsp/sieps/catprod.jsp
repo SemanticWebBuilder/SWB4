@@ -140,7 +140,7 @@
                     {
                         String name=producto.getPname();
                         String description=producto.getDescription();
-                        String urlfoto=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+producto.getFoto();
+                        String urlfoto=SWBPortal.getWebWorkPath()+producto.getWorkPath()+"/"+producto.getFoto();
                         SWBResourceURL url=paramRequest.getRenderUrl();
                         url.setParameter("act", "detail");
                         url.setParameter("uri", producto.getURI());
@@ -173,7 +173,7 @@
                     {
                         String name=producto.getPname();
                         String description=producto.getDescription();
-                        String urlfoto=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+producto.getFoto();
+                        String urlfoto=SWBPortal.getWebWorkPath()+producto.getWorkPath()+"/"+producto.getFoto();
                         SWBResourceURL url=paramRequest.getRenderUrl();
                         url.setParameter("act", "detail");
                         url.setParameter("uri", producto.getURI());
