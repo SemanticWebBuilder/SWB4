@@ -2,7 +2,8 @@
     - Soporte a SQLServer 2008 (Jei)
     - Nuevo Blog con persitencia semantica (Victor L)
     - Se agregó opción "solo acceso" al filtrado de ips (Jei)
-    - Se mejoró soporte a restricciones semánticas en el arbol de administración
+    - Se mejoró soporte a restricciones semánticas en el arbol de administración de SWB (Jei)
+    - Se valido comparacion de password con diferentes digest (Soporte a versiones anteriores) (Serch)
 
   4.0.1.4  31/05/2010
 
