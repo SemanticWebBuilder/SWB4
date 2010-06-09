@@ -4,6 +4,7 @@
     <form name="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
+            <input type="file" name="template" label="Template (xsl, xslt):" showfile="true" msg="Current Template :" bydefault="{@webpath}wbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Template by Default" filetype="xsl|xslt" isshowfiletype="true" jsrequired="false"/>
             <input type="text" name="title" label="Title:" maxlength="60" promptMessage="Title" />
             <input type="text" name="level" label="Level of deployment:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Level must be a numeric value" promptMessage="Level of deployment" />
             <input type="text" name="url" label="Section that displays the site map:" maxlength="50" jsrequired="true" regExp="^[a-zA-Z0-9_]+" promptMessage="Section ID that displays the site map" invalidMessage="Section ID invalid" />
