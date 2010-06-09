@@ -66,7 +66,7 @@
 	};
 	Iterator<Empresa> iterEmpresasSimi	=	Empresa.ClassMgr.listEmpresaByScian(e.getScian());
 	String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
-        
+
         String numclase=e.getScian().getCode();
         String numsubrama=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.SubRama.sclass);
         String numrama=getCode(e.getScian().getSemanticObject(), org.semanticwb.scian.Rama.sclass);
@@ -99,10 +99,10 @@
 </div>
 <div id="columnaCentro">
   <!-- Inicio Mapa -->
-<div id="map_canvas" style="margin-top: 20px; margin-left: 20px;width:395px;height:266px"></div>						
+<div id="map_canvas" style="margin-top: 20px; margin-left: 20px;width:395px;height:266px"></div>
 			<script type="text/javascript">initialize(19.2931282, -99.1701111, 14);</script>
 <!-- Fin Mapa -->
-  
+
   <h3 class="first">Descripción de la empresa</h3>
   <p><%= (e.getDescripcion() != null )? e.getDescripcion() : "No disponible"  %></p>
 </div>
@@ -135,7 +135,7 @@
                             }
                         %>
 		<%} %>
-		</ul>     
+		</ul>
          <form action="#" >
        		<input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Ver más" />
          </form>
@@ -144,17 +144,23 @@
  	<h4>Ofertas relacionadas a la empresa</h4>
      <ul>
                 <%
+                int iProducto=1;
                 GenericIterator<Producto> productos= e.listProductos();
                 while(productos.hasNext())
                     {
                     Producto producto=productos.next();
                     SWBResourceURL urlProducto=paramRequest.getRenderUrl();
                     urlProducto.setParameter("act","detail");
-                    urlProducto.setParameter("uri",producto.getURI());                    
+                    urlProducto.setParameter("uri",producto.getURI());
                     String name=producto.getPname();
                     %>
                     <li><a href="<%=urlProducto%>"><%=name%></a></li>
                     <%
+                    if(iProducto>=3)
+                        {
+                        break;
+                        }
+                    iProducto++;
                     }
 
             %>
@@ -172,7 +178,7 @@
                <li class="b"><span class="codigo"><%=numsubsector%></span><a href="#"><span class="descripcion"><%=subsector%></span></a>
                  <ul>
                    <li class="a"><span class="codigo"><%=numrama%></span><a href="#"><span class="descripcion"><%=rama%></span></a>
-                     <ul>                       
+                     <ul>
                        <li class="a"><span class="codigo"><%=numsubrama%></span><a href="#"><span class="descripcion"><%=subrama%></span></a></li>
                        <ul>
                             <li class="b"><span class="codigo"><%=numclase%></span><a href="#"><span class="descripcion"><%=clase%></span></a></li>
@@ -184,7 +190,7 @@
              </ul>
            </li>
        </ul>
-</div>	
+</div>
     	<form action="#" enctype="multipart/form-data">
           <p id="Envio">
             <input type="submit" name="search" id="search" value="Enviar a mi carpeta" />
