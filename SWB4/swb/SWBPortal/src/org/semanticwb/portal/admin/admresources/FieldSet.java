@@ -324,6 +324,7 @@ public class FieldSet extends WBContainerFE {
                     if (tag.getNodeName().equalsIgnoreCase("SELECT")) {
                         SelectFE selectfe = new SelectFE(tag);
                         selectfe = (SelectFE) addChildsFE(tag, selectfe);
+                        selectfe.setAdmDBConnMgr(form.getAdmDBConnMgr());
                         selectfe.setFormFE(form);
                         this.add(selectfe);
                     } else if (tag.getNodeName().equalsIgnoreCase("TEXTAREA")) {
