@@ -11,12 +11,12 @@
     public ArrayList<Set<Producto>> getLineas(Set<Producto>productos,int prodByLine)
     {
         ArrayList<Set<Producto>> getLineas=new ArrayList<Set<Producto>>();
-        int lineas=productos.size()/3;
-        if(productos.size()%3>0)
+        int lineas=productos.size()/prodByLine;
+        if(productos.size()%prodByLine>0)
         {
             lineas++;
         }
-        for(int i=1;i==lineas;i++)
+        for(int i=1;i<=lineas;i++)
         {
             getLineas.add(new HashSet<Producto>());            
         }
@@ -159,10 +159,10 @@
                 }
                 else
                 {
-                    String sClass="product-pair";
+                    String sClass="product-non";
                     if(iLinea%2==0)
                     {
-                        sClass="product-non";
+                        sClass="product-pair";
                     }                    
                     %>
                     <div class="<%=sClass%>">
