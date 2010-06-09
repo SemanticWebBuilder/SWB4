@@ -57,6 +57,9 @@
 <%	
 	Empresa e = (Empresa)request.getAttribute("obj");
         String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
+        SWBResourceURL urlEmpresa=paramRequest.getRenderUrl();
+        urlEmpresa.setParameter("act", "detail");
+        urlEmpresa.setParameter("uri", e.getURI());
         String urlGaleria = SWBPortal.getContextPath() + "/swbadmin/jsp/sieps/galeria_icono.png";
         %>
 
@@ -66,7 +69,7 @@
       <div id="datos_empresa">
      	<img src="<%=urllog%>" width="104" height="89" alt="<%=e.getName()%>"/>
         <div id="descripcion">
-	    	<h2><%=e.getName()%></h2>
+	    	<h2><a href="<%=urlEmpresa%>"><%=e.getName()%></a></h2>
             <span id="clave">Clave SIEM: <%=e.getClavesiem()%></span>
             <p><strong>Calle: </strong> <%=e.getAddress()%></p>
             <p><strong>Colonia: </strong> <%=e.getColonia()%></p>
