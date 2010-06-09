@@ -82,8 +82,7 @@ public class WBSiteMap extends GenericAdmResource
      * @see org.semanticwb.portal.api.GenericAdmResource#setResourceBase(org.semanticwb.model.Resource)
      */
     @Override
-    public void setResourceBase(Resource base)
-    {
+    public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
             webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
@@ -91,18 +90,14 @@ public class WBSiteMap extends GenericAdmResource
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
 
-        if( base.getAttribute("template")!=null )
-        {
-            try
-            {
+        if( base.getAttribute("template")!=null ) {
+            try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
-            }
-            catch(Exception e) {
+            }catch(Exception e) {
                 log.error("Error while loading resource template: "+base.getId(), e);
             }
         }
-        if( tpl==null )
-        {
+        if( tpl==null ) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl"));
             }catch(Exception e) {
@@ -182,9 +177,9 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html;charset=iso-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        //response.setContentType("text/html; charset=ISO-8859-1");
+        //response.setHeader("Cache-Control", "no-cache");
+        //response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
 
@@ -203,8 +198,10 @@ public class WBSiteMap extends GenericAdmResource
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
             try {
-                String x = SWBUtils.XML.transformDom(tpl, dom);
-                out.print(x);
+                /*String x = SWBUtils.XML.transformDom(tpl, dom);
+                System.out.println("\ndobind =\n"+x);
+                out.print(x);*/
+                out.print(SWBUtils.XML.transformDom(tpl, dom));
             }catch(TransformerException te) {
                 log.error("doBind Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
             }
@@ -222,7 +219,7 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/json;charset=iso-8859-1");
+        //response.setContentType("text/html; charset=ISO-8859-1");
         PrintWriter out = response.getWriter();
         String lang = paramRequest.getUser().getLanguage();
         WebPage home = paramRequest.getWebPage().getWebSite().getHomePage();
@@ -323,7 +320,7 @@ public class WBSiteMap extends GenericAdmResource
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html;charset=iso-8859-1");
+        response.setContentType("text/html; charset=ISO-8859-1");
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
         
@@ -369,6 +366,9 @@ public class WBSiteMap extends GenericAdmResource
             Document dom = getDom(request, response, paramRequest);
             if(dom != null)  {
                 try {
+                    /*String x = SWBUtils.XML.transformDom(tpl, dom);
+                    System.out.println("\ndoview =\n"+x);
+                    out.print(x);*/
                     out.print(SWBUtils.XML.transformDom(tpl, dom));
                 }catch(TransformerException te) {
                     log.error("doView Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
@@ -492,7 +492,8 @@ public class WBSiteMap extends GenericAdmResource
                 }
                 smE.setAttribute("leaf", "0");
                 smE.setAttribute("id", "tree_"+website);
-                smE.setAttribute("title", title);
+                if(title!=null)
+                    smE.setAttribute("title", title);
                 dom.appendChild(smE);
                 
                 Element node = dom.createElement("node");
@@ -572,9 +573,10 @@ public class WBSiteMap extends GenericAdmResource
                     opened=true;
                 }
 
-                if(title!=null) {
+                smE.setAttribute("leaf", "0");
+                smE.setAttribute("id", "tree_"+website);
+                if(title!=null)
                     smE.setAttribute("title", title);
-                }
                 dom.appendChild(smE);
 
                 Element node = dom.createElement("node");
