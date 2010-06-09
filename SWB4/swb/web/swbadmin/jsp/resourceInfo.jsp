@@ -6,8 +6,59 @@
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,java.util.*,org.semanticwb.base.util.*,com.hp.hpl.jena.ontology.*,com.hp.hpl.jena.rdf.model.*"%>
 <%!
+    public void renderProperty(Resource res, SemanticProperty sprop, JspWriter out, String elemid, String oval) throws IOException
+    {
+        String val=oval;
+        if(val==null)val="";
+        if(sprop.isBoolean())
+        {
+            out.println("<select id=\""+elemid+"\" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" style=\"width:400px;font-size:12;\">");
+
+            out.print("<option value=\"false\" ");
+            if (oval!=null && oval.equals("false"))out.print("selected");
+            out.println(">false</option>");
+
+            out.print("<option value=\"true\" ");
+            if (oval!=null && oval.equals("true"))out.print("selected");
+            out.println(">true</option>");
+
+            out.println("</select>");
+
+        }else if (sprop.isInt() || sprop.isLong())
+        {
+            out.println("<input type=\"text\" id=\""+elemid+"\" dojoType=\"dijit.form.ValidationTextBox\" style=\"width:400px;font-size:12;\" regExp=\"\\d+\" value=\""+val+"\" trim=\"true\"/>");
+        }else
+        {
+            out.println("<input type=\"text\" id=\""+elemid+"\" dojoType=\"dijit.form.ValidationTextBox\" style=\"width:400px;font-size:12;\" value='"+val+"' trim=\"true\"/>");
+        }
+    }
+
+    public void renderOkCancelButton(Resource res, Property prop, JspWriter out, String divid, String elemid, String oval, String action) throws IOException
+    {
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
+        out.println("<span>ok</span>");
+        out.println("  <script type=\"dojo/method\" event=\"onClick\">");
+        out.println("    var self = document.getElementById(\""+elemid+"\");");
+        out.println("    var di = dijit.byId('"+elemid+"');");
+        out.println("    if(di.isValid()){");
+        out.print("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"&act="+action);
+        if(oval!=null)out.print("&oval="+URLEncoder.encode(oval));
+        out.println("&val=\"+escape(self.value),\""+divid+"\",true);");
+        out.println("    }");
+        out.println("  </script>");
+        out.println("</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
+        out.println("<span>cancel</span>");
+        out.println("  <script type=\"dojo/method\" event=\"onClick\">");
+        out.println("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"\",\""+divid+"\",true);");
+        out.println("  </script>");
+        out.println("</button>");
+    }
+
     public void renderPropValues(Resource res, Property prop, JspWriter out, boolean isbase, boolean addempty, String editValue) throws IOException
     {
+        SemanticProperty sprop=new SemanticProperty(prop);
+        System.out.println(sprop+" "+sprop.getRange());
         String pathView=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
 
         out.println("<table border=0>");
@@ -19,21 +70,9 @@
         if(addempty)
         {
             out.println("<tr><td width=400>");
-            out.println("<input type='text' id='"+elemid+"' dojoType='dijit.form.ValidationTextBox' style=\"width:400px;font-size:12;\" value=''/>");
+            renderProperty(res, sprop, out, elemid, null);
             out.println("</td><td>");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
-            out.println("<span>ok</span>");
-            out.println("  <script type=\"dojo/method\" event=\"onClick\">");
-            out.println("    var self = document.getElementById(\""+elemid+"\");");
-            out.println("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"&act=add&val=\"+escape(self.value),\""+divid+"\",true);");
-            out.println("  </script>");
-            out.println("</button>");
-            out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
-            out.println("<span>cancel</span>");
-            out.println("  <script type=\"dojo/method\" event=\"onClick\">");
-            out.println("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"\",\""+divid+"\",true);");
-            out.println("  </script>");
-            out.println("</button>");
+            renderOkCancelButton(res, prop, out, divid, elemid, null, "add");
             out.println("</td></tr>");
         }
 
@@ -64,21 +103,9 @@
                     {
                         //System.out.println("base..");
                         out.println("<tr><td width=400>");
-                        out.println("<input type='text' id='"+elemid+"' dojoType='dijit.form.ValidationTextBox' style=\"width:400px;font-size:12;\" value='"+oval+"'/>");
+                        renderProperty(res, sprop, out, elemid, oval);
                         out.println("</td><td>");
-                        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
-                        out.println("<span>ok</span>");
-                        out.println("  <script type=\"dojo/method\" event=\"onClick\">");
-                        out.println("    var self = document.getElementById(\""+elemid+"\");");
-                        out.println("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"&act=update&oval="+URLEncoder.encode(oval)+"&val=\"+escape(self.value),\""+divid+"\",true);");
-                        out.println("  </script>");
-                        out.println("</button>");
-                        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\">");
-                        out.println("<span>cancel</span>");
-                        out.println("  <script type=\"dojo/method\" event=\"onClick\">");
-                        out.println("    getHtml(\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceInfo.jsp?suri="+URLEncoder.encode(res.getURI())+"&puri="+URLEncoder.encode(prop.getURI())+"\",\""+divid+"\",true);");
-                        out.println("  </script>");
-                        out.println("</button>");
+                        renderOkCancelButton(res, prop, out, divid, elemid, oval, "update");
                         out.println("</td></tr>");
                     }else
                     {
