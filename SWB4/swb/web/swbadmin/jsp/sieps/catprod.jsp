@@ -149,7 +149,7 @@
                                 <img src="<%=urlfoto%>" width="110" height="83" alt="<%=name%>">
                                 <p><strong><%=name%></strong><br/><%=description%></p>
                                 <a href="<%=url%>" class="boton_detalle">Ver detalle</a>
-                                <a href="#" class="boton_carrito">Agregar carrito</a>
+                                <a href="#" class="boton_carrito">Agregar a mi carpeta</a>
                             </div>
                         <%
                     }
@@ -182,7 +182,7 @@
                                 <img src="<%=urlfoto%>" width="110" height="83" alt="<%=name%>">
                                 <p><strong><%=name%></strong><br/><%=description%></p>
                                 <a href="<%=url%>" class="boton_detalle">Ver detalle</a>
-                                <a href="#" class="boton_carrito">Agregar carrito</a>
+                                <a href="#" class="boton_carrito">Agregar a mi carpeta</a>
                             </div>
                         <%
                     }
