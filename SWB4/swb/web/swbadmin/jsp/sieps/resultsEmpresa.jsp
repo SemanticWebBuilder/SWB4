@@ -123,6 +123,7 @@
 	List<Empresa> empresas = (List<Empresa>)request.getAttribute("results");
 	boolean isResultados   = (empresas != null &&  !empresas.isEmpty());
 %>
+
 <% if (isResultados) {%>
       <h2 class="tableH2">Resultados de búsqueda</h2>
       <form id="formTableRes" method="post" action="">
