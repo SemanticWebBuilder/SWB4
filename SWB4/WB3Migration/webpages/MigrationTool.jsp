@@ -611,6 +611,7 @@
                                     if(strObjClass.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjClass = "com.infotec.wb.resources.TematicIndexXSL";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Imprimir")) strObjClass = "com.infotec.wb.resources.Print";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Recommend")) strObjClass = "org.semanticwb.portal.resources.Recommend";
                                     else if(strObjClass.equals("com.infotec.wb.resources.MenuMap")) strObjClass = "com.infotec.wb.resources.WBMenuMap";
                                     else if(strObjClass.equals("com.infotec.wb.resources.WBSearch")) strObjClass = "org.semanticwb.portal.resources.WBSearch";
                                     else if(strObjClass.equals("com.infotec.wb.resources.Login")) strObjClass = "org.semanticwb.portal.resources.Login";
@@ -621,6 +622,7 @@
                                     if(strObjBundle.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjBundle = "com.infotec.wb.resources.TematicIndexXSL";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.Imprimir")) strObjBundle = "com.infotec.wb.resources.Print";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recommend")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.MenuMap")) strObjBundle = "com.infotec.wb.resources.WBMenuMap";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
                                     else if(strObjBundle.equals("com.infotec.wb.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
@@ -840,6 +842,7 @@
                             Iterator itsty = colLang.iterator();
                             while (itsty.hasNext()) {
                                 RecSubType rsty = (RecSubType) itsty.next();
+                                String typemap=rsty.getTypeMap();
                                 //String idNameST = rsty.getTitle();
                                 //idNameST = idNameST.trim();
                                 //idNameST = idNameST.replaceAll(" ", "");
@@ -849,8 +852,12 @@
                                 styp.setTitle(rsty.getTitle());
                                 styp.setDescription(rsty.getDescription());
 
-                                RecResourceType recrestype = DBResourceType.getInstance().getResourceType(TopicMgr.TM_GLOBAL, rsty.getType());
-                                if (recrestype == null) {
+                                RecResourceType recrestype = null;
+                                if(typemap.equals(TopicMgr.TM_GLOBAL))
+                                {
+                                    recrestype = DBResourceType.getInstance().getResourceType(TopicMgr.TM_GLOBAL, rsty.getType());
+                                }
+                                else {
                                     recrestype = DBResourceType.getInstance().getResourceType(site, rsty.getType());
                                 }
 
@@ -864,7 +871,7 @@
                                     if (rtype != null) {
                                         styp.setType(rtype);
                                     }
-                                }
+                                } else continue;
                             }
                         }
                         if ("template".equals(arrCat[i])) {
@@ -1233,7 +1240,7 @@
                                                     res.getSemanticObject().setProperty(org.semanticwb.model.Resource.swb_xml, xmlTemp);
                                                 }
 
-                                                if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
+                                               
                                                 if (rresb.getId() > idmax) {
                                                     idmax = rresb.getId();
                                                 }
@@ -1265,6 +1272,7 @@
                                                 }
 
                                             }
+                                             if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
 
                                             //System.out.println("Reviando roles...." + rresb.getId());
                                             Iterator itroles = rres.getResourceBase().getRoles();
@@ -1463,7 +1471,8 @@
             </fieldset>
             <fieldset  style="background-color:#F7BE81;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
                 <ul>
-                    <li><input type="checkbox" name="assocsbtwp" id="cat11" value="assocsbtwp" checked><label for="cat11">Revisar Asociaciones entre Secciones (se debe hacer sólo una vez)</label></li>
+                    <li><input type="checkbox" name="catalog" id="cat13" value="resdata" checked><label for="cat13">Datos de recursos</label></li>
+                    <li><input type="checkbox" name="catalog" id="cat12" value="assocsbtwp" checked><label for="cat12">Revisar Asociaciones entre Secciones (se debe hacer sólo una vez)</label></li>
                 </ul>
             </fieldset>
             <fieldset style="background-color:#F7BE81;">
@@ -1474,9 +1483,9 @@
         </div>
         <%
             }
-    // Impportación de ASOCIACIONES ENTRE SECCIONES
+    // Impportación de ASOCIACIONES ENTRE SECCIONES Y COPIADO DE DATOS DE LOS RECURSOS
             else if ("step7".equals(action))
-    {
+            {
                 boolean reviewWP = false;
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
@@ -1522,87 +1531,245 @@
                 //
                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                HashMap hmasocwb3 = tm.getAssociations();
-                Iterator it = hmasocwb3.values().iterator();
-                while (it.hasNext())
+                long idmax = 0;
+                String[] arrCat = request.getParameterValues("catalog");
+                String wpassoc = request.getParameter("wpassoc");
+                if(null!=wpassoc&&wpassoc.equals("assoc")) reviewWP=true;
+                if (null != arrCat)
                 {
-                   //System.out.println("Obteniendo asociacion.");
-                   com.infotec.topicmaps.Association elem = (com.infotec.topicmaps.Association)it.next();
+                    for (int i = 0; i < arrCat.length; i++) {
 
-                   com.infotec.topicmaps.Topic tpTipo = elem.getType();
-                   if(tpTipo!=null)
-                   {
-                       //System.out.println("Obteniendo WP tipo p/asoc. igual al tipo original: "+tpTipo.getId());
-                       org.semanticwb.model.Topic wpTipo = ws.getWebPage(tpTipo.getId());
+                        out.println(" val : " + arrCat[i]);
 
-                       if(wpTipo==null)
-                       {
-                           WebPage wpage = copyValues(tpTipo, ws);
-                           //parentReview(tpTipo,wpage);
-                           wpTipo = ws.getWebPage(tpTipo.getId());
-                       }
-                       if(wpTipo!=null)
-                       {
-                           WebPage wpType = ws.getWebPage(wpTipo.getId());
-                           parentReview(tpTipo,wpType);
-                           //System.out.println("Creando asociacion.");
-                           org.semanticwb.model.Association asoc = ws.createAssociation(elem.getId());
-                           asoc.setType(wpTipo);
+                        if ("resdata".equals(arrCat[i]))
+                        {
+                            Connection conn = null;
+                            PreparedStatement pst = null;
+                            ResultSet rs = null;
+                            try
+                            {
+                                long resid = 0;
+                                String residtm="", topicmapid="", topicid="", userid="", usertp="", data="";
+                                org.semanticwb.model.User swbusr = null;
+                                org.semanticwb.model.WebPage swbwp = null;
+                                org.semanticwb.model.Resource swbres = null;
+                                conn = AFUtils.getDBConnection("wb","Copiado de datos de recursos");
+                                pst = conn.prepareStatement("select resid, residtm, topicmapid, topicid, userid, usertp, data, lastupdate from wbresourcedata where residtm = ?");
+                                pst.setString(1, site);
+                                rs = pst.executeQuery();
+                                while(rs.next())
+                                {
+                                    swbusr = null;
+                                    swbwp = null;
+                                    swbres = null;
+                                    resid = rs.getLong("resid");
+                                    residtm = rs.getString("residtm");
+                                    topicmapid = rs.getString("topicmapid");
+                                    topicid = rs.getString("topicid");
+                                    userid = rs.getString("userid");
+                                    usertp = rs.getString("usertp");
+                                    data = rs.getString("data");
+                                    //validando usuario
+                                    if(userid!=null&&userid.trim().length()>1&&userid.indexOf("_")>0)
+                                    {
+                                        userid=userid.substring(0,userid.lastIndexOf("_"));
+                                        System.out.println("userid:"+userid);
+                                        swbusr = ws.getUserRepository().getUser(userid);
+                                    }
+                                    //validando webpage
+                                    if(topicid!=null&&topicid.trim().length()>1)
+                                    {
+                                        System.out.println("wpid:"+topicid);
+                                        swbwp=ws.getWebPage(topicid);
+                                    }
+                                    //obteniendo recurso en swb
+                                    swbres = ws.getResource(Long.toString(resid));
+                                    if(swbres!=null&&null!=data&&data.trim().length()>0)
+                                    {
+                                        if(null!=swbusr&&null!=swbwp)
+                                        {
+                                            swbres.setData(swbusr, swbwp, data);
+                                        }
+                                        else if(null==swbusr&&null!=swbwp)
+                                        {
+                                            swbres.setData(swbwp, data);
+                                        }
+                                        else if(null!=swbusr&&null==swbwp)
+                                        {
+                                            swbres.setData(swbusr, data);
+                                        }
+                                        else
+                                        {
+                                            swbres.setData(data);
+                                        }
+                                        swbres.updateAttributesToDB();
+                                    }
+                                }
+                                rs.close();
+                                pst.close();
+                                conn.close();
+                                System.out.println("Terminando copiado de datos de los recursos.");
+                            }
+                            catch (Exception e)
+                            {
+                                System.out.println("Error al copiar datos de recursos.");
+                            }
+                            finally
+                            {
+                                if(rs!=null) rs.close();
+                                if(pst!=null) pst.close();
+                                if(conn!=null) conn.close();
+                            }
+                        }
+                        else if ("assocsbtwp".equals(arrCat[i]))
+                        {
+                            HashMap hmasocwb3 = tm.getAssociations();
+                            Iterator it = hmasocwb3.values().iterator();
+                            while (it.hasNext())
+                            {
+                               //System.out.println("Obteniendo asociacion.");
+                               com.infotec.topicmaps.Association elem = (com.infotec.topicmaps.Association)it.next();
 
-                           Iterator itmember = elem.getMembers().iterator();
-                           //Agregando los miembros existentes ligados a este tipo de asociacion
-                           //System.out.println("Antes de revisar miembros de la asociacion.");
-                           while(itmember.hasNext())
-                           {
-                               com.infotec.topicmaps.Member mem = (com.infotec.topicmaps.Member)itmember.next();
-                               //System.out.println("Obteniendo miembro.");
-
-                               org.semanticwb.model.AssMember assmember = ws.createAssMember(mem.getId());
-                               com.infotec.topicmaps.RoleSpec rolmem = mem.getRoleSpec();
-                               Iterator memite = mem.getTopicRefs().keySet().iterator();
-                               String topicoid = null;
-                               if(memite.hasNext()) topicoid = (String) memite.next();
-                               WebPage wpTopic = null;
-                               if(topicoid!=null)
+                               com.infotec.topicmaps.Topic tpTipo = elem.getType();
+                               if(tpTipo!=null)
                                {
-                                   wpTopic = ws.getWebPage(topicoid);
-                                   com.infotec.topicmaps.Topic tpmem = tm.getTopic(topicoid);
-                                   if(null==wpTopic && tpmem!=null)
+                                   //System.out.println("Obteniendo WP tipo p/asoc. igual al tipo original: "+tpTipo.getId());
+                                   org.semanticwb.model.Topic wpTipo = ws.getWebPage(tpTipo.getId());
+
+                                   if(wpTipo==null)
                                    {
-                                       //System.out.println("============================== ParentReview Member-Assoc.");
-                                       wpTopic = copyValues(tpmem, ws);
-                                       parentReview(tpmem, wpTopic);
+                                       WebPage wpage = copyValues(tpTipo, ws);
+                                       //parentReview(tpTipo,wpage);
+                                       wpTipo = ws.getWebPage(tpTipo.getId());
                                    }
-
-                               }
-                               WebPage wpRole = null;
-                               if(rolmem!=null)
-                               {
-                                   //System.out.println("Assoc. TopicRef: "+rolmem.getTopicRef().getId());
-                                   wpRole = ws.getWebPage(rolmem.getTopicRef().getId());
-                                   com.infotec.topicmaps.Topic tpmem = rolmem.getTopicRef();
-                                   if(null==wpTopic && tpmem!=null)
+                                   if(wpTipo!=null)
                                    {
-                                        //System.out.println("============================== ParentReview Role-Assoc.");
-                                        wpRole = copyValues(tpmem, ws);
-                                        parentReview(tpmem, wpRole);
+                                       WebPage wpType = ws.getWebPage(wpTipo.getId());
+                                       parentReview(tpTipo,wpType);
+                                       //System.out.println("Creando asociacion.");
+                                       org.semanticwb.model.Association asoc = ws.createAssociation(elem.getId());
+                                       asoc.setType(wpTipo);
+
+                                       Iterator itmember = elem.getMembers().iterator();
+                                       //Agregando los miembros existentes ligados a este tipo de asociacion
+                                       //System.out.println("Antes de revisar miembros de la asociacion.");
+                                       while(itmember.hasNext())
+                                       {
+                                           com.infotec.topicmaps.Member mem = (com.infotec.topicmaps.Member)itmember.next();
+                                           //System.out.println("Obteniendo miembro.");
+
+                                           org.semanticwb.model.AssMember assmember = ws.createAssMember(mem.getId());
+                                           com.infotec.topicmaps.RoleSpec rolmem = mem.getRoleSpec();
+                                           Iterator memite = mem.getTopicRefs().keySet().iterator();
+                                           String topicoid = null;
+                                           if(memite.hasNext()) topicoid = (String) memite.next();
+                                           WebPage wpTopic = null;
+                                           if(topicoid!=null)
+                                           {
+                                               wpTopic = ws.getWebPage(topicoid);
+                                               com.infotec.topicmaps.Topic tpmem = tm.getTopic(topicoid);
+                                               if(null==wpTopic && tpmem!=null)
+                                               {
+                                                   //System.out.println("============================== ParentReview Member-Assoc.");
+                                                   wpTopic = copyValues(tpmem, ws);
+                                                   parentReview(tpmem, wpTopic);
+                                               }
+
+                                           }
+                                           WebPage wpRole = null;
+                                           if(rolmem!=null)
+                                           {
+                                               //System.out.println("Assoc. TopicRef: "+rolmem.getTopicRef().getId());
+                                               wpRole = ws.getWebPage(rolmem.getTopicRef().getId());
+                                               com.infotec.topicmaps.Topic tpmem = rolmem.getTopicRef();
+                                               if(null==wpTopic && tpmem!=null)
+                                               {
+                                                    //System.out.println("============================== ParentReview Role-Assoc.");
+                                                    wpRole = copyValues(tpmem, ws);
+                                                    parentReview(tpmem, wpRole);
+                                               }
+                                           }
+                                           if(null!=wpTopic && wpRole!=null)
+                                           {
+                                               //se agrega rol del miembre
+                                               assmember.setRole(wpRole);
+                                               //se agrega el topico
+                                               assmember.setMember(wpTopic);
+                                               // se agrega miembreo al tipo de asociacion
+                                               //System.out.println("Agregando miembro p/asociacion.");
+                                               asoc.addMember(assmember);
+                                           }
+                                       }
                                    }
                                }
-                               if(null!=wpTopic && wpRole!=null)
-                               {
-                                   //se agrega rol del miembre
-                                   assmember.setRole(wpRole);
-                                   //se agrega el topico
-                                   assmember.setMember(wpTopic);
-                                   // se agrega miembreo al tipo de asociacion
-                                   //System.out.println("Agregando miembro p/asociacion.");
-                                   asoc.addMember(assmember);
-                               }
-                           }
-                       }
-                   }
+                            }
+                            System.out.println("Se importo las asociaciones del sitio");
+                        }
+                    }
                 }
-                System.out.println("Se importo las asociaciones del sitio");
+
+                // modificanco pflows por id de tipo de recurso
+                Iterator<org.semanticwb.model.PFlow> itpf = ws.listPFlows();
+                while(itpf.hasNext())
+                {
+                    org.semanticwb.model.PFlow pf = itpf.next();
+                    String xmltmp = pf.getXml();
+                    if(null!=xmltmp)
+                    {
+                        try
+                        {
+                            Document dom = SWBUtils.XML.xmlToDom(xmltmp);
+                            NodeList nl = dom.getElementsByTagName("resourceType");
+                            for(int i=0; i<nl.getLength(); i++)
+                            {
+                                Node nodo = nl.item(i);
+                                String idrestype = nodo.getAttributes().getNamedItem("id").getNodeValue();
+                                String namerestype = nodo.getAttributes().getNamedItem("name").getNodeValue();
+                                String tmrestype = nodo.getAttributes().getNamedItem("topicmap").getNodeValue();
+
+                                //////////////////////////////////////////
+                                // para obtener el tipo de recurso correspondiente
+                                ///////////////////////////////////////////////////
+
+                                RecResourceType recrestype = null;
+                                if(tmrestype.equals(TopicMgr.TM_GLOBAL))
+                                {
+                                    recrestype = DBResourceType.getInstance().getResourceType(TopicMgr.TM_GLOBAL, Integer.parseInt(idrestype));
+                                }
+                                else {
+                                    recrestype = DBResourceType.getInstance().getResourceType(site, Integer.parseInt(idrestype));
+                                }
+
+                                if (recrestype != null) {
+                                    String idName = recrestype.getName();
+                                    idName = idName.trim();
+                                    idName = idName.replaceAll(" ", "");
+
+                                    ResourceType rtype = ws.getResourceType(idName);
+
+                                    if (rtype != null) {
+                                        String buscar = "<resourceType id=\""+idrestype+"\" name=\""+namerestype+"\" topicmap=\""+tmrestype+"\"/>";
+                                        String reemplazar = "<resourceType id=\""+rtype.getId()+"\" name=\""+rtype.getTitle()+"\" topicmap=\""+ws.getId()+"\"/>";
+                                        xmltmp = xmltmp.replaceAll(buscar, reemplazar);
+                                    }
+                                }
+                                //////////////////////////////////////////
+
+                            }
+                            pf.setXml(xmltmp);
+                            
+
+                        }
+                        catch(Exception e)
+                        {
+                            System.out.println("Error al revisar el PFlow");
+                        }
+                    }
+                }
+
+
+                
+                
                 //obteniendo el numero de asociaciones importadas
                 int nwsasoc = 0;
                 nwsasoc = getNumWSAsoc(ws);
@@ -1645,7 +1812,8 @@
             </fieldset>
             <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
                 <ul>
-                    <li><input type="checkbox" name="assocsbtwp" id="cat11" value="assocsbtwp" disabled><label for="cat11">Revisar Asociaciones entre Secciones (se debe hacer sólo una vez) (<%=nwsasoc%>)</label></li>
+                    <li><input type="checkbox" name="resdata" id="cat13" value="resdata" disabled><label for="cat13">Datos de recursos</label></li>
+                    <li><input type="checkbox" name="assocsbtwp" id="cat12" value="assocsbtwp" disabled><label for="cat12">Revisar Asociaciones entre Secciones (se debe hacer sólo una vez) (<%=nwsasoc%>)</label></li>
                 </ul>
             </fieldset>
             <fieldset style="background-color:#F7BE81;">
