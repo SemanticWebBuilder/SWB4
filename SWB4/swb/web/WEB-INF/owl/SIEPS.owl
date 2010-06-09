@@ -291,12 +291,12 @@
         >algo@empresa.com</sieps:email>
         <sieps:hasProducto>
           <sieps:Producto rdf:ID="CocaCola">
-            <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >foto.jpg</sieps:foto>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Great Cola 700ml</swb:title>
             <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
             >600</sieps:precioprom>
-            <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Cocacola 600 ml</swb:description>
+            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Great Cola 700ml</sieps:pname>
             <sieps:unspsc>
               <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#010123">
                 <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -307,12 +307,12 @@
             </sieps:unspsc>
             <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:valid>
-            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >CocaCola</sieps:pname>
+            <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >foto.jpg</sieps:foto>
             <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >botella</sieps:unidad>
-            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >CocaCola</swb:title>
+            <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Envase de vidrio</swb:description>
           </sieps:Producto>
         </sieps:hasProducto>
         <sieps:scian>
@@ -472,12 +472,126 @@
     >Michoacán</sieps:estado>
     <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >logo.jpg</sieps:logo>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_1">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_2">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
     <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Empresa dedicada a la elaboración de Agua purificada</sieps:descripcion>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_3">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Aguas el Raton Loco S. de R.L.</sieps:name>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_4">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_6">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Fraccionamiento el Salitre</sieps:colonia>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_5">
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</sieps:pname>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 700ml</swb:title>
+      </sieps:Producto>
+    </sieps:hasProducto>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >212-2121</sieps:telefono>
   </sieps:Empresa>
