@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class IPFilterBase extends org.semanticwb.model.CalendarRef implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterNumber");
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterAction");
@@ -58,6 +58,18 @@ public abstract class IPFilterBase extends org.semanticwb.model.SWBClass impleme
         public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendar(org.semanticwb.model.Calendar value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_calendar, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.IPFilter> listIPFilterByCalendar(org.semanticwb.model.Calendar value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.IPFilter> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_calendar,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -153,16 +165,6 @@ public abstract class IPFilterBase extends org.semanticwb.model.SWBClass impleme
     public void setIpNumber(String value)
     {
         getSemanticObject().setProperty(swb_ipFilterNumber, value);
-    }
-
-    public boolean isActive()
-    {
-        return getSemanticObject().getBooleanProperty(swb_active);
-    }
-
-    public void setActive(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_active, value);
     }
 
     public int getAction()

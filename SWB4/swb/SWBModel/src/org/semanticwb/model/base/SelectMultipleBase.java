@@ -3,8 +3,9 @@ package org.semanticwb.model.base;
 
 public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormElementBase 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbxf_sm_userRepository=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_userRepository");
     public static final org.semanticwb.platform.SemanticProperty swbxf_sm_globalScope=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_globalScope");
-    public static final org.semanticwb.platform.SemanticProperty swbxf_sm_nullSupport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_nullSupport");
+    public static final org.semanticwb.platform.SemanticProperty swbxf_sm_nullSuport=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#sm_nullSuport");
     public static final org.semanticwb.platform.SemanticClass swbxf_SelectMultiple=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultiple");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultiple");
 
@@ -49,6 +50,16 @@ public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormE
         super(base);
     }
 
+    public boolean isSm_userRepository()
+    {
+        return getSemanticObject().getBooleanProperty(swbxf_sm_userRepository);
+    }
+
+    public void setSm_userRepository(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbxf_sm_userRepository, value);
+    }
+
     public boolean isGlobalScope()
     {
         return getSemanticObject().getBooleanProperty(swbxf_sm_globalScope);
@@ -61,12 +72,12 @@ public abstract class SelectMultipleBase extends org.semanticwb.model.base.FormE
 
     public boolean isNullSupport()
     {
-        return getSemanticObject().getBooleanProperty(swbxf_sm_nullSupport);
+        return getSemanticObject().getBooleanProperty(swbxf_sm_nullSuport);
     }
 
     public void setNullSupport(boolean value)
     {
-        getSemanticObject().setBooleanProperty(swbxf_sm_nullSupport, value);
+        getSemanticObject().setBooleanProperty(swbxf_sm_nullSuport, value);
     }
 
     public void remove()
