@@ -58,8 +58,12 @@
     }
 %>
 <%
-	SWBResourceURL url = paramRequest.getRenderUrl().setParameter("act", "results");
 	Empresa e = (Empresa)request.getAttribute("obj");
+	SWBResourceURL url 			= paramRequest.getRenderUrl().setParameter("act", "results"),
+				   urlCatalogo	=	paramRequest.getRenderUrl().setParameter("act", "cat");
+	if (e != null) {
+		urlCatalogo.setParameter("uri", e.getURI());
+	};
 	Iterator<Empresa> iterEmpresasSimi	=	Empresa.ClassMgr.listEmpresaByScian(e.getScian());
 	String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
         
@@ -156,7 +160,7 @@
             %>
      </ul>
      <form action="#">
-   <input type="submit" name="buscar2" id="buscar" class="panel_btn" value="Ver más" />
+   	  <input type="button" name="verMas" id="verMas" class="panel_btn" value="Ver más" onclick="javascript:document.location='<%=urlCatalogo%>'"/>
      </form>
  </div>
 <div id="industria">
