@@ -137,9 +137,40 @@
         SWBResourceURL urlDetail = paramRequest.getRenderUrl().setParameter("act", "detail");
         List<Empresa> empresas =getSimilarEmpresas(oe);
 	boolean isResultados   = (empresas != null &&  !empresas.isEmpty());
+        String actividad=oe.getScian().getSemanticObject().getLabel(paramRequest.getUser().getLanguage());
+        String urllog=SWBPortal.getWebWorkPath()+oe.getWorkPath()+"/"+oe.getLogo();
+        SWBResourceURL urlEmpresa=paramRequest.getRenderUrl();
+        urlEmpresa.setParameter("act", "detail");
+        urlEmpresa.setParameter("uri", oe.getURI());
 %>
 <% if (isResultados) {%>
-      <h2 class="tableH2">Resultados de búsqueda</h2>
+
+<div id="datos_empresa">
+     	<img src="<%=urllog%>" width="104" height="89" alt="Grupo Plus"/>
+        <div id="descripcion">
+	    	<h2><a href="<%=urlEmpresa%>"><%=oe.getName()%></a></h2>
+            <span id="clave">Clave SIEM: <%=oe.getClavesiem()%></span>
+            <p><strong>Calle: </strong><%=oe.getAddress()%></p>
+            <p><strong>Colonia: </strong><%=oe.getColonia()%></p>
+            <p><strong>Municipio: </strong><%=oe.getMunicipio()%></p>
+            <p><strong>Estado: </strong><%=oe.getEstado()%></p>
+            <p><strong>C.P.: </strong><%=oe.getCp()%></p>
+            <p><strong>R.F.C.: </strong><%=oe.getRfc()%></p>
+            <p><strong>Correo electrónico: </strong><%=oe.getEmail()%></p>
+            <p><strong>Teléfono: </strong><%=oe.getTelefono()%></p>
+        </div>
+</div>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+      <h2 class="tableH2">Empresas similares con actividad "<%=actividad%>"</h2>
       <form id="formTableRes" method="post" action="">
         <p>
           <input type="checkbox" name="checkAllDescrip" id="checkAllDescrip"  onclick="javascript:desplieguaTodasDescripcion(this);"/>
@@ -150,6 +181,7 @@
  -->
         </p>
 
+        
 	  <table id="tablaResultados">
           <tr>
             <th>Código</th>
@@ -227,6 +259,7 @@
           </tr>
 		  <%}%>
 	</table>
+        
 	</form>
 <%} else {%>
 	<h2 class="tableH2">No se encontraron coincidencias</h2>
