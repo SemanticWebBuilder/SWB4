@@ -250,7 +250,7 @@
                 <label for="palabraClave">Palabra clave:</label>
                 <input type="text" name="palabraClave" id="palabraClave" />
                 <label for="segmento">Segmento:</label>
-                <select name="segmento">
+                <select id="segmento" name="segmento" onChange="javascript:loadCombo('segmento','familia','<%=url%>')">
                     <option selected value="all">Todos</option>
                     <%
                         Segment segmento1=null;
@@ -274,15 +274,15 @@
                     %>
                 </select>
                 <label for="familia">Familia:</label>
-                <select name="familia">
+                <select id="familia" name="familia" onChange="javascript:loadCombo('familia','clase','<%=url%>')">
                   <option selected value="all">Todos</option>
                 </select>
                 <label for="clase">Clase:</label>
-                <select name="clase">
+                <select id="clase" name="clase" onChange="javascript:loadCombo('clase','categoria','<%=url%>')">
                   <option selected value="all">Todos</option>
                 </select>
                 <label for="categoria">Categor&iacute;a:</label>
-                <select name="categoria">
+                <select id="categoria" name="categoria">
                   <option selected value="all">Todos</option>
                 </select>
                 <p>
