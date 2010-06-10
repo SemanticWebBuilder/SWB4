@@ -178,7 +178,7 @@
     String action=SWBPortal.getContextPath()+"/es/sieps/Resultados_Empresas";
 %>
 <div id="busquedaAvanzada">
-    <form name="frmadvancedsearch" id="frmadvancedsearch" method="post" action="<%=action%>">
+    <form name="frmadvancedsearch" id="frmadvancedsearch" method="get" action="<%=action%>">
                     <input type="hidden" name="act" value="busquedaempresas">
             	<div id="busquedaHead">
                 <img src="<%=urlBusqueda%>" width="49" height="50" alt="Busqueda avanzada" />
