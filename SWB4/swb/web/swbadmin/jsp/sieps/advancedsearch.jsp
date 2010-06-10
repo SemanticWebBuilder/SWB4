@@ -178,7 +178,7 @@
     String action=SWBPortal.getContextPath()+"/es/sieps/Resultados_Empresas";
 %>
 <div id="busquedaAvanzada">
-        	<form name="frmadvancedsearch" id="frmadvancedsearch" action="<%=action%>">
+    <form name="frmadvancedsearch" id="frmadvancedsearch" method="post" action="<%=action%>">
                     <input type="hidden" name="act" value="busquedaempresas">
             	<div id="busquedaHead">
                 <img src="<%=urlBusqueda%>" width="49" height="50" alt="Busqueda avanzada" />
@@ -248,7 +248,7 @@
             </div>
             	<div id="busquedaProductos">
                 <label for="palabraClave">Palabra clave:</label>
-                <input type="text" name="palabraClave" id="palabraClave" />
+                <input type="text" id="palabraClave" name="palabraClave" id="palabraClave" />
                 <label for="segmento">Segmento:</label>
                 <select id="segmento" name="segmento" onChange="javascript:loadCombo('segmento','familia','<%=url%>')">
                     <option selected value="all">Todos</option>
