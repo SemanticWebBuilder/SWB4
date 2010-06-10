@@ -21,6 +21,10 @@ while(classes.hasNext())
 {
     Clase clase=classes.next();
     String name=clase.getSemanticObject().getLabel(user.getLanguage());
+    if(name==null)
+    {
+        name=clase.getSemanticObject().getLabel();
+    }
     if(i==1)
         {
         %>
