@@ -10,7 +10,7 @@
 	String query = request.getParameter("query");
 	SWBResourceURL urlDetail = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("query", query);
 	List<WebPage> webpages = (List<WebPage>)request.getAttribute("results");
-	boolean isResultados   = (empresas != null &&  !empresas.isEmpty());
+	boolean isResultados   = false;//(empresas != null &&  !empresas.isEmpty());
 %>
 <% if (isResultados) {%>
       <h2 class="tableH2">Resultados de búsqueda</h2>
