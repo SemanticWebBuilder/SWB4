@@ -137,7 +137,7 @@
         SWBResourceURL urlDetail = paramRequest.getRenderUrl().setParameter("act", "detail");
         List<Empresa> empresas =getSimilarEmpresas(oe);
 	boolean isResultados   = (empresas != null &&  !empresas.isEmpty());
-        String actividad=oe.getScian().getSemanticObject().getLabel(paramRequest.getUser().getLanguage());
+        String actividad=oe.getScian().getSemanticObject().getLabel("es");
         String urllog=SWBPortal.getWebWorkPath()+oe.getWorkPath()+"/"+oe.getLogo();
         SWBResourceURL urlEmpresa=paramRequest.getRenderUrl();
         urlEmpresa.setParameter("act", "detail");
@@ -200,7 +200,7 @@
         	  Clase clase=e.getScian();
         	  if(clase!=null)
         	  {
-                    subcategoria=clase.getSemanticObject().getLabel(paramRequest.getUser().getLanguage());
+                    subcategoria=clase.getSemanticObject().getLabel("es");
                     Resource res=clase.getSemanticObject().getRDFResource();
 
                     /*Iterator<Statement> it=res.getModel().listStatements(res,null,(String)null);
@@ -226,7 +226,7 @@
 
                     if(parent!=null)
                     {
-                        categoria=parent.getLabel(paramRequest.getUser().getLanguage());
+                        categoria=parent.getLabel("es");
                     }
                     if(subcategoria==null)
                     {
