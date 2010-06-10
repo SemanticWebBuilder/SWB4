@@ -99,13 +99,13 @@
     {
         document.getElementById('busquedaProductos').style.display ='block';
         document.getElementById('busquedaEmpresas').style.display ='none';
-        document.frmadvancedsearch.mode.value='producto';
+        document.frmadvancedsearch.mode.value='busquedaproductos';
     }
     function activaempresa()
     {
         document.getElementById('busquedaProductos').style.display ='none';
         document.getElementById('busquedaEmpresas').style.display ='block';
-        document.frmadvancedsearch.mode.value='empresa';
+        document.frmadvancedsearch.mode.value='busquedaempresas';
     }
     function LlenarCombo(json,combo)
     {        
@@ -175,10 +175,11 @@
 %>
 <%
     String url=SWBPortal.getContextPath()+"/swbadmin/jsp/sieps/advancedsearch.jsp";
+    String action=SWBPortal.getContextPath()+"/es/sieps/Resultados_Empresas";
 %>
 <div id="busquedaAvanzada">
-        	<form name="frmadvancedsearch" id="frmadvancedsearch" action="./Resultados_Empresas">
-                    <input type="hidden" name="mode" value="empresas">
+        	<form name="frmadvancedsearch" id="frmadvancedsearch" action="<%=action%>">
+                    <input type="hidden" name="mode" value="busquedaempresas">
             	<div id="busquedaHead">
                 <img src="<%=urlBusqueda%>" width="49" height="50" alt="Busqueda avanzada" />
             	<h2>B&uacute;squedaAvanzada</h2>
