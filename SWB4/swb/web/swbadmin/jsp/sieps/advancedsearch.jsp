@@ -80,10 +80,11 @@
                 }
             }
         }
+
         %>values=[<%
         for(String id : options.keySet())
         {
-            String data=options.get(id);
+            String data=new String(options.get(id).getBytes("utf-8"));
             %>
             {"data":"<%=data%>","id":"<%=id%>"},
             <%
@@ -111,7 +112,10 @@
         var the_object = eval('(' + json + ')');             
         for(var i=0;i<the_object.length;i++)
         {
-            combo.options[combo.length]= new Option(the_object[i].data, the_object[i].id);
+            if(the_object[i] && the_object[i].data && the_object[i].id)
+            {
+                combo.options[combo.length]= new Option(the_object[i].data, the_object[i].id);
+            }
         }
     }
 
@@ -137,8 +141,7 @@
         }
         self.xmlHttpReq.send();
     }
-    function updatepage(str,target){
-        alert(str);
+    function updatepage(str,target){        
         LimpiarCombo(document.frmadvancedsearch[target]);
         LlenarCombo(str,document.frmadvancedsearch[target]);        
     }
