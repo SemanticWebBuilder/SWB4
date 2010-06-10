@@ -99,13 +99,13 @@
     {
         document.getElementById('busquedaProductos').style.display ='block';
         document.getElementById('busquedaEmpresas').style.display ='none';
-        document.frmadvancedsearch.mode.value='busquedaproductos';
+        document.frmadvancedsearch.act.value='busquedaproductos';
     }
     function activaempresa()
     {
         document.getElementById('busquedaProductos').style.display ='none';
         document.getElementById('busquedaEmpresas').style.display ='block';
-        document.frmadvancedsearch.mode.value='busquedaempresas';
+        document.frmadvancedsearch.act.value='busquedaempresas';
     }
     function LlenarCombo(json,combo)
     {        
@@ -179,7 +179,7 @@
 %>
 <div id="busquedaAvanzada">
         	<form name="frmadvancedsearch" id="frmadvancedsearch" action="<%=action%>">
-                    <input type="hidden" name="mode" value="busquedaempresas">
+                    <input type="hidden" name="act" value="busquedaempresas">
             	<div id="busquedaHead">
                 <img src="<%=urlBusqueda%>" width="49" height="50" alt="Busqueda avanzada" />
             	<h2>B&uacute;squedaAvanzada</h2>
@@ -243,7 +243,7 @@
                     <option selected value="all">Todos</option>
                 </select>
                 <p>
-                <input type="submit" value="Buscar" id="buscarEmpresas" class="btn-small" />
+                <input type="submit" value="Buscar" name="wbseach" id="buscarEmpresas" class="btn-small" />
                 </p>
             </div>
             	<div id="busquedaProductos">
@@ -286,7 +286,7 @@
                   <option selected value="all">Todos</option>
                 </select>
                 <p>
-                <input type="submit" value="Buscar" id="buscarProductos" class="btn-small" />
+                <input type="submit" value="Buscar" name="wbseach" id="buscarProductos" class="btn-small" />
                 </p>
             </div>
             </form>
