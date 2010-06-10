@@ -20,7 +20,7 @@ int i=1;
 while(classes.hasNext())
 {
     Clase clase=classes.next();
-    String name=clase.getSemanticObject().getLabel(user.getLanguage());
+    String name=clase.getSemanticObject().getLabel("es");
     if(name==null)
     {
         name=clase.getSemanticObject().getLabel();
