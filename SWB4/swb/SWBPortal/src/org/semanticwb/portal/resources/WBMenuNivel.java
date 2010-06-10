@@ -66,7 +66,7 @@ public class WBMenuNivel extends GenericAdmResource
     String webWorkPath = "/work";
     
     /** The path. */
-    String path = SWBPlatform.getContextPath() +"swbadmin/xsl/WBMenuNivel/";
+    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenuNivel/";
     
     /** The ancho. */
     private int ancho=10;
@@ -165,7 +165,7 @@ public class WBMenuNivel extends GenericAdmResource
             
             Element baseele = dom.createElement("basetopic");
             baseele.setAttribute("id", basetp.getId());
-            baseele.setAttribute("name", basetp.getDisplayName(user.getLanguage()));
+            baseele.setAttribute("name", basetp.getDisplayTitle(user.getLanguage()));
             baseele.setAttribute("path", basetp.getUrl());
             baseele.setAttribute("level",Integer.toString(basetp.getLevel()));
             if(basetp.equals(tpid)) {
@@ -178,7 +178,7 @@ public class WBMenuNivel extends GenericAdmResource
             
             Element topicCurrent = dom.createElement("currenttopic");
             topicCurrent.setAttribute("id", tpid.getId());
-            topicCurrent.setAttribute("name", tpid.getDisplayName(user.getLanguage()));
+            topicCurrent.setAttribute("name", tpid.getDisplayTitle(user.getLanguage()));
             topicCurrent.setAttribute("path", tpid.getUrl());
             topicCurrent.setAttribute("level",Integer.toString(tpid.getLevel()));
             el.appendChild(topicCurrent);
@@ -188,7 +188,7 @@ public class WBMenuNivel extends GenericAdmResource
             {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
-                epadre.setAttribute("name", padre.getDisplayName(user.getLanguage()));
+                epadre.setAttribute("name", padre.getDisplayTitle(user.getLanguage()));
                 epadre.setAttribute("path", padre.getUrl());
                 epadre.setAttribute("level",Integer.toString(padre.getLevel()));
                 el.appendChild(epadre);
@@ -208,7 +208,7 @@ public class WBMenuNivel extends GenericAdmResource
                 {
                     Element ehermano = dom.createElement("brother");
                     ehermano.setAttribute("id", tphermano.getId());
-                    ehermano.setAttribute("name", tphermano.getDisplayName(user.getLanguage()));
+                    ehermano.setAttribute("name", tphermano.getDisplayTitle(user.getLanguage()));
                     ehermano.setAttribute("path", tphermano.getUrl());
                     ehermano.setAttribute("level", Integer.toString(tphermano.getLevel()));
                     ehermano.setAttribute("nivel", Integer.toString(nivel));                    
@@ -234,7 +234,7 @@ public class WBMenuNivel extends GenericAdmResource
                         {
                             Element ehijo = dom.createElement("child");
                             ehijo.setAttribute("id", hijo.getId());
-                            ehijo.setAttribute("name", hijo.getDisplayName(user.getLanguage()));
+                            ehijo.setAttribute("name", hijo.getDisplayTitle(user.getLanguage()));
                             ehijo.setAttribute("path", hijo.getUrl());
                             ehijo.setAttribute("level", Integer.toString(hijo.getLevel()));
                             ehijo.setAttribute("nivel", Integer.toString(nivel+1));
@@ -288,7 +288,7 @@ public class WBMenuNivel extends GenericAdmResource
                 {
                     Element ehijo = dom.createElement("child");
                     ehijo.setAttribute("id", hijo.getId());
-                    ehijo.setAttribute("name", hijo.getDisplayName(user.getLanguage()));
+                    ehijo.setAttribute("name", hijo.getDisplayTitle(user.getLanguage()));
                     ehijo.setAttribute("path", hijo.getUrl());
                     ehijo.setAttribute("level", Integer.toString(hijo.getLevel()));
                     ehijo.setAttribute("nivel", Integer.toString(actual));
