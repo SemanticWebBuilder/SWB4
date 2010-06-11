@@ -8,7 +8,6 @@
 <%@page import="org.semanticwb.portal.api.*" %>
 <%@page import="org.semanticwb.portal.SWBFormMgr" %>
 <%@page import="org.semanticwb.portal.SWBFormButton" %>
-
 <%
         User user=paramRequest.getUser();
         WebPage wp = paramRequest.getWebPage();
@@ -20,6 +19,7 @@
         String speciality = "Sin Asignar";
         if(userwp.getSpeciality()!=null)
             speciality = userwp.getSpeciality();
+        ArrayList containers=getContainerActs(wp,paramRequest.getUser().getLanguage());
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
@@ -41,6 +41,27 @@
         ArrayList end =new ArrayList();
 
         if(userwp.getUserWP()!=null){
+              //obtiene las actividades por contenedor
+              ArrayList containActs = new ArrayList();
+              if(!containers.isEmpty()){
+                 Iterator contAct= Activity.ClassMgr.listActivities(wp.getWebSite());
+                 while(contAct.hasNext()){
+                     Activity activ=(Activity)contAct.next();
+                     boolean p=false;
+                     String containerS="";
+                     WebPage parent1=activ;
+                     while(!p){
+                         String clas=parent1.getSemanticObject().getSemanticClass().getName();
+                         if(clas.equals("ActivityContainer")){
+                             containerS=parent1.getDisplayName();p=true;
+                         }
+                         parent1=parent1.getParent();
+                     }
+                     if(containers.contains(containerS))
+                        containActs.add(activ);
+                 }
+              }
+
             Iterator<Activity> actResp=Activity.ClassMgr.listActivityByResponsible(userwp.getUserWP(),userwp.getWebSite());
             ArrayList actValid=new ArrayList();
             //Obtener las Actividades validas
@@ -66,17 +87,15 @@
               //La misma Actividad
               if(!wp1.isActive()|| wp1==null || !wp1.isVisible()||wp1.isHidden() || !wp1.isValid() || wp1.isDeleted())
                  valid=false;
-              if(valid)
+              if(valid&&containActs.contains(wp1))
                   actValid.add(wp1);
             }
 
             Iterator itActs = actValid.iterator();
-
             while(itActs.hasNext()){
                 Activity actRes=(Activity)itActs.next();
-                if(actRes.getStatus().equals("assigned")){
+                if(actRes.getStatus().equals("assigned"))
                     assig.add(actRes.getURI());
-                }
                 else if(actRes.getStatus().equals("canceled"))
                     canc.add(actRes.getURI());
                 else if(actRes.getStatus().equals("develop"))
@@ -94,7 +113,6 @@
               listAct.add(acts.getPlannedHour());
             }
         }
-
 
         String avanTot=getProgressBar(listAct,"66CCFF",null);
         if(avanTot==null)
@@ -150,7 +168,6 @@
         }
         %>
        <table width="91%">
-           <!--tr width="5%"><td></td></tr-->
            <tr width="100%"><td width="2%"></td><td width="10%">Avance: </td>
             <td><%=avanTot%></td></tr>
        </table>
@@ -185,128 +202,149 @@
         <%String x=printStatusActivity(end);
         out.println(x);
         }
-
    }
 %>
 <%!
-private ArrayList listUserRepository(WebSite wp){
-    ArrayList usrs =new ArrayList();
-    UserRepository urep=wp.getUserRepository();
-    Iterator users = urep.listUsers();
-    while(users.hasNext()){
-        User us = (User)users.next();
-        usrs.add(us.getURI());
-    }
-    return usrs;
-}
-private String printStatusActivity(ArrayList listActs){
-    StringBuffer buf = new StringBuffer();
-    Iterator list = listActs.iterator();
-
-    buf.append("");
-    if(list.hasNext()){
-        buf.append("<ul>");
-        while(list.hasNext()){
-            ArrayList lprogress= new ArrayList();
-            String uri = (String) list.next();
-            SemanticObject ob = SemanticObject.createSemanticObject(uri);
-            Activity act = (Activity)ob.createGenericInstance();
-            lprogress.add(act.getCurrentPercentage());
-            lprogress.add(act.getPlannedHour());
-            buf.append("<li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>");
-            buf.append(getProgressBar(lprogress,null,null));
-        }
-        buf.append("</ul>");
-    }
-
-    return buf.toString();
-}
-
-private ArrayList checkVisibleChild(Iterator array){
-    ArrayList ChildVisible =new ArrayList();
-    while(array.hasNext()){
-        WebPage wp=(WebPage)array.next();
-        if(wp.isVisible())
-            ChildVisible.add(wp);
-    }
-    return ChildVisible;
-}
-
-private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
-{
-    String porcentaje = "", horas = "";
-    float porcentajeTotal = 0, horasTotales = 0, horasParciales = 0;
-    UUID uuid = UUID.randomUUID();
-    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-    dfs.setDecimalSeparator('.');
-    DecimalFormat df = new DecimalFormat("###.##", dfs);
-    StringBuffer ret = new StringBuffer();
-    if(!info.isEmpty())
-    {
-        boolean bandera = true;
-        Iterator it = info.iterator();
-        while(it.hasNext())
+        private ArrayList getContainerActs(WebPage wp,String language)
         {
-            if(bandera) //nodo contiene porcentaje
-            {
-                porcentaje = String.valueOf(it.next());
-                horas = "";
-                bandera = false;
+            WebPage site = wp;
+            WebPage siteIni=wp;
+            ArrayList containers=new ArrayList();
+            boolean si=false;
+            while(!si){
+                if(site.getSemanticObject().getSemanticClass().getName().equals("Project")){
+                    si=true;
+                    siteIni=site;
+                }
+                site=site.getParent();
             }
-            else //nodo contiene horas
-            {
-                horas = String.valueOf(it.next());
-                horasTotales += Float.valueOf(horas);
-                float dummy = Float.valueOf(porcentaje);
-                if(dummy > 1)
-                    dummy /= 100;
-                horasParciales += dummy * Float.valueOf(horas);
-                porcentaje = "";
-                horas = "";
-                bandera = true;
+            Iterator<WebPage> itwp = siteIni.listVisibleChilds(language);
+            while(itwp.hasNext()){
+                WebPage pag = itwp.next();
+                String name = pag.getSemanticObject().getSemanticClass().getName();
+                if(name.equals("ActivityContainer"))
+                    containers.add(pag.getDisplayName());
             }
+            return containers;
         }
-        porcentajeTotal = horasParciales / horasTotales * 100;
-        if (colorBarra == null)
-            colorBarra = "006BD7";
-        if (colorFondoBarra == null)
-            colorFondoBarra = "EFEFEF";
-        ret.append("<table border=0 width=\"91%\" bgcolor=\"#FFFFFF\">\n");
-        ret.append("          <tr >\n");
-        ret.append("            <td align=\"left\" width=\"75%\">\n");
-        ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
-        ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
-        ret.append("                 visibility:hidden; background-color:#008040;\n");
-        ret.append("                 margin-left:10px; margin-top:7px;\">\n");
-        ret.append("                 <font color=\"#FFFFFF\">\n");
-        ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-        ret.append("                   <b>Horas Totales: <i> " + horasTotales + " </i></b>\n");
-        ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-        ret.append("                 </font>\n");
-        ret.append("               </div>\n");
-        ret.append("               <table width=\"100%\" border=\"\" cellpadding=\"1\" cellspacing=\"1\" bordercolor=\"#FFFFFF\" bgcolor=\"#FFFFFF\"\n");
-        ret.append("                 onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\"\n");
-        ret.append("                 onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
-        ret.append("                 <tr>\n");
-        ret.append("                   <td width=\"100%\" bgcolor=\"#" + colorFondoBarra + "\">\n");
-        ret.append("                     <table class=\"darkBar\" width=\"" + df.format(porcentajeTotal) + "%\" border=\"0\" bgcolor=\"#" + colorBarra + "\">\n");
-        ret.append("                       <tr>\n");
-        ret.append("                         <td><b>&nbsp;</b>\n");
-        ret.append("                         </td>\n");
-        ret.append("                       </tr>\n");
-        ret.append("                     </table>\n");
-        ret.append("                   </td>\n");
-        ret.append("                 </tr>\n");
-        ret.append("               </table>\n");
-        ret.append("            </td>\n");
-        ret.append("            <td align=\"left\" width=\"15%\">         " + df.format(porcentajeTotal) + "%\n");
-        ret.append("            </td>\n");
-        ret.append("          </tr>\n");
-        ret.append("          </table>\n");
-        return ret.toString();
-    }
-    else
-        return null;
-}
+
+        private ArrayList listUserRepository(WebSite wp){
+            ArrayList usrs =new ArrayList();
+            UserRepository urep=wp.getUserRepository();
+            Iterator users = urep.listUsers();
+            while(users.hasNext()){
+                User us = (User)users.next();
+                usrs.add(us.getURI());
+            }
+            return usrs;
+        }
+        private String printStatusActivity(ArrayList listActs){
+            StringBuffer buf = new StringBuffer();
+            Iterator list = listActs.iterator();
+            buf.append("");
+            if(list.hasNext()){
+                buf.append("<ul>");
+                while(list.hasNext()){
+                    ArrayList lprogress= new ArrayList();
+                    String uri = (String) list.next();
+                    SemanticObject ob = SemanticObject.createSemanticObject(uri);
+                    Activity act = (Activity)ob.createGenericInstance();
+                    lprogress.add(act.getCurrentPercentage());
+                    lprogress.add(act.getPlannedHour());
+                    buf.append("<li><a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></li>");
+                    buf.append(getProgressBar(lprogress,null,null));
+                }
+                buf.append("</ul>");
+            }
+
+            return buf.toString();
+        }
+
+        private ArrayList checkVisibleChild(Iterator array){
+            ArrayList ChildVisible =new ArrayList();
+            while(array.hasNext()){
+                WebPage wp=(WebPage)array.next();
+                if(wp.isVisible())
+                    ChildVisible.add(wp);
+            }
+            return ChildVisible;
+        }
+
+        private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
+        {
+            String porcentaje = "", horas = "";
+            float porcentajeTotal = 0, horasTotales = 0, horasParciales = 0;
+            UUID uuid = UUID.randomUUID();
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+            dfs.setDecimalSeparator('.');
+            DecimalFormat df = new DecimalFormat("###.##", dfs);
+            StringBuffer ret = new StringBuffer();
+            if(!info.isEmpty())
+            {
+                boolean bandera = true;
+                Iterator it = info.iterator();
+                while(it.hasNext())
+                {
+                    if(bandera) //nodo contiene porcentaje
+                    {
+                        porcentaje = String.valueOf(it.next());
+                        horas = "";
+                        bandera = false;
+                    }
+                    else //nodo contiene horas
+                    {
+                        horas = String.valueOf(it.next());
+                        horasTotales += Float.valueOf(horas);
+                        float dummy = Float.valueOf(porcentaje);
+                        if(dummy > 1)
+                            dummy /= 100;
+                        horasParciales += dummy * Float.valueOf(horas);
+                        porcentaje = "";
+                        horas = "";
+                        bandera = true;
+                    }
+                }
+                porcentajeTotal = horasParciales / horasTotales * 100;
+                if (colorBarra == null)
+                    colorBarra = "006BD7";
+                if (colorFondoBarra == null)
+                    colorFondoBarra = "EFEFEF";
+                ret.append("<table border=0 width=\"91%\" bgcolor=\"#FFFFFF\">\n");
+                ret.append("          <tr >\n");
+                ret.append("            <td align=\"left\" width=\"75%\">\n");
+                ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
+                ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
+                ret.append("                 visibility:hidden; background-color:#008040;\n");
+                ret.append("                 margin-left:10px; margin-top:7px;\">\n");
+                ret.append("                 <font color=\"#FFFFFF\">\n");
+                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
+                ret.append("                   <b>Horas Totales: <i> " + horasTotales + " </i></b>\n");
+                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
+                ret.append("                 </font>\n");
+                ret.append("               </div>\n");
+                ret.append("               <table width=\"100%\" border=\"\" cellpadding=\"1\" cellspacing=\"1\" bordercolor=\"#FFFFFF\" bgcolor=\"#FFFFFF\"\n");
+                ret.append("                 onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\"\n");
+                ret.append("                 onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
+                ret.append("                 <tr>\n");
+                ret.append("                   <td width=\"100%\" bgcolor=\"#" + colorFondoBarra + "\">\n");
+                ret.append("                     <table class=\"darkBar\" width=\"" + df.format(porcentajeTotal) + "%\" border=\"0\" bgcolor=\"#" + colorBarra + "\">\n");
+                ret.append("                       <tr>\n");
+                ret.append("                         <td><b>&nbsp;</b>\n");
+                ret.append("                         </td>\n");
+                ret.append("                       </tr>\n");
+                ret.append("                     </table>\n");
+                ret.append("                   </td>\n");
+                ret.append("                 </tr>\n");
+                ret.append("               </table>\n");
+                ret.append("            </td>\n");
+                ret.append("            <td align=\"left\" width=\"15%\">         " + df.format(porcentajeTotal) + "%\n");
+                ret.append("            </td>\n");
+                ret.append("          </tr>\n");
+                ret.append("          </table>\n");
+                return ret.toString();
+            }
+            else
+                return null;
+        }
     %>
 
