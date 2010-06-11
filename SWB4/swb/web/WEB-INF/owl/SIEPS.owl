@@ -86,7 +86,6 @@
     <rdfs:domain rdf:resource="#Perfil"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="clase"/>
   <owl:ObjectProperty rdf:ID="hasProducto">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Producto</rdfs:label>
@@ -178,20 +177,13 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Certificado"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="email">
-    <rdfs:label xml:lang="es">E-mail</rdfs:label>
-    <rdfs:domain rdf:resource="#Empresa"/>
+  <owl:DatatypeProperty rdf:ID="familia">
+    <rdfs:domain rdf:resource="#Producto"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="address">
     <rdfs:label xml:lang="es">Calle</rdfs:label>
     <rdfs:domain rdf:resource="#Empresa"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pname">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Nombre</rdfs:label>
-    <rdfs:domain rdf:resource="#Producto"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
@@ -204,6 +196,10 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="clase">
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="municipio">
     <rdfs:label xml:lang="es">Municipio</rdfs:label>
     <rdfs:domain rdf:resource="#Empresa"/>
@@ -214,7 +210,8 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="class">
+  <owl:DatatypeProperty rdf:ID="subsector">
+    <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="telefono">
@@ -222,30 +219,12 @@
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="foto">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Producto"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="cp">
     <rdfs:label xml:lang="es">Código postal</rdfs:label>
     <rdfs:domain rdf:resource="#Empresa"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="catname">
-    <rdfs:domain rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Nombre</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="unidad">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Producto"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="descripcion">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Empresa"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="logo">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
   </owl:DatatypeProperty>
@@ -253,9 +232,9 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <rdfs:domain rdf:resource="#Producto"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="seach">
+  <owl:DatatypeProperty rdf:ID="logo">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Busqueda"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="cname">
     <rdfs:domain rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
@@ -263,9 +242,9 @@
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Nombre</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="created">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain rdf:resource="#Certificado"/>
+  <owl:DatatypeProperty rdf:ID="subrama">
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="colonia">
     <rdfs:label xml:lang="es">Colonia</rdfs:label>
@@ -275,6 +254,62 @@
   <owl:DatatypeProperty rdf:about="http://www.inegi.gob.mx/2002/scian#code">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >código</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rama">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="actividad">
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="email">
+    <rdfs:label xml:lang="es">E-mail</rdfs:label>
+    <rdfs:domain rdf:resource="#Empresa"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pname">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nombre</rdfs:label>
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="class">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="foto">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sector">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Empresa"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="catname">
+    <rdfs:domain rdf:resource="http://ontoview.org/schema/unspsc/1#Commodity"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Nombre</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="categoria">
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="unidad">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Producto"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="seach">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Busqueda"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="created">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:domain rdf:resource="#Certificado"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="segmento">
+    <rdfs:domain rdf:resource="#Producto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="estado">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
@@ -289,30 +324,42 @@
         >Ayala</sieps:municipio>
         <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >algo@empresa.com</sieps:email>
+        <sieps:subrama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31211</sieps:subrama>
+        <sieps:rama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >3121</sieps:rama>
         <sieps:hasProducto>
           <sieps:Producto rdf:ID="CocaCola">
-            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Great Cola 700ml</swb:title>
-            <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-            >600</sieps:precioprom>
-            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Great Cola 700ml</sieps:pname>
-            <sieps:unspsc>
-              <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#010123">
-                <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >010123</unspsc:unspsc>
-                <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >Bebidas</sieps:catname>
-              </rdf:Description>
-            </sieps:unspsc>
-            <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swb:valid>
             <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >foto.jpg</sieps:foto>
-            <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >botella</sieps:unidad>
+            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Great Cola 700ml</sieps:pname>
             <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Envase de vidrio</swb:description>
+            <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >010123</sieps:categoria>
+            <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009019</sieps:segmento>
+            <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >botella</sieps:unidad>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Great Cola 700ml</swb:title>
+            <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >014065</sieps:clase>
+            <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+            >600</sieps:precioprom>
+            <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:valid>
+            <sieps:unspsc>
+              <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#010123">
+                <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Bebidas</sieps:catname>
+                <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >010123</unspsc:unspsc>
+              </rdf:Description>
+            </sieps:unspsc>
+            <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009212</sieps:familia>
           </sieps:Producto>
         </sieps:hasProducto>
         <sieps:scian>
@@ -323,10 +370,14 @@
         </sieps:scian>
         <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:valid>
-        <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Agustín Maciel 12</sieps:address>
+        <sieps:subsector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312</sieps:subsector>
         <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >8768768</sieps:telefono>
+        <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Agustín Maciel 12</sieps:address>
+        <sieps:actividad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312111</sieps:actividad>
         <sieps:cp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >23423</sieps:cp>
         <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -335,10 +386,18 @@
           <sieps:Producto rdf:ID="Marias">
             <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >caja</sieps:unidad>
+            <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >014017</sieps:categoria>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Galletas Marías</swb:title>
+            <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009210</sieps:familia>
             <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
             >50</sieps:precioprom>
-            <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >foto.jpg</sieps:foto>
+            <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >014012</sieps:clase>
+            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Galletas Marías</sieps:pname>
             <sieps:unspsc>
               <rdf:Description rdf:about="http://ontoview.org/schema/unspsc/1#014017">
                 <sieps:catname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -346,18 +405,20 @@
                 <rdfs:label xml:lang="en">Bisquits or cookies</rdfs:label>
               </rdf:Description>
             </sieps:unspsc>
-            <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Galletas de sabor tradicional</swb:description>
             <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:valid>
-            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Galletas Marías</sieps:pname>
-            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Galletas Marías</swb:title>
+            <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009019</sieps:segmento>
+            <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >foto.jpg</sieps:foto>
+            <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Galletas de sabor tradicional</swb:description>
           </sieps:Producto>
         </sieps:hasProducto>
         <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Galletas y refrescos SA</sieps:name>
+        <sieps:sector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31</sieps:sector>
         <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >GAIRSA48473</sieps:rfc>
         <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -376,8 +437,14 @@
   <sieps:Empresa rdf:ID="Gamesa">
     <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Empresa dedicada a la producción de Galletas</sieps:descripcion>
+    <sieps:subrama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >31211</sieps:subrama>
+    <sieps:actividad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >312111</sieps:actividad>
     <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >045785</sieps:clavesiem>
+    <sieps:sector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >31</sieps:sector>
     <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Janitzio</sieps:municipio>
     <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -391,8 +458,12 @@
 </sieps:colonia>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >EOM-97-08-01-D2L</sieps:rfc>
+    <sieps:subsector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >312</sieps:subsector>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Gamesa S.A.</sieps:name>
+    <sieps:rama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3121</sieps:rama>
     <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >pablito@embjaniz.com&#xD;
 </sieps:email>
@@ -432,6 +503,8 @@
         >Morelos</sieps:estado>
         <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >2342342</sieps:telefono>
+        <sieps:sector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31</sieps:sector>
         <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >11110</sieps:clavesiem>
         <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -443,8 +516,14 @@
         <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >otro@empresa2.com</sieps:email>
         <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+        <sieps:subrama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31211</sieps:subrama>
         <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >REGILSA</sieps:rfc>
+        <sieps:subsector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312</sieps:subsector>
+        <sieps:rama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >3121</sieps:rama>
         <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >CocaCola Cuernavaca</sieps:name>
         <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -453,21 +532,31 @@
         >true</swb:valid>
         <sieps:hasProducto>
           <sieps:Producto rdf:ID="Pascual">
-            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Refresco Pascual 600 ml</sieps:pname>
             <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >botella</sieps:unidad>
+            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Refresco Pascual</swb:title>
             <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >foto.jpg</sieps:foto>
             <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
             >10</sieps:precioprom>
+            <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Refresco Pascual 600 ml</sieps:pname>
+            <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009019</sieps:segmento>
             <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
             <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Refresco Pascual 600 ml</swb:description>
-            <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >Refresco Pascual</swb:title>
+            <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >010123</sieps:categoria>
+            <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >014065</sieps:clase>
+            <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >009212</sieps:familia>
           </sieps:Producto>
         </sieps:hasProducto>
+        <sieps:actividad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312111</sieps:actividad>
         <sieps:municipio rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Cuernavaca</sieps:municipio>
       </sieps:Empresa>
@@ -485,9 +574,15 @@
     <sieps:hasProducto rdf:resource="#CocaCola"/>
     <sieps:rfc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >AUG-71-06-17-MP3</sieps:rfc>
+    <sieps:subrama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >31211</sieps:subrama>
+    <sieps:subsector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >312</sieps:subsector>
     <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >elratonloco@progidy.mx</sieps:email>
     <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
+    <sieps:sector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >31</sieps:sector>
     <sieps:address rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Azúcar No. 16</sieps:address>
     <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -498,120 +593,172 @@
       <sieps:Producto rdf:ID="CocaCola_1">
         <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 1lt</sieps:pname>
-        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Envase de vidrio</swb:description>
-        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >botella</sieps:unidad>
-        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >foto.jpg</sieps:foto>
         <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:valid>
-        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 1lt</swb:title>
-        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-        >600</sieps:precioprom>
-      </sieps:Producto>
-    </sieps:hasProducto>
-    <sieps:hasProducto>
-      <sieps:Producto rdf:ID="CocaCola_2">
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 2lt</sieps:pname>
-        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Envase de vidrio</swb:description>
         <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >botella</sieps:unidad>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
         <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >foto.jpg</sieps:foto>
+      </sieps:Producto>
+    </sieps:hasProducto>
+    <sieps:rama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >3121</sieps:rama>
+    <sieps:hasProducto>
+      <sieps:Producto rdf:ID="CocaCola_2">
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 2lt</sieps:pname>
         <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:valid>
-        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 2lt</swb:title>
         <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
         >600</sieps:precioprom>
+        <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Envase de vidrio</swb:description>
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
       </sieps:Producto>
     </sieps:hasProducto>
     <sieps:descripcion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Empresa dedicada a la elaboración de Agua purificada</sieps:descripcion>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="CocaCola_3">
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
         <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 355 ml</sieps:pname>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
         <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >botella</sieps:unidad>
-        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >foto.jpg</sieps:foto>
-        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:valid>
-        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 355 ml</swb:title>
-        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-        >600</sieps:precioprom>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
         <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >lata</swb:description>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
       </sieps:Producto>
     </sieps:hasProducto>
+    <sieps:actividad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >312111</sieps:actividad>
     <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Aguas el Raton Loco S. de R.L.</sieps:name>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="CocaCola_4">
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 600ml</sieps:pname>
-        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >botella</sieps:unidad>
-        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >foto.jpg</sieps:foto>
         <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:valid>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
         <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
         <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Great Cola 600ml</swb:title>
-        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-        >600</sieps:precioprom>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
         <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Envase de plástico</swb:description>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 600ml</sieps:pname>
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
       </sieps:Producto>
     </sieps:hasProducto>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="CocaCola_6">
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 1 lt</sieps:pname>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
         <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >botella</sieps:unidad>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 1 lt</swb:title>
         <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >foto.jpg</sieps:foto>
         <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:valid>
         <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
-        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 1 lt</swb:title>
-        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-        >600</sieps:precioprom>
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
         <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Envase de tetra pack</swb:description>
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 1 lt</sieps:pname>
       </sieps:Producto>
     </sieps:hasProducto>
     <sieps:colonia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Fraccionamiento el Salitre</sieps:colonia>
     <sieps:hasProducto>
       <sieps:Producto rdf:ID="CocaCola_5">
-        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 500 ml</sieps:pname>
-        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >botella</sieps:unidad>
-        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >foto.jpg</sieps:foto>
-        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:valid>
-        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
-        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Great Cola 500 ml</swb:title>
-        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
-        >600</sieps:precioprom>
+        <sieps:familia rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009212</sieps:familia>
+        <sieps:segmento rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >009019</sieps:segmento>
         <swb:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Envase de tetra pack</swb:description>
+        <sieps:unidad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >botella</sieps:unidad>
+        <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 500 ml</swb:title>
+        <sieps:clase rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >014065</sieps:clase>
+        <sieps:categoria rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >010123</sieps:categoria>
+        <sieps:pname rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Great Cola 500 ml</sieps:pname>
+        <swb:valid rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:valid>
+        <sieps:precioprom rdf:datatype="http://www.w3.org/2001/XMLSchema#float"
+        >600</sieps:precioprom>
+        <sieps:unspsc rdf:resource="http://ontoview.org/schema/unspsc/1#010123"/>
+        <sieps:foto rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >foto.jpg</sieps:foto>
       </sieps:Producto>
     </sieps:hasProducto>
     <sieps:telefono rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -626,6 +773,8 @@
         >Cortázar No 45</sieps:address>
         <sieps:clavesiem rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >025412</sieps:clavesiem>
+        <sieps:rama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >3121</sieps:rama>
         <sieps:scian rdf:resource="http://www.inegi.gob.mx/2002/scian#_312111"/>
         <sieps:email rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >contacto_ficticio@yumail.com</sieps:email>
@@ -637,8 +786,16 @@
         >Cotiyac de Suazo</sieps:municipio>
         <sieps:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Carbonatados de Sureste S.A. de C.V.</sieps:name>
+        <sieps:subrama rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31211</sieps:subrama>
+        <sieps:subsector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312</sieps:subsector>
         <sieps:estado rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Veracruz</sieps:estado>
+        <sieps:sector rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >31</sieps:sector>
+        <sieps:actividad rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >312111</sieps:actividad>
         <sieps:logo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >logo.jpg</sieps:logo>
         <sieps:hasProducto rdf:resource="#CocaCola"/>
