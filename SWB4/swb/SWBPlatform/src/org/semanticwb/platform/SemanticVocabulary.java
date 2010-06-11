@@ -62,6 +62,8 @@ public class SemanticVocabulary
     
     /** The Constant RDFS_URI. */
     public static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
+
+    public static final String RDFS_RESOURCE = RDFS_URI+"Resource";
     
     /** The Constant RDFS_LABEL. */
     public static final String RDFS_LABEL = RDFS_URI + "label";
