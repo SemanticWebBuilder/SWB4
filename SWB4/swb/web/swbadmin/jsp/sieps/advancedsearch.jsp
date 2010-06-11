@@ -198,7 +198,7 @@
                 <select name="estado">
                   <option selected value="all">Todos</option>
                   <option value="Guanajuato">Guanajuato</option>
-                  <option value="Michoacan" >Michoacán</option>
+                  <option value="Michoacán" >Michoacán</option>
                   <option value="Veracuz">Veracuz</option>                  
                 </select>
                 <label for="sector">Sector:</label>
