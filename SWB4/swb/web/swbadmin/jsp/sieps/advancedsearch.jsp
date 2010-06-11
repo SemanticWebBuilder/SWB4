@@ -123,10 +123,11 @@
             }
             if(request.getParameter("mode").equals("actividad"))
             {
+                
                 Iterator<org.semanticwb.unspsc.Class> sectores=org.semanticwb.unspsc.Class.ClassMgr.listClasses();
                 while(sectores.hasNext())
                 {
-                    org.semanticwb.unspsc.Class subsector=sectores.next();
+                    org.semanticwb.unspsc.Class subsector=sectores.next();                    
                     if(subsector.getUnspsc()!=null && subsector.getUnspsc().equals(request.getParameter("value")))
                     {
                         Iterator<Commodity> ramas=subsector.getCommodities();
