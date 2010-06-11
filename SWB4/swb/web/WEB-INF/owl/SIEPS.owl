@@ -187,7 +187,7 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="name">
-    <rdfs:label xml:lang="es">Nombre</rdfs:label>
+    <rdfs:label xml:lang="es">razón social</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Empresa"/>
   </owl:DatatypeProperty>
@@ -237,10 +237,10 @@
     <rdfs:domain rdf:resource="#Empresa"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="cname">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >actividad</rdfs:label>
     <rdfs:domain rdf:resource="http://www.inegi.gob.mx/2002/scian#Clase"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Nombre</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="subrama">
     <rdfs:domain rdf:resource="#Empresa"/>
@@ -270,7 +270,7 @@
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pname">
     <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Nombre</rdfs:label>
+    >nombre</rdfs:label>
     <rdfs:domain rdf:resource="#Producto"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
