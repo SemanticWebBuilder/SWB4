@@ -90,16 +90,17 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
             }
             try
             {
-                mgr.processElement(request, act.swbproy_actType);//mgr.processForm(request);
-                mgr.processElement(request, act.swbproy_critical);
-                mgr.processElement(request, act.swbproy_currentHour);
-                mgr.processElement(request, act.swbproy_currentPercentage);
-                mgr.processElement(request, act.swbproy_endDate);
-                mgr.processElement(request, act.swbproy_plannedHour);
-                mgr.processElement(request, act.swbproy_responsible);
-                mgr.processElement(request, act.swbproy_startDate);
-                mgr.processElement(request, act.swbproy_status);
-                obj.removeProperty(act.swbproy_hasParticipants);
+                mgr.processElement(request, Activity.swbproy_actType);//mgr.processForm(request);
+                mgr.processElement(request, Activity.swbproy_critical);
+                mgr.processElement(request, Activity.swbproy_currentHour);
+                mgr.processElement(request, Activity.swbproy_currentPercentage);
+                mgr.processElement(request, Activity.swbproy_endDate);
+                mgr.processElement(request, Activity.swbproy_plannedHour);
+                mgr.processElement(request, Activity.swbproy_responsible);
+                mgr.processElement(request, Activity.swbproy_startDate);
+                mgr.processElement(request, Activity.swbproy_status);
+                obj.removeProperty(Activity.swbproy_hasParticipants);
+                
                 for(int x = 0; x<valsParts.length;x++){
                     if(!valsParts[x].equals(""))
                         obj.addObjectProperty(act.swbproy_hasParticipants, SemanticObject.createSemanticObject(valsParts[x]));
@@ -145,15 +146,14 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
         ArrayList values1=new ArrayList();
         Iterator<Activity> it = act.listPredecessors();
 
-        Activity act1;
-         while(it.hasNext()){
-             act1 = it.next();
-             values=listPredecessor(act1,values,user);
-             Iterator val = values.iterator();
-             while(val.hasNext())
-                 values1.add(val.next());
-             values=new ArrayList();
-         }
+        while(it.hasNext()){
+           Activity act1 = it.next();
+           values=listPredecessor(act1,values,user);
+           Iterator val = values.iterator();
+           while(val.hasNext())
+               values1.add(val.next());
+           values=new ArrayList();
+        }
         SemanticObject obj = SemanticObject.createSemanticObject(act.getURI());
         obj.removeProperty(act.swbproy_hasPredecessor);
         Iterator itval = values1.iterator();
@@ -179,9 +179,24 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
         wp = wp.getChild();
         if(wp != null && wp.isVisible() && wp.isActive() && !wp.isHidden() && wp.isValid() && !wp.isDeleted())
             valid = true;
-        else
-            valid = false;
+        //else
+        //    valid = false;
         return valid;
+        /*
+                     boolean result = false;
+            ArrayList checks=new ArrayList();
+            Iterator childs = webpage.listVisibleChilds(user.getLanguage());
+            while(childs.hasNext()){
+                WebPage child = (WebPage)childs.next();
+                if(child != null && child.isVisible() && child.isActive() && !child.isHidden() && child.isValid() && !child.isDeleted())
+                    checks.add(true);
+                else
+                    checks.add(false);
+            }
+            if(checks.contains(true))
+                result = true;
+           return result;*/
+
     }
 
 
