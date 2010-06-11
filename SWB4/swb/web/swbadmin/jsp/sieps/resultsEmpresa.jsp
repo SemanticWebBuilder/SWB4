@@ -2,7 +2,13 @@
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.scian.Clase"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
-<%@page import="java.util.Iterator"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.sieps.search.SearchResource"%>
+
+<%@page import="org.semanticwb.sieps.EmpresaInteres"%>
+<%@page import="org.semanticwb.platform.SemanticObject"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.sieps.Empresa"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.util.List"%>
@@ -26,6 +32,39 @@
         return ret;
     }
 %>
+<%!
+    public boolean isEmpresasInteres(User user, SWBModel model, String uriEmpresa) {
+    	 boolean isEmprInteres = false;
+
+         try
+         {        	 
+             Iterator<EmpresaInteres> interes = EmpresaInteres.ClassMgr.listEmpresaIntereses();
+
+             if (interes != null)
+             {
+                 while (interes.hasNext())
+                 {
+                     EmpresaInteres empresaInteres = interes.next();
+                     if (empresaInteres != null) {
+                         User userInteres = empresaInteres.getUsuario();
+                         Empresa e = empresaInteres.getEmpresa();
+                         if (userInteres.equals(user)) {                        	 
+	                         if (e.getId().equals(uriEmpresa)) {
+	                        	 isEmprInteres = true;
+	                         }
+                         }
+                     }
+                 }
+             }
+         }
+         catch (Exception e)
+         {
+             e.printStackTrace();
+         }
+         return isEmprInteres;
+    }
+%>
+<script type="text/javascript" src="/swbadmin/jsp/sieps/sieps.js"></script>
 <style>
 	div#qTip {
 	 padding: 3px;
@@ -42,98 +81,46 @@
 	 
 	}
 </style>
-<script type="text/javascript">
-	function desplieguaDescripcion(idAnchor, idCell) {
-		var cell = document.getElementById(idCell);
-		if (cell != null) {			
-			var modDispl  = cell.style.display;
-			if (modDispl == "block") {
-				cell.style.display = "none";
-				cambiaEstadoDisplayAllDescrip('formTableRes');
-				var objAnchor = document.getElementById(idAnchor);
-				objAnchor.innerHTML = '<img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" /> Abrir detalle';
-								
-			} else {
-				cell.style.display = "block";
-				var objAnchor = document.getElementById(idAnchor);
-				objAnchor.innerHTML = '<img src="/work/models/sieps/Template/2/1/images/bulletGris_tabla.jpg" alt=" " width="10" height="10" /> Cerrar detalle';
-			}
-		}
-		return;
-	}
-	function desplieguaTodasDescripcion(objChk) {
-		var displayType = (objChk.checked) ? "block" : "none";
-		var table = document.getElementById("tablaResultados");
-		var rows  = table.rows;
-		for (var i = 0; i<rows.length; i++) {
-			var row = rows[i];
-			//rowBullets
-            //cellBulletDescrip
-			if (row != null && row.id.indexOf("rowBullets")!= -1 ) {
-				var cells = row.cells;
-				
-				cells[0].children[0].innerHTML = (displayType == 'block')
-															? '<img src="/work/models/sieps/Template/2/1/images/bulletGris_tabla.jpg" alt=" " width="10" height="10" /> Cerrar detalle'
-															: '<img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" /> Abrir detalle';		
-			}
-            			
-			if (row != null && row.id.indexOf("rowDescrip")!= -1 ) {
-				var cells = row.cells;
-				cells[0].style.display = displayType;		
-			}
-		}
-		return;
-	}
-	function desplieguaTodasEmpresas(objChk) {
-		var checkedType = (objChk.checked) ? true : false;
-		var forma 	= objChk.form
 
-		for (var i = 0; i<forma.elements.length; i++) {
-			var e = forma.elements[i];
-			if ((e.id.indexOf("checkEmp") != -1) && (e.type=='checkbox')) {
-				e.checked = checkedType;
-			}								
-		}
-		
-		return;
-	}
-	function cambiaEstadoSelectAllEmpresas(objChk) {
-		var checkedType = (objChk.checked) ? true : false;
-		var forma 	= objChk.form
-		var objChkAll = forma.elements["checkAllEmpresas"];
-		if (objChkAll.checked && !checkedType) {
-			objChkAll.checked  =false;
-		}		
-		return;
-	}	
-	function cambiaEstadoDisplayAllDescrip(idForm) {		
-		var forma 	= document.forms[idForm]
-		var objChkAll = forma.elements["checkAllDescrip"];		
-		objChkAll.checked  =false;
-				
-		return;
-	}	
-		
-</script>
-
+<script type="text/javascript" src="/swbadmin/jsp/sieps/sieps.js"></script>
 <script type="text/javascript" src="/swbadmin/jsp/sieps/qtips.js"></script>
-<%
-	String query = request.getParameter("query");
-	SWBResourceURL urlDetail = paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("query", query);
-	List<Empresa> empresas = (List<Empresa>)request.getAttribute("results");
-	boolean isResultados   = (empresas != null &&  !empresas.isEmpty());
-%>
 
+<%
+	String query 				= 	request.getParameter("query");
+	String queryAttr 			= 	(String)request.getAttribute("query");
+	SWBResourceURL urlDetail 	= 	paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("query", query);
+	
+	SWBResourceURL 	urlGuardaBusqueda 	= 	paramRequest.getActionUrl().setAction("guardaConsulta"),
+					urlGuardaEmpresas 	= 	paramRequest.getActionUrl().setAction("guardaEmpresas");
+	
+	List<Empresa> empresas 		= 	(List<Empresa>)request.getAttribute("results");
+	Boolean isAllEmpInt 		= 	(Boolean)request.getAttribute("isAllEmpInt");
+	
+	boolean isResultados   	= 	(empresas != null &&  !empresas.isEmpty());
+	String mensaje		   	= 	"";//request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
+	
+	User user				= 	paramRequest.getUser();
+	SWBModel webSite		=	paramRequest.getWebPage().getWebSite();
+	int numEmpresasInteres 	= 	0;
+	
+	String urlImages		=	"/swbadmin/jsp/"+paramRequest.getWebPage().getWebSiteId()+"/images/";
+	
+%>
+<% if (queryAttr != null && queryAttr.length() > 0) { %>
+	<p>Usted buscó:<%=queryAttr%></p>
+<% } %>
 <% if (isResultados) {%>
       <h2 class="tableH2">Resultados de búsqueda</h2>
       <form id="formTableRes" method="post" action="">
+      	<input type="hidden" id="currentQuery" name="currentQuery" value="<%=query%>"/>
         <p>
           <input type="checkbox" name="checkAllDescrip" id="checkAllDescrip"  onclick="javascript:desplieguaTodasDescripcion(this);"/>
           <label for="check1">Vista breve de todos los resultados</label>
-<!-- 
-          <input type="checkbox" name="checkAllEmpresas" id="checkAllEmpresas"  onclick="javascript:desplieguaTodasEmpresas(this);"/>
-          <label for="check4">Selecciona la empresa</label>
- -->          
+		  <% if (!isAllEmpInt) { %>	
+	          <input type="checkbox" name="checkAllEmpresas" id="checkAllEmpresas"  onclick="javascript:desplieguaTodasEmpresas(this);"/>
+	          <label for="check4">Selecciona la empresa</label>
+          <% } %>
+        
         </p>
       
 	  <table id="tablaResultados">
@@ -142,7 +129,7 @@
             <th>Categoría</th>
             <th>Subcategoría</th>
             <th>Empresa</th>
-            <th colspan="2">Ubicación</th>
+            <th colspan="3">Ubicación</th>
           </tr>
           <%          	
           	for (int i = 0; i< empresas.size(); i++) {
@@ -188,32 +175,40 @@
                     }
               }
           %>  
-          	<tr onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", e.getEncodedURI())%>"' style="cursor: hand;">          		
-	            <td class="<%=estiloRow%> bold"><%=e.getScian().getCode()%></td>
+          	<tr>          		
+	            <td onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", e.getEncodedURI())%>"' style="cursor: hand;" class="<%=estiloRow%> bold"><%=e.getScian().getCode()%></td>
 	            <td class="<%=estiloRow%> bold"><%=categoria%></td>
 	            <td class="<%=estiloRow%> bold"><%=subcategoria%></td>            
-	            <td class="<%=estiloRow%> bold"><%=e.getName()%></td>            
-	            <td class="<%=estiloRow%> bold"><%=e.getEstado()%>
-	            	<span class="<%=estiloRow%>">
-	            	<!-- 
-	              		<input type="checkbox" name="checkEmp<%=i%>" id="checkEmp<%=i%>" onclick="javascript:cambiaEstadoSelectAllEmpresas(this);"/>
-	            	 -->
-	            	</span>
-	            </td>            
+	            <td onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", e.getEncodedURI())%>"' style="cursor: hand;" class="<%=estiloRow%> bold"><%=e.getName()%></td>            
+	            <td class="<%=estiloRow%> bold"><%=e.getEstado()%></td>
+	            <td class="<%=estiloRow%>">            
+            	<% if (!isEmpresasInteres(user, webSite, e.getURI())) {%>
+              		<input type="checkbox" name="chkEmpresas" id="chkEmpresas" value="<%=e.getURI()%>" onclick="javascript:cambiaEstadoSelectAllEmpresas(this);"/>
+            	<% } else {%>
+            		<img src="<%=urlImages%>favorites.png" width="16" height="16" alt="" />
+            	<% } %>
+	           </td> 	
 	            <td class="<%=estiloRow%>">&nbsp;</td>	          
            </tr>
            <tr id="rowBullets<%=i%>">
 	            <td id="cellBulletDescrip<%=i%>" class="<%=estiloRow%>"><a id="anchor<%=i%>" href="javascript:desplieguaDescripcion('anchor<%=i%>', 'cellDescrip<%=i%>');");"><img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" />Abrir detalle</a></td>
 	            <td class="<%=estiloRow%>"><a href="#" title='  <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=es&amp;geocode=&amp;q=Toriello+Guerra,+Tlalpan,+M%C3%A9xico&amp;sll=37.0625,-95.677068&amp;sspn=47.885545,79.013672&amp;ie=UTF8&amp;hq=&amp;z=14&amp;ll=19.29476,-99.166373&amp;output=embed"></iframe>'><img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" /> Ver mapa</a>
 	            </td>
-	            <td colspan="4" class="<%=estiloRow%>">&nbsp;</td>
+	            <td colspan="5" class="<%=estiloRow%>">&nbsp;</td>
           </tr>
           <tr id="rowDescrip<%=i%>">
             <td id="cellDescrip<%=i%>" class="<%=estiloRow%> tableHide" colspan="6"><%=e.getDescripcion()!=null ? e.getDescripcion() : "No disponible"%></td>
           </tr>
-		  <%}%>
-	</table>	
-	</form>  	        	 
+		  <%}%>		 
+	</table>
+	<p class="centrar">
+	<% if (!isAllEmpInt){ %>
+    	<input type="button" name="btnSendEmpresa" id="btnSendEmpresa" value="Enviar Empresa(s) a mi Carpeta" class="btn-bigger" onclick="javascript:enviarEmpresasInteres('<%=urlGuardaEmpresas%>', this); "/>
+    <% } %>	
+    <input type="button" name="btnSendConsulta" id="btnSendConsulta" value="Enviar Consulta a mi Carpeta" class="btn-bigger" onclick="javascript:enviarBusquedas('<%=urlGuardaBusqueda%>', this); "/>
+	</p>  	        	 
+	</form>
 <%} else {%>
 	<h2 class="tableH2">No se encontraron coincidencias</h2>
 <%}%>
+<script type="text/javascript">muestraMensaje('<%=mensaje%>');</script>
