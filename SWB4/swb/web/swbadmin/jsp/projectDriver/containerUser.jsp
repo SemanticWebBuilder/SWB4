@@ -5,12 +5,15 @@
         Iterator<UserWebPage> it = UserWebPage.ClassMgr.listUserWebPageByParent(wp, wp.getWebSite());
         Iterator<WebPage> itwp = wp.listVisibleChilds(paramRequest.getUser().getLanguage());
         ArrayList webPage = new ArrayList();
+        
         while(itwp.hasNext()){
             WebPage pag = itwp.next();
             String name = pag.getSemanticObject().getSemanticClass().getName();
             if(name.equals("WebPage"))
                 webPage.add(pag);
         }
+        ArrayList containers=getContainerActs(wp,paramRequest.getUser().getLanguage());
+
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
@@ -33,6 +36,27 @@
           if(uwp1.isActive()&& uwp1!=null && uwp1.isVisible()&& uwp1.getChild()==null && !uwp1.isHidden() && uwp1.isValid() && !uwp1.isDeleted())
             userValid.add(uwp1);
       }
+              //obtiene las actividades por contenedor
+              ArrayList containActs = new ArrayList();
+              if(!containers.isEmpty()){
+                 Iterator contAct= Activity.ClassMgr.listActivities(wp.getWebSite());
+                 while(contAct.hasNext()){
+                     Activity activ=(Activity)contAct.next();
+                     boolean p=false;
+                     String containerS="";
+                     WebPage parent1=activ;
+                     while(!p){
+                         String clas=parent1.getSemanticObject().getSemanticClass().getName();
+                         if(clas.equals("ActivityContainer")){
+                             containerS=parent1.getDisplayName();p=true;
+                         }
+                         parent1=parent1.getParent();
+                     }
+                     if(containers.contains(containerS))
+                        containActs.add(activ);
+                 }
+              }
+
       //Obtiene de los usuarios validos, las actividades correspondientes a cada uno
       it=userValid.iterator();
       while(it.hasNext()){
@@ -40,8 +64,13 @@
           if(uwp2.getUserWP()!=null){
            //Obtiene la lista de las actividads por responsable
             array=Activity.ClassMgr.listActivityByResponsible(uwp2.getUserWP(),uwp2.getWebSite());
-            while(array.hasNext())
-              actUser.add(array.next());
+            while(array.hasNext()){
+              //actUser.add(array.next());
+               Activity acti = (Activity)array.next();
+               if(containActs.contains(acti)){
+                  actUser.add(acti);}
+
+            }
           }
       }
       //Obtiene las actividades válidas que no sean hijas y que ninguno de sus papas este desactivado
@@ -118,7 +147,30 @@
         if(!webPage.isEmpty())
             out.println(printPage(webPage,"Secciones"));
 }%>
-<%!     private String printPage(ArrayList array, String title)
+<%!    
+        private ArrayList getContainerActs(WebPage wp,String language)
+        {
+            WebPage site = wp;
+            WebPage siteIni=wp;
+            ArrayList containers=new ArrayList();
+            boolean si=false;
+            while(!si){
+                if(site.getSemanticObject().getSemanticClass().getName().equals("Project")){
+                    si=true;
+                    siteIni=site;
+                }
+                site=site.getParent();
+            }
+            Iterator<WebPage> itwp = siteIni.listVisibleChilds(language);
+            while(itwp.hasNext()){
+                WebPage pag = itwp.next();
+                String name = pag.getSemanticObject().getSemanticClass().getName();
+                if(name.equals("ActivityContainer"))
+                    containers.add(pag.getDisplayName());
+            }
+            return containers;
+        }
+        private String printPage(ArrayList array, String title)
         {
             Iterator itpr=array.iterator();
             StringBuffer strb = new StringBuffer();
