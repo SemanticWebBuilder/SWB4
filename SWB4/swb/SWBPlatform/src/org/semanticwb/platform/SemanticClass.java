@@ -304,7 +304,7 @@ public class SemanticClass
             }
             catch(IndexOutOfBoundsException iobe)
             {
-                log.error("Error en clase "+this.getURI(),iobe);
+                log.error("Class error definition "+this.getURI(),iobe);
             }
             //log.trace("getClassCodeName:"+m_classCodeName);
         }
