@@ -298,9 +298,13 @@ public class SemanticClass
                 m_classCodeName=getName();
             }
             //TODO:corregir modelo para no hacer esto
-            if(m_classCodeName!=null)
+            try
             {
                 m_classCodeName=(""+m_classCodeName.charAt(0)).toUpperCase()+m_classCodeName.substring(1);
+            }
+            catch(IndexOutOfBoundsException iobe)
+            {
+                log.error("Error en clase "+this.getURI(),iobe);
             }
             //log.trace("getClassCodeName:"+m_classCodeName);
         }
