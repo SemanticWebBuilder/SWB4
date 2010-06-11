@@ -46,69 +46,58 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 }
 
 /*------------------- Menu ---------*/
+.swb-menu {
+	width: 11.23em;
+	border:#336699 solid 0.06em;
+	font-family:Arial;
+	font-size:1em;
+}
+.swb-menu h1{
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
+}
+.swb-menu h1 a:link{color: #FFFFFF;	text-decoration:none;}
+.swb-menu h1 a:visited{color: #FFFFFF; text-decoration:none;}
+.swb-menu h1 a:hover{color: #FFFFFF; text-decoration:none;}
+.swb-menu h1 a:active{color: #FFFFFF; text-decoration:none;}
 
-#swb-menu {
-    width: 11.23em;
-    border:#336699 solid 0.06em;
-    font-family:Arial;
-    font-size:1em;
+.swb-menu ul{
+	margin: 0;
+	padding: 0.31em;
+	font-size: 12px;
+	list-style:none;
+	list-style-position:inside;
+	font-weight:bold;
 }
-#swb-menu h1{
-    background-color: #336699;
-    margin: 0 0 0.63em 0;
-    padding: 0;
-    line-height:1.56em;
-    font-size:0.88em;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: center;
-    text-transform: capitalize;
-}
-#swb-menu h1 a:link{
-    color: #FFFFFF;
-    text-decoration:none;
-}
-#swb-menu h1 a:visited{
-    color: #FFFFFF;
-    text-decoration:none;
-}
-#swb-menu h1 a:hover{
-    color: #FFFFFF;
-    text-decoration:none;
-}
-#swb-menu h1 a:active{
-    color: #FFFFFF;
-    text-decoration:none;
-}
-#swb-menu ul{
-    margin: 0;
-    padding: 0.31em;
-    font-size: 0.75em;
-    list-style:none;
-    list-style-position:inside;
-}
-#swb-menu li {
-    padding: 0.31em 0.31em 0.31em 0.31em;
-}
-#swb-menu li a:link{
-    color: #336699;
-    text-decoration:none;
-}
-#swb-menu li a:visited{
-    color: #336699;
-    text-decoration:none;
-}
-#swb-menu li a:hover{
-    color: #99ccff;
-    text-decoration:none;
-}
-#swb-menu li a:active{
-    color: #FFFFFF;
-    text-decoration:none;
-}
-#swb-menu span {
-    color:#990000;
-}
+.swb-menu a{text-decoration:none;}
+.swb-menu li {padding: 0.2em 0.3em 0.2em .5em;}
+
+.swb-menu li a:link{color: #336699;}
+.swb-menu li a:visited{color: #336699;}
+.swb-menu li a:hover{color: #3399FF;}
+.swb-menu li a:active{color: #FFFFFF;}
+
+/*HIJOS*/
+.swb-menu strong{color: #3399CC;} /*Padre seleccionada*/
+.swb-menu em{ background:#99FFFF; font-style:normal;} /*Hijo o nieto seleccionado*/
+.swb-menu ul ul {font-weight:normal} /*Descendientes de seleccionada*/
+.swb-menu li li a:link{color:#3399CC; padding-left:.5em}
+.swb-menu li li a:visited{color:#33CCFF;}
+.swb-menu li li a:hover{color: #33CCFF;}
+.swb-menu li li a:active{color:#33CCFF;}
+
+/*NIETOS*/
+.swb-menu li li li a:link{color: #999999; padding-left:1em}
+.swb-menu li li li a:visited{color: #999999;}
+.swb-menu li li li a:hover{color: #666666;}
+.swb-menu li li li a:active{color: #999999;}
 /*------------------- Menu ---------*/
 
 /*------------------- Encuesta  ----*/
