@@ -97,13 +97,19 @@
 	Boolean isAllEmpInt 		= 	(Boolean)request.getAttribute("isAllEmpInt");
 	
 	boolean isResultados   	= 	(empresas != null &&  !empresas.isEmpty());
-	String mensaje		   	= 	"";//request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
+	String mensaje		   	= 	request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
 	
+	/** XXX:Implementación para fines del demo. Replantear funcionalidad para un ambiente productivo...**/
+	boolean isBusquedaCarpeta 	= mensaje.contains("búsqueda");	
+	mensaje 					= 	isBusquedaCarpeta ? mensaje : "";
+		
 	User user				= 	paramRequest.getUser();
 	SWBModel webSite		=	paramRequest.getWebPage().getWebSite();
 	int numEmpresasInteres 	= 	0;
 	
 	String urlImages		=	"/swbadmin/jsp/"+paramRequest.getWebPage().getWebSiteId()+"/images/";
+	
+	boolean isUser			=	(user != null && user.isSigned());
 	
 %>
 <% if (queryAttr != null && queryAttr.length() > 0) { %>
@@ -116,7 +122,7 @@
         <p>
           <input type="checkbox" name="checkAllDescrip" id="checkAllDescrip"  onclick="javascript:desplieguaTodasDescripcion(this);"/>
           <label for="check1">Vista breve de todos los resultados</label>
-		  <% if (!isAllEmpInt) { %>	
+		  <% if (isUser && !isAllEmpInt) { %>	
 	          <input type="checkbox" name="checkAllEmpresas" id="checkAllEmpresas"  onclick="javascript:desplieguaTodasEmpresas(this);"/>
 	          <label for="check4">Selecciona la empresa</label>
           <% } %>
@@ -129,7 +135,7 @@
             <th>Categoría</th>
             <th>Subcategoría</th>
             <th>Empresa</th>
-            <th colspan="3">Ubicación</th>
+            <th colspan="2">Ubicación</th>
           </tr>
           <%          	
           	for (int i = 0; i< empresas.size(); i++) {
@@ -182,13 +188,15 @@
 	            <td onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", e.getEncodedURI())%>"' style="cursor: hand;" class="<%=estiloRow%> bold"><%=e.getName()%></td>            
 	            <td class="<%=estiloRow%> bold"><%=e.getEstado()%></td>
 	            <td class="<%=estiloRow%>">            
-            	<% if (!isEmpresasInteres(user, webSite, e.getURI())) {%>
+            	<% if (isUser && !isEmpresasInteres(user, webSite, e.getURI())) {%>
               		<input type="checkbox" name="chkEmpresas" id="chkEmpresas" value="<%=e.getURI()%>" onclick="javascript:cambiaEstadoSelectAllEmpresas(this);"/>
-            	<% } else {%>
+            	<% } else if (isUser){%>
             		<img src="<%=urlImages%>favorites.png" width="16" height="16" alt="" />
+            	<% } else { %>
+            		&nbsp;
             	<% } %>
 	           </td> 	
-	            <td class="<%=estiloRow%>">&nbsp;</td>	          
+	            <!--  <td class="">&nbsp;</td> -->	          
            </tr>
            <tr id="rowBullets<%=i%>">
 	            <td id="cellBulletDescrip<%=i%>" class="<%=estiloRow%>"><a id="anchor<%=i%>" href="javascript:desplieguaDescripcion('anchor<%=i%>', 'cellDescrip<%=i%>');");"><img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" />Abrir detalle</a></td>
@@ -202,10 +210,12 @@
 		  <%}%>		 
 	</table>
 	<p class="centrar">
-	<% if (!isAllEmpInt){ %>
+	<% if (isUser && !isAllEmpInt){ %>
     	<input type="button" name="btnSendEmpresa" id="btnSendEmpresa" value="Enviar Empresa(s) a mi Carpeta" class="btn-bigger" onclick="javascript:enviarEmpresasInteres('<%=urlGuardaEmpresas%>', this); "/>
     <% } %>	
-    <input type="button" name="btnSendConsulta" id="btnSendConsulta" value="Enviar Consulta a mi Carpeta" class="btn-bigger" onclick="javascript:enviarBusquedas('<%=urlGuardaBusqueda%>', this); "/>
+	<% if (isUser && !isBusquedaCarpeta){ %>    	
+    	<input type="button" name="btnSendConsulta" id="btnSendConsulta" value="Enviar Consulta a mi Carpeta" class="btn-bigger" onclick="javascript:enviarBusquedas('<%=urlGuardaBusqueda%>', this); "/>
+    <% } %>	
 	</p>  	        	 
 	</form>
 <%} else {%>

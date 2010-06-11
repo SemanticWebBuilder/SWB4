@@ -53,7 +53,11 @@
  		if (http_request.readyState==4){
  			if (http_request.status==200){
  				var container 		= document.getElementById("cuponConfirmacion");
- 				container.style.display = "block"
+			
+ 				container.style.display = "block";
+ 				
+ 				var containerHidden 		= document.getElementById("cuponBody");
+ 				containerHidden.style.display = "none";
  				container.innerHTML =  http_request.responseText;
  			}
  		}
@@ -176,6 +180,13 @@
 		forma.submit();		
 		return;
 	}
+	function enviarProducto(url, objBtn) {
+		objBtn.disabled = true;		
+		var forma 	= objBtn.form;
+		forma.action = url;
+		forma.submit();		
+		return;
+	}	
 	function enviarForma(url, objBtn) {
 		objBtn.disabled = true;		
 		var forma 	= objBtn.form;
@@ -197,6 +208,14 @@
 			enviarForma(url, objBtn);
 		} else {
 			alert("Debe seleccionar al menos una empresa");
+		}		
+		return;
+	}
+	function eliminaProductosCarpeta(url, objBtn, idChk) {
+		if (validaCheck(objBtn, idChk)) {
+			enviarForma(url, objBtn);
+		} else {
+			alert("Debe seleccionar al menos un producto");
 		}		
 		return;
 	}
