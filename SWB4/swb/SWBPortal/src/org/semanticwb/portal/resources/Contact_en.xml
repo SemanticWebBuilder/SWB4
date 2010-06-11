@@ -2,7 +2,7 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
 
-    <form name="frmAddNew" id="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo">
+    <form name="frmAddNew" id="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
     <fieldset legend="Datos">
         <input type="text" name="name" label="Full Name of Contact:"  maxlength="40" jsrequired="true" promptMessage="Full Name of Contact" />
         <input type="text" name="email" label="Contact e-mail:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Contact e-mail" invalidMessage="Invalid email address" />
@@ -24,11 +24,16 @@
 
         <input type="file" name="image" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
         <input type="text" name="alt" label="Alternate Text:" maxlength="50" promptMessage="Image alternate text" />
+    </fieldset>
+
+    <fieldset legend="Apariencia">
+        <input type="text" id="width"  name="width" value="360" label="Width:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Width of the dialog box. This value is considered in pixels" jsrequired="true" />
+        <input type="text" id="height" name="height" value="420" label="Height:" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Height of the dialog box. This value is considered in pixels" jsrequired="true" />
 
         <statictext name="note">
         <![CDATA[
             <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-            * Dato requeridoData required
+            * Data required
             </font>
         ]]>
         </statictext>
@@ -103,6 +108,17 @@
                 frm.alt.focus();
                 return false;
             }
+            if( !frm.width.value ) {
+                alert('Enter the width of the dialog box.');
+                frm.width.focus();
+                return false;
+            }
+            if( !frm.height.value ) {
+                alert('Indicate the height of the dialog box.');
+                frm.width.focus();
+                return false;
+            }
+
             return true;
         }
         ]]>
