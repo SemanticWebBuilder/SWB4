@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:output method="html" encoding="ISO-8859-1"/>
+
+<xsl:template name="children">
+    <xsl:for-each select="brothers">
+        <ul>
+            <xsl:for-each select="brother">
+                <li>
+                    <xsl:if test="@current ='1'">
+                        <a href="{@path}"><em><xsl:value-of select="@name"/></em></a>
+                        <ul>
+                            <xsl:for-each select="child">
+                                <li>
+                                    <a href="{@path}"><xsl:value-of select="@name"/></a>
+                                </li>
+                            </xsl:for-each>
+                        </ul>
+                    </xsl:if>
+                    <xsl:if test="@current ='0'">
+                        <a href="{@path}"><xsl:value-of select="@name"/></a>
+                    </xsl:if>
+                </li>
+            </xsl:for-each>
+        </ul>
+    </xsl:for-each>
+</xsl:template>
+
 <xsl:template match="/menu">
-<LINK href="{@path}images/WBMenu.css" rel="stylesheet" type="text/css"></LINK>
-<DIV class="wmn_box">
-<TABLE border="0" cellpadding="0" cellspacing="2" width="100%" >
-	<xsl:for-each select="parent">
-		<TR><TD>
-			<A href="{@path}" class="wmn_title" ><xsl:value-of select="@name"/></A>
-		</TD></TR>
-	</xsl:for-each>
-	<xsl:for-each select="brothers">
-		<xsl:for-each select="brother">
-			<TR><TD>
-				<A href="{@path}" class="wmn_link"><xsl:value-of select="@name"/></A>
-			</TD></TR>
-			<xsl:if test="@current ='1'">
-				<xsl:for-each select="child">
-					<TR><TD class="wmn_data">::
-						<A href="{@path}" class="wmn_link"><xsl:value-of select="@name"/></A>
-					</TD></TR>
-				</xsl:for-each>
-			</xsl:if>
-		</xsl:for-each>
-	</xsl:for-each>
-</TABLE>
-</DIV>
+    <div class="swb-menu">
+        <ul>
+            <xsl:for-each select="parent">
+                <li>
+                    <a href="{@path}">
+                    <strong><xsl:value-of select="@name"/></strong>
+                    <xsl:call-template name="children" />
+                    </a>
+                </li>
+            </xsl:for-each>
+        </ul>
+    </div>
 </xsl:template>
 </xsl:stylesheet>
