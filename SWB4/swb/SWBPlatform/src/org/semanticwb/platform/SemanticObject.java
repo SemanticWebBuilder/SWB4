@@ -522,9 +522,10 @@ public class SemanticObject
     private void validateModel()
     {
         String ns = getModel().getNameSpace();
-        if (ns != null &&  m_res.getURI() !=null && !m_res.getURI().startsWith(ns))
+        if (ns != null &&  m_res.getURI() !=null && !m_res.getURI().startsWith(ns) && !m_res.getURI().equals(SemanticVocabulary.RDFS_RESOURCE))
         {
             //System.out.println("ns:"+ns+" "+m_res.getURI());
+
             Resource aux=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
             if(aux==null)throw new SWBResourceNotFound("Resource not Found:"+m_res.getURI());
             m_res = aux;
