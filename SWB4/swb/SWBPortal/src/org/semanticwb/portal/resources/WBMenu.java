@@ -279,10 +279,7 @@ public class WBMenu extends GenericAdmResource
         {
             Document dom =getDom(request, response, paramRequest);
             if(dom != null)  {
-                String x = SWBUtils.XML.domToXml(dom);
-                System.out.println("\n\nmenu xml=\n"+x);
                 response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
-                //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
             }
         }
         catch(Exception e) { log.error(e); }
