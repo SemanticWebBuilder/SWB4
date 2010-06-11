@@ -79,6 +79,69 @@
                     }
                 }
             }
+            if(request.getParameter("mode").equals("familia"))
+            {
+                Iterator<Segment> sectores=Segment.ClassMgr.listSegments();
+                while(sectores.hasNext())
+                {
+                    Segment subsector=sectores.next();
+                    if(subsector.getUnspsc()!=null && subsector.getUnspsc().equals(request.getParameter("value")))
+                    {
+                        Iterator<Family> ramas=subsector.getFamilies();
+                        while(ramas.hasNext())
+                        {
+                            Family rama=ramas.next();
+                            if(rama.getUnspsc()!=null)
+                            {
+                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if(request.getParameter("mode").equals("clase"))
+            {
+                Iterator<Family> sectores=Family.ClassMgr.listFamilies();
+                while(sectores.hasNext())
+                {
+                    Family subsector=sectores.next();
+                    if(subsector.getUnspsc()!=null && subsector.getUnspsc().equals(request.getParameter("value")))
+                    {
+                        Iterator<org.semanticwb.unspsc.Class> ramas=subsector.getClasses();
+                        while(ramas.hasNext())
+                        {
+                            org.semanticwb.unspsc.Class rama=ramas.next();
+                            if(rama.getUnspsc()!=null)
+                            {
+                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if(request.getParameter("mode").equals("actividad"))
+            {
+                Iterator<org.semanticwb.unspsc.Class> sectores=org.semanticwb.unspsc.Class.ClassMgr.listClasses();
+                while(sectores.hasNext())
+                {
+                    org.semanticwb.unspsc.Class subsector=sectores.next();
+                    if(subsector.getUnspsc()!=null && subsector.getUnspsc().equals(request.getParameter("value")))
+                    {
+                        Iterator<Commodity> ramas=subsector.getCommodities();
+                        while(ramas.hasNext())
+                        {
+                            Commodity rama=ramas.next();
+                            if(rama.getUnspsc()!=null)
+                            {
+                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
         }
 
         %>values=[<%
@@ -262,7 +325,7 @@
                             {
                                 segmento1=segmento;
                             }
-                            if(segmento!=null && segmento.getSemanticObject()!=null)
+                            if(segmento!=null && segmento.getSemanticObject()!=null && segmento.getUnspsc()!=null)
                             {
                                 String name=segmento.getSemanticObject().getLabel("es");
                                 String value=segmento.getUnspsc();
