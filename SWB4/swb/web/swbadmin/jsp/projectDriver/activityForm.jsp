@@ -227,7 +227,9 @@
 
                     //Obtiene las actividades relacionadas al modelo o sitio web y que sean validas
                     ArrayList listAll =new ArrayList();
-                    Iterator<Activity> listActall=Activity.ClassMgr.listActivities(act.getWebSite());
+                    ArrayList container=getContainerActs(act,user.getLanguage());
+                    ArrayList actsByProj = getActivitiesByProject(container,act.getWebSite());
+                    Iterator<Activity> listActall=actsByProj.iterator();
                     while(listActall.hasNext()){
                         Activity act2 = listActall.next();
                         if(!act2.equals(act))
@@ -429,6 +431,52 @@
     <%      }
           }%>
     <%!
+        private ArrayList getContainerActs(WebPage wp,String language)
+        {
+            WebPage site = wp;
+            WebPage siteIni=wp;
+            ArrayList containers=new ArrayList();
+            boolean si=false;
+            while(!si){
+                if(site.getSemanticObject().getSemanticClass().getName().equals("Project")){
+                    si=true;
+                    siteIni=site;
+                }
+                site=site.getParent();
+            }
+            Iterator<WebPage> itwp = siteIni.listVisibleChilds(language);
+            while(itwp.hasNext()){
+                WebPage pag = itwp.next();
+                String name = pag.getSemanticObject().getSemanticClass().getName();
+                if(name.equals("ActivityContainer"))
+                    containers.add(pag.getDisplayName());
+            }
+            return containers;
+        }
+        private ArrayList getActivitiesByProject(ArrayList containers,WebSite model){
+              ArrayList containActs = new ArrayList();
+              if(!containers.isEmpty()){
+                 Iterator contAct= Activity.ClassMgr.listActivities(model);
+                 while(contAct.hasNext()){
+                     Activity activ=(Activity)contAct.next();
+                     boolean p=false;
+                     String containerS="";
+                     WebPage parent=activ;
+                     while(!p){
+                         String clas=parent.getSemanticObject().getSemanticClass().getName();
+                         if(clas.equals("ActivityContainer")){
+                             containerS=parent.getDisplayName();p=true;
+                         }
+                         parent=parent.getParent();
+                     }
+                     if(containers.contains(containerS))
+                        containActs.add(activ);
+                 }
+              }
+              return containActs;
+        }
+
+
         private void validAct(Activity act){
              if(act.getStatus()==null){
                 if(act.getResponsible()==null)
