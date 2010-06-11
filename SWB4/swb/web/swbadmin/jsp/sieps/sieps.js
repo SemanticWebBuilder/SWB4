@@ -104,12 +104,16 @@
         //concatenamos los parametros    
 		var lista_campos    =   '';    
 		lista_campos    	+=  'idCertificado';
-			    
-		var postString      =  '';
-	    
-	    postString 			= addFields(lista_campos, postString, objForm);
-			    
-	    makeRequest(url, postString, realizaCargaEmpresaHTML);
+		
+		var objCert 	= objForm.elements['idCertificado'];
+		if (objCert != null && objCert.value != null && objCert.value != "") {			    
+			var postString      =  '';	    
+		    postString 			= addFields(lista_campos, postString, objForm);			    
+		    makeRequest(url, postString, realizaCargaEmpresaHTML);
+		} else {
+			alert("Introduzca un certificado");
+			objControl.disabled = false;
+		}
 		
 	    return;
     }
@@ -178,6 +182,22 @@
 		forma.action = url;
 		forma.submit();
 		objBtn.disabled = false;		
+		return;
+	}
+	function eliminaBusquedasCarpeta(url, objBtn, idChk) {
+		if (validaCheck(objBtn, idChk)) {
+			enviarForma(url, objBtn);
+		} else {
+			alert("Debe seleccionar al menos una consulta");
+		}		
+		return;
+	}
+	function eliminaEmpresasCarpeta(url, objBtn, idChk) {
+		if (validaCheck(objBtn, idChk)) {
+			enviarForma(url, objBtn);
+		} else {
+			alert("Debe seleccionar al menos una empresa");
+		}		
 		return;
 	}
 	function muestraMensaje(msg) {

@@ -45,7 +45,7 @@ String idWebSite	=	paramRequest.getWebPage().getWebSiteId();
 		          </tr>
 		    <% } %>
 		    </table>
-        	<p class="mi-carpeta"><input type="button" value="Eliminar" name="eliminar_1" class="btn-small" onclick="enviarForma('<%=urlEliminaBusqueda%>', this)"/></p>
+        	<p class="mi-carpeta"><input type="button" value="Eliminar" name="eliminar_1" class="btn-small" onclick="eliminaBusquedasCarpeta('<%=urlEliminaBusqueda%>', this, 'checkBusqueda')"/></p>
 	    <% } else {%>
 	    	<p>No hay consultas en su carpeta</p>
 	    <% } %>
@@ -102,7 +102,7 @@ String idWebSite	=	paramRequest.getWebPage().getWebSiteId();
 	          </tr>
 	      <% } %>
         </table>
-        <input type="button" value="Eliminar" name="eliminar_3" class="btn-small" onclick="enviarForma('<%=urlEliminaEmpresasCert%>', this)"/>
+        <input type="button" value="Eliminar" name="eliminar_3" class="btn-small" onclick="eliminaEmpresasCarpeta('<%=urlEliminaEmpresasCert%>', this, 'checkEmpCert')"/>
        	<% } else {%>
 	    	<p>No hay empresas certificadas en su carpeta</p>
 	    <% } %>
@@ -161,7 +161,7 @@ String idWebSite	=	paramRequest.getWebPage().getWebSiteId();
 	      <% } %>
         </table>
          <p class="mi-carpeta">
-	        <input type="button" value="Eliminar" name="eliminar_3" class="btn-small" onclick="enviarForma('<%=urlEliminaEmpresasInt%>', this)"/>
+	        <input type="button" value="Eliminar" name="eliminar_3" class="btn-small" onclick="eliminaEmpresasCarpeta('<%=urlEliminaEmpresasInt%>', this, 'checkEmpInt')"/>
        	 </p>        
        	<% } else {%>
 	    	<p>No hay empresas de interés en su carpeta</p>
