@@ -1,19 +1,18 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="java.util.*,java.io.PrintWriter,java.text.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.resources.projectdriver.*,org.semanticwb.portal.api.*,org.semanticwb.portal.*,java.sql.Timestamp"%>
 <%
-
-            WebPage wp=paramRequest.getWebPage();
-            String parent="";
-            WebPage wp1=wp.getParent();
-            User user=paramRequest.getUser();
-            Iterator it=wp.listVisibleChilds(user.getLanguage());
-            boolean p;p=false;
-            while(!p){
-                SemanticObject obj1= SemanticObject.createSemanticObject(wp1.getURI());
-                if(obj1.instanceOf(Project.sclass)){
-                    parent=wp1.getDisplayName();p=true;}
-                wp1=wp1.getParent();
-            }
+    WebPage wp=paramRequest.getWebPage();
+    String parent="";
+    WebPage wp1=wp.getParent();
+    User user=paramRequest.getUser();
+    Iterator it=wp.listVisibleChilds(user.getLanguage());
+    boolean p;p=false;
+    while(!p){
+        SemanticObject obj1= SemanticObject.createSemanticObject(wp1.getURI());
+        if(obj1.instanceOf(Project.sclass)){
+            parent=wp1.getDisplayName();p=true;}
+        wp1=wp1.getParent();
+    }
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
