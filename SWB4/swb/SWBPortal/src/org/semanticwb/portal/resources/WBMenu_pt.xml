@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmWBMenu" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="FILE" name="template" label="Modelo (xsl, xslt):" showfile="true" msg="Modelo atual " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Modelo do defeito " filetype="xsl|xslt" isshowfiletype="true" size="40" jsrequired="true"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Salvar" />
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
-	</form>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Datos">
+            <input type="file" name="template" id="template" label="Plantilla (xsl, xslt): " showfile="true" msg="Plantilla actual: " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" />
+            <input type="checkbox" name="justsons" id="justsons" label="Mostrar solamente hijos: " value="true"/>
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" name="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" value="Restablecer"/>
+        </fieldset>
+    </form>
 </admresource>
