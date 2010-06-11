@@ -121,33 +121,31 @@ public class WBMenu extends GenericAdmResource
         Resource base=paramRequest.getResourceBase();
         try
         {   
-            boolean onlychilds=new Boolean(paramRequest.getArgument("onlychilds","false")).booleanValue();
+            boolean justsons = Boolean.parseBoolean( paramRequest.getArgument("justsons", base.getAttribute("justsons","false")) );
             WebSite tm = paramRequest.getWebPage().getWebSite();
             String lang=paramRequest.getUser().getLanguage();
             WebPage tpid = null;
-            if (paramRequest.getArguments().get("topic") != null) 
-            {
+            if( paramRequest.getArguments().get("topic")!=null ) {
                 tpid = tm.getWebPage((String) paramRequest.getArguments().get("topic"));
-                if (tpid == null) {
+                if (tpid == null)
                     return null;
-                }
-            } 
-            else {
+            }else {
                 tpid = paramRequest.getWebPage();
             }
             
             Document  dom = SWBUtils.XML.getNewDocument();
-            Element el = dom.createElement("menu");
-            el.setAttribute("path", path);
-            dom.appendChild(el);
-            Element topicCurrent = dom.createElement("currenttopic");
-            topicCurrent.setAttribute("id", tpid.getUrl());
-            topicCurrent.setAttribute("name", tpid.getDisplayName(lang));
-            topicCurrent.setAttribute("path", tpid.getUrl());
-            el.appendChild(topicCurrent);
-            WebPage padre=padre = tpid.getParent();
-            if(!onlychilds && padre!=null && padre.isVisible() && user.haveAccess(padre))
-            {
+            Element emenu = dom.createElement("menu");
+            emenu.setAttribute("path", path);
+            dom.appendChild(emenu);
+
+            Element ecurSection = dom.createElement("currenttopic");
+            ecurSection.setAttribute("id", tpid.getUrl());
+            ecurSection.setAttribute("name", tpid.getDisplayName(lang));
+            ecurSection.setAttribute("path", tpid.getUrl());
+            emenu.appendChild(ecurSection);
+
+            WebPage padre = tpid.getParent();
+            if(!justsons && padre!=null && padre.isVisible() && user.haveAccess(padre)) {
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
                 epadre.setAttribute("name", padre.getDisplayName(lang));
@@ -155,10 +153,11 @@ public class WBMenu extends GenericAdmResource
                 if (padre.getTarget() != null && !"".equalsIgnoreCase(padre.getTarget())) {
                     epadre.setAttribute("target", padre.getTarget());
                 }
-                el.appendChild(epadre);
+                emenu.appendChild(epadre);
             }
-            Element ehermanos = dom.createElement("brothers");
-            if(!onlychilds && padre!=null)
+            
+            Element esiblings = dom.createElement("brothers");
+            if(!justsons && padre!=null)
             {
                 Iterator <WebPage>itehermanos=padre.listVisibleChilds(lang);
                 while(itehermanos.hasNext())
@@ -166,17 +165,17 @@ public class WBMenu extends GenericAdmResource
                     WebPage tphermano=itehermanos.next();
                     if(user.haveAccess(tphermano))
                     {
-                        Element ehermano = dom.createElement("brother");
-                        ehermano.setAttribute("id", tphermano.getId());
-                        ehermano.setAttribute("name", tphermano.getDisplayName(lang));
-                        ehermano.setAttribute("path", tphermano.getUrl());
+                        Element esibling = dom.createElement("brother");
+                        esibling.setAttribute("id", tphermano.getId());
+                        esibling.setAttribute("name", tphermano.getDisplayName(lang));
+                        esibling.setAttribute("path", tphermano.getUrl());
                         if (tphermano.getTarget() != null && !"".equalsIgnoreCase(tphermano.getTarget())) {
-                            ehermano.setAttribute("target", tphermano.getTarget());
+                            esibling.setAttribute("target", tphermano.getTarget());
                         }
                         if (tphermano.equals(tpid)) 
                         {
-                            ehermano.setAttribute("current", "1");
-                            ehermanos.appendChild(ehermano);
+                            esibling.setAttribute("current", "1");
+                            esiblings.appendChild(esibling);
 
                             Iterator <WebPage> hijos = tpid.listVisibleChilds(lang);
                             while (hijos.hasNext()) 
@@ -191,30 +190,30 @@ public class WBMenu extends GenericAdmResource
                                     if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
                                         ehijo.setAttribute("target", hijo.getTarget());
                                     }
-                                    ehermano.appendChild(ehijo);
+                                    esibling.appendChild(ehijo);
                                 }
                             }
                         }
                         else 
                         {
                             
-                            ehermano.setAttribute("current", "0");
-                            ehermanos.appendChild(ehermano);
+                            esibling.setAttribute("current", "0");
+                            esiblings.appendChild(esibling);
                         }
                     }
                 }
             }
             else
             {
-                Element ehermano = dom.createElement("brother");
-                ehermano.setAttribute("id", tpid.getId());
-                ehermano.setAttribute("name", tpid.getDisplayName(lang));
-                ehermano.setAttribute("path", tpid.getUrl());
-                ehermano.setAttribute("current", "1");
+                Element esibling = dom.createElement("brother");
+                esibling.setAttribute("id", tpid.getId());
+                esibling.setAttribute("name", tpid.getDisplayName(lang));
+                esibling.setAttribute("path", tpid.getUrl());
+                esibling.setAttribute("current", "1");
                 if (tpid.getTarget() != null && !"".equalsIgnoreCase(tpid.getTarget())) {
-                    ehermano.setAttribute("target", tpid.getTarget());
+                    esibling.setAttribute("target", tpid.getTarget());
                 }
-                ehermanos.appendChild(ehermano);
+                esiblings.appendChild(esibling);
 
                 Iterator <WebPage> hijos = tpid.listVisibleChilds(lang);
                 while (hijos.hasNext()) 
@@ -229,14 +228,16 @@ public class WBMenu extends GenericAdmResource
                         if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
                             ehijo.setAttribute("target", hijo.getTarget());
                         }
-                        ehermano.appendChild(ehijo);
+                        esibling.appendChild(ehijo);
                     }
                 }
             }
-            el.appendChild(ehermanos);            
+            emenu.appendChild(esiblings);
             return dom;
         }
-        catch (Exception e) { log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e); }
+        catch (Exception e) {
+            log.error("Error while generating DOM in resource "+ base.getResourceType().getResourceClassName() +" with identifier " + base.getId() + " - " + base.getTitle(), e);
+        }
         return null;
     }
     
@@ -278,7 +279,10 @@ public class WBMenu extends GenericAdmResource
         {
             Document dom =getDom(request, response, paramRequest);
             if(dom != null)  {
+                String x = SWBUtils.XML.domToXml(dom);
+                System.out.println("\n\nmenu xml=\n"+x);
                 response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+                //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
             }
         }
         catch(Exception e) { log.error(e); }
