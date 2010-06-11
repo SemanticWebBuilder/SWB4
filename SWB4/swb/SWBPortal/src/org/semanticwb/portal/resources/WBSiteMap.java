@@ -177,9 +177,9 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doBind(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //response.setContentType("text/html; charset=ISO-8859-1");
-        //response.setHeader("Cache-Control", "no-cache");
-        //response.setHeader("Pragma", "no-cache");
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
 
