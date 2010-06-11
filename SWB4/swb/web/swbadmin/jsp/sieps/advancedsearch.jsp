@@ -245,7 +245,7 @@
                     <input type="hidden" name="act" value="busquedaempresas">
             	<div id="busquedaHead">
                 <img src="<%=urlBusqueda%>" width="49" height="50" alt="Busqueda avanzada" />
-            	<h2>B&uacute;squedaAvanzada</h2>
+            	<h2>B&uacute;squeda Asistida</h2>
                 <p>Le sugerimos utilizar los siguientes flitros para optimizar su b&uacute;squeda</p>                
                 </div>
                 <div id="busquedaOpciones">
