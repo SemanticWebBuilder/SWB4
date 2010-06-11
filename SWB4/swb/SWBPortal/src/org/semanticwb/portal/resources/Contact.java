@@ -279,7 +279,7 @@ public class Contact extends GenericAdmResource {
 
             out.println("var s = new String('');");
             out.println("s = s.concat('<div class=\"swb-contact\">');");
-            out.println("s = s.concat('<form id=\"frmContact\" name=\"frmContact\" action=\"\" method=\"post\" class=\"cntct-frm\" >');");
+            out.println("s = s.concat('<form id=\"frmContact\" name=\"frmContact\" action=\"\" method=\"post\" >');");
             if( base.getAttribute("title")!=null ) {
                 out.println("s = s.concat('<h3>"+base.getAttribute("title")+"</h3>');");
             }else {
@@ -287,48 +287,53 @@ public class Contact extends GenericAdmResource {
             }
 
             if( base.getAttribute("phone")!=null ) {
-                out.println("s = s.concat('<p class=\"cntct-inst\">"+paramRequest.getLocaleString("instruction1")+" "+base.getAttribute("phone")+".<br />');");
+                out.println("s = s.concat('<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+base.getAttribute("phone")+".<br />');");
                 out.println("s = s.concat('"+paramRequest.getLocaleString("instruction2")+"');");
                 out.println("s = s.concat('</p>');");
             }
             out.println("s = s.concat('<hr />');");
-            out.println("s = s.concat('<p class=\"cntct-inpt\">')");
+            out.println("s = s.concat('<p>')");
             out.println("s = s.concat('<label for=\"name\">"+paramRequest.getLocaleString("name")+"</label>');");
-            out.println("s = s.concat('<input name=\"name\" id=\"name\" size=\"50\" value=\""+(user.isSigned()?user.getFullName():"")+"\" />');");
+            out.println("s = s.concat('<input name=\"name\" id=\"name\" class=\"swb-contact-field\" value=\""+(user.isSigned()?user.getFullName():"")+"\" />');");
             out.println("s = s.concat('</p>');");
 
-            out.println("s = s.concat('<p class=\"cntct-inpt\">');");
+            out.println("s = s.concat('<p>');");
             out.println("s = s.concat('<label for=\"email\">"+paramRequest.getLocaleString("email")+"</label>');");
-            out.println("s = s.concat('<input name=\"email\" id=\"email\" size=\"50\" value=\""+(user.isSigned()?user.getEmail():"")+"\" />');");
+            out.println("s = s.concat('<input name=\"email\" id=\"email\" class=\"swb-contact-field\" value=\""+(user.isSigned()?user.getEmail():"")+"\" />');");
             out.println("s = s.concat('</p>');");
 
-            out.println("s = s.concat('<p class=\"cntct-inpt\">');");
+            out.println("s = s.concat('<p>');");
             out.println("s = s.concat('<label for=\"subject\">"+paramRequest.getLocaleString("subject")+"</label>');");
-            out.println("s = s.concat('<input name=\"subject\" id=\"subject\" size=\"50\" />');");
+            out.println("s = s.concat('<input name=\"subject\" id=\"subject\" class=\"swb-contact-field\" />');");
             out.println("s = s.concat('</p>');");
 
-            out.println("s = s.concat('<p class=\"cntct-inpt\">');");
+            out.println("s = s.concat('<p>');");
             out.println("s = s.concat('<label for=\"message\">"+paramRequest.getLocaleString("message")+"</label>');");
             out.println("s = s.concat('<textarea name=\"message\" id=\"message\" cols=\"40\" rows=\"5\"></textarea>');");
             out.println("s = s.concat('</p>');");
 
-            out.println("s = s.concat('<p class=\"cntct-cmd\">');");
+            out.println("s = s.concat('<div class=\"swb-contact-cmd\" >');");
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(paramRequest.Call_DIRECT).setMode("send");
-            out.println("s = s.concat('<label for=\"contactoEnviar\">"+paramRequest.getLocaleString("send")+"</label>');");
-            out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail(\\'"+url+"\\'+\\'&name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" />');");
-            out.println("s = s.concat('<label for=\"contactoRestablecer\">"+paramRequest.getLocaleString("reset")+"</label>');");
-            out.println("s = s.concat('<input name=\"reset\" id=\"contactoRestablecer\" type=\"reset\" value=\""+paramRequest.getLocaleString("reset")+"\" />');");
-            out.println("s = s.concat('<label for=\"contactoCancelar\">"+paramRequest.getLocaleString("cancel")+"</label>');");
+            //out.println("s = s.concat('<label for=\"contactoEnviar\">"+paramRequest.getLocaleString("send")+"</label>');");
+            out.println("s = s.concat('<input name=\"submit\" id=\"contactoEnviar\" type=\"button\" onclick=\"sendEmail(\\'"+url+"\\'+\\'&name=\\'+dojo.byId(\\'name\\').value+\\'&email=\\'+dojo.byId(\\'email\\').value+\\'&subject=\\'+dojo.byId(\\'subject\\').value+\\'&message=\\'+dojo.byId(\\'message\\').value); removeCoverDiv(\\''+divId+'\\')\" value=\""+paramRequest.getLocaleString("send")+"\" class=\"swb-contact-button\" />');");
+            //out.println("s = s.concat('<label for=\"contactoRestablecer\">"+paramRequest.getLocaleString("reset")+"</label>');");
+            out.println("s = s.concat('<input name=\"reset\" id=\"contactoRestablecer\" type=\"reset\" value=\""+paramRequest.getLocaleString("reset")+"\" class=\"swb-contact-button\" />');");
+            //out.println("s = s.concat('<label for=\"contactoCancelar\">"+paramRequest.getLocaleString("cancel")+"</label>');");
             out.println("s = s.concat('<input name=\"cancel\" id=\"contactoCancelar\" type=\"button\" onclick=\"removeCoverDiv(\\'');");
             out.println("s = s.concat(divId);");
-            out.println("s = s.concat('\\')\" value=\""+paramRequest.getLocaleString("cancel")+"\" />');");
-            out.println("s = s.concat('</p>');");
+            out.println("s = s.concat('\\')\" value=\""+paramRequest.getLocaleString("cancel")+"\" class=\"swb-contact-button\" />');");
+            out.println("s = s.concat('</div>');");
             out.println("s = s.concat('</form>');");
             out.println("s = s.concat('</div>');");
             out.println("contactHolder.innerHTML = s;");
 
-            out.println("    var cwidth=650;");
-            out.println("    var cheight=350;");
+            //out.println("    var cwidth=650;");
+            out.println("    var cwidth = "+base.getAttribute("width","360")+";");
+            //out.println("    var cheight=350;");
+            out.println("    var cheight = "+base.getAttribute("height","420")+";");
+
+            out.println("alert('cwidht='+cwidth+', height='+cheight);");
+
             out.println("    contactHolder.id='s_'+divId;");
             out.println("    contactHolder.style.zIndex=1001;");
             out.println("    contactHolder.style.position='absolute';");

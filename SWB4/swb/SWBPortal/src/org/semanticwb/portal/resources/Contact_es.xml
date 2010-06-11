@@ -2,7 +2,7 @@
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
 
-    <form name="frmAddNew" id="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo">
+    <form name="frmAddNew" id="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
     <fieldset legend="Datos">
         <input type="text" name="name" label="Nombre del contacto:"  maxlength="40" jsrequired="true" promptMessage="Nombre completo del contacto" />
         <input type="text" name="email" label="Correo electrónico del contacto:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Correo electrónico del contacto" invalidMessage="Correo electrónico inválido" />
@@ -24,6 +24,11 @@
 
         <input type="file" name="image" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
         <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno de la imagen" />
+    </fieldset>
+
+    <fieldset legend="Apariencia">
+        <input type="text" id="width"  name="width" value="360" label="Ancho:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
+        <input type="text" id="height" name="height" value="420" label="Alto:" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Altura del cuadro de diálogo. Este valor se considera en pixeles" jsrequired="true" />
 
         <statictext name="note">
         <![CDATA[
@@ -103,6 +108,17 @@
                 frm.alt.focus();
                 return false;
             }
+            if( !frm.width.value ) {
+                alert('Indique la anchura del cuadro de diálogo.');
+                frm.width.focus();
+                return false;
+            }
+            if( !frm.height.value ) {
+                alert('Indique la altura del cuadro de diálogo.');
+                frm.width.focus();
+                return false;
+            }
+
             return true;
         }
         ]]>
