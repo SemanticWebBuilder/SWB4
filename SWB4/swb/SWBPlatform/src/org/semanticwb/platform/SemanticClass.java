@@ -300,11 +300,14 @@ public class SemanticClass
             //TODO:corregir modelo para no hacer esto
             try
             {
-                m_classCodeName=(""+m_classCodeName.charAt(0)).toUpperCase()+m_classCodeName.substring(1);
+                if(m_classCodeName!=null)
+                {
+                    m_classCodeName=(""+m_classCodeName.charAt(0)).toUpperCase()+m_classCodeName.substring(1);
+                }
             }
             catch(IndexOutOfBoundsException iobe)
             {
-                log.error("Class error definition "+this.getURI(),iobe);
+                log.error("Class error definition "+this,iobe);
             }
             //log.trace("getClassCodeName:"+m_classCodeName);
         }
