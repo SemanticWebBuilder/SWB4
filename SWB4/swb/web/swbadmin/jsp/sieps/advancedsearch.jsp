@@ -195,8 +195,9 @@
         else if (window.ActiveXObject) {
             self.xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
         }
-        var value=document.frmadvancedsearch[source].value;        
-        var query=url+'?mode='+target+'&value='+value;        
+        var value=document.frmadvancedsearch[source].value;
+        var query=url+'?mode='+target+'&value='+value;
+        
         self.xmlHttpReq.open('GET', query, true);
         self.xmlHttpReq.onreadystatechange = function() {
             if (self.xmlHttpReq.readyState == 4) {
@@ -205,7 +206,8 @@
         }
         self.xmlHttpReq.send();
     }
-    function updatepage(str,target){        
+    function updatepage(str,target){
+        
         LimpiarCombo(document.frmadvancedsearch[target]);
         LlenarCombo(str,document.frmadvancedsearch[target]);        
     }
