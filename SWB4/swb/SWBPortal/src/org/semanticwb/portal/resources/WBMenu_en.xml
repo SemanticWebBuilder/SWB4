@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" size="40" >
         <admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
             <input type="file" name="template" id="template" label="Template (xsl, xslt): " showfile="true" msg="Current Template: " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Template by default: " filetype="xsl|xslt" isshowfiletype="true" />
-            <input type="checkbox" name="justsons" id="justsons" label="Show Just Sons: " value="true"/>
+            <input type="checkbox" name="justsons" id="justsons" label="Show Just Sons" value="true"/>
         </fieldset>
 
         <fieldset>
