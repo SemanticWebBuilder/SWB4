@@ -275,7 +275,8 @@
                   <option selected value="all">Todos</option>
                   <option value="Guanajuato">Guanajuato</option>
                   <option value="Michoacán" >Michoacán</option>
-                  <option value="Veracuz">Veracruz</option>
+                  <option value="Morelos" >Morelos</option>
+                  <option value="Veracruz">Veracruz</option>
                 </select>
                 <label for="sector">Sector:</label>
                 <select name="sector" onChange="javascript:loadCombo('sector','subsector','<%=url%>')">
