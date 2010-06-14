@@ -13,5 +13,5 @@
         <label for="btnSearch">Buscar</label>
         <input type="submit" name="btnSearch" id="btnSearch" value="Buscar" onclick="javascript:this.form.submit();"/>
       </p>
-      <p class="ejemplo">Ejemplo: Constructoras, materiales, Querétaro, San Juan del Río, Código 236221</p>
+                  <p class="ejemplo">Ejemplo: Empresas en el estado de Veracruz, Empresas cuya actividad es elaboración de refrescos, Empresas que fabrican Great Cola, Empresas que fabrican galletas, Productos que su categoria es 010123</p>
     </form>
