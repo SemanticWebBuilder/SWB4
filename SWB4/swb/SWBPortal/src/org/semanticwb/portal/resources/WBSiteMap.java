@@ -38,6 +38,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
@@ -198,9 +199,6 @@ public class WBSiteMap extends GenericAdmResource
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
             try {
-                /*String x = SWBUtils.XML.transformDom(tpl, dom);
-                System.out.println("\ndobind =\n"+x);
-                out.print(x);*/
                 out.print(SWBUtils.XML.transformDom(tpl, dom));
             }catch(TransformerException te) {
                 log.error("doBind Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
@@ -325,14 +323,16 @@ public class WBSiteMap extends GenericAdmResource
         Resource base=getResourceBase();
         
         if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
-            String surl = paramRequest.getWebPage().getUrl() + "/../";
-
-            if(!"".equals(base.getAttribute("url", "").trim())) {
-                surl += base.getAttribute("url").trim();
-            }else {
-                surl += paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString(true);
+            String surl = paramRequest.getWebPage().getUrl();
+            Iterator<Resourceable> res = base.listResourceables();
+            while(res.hasNext()) {
+                Resourceable re = res.next();
+                if( re instanceof WebPage ) {
+                    surl = ((WebPage)re).getUrl();
+                    break;
+                }
             }
-            
+
             if( base.getAttribute("img")!=null ) {
                 out.println("<a href=\"" + surl +"\">");
                 out.println("<img src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
@@ -366,9 +366,6 @@ public class WBSiteMap extends GenericAdmResource
             Document dom = getDom(request, response, paramRequest);
             if(dom != null)  {
                 try {
-                    /*String x = SWBUtils.XML.transformDom(tpl, dom);
-                    System.out.println("\ndoview =\n"+x);
-                    out.print(x);*/
                     out.print(SWBUtils.XML.transformDom(tpl, dom));
                 }catch(TransformerException te) {
                     log.error("doView Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
