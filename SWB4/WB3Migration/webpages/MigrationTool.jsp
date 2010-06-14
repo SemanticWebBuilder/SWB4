@@ -305,6 +305,7 @@
                     System.out.println("Error al revisar la existencia del sitio: " + site);
                 }
                 if (wsite != null && null != urep) { //se migró sitio y rep. usuarios relacionado
+                    wsite.getSemanticObject().getModel().setTraceable(false);
 
                 %>
                 <input type="hidden" name="act" value="step3" />
@@ -381,6 +382,7 @@
                 WebPage home = null;
                 if (isImported) {
                     ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                    ws.getSemanticObject().getModel().setTraceable(false);
 
                     home = ws.getHomePage();
 
@@ -547,6 +549,7 @@
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
 
                 int numLang = 0, numDev = 0, numResType = 0, numResSubType = 0, numPflow = 0, numTemplates = 0, numGTemplate, numres = 0, numDns = 0, numRules = 0, numRoles = 0;
 
@@ -656,6 +659,7 @@
 
                                 ResourceType rtype = ws.createResourceType(idName);
                                 rtype.setTitle(rrtyp.getDisplayName());
+                                //rtype.setTitle(rrtyp.getName());
                                 rtype.setDescription(rrtyp.getDescription());
                                 rtype.setResourceClassName(clsName);
                                 rtype.setResourceBundle(clsBundle);
@@ -762,6 +766,7 @@
                 //WebSite ws = null;
                 WebPage home = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
                 home = ws.getHomePage();
                 //obteniendo num. de elementos existentes migrados
                 hmcat = getNumCatElements(ws);
@@ -825,6 +830,7 @@
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
 
                 int numLang = 0, numDev = 0, numResType = 0, numResSubType = 0, numPflow = 0, numTemplates = 0, numGTemplate, numres = 0, numDns = 0, numRules = 0, numRoles = 0;
 
@@ -1039,6 +1045,7 @@
                 int nwp = 0;
                 int nptype = 0;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
                 //obteniendo num. de elementos existentes migrados
                 hmcat = getNumCatElements(ws);
             %>
@@ -1099,6 +1106,7 @@
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
 
                 String usrreptemp = usrrep;
                 if (usrrep.startsWith("swb4|")) {
@@ -1436,6 +1444,7 @@
                 int nwp = 0;
                 int nptype = 0;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
                 //obteniendo num. de elementos existentes migrados
                 hmcat = getNumCatElements(ws);
             %>
@@ -1490,6 +1499,7 @@
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
+                ws.getSemanticObject().getModel().setTraceable(false);
 
                 /////////////// RREVISION E IMPORTACION DE ASOCIACIONES ENTRE SECCIONES
 
@@ -2020,6 +2030,9 @@
         if(topic!=null&&!topic.isDeleted())
         {
             String id=topic.getId();
+            wp = ws.getWebPage(id);
+            if(wp==null)
+            {
             String estitle=topic.getDisplayLangName("es");
             String entitle=topic.getDisplayLangName("en");
             String pttitle=topic.getDisplayLangName("pt");
@@ -2037,6 +2050,8 @@
             String frdesc=topic.getDescription(topic.getMap().getTopicLang("fr"));
             String itdesc=topic.getDescription(topic.getMap().getTopicLang("it"));
             String jadesc=topic.getDescription(topic.getMap().getTopicLang("ja"));
+
+
 
             wp = ws.createWebPage(id);
             wp.setTitle(topic.getDisplayName());
@@ -2121,6 +2136,7 @@
                 }
              }
 
+            }
         }
         return wp;
     }
