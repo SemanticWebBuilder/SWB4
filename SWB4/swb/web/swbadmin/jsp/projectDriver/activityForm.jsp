@@ -366,7 +366,7 @@
                    <td>
                     <%GenericIterator <Activity> it1 = act.listPredecessors();
                     if(it1.hasNext()){%>
-                     <select name="<%=act.swbproy_hasPredecessor.getName()%>"  size="4" multiple="true">
+                     <select name="<%=act.swbproy_hasPredecessor.getName()%>"  size="4" multiple="true" style="width:300px;">
                       <%while(it1.hasNext()){
                        act1=it1.next();%>
                        <option value="<%=act1.getDisplayName()%>"><%=act1.getDisplayName()%></option>
@@ -392,7 +392,7 @@
                    <td>
                     <%GenericIterator<User> it2 = act.listParticipantses();
                     if(it2.hasNext()){%>
-                     <select name="<%=act.swbproy_hasParticipants.getName()%>"  size="4" multiple="true">
+                     <select name="<%=act.swbproy_hasParticipants.getName()%>"  size="4" multiple="true" style="width:300px;">
                       <%while(it2.hasNext()){
                         us=it2.next();%>
                         <option value="<%=us.getFirstName()%>"><%=us.getFirstName()%></option>
