@@ -1,9 +1,21 @@
-<%@page import="java.util.List"%><%@page import="java.util.*"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.platform.*"%><%@page import="org.semanticwb.model.*"%><%@page import="org.semanticwb.scian.*"%><%@page import="org.semanticwb.unspsc.*"%><%@page import="org.semanticwb.sieps.*"%><%
+<%@page import="java.util.List"%><%@page import="java.util.*"%><%@page import="org.semanticwb.SWBPortal"%><%@page import="org.semanticwb.platform.*"%><%@page import="org.semanticwb.model.*"%><%@page import="org.semanticwb.scian.*"%><%@page import="org.semanticwb.unspsc.*"%><%@page import="org.semanticwb.sieps.*"%><%!
+
+    class KeyValue
+    {
+        public KeyValue(String key,String value)
+        {
+            this.key=key;
+            this.value=value;
+        }
+        public String key;
+        public String value;
+    }
+%><%
     String urlBusqueda = SWBPortal.getContextPath() + "/swbadmin/jsp/sieps/busqueda_icono.png";
     if(request.getParameter("mode")!=null && request.getParameter("value")!=null && !request.getParameter("mode").equals("") && !request.getParameter("value").equals(""))
         {
-        Hashtable<String,String> options=new Hashtable<String,String>();
-        options.put("all", "Todos");
+        ArrayList<KeyValue> options=new ArrayList<KeyValue>();
+        options.add(new KeyValue("all", "Todos"));
         
         if(!request.getParameter("value").equals("all"))
         {
@@ -19,7 +31,7 @@
                         while(subsectores.hasNext())
                         {
                             SubSector subsector=subsectores.next();
-                            options.put(subsector.getCode(),subsector.getSemanticObject().getLabel("es"));
+                            options.add(new KeyValue(subsector.getCode(),subsector.getSemanticObject().getLabel("es")));
                         }
                         break;
                     }
@@ -37,7 +49,7 @@
                         while(ramas.hasNext())
                         {
                             Rama rama=ramas.next();
-                            options.put(rama.getCode(),rama.getSemanticObject().getLabel("es"));
+                            options.add(new KeyValue(rama.getCode(),rama.getSemanticObject().getLabel("es")));
                         }
                         break;
                     }
@@ -55,7 +67,7 @@
                         while(ramas.hasNext())
                         {
                             SubRama rama=ramas.next();
-                            options.put(rama.getCode(),rama.getSemanticObject().getLabel("es"));
+                            options.add(new KeyValue(rama.getCode(),rama.getSemanticObject().getLabel("es")));
                         }
                         break;
                     }
@@ -73,7 +85,7 @@
                         while(ramas.hasNext())
                         {
                             SubRama rama=ramas.next();
-                            options.put(rama.getCode(),rama.getSemanticObject().getLabel("es"));
+                            options.add(new KeyValue(rama.getCode(),rama.getSemanticObject().getLabel("es")));
                         }
                         break;
                     }
@@ -93,7 +105,7 @@
                             Family rama=ramas.next();
                             if(rama.getUnspsc()!=null)
                             {
-                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                                options.add(new KeyValue(rama.getUnspsc(),rama.getSemanticObject().getLabel("es")));
                             }
                         }
                         break;
@@ -114,14 +126,14 @@
                             org.semanticwb.unspsc.Class rama=ramas.next();
                             if(rama.getUnspsc()!=null)
                             {
-                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                                options.add(new KeyValue(rama.getUnspsc(),rama.getSemanticObject().getLabel("es")));
                             }
                         }
                         break;
                     }
                 }
             }
-            if(request.getParameter("mode").equals("actividad"))
+            if(request.getParameter("mode").equals("categoria"))
             {
                 
                 Iterator<org.semanticwb.unspsc.Class> sectores=org.semanticwb.unspsc.Class.ClassMgr.listClasses();
@@ -136,7 +148,7 @@
                             Commodity rama=ramas.next();
                             if(rama.getUnspsc()!=null)
                             {
-                                options.put(rama.getUnspsc(),rama.getSemanticObject().getLabel("es"));
+                                options.add(new KeyValue(rama.getUnspsc(),rama.getSemanticObject().getLabel("es")));
                             }
                         }
                         break;
@@ -144,13 +156,13 @@
                 }
             }
         }
-
+        
         %>values=[<%
-        for(String id : options.keySet())
+        for(KeyValue id : options)
         {
-            String data=new String(options.get(id).getBytes("utf-8"));
+            String data=new String(id.value.getBytes("utf-8"));
             %>
-            {"data":"<%=data%>","id":"<%=id%>"},
+            {"data":"<%=data%>","id":"<%=id.key%>"},
             <%
         }
         %>]<%
@@ -196,8 +208,7 @@
             self.xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
         }
         var value=document.frmadvancedsearch[source].value;
-        var query=url+'?mode='+target+'&value='+value;
-        
+        var query=url+'?mode='+target+'&value='+value;        
         self.xmlHttpReq.open('GET', query, true);
         self.xmlHttpReq.onreadystatechange = function() {
             if (self.xmlHttpReq.readyState == 4) {
@@ -206,8 +217,7 @@
         }
         self.xmlHttpReq.send();
     }
-    function updatepage(str,target){
-        
+    function updatepage(str,target){        
         LimpiarCombo(document.frmadvancedsearch[target]);
         LlenarCombo(str,document.frmadvancedsearch[target]);        
     }
@@ -265,7 +275,7 @@
                   <option selected value="all">Todos</option>
                   <option value="Guanajuato">Guanajuato</option>
                   <option value="Michoacán" >Michoacán</option>
-                  <option value="Veracuz">Veracuz</option>                  
+                  <option value="Veracuz">Veracruz</option>
                 </select>
                 <label for="sector">Sector:</label>
                 <select name="sector" onChange="javascript:loadCombo('sector','subsector','<%=url%>')">
