@@ -52,7 +52,7 @@ public class EditWorkflow extends javax.swing.JApplet
     private static String cgiPath = "/gtw.jsp";
     private static String jsess = "";
     public static String tm = "";
-    public String url_script;
+    //public String url_script;
     private JActivityFlowPanel jPanelDesign = null;
     private static URL url = null;
     /** Initializes the applet EditWorkflow */
@@ -91,7 +91,7 @@ public class EditWorkflow extends javax.swing.JApplet
         cgiPath = this.getParameter(PRM_CGIPATH);
         tm = this.getParameter(PRM_TOPICMAP);
         String id = this.getParameter("idworkflow");
-        url_script = this.getParameter("script");
+        //url_script = this.getParameter("script");
 
         try
         {
@@ -1044,7 +1044,7 @@ public class EditWorkflow extends javax.swing.JApplet
                         this.jTextFieldVersion.setText(version.getFirstNode().getText() + ".0");
                         this.workflow.setID(eid.getFirstNode().getText());
 
-                        try
+                        /*try
                         {
                             String newurl = url_script + "?tm=" + EditWorkflow.tm + "&id=" + eid.getFirstNode().getText();
                             URL _url = new URL(getCodeBase().getProtocol(), getCodeBase().getHost(), getCodeBase().getPort(), newurl);
@@ -1054,7 +1054,7 @@ public class EditWorkflow extends javax.swing.JApplet
                         {
                             System.out.println(e.getMessage());
                             e.printStackTrace(System.out);
-                        }
+                        }*/
                         JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("save"), java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow", locale).getString("title"), JOptionPane.INFORMATION_MESSAGE);
                         return;
                     }
