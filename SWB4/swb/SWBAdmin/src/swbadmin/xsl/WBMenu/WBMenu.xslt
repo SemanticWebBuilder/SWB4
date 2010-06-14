@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="html" encoding="ISO-8859-1" />
+<xsl:output method="html" encoding="ISO-8859-1"/>
 <xsl:template match="/menu">
 <LINK href="{@path}images/WBMenu.css" rel="stylesheet" type="text/css"></LINK>
 <DIV class="wmn_box">
-<img src="{@path}images/2067.jpg" alt="cual imagen" />
 <TABLE border="0" cellpadding="0" cellspacing="2" width="100%" >
 	<xsl:for-each select="parent">
 		<TR><TD>

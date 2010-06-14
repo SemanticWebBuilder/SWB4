@@ -6,12 +6,12 @@
     <xsl:for-each select="brothers">
         <ul>
             <xsl:for-each select="brother">
-                <li>
+                <li class="swb-menu-ch">
                     <xsl:if test="@current ='1'">
                         <a href="{@path}"><em><xsl:value-of select="@name"/></em></a>
                         <ul>
                             <xsl:for-each select="child">
-                                <li>
+                                <li class="swb-menu-gs">
                                     <a href="{@path}"><xsl:value-of select="@name"/></a>
                                 </li>
                             </xsl:for-each>
@@ -30,7 +30,7 @@
     <div class="swb-menu">
         <ul>
             <xsl:for-each select="parent">
-                <li>
+                <li class="swb-menu-pr">
                     <a href="{@path}">
                     <strong><xsl:value-of select="@name"/></strong>
                     </a>
