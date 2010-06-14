@@ -13,7 +13,7 @@
         <statictext name="txtTarget">Como você pretende mostrar a utilização de contato?:</statictext>
         <input type="radio" name="modal" label="Modal" value="true"/>
         <input type="radio" name="modal" label="Não Modal" value="false" checked="true" />
-        <input type="text" name="secid" label="Secção Contact ID:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID da seção que exibe o formulário de contato" invalidMessage="Identificador inválido" />
+        <input type="text" name="secid" label="Seção que exibe o formulário de contato:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID da seção que exibe o formulário de contato" invalidMessage="Identificador inválido" />
     </fieldset>
 
     <fieldset legend="Modo">
