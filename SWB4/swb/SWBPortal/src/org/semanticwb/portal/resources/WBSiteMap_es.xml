@@ -3,20 +3,18 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
+        <fieldset legend="Configuración de contenido">
             <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" jsrequired="false"/>
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
-            <input type="text" name="level" label="Nivel de despliegue" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor numérico" promptMessage="Nivel de despliegue" />
-            <input type="text" name="url" label="Sección que despliega el mapa de sitio:" maxlength="50" jsrequired="true" regExp="^[a-zA-Z0-9_]+" promptMessage="Identificador de la sección que despliega el mapa de sitio" invalidMessage="Identificador de sección inválido" />
+            <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
 
-        <fieldset legend="Modo">
+        <fieldset legend="Configuración de estrategia">
             <statictext name="txtTarget">¿Cómo desea acceder al recurso de mapa de sitio?:</statictext>
             <input type="text" name="lnktexto" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
             <input type="text" name="btntexto" label="Etiqueta del botón:" maxlength="50" promptMessage="Etiqueta del botón" />
             <input type="file" name="img" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" />
             <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno para la imagen. Pauta de accesibilidad" />
-
 
             <statictext name="note">
             <![CDATA[
