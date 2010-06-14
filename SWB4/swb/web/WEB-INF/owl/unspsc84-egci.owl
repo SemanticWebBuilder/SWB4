@@ -8,29 +8,16 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://ontoview.org/schema/unspsc/1">
   <owl:Ontology rdf:about=""/>
-  <owl:Class rdf:ID="_014017">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="_014012"/>
-    </rdfs:subClassOf>
-    <unspsc:code>50.18.19.05</unspsc:code>
-    <rdf:type>
-      <owl:Class rdf:ID="Commodity"/>
-    </rdf:type>
-    <rdfs:label xml:lang="es">Sweet biscuits or cookies</rdfs:label>
-    <rdfs:label xml:lang="es">biscuits or galletas</rdfs:label>
-    <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >014017</unspsc:unspsc>
-  </owl:Class>
-  <owl:Class rdf:about="#_014012">
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="_009210"/>
-    </rdfs:subClassOf>
+  <owl:Class rdf:ID="_014012">
     <unspsc:code>50.18.19.00</unspsc:code>
     <rdf:type>
       <owl:Class rdf:ID="Class"/>
     </rdf:type>
-    <rdfs:label xml:lang="en">Bread and biscuits and cookies</rdfs:label>
-    <rdfs:label xml:lang="es">Pan, biscuits y galletas</rdfs:label>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pan, biscuits y galletas</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="_009210"/>
+    </rdfs:subClassOf>
     <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >014012</unspsc:unspsc>
   </owl:Class>
@@ -57,13 +44,12 @@
     >segmento</rdfs:label>
   </owl:Class>
   <owl:Class rdf:ID="_010123">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Bebidas</rdfs:label>
     <unspsc:code>50.20.23.06</unspsc:code>
     <rdf:type>
-      <owl:Class rdf:about="#Commodity"/>
+      <owl:Class rdf:ID="Commodity"/>
     </rdf:type>
-    <rdfs:label xml:lang="en">Soft drinks</rdfs:label>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Bebidas</rdfs:label>
     <rdfs:subClassOf>
       <unspsc:Class rdf:ID="_014065">
         <rdfs:subClassOf>
@@ -109,6 +95,15 @@
     <rdfs:domain rdf:resource="#Segment"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
+  <unspsc:Commodity rdf:ID="_014017">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >biscuits or galletas</rdfs:label>
+    <unspsc:code>50.18.19.05</unspsc:code>
+    <rdfs:subClassOf rdf:resource="#_014012"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <unspsc:unspsc rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >014017</unspsc:unspsc>
+  </unspsc:Commodity>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
