@@ -13,7 +13,7 @@
         <statictext name="txtTarget">How do you want to show the Contact Resource?:</statictext>
         <input type="radio" name="modal" label="Modal" value="true"/>
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
-        <input type="text" name="secid" label="Section ID Contact:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID of the section that displays the contact form" invalidMessage="Invalid identifier" />
+        <input type="text" name="secid" label="Section that displays the contact form:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID of the section that displays the contact form" invalidMessage="Invalid identifier" />
     </fieldset>
 
     <fieldset legend="Modo">

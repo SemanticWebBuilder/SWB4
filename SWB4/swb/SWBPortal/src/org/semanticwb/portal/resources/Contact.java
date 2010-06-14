@@ -327,12 +327,19 @@ public class Contact extends GenericAdmResource {
             out.println("s = s.concat('</div>');");
             out.println("contactHolder.innerHTML = s;");
 
-            //out.println("    var cwidth=650;");
-            out.println("    var cwidth = "+base.getAttribute("width","360")+";");
-            //out.println("    var cheight=350;");
-            out.println("    var cheight = "+base.getAttribute("height","420")+";");
-
-            out.println("alert('cwidht='+cwidth+', height='+cheight);");
+            int width, height;
+            try {
+                width = Integer.parseInt(base.getAttribute("width","360"));
+            }catch(NumberFormatException nfe) {
+                width = 360;
+            }
+            try {
+                height = Integer.parseInt(base.getAttribute("height","420"));
+            }catch(NumberFormatException nfe) {
+                height = 420;
+            }
+            out.println("    var cwidth = "+width+";");
+            out.println("    var cheight = "+height+";");
 
             out.println("    contactHolder.id='s_'+divId;");
             out.println("    contactHolder.style.zIndex=1001;");
