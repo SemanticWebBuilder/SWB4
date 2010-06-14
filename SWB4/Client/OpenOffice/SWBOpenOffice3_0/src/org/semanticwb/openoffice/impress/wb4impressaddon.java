@@ -238,8 +238,9 @@ public final class wb4impressaddon extends WeakBase
                     OfficeApplication.showContentsToAuthorize();
                 }
             }
-            catch (Exception e)
+            catch (Throwable e)
             {
+                e.printStackTrace();
             }
         }
     }
@@ -373,8 +374,9 @@ public final class wb4impressaddon extends WeakBase
                     aState.IsEnabled = true;
                 }
             }
-            catch (Exception e)
+            catch (Throwable e)
             {
+                e.printStackTrace();
             }
         }
         /*if (queryDispatch(aURL, "", 0) == null)

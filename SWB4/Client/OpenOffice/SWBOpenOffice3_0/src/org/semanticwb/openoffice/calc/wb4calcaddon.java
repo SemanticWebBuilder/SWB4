@@ -251,9 +251,10 @@ public final class wb4calcaddon extends WeakBase
         {
             try
             {
-                WB4Calc document = new WB4Calc(this.m_xContext);
+                //WB4Calc document = new WB4Calc(this.m_xContext);
                 if (aURL.Path.compareTo("publish") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -265,6 +266,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 else if (aURL.Path.compareTo("delete") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -276,6 +278,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 else if (aURL.Path.compareTo("view") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -287,6 +290,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 else  if (aURL.Path.compareTo("information") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -298,6 +302,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 else  if (aURL.Path.compareTo("rules") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -309,6 +314,7 @@ public final class wb4calcaddon extends WeakBase
                 }
                 else if (aURL.Path.compareTo("deleteAssociation") == 0)
                 {
+                    WB4Calc document = new WB4Calc(this.m_xContext);
                     if (document.isPublicated())
                     {
                         aState.IsEnabled = true;
@@ -356,8 +362,9 @@ public final class wb4calcaddon extends WeakBase
                     aState.IsEnabled = true;
                 }
             }
-            catch (Exception e)
+            catch (Throwable e)
             {
+                e.printStackTrace();
             }
         }        
         xControl.statusChanged(aState);
