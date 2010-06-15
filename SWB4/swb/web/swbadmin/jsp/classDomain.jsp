@@ -14,15 +14,91 @@
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     String suri=request.getParameter("suri");
+    String act=request.getParameter("act");
+    if(act==null) act="";
 
     String pathView=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
+    String actform = SWBPlatform.getContextPath()+"/swbadmin/jsp/classDomain.jsp";
 
     //out.println(suri+" "+Thread.currentThread().getName());
     SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
     SemanticClass cls=new SemanticClass(ont.getRDFOntModel().getOntClass(suri));
+
+
+    if(act.equals("newprop"))
+    {
+        //out.println("Nueva propiedad para la clase");
+        out.println("<form id=\"\" action=\""+actform+"\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\">");
+        out.println("<input type=\"hidden\" name=\"act\" value=\"addnewprop\">");
+        out.println("<input type=\"text\" name=\"_pname\">");
+        out.println("<select name=\"_stype\">");
+        out.println("   <option value=\"0\">Select prop type</option>");
+        out.println("</select>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"><span>Add</span>");
+        out.println("<script type=\"dojo/method\" event=\"onClick\">");
+        //out.println("   submit();");
+        out.println("   hideDialog();return false;");
+        out.println("</script>");
+        out.println("</button>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"><span>Cancel</span>");
+        out.println("<script type=\"dojo/method\" event=\"onClick\">");
+        out.println("   hideDialog();return false;");
+        out.println("</script>");
+        out.println("</button>");
+        out.println("</form>");
+
+    }
+    else if(act.equals("removeprops"))
+    {
+        System.out.println("Eliminando propiedades de la clase");
+        String[] vals = request.getParameterValues("propuri");
+        if(vals!=null)
+        {
+            for(int i=0; i<vals.length;i++)
+            {
+                System.out.println("Quitar puri: "+vals[i]);
+            }
+        }
+
+    }
+    if(!act.equals("newprop"))
+    {
+
 %>
+<form dojoType="dijit.form.Form" id="<%=suri%>_addremprop" name="<%=suri%>_addremprop" method="post" action="<%=actform%>">
+        <input type="hidden" name="suri" value="<%=suri%>">
+        <input type="hidden" name="act" value="">
     <table width="100%">
-        <thead><tr><th>Propiedad</th><th>Tipo</th><th>Rango</th><th>Dominio</th></tr></thead>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Propiedad</th>
+                <th>Tipo</th>
+                <th>Rango</th>
+                <th>Dominio</th>
+                <th>
+                    <button dojoType="dijit.form.Button" type="button">
+                        <span>+</span>
+                        <script type="dojo/method" event="onClick">
+                            showDialog('<%=SWBPlatform.getContextPath()%>/swbadmin/jsp/classDomain.jsp?act=newprop&suri=<%=URLEncoder.encode(suri)%>','Nueva propiedad');
+                        </script>
+                    </button>
+                    <button dojoType="dijit.form.Button" type="button">
+                        <span>-</span>
+                        <script type="dojo/method" event="onClick" >
+                            if(confirm('Estas seguro de quere eliminar las propiedades seleccionadas?'))
+                            {
+                                var forma = dijit.byId('<%=suri%>_addremprop').domNode;
+                                forma.act.value='removeprops';
+                                forma.submit();
+                            }
+                            return false;
+                        </script>
+                    </button>
+                </th>
+            </tr>
+        </thead>
     <tbody>
 <%
     Property ptype=ont.getRDFOntModel().getProperty(SemanticVocabulary.RDF_TYPE);
@@ -61,13 +137,20 @@
 
             if(direct)style="style=\"font-weight: bolder; background-color: #f0f0ff;\"";
             out.print("<tr>");
+            if(direct) out.print("<td "+style+"><input type=\"checkbox\" value=\""+prop.getURI()+"\" name=\"propuri\"></td>");
+            else out.print("<td "+style+">&nbsp;</td>");
             out.print("<td "+style+">"+SWBPlatform.JENA_UTIL.getLink(prop.getRDFProperty() ,pathView)+"</td>");
             out.print("<td "+style+">"+type+"</td>");
             out.print("<td "+style+">"+rang+"</td>");
-            out.print("<td "+style+">"+domin+"</td>");
+            out.print("<td colspan=\"2\" " +style+">"+domin+"</td>");
             out.println("</tr>");
         }
     }
 %>
     </tbody>
     </table>
+    </form>
+<%
+    }
+
+%>
