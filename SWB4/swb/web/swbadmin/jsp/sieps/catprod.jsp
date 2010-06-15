@@ -5,7 +5,8 @@
 <%@page import="org.semanticwb.model.*"%>
 <%@page import="org.semanticwb.scian.*"%>
 <%@page import="org.semanticwb.unspsc.*"%>
-<%@page import="org.semanticwb.sieps.*"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.sieps.*"%>
+<%@page import="org.semanticwb.sieps.search.SearchResource"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%!
     public ArrayList<Set<Producto>> getLineas(Set<Producto>productos,int prodByLine)
@@ -55,17 +56,22 @@
     }
 %>
 <%	
+	User user			= 	paramRequest.getUser();
+	SWBModel model		= 	paramRequest.getWebPage().getWebSite();
+	boolean isUsuario 	= 	(user != null && user.isSigned());
 	Empresa e = (Empresa)request.getAttribute("obj");
         String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
         SWBResourceURL urlEmpresa=paramRequest.getRenderUrl();
         urlEmpresa.setParameter("act", "detail");
         urlEmpresa.setParameter("uri", e.getURI());
-        String urlGaleria = SWBPortal.getContextPath() + "/swbadmin/jsp/sieps/galeria_icono.png";
+        String urlGaleria 	= 	SWBPortal.getContextPath() + "/swbadmin/jsp/sieps/galeria_icono.png";
+        String mensaje	  	= 	request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";    
         %>
-
+<script type="text/javascript" src="/swbadmin/jsp/sieps/sieps.js"></script>
         <div id="columnaDerecha">
       <p class="fecha">Bienvenido, hoy es 25 de septiembre de 2010</p>
       <p class="noEmpresas">Ya somos: 18,367 empresas</p>
+	  <form name= "frmCatProd" id= "frmCatProd" action="" method="post">      
       <div id="datos_empresa">
      	<img src="<%=urllog%>" width="104" height="89" alt="<%=e.getName()%>"/>
         <div id="descripcion">
@@ -147,12 +153,17 @@
                         SWBResourceURL url=paramRequest.getRenderUrl();
                         url.setParameter("act", "detail");
                         url.setParameter("uri", producto.getURI());
+                        SWBResourceURL 	urlGuardaProducto 	= 	paramRequest.getActionUrl().setAction("guardaProductosCatalogo").setParameter("uriProductos", producto.getEncodedURI()).setParameter("uriEmpresa", e.getEncodedURI());
+                        boolean isProductoCarpeta = SearchResource.isProductosInteres(user, model, producto.getURI());
                         %>
                             <div class="product">
                                 <img src="<%=urlfoto%>" width="110" height="83" alt="<%=name%>">
                                 <p><strong><%=name%></strong><br/><%=description%></p>
-                                <a href="<%=url%>" class="boton_detalle">Ver detalle</a>
-                                <a href="#" class="boton_carrito">Agregar a mi carpeta</a>
+                                <a href="<%=url%>" class="boton_detalle">Ver detalle</a>                                
+                                <% if (isUsuario && !isProductoCarpeta) { %>
+                                	<input type="button" name="btnSendProducto" id="btnSendProducto" value="Enviar Producto(s) a mi Carpeta" class="btn-bigger" onclick="enviaProductoCatalago('<%=urlGuardaProducto%>', this); "/>
+                                <%}%>	
+                                
                             </div>
                         <%
                     }
@@ -180,12 +191,17 @@
                         SWBResourceURL url=paramRequest.getRenderUrl();
                         url.setParameter("act", "detail");
                         url.setParameter("uri", producto.getURI());
-                        %>
+                        SWBResourceURL 	urlGuardaProducto 	= 	paramRequest.getActionUrl().setAction("guardaProductosCatalogo").setParameter("uriProductos", producto.getEncodedURI()).setParameter("uriEmpresa", e.getEncodedURI());
+                        boolean isProductoCarpeta = SearchResource.isProductosInteres(user, model, producto.getURI());
+                        
+                    %>
                             <div class="product">
                                 <img src="<%=urlfoto%>" width="110" height="83" alt="<%=name%>">
                                 <p><strong><%=name%></strong><br/><%=description%></p>
                                 <a href="<%=url%>" class="boton_detalle">Ver detalle</a>
-                                <a href="#" class="boton_carrito">Agregar a mi carpeta</a>
+                                <% if (isUsuario && !isProductoCarpeta) { %>
+                                	<input type="button" name="btnSendProducto" id="btnSendProducto" value="Enviar Producto(s) a mi Carpeta" class="btn-bigger" onclick="javascript:enviaProductoCatalago('<%=urlGuardaProducto%>', this); "/>
+                                <%}%>	
                             </div>
                         <%
                     }
@@ -199,13 +215,12 @@
         }
         
 %>
-      
-	
-        
-<form action="#" enctype="multipart/form-data">
+<!-- 
           <p id="Envio">
             <input type="submit" name="search2" id="search2" value="Enviar a mi carpeta" />
             <input type="submit" name="search3" id="search3" value="Enviar un mensaje" />
           </p>
+ -->
         </form>
     </div>
+    <script type="text/javascript">muestraMensaje('<%=mensaje%>');</script>

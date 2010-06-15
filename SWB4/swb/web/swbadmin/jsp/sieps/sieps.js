@@ -173,6 +173,14 @@
 		objBtn.disabled = false;
 		return;
 	}
+	function enviarEmpresasInteresFicha(url, objBtn) {
+		objBtn.disabled = true;		
+		var forma 	= objBtn.form;
+		forma.action = url;
+		forma.submit();
+		objBtn.disabled = false;
+		return;
+	}	
 	function enviarBusquedas(url, objBtn) {
 		objBtn.disabled = true;		
 		var forma 	= objBtn.form;
@@ -180,13 +188,7 @@
 		forma.submit();		
 		return;
 	}
-	function enviarProducto(url, objBtn) {
-		objBtn.disabled = true;		
-		var forma 	= objBtn.form;
-		forma.action = url;
-		forma.submit();		
-		return;
-	}	
+
 	function enviarForma(url, objBtn) {
 		objBtn.disabled = true;		
 		var forma 	= objBtn.form;
@@ -300,3 +302,56 @@
 				
 		return;
 	}
+	
+	// resultados productos
+	
+	function desplieguaTodosProductos(objChk) {
+		var checkedType = (objChk.checked) ? true : false;
+		var forma 	= objChk.form
+
+		for (var i = 0; i<forma.elements.length; i++) {
+			var e = forma.elements[i];
+			if ((e.id.indexOf("uriProductos") != -1) && (e.type=='checkbox')) {
+				e.checked = checkedType;
+			}								
+		}
+		
+		return;
+	}
+	function cambiaEstadoSelectAllProductos(objChk) {
+		var checkedType = (objChk.checked) ? true : false;
+		var forma 	= objChk.form
+		var objChkAll = forma.elements["checkAllProductos"];
+		if (objChkAll.checked && !checkedType) {
+			objChkAll.checked  =false;
+		}		
+		return;
+	}
+	
+	function enviarProductosInteres(url, objBtn) {
+		objBtn.disabled = true;		
+		var forma 	= objBtn.form;
+		forma.action = url;
+		if (validaCheck(objBtn, 'uriProductos')) {
+			forma.submit();
+		} else {
+			alert("Debe seleccionar al menos un producto")
+		}
+		objBtn.disabled = false;
+		return;
+	}
+
+	function enviarProductosInteresFicha(url, objBtn) {
+		objBtn.disabled = true;		
+		var forma 	= objBtn.form;
+		forma.action = url;
+		forma.submit();		
+		return;
+	}
+	function enviaProductoCatalago(url, objBtn) {
+		objBtn.disabled = true;		
+		var forma 	= objBtn.form;
+		forma.action = url;
+		forma.submit();		
+		return;
+	}	

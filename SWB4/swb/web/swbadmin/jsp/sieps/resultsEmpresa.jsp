@@ -100,25 +100,24 @@
 	String mensaje		   	= 	request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
 	
 	/** XXX:Implementación para fines del demo. Replantear funcionalidad para un ambiente productivo...**/
-	boolean isBusquedaCarpeta 	= mensaje.contains("búsqueda");	
-	mensaje 					= 	isBusquedaCarpeta ? mensaje : "";
 		
 	User user				= 	paramRequest.getUser();
 	SWBModel webSite		=	paramRequest.getWebPage().getWebSite();
-	int numEmpresasInteres 	= 	0;
 	
 	String urlImages		=	"/swbadmin/jsp/"+paramRequest.getWebPage().getWebSiteId()+"/images/";
 	
-	boolean isUser			=	(user != null && user.isSigned());
-	
+	boolean isUser				=	(user != null && user.isSigned());
+	boolean isBusquedaCarpeta 	= 	SearchResource.isQueryInCarpeta(queryAttr, user, webSite);	
+			mensaje 			= 	isBusquedaCarpeta ? mensaje : "";		
 %>
+<div id="resultadosBusqueda">
 <% if (queryAttr != null && queryAttr.length() > 0) { %>
-	<p>Usted buscó:<%=queryAttr%></p>
+	<p id="resultadosBusquedaTop"><strong>Usted buscó:</strong><%=queryAttr%></p>
 <% } %>
 <% if (isResultados) {%>
       <h2 class="tableH2">Resultados de búsqueda</h2>
       <form id="formTableRes" method="post" action="">
-      	<input type="hidden" id="currentQuery" name="currentQuery" value="<%=query%>"/>
+      	<input type="hidden" id="currentQuery" name="currentQuery" value="<%=queryAttr%>"/>
         <p>
           <input type="checkbox" name="checkAllDescrip" id="checkAllDescrip"  onclick="javascript:desplieguaTodasDescripcion(this);"/>
           <label for="check1">Vista breve de todos los resultados</label>
@@ -132,8 +131,8 @@
 	  <table id="tablaResultados">
           <tr>
             <th>Código</th>
-            <th>Categoría</th>
-            <th>Subcategoría</th>
+            <th>Subrama</th>
+            <th>Actividad</th>
             <th>Empresa</th>
             <th colspan="2">Ubicación</th>
           </tr>
@@ -222,3 +221,4 @@
 	<h2 class="tableH2">No se encontraron coincidencias</h2>
 <%}%>
 <script type="text/javascript">muestraMensaje('<%=mensaje%>');</script>
+</div>
