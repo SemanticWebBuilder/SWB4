@@ -3,13 +3,13 @@
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Configurações de Conteúdo">
+        <fieldset legend="Configuração de Conteúdo">
             <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" jsrequired="false"/>
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
             <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nível deve ser um valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
 
-        <fieldset legend="Configurações de estratégia">
+        <fieldset legend="Configuração da estratégia">
             <statictext name="txtTarget">¿Como você quiser acessar o site de recursos mapa?:</statictext>
             <input type="text" name="lnktexto" label="Texto da Liga:" maxlength="50" promptMessage="Text link" />
             <input type="text" name="btntexto" label="Button label:" maxlength="50" promptMessage="Button label" />
