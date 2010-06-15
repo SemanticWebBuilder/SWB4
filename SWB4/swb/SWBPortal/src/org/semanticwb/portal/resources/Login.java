@@ -289,7 +289,8 @@ public class Login extends GenericAdmResource
         {
             CallbackHandler cbh = org.semanticwb.servlet.internal.Login.getHandler(
                     CBHClassName, request, null, authMethod, response.getWebPage().getWebSiteId());
-            org.semanticwb.servlet.internal.Login.doLogin(cbh, context, subject, request);
+            String matchKey = response.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
+            org.semanticwb.servlet.internal.Login.doLogin(cbh, context, subject, request,matchKey);
         } catch (Exception e)
         {
             org.semanticwb.servlet.internal.Login.markFailedAttepmt(request.getParameter("wb_username"));

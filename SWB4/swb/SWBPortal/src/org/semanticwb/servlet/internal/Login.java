@@ -26,9 +26,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -188,7 +186,8 @@ public class Login implements InternalServlet
             }
             try
             {
-                doLogin(callbackHandler, context, subject, request);
+                String matchKey = dparams.getWebPage().getWebSiteId()+"|"+request.getParameter("wb_username");
+                doLogin(callbackHandler, context, subject, request, matchKey);
 
             } catch (LoginException ex)
             {
@@ -590,9 +589,9 @@ public class Login implements InternalServlet
         }
     }
 
-    public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request) throws LoginException
+    public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request, String matchKey) throws LoginException
     {
-        if (isblocked(request.getParameter("wb_username"))){
+        if (isblocked(matchKey)){
             throw new LoginException("Login blocked for repeated attempts");
         }
         LoginContext lc;
@@ -609,40 +608,40 @@ public class Login implements InternalServlet
             log.trace("user checked?:" + user.hashCode() + ":" + user.isSigned());
         }
         if(null==user.getLanguage()) user.setLanguage("es"); //forzar lenguage si no se dio de alta.
-        cleanBlockedEntry(request.getParameter("wb_username"));
+        cleanBlockedEntry(matchKey);
         sendLoginLog(request, user);
     }
 
-    public static void markFailedAttepmt(String login)
+    public static void markFailedAttepmt(String matchKey)
     {
-        FailedAttempt failedAttempt = blockedList.get(login);
+        FailedAttempt failedAttempt = blockedList.get(matchKey);
         if (null==failedAttempt) {
-            FailedAttempt fa = new FailedAttempt(login);
-            blockedList.put(login, fa);
+            FailedAttempt fa = new FailedAttempt(matchKey);
+            blockedList.put(matchKey, fa);
             failedAttempt = fa;
         }
         failedAttempt.failedAttempt();
     }
 
-    public static boolean isblocked(String login)
+    public static boolean isblocked(String matchKey)
     {
         boolean ret=false;
-        FailedAttempt current = blockedList.get(login);
+        FailedAttempt current = blockedList.get(matchKey);
         if (null!=current){
             ret = current.isBlocked();
             if (current.isBlocked() && current.getTsBlockedTime()+(1000*60*5)<System.currentTimeMillis()){
-                blockedList.remove(login);
+                blockedList.remove(matchKey);
                 ret=false;
             }
         }
         return ret;
     }
 
-    private static void cleanBlockedEntry(String login)
+    private static void cleanBlockedEntry(String matchKey)
     {
-        FailedAttempt current = blockedList.get(login);
+        FailedAttempt current = blockedList.get(matchKey);
         if (null!=current){
-            blockedList.remove(login);
+            blockedList.remove(matchKey);
         }
     }
 }
