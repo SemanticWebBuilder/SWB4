@@ -66,7 +66,7 @@ public class FBLogin implements InternalServlet
      */
     public void init(ServletContext config)
     {
-        log.event("Initializing InternalServlet Login...");
+        log.event("Initializing InternalServlet FBLogin...");
     //TODO: preparar los aspectos configurables de la autenticación
     }
 

@@ -56,7 +56,7 @@ public class Admin implements InternalServlet
 {
     
     /** The log. */
-    static Logger log=SWBUtils.getLogger(Login.class);
+    static Logger log=SWBUtils.getLogger(Admin.class);
     
     /** The date formats. */
     protected static SimpleDateFormat dateFormats[];
