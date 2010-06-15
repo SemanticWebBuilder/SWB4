@@ -3,7 +3,7 @@
     - Nuevo Blog con persitencia semantica (Victor L)
     - Se agregó opción "solo acceso" al filtrado de ips (Jei)
     - Se mejoró soporte a restricciones semánticas en el arbol de administración de SWB (Jei)
-    - Se valido comparacion de password con diferentes digest (Soporte a versiones anteriores) (Serch)
+    - Se validó comparación de password con diferentes digest (Soporte a versiones anteriores) (Serch)
     - Validación de intentos fallidos de autenticación (Serch)
     - Mostrar información de la instancia en el Monitoreo de Memoria (Serch)
 
