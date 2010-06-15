@@ -278,6 +278,13 @@
 
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
+
+        boolean hasHN=hasHerarquicalNodes(node.getSemanticObject(),user.getLanguage());
+        if(hasHN)
+        {
+            addHerarquicalNodes(childs, node.getSemanticObject(),user);
+        }
+
         if(cls==null)return;
         Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
 
