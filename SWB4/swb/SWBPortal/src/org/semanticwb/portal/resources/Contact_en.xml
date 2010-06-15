@@ -3,20 +3,13 @@
     <xslfile>admresource.xslt</xslfile>
 
     <form name="frmAddNew" id="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
-    <fieldset legend="Datos">
-        <input type="text" name="name" label="Full Name of Contact:"  maxlength="40" jsrequired="true" promptMessage="Full Name of Contact" />
-        <input type="text" name="email" label="Contact e-mail:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Contact e-mail" invalidMessage="Invalid email address" />
-        <input type="text" name="title" label="Title, position or business name:" maxlength="40" jsrequired="true" promptMessage="Title, position or business name" />
-        <input type="text" name="phone" label="Contact phone:" maxlength="12" jsrequired="true" promptMessage="Contact phone" />
-        <input type="text" name="address" label="Contact address or business name:" maxlength="60" promptMessage="Contact address or business name" />
-
+    <fieldset legend="Content Settings">
         <statictext name="txtTarget">How do you want to show the Contact Resource?:</statictext>
         <input type="radio" name="modal" label="Modal" value="true"/>
         <input type="radio" name="modal" label="No Modal" value="false" checked="true" />
-        <input type="text" name="secid" label="Section that displays the contact form:" maxlength="40" jsvaltype="js_alphabetic" promptMessage="ID of the section that displays the contact form" invalidMessage="Invalid identifier" />
     </fieldset>
 
-    <fieldset legend="Modo">
+    <fieldset legend="Strategy Setting">
         <statictext name="txtTarget">How to access to Contact Resource?:</statictext>
         <input type="text" name="link" label="Text link:" maxlength="50" promptMessage="Text link" />
 
@@ -26,7 +19,15 @@
         <input type="text" name="alt" label="Alternate Text:" maxlength="50" promptMessage="Image alternate text" />
     </fieldset>
 
-    <fieldset legend="Apariencia">
+    <fieldset legend="Contact Details">
+        <input type="text" name="name" label="Full Name of Contact:"  maxlength="40" jsrequired="true" promptMessage="Full Name of Contact" />
+        <input type="text" name="email" label="Contact e-mail:" maxlength="40" jsrequired="true" regExp="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" promptMessage="Contact e-mail" invalidMessage="Invalid email address" />
+        <input type="text" name="title" label="Title, position or business name:" maxlength="40" jsrequired="true" promptMessage="Title, position or business name" />
+        <input type="text" name="phone" label="Contact phone:" maxlength="12" jsrequired="true" promptMessage="Contact phone" />
+        <input type="text" name="address" label="Contact address or business name:" maxlength="60" promptMessage="Contact address or business name" />
+    </fieldset>
+
+    <fieldset legend="Look">
         <input type="text" id="width"  name="width" value="360" label="Width:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Width of the dialog box. This value is considered in pixels" jsrequired="true" />
         <input type="text" id="height" name="height" value="420" label="Height:" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Height of the dialog box. This value is considered in pixels" jsrequired="true" />
 
@@ -78,7 +79,7 @@
                 return false;
             }
             if( !regemail.test(frm.email.value) ) {
-                alert('Enter the email address of the contact.');
+                alert('The email address of the contact is incorrect.');
                 frm.email.focus();
                 return false;
             }
