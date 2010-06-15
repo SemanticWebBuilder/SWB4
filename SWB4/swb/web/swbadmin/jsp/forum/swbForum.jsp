@@ -25,7 +25,6 @@
 <%@page import="org.semanticwb.portal.SWBFormButton"%>
 <%@page import="org.semanticwb.portal.SWBFormMgr"%>
 
-Jorge Jim
 <style type="text/css">
 * {
 	margin: 0px;
