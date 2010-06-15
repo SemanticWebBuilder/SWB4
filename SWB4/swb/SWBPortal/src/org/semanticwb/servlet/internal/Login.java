@@ -43,7 +43,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBSoftkHashMap;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
-import org.semanticwb.security.limiter.BlockedList;
 import org.semanticwb.security.limiter.FailedAttempt;
 
 
