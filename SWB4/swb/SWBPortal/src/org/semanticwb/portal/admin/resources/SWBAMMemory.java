@@ -43,6 +43,8 @@ import org.semanticwb.SWBPortal;
 import javax.servlet.http.*;
 import java.util.*;
 import java.io.*;
+import org.semanticwb.portal.monitor.SWBSummary;
+import org.semanticwb.servlet.internal.Monitor;
 
 
 // TODO: Auto-generated Javadoc
@@ -56,12 +58,13 @@ import java.io.*;
  * @author Javier Solis Gonzalez
  */
 public class SWBAMMemory extends GenericResource {
-
+    private SWBSummary swbSummary = null;
     
     /**
      * Creates a new instance of WBAMemory.
      */
     public SWBAMMemory() {
+        swbSummary = new SWBSummary();
     }
     
     
@@ -131,9 +134,13 @@ public class SWBAMMemory extends GenericResource {
             //out.print("      <input type=\"submit\" name=\"gc\" value=\""+paramsRequest.getLocaleString("gc")+"\">&nbsp;&nbsp;");
             out.println("</form>");
             out.println("</fieldset>");
+            out.println("<div class=\"swbform\">");
+            out.println(swbSummary.getSample().GetSumaryHTML());
+            out.println("</div>");
         } else {
             out.println(paramsRequest.getLocaleString("msgIsNotActive"));
         }
+        out.println("</div>");
     }
     
     /**
