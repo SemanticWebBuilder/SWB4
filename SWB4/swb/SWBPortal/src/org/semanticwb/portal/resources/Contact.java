@@ -271,14 +271,14 @@ public class Contact extends GenericAdmResource {
             out.println("var s = new String('');");
             out.println("s = s.concat('<div class=\"swb-contact\">');");
             out.println("s = s.concat('<form id=\"frmContact\" name=\"frmContact\" action=\"\" method=\"post\" >');");
-            if( base.getAttribute("title")!=null ) {
-                out.println("s = s.concat('<h3>"+base.getAttribute("title")+"</h3>');");
+            if( title!=null ) {
+                out.println("s = s.concat('<h3>"+title+"</h3>');");
             }else {
                 out.println("s = s.concat('<h3>"+paramRequest.getLocaleString("title")+"</h3>');");
             }
 
-            if( base.getAttribute("phone")!=null ) {
-                out.println("s = s.concat('<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+base.getAttribute("phone")+".<br />');");
+            if( contactPhone!=null ) {
+                out.println("s = s.concat('<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+contactPhone+".<br />');");
                 out.println("s = s.concat('"+paramRequest.getLocaleString("instruction2")+"');");
                 out.println("s = s.concat('</p>');");
             }
@@ -391,14 +391,14 @@ public class Contact extends GenericAdmResource {
                 }
 
                 out.print("<form name=\"frmContact\" id=\"frmContact\" action=\""+url+"\" method=\"post\" >");
-                if( base.getAttribute("title")!=null ) {
-                    out.println("<h3>"+base.getAttribute("title")+"</h3>");
+                if( title!=null ) {
+                    out.println("<h3>"+title+"</h3>");
                 }else {
                     out.println("<h3>"+paramRequest.getLocaleString("title")+"</h3>");
                 }
 
-                if( base.getAttribute("phone")!=null ) {
-                    out.println("<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+base.getAttribute("phone")+".<br />");
+                if( contactPhone!=null ) {
+                    out.println("<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+contactPhone+".<br />");
                     out.println(paramRequest.getLocaleString("instruction2"));
                     out.println("</p>");
                 }
