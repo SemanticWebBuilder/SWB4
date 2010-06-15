@@ -1414,3 +1414,35 @@ function replaceChars4Id(value, lowercase)
                     dojox.html.insertCssRule(rule[0]+'_'+sufix, rule[1]);
         }
     }
+
+    function createCoverDiv(divId, bgcolor, opacity) {
+      var layer=document.createElement('div');
+      layer.id=divId;
+      layer.style.width='100%';
+      layer.style.height='100%';
+      layer.style.backgroundColor=bgcolor;
+      layer.style.position='fixed';
+      layer.style.top=0;
+      layer.style.left=0;
+      layer.style.zIndex=1000;
+      layer.style.filter='alpha(opacity='+opacity+')';
+      layer.style.opacity=opacity/100;
+      document.body.appendChild(layer);
+    }
+
+    function removeCoverDiv(divId) {
+      var layer=document.getElementById(divId);
+      var superlayer=document.getElementById('s_'+divId);
+      if(layer && superlayer) {
+          document.body.removeChild(superlayer);
+          document.body.removeChild(layer);
+      }
+    }
+
+    function isValidEmail(email) {
+        var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!filter.test(email)) {
+            return false;
+        }
+        return true;
+    }
