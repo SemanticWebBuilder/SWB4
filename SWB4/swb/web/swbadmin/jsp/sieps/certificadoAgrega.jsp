@@ -15,7 +15,7 @@
 	    	<div id="cupon">
 	        	<div id="cuponHead">
 	                <label for="idCertificado">N&uacute;mero certificado:</label>
-	                <input type="text" name="idCertificado" id="idCertificado" value="" />
+	                <input type="text" name="idCertificado" id="idCertificado" value="ABC7F-XY4W-GTWER-1FDG" />
 	                <input type="button" value="Confirmar" name="confirmar" id="confirmar" class="btn-small" onclick="javascript:buscaEmpresa('<%=urlBuscaEmpresa%>', this);"/>
 	                <input type="button" value="Borrar" name="borrar" class="btn-small" onclick="javascript:this.form.reset(); this.form.elements['confirmar'].disabled = false;"/>
 	            </div>

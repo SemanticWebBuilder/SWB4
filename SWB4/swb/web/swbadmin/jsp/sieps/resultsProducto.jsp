@@ -3,7 +3,9 @@
 <%@page import="org.semanticwb.sieps.Producto"%>
 <%@page import="org.semanticwb.sieps.Empresa"%>
 
-<%@page import="org.semanticwb.model.User"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.sieps.search.SearchResource"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -50,28 +52,7 @@
 		}
 		return;
 	}
-	function desplieguaTodasEmpresas(objChk) {
-		var checkedType = (objChk.checked) ? true : false;
-		var forma 	= objChk.form
 
-		for (var i = 0; i<forma.elements.length; i++) {
-			var e = forma.elements[i];
-			if ((e.id.indexOf("checkEmp") != -1) && (e.type=='checkbox')) {
-				e.checked = checkedType;
-			}								
-		}
-		
-		return;
-	}
-	function cambiaEstadoSelectAllEmpresas(objChk) {
-		var checkedType = (objChk.checked) ? true : false;
-		var forma 	= objChk.form
-		var objChkAll = forma.elements["checkAllEmpresas"];
-		if (objChkAll.checked && !checkedType) {
-			objChkAll.checked  =false;
-		}		
-		return;
-	}	
 	function cambiaEstadoDisplayAllDescrip(idForm) {		
 		var forma 	= document.forms[idForm]
 		var objChkAll = forma.elements["checkAllDescrip"];		
@@ -87,9 +68,12 @@
 	String query 						= 	request.getParameter("query");
 	String queryAttr 					= 	(String)request.getAttribute("query");
 	SWBResourceURL 	urlDetail 			= 	paramRequest.getRenderUrl().setParameter("act", "detail").setParameter("query", query);
-	SWBResourceURL 	urlGuardaBusqueda 	= 	paramRequest.getActionUrl().setAction("guardaConsulta");
+	SWBResourceURL 	urlGuardaBusqueda 	= 	paramRequest.getActionUrl().setAction("guardaConsulta"),
+					urlGuardaProductos 	= 	paramRequest.getActionUrl().setAction("guardaProductos");
 	
 	List<Producto> productos 			= 	(List<Producto>)request.getAttribute("results");
+	Boolean isAllProdInt 				= 	(Boolean)request.getAttribute("isAllProdInt");
+	
 	boolean isResultados   				= 	(productos != null &&  !productos.isEmpty());
 	String mensaje		   				= 	request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
 	
@@ -97,28 +81,36 @@
 	boolean isBusquedaCarpeta 	= 	mensaje.contains("búsqueda");	
 			mensaje 			= 	isBusquedaCarpeta ? mensaje : "";
 
+	SWBModel webSite			=	paramRequest.getWebPage().getWebSite();
 	User user					= 	paramRequest.getUser();
 	boolean isUser				=	(user != null && user.isSigned());
+	
+	String urlImages			=	"/swbadmin/jsp/"+paramRequest.getWebPage().getWebSiteId()+"/images/";
 %>
+<div id="resultadosBusqueda">
 <% if (queryAttr != null && queryAttr.length() > 0) { %>
-	<p>Usted buscó:<%=queryAttr%></p>
+	<p id="resultadosBusquedaTop"><strong>Usted buscó:</strong>Usted buscó:<%=queryAttr%></p>
 <% } %>
 <% if (isResultados) {%>
       <h2 class="tableH2">Resultados de búsqueda</h2>
       <form id="formTableRes" method="post" action="">
-      <input type="hidden" id="currentQuery" name="currentQuery" value="<%=query%>"/>
+      <input type="hidden" id="currentQuery" name="currentQuery" value="<%=queryAttr%>"/>
         <p>
           <input type="checkbox" name="checkAllDescrip" id="checkAllDescrip"  onclick="javascript:desplieguaTodasDescripcion(this);"/>
           <label for="check1">Vista breve de todos los resultados</label>
+          <% if (isUser && !isAllProdInt) { %>	
+	          <input type="checkbox" name="checkAllProductos" id="checkAllProductos"  onclick="javascript:desplieguaTodosProductos(this);"/>
+	          <label for="check4">Selecciona el producto</label>
+          <% } %>
         </p>
       
 	  <table id="tablaResultados">
           <tr>
             <th>Código</th>
             <th>Producto</th>
-            <th>Subcategoría</th>
+            <th>Categoría</th>
             <th>Empresa</th>
-            <th>Ubicación</th>
+            <th colspan="2">Ubicación</th>
           </tr>
           <%          	
           	for (int i = 0; i< productos.size(); i++) {
@@ -144,7 +136,16 @@
 	            <td onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", p.getEncodedURI())%>"' style="cursor: hand;" class="<%=estiloRow%> bold"><%=p.getTitle()%></td>
 	            <td class="<%=estiloRow%> bold"><%=subcategoria%></td>
 	            <td onclick='javascript: document.location ="<%=urlDetail.setParameter("uri", f.getEncodedURI())%>"' style="cursor: hand;" class="<%=estiloRow%> bold"><%=(f != null)? f.getName(): "No disponible"%></td>
-	            <td class="<%=estiloRow%> bold"><%=(f != null)? f.getEstado(): "No disponible"%></td>            	          
+	            <td class="<%=estiloRow%> bold"><%=(f != null)? f.getEstado(): "No disponible"%></td>
+	            <td class="<%=estiloRow%>">            
+            	<% if (isUser && !SearchResource.isProductosInteres(user, webSite, p.getURI())) {%>
+              		<input type="checkbox" name="uriProductos" id="uriProductos" value="<%=p.getURI()%>" onclick="javascript:cambiaEstadoSelectAllProductos(this);"/>
+            	<% } else if (isUser){%>
+            		<img src="<%=urlImages%>favorites.png" width="16" height="16" alt="" />
+            	<% } else { %>
+            		&nbsp;
+            	<% } %>
+	           </td> 	            	          
            </tr>
            <tr id="rowBullets<%=i%>">
 	            <td id="cellBulletDescrip<%=i%>" class="<%=estiloRow%>"><a id="anchor<%=i%>" href="javascript:desplieguaDescripcion('anchor<%=i%>', 'cellDescrip<%=i%>');");"><img src="/work/models/sieps/Template/2/1/images/bulletVerde_tabla.jpg" alt=" " width="10" height="10" />Abrir detalle</a></td>	            
@@ -156,6 +157,9 @@
 		  <%}%>
 	</table>
 	<p class="centrar">
+	<% if (isUser && !isAllProdInt){ %>
+    	<input type="button" name="btnSendProducto" id="btnSendProducto" value="Enviar Producto(s) a mi Carpeta" class="btn-bigger" onclick="javascript:enviarProductosInteres('<%=urlGuardaProductos%>', this); "/>
+    <% } %>		
 	<% if (isUser && !isBusquedaCarpeta){ %>    	
     	<input type="button" name="btnSendConsulta" id="btnSendConsulta" value="Enviar Consulta a mi Carpeta" class="btn-bigger" onclick="javascript:enviarBusquedas('<%=urlGuardaBusqueda%>', this); "/>
     <% } %>	
@@ -165,3 +169,4 @@
 	<h2 class="tableH2">No se encontraron coincidencias</h2>	
 <%}%>
 <script type="text/javascript">muestraMensaje('<%=mensaje%>');</script>
+</div>

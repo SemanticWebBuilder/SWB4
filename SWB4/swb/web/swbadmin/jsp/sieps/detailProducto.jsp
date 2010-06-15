@@ -4,7 +4,9 @@
 
 <%@page import="org.semanticwb.sieps.Empresa"%>
 <%@page import="org.semanticwb.sieps.Producto"%>
-<%@page import="org.semanticwb.model.User"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%@page import="org.semanticwb.model.User"%>
+<%@page import="org.semanticwb.sieps.search.SearchResource"%>
+<%@page import="org.semanticwb.model.SWBModel"%><jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%
 	//SWBResourceURL url = paramRequest.getRenderUrl().setParameter("act", "results");
@@ -12,19 +14,20 @@
     Empresa e = producto.getFabrica();
     String urllog=SWBPortal.getWebWorkPath()+e.getWorkPath()+"/"+e.getLogo();
     String urlphotoprod=SWBPortal.getWebWorkPath()+producto.getWorkPath()+"/"+producto.getFoto();
-    SWBResourceURL 	urlGuardaProducto 	= 	paramRequest.getActionUrl().setAction("guardaProductos");
+    SWBResourceURL 	urlGuardaProducto 	= 	paramRequest.getActionUrl().setAction("guardaProductosFicha");
     String mensaje		   	= 	request.getParameter("mensaje")!= null ? request.getParameter("mensaje") : "";
-    String query 			= 	request.getParameter("query");
+    String query 			= 	(String)request.getAttribute("query");
+
+    SWBResourceURL 	urlResultados		= 	paramRequest.getRenderUrl().setParameter("act", "results").setParameter("query", query);
 	/** XXX:Implementación para fines del demo. Replantear funcionalidad para un ambiente productivo...**/
-	boolean isProductoCarpeta 	= 	mensaje.contains("producto");
 	User user					= 	paramRequest.getUser();
+    SWBModel model				=	paramRequest.getWebPage().getWebSite();
+	boolean isProductoCarpeta 	= 	SearchResource.isProductosInteres(user, model, producto.getURI());//mensaje.contains("producto");
 	boolean isUser				=	(user != null && user.isSigned());
 
 %>
 <script type="text/javascript" src="/swbadmin/jsp/sieps/sieps.js"></script>
 <div id="columnaDerecha">
-    <p class="fecha">Bienvenido, hoy es 25 de septiembre de 2010</p>
-    <p class="noEmpresas">Ya somos: 18,367 empresas</p>
     <div id="datos_empresa">
         <img src="<%=urllog%>" width="104" height="89" alt="<%=e.getName()%>"/>
         <div id="descripcion">
@@ -63,15 +66,17 @@
             	<input type="hidden" id="uriProductos" name="uriProductos" value="<%=producto.getURI()%>">
                 <p id="EnvioFicha">
                 	<% if (isUser && !isProductoCarpeta){ %>
-                    	<input type="submit" name="search4" id="search4" value="Enviar a mi carpeta" onclick="javascript:enviarProducto('<%=urlGuardaProducto%>', this);"/>
+                    	<input type="submit" name="search4" id="search4" class="btn-bigger" value="Enviar a mi carpeta" onclick="javascript:enviarProductosInteresFicha('<%=urlGuardaProducto%>', this);"/>
                     <%} %>
-                    <input type="submit" name="search5" id="search5" value="Enviar un mensaje" />
+                   <!--  
+                   <input type="submit" name="search5" id="search5" class="btn-bigger" value="Enviar un mensaje" />
+                   --> 
                 </p>
             </form>
         </div>
     </div>
     <p id="regresar">
-        <a class="btn-large" href="#" onclick="javascript:history.go(-1);">Regresar</a>
+        <a class="btn-large" href="#" onclick="javascript:document.location ='<%=urlResultados%>'">Regresar</a>
     </p>
 </div>
 <script type="text/javascript">muestraMensaje('<%=mensaje%>');</script>
