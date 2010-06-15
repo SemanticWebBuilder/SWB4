@@ -292,7 +292,12 @@ public class Login extends GenericAdmResource
             org.semanticwb.servlet.internal.Login.doLogin(cbh, context, subject, request);
         } catch (Exception e)
         {
-            request.getSession(true).setAttribute("ErrorMsg", "No se pudo autenticar, datos incorrectos.");
+            org.semanticwb.servlet.internal.Login.markFailedAttepmt(request.getParameter("wb_username"));
+            String alert="No se pudo autenticar, datos incorrectos.";
+            if (org.semanticwb.servlet.internal.Login.isblocked(request.getParameter("wb_username"))){
+                alert="Usuario temporalmente inhabilitado";
+            }
+            request.getSession(true).setAttribute("ErrorMsg", alert);
             response.setRenderParameter("ErrorMgs", "ok");
             response.setCallMethod(SWBResourceURL.Call_CONTENT);
             return;

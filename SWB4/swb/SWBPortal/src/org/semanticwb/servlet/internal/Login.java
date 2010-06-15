@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -38,12 +40,15 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SWBSoftkHashMap;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
+import org.semanticwb.security.limiter.BlockedList;
+import org.semanticwb.security.limiter.FailedAttempt;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Class Login.
+ * The Internal Servlet Login.
  * 
  * @author Sergio Martínez  (sergio.martinez@acm.org)
  */
@@ -56,11 +61,16 @@ public class Login implements InternalServlet
     // private static String CALLBACK = "swb4-callback";
     /** The _realm. */
     private static String _realm = "Semantic Web Builder";
+
+
     /** The _name. */
     private String _name = "login";
     /** The handle error. */
     private boolean handleError = false;
     //Constantes para primer implementación
+
+    private static SWBSoftkHashMap<String, FailedAttempt> blockedList = new SWBSoftkHashMap<String, FailedAttempt>();
+    
 
     /* (non-Javadoc)
      * @see org.semanticwb.servlet.internal.InternalServlet#init(javax.servlet.ServletContext)
@@ -183,8 +193,13 @@ public class Login implements InternalServlet
 
             } catch (LoginException ex)
             {
+                markFailedAttepmt(request.getParameter("wb_username"));
                 log.debug("Can't log User", ex);
-                doResponse(request, response, dparams, "User non existent", authMethod);
+                String alert = "User non existent";
+                if (isblocked(request.getParameter("wb_username"))){
+                    alert = "User has been temporarily blocked";
+                }
+                doResponse(request, response, dparams, alert, authMethod);
                 return;
             }
 
@@ -578,6 +593,9 @@ public class Login implements InternalServlet
 
     public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request) throws LoginException
     {
+        if (isblocked(request.getParameter("wb_username"))){
+            throw new LoginException("Login blocked for repeated attempts");
+        }
         LoginContext lc;
         User user=null;
         log.trace("Sending calback:" + callbackHandler + " " + context);
@@ -592,6 +610,40 @@ public class Login implements InternalServlet
             log.trace("user checked?:" + user.hashCode() + ":" + user.isSigned());
         }
         if(null==user.getLanguage()) user.setLanguage("es"); //forzar lenguage si no se dio de alta.
+        cleanBlockedEntry(request.getParameter("wb_username"));
         sendLoginLog(request, user);
+    }
+
+    public static void markFailedAttepmt(String login)
+    {
+        FailedAttempt failedAttempt = blockedList.get(login);
+        if (null==failedAttempt) {
+            FailedAttempt fa = new FailedAttempt(login);
+            blockedList.put(login, fa);
+            failedAttempt = fa;
+        }
+        failedAttempt.failedAttempt();
+    }
+
+    public static boolean isblocked(String login)
+    {
+        boolean ret=false;
+        FailedAttempt current = blockedList.get(login);
+        if (null!=current){
+            ret = current.isBlocked();
+            if (current.isBlocked() && current.getTsBlockedTime()+(1000*60*5)<System.currentTimeMillis()){
+                blockedList.remove(login);
+                ret=false;
+            }
+        }
+        return ret;
+    }
+
+    private static void cleanBlockedEntry(String login)
+    {
+        FailedAttempt current = blockedList.get(login);
+        if (null!=current){
+            blockedList.remove(login);
+        }
     }
 }
