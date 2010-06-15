@@ -53,6 +53,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
+        System.out.println("processAction-1");
         User user=response.getUser();
         WebSite website=response.getWebPage().getWebSite();
         if(isAcceptGuessComments() || user.isSigned())
@@ -62,16 +63,19 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             System.out.println("action:"+action);
             System.out.println("uri:"+request.getParameter("uri"));
             if(action.equals("addQuestion")){
+                System.out.println("processAction-2");
                 SWBFormMgr mgr = new SWBFormMgr(Question.forumCat_Question, getResourceBase().getSemanticObject(), SWBFormMgr.MODE_CREATE);
                 try
                 {
                     SemanticObject semObj = mgr.processForm(request);
+                    System.out.println("semObj-J creado:"+semObj);
                     Question question=(Question)semObj.createGenericInstance();
                     if (user != null && user.isSigned()) {
                         question.setCreator(user);
                     }
                     question.setForumResource(this);
                     question.setQueStatus(STATUS_REGISTERED);
+                    System.out.println("Grabo...");
                 }catch(FormValidateException e) { log.error(e); }
             }else if(action.equals("editQuestion")){
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
