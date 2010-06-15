@@ -333,33 +333,18 @@ public class WBSiteMap extends GenericAdmResource
                 }
             }
 
-            if( base.getAttribute("img")!=null ) {
-                out.println("<a href=\"" + surl +"\">");
-                out.println("<img src=\""+ webWorkPath +"/"+ base.getAttribute("img").trim() +"\"");
-                if(!"".equals(base.getAttribute("alt", "").trim())) {
-                    out.println(" alt=\"" + base.getAttribute("alt").trim() + "\"");
-                }
-                out.println(" border=\"0\"></a>");
+            if( base.getAttribute("lnktexto")!=null ) {
+                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">"+base.getAttribute("lnktexto")+"</a>");
             }else if( base.getAttribute("btntexto")!=null ) {
-                out.println("<form name=\"frmWBSiteMap\" method=\"post\" action=\"" + surl + "\">");
-                out.println("<input type=\"submit\" name=\"btnWBSiteMap\" value=\"");
-                out.println(base.getAttribute("btntexto").trim().replaceAll("\"","&#34;") + "\"");
-                if( base.getAttribute("blnstyle")!=null ) {
-                    out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
-                }
-                out.println("></form>");
-            }else {
-                out.println("<a href=\""+surl+"\"");
-                if( base.getAttribute("blnstyle")!=null ) {
-                    out.println(" style=\"" + base.getAttribute("blnstyle").trim().replaceAll("\"","&#34;") + "\"");
-                }
-                out.println(">");
-                if( base.getAttribute("lnktexto")!=null ) {
-                    out.println(base.getAttribute("lnktexto").trim());
-                }else {
-                    out.println(paramRequest.getLocaleString("msgSiteMap"));
-                }
+                out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-mapa\">");
+                out.println("  <input type=\"submit\" value=\""+base.getAttribute("btntexto")+"\" />");
+                out.println("</form>");
+            }else if( base.getAttribute("img")!=null ) {
+                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">");
+                out.println("  <img src=\""+webWorkPath+"/"+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgSiteMap"))+"\" />");
                 out.println("</a>");
+            }else {
+                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">"+paramRequest.getLocaleString("msgSiteMap")+"</a>");
             }
         }else {
             // Mapa de sitio
