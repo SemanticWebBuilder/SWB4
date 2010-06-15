@@ -51,53 +51,45 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 	border:#336699 solid 0.06em;
 	font-family:Arial;
 	font-size:1em;
-}
-.swb-menu h1{
-	background: url(bg_titulos.gif) #336699 repeat-x;
-	margin: 0 0 0.63em 0;
-	padding: 0;
-	line-height:1.56em;
-	font-size:0.88em;
-	font-weight: bold;
-	color: #FFFFFF;
-	text-align: center;
-	text-transform: capitalize;
-}
-.swb-menu h1 a:link{color: #FFFFFF;	text-decoration:none;}
-.swb-menu h1 a:visited{color: #FFFFFF; text-decoration:none;}
-.swb-menu h1 a:hover{color: #FFFFFF; text-decoration:none;}
-.swb-menu h1 a:active{color: #FFFFFF; text-decoration:none;}
-
+	}
 .swb-menu ul{
 	margin: 0;
-	padding: 0.31em;
+	padding: 0;
 	font-size: 12px;
 	list-style:none;
 	list-style-position:inside;
-	font-weight:bold;
-}
-.swb-menu a{text-decoration:none;}
+	}
 .swb-menu li {padding: 0.2em 0.3em 0.2em .5em;}
-
-.swb-menu li a:link{color: #336699;}
-.swb-menu li a:visited{color: #336699;}
-.swb-menu li a:hover{color: #3399FF;}
-.swb-menu li a:active{color: #FFFFFF;}
-
-/*HIJOS*/
 .swb-menu strong{color: #3399CC;} /*Padre seleccionada*/
 .swb-menu em{ background:#99FFFF; font-style:normal;} /*Hijo o nieto seleccionado*/
-.swb-menu ul ul {font-weight:normal} /*Descendientes de seleccionada*/
-.swb-menu li li a:link{color:#3399CC; padding-left:.5em}
-.swb-menu li li a:visited{color:#33CCFF;}
-.swb-menu li li a:hover{color: #33CCFF;}
-.swb-menu li li a:active{color:#33CCFF;}
+.swb-menu a{text-decoration:none;}
 
-/*NIETOS*/
-.swb-menu li li li a:link{color: #999999; padding-left:1em}
-.swb-menu li li li a:visited{color: #999999;}
-.swb-menu li li li a:hover{color: #666666;}
-.swb-menu li li li a:active{color: #999999;}
+/* -- PADRE -- */
+.swb-menu-pr{	font-weight:bold;}
+.swb-menu-pr a:link{color: #336699;}
+.swb-menu-pr a:visited{color: #336699;}
+.swb-menu-pr a:hover{color: #3399FF;}
+.swb-menu-pr a:active{color: #FFFFFF;}
+/* -- HIJOS -- */
+.swb-menu-ch{
+	font-weight:bold;
+	margin-left:10px;
+}
+.swb-menu-ch a:link{color: #336699;}
+.swb-menu-ch a:visited{color: #336699;}
+.swb-menu-ch a:hover{color: #3399FF;}
+.swb-menu-ch li a:active{color: #FFFFFF;}
+/* -- NIETOS -- */
+.swb-menu-gs {font-weight:normal} /*Descendientes de seleccionada*/
+.swb-menu-gs a:link{color:#3399CC; padding-left:.5em}
+.swb-menu-gs a:visited{color:#33CCFF;}
+.swb-menu-gs a:hover{color: #33CCFF;}
+.swb-menu-gs a:active{color:#33CCFF;}
+
+.swb-menu-gs li a:link{color: #999999; padding-left:1em}
+.swb-menu-gs li a:visited{color: #999999;}
+.swb-menu-gs li a:hover{color: #666666;}
+.swb-menu-gs li a:active{color: #999999;}
 /*------------------- Menu ---------*/
 
 /*------------------- Encuesta  ----*/
@@ -1170,42 +1162,57 @@ div.sitesectiontree ul.treeres {
 
 /*------Contacto---*/
 .swb-contact {
-	/*width:360px;*/
-	border:solid 0px #CCCCCC;
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
-	color:#369;
-	padding:0px;
-	margin:0px;
+    border:solid 0px #CCCCCC;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:12px;
+    color:#369;
+    padding:0px;
+    margin:0px;
 }
-swb-contact-inst {
+.swb-contact-inst {
+    font-weight: bold;
 }
 .swb-contact label {
-	border:solid 0px #999;
-	width:70px;
-	display:block;
-	float:left;
-	clear:both;
-	height:19px;
-	padding-top:4px;
-	text-align:right;
-	margin:0px 5px 0px 5px;
+    border:solid 0px #999;
+    width:70px;
+    display:block;
+    float:left;
+    clear:both;
+    height:19px;
+    padding-top:4px;
+    text-align:right;
+    margin:0px 5px 0px 5px;
 }
 .swb-contact textarea, .swb-contact-field {
-	width:270px;
-	font-family:Arial, Helvetica, sans-serif;
-	color:#369;
+    width:270px;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#369;
 }
 .swb-contact-button {
-	background-color:#336699;
-	color:#FFFFFF;
-	margin: 5px;
-	font-size:1em;
-	border:outset 1px #336699;
-	width:60px;
-	margin-right:20px;
+    background-color:#336699;
+    color:#FFFFFF;
+    margin: 5px;
+    font-size:1em;
+    border:outset 1px #336699;
+    margin-right:20px;
 }
 .swb-contact-cmd{
-	margin-left:85px;
+    margin-left:85px;
+}
+.swb-contact-fail{
+    width:270px;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#8A4B08;
+}
+.swb-contact-tks{
+    border:solid 0px #999;
+    width:70px;
+    display:block;
+    float:left;
+    clear:both;
+    height:19px;
+    padding-top:4px;
+    text-align:right;
+    margin:0px 5px 0px 5px;
 }
 /*------Contacto---*/
