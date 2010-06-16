@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Hitable,org.semanticwb.model.Sortable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Deviceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RoleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Campable,org.semanticwb.model.Priorityable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable
+public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Priorityable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Sortable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Searchable,org.semanticwb.model.Deviceable,org.semanticwb.model.Indexable,org.semanticwb.model.Hitable,org.semanticwb.model.Campable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.XMLConfable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.XMLable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Expirable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceFilter");
@@ -315,6 +315,16 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
          return ret;
     }
 
+    public String getXml()
+    {
+        return getSemanticObject().getProperty(swb_xml);
+    }
+
+    public void setXml(String value)
+    {
+        getSemanticObject().setProperty(swb_xml, value);
+    }
+
     public long getHits()
     {
         //Override this method in Resource object
@@ -325,16 +335,6 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
     {
         //Override this method in Resource object
         getSemanticObject().setLongProperty(swb_hits, value,false);
-    }
-
-    public String getXml()
-    {
-        return getSemanticObject().getProperty(swb_xml);
-    }
-
-    public void setXml(String value)
-    {
-        getSemanticObject().setProperty(swb_xml, value);
     }
 
     public String getXmlConf()
