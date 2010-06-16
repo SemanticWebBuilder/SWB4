@@ -734,7 +734,7 @@ public class SWBImportWebSite extends GenericResource {
             out.println(paramRequest.getLocaleString("usrRep")+" <em>*</em>");
             out.println("</td><td>");
             out.println("<select name=\"wsrepository\">");
-            out.println("<option value=\"0\">" + paramRequest.getLocaleLogString("Exclusive") + "</option>");
+            out.println("<option value=\"0\">" + paramRequest.getLocaleString("Exclusive") + "</option>");
             Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositories();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
@@ -760,8 +760,8 @@ public class SWBImportWebSite extends GenericResource {
             }
 
             out.println("<td colspan=\"2\" align=\"center\">");
-            out.println("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleLogString("save")+"</button>");
-            out.println("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleLogString("cancel")+"</button>");
+            out.println("<button dojoType='dijit.form.Button' type=\"submit\">"+paramRequest.getLocaleString("save")+"</button>");
+            out.println("<button dojoType='dijit.form.Button' onclick=\"dijit.byId('swbDialog').hide();\">"+paramRequest.getLocaleString("cancel")+"</button>");
             out.println("</td></tr>");
             out.println("</table>");
             out.println("</fieldset>");
