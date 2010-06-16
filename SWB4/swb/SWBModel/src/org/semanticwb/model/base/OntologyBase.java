@@ -3,6 +3,8 @@ package org.semanticwb.model.base;
 
 public abstract class OntologyBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable
 {
+    public static final org.semanticwb.platform.SemanticClass swb_OntologyDepable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#OntologyDepable");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasOntologyDependenceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasOntologyDependenceInv");
     public static final org.semanticwb.platform.SemanticClass swb_SparqlQuery=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SparqlQuery");
     public static final org.semanticwb.platform.SemanticClass swb_InfRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#InfRule");
     public static final org.semanticwb.platform.SemanticClass swb_Ontology=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Ontology");
@@ -93,6 +95,18 @@ public abstract class OntologyBase extends org.semanticwb.model.SWBModel impleme
         public static java.util.Iterator<org.semanticwb.model.Ontology> listOntologyByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Ontology> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.Ontology> listOntologyByOntologyDependence(org.semanticwb.model.OntologyDepable value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Ontology> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntologyDependenceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.Ontology> listOntologyByOntologyDependence(org.semanticwb.model.OntologyDepable value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Ontology> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntologyDependenceInv,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -212,6 +226,32 @@ public abstract class OntologyBase extends org.semanticwb.model.SWBModel impleme
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.OntologyDepable> listOntologyDependences()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.OntologyDepable>(getSemanticObject().listObjectProperties(swb_hasOntologyDependenceInv));
+    }
+
+    public boolean hasOntologyDependence(org.semanticwb.model.OntologyDepable value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasOntologyDependenceInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public org.semanticwb.model.OntologyDepable getOntologyDependence()
+    {
+         org.semanticwb.model.OntologyDepable ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasOntologyDependenceInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.OntologyDepable)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public boolean isUndeleteable()
