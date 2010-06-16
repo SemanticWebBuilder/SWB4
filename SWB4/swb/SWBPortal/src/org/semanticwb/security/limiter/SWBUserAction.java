@@ -16,8 +16,8 @@ import org.semanticwb.model.WebSite;
  *
  * @author serch
  */
-public class SWBUserAction implements UserAction {
-
+public class SWBUserAction implements UserAction
+{
     public boolean isEnabledForFileUpload(HttpServletRequest hsr)
     {
         WebSite site = SWBContext.getAdminWebSite();
