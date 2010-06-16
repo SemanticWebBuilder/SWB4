@@ -100,8 +100,6 @@ html, body, #main{
 .swbIconMenuItems,
 .swbIconMenuItem,
 .swbIconMenuItemU,
-.swbIconClass,
-.swbIconClassU,
 .swbIconReload,
 .swbIconTrash,
 .swbIconAdd,
@@ -110,6 +108,12 @@ html, body, #main{
 .swbIconCalendars,
 .swbIconCalendar,
 .swbIconCalendarU,
+
+.swbIconOntology,
+.swbIconOntologyU,
+.swbIconClass,
+.swbIconProperty,
+
 .swbIconProcess,
 .swbIconProcessU,
 .swbIconSubProcess,
@@ -187,8 +191,6 @@ html, body, #main{
 .swbIconPFlows      { background-position: -120px -0px; }
 .swbIconPFlow       { background-position: -120px -18px; }
 .swbIconPFlowU      { background-position: -120px -36px; }
-.swbIconClass       { background-position: -380px -18px; }
-.swbIconClassU      { background-position: -380px -36px; }
 .swbIconTrash       { background-position: -440px -200px; }
 .swbIconReload      { background-position: -520px -200px; }
 .swbIconDelete      { background-position: -103px -200px; }
@@ -197,6 +199,11 @@ html, body, #main{
 .swbIconCalendars   { background-position: -220px -0px; }
 .swbIconCalendar    { background-position: -220px -18px; }
 .swbIconCalendarU   { background-position: -220px -36px; }
+
+.swbIconOntology       { background-position: -380px -18px; }
+.swbIconOntologyU      { background-position: -380px -36px; }
+.swbIconClass       { background-position: -60px -90px; }
+.swbIconProperty       { background-position: -240px -90px; }
 
 .swbIconProcess   { background-position: -540px -145px; }
 .swbIconProcessU   { background-position: -540px -145px; }
