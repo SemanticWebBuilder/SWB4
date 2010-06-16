@@ -1,75 +1,103 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="post" jsframework="dojo">
-        <admdbconnmgr defconn="true"/>
+	<xslfile>admresource.xslt</xslfile>
+	<form name="frmIFrameContent" action="true" method="POST">
+		<admdbconnmgr defconn="true"/>
         <fieldset legend="Datos">
-            <input type="text" name="url" label="Url del contenido:" size="50" jsrequired="true" promptMessage="URL del archivo, absoluta o relativa a la sección" />
+            <input type="TEXT" name="url" label="Url del contenido remoto:" size="50" jsrequired="true"/>
+            <statictext name="txtTarget">Barras de desplazamiento:</statictext>
+            <input type="RADIO" name="scrollbars" label="Automático" value="auto" checked="true" />
+            <input type="RADIO" name="scrollbars" label="Sí" value="yes"/>
+            <input type="RADIO" name="scrollbars" label="No" value="no"/>
+            <input type="CHECKBOX" name="frameborder" label="Borde del frame" value="1"/>
         </fieldset>
-
         <fieldset legend="Forma y estilo">
-            <input type="text" id="width"  name="width"  label="Ancho:" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho del recuadro considerado en pixeles" />
-            <input type="text" id="height" name="height" label="Alto:"  maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Alto del recuadro considerado en pixeles" />
-
-            <select name="mimetype" id="mimetype" label="Tipo de Mime:" jsrequired="true">
-                <option value="text/html" />
-                <option value="text/richtext" />
-                <option value="text/rtf" />
-                <option value="application/rtf" />
-                <option value="application/pdf" />
-                <option value="application/vnd.sun.xml.writer" />
-                <option value="application/vnd.sun.xml.calc" />
-                <option value="application/vnd.sun.xml.impress" />
-                <option value="application/msword " />
-                <option value="application/vnd.ms-excel" />
-                <option value="application/vnd.ms-powerpoint" />
-            </select>
-
-            <input type="text" id="style" name="style" label="Estilo:" promptMessage="Estilo de la región" />
-            <input type="text" id="cssclass" name="cssclass" label="Clase CSS:" promptMessage="Nombre de la clase CSS" />
-            <statictext name="note">
-		<![CDATA[
-                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-                    * Dato requerido
-                </font>
-		]]>
-            </statictext>
+            <input type="TEXT" name="width" label="Ancho (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+            <input type="TEXT" name="height" label="Alto (pixeles o nn% para porcentaje):" size="4" maxlength="4" />
+            <input type="TEXT" name="marginwidth" label="Ancho del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="marginheight" label="Altura del margen (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
+            <input type="TEXT" name="style" label="Estilo para el frame:" size="50"/>
+            <statictext name="txtAlign">Alineación:</statictext>
+            <input type="RADIO" name="align" label="Superior" value="top"/>
+            <input type="RADIO" name="align" label="Media" value="middle"/>
+            <input type="RADIO" name="align" label="Inferior" value="bottom"/>
+            <input type="RADIO" name="align" label="Derecha" value="left"/>
+            <input type="RADIO" name="align" label="Izquierda" value="right"/>
+            <input type="RADIO" name="align" label="Centrada" value="center" checked="true" />
         </fieldset>
 
         <fieldset>
-            <statictext name="cmd">
+            <statictext name="b">
             <![CDATA[
             <button id="btnSave" type="submit" name="btnSave" dojoType="dijit.form.Button">Guardar</button>
             <button id="btnReset" type="reset" name="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
             ]]>
             </statictext>
         </fieldset>
-    </form>
-
-    <script type="text/javascript">
-        <![CDATA[
+	</form>
+	<statictext name="txtNote">
+		<![CDATA[
+			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
+				* Dato requerido
+			</font>
+		]]>
+	</statictext>
+	<script language="JavaScript">
+		<![CDATA[
         dojo.require("dijit.form.Button");
-        
         dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"),  "onSubmit", 
+            dojo.connect(dijit.byId("btnSave"), "onClick",
                 function() {
-                    if(jsValida(dojo.byId("frmAddNew")))
-                        return true;
-                    else
-                        return false;
+                    if(jsValida(dojo.byId("frmIFrameContent"))) {
+                        dojo.byId("frmIFrameContent").submit();
+                    }
                 }
             );
-            dojo.byId('mimetype').selectedIndex=0;
+        });
+        dojo.addOnLoad(function(){
+            dojo.connect(dijit.byId("btnReset"), "onClick",
+                function() {
+                    dojo.byId("frmIFrameContent").reset();
+                }
+            );
         });
 
         function jsValida(frm) {
-            if( frm.mimetype.selectedIndex<0 ) {
-                alert('Falta seleccionar un tipo MIME.');
-                frm.mimetype.focus();
+            if( frm.height.value.length>0 && isNaN(parseInt(frm.height.value, 10)) ) {
+                alert('Alto debe ser numérico.');
+                frm.height.focus();
                 return false;
             }
+            if(frm.height.value < 0) {
+                alert("Alto debe ser mayor que cero.");
+                frm.height.focus();
+                return false;
+            }
+
+            if( frm.marginwidth.value.length>0 && isNaN(parseInt(frm.marginwidth.value, 10)) ) {
+                alert('Ancho del margen debe ser numérico.');
+                frm.marginwidth.focus();
+                return false;
+            }
+            if(frm.marginwidth.value < 0) {
+                alert("Ancho del margen debe ser mayor que cero.");
+                frm.marginwidth.focus();
+                return false;
+            }
+
+            if( frm.marginheight.value.length>0 && isNaN(parseInt(frm.marginheight.value, 10)) ) {
+                alert('Altura del margen debe ser numérico.');
+                frm.marginheight.focus();
+                return false;
+            }
+            if(frm.marginheight.value < 0) {
+                alert("Altura del margen debe ser mayor que cero.");
+                frm.marginheight.focus();
+                return false;
+            }
+
             return true;
         }
-    ]]>
-    </script>
+		]]>
+	</script>
 </admresource>
