@@ -6,6 +6,7 @@
     - Se validó comparación de password con diferentes digest (Soporte a versiones anteriores) (Serch)
     - Validación de intentos fallidos de autenticación (Serch)
     - Mostrar información de la instancia en el Monitoreo de Memoria (Serch)
+    - Wrapper fckEditor (Serch)
 
   4.0.1.4  31/05/2010
     
