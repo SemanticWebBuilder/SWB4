@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
@@ -237,6 +238,11 @@ public class SWBFormMgr
             //System.out.println("add:"+prop);
             addProperty(prop,filterRequired);
         }
+    }
+
+    public String getLocaleString(String key, String lang)
+    {
+        return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
     }
 
     /**
@@ -460,8 +466,7 @@ public class SWBFormMgr
         if(m_type.equals(TYPE_IPHONE))IPHONE=true;
 
         StringBuffer ret=new StringBuffer();
-        String sid="Identificador";
-        if(m_lang.equals("en"))sid="Identifier";
+        String sid=getLocaleString("identifier",m_lang);
         String model=m_ref.getModel().getName();
         String clsid=m_cls.getClassId();
         ret.append("	    <tr><td align=\"right\">\n");
@@ -590,8 +595,7 @@ public class SWBFormMgr
 
         if(!m_mode.equals(MODE_CREATE))
         {
-            String sid="Identificador";
-            if(m_lang.equals("en"))sid="Identifier";
+            String sid=getLocaleString("identifier",m_lang);
             ret.append("	<fieldset>\n");
             ret.append("	    <table><tr><td width=\"200px\" align=\"right\">\n");
             ret.append("                <label>"+sid+" &nbsp;</label>\n");
@@ -1151,18 +1155,13 @@ public class SWBFormMgr
         ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");
                 ret.append("<img src=\""+SWBPlatform.getContextPath()+"/frmprocess/requestCaptcha\" style=\"float:left;margin-left: 5px;margin-right: 30px;\" id=\"captchaimg\" />");
                 ret.append("<a onclick=\"document.getElementById('captchaimg').src='"+SWBPlatform.getContextPath()+
-                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">Cambiar im&aacute;gen</a><br/>");
+                        "/frmprocess/requestCaptcha?'+ Math.random(); document.getElementById('frmCaptchaValue').value=''; return false;\">"+getLocaleString("captchachgImg",m_lang)+"</a><br/>");
                 ret.append("<input name=\"frmCaptchaValue\" id=\"frmCaptchaValue\"  ");
 
                 if (isdojo) {
-                    String required="La validaci&oacute;n es requerida";
-                    String pmsg="Captura los caracteres en la im&aacute;gen";
-                    String imsg="Captura los caracteres en la im&aacute;gen";
-                    if (m_lang.equals("en")) {
-                        required="Validation required";
-                     pmsg="Type the characters in the image";
-                     imsg="Type the characters in the image";
-                    }
+                    String required=getLocaleString("required",m_lang);
+                    String pmsg=getLocaleString("captchapmsg",m_lang);
+                    String imsg=getLocaleString("captchaimsg",m_lang);
                     ret.append(" dojoType=\"dijit.form.ValidationTextBox\"");
                     ret.append(" required=\"" + required + "\"");
                     ret.append(" promptMessage=\"" + pmsg + "\"");
