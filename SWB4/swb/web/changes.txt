@@ -7,6 +7,19 @@
     - Validación de intentos fallidos de autenticación (Serch)
     - Mostrar información de la instancia en el Monitoreo de Memoria (Serch)
     - Wrapper fckEditor (Serch)
-
+    - Se corrigió la hoja de transformación admresource.xslt para la administración genérica de recursos
+    - Se corrigieron algunos controles FE de la administración genérica de recursos.
+    - Se agregó soporte para accesiblidad al recurso Banner
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso Banner
+    - Se mejoró la validación de campos en la administración del recurso Banner
+    - Se agregó hoja de transformación xsl al recurso Contact
+    - Se agregó soporte para accesiblidad al recurso Contact
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso Contact
+    - Se mejoró la validación de campos en la administración del recurso Contact
+    - Se agregó hoja de transformación xsl al recurso WBSiteMap
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBSiteMap
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenu
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenuMap
+    - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenuNivel
   4.0.1.4  31/05/2010
     
