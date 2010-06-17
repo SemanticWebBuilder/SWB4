@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.model.SWBVocabulary"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page contentType="text/html"%>
@@ -25,16 +26,33 @@
     SemanticClass cls=new SemanticClass(ont.getRDFOntModel().getOntClass(suri));
 
 
-    if(act.equals("newprop"))
+    if(act.equals("addnewprop"))
+    {
+
+        //st = m.createStatement(res, m.getProperty(SemanticVocabulary.RDF_TYPE), m.getResource(SemanticVocabulary.OWL_CLASS));
+
+    } else if(act.equals("newprop"))
     {
         //out.println("Nueva propiedad para la clase");
         out.println("<form id=\"\" action=\""+actform+"\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\">");
         out.println("<input type=\"hidden\" name=\"act\" value=\"addnewprop\">");
-        out.println("<input type=\"text\" name=\"_pname\">");
-        out.println("<select name=\"_stype\">");
+        out.println("<div>");
+        out.println("<label for=\"_pname\">Property name:</label><input type=\"text\" name=\"_pname\"><br/>");
+        out.println("<label for=\"_stype\">Property type:</label><select name=\"_stype\">");
         out.println("   <option value=\"0\">Select prop type</option>");
-        out.println("</select>");
+        SemanticClass clsprop=new SemanticClass(ont.getRDFOntModel().getOntClass(SWBPlatform.getSemanticMgr().getVocabulary().RDF_PROPERTY));
+        //OntClass ontcls=ont.getRDFOntModel().getOntClass(SWBPlatform.getSemanticMgr().getVocabulary().RDF_PROPERTY);
+
+        //Iterator<OntProperty> itontprop = ontcls.listDeclaredProperties();
+        Iterator<SemanticProperty> it = clsprop.listProperties();
+        while (it.hasNext())
+        {
+            SemanticProperty semprop = it.next();
+            out.println("   <option value=\""+semprop.getURI()+"\">"+semprop.getPropId()+"</option>");
+        }
+        
+        out.println("</select><br/><br/>");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"button\"><span>Add</span>");
         out.println("<script type=\"dojo/method\" event=\"onClick\">");
         //out.println("   submit();");
@@ -46,6 +64,7 @@
         out.println("   hideDialog();return false;");
         out.println("</script>");
         out.println("</button>");
+        out.println("</div");
         out.println("</form>");
 
     }
