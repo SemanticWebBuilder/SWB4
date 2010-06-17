@@ -76,8 +76,8 @@ a:hover {text-decoration: underline;}
         <div class="innerContent">
            <div id="WBForo">
                <p class="agregarContenido">
-                   <%if(user!=null && user.isRegistered()){%><a href="<%=urlthread%>"><%=paramRequest.getLocaleLogString("publicThread")%></a><%}else
-                   {%><%=paramRequest.getLocaleLogString("signintopost")%><%}%>
+                   <%if(user!=null && user.isRegistered()){%><a href="<%=urlthread%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
+                   {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
                </p>
             <!-- INICIA ENTRADA -->
             <div class="entradaForo">
@@ -88,19 +88,19 @@ a:hover {text-decoration: underline;}
               <p class="tituloNoticia"><a href="#"><%=autor%></a></p>
               <p><%=thread.getBody()%></p>
               <div class="vistasForo">
-                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleLogString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleLogString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleLogString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleLogString("visites")%>" width="10" height="9" />
+                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" />
                  <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editThread");%>
                  <a href="<%=urlthread%>">
-                     <%=paramRequest.getLocaleLogString("edit")%>
+                     <%=paramRequest.getLocaleString("edit")%>
                  </a>
-                 <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleLogString("edit")%>" width="7" height="15" />
+                 <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
                  <%}%>
                  <%if(isTheAuthor || isforumAdmin){%>|  <%url.setAction("removePost");url.setParameter("isthread", "1");
                          %> 
                 <a href="<%=url%>">
-                    <%=paramRequest.getLocaleLogString("remove")%>
+                    <%=paramRequest.getLocaleString("remove")%>
                 </a>
-                <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleLogString("remove")%>" width="11" height="12" /></p>
+                <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p>
                 <%}%>
               </div>
               <p>&nbsp;</p>
@@ -165,17 +165,17 @@ a:hover {text-decoration: underline;}
                             if((user!=null && user.isRegistered()) || acceptguesscomments){
                           %>
                             <a href="<%=urlthread%>">
-                              <%=paramRequest.getLocaleLogString("comment")%>
-                            </a><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleLogString("comment")%>" width="14" height="12" />
+                              <%=paramRequest.getLocaleString("comment")%>
+                            </a><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("comment")%>" width="14" height="12" />
                            <%}%>
                            <%if(isTheAuthor || isforumAdmin){%> |  <%urlthread.setMode("editPost");%>
                           <a href="<%=urlthread%>">
-                              <%=paramRequest.getLocaleLogString("edit")%>
-                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleLogString("edit")%>" width="7" height="15" />
+                              <%=paramRequest.getLocaleString("edit")%>
+                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/editar_foro.png" alt="<%=paramRequest.getLocaleString("edit")%>" width="7" height="15" />
                           <%if(isTheAuthor || isforumAdmin){%> |  <%url.setAction("removePost");%><%}%>
                           <a href="<%=urlRemovePost%>">
-                              <%=paramRequest.getLocaleLogString("remove")%>
-                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleLogString("remove")%>" width="11" height="12" /></p><%}%>
+                              <%=paramRequest.getLocaleString("remove")%>
+                          </a> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/eliminar_foro.png" alt="<%=paramRequest.getLocaleString("remove")%>" width="11" height="12" /></p><%}%>
                       </div>
                     </div>
                     <%
@@ -192,22 +192,22 @@ a:hover {text-decoration: underline;}
             %>
               <table class="eliminarDatos">
                   <caption>
-                    <%=paramRequest.getLocaleLogString("threadData")%>
+                    <%=paramRequest.getLocaleString("threadData")%>
                   </caption>
 
                 <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("thread")%></th>
+                    <th><%=paramRequest.getLocaleString("thread")%></th>
                     <td><%=thread.getTitle()%></td>
                   </tr>
                   <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("msg")%></th>
+                    <th><%=paramRequest.getLocaleString("msg")%></th>
                     <td><%=thread.getBody()%></td>
                   </tr>
                   <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("autor")%></th>
+                    <th><%=paramRequest.getLocaleString("autor")%></th>
                     <td>
                     <%if (thread.getCreator() != null) {%>
                      <%=thread.getCreator().getName()%>
@@ -216,7 +216,7 @@ a:hover {text-decoration: underline;}
                   </tr>
                   <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("noMsgs")%></th>
+                    <th><%=paramRequest.getLocaleString("noMsgs")%></th>
                     <td>
                       <%
                         int postSize = 0;
@@ -231,7 +231,7 @@ a:hover {text-decoration: underline;}
                   </tr>
                   <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("noAttachments")%></th>
+                    <th><%=paramRequest.getLocaleString("noAttachments")%></th>
                     <td>
                        <%
                         int attchmentsSize = 0;
@@ -246,7 +246,7 @@ a:hover {text-decoration: underline;}
                   </tr>
                   <tr>
                     <td><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                    <th><%=paramRequest.getLocaleLogString("totAttach")%></th>
+                    <th><%=paramRequest.getLocaleString("totAttach")%></th>
                     <td>
                         <%
                         int attchmentsTotSize = attchmentsSize;
@@ -261,8 +261,8 @@ a:hover {text-decoration: underline;}
                   <form name="removeThread" action="<%=actionURL.toString()%>">
                     <input type="hidden" name="threadUri" value="<%=thread.getURI()%>">
                     <input type="hidden" name="forumUri" value="<%=request.getParameter("forumUri")%>">
-                    <tr class="pluginRow1"><td><input type="submit" value="<%=paramRequest.getLocaleLogString("remove")%>"></td>
-                        <td><input type="button" value="<%=paramRequest.getLocaleLogString("cancel")%>" onClick="retorna(this.form);"></td>
+                    <tr class="pluginRow1"><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
+                        <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
                     </tr>
                  </form>
                 </table>
@@ -277,7 +277,7 @@ a:hover {text-decoration: underline;}
                             <tr>
                                 <td class="pluginBreadCrumbs alignleft" style="padding-left:5px;" nowrap></td>
                                 <td width="90%" class="alignright pluginBreadCrumbs" nowrap><!-- start subscribe.thtml -->
-                                    <%=paramRequest.getLocaleLogString("PostData")%>
+                                    <%=paramRequest.getLocaleString("PostData")%>
                                 </td>
                                 <td class="pluginBreadCrumbs" nowrap>&nbsp; &nbsp;</td>
                                 <td class="pluginBreadCrumbs" style="padding-right:5px;" nowrap><!-- start print.thtml -->
@@ -292,7 +292,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("thread")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("thread")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -303,7 +303,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("msg")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("msg")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -314,7 +314,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("autor")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("autor")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -356,7 +356,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("noResponse")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noResponse")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -367,7 +367,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("TotReply")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("TotReply")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -378,7 +378,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("noAttachments")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("noAttachments")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -389,7 +389,7 @@ a:hover {text-decoration: underline;}
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td width="8" class="aligncenter"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/icon_minipost.gif"></td>
-                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleLogString("totAttach")%></b></td>
+                                            <td height="30" style="padding-left:6px; padding-right:6px;"><b><%=paramRequest.getLocaleString("totAttach")%></b></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -399,8 +399,8 @@ a:hover {text-decoration: underline;}
                             <form name="removePost" action="<%=actionURL.toString()%>">
                                 <input type="hidden" name="postUri" value="<%=post.getURI()%>">
                                 <input type="hidden" name="threadUri" value="<%=request.getParameter("threadUri")%>">
-                                <tr><td><input type="submit" value="<%=paramRequest.getLocaleLogString("remove")%>"></td>
-                                    <td><input type="button" value="<%=paramRequest.getLocaleLogString("cancel")%>" onClick="retorna(this.form);"></td>
+                                <tr><td><input type="submit" value="<%=paramRequest.getLocaleString("remove")%>"></td>
+                                    <td><input type="button" value="<%=paramRequest.getLocaleString("cancel")%>" onClick="retorna(this.form);"></td>
                                 </tr>
                             </form>
                         </table>
@@ -423,8 +423,8 @@ a:hover {text-decoration: underline;}
              <div class="innerContent">
                 <div id="WBForo">
                     <p class="agregarContenido">
-                        <%if(user!=null && user.isRegistered()){%><a href="<%=url%>"><%=paramRequest.getLocaleLogString("publicThread")%></a><%}else
-                        {%><%=paramRequest.getLocaleLogString("signintopost")%><%}%>
+                        <%if(user!=null && user.isRegistered()){%><a href="<%=url%>"><%=paramRequest.getLocaleString("publicThread")%></a><%}else
+                        {%><%=paramRequest.getLocaleString("signintopost")%><%}%>
                     </p>
                     <%
                     autor = "";
@@ -483,16 +483,16 @@ a:hover {text-decoration: underline;}
                                     date=SWBUtils.TEXT.getTimeAgo(thread.getLastPostDate(), user.getLanguage());
                                 }
                                 %>
-                                <p><%=paramRequest.getLocaleLogString("lastcomment")%>:
+                                <p><%=paramRequest.getLocaleString("lastcomment")%>:
                                 <%
                                 if(date!=null){
                                 %>
                                     <%=date%>
-                                <%}else{%><%=paramRequest.getLocaleLogString("nocomments")%><%}%>
+                                <%}else{%><%=paramRequest.getLocaleString("nocomments")%><%}%>
                                 </p>
                             </div>
                             <div class="vistasForo">
-                                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleLogString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleLogString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleLogString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleLogString("visites")%>" width="10" height="9" /></p>
+                                <p> (<%=thread.getReplyCount()%>) <%=paramRequest.getLocaleString("responses")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/commentsForo.png" alt="<%=paramRequest.getLocaleString("responses")%>" width="14" height="12" /> |  (<%=thread.getViewCount()%>) <%=paramRequest.getLocaleString("visites")%> <img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/viewsForo.png" alt="<%=paramRequest.getLocaleString("visites")%>" width="10" height="9" /></p>
                             </div>
                             <div class="clearNosp">&nbsp;</div>                        
                        </div>
