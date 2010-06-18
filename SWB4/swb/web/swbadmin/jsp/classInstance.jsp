@@ -19,7 +19,9 @@
     String pathView=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
 
     //out.println(suri+" "+Thread.currentThread().getName());
-    SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    //SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
+    
     OntClass cls=ont.getRDFOntModel().getOntClass(suri);
 %>
     <table width="100%">
