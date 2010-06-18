@@ -23,6 +23,7 @@
  
 package org.semanticwb.portal.admin.resources;
 
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -58,6 +59,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
     
     /** The US e_ add. */
     static String USE_ADD = "useadd";
+
+    /** The US e_ global. */
+    static String USE_GLOBAL = "useglobal";
     
     /** The DE l_ so. */
     static String DEL_SO = "delso";
@@ -108,6 +112,14 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         if(base.getAttribute(USE_ADD)==null&&base.getAttribute(USE_SELECT)==null){
             base.setAttribute(USE_ADD, "0");
             base.setAttribute(USE_SELECT, "1");
+            try {
+                base.updateAttributesToDB();
+            } catch (Exception e) {log.error(e);
+            }
+        }
+
+        if(base.getAttribute(USE_GLOBAL)==null){
+            base.setAttribute(USE_GLOBAL, "0");
             try {
                 base.updateAttributesToDB();
             } catch (Exception e) {log.error(e);
@@ -639,6 +651,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 urlDAll.setParameter("sprop", idp);
                 urlDAll.setParameter("spropref", idpref);
                 urlDAll.setParameter("sval", "remove");
+                urlDAll.setParameter(prop.getName(), prop.getURI());
                 urlDAll.setAction("deleteall");
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQremoveAll")+"?')){submitUrl('" + urlDAll + "',this.domNode);} return false;\">" + paramRequest.getLocaleString("btn_dallnew") + "</button>");
             }
@@ -893,7 +906,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             log.debug("choose:" + clsprop.getName() + ", " + idp);
 
             SWBResourceURL urladd = paramRequest.getActionUrl();
-            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity")) || (idp.endsWith("hasAdminFilter"))) {
+            if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup))|| (idp.endsWith("hasProcessActivity")) || (idp.endsWith("hasAdminFilter")) || (idp.endsWith("hasOntology"))) {
                 urladd.setAction("choose");
             } else {
                 urladd.setAction("new");
@@ -951,6 +964,23 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                 itso = obj.getModel().listInstancesOfClass(clsprop);
             }
 
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            if(base.getAttribute(USE_GLOBAL, "0").equals("1"))
+            {
+                HashMap hmso = new HashMap();
+                Iterator<Ontology> itont = SWBComparator.sortSermanticObjects(user.getLanguage(), SWBContext.listOntologies());
+                while(itont.hasNext())
+                {
+                    Ontology ontology = itont.next();
+
+                    hmso.put(ontology.getSemanticObject(),ontology.getSemanticObject());
+                    itso = hmso.values().iterator();
+                }
+            }
+
+            /////////////////////////////////////////////////////
+
             int numrols = 0;
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
@@ -962,7 +992,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
                     out.println("<tr>");
                     out.println("<td>" + stitle + "</td> ");
                     SWBResourceURL urlchoose = paramRequest.getActionUrl();
-                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))|| (idp.endsWith("hasAdminFilter"))) {
+                    if ((idp.endsWith("hasRole") && clsprop.equals(Role.swb_Role)) || (idp.endsWith("hasUserGroup") && clsprop.equals(UserGroup.swb_UserGroup)) || (idp.endsWith("hasProcessActivity"))|| (idp.endsWith("hasAdminFilter"))|| (idp.endsWith("hasOntology"))) {
                         urlchoose.setAction("choose");
                         urlchoose.setParameter("suri", id);
                     } else {
@@ -1420,7 +1450,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
 
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
-                if (obj.getSemanticClass().equals(User.swb_User)) {
+                if (obj.getSemanticClass().equals(User.swb_User)||(obj.getSemanticClass().equals(WebSite.swb_WebSite)&&sp.getName().endsWith("hasOntology"))) {
                     obj.removeObjectProperty(sp, sobj);
                 } else {
                     sobj.remove();
