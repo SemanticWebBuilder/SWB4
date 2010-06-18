@@ -2,13 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="html" version="1.0" encoding="ISO-8859-1" indent="yes"/>
     <xsl:template match="/admresource">
-        <script type="text/javascript">
-            dojo.require("dijit.form.Form");
-            dojo.require("dijit.form.ValidationTextBox");
-            dojo.require("dijit.form.TextBox");
-            dojo.require("dijit.form.SimpleTextarea");
-            dojo.require("dijit.form.FilteringSelect");
-        </script>
         <div class="swbform">
         <!--table width="100%"  border="0" cellpadding="5" cellspacing="0"-->
 		<xsl:apply-templates />
