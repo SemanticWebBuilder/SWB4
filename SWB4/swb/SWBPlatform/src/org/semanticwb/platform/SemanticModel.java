@@ -213,18 +213,12 @@ public class SemanticModel
     {
         if(m_ont==null)
         {
-            m_ont=ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF);
-            //Load Ontology from file
-            //TODO:extraer es de un modelo ya existente
-//            StringTokenizer st=new StringTokenizer(owls,",;");
-//            while(st.hasMoreTokens())
-//            {
-//                String file=st.nextToken();
-//                String swbowl="file:"+SWBUtils.getApplicationPath()+file;
-//                Model model=SWBPlatform.getSemanticMgr().loadRDFFileModel(swbowl);
-//                m_ont.add(model);
-//            }
-            m_ont.addSubModel(m_model,true);
+            m_ont=ModelFactory.createOntologyModel(SWBPlatform.getSemanticMgr().getModelSpec(),m_model);
+            Iterator<SemanticModel> it=SWBPlatform.getSemanticMgr().listBaseModels();
+            while (it.hasNext()) {
+                SemanticModel model = it.next();
+                m_ont.addSubModel(model.getRDFModel());
+            }
         }
         return m_ont;
     }

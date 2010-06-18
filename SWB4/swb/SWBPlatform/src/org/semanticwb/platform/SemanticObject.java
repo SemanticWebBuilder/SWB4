@@ -705,7 +705,7 @@ public class SemanticObject
                 if(stm!=null)
                 {
                     m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
-                    if(m_cls.isSWBClass())
+                    if(m_cls!=null && m_cls.isSWBClass())
                     {
                         break;
                     }

@@ -264,16 +264,29 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
 
     /**
      * Filter properties.
+     *
+     * @param tpc the tpc
+     */
+    private void filterProperties()
+    {
+        //System.out.println("filterProperties");
+        Iterator<SemanticClass> tpcit=listSemanticClasses();
+        while(tpcit.hasNext())
+        {
+            SemanticClass tpc=tpcit.next();
+            filterProperties(tpc);
+        }
+    }
+
+
+    /**
+     * Filter properties.
      * 
      * @param tpc the tpc
      */
     private void filterProperties(SemanticClass tpc)
     {
         //System.out.println("filterProperties");
-//        Iterator<SemanticClass> tpcit=listSemanticClasses();
-//        while(tpcit.hasNext())
-//        {
-//            SemanticClass tpc=tpcit.next();
         Iterator<SemanticProperty> tppit = tpc.listProperties();
         while (tppit.hasNext())
         {
@@ -287,7 +300,6 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
                 tpc.inverseHerarquicalProps.remove(tpp);
             }
         }
-//        }
     }
 
     /**
