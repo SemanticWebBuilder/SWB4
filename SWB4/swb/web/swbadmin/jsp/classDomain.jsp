@@ -22,7 +22,9 @@
     String actform = SWBPlatform.getContextPath()+"/swbadmin/jsp/classDomain.jsp";
 
     //out.println(suri+" "+Thread.currentThread().getName());
-    SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    //SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
+
     SemanticClass cls=new SemanticClass(ont.getRDFOntModel().getOntClass(suri));
 
 
