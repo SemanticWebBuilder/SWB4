@@ -157,7 +157,9 @@
     String pathView=SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp";
 
     //out.println("suri:"+suri);
-    SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    //SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
+
     Resource res=SWBPlatform.JENA_UTIL.getBaseModelResource(suri, ont.getRDFOntModel());
     //out.println("res:"+res);
     boolean isbase=SWBPlatform.JENA_UTIL.isInBaseModel(res,ont.getRDFOntModel());
