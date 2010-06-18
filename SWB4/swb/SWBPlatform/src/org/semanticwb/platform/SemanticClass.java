@@ -30,8 +30,6 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 
-import com.hp.hpl.jena.ontology.OntProperty;
-import com.hp.hpl.jena.ontology.Restriction;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -44,7 +42,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.Vector;
 import org.semanticwb.*;
 import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericIterator;
@@ -479,7 +476,7 @@ public class SemanticClass
      */
     public Iterator<SemanticClass> listModelClasses()
     {
-        Iterator ret=(new Vector()).iterator();
+        Iterator ret=(new ArrayList()).iterator();
         if(isSWBModel()==true)
         {
             Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_HASCLASS).getRDFProperty();
@@ -495,7 +492,7 @@ public class SemanticClass
      */
     public Iterator<SemanticObject> listHerarquicalNodes()
     {
-        Iterator ret=(new Vector()).iterator();
+        Iterator ret=(new ArrayList()).iterator();
         if(isSWBModel()==true)
         {
             Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_HASHERARQUICALNODE).getRDFProperty();

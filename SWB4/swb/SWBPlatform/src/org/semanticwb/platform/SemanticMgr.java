@@ -47,12 +47,16 @@ import com.hp.hpl.jena.sdb.StoreDesc;
 import com.hp.hpl.jena.sdb.Store;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.rdf.model.NsIterator;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
+import com.hp.hpl.jena.vocabulary.RDFS;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -103,7 +107,8 @@ public class SemanticMgr implements SWBInstanceObject
         /** The DAM l_ me m_ rdf s_ inf. */
         DAML_MEM_RDFS_INF,
         /** The OW l_ d l_ me m_ rdf s_ inf. */
-        OWL_DL_MEM_RDFS_INF;
+        OWL_DL_MEM_RDFS_INF,
+        OWL_MEM_RDFS_INF;
     }
     /** The model schema. */
     private static ModelSchema modelSchema = ModelSchema.OWL_MEM_TRANS_INF;
@@ -130,12 +135,15 @@ public class SemanticMgr implements SWBInstanceObject
     //private HashMap<String,SemanticModel> m_schemas;
     /** The m_schema. */
     private SemanticOntology m_schema;
-    /** The m_models. */
+    /** The models */
     private HashMap<String, SemanticModel> m_models = null;
-    /** The m_nsmodels. */
+    /** The namespace related models. */
     private HashMap<String, SemanticModel> m_nsmodels = null;
-    /** The m_imodels. */
+    /** The interenal related models. */
     private HashMap<Model, SemanticModel> m_imodels = null;
+    /** The Base Models */
+    private HashMap<String, SemanticModel> m_bmodels = null;
+
     /** The conn. */
     private IDBConnection conn;
     /** The maker. */
@@ -154,6 +162,51 @@ public class SemanticMgr implements SWBInstanceObject
     /* (non-Javadoc)
      * @see org.semanticwb.platform.SWBInstanceObject#init()
      */
+
+    public OntModelSpec getModelSpec()
+    {
+        OntModelSpec modelSpec = OntModelSpec.OWL_MEM_TRANS_INF;
+        //Create Schema
+        switch (modelSchema) {
+            case OWL_MEM:
+                modelSpec = OntModelSpec.OWL_MEM;
+                break;
+            case OWL_DL_MEM_RDFS_INF:
+                modelSpec = OntModelSpec.OWL_DL_MEM_RDFS_INF;
+                log.event("ModelSpecification: OWL_DL_MEM_RDFS_INF");
+                break;
+            case OWL_MEM_TRANS_INF:
+                modelSpec = OntModelSpec.OWL_MEM_TRANS_INF;
+                log.event("ModelSpecification: OWL_MEM_TRANS_INF");
+                break;
+            case OWL_MEM_MINI_RULE_INF:
+                modelSpec = OntModelSpec.OWL_MEM_MINI_RULE_INF;
+                log.event("ModelSpecification: OWL_MEM_MINI_RULE_INF");
+                break;
+            case OWL_MEM_RDFS_INF:
+                modelSpec = OntModelSpec.OWL_MEM_RDFS_INF;
+                log.event("ModelSpecification: OWL_MEM_RDFS_INF");
+                break;
+            case RDFS_MEM_RDFS_INF:
+                modelSpec = OntModelSpec.RDFS_MEM_RDFS_INF;
+                log.event("ModelSpecification: RDFS_MEM_RDFS_INF");
+                break;
+            case DAML_MEM_RDFS_INF:
+                modelSpec = OntModelSpec.DAML_MEM_RDFS_INF;
+                log.event("ModelSpecification: DAML_MEM_RDFS_INF");
+                break;
+            case OWL_LITE_MEM_RDFS_INF:
+                modelSpec = OntModelSpec.OWL_LITE_MEM_RDFS_INF;
+                log.event("ModelSpecification: OWL_LITE_MEM_RDFS_INF");
+                break;
+            default:
+                modelSpec = OntModelSpec.OWL_MEM_TRANS_INF;
+                log.event("ModelSpecification: OWL_MEM_TRANS_INF");
+        }
+        return modelSpec;
+    }
+
+
     public void init() {
         log.event("Initializing SemanticMgr...");
 
@@ -162,58 +215,38 @@ public class SemanticMgr implements SWBInstanceObject
         m_models = new HashMap();                     //Arreglo de SemanticModel por name
         m_nsmodels = new HashMap();                   //Arreglo de SemanticModel por NS
         m_imodels = new HashMap();                    //Arreglo de RDFModel
+        m_bmodels = new HashMap();                    //Arreglo de RDFModel
         //m_schemas=new HashMap();
         m_observers = new ArrayList();
 
-        OntModelSpec model = OntModelSpec.OWL_MEM_TRANS_INF;
+        OntModelSpec modelSpec = getModelSpec();
+
         //Create Schema
-        switch (modelSchema) {
-            case OWL_MEM:
-                model = OntModelSpec.OWL_MEM;
-                break;
-            case OWL_DL_MEM_RDFS_INF:
-                model = OntModelSpec.OWL_DL_MEM_RDFS_INF;
-                break;
-            case OWL_MEM_TRANS_INF:
-                model = OntModelSpec.OWL_MEM_TRANS_INF;
-                break;
-            case OWL_MEM_MINI_RULE_INF:
-                model = OntModelSpec.OWL_MEM_MINI_RULE_INF;
-                break;
-            case RDFS_MEM_RDFS_INF:
-                model = OntModelSpec.RDFS_MEM_RDFS_INF;
-                break;
-            case DAML_MEM_RDFS_INF:
-                model = OntModelSpec.DAML_MEM_RDFS_INF;
-                break;
-            case OWL_LITE_MEM_RDFS_INF:
-                model = OntModelSpec.OWL_LITE_MEM_RDFS_INF;
-                break;
-            default:
-                model = OntModelSpec.OWL_MEM_TRANS_INF;
-        }
-        //Create Schema
-        m_schema = new SemanticOntology("SWBSquema", ModelFactory.createOntologyModel(model));
+        m_schema = new SemanticOntology("SWBSquema", ModelFactory.createOntologyModel(modelSpec));
+        //System.out.println("p2");
+
         //Create Ontology
-        m_ontology = new SemanticOntology("SWBOntology", ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM));
+        m_ontology = new SemanticOntology("SWBOntology", ModelFactory.createOntologyModel(OntModelSpec.OWL_LITE_MEM));
         //m_ontology = new SemanticOntology("SWBOntology",ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_RDFS_INF));
+        //System.out.println("p3");
 
         //Agrega ontologia a los modelos
         SemanticModel ontModel = new SemanticModel("swb_ontology", m_ontology.getRDFOntModel());
-//        m_models.put("swb_ontology", ontModel);
         m_imodels.put(ontModel.getRDFModel(), ontModel);
+        //System.out.println("p4");
 
         //Agrega squema a los modelos
         SemanticModel ontSchemaModel = new SemanticModel("swb_schema", m_schema.getRDFOntModel());
-//        m_models.put("swb_schema", ontSchemaModel);
         //para busqueda inversa
         m_imodels.put(ontSchemaModel.getRDFModel(), ontSchemaModel);
+        //System.out.println("p5");
     }
 
     /**
      * Initialize db.
      */
     public void initializeDB() {
+        //System.out.println("initializeDB");
         DBConnectionPool pool = SWBUtils.DB.getDefaultPool();
 //        String M_DB_URL         = pool.getURL();
 //        String M_DB_USER        = pool.getUser();
@@ -292,10 +325,9 @@ public class SemanticMgr implements SWBInstanceObject
     public SemanticModel addBaseOntology(String owlPath) {
         Model model = SWBPlatform.getSemanticMgr().loadRDFFileModel(owlPath);
         SemanticModel smodel = new SemanticModel(new File(owlPath).getName(), model);
-//            m_models.put(owlf.getName(),smodel);
-//            m_imodels.put(model, smodel);
         getSchema().addSubModel(smodel, false);
         getOntology().addSubModel(smodel, false);
+        m_bmodels.put(smodel.getName(), smodel);
 
         //agregar todos los NS del schema
         Iterator it = smodel.getRDFModel().getNsPrefixMap().values().iterator();
@@ -314,12 +346,18 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public void loadBaseVocabulary() {
         //Create Vocabulary
+        //System.out.println("Loading voc...");
         vocabulary = new SemanticVocabulary();
+
+        //m_schema.getRDFOntModel().listStatements(null, RDF.type, RDFS.Class);
+
         Iterator<SemanticClass> tpcit = new SemanticClassIterator(m_schema.getRDFOntModel().listClasses());
         while (tpcit.hasNext()) {
             SemanticClass cls = tpcit.next();
+            //System.out.println("register class:"+cls);
             vocabulary.registerClass(cls);
         }
+        //System.out.println("voc ini");
         vocabulary.init();
     }
 
@@ -587,6 +625,11 @@ public class SemanticMgr implements SWBInstanceObject
         return m_imodels.get(model);
     }
 
+    public Iterator<SemanticModel> listBaseModels()
+    {
+        return m_bmodels.values().iterator();
+    }
+
     /**
      * Load db models.
      */
@@ -729,7 +772,29 @@ public class SemanticMgr implements SWBInstanceObject
                 }
             }
         }
-        SemanticModel m = new SemanticModel(name, model);
+        SemanticModel m = null;
+        //Verificar si es una ontologia
+        Resource res=model.getResource(model.getNsPrefixURI(name)+name);
+        //System.out.println("uri:"+model.getNsPrefixURI(name)+name);
+        StmtIterator it=res.listProperties(model.getProperty(SemanticVocabulary.RDF_TYPE));
+        while(it.hasNext())
+        {
+            Statement stm=it.next();
+            Resource type=stm.getResource();
+            //System.out.println("Type:"+type);
+            if(type!=null && type.getLocalName().equals("Ontology"))
+            {
+                model=new ModelCom(new GraphCached((model.getGraph())));
+                m = new SemanticModel(name, model);
+                //System.out.println("cache ontology:"+m);
+            }
+        }
+
+        if(m==null) //No es una ontologia
+        {
+            m = new SemanticModel(name, model);
+        }
+
         //TODO:notify this
         m_models.put(name, m);
         m_nsmodels.put(m.getNameSpace(), m);
@@ -1063,4 +1128,6 @@ public class SemanticMgr implements SWBInstanceObject
         model.getModelObject().setProperty(priv, llaves[0]);
         model.getModelObject().setProperty(publ, llaves[1]);
     }
+
+
 }
