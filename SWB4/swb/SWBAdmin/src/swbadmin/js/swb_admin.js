@@ -16,7 +16,7 @@
       dojo.require("dojo.dnd.Source");
 
       // various Form elemetns
-      //dojo.require("dijit.form.Form");
+      dojo.require("dijit.form.Form");
       dojo.require("dijit.form.CheckBox");
       dojo.require("dijit.form.Textarea");
       dojo.require("dijit.form.FilteringSelect");
