@@ -796,7 +796,7 @@
           setWaitCursor();
           //alert("reload:"+item.id);
           removeChilds(store,item);
-          var arr=getJSON(context+store.controllerURL+"?suri="+encodeURIComponent(item.id))
+          var arr=getJSON(context+store.controllerURL+"?suri="+encodeURIComponent(item.id)+"&type="+item.type)
           updateTreeNode(store,item,arr[0]);
           //alert("arr:"+arr[0].id);
           var items=arr[0].children;
