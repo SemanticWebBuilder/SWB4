@@ -17,22 +17,23 @@
     </xsl:template>
     <xsl:template match="statictext">
 	<tr>
-		<td class="datos" width="200px" align="left" colspan="2">
-            <xsl:value-of select="." disable-output-escaping="yes"/>
-        </td>
+            <td class="datos" width="250" align="right">
+                <xsl:value-of select="." disable-output-escaping="yes"/>
+            </td>
+            <td class="valores"> </td>
 	</tr>
     </xsl:template>
     <xsl:template match="wbmsg">
 	<tr>
-		<td width="200px" align="right"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
-		<td class="datos" width="200px" align="right"><xsl:value-of select="." disable-output-escaping="yes"/></td>
+            <td width="250" align="right"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></td>
+            <td class="datos" align="right"><xsl:value-of select="." disable-output-escaping="yes"/></td>
 	</tr>
     </xsl:template>
     <xsl:template match="script">
 	<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
 	<xsl:if test="string-length( @language ) &gt; 0"> language=&quot;<xsl:value-of select="@language" />&quot;</xsl:if>
 	<xsl:if test="string-length( @src ) &gt; 0"> src=&quot;<xsl:value-of select="@src" />&quot;</xsl:if>
-	<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+	<xsl:text disable-output-escaping="yes"> type="text/javascript" &gt;</xsl:text>
 		<xsl:value-of select="." disable-output-escaping="yes"/>
 	<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()" /><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:template>
@@ -114,7 +115,7 @@
     </xsl:template>
     <xsl:template match="label">
 	<tr>
-            <td class="datos" width="200px" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" />
+            <td class="datos" width="250" align="right"><xsl:value-of select="node()" disable-output-escaping="yes" />
             <xsl:if test="string-length( @required    ) &gt; 0">
                 <xsl:text disable-output-escaping="yes">&lt;</xsl:text>font color="RED"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
                     <xsl:value-of select="@required" />
@@ -402,7 +403,7 @@
     <xsl:template match="img">
 	<xsl:if test="name(parent::*)!='label'">
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
-            <xsl:text disable-output-escaping="yes">&lt;</xsl:text>td<xsl:text disable-output-escaping="yes">&gt;&amp;nbsp;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;</xsl:text>td width="250" class="datos" <xsl:text disable-output-escaping="yes">&gt;&amp;nbsp;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 	</xsl:if>
@@ -496,6 +497,8 @@
     <xsl:template match="object">
         <xsl:if test="name(parent::*)!='label'">
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>tr<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;</xsl:text>td width="250" class="datos" <xsl:text disable-output-escaping="yes">&gt;&amp;nbsp;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;</xsl:text>/td<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;</xsl:text>td class="valores"<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
         </xsl:if>
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()" />
