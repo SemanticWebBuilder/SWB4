@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="com.hp.hpl.jena.ontology.OntModelSpec"%>
 <%@page import="com.hp.hpl.jena.ontology.OntDocumentManager"%>
 <%@page import="com.hp.hpl.jena.ontology.OntProperty"%>
@@ -46,7 +47,7 @@
             //sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/ontology", OntModelSpec.OWL_MEM_RDFS_INF));
             //sont.getRDFOntModel().addLoadedImport("http://www.w3.org/2002/07/owl");
             //sont.getRDFOntModel().addSubModel(mgr.getModel("http://www.w3.org/2002/07/owl"), true);
-            sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/process", OntModelSpec.OWL_MEM_RDFS_INF));
+            sont=new SemanticOntology("", mgr.getOntology("http://www.semanticwebbuilder.org/swb4/process", OntModelSpec.OWL_LITE_MEM_RDFS_INF));
     /*
             swbowl="file:"+SWBUtils.getApplicationPath()+"/WEB-INF/owl/swb.owl";
             owlf=new java.io.File(swbowl);
@@ -270,6 +271,17 @@
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
+
+        if(node.getId().equals("hn_Classes"))
+        {
+            addHNClasses(arr, node, obj, addChilds, user);
+            return;
+        }else if(node.getId().equals("hn_Properties"))
+        {
+            addHNProperties(arr, node, obj, addChilds, user);
+            return;
+        }
+
         SemanticClass cls=null;
         if(node.getHClass()!=null)cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
         String pf=node.getPropertyFilter();
@@ -279,14 +291,14 @@
         JSONArray childs=new JSONArray();
         jobj.putOpt("children", childs);
 
-        boolean hasHN=hasHerarquicalNodes(node.getSemanticObject(),user.getLanguage());
-        if(hasHN)
+        Iterator<SemanticObject> it=null;
+        if(cls!=null)
         {
-            addHerarquicalNodes(childs, node.getSemanticObject(),user);
+            it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
+        }else
+        {
+            it=new ArrayList().iterator();
         }
-
-        if(cls==null)return;
-        Iterator<SemanticObject> it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
 
         //System.out.println("obj:"+obj.getId()+" cls:"+cls);
         //drop acceptance
@@ -297,49 +309,62 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath();
-        //TODO:Separar en controller
-        if(cls.equals(Language.sclass))
-        {
-            url+="/swbadmin/jsp/addLang.jsp";
-        }else if(cls.equals(Country.sclass))
-        {
-            url+="/swbadmin/jsp/addCountry.jsp";
-        }else
-        {
-            url+="/swbadmin/jsp/SemObjectEditor.jsp";
-        }
-        url+="?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
-        if(pf!=null)url+="&"+pf;
 
-        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD))
+        if(cls!=null)
         {
-            menus.put(getMenuItem(getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()), getLocaleString("icon_add",null),getAction("showDialog", url,getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()))));
-            dropacc.put(cls.getClassId());
-        }
-        //Iterator<SemanticClass> it2=cls.listSubClasses();
-        //while(it2.hasNext())
-        //{
-        //    SemanticClass scls=it2.next();
-        //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
-        //    dropacc.put(scls.getClassID());
-        //}
+            //TODO:Separar en controller
+            if(cls.equals(Language.sclass))
+            {
+                url+="/swbadmin/jsp/addLang.jsp";
+            }else if(cls.equals(Country.sclass))
+            {
+                url+="/swbadmin/jsp/addCountry.jsp";
+            }else
+            {
+                url+="/swbadmin/jsp/SemObjectEditor.jsp";
+            }
+            url+="?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
+            if(pf!=null)url+="&"+pf;
 
-        menus.put(getMenuSeparator());
+            if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD))
+            {
+                menus.put(getMenuItem(getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()), getLocaleString("icon_add",null),getAction("showDialog", url,getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()))));
+                dropacc.put(cls.getClassId());
+            }
+            //Iterator<SemanticClass> it2=cls.listSubClasses();
+            //while(it2.hasNext())
+            //{
+            //    SemanticClass scls=it2.next();
+            //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
+            //    dropacc.put(scls.getClassID());
+            //}
+            menus.put(getMenuSeparator());
+        }
         menus.put(getMenuReload(user.getLanguage()));
 
         SemanticProperty herarprop=null;   //Herarquical property;
         //System.out.println(cls);
-        Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
-        while(hprops.hasNext())
+        if(cls!=null)
         {
-            herarprop=hprops.next();
-            //System.out.println("herarprop1:"+herarprop);
+            Iterator<SemanticProperty> hprops=cls.listInverseHerarquicalProperties();
+            while(hprops.hasNext())
+            {
+                herarprop=hprops.next();
+                //System.out.println("herarprop1:"+herarprop);
+            }
         }
-
         //System.out.println("herarprop:"+herarprop);
 
         if(addChilds)
         {
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            while(sit.hasNext())
+            {
+                HerarquicalNode cnode=sit.next();
+                //System.out.println("cnode:"+cnode);
+                addHerarquicalNode(childs,cnode,obj,false,user);
+            }
+
             while(it.hasNext())
             {
                 SemanticObject so=it.next();
@@ -358,7 +383,10 @@
             }
         }else
         {
-            if(it.hasNext())
+            //Tiene HN
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+
+            if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
                 JSONArray events=new JSONArray();
@@ -816,6 +844,263 @@
 
 /****************************************************************************/
 
+    public void addHNClasses(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
+    {
+        SemanticModel model=obj.getModel();
+        String pf=node.getPropertyFilter();
+        JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(user.getLanguage()), "HerarquicalNode", node.getIconClass());
+        arr.put(jobj);
+
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
+        ArrayList<OntClass> carr=new ArrayList();
+        //Add default Classes
+        //carr.add(ont.getRDFOntModel().getOntClass(SemanticVocabulary.RDF_PROPERTY));
+        //carr.add(ont.getRDFOntModel().getOntClass(SemanticVocabulary.OWL_CLASS));
+        Iterator<OntClass> it=null;
+        if(addChilds)
+        {
+            //it=ont.getRDFOntModel().listHierarchyRootClasses();
+            it=ont.getRDFOntModel().listClasses();
+            while (it.hasNext())
+            {
+                OntClass cls = it.next();
+                if(!cls.isAnon())
+                {
+                    System.out.println("xx:"+cls);
+                    Iterator itc=cls.listSuperClasses();
+                    if(!itc.hasNext())
+                    {
+                        //Object elem = itc.next();
+                        carr.add(cls);
+                        //System.out.println("-->xx:"+elem);
+                    }
+
+                }
+            }
+        }
+        it=carr.iterator();
+
+        //System.out.println("obj:"+obj.getId()+" cls:"+cls);
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
+
+        //Menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+        String url=SWBPlatform.getContextPath();
+
+        //Agregar clases
+        {
+            url+="/swbadmin/jsp/addClass.jsp";
+            url+="?sref="+obj.getEncodedURI();
+            if(pf!=null)url+="&"+pf;
+            String title=getLocaleString("add",user.getLanguage())+" "+getLocaleString("class",user.getLanguage());
+            menus.put(getMenuItem(title, getLocaleString("icon_add",null),getAction("showDialog", url,title)));
+            dropacc.put("rdfs:Class");
+            menus.put(getMenuSeparator());
+        }
+        menus.put(getMenuReload(user.getLanguage()));
+
+        if(addChilds)
+        {
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            while(sit.hasNext())
+            {
+                HerarquicalNode cnode=sit.next();
+                //System.out.println("cnode:"+cnode);
+                addHerarquicalNode(childs,cnode,obj,false,user);
+            }
+
+            while(it.hasNext())
+            {
+                OntClass cls=it.next();
+                addClass(childs, cls,false,model,user);
+            }
+        }else
+        {
+            //Tiene HN
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+
+            if(it.hasNext() || sit.hasNext())
+            {
+                jobj.put("hasChilds", "true");
+                JSONArray events=new JSONArray();
+                jobj.putOpt("events", events);
+                events.put(getEvent("onOpen", getReloadAction()));
+            }
+        }
+    }
+
+    public void addHNProperties(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
+    {
+        SemanticModel model=obj.getModel();
+        String pf=node.getPropertyFilter();
+        JSONObject jobj=getNode("HN|"+obj.getURI()+"|"+node.getURI(), node.getDisplayTitle(user.getLanguage()), "HerarquicalNode", node.getIconClass());
+        arr.put(jobj);
+
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
+        ArrayList<OntProperty> carr=new ArrayList();
+        Iterator<OntProperty> it=null;
+        if(addChilds)
+        {
+            it=ont.getRDFOntModel().listAllOntProperties();
+            while (it.hasNext())
+            {
+                OntProperty prop = it.next();
+                if(!prop.isAnon())
+                {
+                    //Filter
+                    if(prop.getNameSpace().indexOf("proy")>-1)
+                    {
+                        carr.add(prop);
+                        System.out.println("prop:"+prop);
+                    }
+                }
+            }
+        }
+        it=carr.iterator();
+
+        //System.out.println("obj:"+obj.getId()+" cls:"+cls);
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
+
+        //Menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+        String url=SWBPlatform.getContextPath();
+
+        //Agregar Propiedades
+        {
+            url+="/swbadmin/jsp/addProperty.jsp";
+            url+="?sref="+obj.getEncodedURI();
+            if(pf!=null)url+="&"+pf;
+            String title=getLocaleString("add",user.getLanguage())+" "+getLocaleString("property",user.getLanguage());
+            menus.put(getMenuItem(title, getLocaleString("icon_add",null),getAction("showDialog", url,title)));
+            dropacc.put("rdfs:Property");
+            menus.put(getMenuSeparator());
+        }
+        menus.put(getMenuReload(user.getLanguage()));
+
+        if(addChilds)
+        {
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+            while(sit.hasNext())
+            {
+                HerarquicalNode cnode=sit.next();
+                //System.out.println("cnode:"+cnode);
+                addHerarquicalNode(childs,cnode,obj,false,user);
+            }
+
+            while(it.hasNext())
+            {
+                OntProperty prop=it.next();
+                addProperty(childs, prop,false,model,user);
+            }
+        }else
+        {
+            //Tiene HN
+            Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
+
+            //if(it.hasNext() || sit.hasNext())
+            {
+                jobj.put("hasChilds", "true");
+                JSONArray events=new JSONArray();
+                jobj.putOpt("events", events);
+                events.put(getEvent("onOpen", getReloadAction()));
+            }
+        }
+    }
+
+    public void addClass(JSONArray arr, OntClass cls, boolean addChilds, SemanticModel model, User user) throws JSONException
+    {
+        System.out.println("cls:"+cls);
+        if(cls==null)return;
+        boolean base=false; //TODO //SWBPlatform.JENA_UTIL.isInBaseModel(cls, ont.getRDFOntModel());
+
+        String icon="swbIconClass";
+        //if(!base)icon+="U";
+        JSONObject jobj=getNode(cls.getURI()+"|"+(nullnode++), SWBPlatform.JENA_UTIL.getId(cls), "Class", icon);
+        arr.put(jobj);
+
+        //hijos
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
+        //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
+
+        Iterator<OntClass> it=cls.listSubClasses(true);
+
+        if(addChilds)
+        {
+            while(it.hasNext())
+            {
+                OntClass ccls=it.next();
+                addClass(childs,ccls,false,model,user);
+            }
+        }else
+        {
+            if(it.hasNext())
+            {
+                jobj.put("hasChilds", "true");
+                events=new JSONArray();
+                jobj.putOpt("events", events);
+                events.put(getEvent("onOpen", getReloadAction()));
+            }
+        }
+    }
+
+    public void addProperty(JSONArray arr, OntProperty prop, boolean addChilds, SemanticModel model, User user) throws JSONException
+    {
+        if(prop==null)return;
+        boolean base=false; //TODO //SWBPlatform.JENA_UTIL.isInBaseModel(cls, ont.getRDFOntModel());
+
+        String icon="swbIconProperty";
+        //if(!base)icon+="U";
+        JSONObject jobj=getNode(prop.getURI()+"|"+(nullnode++), SWBPlatform.JENA_UTIL.getId(prop), "Class", icon);
+        arr.put(jobj);
+
+        //hijos
+        JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
+
+        //eventos
+        JSONArray events=new JSONArray();
+        jobj.putOpt("events", events);
+        events.put(getEvent("onDblClick", getAction("newTab", SWBPlatform.getContextPath()+"/swbadmin/jsp/resourceTab.jsp", null)));
+        //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
+
+        Iterator it=prop.listSubProperties();
+        if(addChilds)
+        {
+            while(it.hasNext())
+            {
+                OntProperty ch=(OntProperty)it.next();
+                addProperty(childs,ch,false,model,user);
+            }
+        }else
+        {
+            if(it.hasNext())
+            {
+                jobj.put("hasChilds", "true");
+                events=new JSONArray();
+                jobj.putOpt("events", events);
+                events.put(getEvent("onOpen", getReloadAction()));
+            }
+        }
+    }
+/*
     public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException
     {
         //System.out.println("addClasses");
@@ -897,6 +1182,7 @@
             addProperty(childs, cprop,ont);
         }
     }
+ */
 %>
 <%
     User user=SWBContext.getAdminUser();
@@ -936,6 +1222,7 @@
     response.setHeader("Pragma", "no-cache"); 
     
     String suri=request.getParameter("suri");
+    String type=request.getParameter("type");
     //System.out.println("suri:"+suri);
     if(suri==null)
     {
@@ -952,8 +1239,8 @@
         if(id.equals("mfavo"))addFavorites(items,user);
         if(id.equals("mtra")) addWebSitesTrash(items,user);
         if(id.equals("mdoc")) addDocRepositories(items,user);
-        if(id.equals("mclass")) addClasses(items,sont);
-        if(id.equals("mprop")) addProperties(items,sont);
+        //if(id.equals("mclass")) addClasses(items,sont);
+        //if(id.equals("mprop")) addProperties(items,sont);
         //System.out.println("gen3");
         out.print(obj.toString());
         //System.out.print(id);
@@ -981,15 +1268,31 @@
             }
         }else
         {
-            SemanticObject sobj=ont.getSemanticObject(suri);
-            if(sobj!=null)
+            if(type!=null && type.equals("Class"))
             {
-                addSemanticObject(items, sobj,addChilds,user);
-                Iterator<SemanticObject> it=sobj.listHerarquicalParents();
-                if(it.hasNext())
+                //Eliminar contador
+                int ind=suri.indexOf('|');
+                if(ind>0)
                 {
-                    JSONObject obj=items.getJSONObject(0);
-                    obj.put("parent", it.next().getURI());
+                    suri=suri.substring(0,ind);
+                }
+                SemanticOntology so=SWBPlatform.getSemanticMgr().getSchema();
+                OntClass cls=so.getRDFOntModel().getOntClass(suri);
+                System.out.println(cls+" "+suri);
+                SemanticModel model=null; //TODO: obtener modelo
+                addClass(items, cls, true, model, user);
+            }else
+            {
+                SemanticObject sobj=ont.getSemanticObject(suri);
+                if(sobj!=null)
+                {
+                    addSemanticObject(items, sobj,addChilds,user);
+                    Iterator<SemanticObject> it=sobj.listHerarquicalParents();
+                    if(it.hasNext())
+                    {
+                        JSONObject obj=items.getJSONObject(0);
+                        obj.put("parent", it.next().getURI());
+                    }
                 }
             }
         }
