@@ -183,7 +183,7 @@ simpleGallery.routines={
     layer.style.width='100%';
     layer.style.height='100%';
     layer.style.backgroundColor=bgcolor;
-    layer.style.position='absolute';
+    layer.style.position='fixed';
     layer.style.top=0;
     layer.style.left=0;
     layer.style.zIndex=1000;
@@ -214,7 +214,7 @@ simpleGallery.routines={
     }
     
     var cwidth=foto.width;
-    var cheight=foto.height+60;
+    var cheight=foto.height;
     
     var superlayer=document.createElement('div');
     superlayer.id='s_'+divId;
