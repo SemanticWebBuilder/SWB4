@@ -148,9 +148,23 @@ public class FrmProcess implements InternalServlet
                 }
                 else
                 {
-                    if (isValidId(id))
+                    SemanticModel m = SWBPlatform.getSemanticMgr().getModel(model);
+                    if(clsid.equals("rdfs:Class"))
                     {
-                        SemanticModel m = SWBPlatform.getSemanticMgr().getModel(model);
+                        //TODO:validar prefijoa
+                        String uri=id;
+
+                        boolean con = m.getRDFModel().contains(m.getRDFModel().getResource(uri), null);
+                        if (con)
+                        {
+                            out.println("false");
+                        }
+                        else
+                        {
+                            out.println("true");
+                        }
+                    }else if (isValidId(id))
+                    {
                         SemanticClass scls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClassById(clsid);
                         String uri = m.getObjectUri(id, scls);
                         //out.println(uri);

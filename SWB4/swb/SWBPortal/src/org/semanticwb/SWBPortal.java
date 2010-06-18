@@ -806,9 +806,11 @@ public class SWBPortal
         {
             String file = st.nextToken();
             String swbowl = "file:" + SWBUtils.getApplicationPath() + file;
+            log.info("Loading OWL:" + swbowl);
+            //System.out.println("Loading OWL:"+ swbowl);
             SemanticModel model = SWBPlatform.getSemanticMgr().addBaseOntology(swbowl);
-            log.debug("Loading Model:" + model.getName());
         }
+        //System.out.println("End OWLs");
 
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
 
@@ -845,6 +847,7 @@ public class SWBPortal
 //        }
 
         //TODO agregar RDFa
+        //System.out.println("end loadDBModels");
 
         SWBPlatform.getSemanticMgr().getOntology().rebind();
         //System.out.println("End loadSemanticModels");
