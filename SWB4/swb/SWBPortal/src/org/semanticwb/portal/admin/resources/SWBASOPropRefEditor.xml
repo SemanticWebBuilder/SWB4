@@ -7,6 +7,7 @@
             <input type="CHECKBOX" name="useselect" label="Seleccionar de un lista de existentes:" value="1"/>
             <input type="CHECKBOX" name="useadd" label="Agregar nuevo:" value="1"/>
             <input type="CHECKBOX" name="delso" label="Eliminar sólo referencia:" value="1"/>
+            <input type="CHECKBOX" name="useglobal" label="Utilizar Elementos Globales:" value="1"/>
         </fieldset>
 
         <fieldset>
