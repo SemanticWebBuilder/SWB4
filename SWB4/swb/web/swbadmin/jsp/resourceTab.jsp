@@ -13,7 +13,8 @@
         id=id.substring(0,ind);
     }
     //out.println("suri2:"+id);
-    SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    //SemanticOntology ont=(SemanticOntology)session.getAttribute("ontology");
+    SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
     //System.out.println("suri:"+id);
     OntResource res=ont.getRDFOntModel().getOntResource(id);
     //System.out.println("res:"+res);
