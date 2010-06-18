@@ -82,7 +82,6 @@ public class Contact extends GenericAdmResource {
             super.setResourceBase(base);
             webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath();
         }catch(Exception e) {
-            System.out.println("\n\n1.Error while setting resource base: "+base.getId() +"-"+ base.getTitle()+"\nDescripcion:"+e+"\n\n");
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
 
@@ -90,7 +89,6 @@ public class Contact extends GenericAdmResource {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
             }catch(Exception e) {
-                System.out.println("\n\n2.Error while loading resource template: "+base.getId()+"\nDescripcion:"+e+"\n\n");
                 log.error("Error while loading resource template: "+base.getId(), e);
             }
         }
@@ -98,7 +96,6 @@ public class Contact extends GenericAdmResource {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Contact/Contact.xsl"));
             }catch(Exception e) {
-                System.out.println("\n\n3.Error while loading default resource template: "+base.getId()+"\nDescripcion:"+e+"\n\n");
                 log.error("Error while loading default resource template: "+base.getId(), e);
             }
         }
@@ -473,16 +470,7 @@ public class Contact extends GenericAdmResource {
                     out.println("<a href=\""+surl+"\" class=\"\">"+paramRequest.getLocaleString("msgContact")+"</a>");
                 }
             }else {
-
-
                 Document dom =getDom(request, response, paramRequest);
-                if(dom != null)  {
-                    String x = SWBUtils.XML.domToXml(dom);
-                    System.out.println("\n\nx=\n"+x);
-                }else
-                    System.out.println("\n\ndom nulo");
-
-
                 try {
                     if(dom != null) {
                         out.println(SWBUtils.XML.transformDom(tpl, dom));
@@ -490,56 +478,6 @@ public class Contact extends GenericAdmResource {
                 }catch(TransformerException e) {
                     log.error(e);
                 }
-
-
-
-                /*SWBResourceURL url = paramRequest.getActionUrl();
-                url.setAction(paramRequest.Action_ADD);
-
-                out.println("<div class=\"swb-contact\">");
-                if( request.getParameter(_FAIL)!=null ) {
-                    out.println("<p class=\"swb-contact-fail\">");
-                    out.println(paramRequest.getLocaleString("apologies"));
-                    out.println("</p>");
-                }
-                out.print("<form name=\"frmContact\" id=\"frmContact\" action=\""+url+"\" method=\"post\" >");
-                if( title!=null ) {
-                    out.println("<h3>"+title+"</h3>");
-                }
-                if( contactPhone!=null ) {
-                    out.println("<p class=\"swb-contact-inst\">"+paramRequest.getLocaleString("instruction1")+" "+contactPhone+".<br />");
-                    out.println(paramRequest.getLocaleString("instruction2"));
-                    out.println("</p>");
-                }
-                out.println("<hr />");
-                out.print("<p>");
-                out.print("<label for=\"name\">"+paramRequest.getLocaleString("name")+"</label>");
-                out.print("<input name=\"name\" id=\"name\" size=\"50\" value=\""+(user.isSigned()?user.getFullName():"")+"\" class=\"swb-contact-field\" />");
-                out.print("</p>");
-
-                out.print("<p>");
-                out.print("<label for=\"email\">"+paramRequest.getLocaleString("email")+"</label>");
-                out.print("<input name=\"email\" id=\"email\" size=\"50\" value=\""+(user.isSigned()?user.getEmail():"")+"\" class=\"swb-contact-field\" />");
-                out.print("</p>");
-
-                out.print("<p>");
-                out.print("<label for=\"subject\">"+paramRequest.getLocaleString("subject")+"</label>");
-                out.print("<input name=\"subject\" id=\"subject\" size=\"50\" class=\"swb-contact-field\" />");
-                out.print("</p>");
-
-                out.print("<p>");
-                out.print("<label for=\"message\">"+paramRequest.getLocaleString("message")+"</label>");
-                out.print("<textarea name=\"message\" id=\"message\" cols=\"40\" rows=\"5\"></textarea>");
-                out.print("</p>");
-
-                out.print("<p class=\"swb-contact-cmd\">");
-                out.print("<input name=\"submit\" id=\"contactoEnviar\" type=\"submit\" value=\""+paramRequest.getLocaleString("send")+"\" onClick=\"if(validateContactFrm(this.form))return true; else return false;\" class=\"swb-contact-button\" />");
-                out.print("<input name=\"reset\" id=\"contactoRestablecer\" type=\"reset\" value=\""+paramRequest.getLocaleString("reset")+"\" class=\"swb-contact-button\" />");
-                out.print("</p>");
-
-                out.print("</form>");
-                out.println("</div>");*/
-
                 out.println("<script type=\"text/javascript\">");
                 out.println("function validateContactFrm(frm) {");
                 out.println("   if(!isValidEmail(frm.email.value)) {");
