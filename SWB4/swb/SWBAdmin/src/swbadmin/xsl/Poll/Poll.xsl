@@ -7,7 +7,7 @@
             <xsl:apply-templates select="title"/>
             <xsl:apply-templates select="imgTitle"/>
             <form name="mypoll" id="mypoll" action="{@url}" method="post">
-                <xsl:apply-templates select="cuestion"/>
+                <xsl:apply-templates select="question"/>
                 <xsl:apply-templates select="options"/>
                 <xsl:apply-templates select="vote"/>
                 <xsl:apply-templates select="results"/>
@@ -22,10 +22,10 @@
     <xsl:template match="imgTitle">
         <img src="{@src}" alt="{@alt}"/>
     </xsl:template>
-    <xsl:template match="cuestion">
-        <p class="">
-            <xsl:value-of select="cuestion"/>
-        </p>
+    <xsl:template match="question">
+        <h2 class="">
+            <xsl:apply-templates/>
+        </h2>
     </xsl:template>
 
     <xsl:template match="options">
@@ -44,7 +44,7 @@
     <xsl:template match="vote">
         <p class="">
             <a href="#" onClick="{@action}">
-                <img src="{@path}images/vota.jpg" alt="vota" />
+                <img src="{@path}images/vota.jpg" alt="vota"></img>
                 <xsl:apply-templates/>
             </a>
         </p>
@@ -58,7 +58,7 @@
     </xsl:template>
     <xsl:template match="links">
         <xsl:for-each select="link">
-            <a href="{@url}"><xsl:apply-templates/></a><br />
+            <a href="{@url}"><xsl:apply-templates/></a><br></br>
         </xsl:for-each>
     </xsl:template>
 
