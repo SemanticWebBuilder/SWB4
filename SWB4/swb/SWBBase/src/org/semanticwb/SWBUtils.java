@@ -97,6 +97,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.namespace.QName;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -105,7 +107,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.mail.EmailException;
 import org.apache.poi.POITextExtractor;
 import org.apache.poi.extractor.ExtractorFactory;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -3582,6 +3583,32 @@ public class SWBUtils {
         {
             return domToXml(dom, "UTF-8", ident);
         }
+
+        /**
+         * Test:Jorge Jiménez
+         * Method that transforms Node to String
+         * @param node
+         * @return
+         */
+        public static String nodeToString(Node node) {
+            try {
+                Source source = new DOMSource(node);
+                StringWriter stringWriter = new StringWriter();
+                Result result = new StreamResult(stringWriter);
+                TransformerFactory factory = TransformerFactory.newInstance();
+                Transformer transformer = factory.newTransformer();
+                transformer.transform(source, result);
+                return stringWriter.getBuffer().toString();
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+
 
         /**
          * Creates an exact copy of the document received.
