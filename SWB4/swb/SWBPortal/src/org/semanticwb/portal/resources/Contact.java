@@ -285,13 +285,11 @@ public class Contact extends GenericAdmResource {
         econtact.appendChild(insts);
 
         e = dom.createElement("instruction");
-        e.setTextContent(paramRequest.getLocaleString("instruction1")+" "+contactPhone);
-         e.setNodeValue(paramRequest.getLocaleString("instruction1")+" "+contactPhone);
+        e.appendChild(dom.createTextNode(paramRequest.getLocaleString("instruction1")+" "+contactPhone));
         insts.appendChild(e);
 
         e = dom.createElement("instruction");
-        e.setTextContent(paramRequest.getLocaleString("instruction2"));
-         e.setNodeValue(paramRequest.getLocaleString("instruction2"));
+        e.appendChild(dom.createTextNode(paramRequest.getLocaleString("instruction2")));
         insts.appendChild(e);
         
 
