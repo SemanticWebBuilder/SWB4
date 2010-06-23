@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<swbForm htmlType="dojo">
+    <swbClass uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon" filterRequired="true">
+        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/>
+        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/>
+        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/>
+        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponPeriodIni"/>
+        <statictext name="txtLocal">Prueba:</statictext>
+    </swbClass>
+    <swbButton type="saveBtn"/>
+    <swbButton type="cancelBtn"/>
+</swbForm>
