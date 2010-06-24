@@ -77,15 +77,12 @@ public class SWBClass {
             }
         }
         //uri=cls1.getURI();
-        System.out.println("uri Class k llega:"+uri);
         if(uri!=null && uri.trim().length()>0){
             if(base.getAttribute("objInst")!=null && base.getAttribute("objInst").trim().length()>0) {
                 //Es edición y ahorita solo funciona para una clase (No para varias)
-                System.out.println("Se Actualiza Clase..");
                 SemanticObject semObject = SemanticObject.createSemanticObject(base.getAttribute("objInst"));
                 swbFormMgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
             }else{ //Se esta creando apenas una instancia de la clase
-                System.out.println("Se Crea Clase ..");
                 SemanticClass cls1 = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(uri);
                 swbFormMgr = new SWBFormMgr(cls1, base.getSemanticObject(), null);
             }
