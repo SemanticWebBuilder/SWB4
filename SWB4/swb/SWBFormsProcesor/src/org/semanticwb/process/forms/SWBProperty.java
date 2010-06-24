@@ -11,6 +11,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.SWBFormButton;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.w3c.dom.NamedNodeMap;
@@ -25,7 +26,9 @@ public class SWBProperty implements SWBFormLayer{
     private static Logger log = SWBUtils.getLogger(SWBProperty.class);
     private Node tag = null;
     private String uri = null;
+    private String type= null;
     private SWBFormMgr swbFormMgr=null;
+    private String htmlType=null;
     HttpServletRequest request=null;
     SWBParamRequest paramRequest=null;
     Resource base=null;
@@ -34,6 +37,16 @@ public class SWBProperty implements SWBFormLayer{
     public SWBProperty(Node tag, SWBFormMgr swbFormMgr, HttpServletRequest request, SWBParamRequest paramRequest) {
         this.tag = tag;
         this.swbFormMgr=swbFormMgr;
+        this.request=request;
+        this.paramRequest=paramRequest;
+        base=paramRequest.getResourceBase();
+        user=paramRequest.getUser();
+        setAttributes();
+    }
+
+    public SWBProperty(Node tag, String htmlType, HttpServletRequest request, SWBParamRequest paramRequest) {//Utilizado para el caso de que la propiedad sea un boton (Tag swbButton)
+        this.tag = tag;
+        this.htmlType=htmlType;
         this.request=request;
         this.paramRequest=paramRequest;
         base=paramRequest.getResourceBase();
@@ -51,88 +64,64 @@ public class SWBProperty implements SWBFormLayer{
                     if (attrValue != null && !attrValue.equals("")) {
                         if (attrName.equalsIgnoreCase("uri")) {
                             uri = attrValue;
+                        }else if (attrName.equalsIgnoreCase("type")) {
+                            type = attrValue;
                         }
                     }
                 }
             }
         }
-        System.out.println("Uri Prop k llega:"+uri);
     }
 
     public String getHtml() {
-        
-        if(swbFormMgr!=null && request!=null && uri!=null && uri.trim().length()>0){
-            //String renderElement=swbFormMgr.renderElement(request, ServiceProvider.pymtur_contactFirstName, swbFormMgr.MODE_CREATE);
-            
-            SemanticProperty semProp=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
-            if(semProp!=null)
-            {
-                System.out.println("semProp:"+semProp);
+        String renderElement=null;
+        if(request!=null){
+            try{
+                String tagName=tag.getNodeName();
 
-                String mode=swbFormMgr.MODE_CREATE;
-                if(base.getAttribute("objInst")!=null && base.getAttribute("objInst").trim().length()>0) {
-                    mode=swbFormMgr.MODE_EDIT;
+                if(tagName.equalsIgnoreCase("swbbutton") && type!=null){
+
+                    if(type.equalsIgnoreCase("savebtn")) {
+                        renderElement=SWBFormButton.newSaveButton().renderButton(request, htmlType, user.getLanguage());
+                    }else if(type.equalsIgnoreCase("cancelbtn")) {
+                        renderElement=SWBFormButton.newCancelButton().renderButton(request, htmlType, user.getLanguage());
+                    }
                 }
-                String renderElement=semProp.getDisplayName(user.getLanguage())+swbFormMgr.renderElement(request, semProp, mode);
-
-                System.out.println("renderElement:"+renderElement);
-                return renderElement;
-            }
+                else if(swbFormMgr!=null && uri!=null && uri.trim().length()>0){
+                    SemanticProperty semProp=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+                    if(semProp!=null)
+                    {
+                        if(tag.getNodeName().equalsIgnoreCase("swbprop")){
+                            String mode=swbFormMgr.MODE_CREATE;
+                            if(base.getAttribute("objInst")!=null && base.getAttribute("objInst").trim().length()>0) {
+                                mode=swbFormMgr.MODE_EDIT;
+                            }
+                            renderElement=swbFormMgr.renderElement(request, semProp, mode);
+                        }else if(tag.getNodeName().equalsIgnoreCase("swbproplabel")){
+                            renderElement=semProp.getDisplayName(user.getLanguage());
+                        }
+                    }
+                }
+            }catch(Exception e){log.error(e);}
         }
-        return null;
+        return renderElement;
+    }
+
+    public String getTag() {
+        String retString=SWBUtils.XML.nodeToString(tag);
+        if(retString!=null) retString=SWBUtils.TEXT.replaceAll(retString, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+        return retString;
     }
 
     public SWBFormMgr getswbFormMgr(){
         return swbFormMgr;
     }
 
-    public String getId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getLabel() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public String getMoreAttr() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getName() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getStyle() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getStyleClass() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setId(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setLabel(String label) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void setMoreAttr(String moreattr) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    public void setName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setStyle(String style) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setStyleClass(String styleclass) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    
 }

@@ -1,12 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
 <swbForm htmlType="dojo">
-    <swbClass uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon" filterRequired="true">
-        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/>
-        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/>
-        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/>
-        <swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponPeriodIni"/>
-        <statictext name="txtLocal">Prueba:</statictext>
+    <table>
+    <tr><td colspan="2" align="center">Cabecera George24</td></tr>
+    <tr><td>
+    <fieldset>
+    <legend>Grupo de Elementos</legend>
+    <swbClass uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon" filterRequired="true" htmlRowType="tr|li">
+     <table>
+        <tr>
+            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
+            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
+        </tr>
+        <tr>
+            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
+            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
+        </tr>
+        <tr>
+            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
+            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
+        </tr>
+      </table>
     </swbClass>
-    <swbButton type="saveBtn"/>
-    <swbButton type="cancelBtn"/>
+    </fieldset>
+    </td></tr>
+    <tr>
+        <td colspan="2" align="center">
+            <fieldset>
+            <legend>Botones</legend>
+            <swbButton type="saveBtn"/><swbButton type="cancelBtn"/>
+            </fieldset>
+        </td>
+    </tr>
+    </table>
 </swbForm>
