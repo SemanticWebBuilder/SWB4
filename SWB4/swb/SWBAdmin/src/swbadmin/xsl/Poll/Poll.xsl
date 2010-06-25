@@ -6,26 +6,26 @@
         <div class="swb-encuesta">
             <xsl:apply-templates select="title"/>
             <xsl:apply-templates select="imgTitle"/>
-            <form name="mypoll" id="mypoll" action="{@url}" method="post">
-                <xsl:apply-templates select="question"/>
-                <xsl:apply-templates select="options"/>
-                <xsl:apply-templates select="vote"/>
-                <xsl:apply-templates select="results"/>
-                <xsl:apply-templates select="links"/>
-            </form>
+            <xsl:apply-templates select="question"/>
+            <xsl:apply-templates select="options"/>
+            <xsl:apply-templates select="vote"/>
+            <xsl:apply-templates select="results"/>
+            <xsl:apply-templates select="links"/>
         </div>
     </xsl:template>
 
     <xsl:template match="title">
-        <p class=""><xsl:apply-templates/></p>
+        <h2 class="">
+            <xsl:apply-templates/>
+        </h2>
     </xsl:template>
     <xsl:template match="imgTitle">
         <img src="{@src}" alt="{@alt}"/>
     </xsl:template>
     <xsl:template match="question">
-        <h2 class="">
+        <p class="">
             <xsl:apply-templates/>
-        </h2>
+        </p>
     </xsl:template>
 
     <xsl:template match="options">
