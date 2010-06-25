@@ -1446,3 +1446,35 @@ function replaceChars4Id(value, lowercase)
         }
         return true;
     }
+
+    function setCookie(name,val,life) {
+        document.cookie = name;
+        var expDate = new Date();
+        expDate.setTime(expDate.getTime() + life );
+        expDate = expDate.toGMTString();
+        var str1 = name + "="+val+"; expires=" + expDate + ";Path=/";
+        document.cookie = str1;
+    }
+
+    function getCookie(name) {
+        var arg = name + "=";
+        var alen = arg.length;
+        var clen = document.cookie.length;
+        var i = 0;
+        while (i < clen) {
+           var j = i + alen;
+           if (document.cookie.substring(i, j) == arg)
+                return getCookieVal (j);
+            i = document.cookie.indexOf(" ", i) + 1;
+            if (i == 0)
+                break;
+        }
+        return null;
+    }
+    
+    function getCookieVal (offset) {
+        var endstr = document.cookie.indexOf (";", offset);
+        if (endstr == -1)
+            endstr = document.cookie.length;
+        return unescape(document.cookie.substring(offset, endstr));
+    }
