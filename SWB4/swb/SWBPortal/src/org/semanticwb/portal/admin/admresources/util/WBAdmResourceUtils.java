@@ -1317,125 +1317,109 @@ public class WBAdmResourceUtils {
     public String loadWindowConfiguration(Resource base, org.semanticwb.portal.api.SWBParamRequest paramsRequest) {
         StringBuffer ret = new StringBuffer("");
         try {
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgMenubar") + "</td> \n");
-            ret.append("<td> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgMenubar") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"menubar\" value=\"yes\"");
-            if ("yes".equals(base.getAttribute("menubar", ""))) {
-                ret.append(" checked");
-            }
-            ret.append("/> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            if ("yes".equals(base.getAttribute("menubar", "")))
+                ret.append(" checked=\"checked\"");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgToolbar") + "</td> \n");
-            ret.append("<td> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgToolbar") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"toolbar\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("toolbar", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgStatusbar") + "</td> \n");
-            ret.append("<td> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgStatusbar") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"status\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("status", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgLocation") + "</td> \n");
-            ret.append("<td> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLocation") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"location\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("location", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgDirectories") + "</td> \n");
-            ret.append("<td \n>");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgDirectories") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"directories\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("directories", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgScrollbars") + "</td> \n");
-            ret.append("<td> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgScrollbars") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"scrollbars\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("scrollbars", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append(" /> \n");
-            ret.append(" </td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgResizable") + "</td> \n");
-            ret.append("<td>");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgResizable") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
             ret.append("<input type=\"checkbox\" name=\"resizable\" value=\"yes\"");
             if ("yes".equals(base.getAttribute("resizable", ""))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append("></td> \n");
-            ret.append("</tr> \n");
+            ret.append("/>");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td> \n");
-            ret.append("<input type=text size=4 maxlength=4 name=width ");
-            if (!"".equals(base.getAttribute("width", "").trim())) {
-                ret.append(" value=\"" + base.getAttribute("width").trim() + "\"");
-            }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgWidth") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"width\" value=\""+base.getAttribute("width","")+"\" />");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td> \n");
-            ret.append("<input type=text size=4 maxlength=4 name=height ");
-            if (!"".equals(base.getAttribute("height", "").trim())) {
-                ret.append(" value=\"" + base.getAttribute("height").trim() + "\"");
-            }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgHeight") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"height\" value=\""+base.getAttribute("height","")+"\" />");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td> \n");
-            ret.append("<input type=text size=4 maxlength=4 name=top ");
-            if (!"".equals(base.getAttribute("top", "").trim())) {
-                ret.append(" value=\"" + base.getAttribute("top").trim() + "\"");
-            }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgTop") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"top\" value=\""+base.getAttribute("top","")+"\" />");
+            ret.append("</td>");
+            ret.append("</tr>");
 
-            ret.append("<tr> \n");
-            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":</td> \n");
-            ret.append("<td> \n");
-            ret.append("<input type=text size=4 maxlength=4 name=left ");
-            if (!"".equals(base.getAttribute("left", "").trim())) {
-                ret.append(" value=\"" + base.getAttribute("left").trim() + "\"");
-            }
-            ret.append(" /> \n");
-            ret.append("</td> \n");
-            ret.append("</tr> \n");
+            ret.append("\n<tr>");
+            ret.append("<td class=\"datos\">" + paramsRequest.getLocaleString("msgLeft") + " " + paramsRequest.getLocaleString("msgPixels") + ":&nbsp;</td>");
+            ret.append("<td class=\"valores\">");
+            ret.append("<input type=\"text\" size=\"4\" maxlength=\"4\" name=\"left\" value=\""+base.getAttribute("left","")+"\" />");
+            ret.append("</td>");
+            ret.append("</tr>");
         } catch (Exception e) {
             log.error("Error while generating form to load window configuration in resource " + base.getId() + ".", e);
         }
@@ -1473,7 +1457,8 @@ public class WBAdmResourceUtils {
         StringBuffer sbfRet = new StringBuffer();
         sbfRet.append("\nfunction editOption(pInSel, pInTxt)");
         sbfRet.append("\n{");
-        sbfRet.append("\n   pInTxt.value=pInSel.options[pInSel.selectedIndex].value;");
+        sbfRet.append("\n   if(pInSel && pInSel.selectedIndex>=0)");
+        sbfRet.append("\n      pInTxt.value=pInSel.options[pInSel.selectedIndex].value;");
         sbfRet.append("\n}");
         return sbfRet.toString();
     }
