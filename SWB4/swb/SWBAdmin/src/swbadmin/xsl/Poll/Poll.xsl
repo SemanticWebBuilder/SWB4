@@ -44,8 +44,7 @@
     <xsl:template match="vote">
         <p class="">
             <a href="#" onClick="{@action}">
-                <img src="{@path}images/vota.jpg" alt="vota"></img>
-                <xsl:apply-templates/>
+                <img src="{@path}images/votar.png" alt="vota" />
             </a>
         </p>
     </xsl:template>
@@ -61,6 +60,4 @@
             <a href="{@url}"><xsl:apply-templates/></a><br></br>
         </xsl:for-each>
     </xsl:template>
-
-    
 </xsl:stylesheet>
