@@ -411,6 +411,7 @@ _form.swbform fieldset li {
 .datos {
 	color: #333333;
 	text-decoration: none;
+        text-align: right;
 	font-family: Verdana;
 	font-size: 12px;
 }
@@ -419,6 +420,14 @@ _form.swbform fieldset li {
 	text-decoration: none;
 	font-family: Verdana;
 	font-size: 12px;
+}
+.enfasis {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: xx-small;
+    font-weight: 100;
+}
+.requerido {
+    color: red;
 }
 .indice {
 	color: #428AD4;
