@@ -9,77 +9,60 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/SWBForumCategory">
   <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="AnswerVote">
+  <owl:Class rdf:ID="QuestionSubscription">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:ID="QuestionVote">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Answer">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+  <owl:Class rdf:ID="CategorySubscription">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Question">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SWBForumCatResource">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
   </owl:Class>
   <owl:ObjectProperty rdf:ID="hasQuestions">
+    <rdfs:range>
+      <swb:Class rdf:ID="Question">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:range rdf:resource="#Question"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasAnswerInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="categoryWebpage">
+    <rdfs:domain rdf:resource="#CategorySubscription"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="categoryWebpageInv"/>
     </owl:inverseOf>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="CategorySubscription">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#categoryWebpageInv">
     <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:notCodeGeneration>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="webpage">
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >false</swb:notCodeGeneration>
+    <rdfs:label xml:lang="es">Category</rdfs:label>
+    <rdfs:label xml:lang="es">Categoría</rdfs:label>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasQuetionInv"/>
     </owl:inverseOf>
-    <rdfs:label xml:lang="es">Categoría</rdfs:label>
-    <rdfs:label xml:lang="es">Category</rdfs:label>
+    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:notCodeGeneration>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <rdfs:domain rdf:resource="#Question"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="questionObjInv"/>
   <owl:ObjectProperty rdf:ID="userObjInv">
@@ -95,21 +78,48 @@
     >true</swb:notCodeGeneration>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="forumResource">
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:range rdf:resource="#SWBForumCatResource"/>
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasQuestionInv"/>
     </owl:inverseOf>
+    <rdfs:range>
+      <swb:SemanticResource rdf:ID="SWBForumCatResource">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Question"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasQuestionInv">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="questionObj">
+    <rdfs:domain rdf:resource="#QuestionSubscription"/>
+    <rdfs:range rdf:resource="#Question"/>
     <owl:inverseOf rdf:resource="#questionObjInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ansQuestion">
+    <owl:inverseOf rdf:resource="#hasAnswerInv"/>
     <rdfs:range rdf:resource="#Question"/>
     <rdfs:domain>
-      <swb:Class rdf:ID="QuestionSubscription">
+      <swb:Class rdf:ID="Answer">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="userObj">
+    <rdfs:domain rdf:resource="#QuestionSubscription"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <owl:inverseOf rdf:resource="#userObjInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="ansUserVote">
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="AnswerVote">
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
@@ -117,297 +127,297 @@
       </swb:Class>
     </rdfs:domain>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ansQuestion">
-    <rdfs:domain rdf:resource="#Answer"/>
-    <rdfs:range rdf:resource="#Question"/>
-    <owl:inverseOf rdf:resource="#hasAnswerInv"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="userObj">
-    <owl:inverseOf rdf:resource="#userObjInv"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-    <rdfs:domain rdf:resource="#QuestionSubscription"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="ansUserVote">
-    <rdfs:domain rdf:resource="#AnswerVote"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="categoryUser">
-    <owl:inverseOf rdf:resource="#categoryUserInv"/>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <rdfs:domain rdf:resource="#CategorySubscription"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <owl:inverseOf rdf:resource="#categoryUserInv"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="userVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="QuestionVote">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="questionVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
     <rdfs:range rdf:resource="#Question"/>
+    <rdfs:domain rdf:resource="#QuestionVote"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="answerVote">
-    <rdfs:domain rdf:resource="#AnswerVote"/>
     <rdfs:range rdf:resource="#Answer"/>
+    <rdfs:domain rdf:resource="#AnswerVote"/>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="markInnapropiateAnswers">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">marcar respuestas como inapropiadas</rdfs:label>
+    <rdfs:label xml:lang="en">Mark Answers as innapropiates</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_markInnapropiateAnswers"/>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Mark Answers as innapropiates</rdfs:label>
-    <rdfs:label xml:lang="es">marcar respuestas como inapropiadas</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="maxInnapropiateCount">
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:label xml:lang="es">Maxima cantidad de votos de inapropiado</rdfs:label>
-    <rdfs:label xml:lang="en">Innapropiate max count</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_maxInnapropiateCount">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="en">Innapropiate max count</rdfs:label>
+    <rdfs:label xml:lang="es">Maxima cantidad de votos de inapropiado</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isModerate">
-    <rdfs:label xml:lang="en">Is moderate</rdfs:label>
-    <rdfs:label xml:lang="es">Es moderado</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isModerate">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:label xml:lang="es">Es moderado</rdfs:label>
+    <rdfs:label xml:lang="en">Is moderate</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="question">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_question">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Question</rdfs:label>
+    <rdfs:label xml:lang="es">Pregunta</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Question"/>
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:required>
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Pregunta</rdfs:label>
-    <rdfs:label xml:lang="en">Question</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_question">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="commentVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#QuestionVote"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isQuestionSubscription">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Los usuarios se pueden subscribir a las preguntas</rdfs:label>
+    <rdfs:label xml:lang="en">Users can be subscribed to questions</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isQuestionSubscription">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >70</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Users can be subscribed to questions</rdfs:label>
-    <rdfs:label xml:lang="es">Los usuarios se pueden subscribir a las preguntas</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isQuestionVotable">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Se pueden votar las preguntas</rdfs:label>
+    <rdfs:label xml:lang="en">Questions can be voted</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isQuestionVotable">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Questions can be voted</rdfs:label>
-    <rdfs:label xml:lang="es">Se pueden votar las preguntas</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansInappropriate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
+    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_ansInappropriate">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
-    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
-    <rdfs:domain rdf:resource="#Answer"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="likeAnswer">
-    <rdfs:domain rdf:resource="#AnswerVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#AnswerVote"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isCategorySubscription">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Los usuarios pueden subscribirse a las categorias</rdfs:label>
+    <rdfs:label xml:lang="en">Users can be subscribed to categories</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isCategorySubscription">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >80</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Users can be subscribed to categories</rdfs:label>
-    <rdfs:label xml:lang="es">Los usuarios pueden subscribirse a las categorias</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="answer">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    <rdfs:label xml:lang="en">Answer</rdfs:label>
+    <rdfs:label xml:lang="es">Respuesta</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Answer"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_answer">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Answer"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Respuesta</rdfs:label>
-    <rdfs:label xml:lang="en">Answer</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="markInnapropiateQuestions">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Marcar preguntas como inapropiadas</rdfs:label>
+    <rdfs:label xml:lang="en">Mark questions as innapropiates</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_markInnapropiateQuestions">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >90</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Mark questions as innapropiates</rdfs:label>
-    <rdfs:label xml:lang="es">Marcar preguntas como inapropiadas</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attachFilesSize">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Tamaño maximo para archivos atachados</rdfs:label>
+    <rdfs:label xml:lang="en">Max size to attachement files</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_attachFilesSize">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >40</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Max size to attachement files</rdfs:label>
-    <rdfs:label xml:lang="es">Tamaño maximo para archivos atachados</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attachFilesTypes">
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Tipos de Archivos adjuntados</rdfs:label>
+    <rdfs:label xml:lang="en">Attachments files types</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_attachFilesTypes">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Attachments files types</rdfs:label>
-    <rdfs:label xml:lang="es">Tipos de Archivos adjuntados</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansCommentVote">
-    <rdfs:domain rdf:resource="#AnswerVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#AnswerVote"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="acceptAttachements">
+    <rdfs:label xml:lang="es">Acepta archivos adjuntos</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:label xml:lang="en">Accept Attachements</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_acceptAttachements">
+        <rdfs:label xml:lang="en">Accept Attachements</rdfs:label>
+        <rdfs:label xml:lang="es">Acepta archivos adjuntos</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
-        <rdfs:label xml:lang="es">Acepta archivos adjuntos</rdfs:label>
-        <rdfs:label xml:lang="en">Accept Attachements</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Accept Attachements</rdfs:label>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:label xml:lang="es">Acepta archivos adjuntos</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="queStatus">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#Question"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="references">
-    <rdfs:comment>Sirve para poner ligas de referencias a la respuesta que se esta dando</rdfs:comment>
-    <rdfs:label xml:lang="en">References</rdfs:label>
-    <rdfs:label xml:lang="es">Referencias</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Referencias</rdfs:label>
+    <rdfs:label xml:lang="en">References</rdfs:label>
+    <rdfs:comment>Sirve para poner ligas de referencias a la respuesta que se esta dando</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansIsAppropiate">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="specifications">
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
+    <rdfs:label xml:lang="en">Add specifications</rdfs:label>
+    <rdfs:label xml:lang="es">Añadir especificaciones</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Question"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_specifications">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:label xml:lang="es">Añadir especificaciones</rdfs:label>
-    <rdfs:label xml:lang="en">Add specifications</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="queInappropriate">
-    <rdfs:domain rdf:resource="#Question"/>
-    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
-    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Marcar como Inapropiada</rdfs:label>
+    <rdfs:label xml:lang="en">Select as inappropriate</rdfs:label>
+    <rdfs:domain rdf:resource="#Question"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="acceptGuessComments">
+    <rdfs:label xml:lang="es">Aceptar comentarios de usuarios no registrados</rdfs:label>
+    <rdfs:label xml:lang="en">accept Guess Comments</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_acceptGuessComments">
+        <rdfs:label xml:lang="en">accept Guess Comments</rdfs:label>
+        <rdfs:label xml:lang="es">Aceptar comentarios de usuarios no registrados</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
-        <rdfs:label xml:lang="es">Aceptar comentarios de usuarios no registrados</rdfs:label>
-        <rdfs:label xml:lang="en">accept Guess Comments</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
-    <rdfs:label xml:lang="en">accept Guess Comments</rdfs:label>
-    <rdfs:label xml:lang="es">Aceptar comentarios de usuarios no registrados</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="likeVote">
-    <rdfs:domain rdf:resource="#QuestionVote"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#QuestionVote"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="attachements">
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_attachements"/>
-    </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Answer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_attachements">
+        <swbxf:formElement>
+          <swb:FlashFileUpload rdf:ID="answerAttach">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+          </swb:FlashFileUpload>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="queIsApropiate">
-    <rdfs:domain rdf:resource="#Question"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#Question"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="isAnswerVotable">
-    <rdfs:label xml:lang="es">Las respuestas pueden ser votadas</rdfs:label>
-    <rdfs:label xml:lang="en">Answers can be voted</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_isAnswerVotable">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >60</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBForumCatResource"/>
+    <rdfs:label xml:lang="en">Answers can be voted</rdfs:label>
+    <rdfs:label xml:lang="es">Las respuestas pueden ser votadas</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="ansStatus">
-    <rdfs:domain rdf:resource="#Answer"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Answer"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg_forumCat">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.resources.sem.forumcat</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >forumCat</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.resources.sem.forumcat</swb:package>
   </swb:CodePackage>
 </rdf:RDF>
 
