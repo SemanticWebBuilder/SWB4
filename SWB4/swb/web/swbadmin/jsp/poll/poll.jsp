@@ -109,9 +109,9 @@
                             </p>
                         <%
                     }
-                    if ("1".equals(base.getAttribute("wherelinks", "").trim()) || "3".equals(base.getAttribute("wherelinks", "").trim())) {
+                    if ("0".equals(base.getAttribute("wherelinks", "").trim()) || "2".equals(base.getAttribute("wherelinks", "").trim())) {
                         %>
-                            <%=getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("usrmsg_Encuesta_doView_relatedLink"))%>
+                            <%=getLinks(dom.getElementsByTagName("link"), paramRequest.getLocaleString("lblDoView_relatedLink"))%>
                         <%
                     }
                     %>
@@ -143,7 +143,7 @@
                             <%
                             if ("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
                             %>
-                                alert('<%=paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote")%>');
+                                alert('<%=paramRequest.getLocaleString("lblDoView_msgVote")%>');
                             <%}%>
                         }
                         grabaEncuesta(forma);
@@ -200,7 +200,7 @@
                                 }
                                 %>
                             }else {
-                                alert('<%=paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgAnswer")%>');
+                                alert('<%=paramRequest.getLocaleString("lblDoView_msgAnswer")%>');
                             }
                     }
 
@@ -225,7 +225,7 @@
                 }
             }
         } catch (Exception e) {
-            //log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") + " " + restype + " " + paramRequest.getLocaleString("error_Encuesta_doView_method"), e);
+            //log.error(paramRequest.getLocaleString("msgDoView_resource") + " " + restype + " " + paramRequest.getLocaleString("msgDoView_method"), e);
         }        
 %>
 
@@ -239,10 +239,10 @@
             String value = links.item(i).getChildNodes().item(0).getNodeValue().trim();
             if(!"".equals(value.trim()))
             {
-                int idx = value.indexOf(" /wblink/ ");
+                int idx = value.indexOf(",");
                 if (idx > -1)
                 {
-                    _comment = value.substring(idx + 10);
+                    _comment = value.substring(idx + 1);
                     value = value.substring(0, idx);
                 }
                 ret.append("<a href=\"" + value + "\" target=\"_newlink\">"+ _comment + "</a><br /> ");
