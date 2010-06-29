@@ -222,5 +222,10 @@ public class SWBResourceCachedMgr
     {
         this.cacheLoadHits++;;
     }
+
+    public synchronized void clearCache(){
+        cache.clear();
+        mrulist.clear();
+    }
     
 }
