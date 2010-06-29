@@ -1,0 +1,25 @@
+<template method="setHeaders" Content-Type="text/html"  Cache-Control="no-cache" Pragma="no-cache"  response="{response}" />
+<HTML>
+<METAA HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html">
+<METAA HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<METAA HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<HEAD>
+<LINK REL="SHORTCUT ICON" HREF="{webpath}wbadmin/images/wb.ico">
+<TITLE>WebBuilder OpenSource</TITLE>
+</HEAD>
+<frameset marginheight="0" framespacing="0" border="0" rows="24,*" marginwidth="0" topmargin="0" leftmargin="0">
+      <frame scrolling="no" marginheight="0" border="0" marginwidth="0" topmargin="0" frameborder="no" noresize="noresize" leftmargin="0" src="{distpath}/WBAdmin/WBAd_int_Menu" name="menu">
+      <frameset marginheight="0" framespacing="5" border="1" cols="201,*" marginwidth="0" topmargin="0" frameborder="1" leftmargin="0" name="fstMain">
+        <frameset border="1" framespacing="5" rows="*,210" frameborder="1">
+          <frame scrolling="no" frameborder="yes" id="left" bordercolor="#EDEFEC" src="{distpath}/WBAdmin/WBAd_int_Tree" name="tree">
+          <frame scrolling="no" src="{distpath}/WBAdmin/WBAd_int_Info" name="info">
+        </frameset>
+        <frameset framespacing="0" border="0" rows="*,25" frameborder="NO" bordercolor="#6699CC" noresize="#DEFAULT">
+          <frame frameborder="yes" id="main" bordercolor="#EDEFEC" src="{distpath}/WBAdmin/WBAd_int_Work" name="work">
+          <frame scrolling="no" src="{distpath}/WBAdmin/WBAd_int_Status" name="status">
+        </frameset>
+      </frameset>
+    </frameset>
+    <noframes>
+            No Frames        </noframes>
+</HTML>

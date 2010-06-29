@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Webuilder</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body bgcolor="#FFFFFF" text="#000000" topmargin=0 leftmargin=20 marginwidth=20 marginheight=0>
+<a name="top"></a> 
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td colspan="2">
+	<font face="Verdana, Arial, Helvetica, sans-serif" size="5"><BR>WebBuilder 2.0</font>
+    </td>
+  </tr>
+  <tr> 
+    <td colspan="2">
+      <table width="740" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="center" valign="top" width="738">
+            <table width="95%" border="0" cellspacing="0" cellpadding="10">
+              <tr> 
+                <td> 
+                  <p>&nbsp;</p>
+                  <p><font face="Verdana, Arial, Helvetica, sans-serif" size="3"><font size="4" color="#990000">No 
+                    se encontr&oacute; la p&aacute;gina</font></font></p>
+                  <p><font face="Verdana, Arial, Helvetica, sans-serif" size="3" color="#0000FF">Puede 
+                    que la p&aacute;gina solicitada ya no exista haya cambiado 
+                    de nombre o no est&eacute; disponible temporalmente.</font></p>
+                  <p><font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#666666">Pruebe 
+                    lo siguiente:</font></p>
+                  <ul>
+                    <li><font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#666666">Si 
+                      escribi&oacute; la direcci&oacute;n de la p&aacute;gina 
+                      en la barra de direcciones, compruebe que est&eacute; escrita 
+                      correctamente.</font><font color="#666666"><br>
+                      <br>
+                      </font></li>
+                    <li><font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#666666">Abra 
+                      la p&aacute;gina principal de <a href="/index.html" target="_top">WebBuilder</a> 
+                      y busque v&iacute;nculos a la informaci&oacute;n que desea. 
+                      <br>
+                      <br>
+                      </font></li>
+                    <li><font face="Verdana, Arial, Helvetica, sans-serif" size="2" color="#666666">Haga 
+                      clic en el bot&oacute;n <a href="javascript:history.go(-1)">Atr&aacute;s</a> 
+                      para intentar otro v&iacute;nculo. </font><br>
+                      <br>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

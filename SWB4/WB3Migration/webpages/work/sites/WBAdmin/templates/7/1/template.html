@@ -1,0 +1,41 @@
+<template method="setHeaders" Content-Type="text/html"  Cache-Control="no-cache" Pragma="no-cache"  response="{response}" />
+<HTML>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<HEAD>
+<TITLE></TITLE>
+<!--META http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+<LINK REL="SHORTCUT ICON" HREF="{webpath}wbadmin/images/wb.ico">
+<LINK href="images/wb3.css" rel="stylesheet" type="text/css">
+<script language="javascript">
+
+    function wbTree_executeAction(action)
+    {
+        if(top.tree!=null)top.tree.document.applets[0].executeAction(action);
+    }
+
+    function wbTree_remove()
+    {
+        wbTree_executeAction('remove');
+    }
+
+    function wbTree_reload()
+    {
+        wbTree_executeAction('reload');
+    }
+
+    function wbStatus(msg)
+    {
+	top.frames[4].location='<distpath/>/WBAdmin/WBAd_int_Status?stmsg='+msg;
+	//document.write(top.frames['status'].name);
+	
+    }
+
+</script>
+</HEAD>
+
+<BODY bgcolor="#EDEFEC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<p class="status">&nbsp;&nbsp;<content/></p>
+</BODY>
+</HTML>

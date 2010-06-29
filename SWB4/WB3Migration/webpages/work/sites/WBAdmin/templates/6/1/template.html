@@ -1,0 +1,116 @@
+<template method="setHeaders" Content-Type="text/html"  Cache-Control="no-cache" Pragma="no-cache"  response="{response}" /><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html">
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<HEAD>
+<TITLE></TITLE>
+<!--META http-equiv="Content-Type" content="text/html; charset=iso-8859-1"-->
+<LINK REL="SHORTCUT ICON" HREF="{webpath}wbadmin/images/wb.ico">
+<LINK href="images/wb3.css" rel="stylesheet" type="text/css">
+<script language="javascript">
+    function wbTree_executeAction(action)
+    {
+        if(top.tree!=null)top.tree.document.applets[0].executeAction(action);
+    }
+
+    function wbTree_remove()
+    {
+        wbTree_executeAction('remove');
+    }
+
+    function wbTree_reload()
+    {
+        wbTree_executeAction('reload');
+    }
+
+    function wbStatus(msg)
+    {
+	top.frames[4].location='<distpath/>/WBAdmin/WBAd_int_Status?stmsg='+msg;
+	//document.write(top.frames['status'].name);
+	
+    }
+
+    wbStatus('');
+
+</script>
+</HEAD>
+
+<BODY bgcolor="#EDEFEC" onResize="resize()" onLoad="resize()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<SCRIPT LANGUAGE="JavaScript"> 
+function resize() 
+{ 
+   var w_newWidth,w_newHeight; 
+   var w_maxWidth=1600, w_maxHeight=1200; 
+   if (navigator.appName.indexOf("Microsoft") != -1) 
+   { 
+      w_newWidth=document.body.clientWidth-15; 
+      w_newHeight=document.body.clientHeight-15; 
+   } 
+   else 
+   { 
+      var netscapeScrollWidth=50; 
+      w_newWidth=window.innerWidth-netscapeScrollWidth; 
+      w_newHeight=window.innerHeight-netscapeScrollWidth; 
+   } 
+   if (w_newWidth>w_maxWidth) 
+      w_newWidth=w_maxWidth; 
+   if (w_newHeight>w_maxHeight) 
+     w_newHeight=w_maxHeight; 
+   document.apptpleditor.setSize(w_newWidth,w_newHeight); 
+   window.scroll(0,0); 
+} 
+window.onResize = resize; 
+window.onLoad = resize; 
+</SCRIPT> 
+
+
+   <table border="0" cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td height="50">
+          <resource type="WBATools" name="frame"></resource>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <tr>
+
+              <td background="{webpath}wbadmin/images/izq.gif" width="3">
+                <img src="{webpath}wbadmin/images/izq.gif" height="1" width="3">
+              </td>
+              <td bgcolor="#FFFFFF" width="100%">
+                <resource type="WBATabs" name="tabs"></resource>
+              </td>
+              <td background="{webpath}wbadmin/images/der.gif" width="3">
+                <img src="{webpath}wbadmin/images/der.gif" height="1" width="3">
+              </td>
+            </tr>
+<!--
+            <tr>
+              <td background="{webpath}wbadmin/images/izq.gif" width="3">
+                <img src="{webpath}wbadmin/images/izq.gif" height="1" width="3">
+              </td>
+              <td>
+                <img src="{webpath}wbadmin/images/bottom.gif" height="1" width="100%">
+              </td>
+              <td background="{webpath}wbadmin/images/der.gif" width="3">
+                <img src="{webpath}wbadmin/images/der.gif" height="1" width="3">
+              </td>
+            </tr>
+-->
+          </table>
+        </td>
+      </tr>
+    </table>
+
+<!--   <table border="10" cellspacing="0" cellpadding="0" width="100" height="100">
+      <tr>
+        <td>-->
+          <content/>
+<!--        </td>
+      </tr>
+    </table>-->
+
+</BODY>
+</HTML>
