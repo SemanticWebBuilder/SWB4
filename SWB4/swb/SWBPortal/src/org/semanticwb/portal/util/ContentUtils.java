@@ -766,7 +766,7 @@ public class ContentUtils {
        * @return the html content pages number
        */
     private int getHtmlContentPagesNumber(String content) {
-        Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always\">");
+        Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always;\">");
         int size = 1;
         while (itStr.hasNext()) {
             String str=itStr.next();
@@ -787,7 +787,7 @@ public class ContentUtils {
     private String getHtmlContentByPage(String datos, int page){
         int off = 0;
         int cont = 0;
-        String matchPatron="<div style=\"page-break-after: always\">";
+        String matchPatron="<div style=\"page-break-after: always;\">";
         int f = -1;
         String data="";
         do {
