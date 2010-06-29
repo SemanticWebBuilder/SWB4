@@ -21,5 +21,7 @@
     - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenu
     - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenuMap
     - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenuNivel
+    - CPU Time por thread para monitoreo (Serch)
+
   4.0.1.4  31/05/2010
     
