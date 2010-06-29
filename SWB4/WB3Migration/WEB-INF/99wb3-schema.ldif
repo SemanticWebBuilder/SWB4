@@ -1,0 +1,56 @@
+dn: cn=schema
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.1 NAME 'admtype' DESC 'tipo deadmi
+ nistrador' SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE X-ORIGIN 'Infot
+ ec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.2 NAME 'area' DESC 'Area de adscri
+ pcion del usuario' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGI
+ N 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.3 NAME 'email' DESC 'email wubuser
+ ' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'Infotec WebBui
+ lder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.4 NAME ( 'fname' 'fn' ) DESC 'Nomb
+ re(s) del WBUser' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN
+  'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.5 NAME ( 'language' 'lang' )  SYNT
+ AX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'Infotec WebBuilder' 
+ )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.6 NAME 'lastupdate' DESC 'fecha de
+  ultima actualizacion' SYNTAX 1.3.6.1.4.1.1466.115.121.1.24 SINGLE-VALUE X-O
+ RIGIN 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.7 NAME 'login' DESC 'login WBAdmin
+ User' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'Infotec We
+ bBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.8 NAME 'mname' DESC 'Segundo Apell
+ ido del WBUser' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN '
+ Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.9 NAME 'wbid' DESC 'id de WBAdminU
+ ser' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'Infotec Web
+ Builder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.10 NAME 'xml' DESC 'xml' SYNTAX 1.
+ 3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.11 NAME 'readableBy' DESC 'lista d
+ e servers a los que se autorizo a leer' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  X-ORIGIN 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.12 NAME 'lastLogin' DESC 'fecha de
+ ultimo acceso' SYNTAX 1.3.6.1.4.1.1466.115.121.1.24 SINGLE-VALUE X-ORIGIN 
+ 'Infotec WebBuilder' ) 
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.13 NAME 'passwordChanged' DESC 'fecha de
+ ultimo cambio de password' SYNTAX 1.3.6.1.4.1.1466.115.121.1.24 SINGLE-VALUE X-ORIGIN 
+ 'Infotec WebBuilder' ) 
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.14 NAME 'confirmValue' DESC 'Valor de con
+ firmacion' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 
+ 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.15 NAME 'home' DESC 'Topico inicial'
+ SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE X-ORIGIN 
+ 'Infotec WebBuilder' )
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.16 NAME 'ID' DESC 'Identificador en WB3+'
+ SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE X-ORIGIN 'Infot
+ ec WebBuilder' ) 
+attributeTypes: ( 1.3.6.1.4.1.14835.1.1.1.2.17 NAME 'federation' DESC 'Liberty Account
+  Federation' EQUALITY caseExactMatch SUBSTR caseExactSubstringsMatch 
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15  X-ORIGIN 'Infotec WebBuilder')
+objectClasses: ( 1.3.6.1.4.1.14835.1.1.1.1.1 NAME 'WBPerson' SUP top STRUCTURA
+ L MUST uid MAY ( ID $ inetUserStatus $ mail $ givenName $ preferredLocale $ lastLogin $ 
+ passwordChanged $ mname $ readableBy $ sn $ confirmValue $ userPassword $ 
+ home $ xml $ federation) X-ORIGIN 'Infotec WebBuilder' )
+

@@ -1,0 +1,7 @@
+_caption=User type
+_description=User type
+Employe=Employee
+Student=Student
+HouseKeeper=Housekeeper
+_msgval=Select one option from the user type list
+_msghelp=Stores the user type
