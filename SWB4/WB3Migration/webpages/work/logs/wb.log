@@ -1,0 +1,125 @@
+Tue Dec 08 23:00:38 GMT 2009: Locale:			en
+Tue Dec 08 23:00:39 GMT 2009: Starting Infotec WebBuilder
+Tue Dec 08 23:00:39 GMT 2009: Admin Files in Memory:	568
+Tue Dec 08 23:00:40 GMT 2009: Core version:		3.2.2.6
+Tue Dec 08 23:00:40 GMT 2009: Initializing WBAppBroker
+Tue Dec 08 23:00:40 GMT 2009: JVM version:		1.5.0_04-b05
+Tue Dec 08 23:00:40 GMT 2009: Instance configured as:	SASC
+Tue Dec 08 23:00:40 GMT 2009: Number of processors:	2
+Tue Dec 08 23:00:40 GMT 2009: IP:			jafernandez/192.168.5.44
+Tue Dec 08 23:00:40 GMT 2009: Updating Core version 3.2.1.0 to 3.2.2.6
+Tue Dec 08 23:00:40 GMT 2009: Login Config:D:/Java/apache-tomcat-6.0.20/webapps/wb3/WEB-INF/classes/wb_jaas.config
+Tue Dec 08 23:00:40 GMT 2009: Initializing TopicMgr
+Tue Dec 08 23:00:40 GMT 2009: Initializing DBTopicMap
+Tue Dec 08 23:00:40 GMT 2009: TopicMaps in memory:	1 (ADMIN)
+Tue Dec 08 23:00:41 GMT 2009: Topics in memory:	538 (ADMIN)
+Tue Dec 08 23:00:41 GMT 2009: Associations in memory:	0 (ADMIN)
+Tue Dec 08 23:00:41 GMT 2009: Occurrences in memory:	573 (ADMIN)
+Tue Dec 08 23:00:41 GMT 2009: TopicMaps in memory:	2
+Tue Dec 08 23:00:41 GMT 2009: Topics in memory:	25
+Tue Dec 08 23:00:41 GMT 2009: Associations in memory:	0
+Tue Dec 08 23:00:41 GMT 2009: Occurrences in memory:	7
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBCatalogs
+Tue Dec 08 23:00:42 GMT 2009: GrpTemplates in memory:	2 (ADMIN)
+Tue Dec 08 23:00:42 GMT 2009: Languages in memory:	3 (ADMIN)
+Tue Dec 08 23:00:42 GMT 2009: Campaigns in memory:	4
+Tue Dec 08 23:00:42 GMT 2009: Rec. subtypes in mem.:	10
+Tue Dec 08 23:00:42 GMT 2009: Languages in memory:	4
+Tue Dec 08 23:00:42 GMT 2009: GrpTemplates in memory:	2
+Tue Dec 08 23:00:42 GMT 2009: DNS in memory:		1
+Tue Dec 08 23:00:42 GMT 2009: Devices in memory:	5
+Tue Dec 08 23:00:42 GMT 2009: IP filters in memory:	0
+Tue Dec 08 23:00:42 GMT 2009: Initializing VirtualHostMgr
+Tue Dec 08 23:00:42 GMT 2009: VirtualHost in memory: 	0
+Tue Dec 08 23:00:42 GMT 2009: Initializing RuleMgr
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBRule
+Tue Dec 08 23:00:42 GMT 2009: Rules in memory:		6 (ADMIN)
+Tue Dec 08 23:00:42 GMT 2009: Rules in memory:		2
+Tue Dec 08 23:00:42 GMT 2009: RoleMgr Initializing
+Tue Dec 08 23:00:42 GMT 2009: DBRole Initializing
+Tue Dec 08 23:00:42 GMT 2009: Roles en memoria:1
+Tue Dec 08 23:00:42 GMT 2009: Initializing UserMgr
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBUser
+Tue Dec 08 23:00:42 GMT 2009: Initializing User Repository: wb
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBUserRepWB
+Tue Dec 08 23:00:42 GMT 2009: Users Cache Initialized:1
+Tue Dec 08 23:00:42 GMT 2009: Initializing AdmFilterMgr
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBAdmFilter
+Tue Dec 08 23:00:42 GMT 2009: AdmFilter in memory:1
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBResourceType
+Tue Dec 08 23:00:42 GMT 2009: ResourceTypes in memory:	111 (ADMIN)
+Tue Dec 08 23:00:42 GMT 2009: ResourceTypes in memory:	23
+Tue Dec 08 23:00:42 GMT 2009: Initializing CampMgr
+Tue Dec 08 23:00:42 GMT 2009: Initializing ResourceMgr
+Tue Dec 08 23:00:42 GMT 2009: Initializing ResCachedMgr:100
+Tue Dec 08 23:00:42 GMT 2009: WBResourceTraceMgr active...
+Tue Dec 08 23:00:42 GMT 2009: Initializing DBResource
+Tue Dec 08 23:00:42 GMT 2009: Resources in memory:	184 (ADMIN)
+Tue Dec 08 23:00:42 GMT 2009: Resources in memory:	22
+Tue Dec 08 23:00:44 GMT 2009: Inicializando WBAdmResourceUtils...
+Tue Dec 08 23:00:47 GMT 2009: Initializing ContentMonitor..
+Tue Dec 08 23:00:48 GMT 2009: Initializing TemplateMgr
+Tue Dec 08 23:00:48 GMT 2009: Initializing DBTemplate
+Tue Dec 08 23:00:48 GMT 2009: Templates in memory:	6 (ADMIN)
+Tue Dec 08 23:00:48 GMT 2009: Templates in memory:	5
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:interna
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:interna
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:DEMOWBENG
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:DEMOWBENG
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:DEMOWB
+Tue Dec 08 23:00:48 GMT 2009: Resource not found null ->Template:DEMOWB
+Tue Dec 08 23:00:48 GMT 2009: Initializing PFlowMgr
+Tue Dec 08 23:00:48 GMT 2009: Initializing DBPFlow
+Tue Dec 08 23:00:48 GMT 2009: PublishFlows in memory:	0
+Tue Dec 08 23:00:48 GMT 2009: Initializing DBGenericMgr
+Tue Dec 08 23:00:48 GMT 2009: ScheduleMgr Initializing
+Tue Dec 08 23:00:48 GMT 2009: Initializing DBResHits
+Tue Dec 08 23:00:48 GMT 2009: initializing DBAdmLog
+Tue Dec 08 23:00:48 GMT 2009: Starting WBAccessLog
+Tue Dec 08 23:00:48 GMT 2009: Initializing WBIndexMgr
+Tue Dec 08 23:00:48 GMT 2009: Initializing Indexer: wb
+Tue Dec 08 23:00:48 GMT 2009: Initializing WBLuceneIndexer
+Tue Dec 08 23:00:48 GMT 2009: Initializing WBMessageCenter
+Tue Dec 08 23:00:48 GMT 2009: Starting WBTopicAccessIncrement
+Tue Dec 08 23:00:48 GMT 2009: Webbuilder Monitor Started (500,5s)
+Tue Dec 08 23:00:48 GMT 2009: Total memory:		23986176
+Tue Dec 08 23:00:48 GMT 2009: Free memory:		10634488
+Tue Dec 08 23:00:48 GMT 2009: Used memory:		13351688
+Tue Dec 08 23:00:48 GMT 2009: Memory used by WB:	10443680
+Tue Dec 08 23:00:48 GMT 2009: WebBuilder initialized
+Tue Dec 08 23:00:48 GMT 2009: Initializing VirtualHostFilter
+Tue Dec 08 23:00:53 GMT 2009: Initializing DBDbSync
+Tue Dec 08 23:01:34 GMT 2009: finishing Application Broker
+Tue Dec 08 23:01:34 GMT 2009: Webbuilder Monitor Stoped
+Tue Dec 08 23:01:34 GMT 2009: WBTopicAccessIncrement finalized
+Tue Dec 08 23:01:34 GMT 2009: WBMessageCenter finalized
+Tue Dec 08 23:01:34 GMT 2009: Webbuilder WBIndexMgr Stoped
+Tue Dec 08 23:01:34 GMT 2009: Stoping WBAccessLog...
+Tue Dec 08 23:01:34 GMT 2009: Updating hits...
+Tue Dec 08 23:01:34 GMT 2009: WBAccessLog finished
+Tue Dec 08 23:01:34 GMT 2009: DBAdmLog finalized
+Tue Dec 08 23:01:34 GMT 2009: DBResHits finalized
+Tue Dec 08 23:01:34 GMT 2009: ScheduleMgr Stopped
+Tue Dec 08 23:01:34 GMT 2009: DBPFlow DBGenericMgr...
+Tue Dec 08 23:01:34 GMT 2009: DBPFlow finalized
+Tue Dec 08 23:01:34 GMT 2009: PFlowMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBTemplate finalized
+Tue Dec 08 23:01:34 GMT 2009: TemplateMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBResource finalized
+Tue Dec 08 23:01:34 GMT 2009: ResourceMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: CampMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBCatalogs finalized
+Tue Dec 08 23:01:34 GMT 2009: DBAdmFilter finalized
+Tue Dec 08 23:01:34 GMT 2009: AdmFilterMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBUser finalized
+Tue Dec 08 23:01:34 GMT 2009: WBUser finalized
+Tue Dec 08 23:01:34 GMT 2009: DBRole finalizado
+Tue Dec 08 23:01:34 GMT 2009: RoleMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBRule finalized
+Tue Dec 08 23:01:34 GMT 2009: RuleMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: VirtualHostMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: DBCatalogs finalized
+Tue Dec 08 23:01:34 GMT 2009: DBTopicMap finalized
+Tue Dec 08 23:01:34 GMT 2009: TopicMgr finalized
+Tue Dec 08 23:01:34 GMT 2009: WebBuilder stopped
+Tue Dec 08 23:01:34 GMT 2009: Locale:			en

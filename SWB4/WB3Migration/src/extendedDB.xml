@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXTDEF localeLocation="/userrep/wb">
+	<USERTYPE VALUE="Employe"/>
+	<USERTYPE VALUE="Student"/>
+	<USERTYPE VALUE="HouseKeeper"/>
+	<TEXT NAME="City" DESC="Residence city"/>
+	<LIST NAME="Sex" DESC="User Sex">
+		<ELEMENT VALUE="Male"/>
+		<ELEMENT VALUE="Female"/>
+		<ELEMENT VALUE="Undisclosure"/>
+	</LIST>
+</EXTDEF>
