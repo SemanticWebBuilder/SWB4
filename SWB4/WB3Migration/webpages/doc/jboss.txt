@@ -1,0 +1,24 @@
+You have to unpack the wb3.war in the next path
+
+    jboss\server\default\deploy
+
+example
+    
+    jboss\server\default\deploy\wb3.war
+
+note: the "wb3.war" is a directory
+
+
+For the login configuration you have modify the next file:
+	
+    jboss\server\default\conf\login-config.xml
+
+and add the next lines
+
+    <!--WB Login configuration -->
+    <application-policy name="basicModule">
+       <authentication>
+          <login-module code="com.infotec.wb.core.Authentication.WBPasiveLoginModule" flag="required">
+          </login-module>
+       </authentication>
+    </application-policy>

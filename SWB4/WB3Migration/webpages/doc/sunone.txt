@@ -1,0 +1,35 @@
+server.policy
+
+1.- Agregar los permisos requeridos por WebBuilder en el archivo
+    RUTA_AL_DOMINIO/config/server.policy
+
+grant {
+        permission java.lang.RuntimePermission "createClassLoader";
+        permission java.util.PropertyPermission "*", "read,write";
+        permission java.util.PropertyPermission "sun.net.client.defaultConnectTimeout", "write";
+        permission java.util.PropertyPermission "sun.net.client.defaultReadTimeout", "write";
+        permission javax.security.auth.AuthPermission "createLoginContext.basicModule";
+        permission java.io.FilePermission "${/}-", "read,write,execute,delete";
+        permission java.lang.RuntimePermission "writeFileDescriptor";
+        permission java.net.SocketPermission    "*", "connect,accept,listen,resolve";
+        permission java.net.NetPermission "*", "specifyStreamHandler";
+};
+
+login.config
+
+2.- Activar el módulo de logueo en SunOne
+    Modificar el archivo RUTA_AL_DOMINIO/config/login.conf y agregar la ruta al módulo
+
+basicModule {
+   com.infotec.wb.core.Authentication.WBPasiveLoginModule required; };
+
+webuilder
+
+3.- Deshabilitar la configuración de JAAS desde WebBuilder
+    Modificar el archivo web.properties de WebBuilder y cambiar el valor
+
+wb/security.auth.login.config=/wb_jaas.config
+
+Por
+
+wb/security.auth.login.config=ignore

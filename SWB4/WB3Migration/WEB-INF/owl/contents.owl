@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:swb_wiki="http://www.semanticwebbuilder.org/swb4/wiki#"
+    xmlns:swb_entry="http://www.semanticwebbuilder.org/swb4/entry#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0#"
+    xmlns:swbrep="http://www.semanticwebbuilder.org/swb4/repository#"
+    xmlns:swb_news="http://www.semanticwebbuilder.org/swb4/news#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:mix="http://www.jcp.org/jcr/mix/1.0#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swb_rss="http://www.semanticwebbuilder.org/swb4/rss#"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0#"
+    xmlns:swb_blog="http://www.semanticwebbuilder.org/swb4/blog#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/blog">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/repository"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/entry#Entry">
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#file"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/news#Entry">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/entry#Entry"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</mix:mixin>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Comment">
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#file"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </owl:Class>
+  <rdf:Property rdf:about="http://www.semanticwebbuilder.org/swb4/news#title">
+    <rdfs:domain>
+      <swbrep:Node rdf:about="http://www.semanticwebbuilder.org/swb4/news#News">
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+        <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</mix:mixin>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:referenceable</jcr:supertypes>
+        <jcr:childNodeDefinition>
+          <nt:childNodeDefinition>
+            <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:mandatory>
+            <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >news:Entry</jcr:defaultPrimaryType>
+            <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:protected>
+            <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >news:Entry</jcr:requiredPrimaryTypes>
+            <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</jcr:sameNameSiblings>
+            <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >news:Entry</jcr:name>
+            <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IGNORE</jcr:onParentVersion>
+            <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:autoCreated>
+          </nt:childNodeDefinition>
+        </jcr:childNodeDefinition>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swbrep:Node>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#newsuddi">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#dp_newsuddi">
+        <rdfs:label xml:lang="en">News UDDI source</rdfs:label>
+        <rdfs:label xml:lang="es">UDDI de las Noticias a utilizar</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/rss#SWBRss">
+        <rdfs:label>RSS</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#wikiuddi">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#dp_wikiuddi">
+        <rdfs:label>UDDI del Wiki a utilizar</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/rss#SWBRss"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="title">
+    <rdfs:domain>
+      <swb:Class rdf:ID="Blog">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >mix:referenceable</jcr:supertypes>
+        <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</mix:mixin>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+        <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
+        <jcr:childNodeDefinition>
+          <nt:childNodeDefinition>
+            <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:autoCreated>
+            <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >blog:Entry</jcr:defaultPrimaryType>
+            <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:mandatory>
+            <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >blog:Entry</jcr:name>
+            <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >COPY</jcr:onParentVersion>
+            <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</jcr:protected>
+            <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >blog:Entry</jcr:requiredPrimaryTypes>
+            <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</jcr:sameNameSiblings>
+          </nt:childNodeDefinition>
+        </jcr:childNodeDefinition>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/entry#category">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/entry#Entry"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/entry#url">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/entry#Entry"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#bloguddi">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/rss#dp_bloguddi">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <rdfs:label xml:lang="es">UDDI del Blog a utilizar</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/rss#SWBRss"/>
+  </owl:DatatypeProperty>
+  <swb:SemanticResource rdf:ID="SWBBlog">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdfs:label>Blog</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+  <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/wiki#Wiki">
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >wiki:Entry</jcr:requiredPrimaryTypes>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:sameNameSiblings>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >COPY</jcr:onParentVersion>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >wiki:Entry</jcr:name>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >wiki:Entry</jcr:defaultPrimaryType>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</mix:mixin>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/nt/1.0#folder"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </swb:Class>
+  <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/news#SWBNews">
+    <rdfs:label>News</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/news#pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.news</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb_news</swb:prefix>
+  </swb:CodePackage>
+  <swb:Class rdf:about="http://www.semanticwebbuilder.org/swb4/wiki#Entry">
+    <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</mix:mixin>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:versionable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/entry#Entry"/>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#versionable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/repository#Node"/>
+  </swb:Class>
+  <swbrep:Node rdf:ID="Entry">
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:referenceable</jcr:supertypes>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#referenceable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/entry#Entry"/>
+    <jcr:childNodeDefinition>
+      <nt:childNodeDefinition>
+        <jcr:autoCreated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:autoCreated>
+        <jcr:defaultPrimaryType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >blog:Comment</jcr:defaultPrimaryType>
+        <jcr:mandatory rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:mandatory>
+        <jcr:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >blog:Comment</jcr:name>
+        <jcr:onParentVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IGNORE</jcr:onParentVersion>
+        <jcr:protected rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</jcr:protected>
+        <jcr:requiredPrimaryTypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >blog:Comment</jcr:requiredPrimaryTypes>
+        <jcr:sameNameSiblings rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</jcr:sameNameSiblings>
+      </nt:childNodeDefinition>
+    </jcr:childNodeDefinition>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <jcr:supertypes rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >mix:versionable</jcr:supertypes>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <mix:mixin rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</mix:mixin>
+    <rdfs:subClassOf rdf:resource="http://www.jcp.org/jcr/mix/1.0#versionable"/>
+  </swbrep:Node>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/rss#pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb_rss</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.rss</swb:package>
+  </swb:CodePackage>
+  <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/wiki#pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.wiki</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb_wiki</swb:prefix>
+  </swb:CodePackage>
+  <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/wiki#SWBWiki">
+    <rdfs:label>Wiki</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >swb_blog</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.blog</swb:package>
+  </swb:CodePackage>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
