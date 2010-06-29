@@ -39,6 +39,7 @@ import java.security.Principal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -70,7 +71,7 @@ public class SWBContext extends SWBContextBase {
     private static Logger log = SWBUtils.getLogger(SWBContext.class);
     
     /** The m_sessions. */
-    private static HashMap<String, SessionUser> m_sessions = new HashMap();
+    private static ConcurrentHashMap<String, SessionUser> m_sessions = new ConcurrentHashMap();
     
     /** The filtered. */
     private static ArrayList<String> filtered = new ArrayList();
