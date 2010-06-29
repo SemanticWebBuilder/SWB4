@@ -1,34 +1,34 @@
-<swbForm htmlType="dojo">
+<form htmlType="dojo">
     <table>
     <tr><td colspan="2" align="center">Cabecera George24</td></tr>
     <tr><td>
     <fieldset>
     <legend>Grupo de Elementos</legend>
-    <swbClass uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon" filterRequired="true" htmlRowType="tr|li">
+    <class uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon">
      <table>
         <tr>
-            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
-            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
         </tr>
         <tr>
-            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
-            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
         </tr>
         <tr>
-            <td><swbproplabel uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
-            <td><swbprop uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
         </tr>
       </table>
-    </swbClass>
+    </class>
     </fieldset>
     </td></tr>
     <tr>
         <td colspan="2" align="center">
             <fieldset>
             <legend>Botones</legend>
-            <swbButton type="saveBtn"/><swbButton type="cancelBtn"/>
+            <Button type="saveBtn"/><Button type="cancelBtn"/>
             </fieldset>
         </td>
     </tr>
     </table>
-</swbForm>
+</form>
