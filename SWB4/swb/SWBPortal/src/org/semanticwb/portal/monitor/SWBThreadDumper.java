@@ -113,7 +113,7 @@ public class SWBThreadDumper
         long[] tiarr = thbean.getAllThreadIds();
         for (long ct : tiarr)
         {
-            sb.append("ThreadCpuTime:"+thbean.getThreadCpuTime(ct)+"\n");
+            sb.append("ThreadCpuTime: "+SWBFormatUtils.formatTime(thbean.getThreadCpuTime(ct)/1000000)+"\n");
             sb.append(formatThreadInfo(thbean.getThreadInfo(ct)));
         }
         return sb.toString();
@@ -131,6 +131,7 @@ public class SWBThreadDumper
         long[] tiarr = thbean.getAllThreadIds();
         for (long ct : tiarr)
         {
+            sb.append("ThreadCpuTime: "+SWBFormatUtils.formatTime(thbean.getThreadCpuTime(ct)/1000000)+"\n");
             sb.append(formatThreadInfo(thbean.getThreadInfo(ct, Integer.MAX_VALUE)));
         }
         return sb.toString();
