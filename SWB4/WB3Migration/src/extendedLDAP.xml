@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXTDEF localeLocation="/userrep/ldap">
+	<USERTYPE VALUE="Visitor" DESC="Visitor User"/>
+	<INTEGER NAME="Age" DESC="User age"/>
+	<LIST NAME="SEX" DESC="User sex">
+		<ELEMENT VALUE="Male"></ELEMENT>
+		<ELEMENT VALUE="Female"></ELEMENT>
+	</LIST>
+	<TEXT NAME="CITY" DESC="User city"/>
+</EXTDEF>

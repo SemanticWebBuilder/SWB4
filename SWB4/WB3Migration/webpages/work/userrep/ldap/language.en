@@ -1,0 +1,5 @@
+_caption=Language
+_description=User's prefered language
+_msgval=Please indicate user's language
+_msghelp=Indicates user's prefered language
+_lang=default

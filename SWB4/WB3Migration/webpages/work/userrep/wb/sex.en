@@ -1,0 +1,7 @@
+_caption=Sex
+_description=Sex
+_msgval=Select one option from the list of sexs.
+_msghelp= Indicates user's sex (male / female)
+_list=Male=Male
+_list=Female=Female
+_list=Undisclosure=I prefere not to disclose this information

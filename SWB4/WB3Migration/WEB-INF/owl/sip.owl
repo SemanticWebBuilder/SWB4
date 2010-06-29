@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:sip="http://www.semanticwebbuilder.org/swb4/sip#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns="http://www.semanticwebbuilder.org/portal/resources/sip.owl#"
+  xml:base="http://www.semanticwebbuilder.org/portal/resources/sip.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/sip#SIPResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
+  <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/sip#VideoResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/sip#SIPResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
