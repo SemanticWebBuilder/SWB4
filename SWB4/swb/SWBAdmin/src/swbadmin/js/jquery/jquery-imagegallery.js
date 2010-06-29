@@ -23,7 +23,7 @@ function simpleGallery(settingarg){
 	var preloadimages=[] //temp array to preload images
 	for (var i=0; i<setting.imagearray.length; i++){
 		preloadimages[i]=new Image()
-		preloadimages[i].src=setting.imagearray[i][0]
+		preloadimages[i].src=setting.imagearray[i][1]
 	}
         
 	var slideshow=this
