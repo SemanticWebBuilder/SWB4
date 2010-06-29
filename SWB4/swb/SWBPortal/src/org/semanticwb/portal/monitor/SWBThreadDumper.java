@@ -113,6 +113,7 @@ public class SWBThreadDumper
         long[] tiarr = thbean.getAllThreadIds();
         for (long ct : tiarr)
         {
+            sb.append("ThreadCpuTime:"+thbean.getThreadCpuTime(ct)+"\n");
             sb.append(formatThreadInfo(thbean.getThreadInfo(ct)));
         }
         return sb.toString();
