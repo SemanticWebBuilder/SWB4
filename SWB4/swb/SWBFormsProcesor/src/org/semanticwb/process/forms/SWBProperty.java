@@ -79,7 +79,7 @@ public class SWBProperty implements SWBFormLayer{
             try{
                 String tagName=tag.getNodeName();
 
-                if(tagName.equalsIgnoreCase("swbbutton") && type!=null){
+                if(tagName.equalsIgnoreCase("button") && type!=null){
 
                     if(type.equalsIgnoreCase("savebtn")) {
                         renderElement=SWBFormButton.newSaveButton().renderButton(request, htmlType, user.getLanguage());
@@ -91,13 +91,13 @@ public class SWBProperty implements SWBFormLayer{
                     SemanticProperty semProp=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
                     if(semProp!=null)
                     {
-                        if(tag.getNodeName().equalsIgnoreCase("swbprop")){
+                        if(tag.getNodeName().equalsIgnoreCase("property")){
                             String mode=swbFormMgr.MODE_CREATE;
                             if(base.getAttribute("objInst")!=null && base.getAttribute("objInst").trim().length()>0) {
                                 mode=swbFormMgr.MODE_EDIT;
                             }
                             renderElement=swbFormMgr.renderElement(request, semProp, mode);
-                        }else if(tag.getNodeName().equalsIgnoreCase("swbproplabel")){
+                        }else if(tag.getNodeName().equalsIgnoreCase("label")){
                             renderElement=semProp.getDisplayName(user.getLanguage());
                         }
                     }

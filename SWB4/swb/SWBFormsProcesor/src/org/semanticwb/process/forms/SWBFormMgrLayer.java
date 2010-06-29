@@ -58,7 +58,7 @@ public class SWBFormMgrLayer {
             dom = SWBUtils.XML.xmlToDom(xml);
             NodeList ndllevel1 = dom.getChildNodes();
             if (ndllevel1.getLength() > 0) { //en el tag swbForm pueden venir algunos atributos para la forma, ej. si se utilizara Dojo como framework
-                if (ndllevel1.item(0).getNodeName().equalsIgnoreCase("swbForm")) {
+                if (ndllevel1.item(0).getNodeName().equalsIgnoreCase("Form")) {
                     NamedNodeMap nnodemap = ndllevel1.item(0).getAttributes();
                     if (nnodemap.getLength() > 0) {
                         for (int i = 0; i < nnodemap.getLength(); i++) { //Preparado para si se requiere agregar más parametros al tag swbForm
@@ -118,9 +118,9 @@ public class SWBFormMgrLayer {
         for (int i = 0; i <= nlist.getLength(); i++) {
             Node unKwonnode = nlist.item(i);
             if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
-                if (unKwonnode.getNodeName().equalsIgnoreCase("swbClass")) {
+                if (unKwonnode.getNodeName().equalsIgnoreCase("Class")) {
                     aSWBClassNodes.add(unKwonnode);
-                } else if (unKwonnode.getNodeName().equalsIgnoreCase("swbButton")) {
+                } else if (unKwonnode.getNodeName().equalsIgnoreCase("Button")) {
                     aSWBPropertyNodes.add(unKwonnode);
                 } else {
                     findSWBClassNodes(unKwonnode, aSWBClassNodes, aSWBPropertyNodes);
@@ -136,7 +136,7 @@ public class SWBFormMgrLayer {
             Node unKwonnode = nlist.item(i);
             if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
                 String snodelName = unKwonnode.getNodeName();
-                if (snodelName.equalsIgnoreCase("swbprop") || snodelName.equalsIgnoreCase("swbproplabel")) {
+                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label")) {
                     aSWBPropsNodes.add(unKwonnode);
                 } else {
                     findPropertyNodes(unKwonnode, aSWBPropsNodes);
@@ -157,6 +157,13 @@ public class SWBFormMgrLayer {
         if (sDojo.equalsIgnoreCase("dojo")) {
             sDojo = "dojoType=\"dijit.form.Form\"";
         }
+        int pos=-1;
+        pos=xml.indexOf("<form");
+        if(pos>-1){
+            int pos1=xml.indexOf(">", pos);
+            xml=xml.substring(0,pos)+xml.substring(pos1+1);
+        }
+        
         strb.append("<form name=\"SWBFormMgrLayer\" method=\"post\" action=\"" + actionUrl + "\" id=\"SWBFormMgrLayer\" " + sDojo + " class=\"swbform\">");
         Iterator<SWBClass> itaClasses = aClasses.iterator();
         while (itaClasses.hasNext()) {
@@ -187,7 +194,7 @@ public class SWBFormMgrLayer {
             xml = xml.replaceFirst(swbProperty.getTag(), swbProperty.getHtml()); //TODO:Ver si puedo no barrerme todo el archivo por cada una de las propiedades
         }
         strb.append(xml);
-        strb.append("</form>");
+        //strb.append("</form>");
         return strb.toString();
     }
 
