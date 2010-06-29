@@ -1,0 +1,4 @@
+_caption=Confirm password
+_description=Confirm user's password
+_msgval=Please indicate a password of at least 6 letters, digits or symbols
+_msghelp=Stores user's password
