@@ -128,8 +128,15 @@ public class ContentUtils {
             int pos1 = content.indexOf("{", pos);
             int npages = Integer.parseInt(content.substring(pos + 11, pos1 - 1).trim());
             return npages;
+        }else {
+            pos=content.lastIndexOf("div.WordSection");
+            if (pos > -1) {
+                int pos1 = content.indexOf("{", pos);
+                int npages = Integer.parseInt(content.substring(pos + 15, pos1 - 1).trim());
+                return npages;
+            }
+            return 1;
         }
-        return 1;
     }
 
     //regresa string html de contenido páginado
@@ -312,7 +319,7 @@ public class ContentUtils {
                                 rettmp.append(name);
                                 rettmp.append("=\"");
                                 if (name.toLowerCase().equals("class")) { //si es atributo class
-                                    if (value.toLowerCase().equals("section" + page)) {
+                                    if (value.toLowerCase().endsWith("section" + page)) {
                                         flag = true;
                                         ret.append(rettmp.toString());
                                         ret.append(value);
