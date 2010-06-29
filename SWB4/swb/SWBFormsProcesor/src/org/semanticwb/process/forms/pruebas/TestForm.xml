@@ -4,22 +4,24 @@
     <tr><td>
     <fieldset>
     <legend>Grupo de Elementos</legend>
-    <class uri="http://www.semanticwebbuilder.org/swb4/pymestur#Cupon">
-     <table>
+    <table>
         <tr>
             <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
             <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
         </tr>
         <tr>
             <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
-            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
+            <td>
+                <property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions" modeview="edit" required="true">
+                    <formelement classuri=""/>
+                </property>
+            </td>
         </tr>
         <tr>
             <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
             <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
         </tr>
-      </table>
-    </class>
+    </table>
     </fieldset>
     </td></tr>
     <tr>
