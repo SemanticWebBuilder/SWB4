@@ -33,7 +33,6 @@ public class SWBFormMgrLayer {
     private Document dom = null;
     private User user = null;
     HttpServletRequest request = null;
-    ArrayList<SWBClass> aClasses = null;
     ArrayList<SWBProperty> aProperties = null;
     SWBParamRequest paramRequest = null;
     private String htmlType = "";
@@ -48,7 +47,6 @@ public class SWBFormMgrLayer {
     }
 
     private void init() {
-        aClasses = new ArrayList();
         aProperties = new ArrayList();
         user = paramRequest.getUser();
     }
@@ -72,39 +70,13 @@ public class SWBFormMgrLayer {
                         }
                     }
 
-                    ArrayList<Node> aSWBClassNodes = new ArrayList();
                     ArrayList<Node> aSWBPropertyNodes = new ArrayList();
-                    findSWBClassNodes(ndllevel1.item(0), aSWBClassNodes, aSWBPropertyNodes);
-                    Iterator<Node> itASWBClassNodes = aSWBClassNodes.iterator();
-                    Iterator<Node> itSWBPropertyNodes = aSWBPropertyNodes.iterator();
-                    while (itASWBClassNodes.hasNext()) {
-                        Node swbClassNode = itASWBClassNodes.next();
-                        //Creación de SWBClass
-                        SWBClass swbClass = new SWBClass(swbClassNode, paramRequest, htmlType);
-                        if (user != null) {
-                            swbClass.setLocale(new java.util.Locale(user.getLanguage()));
-                        } else {
-                            swbClass.setLocale(SWBUtils.TEXT.getLocale());
-                        }
-                        //Barrido de las propiedades de la clase
-                        Iterator<Node> itPropertyNodes = findPropertyNodes(swbClassNode, new ArrayList()).iterator();
-                        if (itPropertyNodes.hasNext()) //Tiene nodos el tag de swbClass, pintar solo propiedades del nodo
-                        {
-                            while (itPropertyNodes.hasNext()) {
-                                Node swbPropertyNode = itPropertyNodes.next();
-                                SWBProperty property = new SWBProperty(swbPropertyNode, swbClass.getSWBFormMgr(), request, paramRequest);
-                                swbClass.addElement(property);
-                            }
-                        } else { //No tiene nodos el tag de swbClass, pintar todas las propiedades de la clase
-                            //TODO
-                        }
-                        aClasses.add(swbClass);
-                    }
-                    while (itSWBPropertyNodes.hasNext()) { //Utilizado en este momento solo para el caso de que la propiedad sea un boton (Tag swbButton)
+                    Iterator <Node>itSWBPropertyNodes=findPropertyNodes(ndllevel1.item(0), aSWBPropertyNodes).iterator();
+                    while (itSWBPropertyNodes.hasNext()) {//Barrido de las propiedades existentes
                         Node swbPropertyNode = itSWBPropertyNodes.next();
                         SWBProperty property = new SWBProperty(swbPropertyNode, htmlType, request, paramRequest);
                         aProperties.add(property);
-                    }
+                    }                    
                 }
             }
         } catch (Exception e) {
@@ -112,31 +84,13 @@ public class SWBFormMgrLayer {
         }
     }
 
-    private void findSWBClassNodes(Node swbFormNode, ArrayList aSWBClassNodes, ArrayList aSWBPropertyNodes) {
-
-        NodeList nlist = swbFormNode.getChildNodes();
-        for (int i = 0; i <= nlist.getLength(); i++) {
-            Node unKwonnode = nlist.item(i);
-            if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
-                if (unKwonnode.getNodeName().equalsIgnoreCase("Class")) {
-                    aSWBClassNodes.add(unKwonnode);
-                } else if (unKwonnode.getNodeName().equalsIgnoreCase("Button")) {
-                    aSWBPropertyNodes.add(unKwonnode);
-                } else {
-                    findSWBClassNodes(unKwonnode, aSWBClassNodes, aSWBPropertyNodes);
-                }
-            }
-        }
-    }
-
     private ArrayList findPropertyNodes(Node swbClassNode, ArrayList aSWBPropsNodes) {
-
         NodeList nlist = swbClassNode.getChildNodes();
         for (int i = 0; i <= nlist.getLength(); i++) {
             Node unKwonnode = nlist.item(i);
             if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
                 String snodelName = unKwonnode.getNodeName();
-                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label")) {
+                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label") ||  snodelName.equalsIgnoreCase("Button")) {
                     aSWBPropsNodes.add(unKwonnode);
                 } else {
                     findPropertyNodes(unKwonnode, aSWBPropsNodes);
@@ -165,36 +119,27 @@ public class SWBFormMgrLayer {
         }
         
         strb.append("<form name=\"SWBFormMgrLayer\" method=\"post\" action=\"" + actionUrl + "\" id=\"SWBFormMgrLayer\" " + sDojo + " class=\"swbform\">");
-        Iterator<SWBClass> itaClasses = aClasses.iterator();
-        while (itaClasses.hasNext()) {
-            SWBClass swbClass = itaClasses.next();
-            Iterator<SWBFormLayer> itElements = swbClass.getElements().iterator();
-            while (itElements.hasNext()) {
-                SWBFormLayer swbFormLayerElement = itElements.next();
-
-                String match=swbFormLayerElement.getTag();
-                String replace=swbFormLayerElement.getHtml();
+        Iterator<SWBProperty> itaProperties = aProperties.iterator();
+        while (itaProperties.hasNext()) {
+            SWBProperty swbProperty = itaProperties.next();
+                String match=swbProperty.getTag();
+                System.out.println("match:"+match);
+                String replace=swbProperty.getHtml();
                 //Me barro todas las porpiedades del xml, pero voy guardando el indice para seguir barriendo el xml apartir de la ultima propiedad encontrada
-                index=xml.indexOf(match,y);
-                xmlTmp+=xml.substring(y, index);
-                xmlTmp+=replace;
-                y = index + match.length();
+                //index=xml.indexOf(match,y);
+                //xmlTmp+=xml.substring(y, index);
+                //xmlTmp+=replace;
+                //y = index + match.length();
             }
-            if(swbClass.getSWBFormMgr().getFormHiddens()!=null){
-                strb.append(swbClass.getSWBFormMgr().getFormHiddens());//Agrego los hiddens que me regresa el FormMgr para cada Clase
-            }
-        }
+            //if(swbClass.getSWBFormMgr().getFormHiddens()!=null){
+            //    strb.append(swbClass.getSWBFormMgr().getFormHiddens());//Agrego los hiddens que me regresa el FormMgr para cada Clase
+            //}
         if(xmlTmp.trim().length()>0){
             xmlTmp+=xml.substring(index);
             xml = xmlTmp;
         }
-        Iterator<SWBProperty> itproperties = aProperties.iterator();
-        while (itproperties.hasNext()) {
-            SWBProperty swbProperty = itproperties.next();
-            xml = xml.replaceFirst(swbProperty.getTag(), swbProperty.getHtml()); //TODO:Ver si puedo no barrerme todo el archivo por cada una de las propiedades
-        }
         strb.append(xml);
-        //strb.append("</form>");
+        strb.append("</form>");
         return strb.toString();
     }
 
