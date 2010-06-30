@@ -695,29 +695,51 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         this.jMenuItemFileRename.setEnabled(false);
         this.jMenuItemFileDelete.setEnabled(false);
         this.jMenuAdd.setEnabled(false);
-        this.jMenuItemDirDelete.setEnabled(false);
-        this.jMenuFileAdd.setEnabled(false);
+        //this.jMenuItemDirDelete.setEnabled(false);
+        //this.jMenuFileAdd.setEnabled(false);
         this.jMenuBorrar.setEnabled(false);
         if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {
-            if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            try
             {
-                jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
-                File file=model.getFile(jTableFiles.getSelectedRow());
-                if(hasPermission(file))
+                if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
                 {
-                    this.jMenuItemDirDelete.setEnabled(true);
-                    this.jMenuFileAdd.setEnabled(true);
-                    this.jMenuBorrar.setEnabled(true);
-                    this.jMenuItemFileDownload.setEnabled(true);
-                    this.jMenuItemFileRename.setEnabled(true);
-                    this.jMenuItemFileDelete.setEnabled(true);
-                    this.jMenuFileAdd.setEnabled(true);
-                    this.jMenuAdd.setEnabled(true);
-                    this.jMenuBorrar.setEnabled(true);
+
+                    Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
+                    if(this.hasPermission(dir.getDirectory()))
+                    {
+                        this.jMenuFileAdd.setEnabled(true);
+
+                    }
                 }
+                if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
+                {
+                    jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
+                    File file=model.getFile(jTableFiles.getSelectedRow());
+                    if(hasPermission(file))
+                    {
+                        //this.jMenuItemDirDelete.setEnabled(true);
+                        this.jMenuFileAdd.setEnabled(true);
+                        this.jMenuBorrar.setEnabled(true);
+                        this.jMenuItemFileDownload.setEnabled(true);
+                        this.jMenuItemFileRename.setEnabled(true);
+                        this.jMenuItemFileDelete.setEnabled(true);
+                        //this.jMenuFileAdd.setEnabled(true);
+                        this.jMenuAdd.setEnabled(true);
+                        this.jMenuBorrar.setEnabled(true);
+                    }
+                }
+                this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());
             }
-            this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
         }
     }//GEN-LAST:event_jScrollPane2MousePressed
 
@@ -952,6 +974,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             this.jButtonaddFolder.setEnabled(false);
             this.jMenuBorrar.setEnabled(false);
             this.jMenuDirAdd.setEnabled(false);
+            this.jMenuAdd.setEnabled(false);
             this.jMenuItemCrearDirectorio.setEnabled(false);
             this.jMenuRename.setEnabled(false);
             if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
@@ -960,6 +983,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
                 if(this.hasPermission(dir.getDirectory()))
                 {
+                    this.jMenuAdd.setEnabled(true);
                     this.jMenuRename.setEnabled(true);
                     this.jMenuItemCrearDirectorio.setEnabled(true);
                     this.jMenuDirAdd.setEnabled(true);
