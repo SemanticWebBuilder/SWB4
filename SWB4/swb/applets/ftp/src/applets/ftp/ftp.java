@@ -694,8 +694,9 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         this.jMenuItemFileDownload.setEnabled(false);
         this.jMenuItemFileRename.setEnabled(false);
         this.jMenuItemFileDelete.setEnabled(false);
+        this.jMenuAdd.setEnabled(false);
         if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
-        {         
+        {
             if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
             {
                 jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
@@ -705,9 +706,10 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                     this.jMenuItemFileDownload.setEnabled(true);
                     this.jMenuItemFileRename.setEnabled(true);
                     this.jMenuItemFileDelete.setEnabled(true);
+                    this.jMenuAdd.setEnabled(true);
                 }
-            }            
-            this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());            
+            }
+            this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());
         }
     }//GEN-LAST:event_jScrollPane2MousePressed
 
@@ -936,14 +938,26 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
     private void jTreeDirsValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTreeDirsValueChanged
         
-        if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
-        {
-            Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
-            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            loadFiles(dir);            
-        }
-        this.jTreeDirs.updateUI();
-        this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        this.jButtonAddFile.setEnabled(false);
+            this.jButtonDownload.setEnabled(false);
+            this.jButtonNewFolder.setEnabled(false);
+            this.jButtonaddFolder.setEnabled(false);
+
+            if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
+            {
+                this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
+                if(this.hasPermission(dir.getDirectory()))
+                {
+                    this.jButtonAddFile.setEnabled(true);
+                    this.jButtonDownload.setEnabled(true);
+                    this.jButtonNewFolder.setEnabled(true);
+                    this.jButtonaddFolder.setEnabled(true);
+                }
+                loadFiles(dir);
+            }
+            this.jTreeDirs.updateUI();
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         
     }//GEN-LAST:event_jTreeDirsValueChanged
     public boolean createFile(java.io.File filelocal,String path,boolean siAll) throws Exception 
