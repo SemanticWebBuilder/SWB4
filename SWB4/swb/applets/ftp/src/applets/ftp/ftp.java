@@ -693,41 +693,22 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MousePressed
         this.jMenuItemFileDownload.setEnabled(false);
         this.jMenuItemFileRename.setEnabled(false);
-        this.jMenuItemFileDelete.setEnabled(false);
-        this.jMenuAdd.setEnabled(false);
-        //this.jMenuItemDirDelete.setEnabled(false);
-        //this.jMenuFileAdd.setEnabled(false);
-        this.jMenuBorrar.setEnabled(false);
+        this.jMenuItemFileDelete.setEnabled(false);                
         if(evt.getButton()==MouseEvent.BUTTON3 && evt.getClickCount()==1)
         {
             this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
             try
-            {
-                if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
-                {
-
-                    Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
-                    if(this.hasPermission(dir.getDirectory()))
-                    {
-                        this.jMenuFileAdd.setEnabled(true);
-
-                    }
-                }
+            {                
                 if(this.jTableFiles.getSelectedRowCount()>0 && this.jTableFiles.getModel().getRowCount()>0)
                 {
                     jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
                     File file=model.getFile(jTableFiles.getSelectedRow());
                     if(hasPermission(file))
-                    {
-                        //this.jMenuItemDirDelete.setEnabled(true);
-                        this.jMenuFileAdd.setEnabled(true);
-                        this.jMenuBorrar.setEnabled(true);
+                    {                        
                         this.jMenuItemFileDownload.setEnabled(true);
                         this.jMenuItemFileRename.setEnabled(true);
                         this.jMenuItemFileDelete.setEnabled(true);
-                        //this.jMenuFileAdd.setEnabled(true);
-                        this.jMenuAdd.setEnabled(true);
-                        this.jMenuBorrar.setEnabled(true);
+                        
                     }
                 }
                 this.jPopupMenuFile.show(this.jScrollPane2, evt.getX(),evt.getY());
@@ -977,12 +958,15 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             this.jMenuAdd.setEnabled(false);
             this.jMenuItemCrearDirectorio.setEnabled(false);
             this.jMenuRename.setEnabled(false);
+            this.jMenuFileAdd.setEnabled(false);
+
             if(this.jTreeDirs.getSelectionPath().getLastPathComponent() instanceof Directory)
             {
                 this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                 Directory dir=(Directory)this.jTreeDirs.getSelectionPath().getLastPathComponent();
                 if(this.hasPermission(dir.getDirectory()))
                 {
+                    this.jMenuFileAdd.setEnabled(true);
                     this.jMenuAdd.setEnabled(true);
                     this.jMenuRename.setEnabled(true);
                     this.jMenuItemCrearDirectorio.setEnabled(true);
