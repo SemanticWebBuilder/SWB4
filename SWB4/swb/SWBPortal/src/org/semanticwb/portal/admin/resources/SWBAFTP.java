@@ -798,8 +798,7 @@ public class SWBAFTP extends GenericResource{
                             catch(Exception e)
                             {
                                 log.error(e);
-                            }
-                            i++;
+                            }                            
                         }
                     }
                 }
