@@ -211,5 +211,14 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
     }
 
+    /**
+     * Regresa Pagina Web asociada al proceso
+     * @return ProcessWebPage
+     */
+    public ProcessWebPage getProcessWebPage()
+    {
+        return getProcessInstance().getProcessType().getProcessWebPage();
+    }
+
 
 }

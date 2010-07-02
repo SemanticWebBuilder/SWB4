@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Containerable
+public abstract class SubProcessBase extends org.semanticwb.process.model.Activity implements org.semanticwb.model.Traceable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.Containerable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swp_SubProcess=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#SubProcess");
@@ -68,6 +68,18 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
         public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByFlowObjectInstance(org.semanticwb.process.model.FlowNodeInstance value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasFlowNodeInstanceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByTemplateRef(org.semanticwb.model.TemplateRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.SubProcess> listSubProcessByTemplateRef(org.semanticwb.model.TemplateRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.SubProcess> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasTemplateRef,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -159,6 +171,52 @@ public abstract class SubProcessBase extends org.semanticwb.process.model.Activi
     public SubProcessBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listTemplateRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listObjectProperties(swb_hasTemplateRef));
+    }
+
+    public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listInheritProperties(swb_hasTemplateRef));
+    }
+
+    public void addTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasTemplateRef, value.getSemanticObject());
+    }
+
+    public void removeAllTemplateRef()
+    {
+        getSemanticObject().removeProperty(swb_hasTemplateRef);
+    }
+
+    public void removeTemplateRef(org.semanticwb.model.TemplateRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasTemplateRef,value.getSemanticObject());
+    }
+
+    public org.semanticwb.model.TemplateRef getTemplateRef()
+    {
+         org.semanticwb.model.TemplateRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasTemplateRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.TemplateRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.GraphicalElement> listContaineds()

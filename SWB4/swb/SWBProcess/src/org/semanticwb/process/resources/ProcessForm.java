@@ -21,10 +21,10 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.process.Activity;
-import org.semanticwb.process.FlowObjectInstance;
-import org.semanticwb.process.ProcessObject;
-import org.semanticwb.process.SWBProcessFormMgr;
+import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.Instance;
+import org.semanticwb.process.model.ProcessObject;
+import org.semanticwb.process.model.SWBProcessFormMgr;
 
 /**
  *
@@ -47,7 +47,7 @@ public class ProcessForm extends GenericResource
 
         out.println("<a href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setParameter("suri", suri)+"\">[editar]</a>");
 
-        FlowObjectInstance foi = (FlowObjectInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        FlowNodeInstance foi = (FlowNodeInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
         SWBProcessFormMgr mgr=new SWBProcessFormMgr(foi);
         mgr.setAction(paramRequest.getActionUrl().setAction("process").toString());
@@ -93,7 +93,7 @@ public class ProcessForm extends GenericResource
         {
             return;
         }
-        FlowObjectInstance foi = (FlowObjectInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        FlowNodeInstance foi = (FlowNodeInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
         if("savecnf".equals(response.getAction()))
         {
@@ -147,11 +147,11 @@ public class ProcessForm extends GenericResource
                 mgr.processForm(request);
                 if(request.getParameter("accept")!=null)
                 {
-                    foi.close(response.getUser(),Activity.ACTION_ACCEPT);
+                    foi.close(response.getUser(),Instance.ACTION_ACCEPT);
                     response.sendRedirect(foi.getProcessWebPage().getUrl());
                 }else if(request.getParameter("reject")!=null)
                 {
-                    foi.close(response.getUser(),Activity.ACTION_REJECT);
+                    foi.close(response.getUser(),Instance.ACTION_REJECT);
                     response.sendRedirect(foi.getProcessWebPage().getUrl());
                 }
 
@@ -176,7 +176,7 @@ public class ProcessForm extends GenericResource
             out.println("Parámetro no difinido...");
             return;
         }
-        FlowObjectInstance foi = (FlowObjectInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        FlowNodeInstance foi = (FlowNodeInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
         out.println("<form action=\""+paramRequest.getActionUrl().setAction("savecnf")+"\" method=\"post\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\">");
