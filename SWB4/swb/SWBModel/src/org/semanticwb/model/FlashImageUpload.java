@@ -35,7 +35,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
     {
-        System.out.println("Prop:"+prop.getURI()+" - "+prop.getName());
+//        System.out.println("Prop:"+prop.getURI()+" - "+prop.getName());
         if (request.getParameter(prop.getName() + "_delFile") != null)
         {
             if (prop.getName().startsWith("has"))
@@ -72,7 +72,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
         }
         String cad = request.getParameter(prop.getName());
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
-        System.out.println("Lista:"+lista.size());
+//        System.out.println("Lista:"+lista.size());
         for (UploadedFile arch : lista)
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
@@ -95,7 +95,7 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
                 obj.addLiteralProperty(prop, new SemanticLiteral(prop.getName()+"_"+arch.getOriginalName()));
             } else
             {
-                System.out.println("Prop:"+prop.getURI()+" - "+arch.getOriginalName());
+//                System.out.println("Prop:"+prop.getURI()+" - "+arch.getOriginalName());
                 obj.setProperty(prop, arch.getOriginalName());
             }
             }catch (IOException IOE){
@@ -134,14 +134,15 @@ public class FlashImageUpload extends org.semanticwb.model.base.FlashImageUpload
 
     protected UploadFileRequest configFileRequest(SemanticProperty prop)
     {
-        System.out.println("*Prop:"+prop.getName());
-        System.out.println("*getFileMaxSize:"+getFileMaxSize());
-        System.out.println("*getImgMaxHeight:"+getImgMaxHeight());
-        System.out.println("*getImgMaxWidth:"+getImgMaxWidth());
-        System.out.println("*getImgThumbnailHeight:"+getImgThumbnailHeight());
-        System.out.println("*getImgThumbnailWidth:"+getImgThumbnailWidth());
-        System.out.println("*isImgCrop:"+isImgCrop());
-        System.out.println("*isImgThumbnail:"+isImgThumbnail());
+        System.out.println("img Tengo filtro "+getFileFilter()+"|--");
+//        System.out.println("*Prop:"+prop.getName());
+//        System.out.println("*getFileMaxSize:"+getFileMaxSize());
+//        System.out.println("*getImgMaxHeight:"+getImgMaxHeight());
+//        System.out.println("*getImgMaxWidth:"+getImgMaxWidth());
+//        System.out.println("*getImgThumbnailHeight:"+getImgThumbnailHeight());
+//        System.out.println("*getImgThumbnailWidth:"+getImgThumbnailWidth());
+//        System.out.println("*isImgCrop:"+isImgCrop());
+//        System.out.println("*isImgThumbnail:"+isImgThumbnail());
 
         boolean multiple = prop.getName().startsWith("has");
 //        System.out.println("filter:"+getFileFilter());

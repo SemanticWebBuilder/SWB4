@@ -34,14 +34,14 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
     public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String type, String mode, String lang)
     {
-        System.out.println("obj: "+obj);
-        System.out.println("objuri: "+obj.getURI());
-        System.out.println("prop: "+prop);
-        System.out.println("type: "+type);
-        System.out.println("mode: "+mode);
-        System.out.println("lang: "+lang);
-        System.out.println("objcls: "+obj.getSemanticClass());
-        System.out.println("propcls: "+prop.getDomainClass());
+//        System.out.println("obj: "+obj);
+//        System.out.println("objuri: "+obj.getURI());
+//        System.out.println("prop: "+prop);
+//        System.out.println("type: "+type);
+//        System.out.println("mode: "+mode);
+//        System.out.println("lang: "+lang);
+//        System.out.println("objcls: "+obj.getSemanticClass());
+//        System.out.println("propcls: "+prop.getDomainClass());
         if (null == obj)
         {
             throw new SWBRuntimeException("No Semantic Object present");
@@ -235,8 +235,9 @@ public class FlashFileUpload extends org.semanticwb.model.base.FlashFileUploadBa
 
     protected UploadFileRequest configFileRequest(SemanticProperty prop)
     {
-        System.out.println("*Prop:"+prop.getName());
-        System.out.println("*FileMaxSize:"+getFileMaxSize());
+        System.out.println("Tengo filtro "+getFileFilter()+"|--");
+//        System.out.println("*Prop:"+prop.getName());
+//        System.out.println("*FileMaxSize:"+getFileMaxSize());
 
         boolean multiple = prop.getName().startsWith("has");
 //        System.out.println("filter:"+getFileFilter());
