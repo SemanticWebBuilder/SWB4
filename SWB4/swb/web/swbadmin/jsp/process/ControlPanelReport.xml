@@ -1,0 +1,413 @@
+<Report>
+   <title titleName="Control Panel Activity Report"/>
+   <pageHeader pageHeaderName="Usuario Jei"/>
+   <row rowId="1">
+      <processName>Producto No Conforme</processName>
+      <taskId>962</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-03-10 10:40:30.652</taskCreated>
+      <taskCreatedBy>ClienteX PaternoX MaternoX</taskCreatedBy>
+      <taskStatus>En proceso </taskStatus>
+      <taskUpdated>2010-03-10 10:40:30.668</taskUpdated>
+      <taskUpdatedBy>ClienteX PaternoX MaternoX</taskUpdatedBy>
+      <taskEnded></taskEnded>
+      <taskEndedBy></taskEndedBy>
+   </row>
+   <row rowId="2">
+      <processName>Producto No Conforme</processName>
+      <taskId>960</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-03-10 10:40:18.59</taskCreated>
+      <taskCreatedBy>ClienteX PaternoX MaternoX</taskCreatedBy>
+      <taskStatus>En proceso </taskStatus>
+      <taskUpdated>2010-03-10 10:40:18.605</taskUpdated>
+      <taskUpdatedBy>ClienteX PaternoX MaternoX</taskUpdatedBy>
+      <taskEnded></taskEnded>
+      <taskEndedBy></taskEndedBy>
+   </row>
+   <row rowId="3">
+      <processName>Producto No Conforme</processName>
+      <taskId>957</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-03-10 10:39:56.183</taskCreated>
+      <taskCreatedBy>ClienteX PaternoX MaternoX</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-03-10 10:40:08.636</taskUpdated>
+      <taskUpdatedBy>ClienteX PaternoX MaternoX</taskUpdatedBy>
+      <taskEnded>2010-03-10 10:40:08.636</taskEnded>
+      <taskEndedBy>ClienteX PaternoX MaternoX</taskEndedBy>
+   </row>
+   <row rowId="4">
+      <processName>Producto No Conforme</processName>
+      <taskId>955</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-03-10 10:39:11.51</taskCreated>
+      <taskCreatedBy>EspecialistaZ PaternoZ MaternoZ</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-03-10 10:39:56.152</taskUpdated>
+      <taskUpdatedBy>ClienteX PaternoX MaternoX</taskUpdatedBy>
+      <taskEnded>2010-03-10 10:39:56.167</taskEnded>
+      <taskEndedBy>ClienteX PaternoX MaternoX</taskEndedBy>
+   </row>
+   <row rowId="5">
+      <processName>Producto No Conforme</processName>
+      <taskId>951</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-03-10 10:32:47.031</taskCreated>
+      <taskCreatedBy>ClienteX PaternoX MaternoX</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-03-10 10:35:36.161</taskUpdated>
+      <taskUpdatedBy>ClienteX PaternoX MaternoX</taskUpdatedBy>
+      <taskEnded>2010-03-10 10:35:36.161</taskEnded>
+      <taskEndedBy>ClienteX PaternoX MaternoX</taskEndedBy>
+   </row>
+   <row rowId="6">
+      <processName>Producto No Conforme</processName>
+      <taskId>949</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-03-04 15:30:31.294</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>En proceso </taskStatus>
+      <taskUpdated>2010-03-04 15:30:31.31</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded></taskEnded>
+      <taskEndedBy></taskEndedBy>
+   </row>
+   <row rowId="7">
+      <processName>Producto No Conforme</processName>
+      <taskId>917</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-11 11:38:23.066</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-03-22 13:47:41.547</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-03-22 13:47:41.547</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="8">
+      <processName>Producto No Conforme</processName>
+      <taskId>914</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-10 13:51:05.144</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-10 13:51:16.133</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-10 13:51:16.133</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="9">
+      <processName>Producto No Conforme</processName>
+      <taskId>912</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-10 13:50:57.469</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-10 13:51:05.129</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-10 13:51:05.129</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="10">
+      <processName>Producto No Conforme</processName>
+      <taskId>908</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-10 13:46:16.926</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-10 13:48:21.599</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-10 13:48:21.599</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="11">
+      <processName>Producto No Conforme</processName>
+      <taskId>866</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 23:49:31.937</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 23:49:50.171</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 23:49:50.187</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="12">
+      <processName>Producto No Conforme</processName>
+      <taskId>864</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 23:49:06.812</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 23:49:31.906</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 23:49:31.906</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="13">
+      <processName>Producto No Conforme</processName>
+      <taskId>860</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 23:36:14.734</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 23:37:37.546</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 23:37:37.546</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="14">
+      <processName>Producto No Conforme</processName>
+      <taskId>857</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 20:16:07.545</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 20:16:24.53</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 20:16:24.53</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="15">
+      <processName>Producto No Conforme</processName>
+      <taskId>855</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 20:15:44.748</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 20:16:07.514</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 20:16:07.514</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="16">
+      <processName>Producto No Conforme</processName>
+      <taskId>851</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 20:14:27.405</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 20:14:52.155</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 20:14:52.155</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="17">
+      <processName>Producto No Conforme</processName>
+      <taskId>848</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 19:55:52.352</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:57:00.867</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:57:00.882</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="18">
+      <processName>Producto No Conforme</processName>
+      <taskId>846</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 19:55:36.364</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:55:52.305</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:55:52.305</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="19">
+      <processName>Producto No Conforme</processName>
+      <taskId>841</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 19:54:26.802</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:54:43.806</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:54:43.806</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="20">
+      <processName>Producto No Conforme</processName>
+      <taskId>839</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 19:54:19.785</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:54:26.755</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:54:26.755</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="21">
+      <processName>Producto No Conforme</processName>
+      <taskId>835</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 19:53:13.786</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:54:59.544</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:54:59.544</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="22">
+      <processName>Producto No Conforme</processName>
+      <taskId>833</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 19:53:03.893</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:53:46.09</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:53:46.106</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="23">
+      <processName>Producto No Conforme</processName>
+      <taskId>784</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 19:39:45.573</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:39:56.792</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:39:56.792</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="24">
+      <processName>Producto No Conforme</processName>
+      <taskId>782</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 19:38:43.638</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 19:39:45.511</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 19:39:45.511</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="25">
+      <processName>Producto No Conforme</processName>
+      <taskId>778</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 18:22:36.956</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:25:06.987</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:25:06.987</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="26">
+      <processName>Producto No Conforme</processName>
+      <taskId>775</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 18:10:25.222</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:10:29.55</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:10:29.55</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="27">
+      <processName>Producto No Conforme</processName>
+      <taskId>773</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 18:10:20.815</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:10:25.19</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:10:25.19</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="28">
+      <processName>Producto No Conforme</processName>
+      <taskId>768</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-09 18:09:50.701</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:09:58.187</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:09:58.202</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="29">
+      <processName>Producto No Conforme</processName>
+      <taskId>766</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-09 18:09:45.31</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:09:50.639</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:09:50.655</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="30">
+      <processName>Producto No Conforme</processName>
+      <taskId>749</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 17:49:48.968</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:10:07.719</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:10:07.719</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="31">
+      <processName>Producto No Conforme</processName>
+      <taskId>747</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-09 10:22:58.586</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-09 18:11:17.702</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-09 18:11:17.702</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="32">
+      <processName>Producto No Conforme</processName>
+      <taskId>744</taskId>
+      <taskTitle>Cerrar reporte de falla</taskTitle>
+      <taskCreated>2010-02-08 19:55:58.883</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-08 20:00:45.416</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-08 20:00:45.416</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="33">
+      <processName>Producto No Conforme</processName>
+      <taskId>741</taskId>
+      <taskTitle>Verificar respuesta</taskTitle>
+      <taskCreated>2010-02-08 19:50:10.568</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-08 19:55:58.867</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-08 19:55:58.867</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <row rowId="34">
+      <processName>Producto No Conforme</processName>
+      <taskId>737</taskId>
+      <taskTitle>Registrar falla en la herramienta</taskTitle>
+      <taskCreated>2010-02-08 19:43:21.394</taskCreated>
+      <taskCreatedBy>Jei</taskCreatedBy>
+      <taskStatus>Cerradas</taskStatus>
+      <taskUpdated>2010-02-08 19:44:59.332</taskUpdated>
+      <taskUpdatedBy>Jei</taskUpdatedBy>
+      <taskEnded>2010-02-08 19:44:59.332</taskEnded>
+      <taskEndedBy>Jei</taskEndedBy>
+   </row>
+   <pageFooter pageFooterName="pageFooterValue"/>
+</Report>
