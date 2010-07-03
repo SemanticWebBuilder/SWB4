@@ -262,10 +262,10 @@ public class MultipleFileUploader implements InternalServlet
         }
         filts.append("\"]\n");
         buffer.append(filts);
-        buffer.append("                        [\"Jpeg File\", 	\"*.jpg;*.jpeg\"],\n");
-        buffer.append("                        [\"GIF File\", 	\"*.gif\"],\n");
-        buffer.append("                        [\"PNG File\", 	\"*.png\"],\n");
-        buffer.append("                        [\"All Images\", 	\"*.jpg;*.jpeg;*.gif;*.png\"]\n");
+//        buffer.append("                        [\"Jpeg File\", 	\"*.jpg;*.jpeg\"],\n");
+//        buffer.append("                        [\"GIF File\", 	\"*.gif\"],\n");
+//        buffer.append("                        [\"PNG File\", 	\"*.png\"],\n");
+//        buffer.append("                        [\"All Images\", 	\"*.jpg;*.jpeg;*.gif;*.png\"]\n");
         buffer.append("                    ]\n");
         buffer.append("                }\n");
         buffer.append("			\n");
