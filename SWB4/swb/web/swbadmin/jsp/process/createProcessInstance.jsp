@@ -1,4 +1,4 @@
-<%@page import="org.semanticwb.process.*"%>
+<%@page import="org.semanticwb.process.model.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.portal.*"%>
 <%@page import="org.semanticwb.portal.api.*"%>
@@ -11,7 +11,7 @@
     User user=paramRequest.getUser();
     WebPage topic=paramRequest.getWebPage();
     String url=paramRequest.getRenderUrl().setParameter("act", "cpi").toString();
-    org.semanticwb.process.Process process=SWBProcessMgr.getProcess(topic);
+    org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(topic);
 %>
         <a href="<%=url%>">Crear Instancia de Proceso</a>
 <%
@@ -20,7 +20,7 @@
         {
             if(act.equals("cpi"))
             {
-                SWBProcessMgr.createProcessInstance((ProcessSite)topic.getWebSite(), process, user);
+                SWBProcessMgr.createProcessInstance(process, user);
             }
         }
 %>

@@ -1,4 +1,4 @@
-<%@page import="org.semanticwb.process.*"%>
+<%@page import="org.semanticwb.process.model.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.platform.*"%>
 <%@page import="org.semanticwb.portal.*"%>
@@ -39,7 +39,7 @@
     String lang=user.getLanguage();
     WebPage topic=paramRequest.getWebPage();
     ProcessSite site=(ProcessSite)paramRequest.getWebPage().getWebSite();
-    org.semanticwb.process.Process process=SWBProcessMgr.getProcess(topic);
+    org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(topic);
 
     String suri=request.getParameter("suri");
     if(suri==null)
@@ -47,7 +47,7 @@
         out.println("Parámetro no difinido...");
         return;
     }
-    FlowObjectInstance foi = (FlowObjectInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+    FlowNodeInstance foi = (FlowNodeInstance)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
 
     if("savecnf".equals(paramRequest.getAction()))

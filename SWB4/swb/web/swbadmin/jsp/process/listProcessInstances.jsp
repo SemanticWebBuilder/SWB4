@@ -1,4 +1,4 @@
-<%@page import="org.semanticwb.process.*"%>
+<%@page import="org.semanticwb.process.model.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.portal.*"%>
 <%@page import="org.semanticwb.portal.api.*"%>
@@ -7,22 +7,22 @@
 <%@page import="org.semanticwb.model.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%!
-    public void printActivityInstance(FlowObjectInstance ai, JspWriter out) throws IOException
+    public void printActivityInstance(FlowNodeInstance ai, JspWriter out) throws IOException
     {
         out.println("<li>");
-        out.println("Activity: "+ai.getFlowObjectType().getTitle()+" "+ai.getId());
+        out.println("Activity: "+ai.getFlowNodeType().getTitle()+" "+ai.getId());
         out.println("Status:"+ai.getStatus());
         out.println("</li>");
-        if(ai instanceof ProcessInstance)
+        if(ai instanceof SubProcessInstance)
         {
-            ProcessInstance pi=(ProcessInstance)ai;
-            Iterator<FlowObjectInstance> acit=pi.listFlowObjectInstances();
+            SubProcessInstance pi=(SubProcessInstance)ai;
+            Iterator<FlowNodeInstance> acit=pi.listFlowNodeInstances();
             if(acit.hasNext())
             {
                 out.println("<ul>");
                 while(acit.hasNext())
                 {
-                    FlowObjectInstance actinst =  acit.next();
+                    FlowNodeInstance actinst =  acit.next();
                     printActivityInstance(actinst,out);
                 }
                 out.println("</ul>");
@@ -36,7 +36,7 @@
     WebPage topic=paramRequest.getWebPage();
     ProcessSite site=(ProcessSite)paramRequest.getWebPage().getWebSite();
     String url=paramRequest.getRenderUrl().setParameter("act", "cpi").toString();
-    org.semanticwb.process.Process process=SWBProcessMgr.getProcess(topic);
+    org.semanticwb.process.model.Process process=SWBProcessMgr.getProcess(topic);
 %>
     <h2>Instancias del Proceso <%=process.getDisplayTitle(user.getLanguage())%></h2>
 <%
@@ -45,19 +45,19 @@
     {
         ProcessInstance pi =  it.next();
 %>
-        <h3><%=pi.getFlowObjectType().getTitle()%> <%=pi.getId()%></h3>
+        <h3><%=pi.getProcessType().getTitle()%> <%=pi.getId()%></h3>
         <h3>Tareas del usuario (<%=user.getFullName()%>)</h3>
 <%
             out.println("<ul>");
-            Iterator<FlowObjectInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
+            Iterator<FlowNodeInstance> utkit=SWBProcessMgr.getUserTaskInstances(pi, user).iterator();
             while(utkit.hasNext())
             {
-                FlowObjectInstance tkinst =  utkit.next();
-                UserTask task=(UserTask)tkinst.getFlowObjectType();
+                FlowNodeInstance tkinst =  utkit.next();
+                UserTask task=(UserTask)tkinst.getFlowNodeType();
     %>
                 <li>
-                    User Task: <%=task.getDisplayName(user.getLanguage())%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%>
-                  <a href="<%=task.getUrl()%>?suri=<%=tkinst.getEncodedURI()%>">ver</a>
+                    User Task: <%=task.getDisplayTitle(user.getLanguage())%> <%=tkinst.getId()%> Status:<%=tkinst.getStatus()%>
+                  <a href="<%=task.getTaskWebPage().getUrl()%>?suri=<%=tkinst.getEncodedURI()%>">ver</a>
                 </li>
     <%
             }
@@ -82,10 +82,10 @@
         <h3>Detalle de Proceso</h3>
 <%
             out.println("<ul>");
-            Iterator<FlowObjectInstance> actit=pi.listFlowObjectInstances();
+            Iterator<FlowNodeInstance> actit=pi.listFlowNodeInstances();
             while(actit.hasNext())
             {
-                FlowObjectInstance obj =  actit.next();
+                FlowNodeInstance obj =  actit.next();
                 printActivityInstance(obj, out);
             }
             out.println("</ul>");
