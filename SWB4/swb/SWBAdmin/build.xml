@@ -105,7 +105,7 @@
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplRules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFilterSection.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplWorkFlowAdmin.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAppBPMNModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <!--<signjar jar="${build.classes.dir}//swbadmin/lib/SWBAppBPMNModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>-->
         <signjar jar="${build.classes.dir}//swbadmin/lib/json.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplCommons.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
         </target>
