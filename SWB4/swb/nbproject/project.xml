@@ -8,6 +8,7 @@
         <data xmlns="http://www.netbeans.org/ns/web-project/3">
             <name>swb</name>
             <minimum-ant-version>1.6</minimum-ant-version>
+            <explicit-platform explicit-source-supported="true"/>
             <web-module-libraries>
                 <library dirs="200">
                     <file>${reference.SWBBase.jar}</file>
@@ -253,10 +254,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.antlrworks-1.2.3.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${reference.SWB3Resources.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -378,6 +375,10 @@
                 </library>
                 <library dirs="200">
                     <file>${reference.SWBTOWB3Compatibility.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.antlrworks-1.4.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
