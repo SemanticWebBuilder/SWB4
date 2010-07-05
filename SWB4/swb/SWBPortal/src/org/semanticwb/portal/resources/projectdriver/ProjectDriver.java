@@ -12,9 +12,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 
 public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver.base.ProjectDriverBase 
@@ -71,70 +69,93 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action= response.getAction();
         if(action.equals("update")&& request.getParameter("uri")!=null){
-            String status_ini=request.getParameter("status_ini");
-            String status_act=request.getParameter("status");
-            String vals[]=request.getParameterValues("hasPredecessor");
-            String valsParts[] =request.getParameterValues("hasParticipants");
-            if(vals==null)
-                vals=new String[0];
-            if(valsParts==null)
-                valsParts=new String[0];
             SemanticObject obj = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            SWBFormMgr mgr = new SWBFormMgr(obj,null,SWBFormMgr.MODE_EDIT);
-            Activity act=(Activity)obj.createGenericInstance();
-            if((status_act.equals("develop")&&act.getStartDate()==null)||(status_act.equals("develop")&&status_ini.equals("paused"))||status_act.equals("develop")){
-                act.setStartDate(new Timestamp(new Date().getTime()));
-            }
-            if(status_act.equals("ended")||status_act.equals("canceled")){
-                act.setEndDate(new Timestamp(new Date().getTime()));
-            }
+            int currHour=0,planHour=0;
+            float currPerc=0;
+            String responsible="", critical="",actType="",status="";
+            String vals[]=new String[0], valsParts[]=new String[0];
             try
             {
-                mgr.processElement(request, Activity.swbproy_actType);//mgr.processForm(request);
-                mgr.processElement(request, Activity.swbproy_critical);
-                mgr.processElement(request, Activity.swbproy_currentHour);
-                mgr.processElement(request, Activity.swbproy_currentPercentage);
-                mgr.processElement(request, Activity.swbproy_endDate);
-                mgr.processElement(request, Activity.swbproy_plannedHour);
-                mgr.processElement(request, Activity.swbproy_responsible);
-                mgr.processElement(request, Activity.swbproy_startDate);
-                mgr.processElement(request, Activity.swbproy_status);
-                obj.removeProperty(Activity.swbproy_hasParticipants);
-                
+                String status_ini=request.getParameter("status_ini");
+                String status_act=request.getParameter("status");
+
+                if(request.getParameter("currentHour")!=null&&!request.getParameter("currentHour").equals(""))
+                    currHour = Integer.parseInt(request.getParameter("currentHour"));
+                if(request.getParameter("currentHour")!=null&&!request.getParameter("currentPercentage").equals(""))
+                    currPerc = Float.parseFloat(request.getParameter("currentPercentage"));
+                if(request.getParameter("currentHour")!=null&&!request.getParameter("plannedHour").equals(""))
+                    planHour = Integer.parseInt(request.getParameter("plannedHour"));
+                if(request.getParameter("actType")!=null)
+                    actType = request.getParameter("actType");
+                if(request.getParameter("critical")!=null)
+                    critical = request.getParameter("critical");
+                if(request.getParameter("responsible")!=null)
+                    responsible = request.getParameter("responsible");
+                if(request.getParameterValues("hasPredecessor")!=null)
+                    vals=request.getParameterValues("hasPredecessor");
+                if(request.getParameterValues("hasParticipants")!=null)
+                    valsParts = request.getParameterValues("hasParticipants");
+                if(request.getParameter("status")!=null)
+                    status=request.getParameter("status");
+
+                Activity act=(Activity)obj.createGenericInstance();
+                if((status_act.equals("develop")&&act.getStartDate()==null)||(status_act.equals("develop")&&status_ini.equals("paused"))||status_act.equals("develop")){
+                    act.setStartDate(new Timestamp(new Date().getTime()));
+                }
+                if(status_act.equals("ended")||status_act.equals("canceled")){
+                    act.setEndDate(new Timestamp(new Date().getTime()));
+                }
+
+                act.setCurrentHour(currHour);
+                act.setCurrentPercentage(currPerc);
+                act.setPlannedHour(planHour);
+                act.setStatus(status);
+                act.setActType(actType);
+                if(critical!=null && (critical.equals("true")||(critical.equals("on"))))
+                    act.setCritical(true);
+                else
+                    act.setCritical(false);
+                act.removeResponsible();
+                SemanticObject objs = SemanticObject.createSemanticObject(responsible);
+                User usrs = (User)objs.createGenericInstance();
+                act.setResponsible(usrs);
+
+                Iterator<User> usr = act.listParticipantses();
+                while(usr.hasNext()){
+                    User usr1 = usr.next();
+                    act.removeParticipants(usr1);
+                }
                 for(int x = 0; x<valsParts.length;x++){
-                    if(!valsParts[x].equals(""))
-                        obj.addObjectProperty(act.swbproy_hasParticipants, SemanticObject.createSemanticObject(valsParts[x]));
+                    if(!valsParts[x].equals("")){
+                        SemanticObject obj1 = SemanticObject.createSemanticObject(valsParts[x]);
+                        User us = (User)obj1.createGenericInstance();
+                        act.addParticipants(us);
+                    }
                 }
-                obj.removeProperty(act.swbproy_hasPredecessor);
+                Iterator<Activity> ix=act.listPredecessors();
+                while(ix.hasNext()){
+                    Activity actsx = ix.next();
+                    act.removePredecessor(actsx);
+                }
+
                 for (int x = 0; x < vals.length; x++) {
-                    if(!vals[x].equals(""))
-                        obj.addObjectProperty(act.swbproy_hasPredecessor, SemanticObject.createSemanticObject(vals[x]));
+                    if(!vals[x].equals("")){
+                        SemanticObject obj1 = SemanticObject.createSemanticObject(vals[x]);
+                        Activity actsx1 = (Activity)obj1.createGenericInstance();
+                        act.addPredecessor(actsx1);
+                    }
                 }
+                
                 getListPredecessores(act,response.getUser());
             }catch(Exception e){
                 log.error(e);
             }
-        }else if(action.equals("updatepro")&&request.getParameter("uri")!=null){
-            SemanticObject obj = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            obj.removeProperty(Project.swbproy_leader);
+        }else if(action.equals("upduser")&& request.getParameter("uri")!=null){
             try{
-                String val = request.getParameter("leader");
-                if(!val.equals("")||val!=null)
-                    obj.addObjectProperty(Project.swbproy_leader, SemanticObject.createSemanticObject(val));
-            }catch(Exception e){
-                log.error(e);
-            }
-        }else if(action.equals("updateus")&&request.getParameter("uri")!=null){
-            SemanticObject obj = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            obj.removeProperty(UserWebPage.swbproy_userWP);
-            obj.removeProperty(UserWebPage.swbproy_speciality);
-            try{
-                String us1 = request.getParameter("userWP");
-                String us2 =  request.getParameter("speciality");
-                if(us1!=null&&us2!=null){
-                    obj.addObjectProperty(UserWebPage.swbproy_userWP, SemanticObject.createSemanticObject(us1));
-                    obj.addLiteralProperty(UserWebPage.swbproy_speciality, new SemanticLiteral(us2));
-                }
+                String speciality = request.getParameter("speciality");
+                SemanticObject obj = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                UserWebPage uwp = (UserWebPage)obj.createGenericInstance();
+                uwp.setSpeciality(speciality);
             }catch(Exception e){
                 log.error(e);
             }
@@ -179,25 +200,6 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
         wp = wp.getChild();
         if(wp != null && wp.isVisible() && wp.isActive() && !wp.isHidden() && wp.isValid() && !wp.isDeleted())
             valid = true;
-        //else
-        //    valid = false;
         return valid;
-        /*
-                     boolean result = false;
-            ArrayList checks=new ArrayList();
-            Iterator childs = webpage.listVisibleChilds(user.getLanguage());
-            while(childs.hasNext()){
-                WebPage child = (WebPage)childs.next();
-                if(child != null && child.isVisible() && child.isActive() && !child.isHidden() && child.isValid() && !child.isDeleted())
-                    checks.add(true);
-                else
-                    checks.add(false);
-            }
-            if(checks.contains(true))
-                result = true;
-           return result;*/
-
     }
-
-
 }
