@@ -48,7 +48,6 @@ import org.semanticwb.portal.util.SWBCookieMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 
-// TODO: Auto-generated Javadoc
 /**
  * Poll se encarga de desplegar y administrar una encuesta de opinion bajo
  * ciertos criterios(configuraci?n de recurso).
@@ -60,37 +59,21 @@ import org.semanticwb.portal.util.FileUpload;
  */
 
 public class Poll extends GenericResource {
-    
-    /** The log. */
     private static Logger log = SWBUtils.getLogger(Poll.class);
-    
-    /** The poll. */
     private static String poll = "poll_";
     
-    /** The hash prim. */
     HashMap hashPrim=new HashMap();
-    
-    /** The work path. */
     String workPath;
-    
-    /** The web work path. */
     String webWorkPath;
-    
-    /** The restype. */
     String restype = "";
-    
-    /** The Mng cookie. */
     private SWBCookieMgr MngCookie;
-    
-    /** The adm res utils. */
     WBAdmResourceUtils admResUtils=new WBAdmResourceUtils();
     
     
      /**
-      * Inicializa el recurso.
-      * 
-      * @param base the new resource base
-      */    
+     * Inicializa el recurso
+     * @param base
+     */    
     @Override
     public void setResourceBase(Resource base) {
         try 
@@ -104,13 +87,11 @@ public class Poll extends GenericResource {
     }
     
     /**
-     * Process request.
-     * 
-     * @param request the request
-     * @param response the response
-     * @param paramRequest the param request
-     * @throws SWBResourceException the sWB resource exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @param request
+     * @param response
+     * @param paramRequest
+     * @throws SWBResourceException
+     * @throws IOException
      */    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -122,9 +103,6 @@ public class Poll extends GenericResource {
     }
 
   
-     /* (non-Javadoc)
-      * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-      */
      @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
@@ -143,13 +121,12 @@ public class Poll extends GenericResource {
     }
   
     /**
-     * Muestra el html al usuario final.
-     * 
-     * @param request the request
-     * @param response the response
-     * @param paramRequest the param request
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws SWBResourceException the sWB resource exception
+     * Muestra el html al usuario final
+     * @param request
+     * @param response
+     * @param reqParams
+     * @throws AFException
+     * @throws IOException
      */
     /*
     @Override
@@ -427,10 +404,8 @@ public class Poll extends GenericResource {
     
     
     /**
-     * Metodo que valida si se encuentra la cookie de la encuensta registrada en la maquina del usuario.
-     * 
-     * @param request the request
-     * @return true, if successful
+     * Metodo que valida si se encuentra la cookie de la encuensta registrada en la maquina del usuario
+     * @param request
      */
     private boolean validateCookie(javax.servlet.http.HttpServletRequest request) {
         for(int i=0;i<request.getCookies().length;i++){
@@ -443,10 +418,8 @@ public class Poll extends GenericResource {
     }
     
     /**
-     * Metodo que valida si la ip del usuario final ya voto.
-     * 
-     * @param request the request
-     * @return true, if successful
+     * Metodo que valida si la ip del usuario final ya voto
+     * @param request
      */
     private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request)
     {
@@ -484,14 +457,12 @@ public class Poll extends GenericResource {
     }
     
     /**
-     * Muestra los resultados de la encuesta.
-     * 
-     * @param request the request
-     * @param paramRequest the param request
-     * @param data the data
-     * @return the poll results
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws SWBResourceException the sWB resource exception
+     * Muestra los resultados de la encuesta
+     * @param request
+     * @param reqParams
+     * @param data
+     * @throws AFException
+     * @throws IOException
      */    
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException {
         StringBuffer ret = new StringBuffer("");
@@ -653,13 +624,6 @@ public class Poll extends GenericResource {
         return ret.toString();
     }
    
-    /**
-     * Gets the links.
-     * 
-     * @param links the links
-     * @param comment the comment
-     * @return the links
-     */
     private String getLinks(NodeList links, String comment) {
         StringBuffer ret = new StringBuffer("");
         if (links==null) return ret.toString();
@@ -683,13 +647,12 @@ public class Poll extends GenericResource {
     }
     
     /**
-     * Metodo que despliega la administraci?n del recurso.
-     * 
-     * @param request the request
-     * @param response the response
-     * @param paramRequest the param request
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws SWBResourceException the sWB resource exception
+     * Metodo que despliega la administraci?n del recurso
+     * @param request
+     * @param response
+     * @param paramsRequest
+     * @throws AFException
+     * @throws IOException
      */    
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -903,12 +866,10 @@ public class Poll extends GenericResource {
     }
     
      /**
-      * Sets the attribute.
-      * 
-      * @param base the base
-      * @param fup the fup
-      * @param att the att
-      */  
+     * @param base
+     * @param fup
+     * @param att
+     */  
     protected void setAttribute(Resource base, FileUpload fup, String att) {
         try
         {
@@ -923,12 +884,10 @@ public class Poll extends GenericResource {
     }
     
     /**
-     * Sets the attribute.
-     * 
-     * @param base the base
-     * @param fup the fup
-     * @param att the att
-     * @param value the value
+     * @param base
+     * @param fup
+     * @param att
+     * @param value
      */  
     protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
         try
@@ -944,11 +903,9 @@ public class Poll extends GenericResource {
     }    
     
     /**
-     * Removes the all nodes.
-     * 
-     * @param dom the dom
-     * @param nodeType the node type
-     * @param name the name
+     * @param dom
+     * @param nodeType
+     * @param name
      */        
     private void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
@@ -966,11 +923,9 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo que muestra la forma de la encuesta de opini?n en html.
-     * 
-     * @param request the request
-     * @param paramRequest the param request
-     * @return the form
+     * Metodo que muestra la forma de la encuesta de opini?n en html
+     * @param request
+     * @param paramsRequest
      */      
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuffer ret=new StringBuffer();
@@ -1443,11 +1398,9 @@ public class Poll extends GenericResource {
     }             
     
     /**
-     * Metodo de validaci?n en javascript para la encuesta.
-     * 
-     * @param request the request
-     * @param paramsRequest the params request
-     * @return the script
+     * Metodo de validaci?n en javascript para la encuesta
+     * @param request
+     * @param paramsRequest
      */     
     private String getScript(HttpServletRequest request, SWBParamRequest paramsRequest) {
         StringBuffer ret = new StringBuffer();
