@@ -2,6 +2,7 @@
 <%@page import="java.util.*,java.io.PrintWriter,java.text.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.resources.projectdriver.*,org.semanticwb.portal.api.*,org.semanticwb.portal.*,java.sql.Timestamp"%>
 <%
         WebPage wp = paramRequest.getWebPage();
+        User user = paramRequest.getUser();
         Iterator<UserWebPage> it = UserWebPage.ClassMgr.listUserWebPageByParent(wp, wp.getWebSite());
         Iterator<WebPage> itwp = wp.listVisibleChilds(paramRequest.getUser().getLanguage());
         ArrayList webPage = new ArrayList();
@@ -12,8 +13,6 @@
             if(name.equals("WebPage"))
                 webPage.add(pag);
         }
-        ArrayList containers=getContainerActs(wp,paramRequest.getUser().getLanguage());
-
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
@@ -22,153 +21,227 @@
         document.getElementById(objDIV).style.visibility = 'visible';
     }
 </script>
+<style type="text/css">
+#proyecto .barraProgreso{
+   width:82%;
+   float:left;
+   background-color : #EFEFEF;
+   padding: 0px;
+   border: 2px outset;
+   border-top: 1px solid #242424;
+   border-right: 1px solid #DDDDDD;
+   border-bottom: 1px solid #DDDDDD;
+   border-left: 1px solid #242424;
+   height: 20px;
+}
+#proyecto .tag_porcentaje{
+   float:right;
+   background-color:#FFFFFF;
+   padding: 1px;
+   width:12%;
+}
+#proyecto .contenedor {width: 95%; height: 25px;
+   background-color: #FFFFFF;
+   padding: 4px;
+}
+#proyecto .porcentaje{
+    width:98%;
+    float:left;
+    height:20px;
+    background-color: #EFEFEF;
+}
+#proyecto .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #0099FF;
+}
+#proyecto .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 27%;
+}
+#proyecto .porcentajeAvance {
+   float:left;
+   height: 20px;
+   background-color: #0099FF;
+}
+#proyecto .espa{
+    width:95%;
+    float:right;
+    height:38px;
+}
+#proyecto .liespa{
+    width:100%;
+
+}
+.indentation{
+    padding-left:10px;
+}
+#proyecto .avanTot{
+    width:98%;
+    float:right;
+    height:38px;
+}
+#proyecto .avanTot .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #006BD7;
+}
+#proyecto .avanTot .porcentajeAvance{
+
+   float: left;
+   height: 20px;
+   background-color: #006BD7;
+}
+#proyecto .avanTot .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 27%;
+}
+</style>
+  <div id="proyecto">
   <%if(it.hasNext())
    {
-      ArrayList userValid= new ArrayList();//Lista los usuarios validos, paginas web
-      Iterator array;
-      ArrayList actUser=new ArrayList();
+      Iterator ita;
       ArrayList actValid=new ArrayList();//Lista los actividades validos, Paginas web
-      WebPage parent;
+      
+
       //Obtiene usuarios activos, visibles, que no tengan hijos, que no esten escondidos, que sean validos y que no esten borrados
+      ArrayList userValid= new ArrayList();
       it=UserWebPage.ClassMgr.listUserWebPageByParent(wp,wp.getWebSite());
       while(it.hasNext()){
           UserWebPage uwp1=it.next();
           if(uwp1.isActive()&& uwp1!=null && uwp1.isVisible()&& uwp1.getChild()==null && !uwp1.isHidden() && uwp1.isValid() && !uwp1.isDeleted())
             userValid.add(uwp1);
       }
-              //obtiene las actividades por contenedor
-              ArrayList containActs = new ArrayList();
-              if(!containers.isEmpty()){
-                 Iterator contAct= Activity.ClassMgr.listActivities(wp.getWebSite());
-                 while(contAct.hasNext()){
-                     Activity activ=(Activity)contAct.next();
-                     boolean p=false;
-                     String containerS="";
-                     WebPage parent1=activ;
-                     while(!p){
-                         String clas=parent1.getSemanticObject().getSemanticClass().getName();
-                         if(clas.equals("ActivityContainer")){
-                             containerS=parent1.getDisplayName();p=true;
-                         }
-                         parent1=parent1.getParent();
-                     }
-                     if(containers.contains(containerS))
-                        containActs.add(activ);
-                 }
-              }
-
-      //Obtiene de los usuarios validos, las actividades correspondientes a cada uno
-      it=userValid.iterator();
+      
+      //Llena un HashMap, un usuario y la lista de actividades asignadas a el, validas(sin hijos, activas, sin papas activos) y que esten en el contenedor de ese proyecto
+      it = userValid.iterator();
+      WebPage project = getProject(wp);
+      HashMap users = new HashMap();
       while(it.hasNext()){
-          UserWebPage uwp2=(UserWebPage)it.next();
-          if(uwp2.getUserWP()!=null){
-           //Obtiene la lista de las actividads por responsable
-            array=Activity.ClassMgr.listActivityByResponsible(uwp2.getUserWP(),uwp2.getWebSite());
-            while(array.hasNext()){
-              //actUser.add(array.next());
-               Activity acti = (Activity)array.next();
-               if(containActs.contains(acti)){
-                  actUser.add(acti);}
-
-            }
-          }
-      }
-      //Obtiene las actividades válidas que no sean hijas y que ninguno de sus papas este desactivado
-      array = actUser.iterator();
-      while(array.hasNext()){
-          WebPage wp1=(WebPage)array.next();
-          boolean valid=true;
-          parent = wp1.getParent();
-          //Actividad sin papa desactivado
-          while(parent!=null){
-              if(!parent.isActive())
-                  valid=false;
-              parent=parent.getParent();
-          }
-          //Actividad con hijos activos
-          if(wp1.getChild()!=null){
-              Iterator itA = wp1.listVisibleChilds(paramRequest.getUser().getLanguage());
-              while(itA.hasNext()){
-                  WebPage ch = (WebPage)itA.next();
-                  if(ch.isActive())
-                     valid = false;
+          UserWebPage uwpi1 = it.next();
+          actValid = new ArrayList();
+          if(uwpi1.getUserWP()!=null){
+              ita=Activity.ClassMgr.listActivityByResponsible(uwpi1.getUserWP(),uwpi1.getWebSite());
+              while(ita.hasNext()){
+                  WebPage acts= (WebPage)ita.next();
+                  boolean valid=validaPage(acts,user.getLanguage());
+                  if(valid&&acts.isChildof(project))
+                      actValid.add(acts);
               }
           }
-          if(!wp1.isActive()|| wp1==null || !wp1.isVisible()||wp1.isHidden() || !wp1.isValid() || wp1.isDeleted())
-             valid=false;
-          if(valid)
-              actValid.add(wp1);
+          users.put(uwpi1.getURI(), actValid);
       }
+      //obtiene todas las actividades
+      actValid = new ArrayList();
+      it = users.entrySet().iterator();
+      while (it.hasNext()) {
+          Map.Entry e = (Map.Entry)it.next();
+          ArrayList activ = (ArrayList)e.getValue();
+          actValid.addAll(activ);
+      }
+
       //Obtiene el porcentaje actual y las horas planeadas para obtener la barra de progreso de avance general
-      ArrayList listAct = new ArrayList();
-      array=actValid.iterator();
-      while(array.hasNext()){
-          Activity acts = (Activity) array.next();
-          listAct.add(acts.getCurrentPercentage());
-          listAct.add(acts.getPlannedHour());
+      ita=actValid.iterator();
+      actValid=new ArrayList();
+      while(ita.hasNext()){
+          Activity acts = (Activity) ita.next();
+          actValid.add(acts.getCurrentPercentage());
+          actValid.add(acts.getPlannedHour());
       }
-      String avanTot=getProgressBar(listAct,"66CCFF",null);
+      String avanTot=getProgressBar(actValid,paramRequest.getLocaleString("msgTotalHours"));
       if(avanTot==null)
-          avanTot="Sin Avance";
+          avanTot=paramRequest.getLocaleString("msgNoProgress");//"Sin Avance";
         %>
-      <fieldset><legend>Avance Total</legend>
-         <%=avanTot%>
+      <fieldset><legend><%=paramRequest.getLocaleString("labelTotalProgress")%></legend>
+          <div class="avanTot"><%=avanTot%></div>
       </fieldset>
 <%
-        array=userValid.iterator();
-        if(array.hasNext()){
+        ita=userValid.iterator();
+        if(ita.hasNext()){
 %>
-      <h2>Personal Asociado</h2>
-         <ul>
+      <h2><%=paramRequest.getLocaleString("titleAssociatedPersonnel")%></h2>
 <%      //Recorre los usuarios validos y recorre las actividades validas asociadas a cada usuario, obtiene la barra de progreso para cada usuario
-        while(array.hasNext()){
-            UserWebPage wpu=(UserWebPage)array.next();
-            Iterator itA = actValid.iterator();
-            listAct = new ArrayList();
+        while(ita.hasNext()){
+            UserWebPage wpu=(UserWebPage)ita.next();
+            actValid = new ArrayList();
+            ArrayList activ=(ArrayList)users.get(wpu.getURI());
+            Iterator itA= activ.iterator();
             while(itA.hasNext()){
                 Activity actU = (Activity)itA.next();
-                if(actU.getResponsible().equals(wpu.getUserWP()))
-                {
-                    listAct.add(actU.getCurrentPercentage());
-                    listAct.add(actU.getPlannedHour());
-                }
+                actValid.add(actU.getCurrentPercentage());
+                actValid.add(actU.getPlannedHour());
             }
-            String avan=getProgressBar(listAct,null,null);
+            String avan=getProgressBar(actValid,paramRequest.getLocaleString("msgTotalHours"));
             if(avan==null)
-                avan="Sin avance";
+                avan=paramRequest.getLocaleString("msgNoProgress");//"Sin avance";
 %>
-            <li><a href="<%=wpu.getUrl()%>"><%=wpu.getDisplayName()%></a></li>
-            <%=avan%>
+            <div class="liespa">
+                <span class="indentation"><a href="<%=wpu.getUrl()%>"><%=wpu.getDisplayName()%></a></span>
+                <div class="espa"><%=avan%></div>
+            </div>
          <%
-            }%>
-         </ul>
-<%
+        }
         }
         if(!webPage.isEmpty())
-            out.println(printPage(webPage,"Secciones"));
-}%>
+            out.println(printPage(webPage,paramRequest.getLocaleString("titleSections")));
+   }else{%>
+      <fieldset><legend><%=paramRequest.getLocaleString("labelTotalProgress")%></legend>
+         <%=paramRequest.getLocaleString("msgNoUsers")%>
+      </fieldset>
+<%}%>
+</div>
 <%!    
-        private ArrayList getContainerActs(WebPage wp,String language)
-        {
-            WebPage site = wp;
-            WebPage siteIni=wp;
-            ArrayList containers=new ArrayList();
-            boolean si=false;
-            while(!si){
-                if(site.getSemanticObject().getSemanticClass().getName().equals("Project")){
-                    si=true;
-                    siteIni=site;
-                }
-                site=site.getParent();
+        private boolean validaPage(WebPage wp, String lang){
+             boolean valid=true;
+             WebPage parent = wp.getParent();
+             //Actividad sin papa desactivado
+             while(parent!=null){
+                 if(!parent.isActive())
+                     valid=false;
+                 parent=parent.getParent();
+             }
+             //Actividad con hijos activos
+             if(wp.getChild()!=null){
+                 Iterator itA = wp.listVisibleChilds(lang);
+                 while(itA.hasNext()){
+                     WebPage ch = (WebPage)itA.next();
+                     if(ch.isActive())
+                        valid = false;
+                 }
+             }
+             //La misma Actividad
+             if(!wp.isActive()|| wp==null || !wp.isVisible()||wp.isHidden() || !wp.isValid() || wp.isDeleted())
+                 valid=false;
+             return valid;
+        }
+        private WebPage getProject(WebPage wp){
+           boolean p;p=false;
+           WebPage parent=wp;
+           while(!p){
+                SemanticObject obj1= SemanticObject.createSemanticObject(wp.getURI());
+                if(obj1.instanceOf(Project.sclass)){
+                    parent=wp;p=true;}
+                wp=wp.getParent();
             }
-            Iterator<WebPage> itwp = siteIni.listVisibleChilds(language);
-            while(itwp.hasNext()){
-                WebPage pag = itwp.next();
-                String name = pag.getSemanticObject().getSemanticClass().getName();
-                if(name.equals("ActivityContainer"))
-                    containers.add(pag.getDisplayName());
-            }
-            return containers;
+            return parent;
         }
         private String printPage(ArrayList array, String title)
         {
@@ -188,7 +261,7 @@
             }
             return strb.toString();
         }
-        private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
+        private String getProgressBar(ArrayList info, String titleLan)
         {
             String porcentaje = "", horas = "";
             float porcentajeTotal = 0, horasTotales = 0, horasParciales = 0;
@@ -223,43 +296,18 @@
                     }
                 }
                 porcentajeTotal = horasParciales / horasTotales * 100;
-                if (colorBarra == null)
-                    colorBarra = "006BD7";
-                if (colorFondoBarra == null)
-                    colorFondoBarra = "EFEFEF";
-                ret.append("        <table border=0 width=\"90%\" bgcolor=\"#FFFFFF\">\n");
-                ret.append("          <tr >\n");
-                ret.append("            <td align=\"left\" width=\"75%\">\n");
-                ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
-                ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
-                ret.append("                 visibility:hidden; background-color:#008040;\n");
-                ret.append("                 margin-left:10px; margin-top:7px;\">\n");
-                ret.append("                 <font color=\"#FFFFFF\">\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                   <b>Horas Totales: <i> " + horasTotales + " </i></b>\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                 </font>\n");
-                ret.append("               </div>\n");
-                ret.append("               <table width=\"100%\" border=\"\" cellpadding=\"1\" cellspacing=\"1\" bordercolor=\"#FFFFFF\" bgcolor=\"#FFFFFF\"\n");
-                ret.append("                 onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\"\n");
-                ret.append("                 onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
-                ret.append("                 <tr>\n");
-                ret.append("                   <td width=\"100%\" bgcolor=\"#" + colorFondoBarra + "\">\n");
-                ret.append("                     <table class=\"darkBar\" width=\"" + df.format(porcentajeTotal) + "%\" border=\"0\" bgcolor=\"#" + colorBarra + "\">\n");
-                ret.append("                       <tr>\n");
-                ret.append("                         <td><b>&nbsp;</b>\n");
-                ret.append("                         </td>\n");
-                ret.append("                       </tr>\n");
-                ret.append("                     </table>\n");
-                ret.append("                   </td>\n");
-                ret.append("                 </tr>\n");
-                ret.append("               </table>\n");
-                ret.append("            </td>\n");
-                ret.append("            <td align=\"left\" width=\"15%\">         " + df.format(porcentajeTotal) + "%\n");
-                ret.append("            </td>\n");
-                ret.append("          </tr>\n");
-                ret.append("        </table>\n");
-                ret.append("\n");
+                if(Float.isNaN(porcentajeTotal))
+                    porcentajeTotal=0;
+                ret.append("        <div class=\"contenedor\">\n");
+                ret.append("            <div class=\"barraProgreso\" onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\" onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
+                ret.append("                 <div class=\"defaultPorcentaje\"></div>\n");
+                ret.append("                 <div class=\"porcentaje\">\n");
+                ret.append("                     <div class=\"estatusBarra\" id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\">"+titleLan+":<span class=\"text\">" + horasTotales + "</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>\n");
+                ret.append("                     <div class=\"porcentajeAvance\" style=\"width:"+df.format(porcentajeTotal)+"%\"></div>\n");
+                ret.append("                 </div>\n");
+                ret.append("            </div>\n");
+                ret.append("            <div class=\"tag_porcentaje\">"+ df.format(porcentajeTotal) +"%</div>\n");
+                ret.append("         </div>\n");
                 return ret.toString();
             }
             else

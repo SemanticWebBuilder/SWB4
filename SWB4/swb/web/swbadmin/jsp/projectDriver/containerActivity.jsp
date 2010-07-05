@@ -13,6 +13,8 @@
             parent=wp1.getDisplayName();p=true;}
         wp1=wp1.getParent();
     }
+    String avan = getProgressBar(getListLeaf(wp,user),paramRequest.getLocaleString("msgTotalHours"));
+    if(avan==null)avan = paramRequest.getLocaleString("msgNoProgress");//"Sin avance";
 %><script type="text/javascript">
     function hideDiv(objDIV) {
         document.getElementById(objDIV).style.visibility = 'hidden';
@@ -21,54 +23,169 @@
         document.getElementById(objDIV).style.visibility = 'visible';
     }
 </script>
+<style type="text/css">
+#proyecto .list .porcentajeAvance {
+   width: 95%;
+   float: left;
+   height: 20px;
+   background-color: #0099FF;
+}
+#proyecto .list .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #0099FF;
+}
+#proyecto .list .activity{
+   width:100%;
+   float:left;
+   padding: 2px;
+}
+#proyecto .barraProgreso{
+   width:82%;
+   float:left;
+   background-color : #EFEFEF;
+   padding: 0px;
+   border: 2px outset;
+   border-top: 1px solid #242424;
+   border-right: 1px solid #DDDDDD;
+   border-bottom: 1px solid #DDDDDD;
+   border-left: 1px solid #242424;
+   height: 20px;
+}
+#proyecto .contPorcentaje{
+    float:right;
+    width:92%;
+}
+#proyecto .espacio{
+    float:right;
+    width:97%;
+}
+#proyecto .list .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left:28%;
+}
+#proyecto .list .text{
+   color:#FFFFFF;
+   font-weight: bold;
+   font-style: italic;
+}
+#proyecto .tag_porcentaje{
+   float:right;
+   background-color:#FFFFFF;
+   padding: 1px;
+   width:12%;
+}
+#proyecto .contenedor {width: 95%; height: 25px;
+   background-color: #FFFFFF;
+   padding: 4px;
+}
+#proyecto .list{
+    width:99%;
+}
+#proyecto .porcentaje{
+    width:98%;
+    float:left;
+    height:20px;
+    background-color: #EFEFEF;
+}
+#proyecto .datos .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 36%;
+}
+#proyecto .datos .etiquetas{
+    text-align: left;
+    float:left;
+    width: 30%;
+    padding-left:2%;
+}
+#proyecto .datos .porcentajeAvance {
+   width: 95%;
+   float: left;
+   height: 20px;
+   background-color: #006BD7;
+}
+#proyecto .datos .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #006BD7;
+}
+#proyecto .datos .barraDatos{
+    width: 68%;
+    float: left;
+}
+#proyecto .datos .global{
+    width:100%;
+}
+#proyecto .datos{
+    padding-bottom:2%;
+    padding-top: 2%;
+}
+#proyecto .datos .elementos{
+    padding-bottom: 2%;
+}
+</style>
+    <div id="proyecto">
+        <div class="datos">
+            <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
+            <div class="elementos"><%=parent%></div>
+            <div class="global">
+                <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivitiesProgress")%>: </div>
+                <div class="barraDatos"><%=avan%></div>
+            </div>
+        </div>
 <%
           if(it.hasNext())
           {//Si tiene hijos muestra una lista de ellos
-            HashMap webPage=new HashMap();
-            WebPage page1;
-            String namewp="";
+            ArrayList webPage=new ArrayList();
             while(it.hasNext()){
-              page1=(WebPage)it.next();
-              namewp=page1.getSemanticObject().getSemanticClass().getName();
+              WebPage page1=(WebPage)it.next();
+              String namewp=page1.getSemanticObject().getSemanticClass().getName();
               if(namewp.equals("WebPage"))
-              webPage.put(page1, page1);
+              webPage.add(page1);
             }
-
-    %>
-        <table width="91%">
-          <tr>
-              <td width="180">Proyecto: </td>
-            <td><%=parent%></td></tr>
-          <tr><td width="180">Avance de Actividades: </td>
-            <td><%=getProgressBar(getListLeaf(wp,user),"66CCFF",null)%>
-            </td></tr>
-        </table>
-      <%
-          out.println(getWebPageListLevel(wp,user,4,"Actividades",""));
-          if(!webPage.isEmpty())
-            out.println(printPage(webPage,"Secciones"));
+            out.println(getWebPageListLevel(wp,user,4,paramRequest.getLocaleString("titleActivities"),"",paramRequest.getLocaleString("msgTotalHours")));
+            if(!webPage.isEmpty())
+              out.println(printPage(webPage,paramRequest.getLocaleString("titleSections")));
           }%>
+    </div>
 <%!
-        private String printPage(HashMap mpag, String title)
+        private String printPage(ArrayList mpag, String title)
         {
-            Iterator itpr=mpag.values().iterator();
+            Iterator it=mpag.iterator();
             StringBuffer strb = new StringBuffer();
-            WebPage wpage;
             strb.append("");
-            if(itpr.hasNext())
+            if(it.hasNext())
             {
                 strb.append("<h2>"+title+"</h2>\n");
                 strb.append("<br>\n");
                 strb.append("   <ul>\n");
-                while(itpr.hasNext()){
-                    wpage=(WebPage)itpr.next();
+                while(it.hasNext()){
+                    WebPage wpage=(WebPage)it.next();
                     strb.append("      <li>\n         <a href=\""+wpage.getUrl()+"\">"+wpage.getDisplayName()+"</a>\n      </li>\n");
                 }
                 strb.append("   </ul>");
             }
             return strb.toString();
         }
-        private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
+        private String getProgressBar(ArrayList info,String titleLan)
         {
             String porcentaje = "", horas = "";
             float porcentajeTotal = 0, horasTotales = 0, horasParciales = 0;
@@ -103,84 +220,46 @@
                     }
                 }
                 porcentajeTotal = horasParciales / horasTotales * 100;
-                if (colorBarra == null)
-                    colorBarra = "006BD7";
-                if (colorFondoBarra == null)
-                    colorFondoBarra = "EFEFEF";
-                ret.append("        <table border=0 width=\"100%\" bgcolor=\"#FFFFFF\">\n");
-                ret.append("          <tr >\n");
-                ret.append("            <td align=\"left\" width=\"70%\">\n");
-                ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
-                ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
-                ret.append("                 visibility:hidden; background-color:#008040;\n");
-                ret.append("                 margin-left:10px; margin-top:7px;\">\n");
-                ret.append("                 <font color=\"#FFFFFF\">\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                   <b>Horas Totales: <i> " + horasTotales + " </i></b>\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                 </font>\n");
-                ret.append("               </div>\n");
-                ret.append("               <table width=\"100%\" border=\"\" cellpadding=\"1\" cellspacing=\"1\" bordercolor=\"#FFFFFF\" bgcolor=\"#FFFFFF\"\n");
-                ret.append("                 onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\"\n");
-                ret.append("                 onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
-                ret.append("                 <tr>\n");
-                ret.append("                   <td width=\"100%\" bgcolor=\"#" + colorFondoBarra + "\">\n");
-                ret.append("                     <table class=\"darkBar\" width=\"" + df.format(porcentajeTotal) + "%\" border=\"0\" bgcolor=\"#" + colorBarra + "\">\n");
-                ret.append("                       <tr>\n");
-                ret.append("                         <td><b>&nbsp;</b>\n");
-                ret.append("                         </td>\n");
-                ret.append("                       </tr>\n");
-                ret.append("                     </table>\n");
-                ret.append("                   </td>\n");
-                ret.append("                 </tr>\n");
-                ret.append("               </table>\n");
-                ret.append("            </td>\n");
-                ret.append("            <td align=\"left\" width=\"15%\">         " + df.format(porcentajeTotal) + "%\n");
-                ret.append("            </td>\n");
-                ret.append("          </tr>\n");
-                ret.append("        </table>\n");
-                ret.append("\n");
+                if(Float.isNaN(porcentajeTotal))
+                    porcentajeTotal=0;
+                ret.append("        <div class=\"contenedor\">\n");
+                ret.append("            <div class=\"barraProgreso\" onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\" onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
+                ret.append("                 <div class=\"defaultPorcentaje\"></div>\n");
+                ret.append("                 <div class=\"porcentaje\">\n");
+                ret.append("                     <div class=\"estatusBarra\" id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\">"+titleLan+":<span class=\"text\">" + horasTotales + "</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>\n");
+                ret.append("                     <div class=\"porcentajeAvance\" style=\"width:"+df.format(porcentajeTotal)+"%\"></div>\n");
+                ret.append("                 </div>\n");
+                ret.append("            </div>\n");
+                ret.append("            <div class=\"tag_porcentaje\">"+ df.format(porcentajeTotal) +"%</div>\n");
+                ret.append("         </div>\n");
                 return ret.toString();
             }
             else
                 return null;
         }
-        public ArrayList getListLeaf(WebPage wp,User user)
-        {
+        public ArrayList getListLeaf(WebPage wp, User user){
+            Iterator<Activity> it = Activity.ClassMgr.listActivities(wp.getWebSite());
             ArrayList result = new ArrayList();
-            getListLeafProcess(wp, user, result);
+            while(it.hasNext()){
+                Activity act = it.next();
+                if((act.isVisible()&&parentActive(act)&&!hasChild(act,user)&&act.isChildof(wp))||(act.isVisible()&&parentActive(act)&&!hasChild(act,user)&&act.equals(wp))){
+                    result.add(act.getCurrentPercentage());
+                    result.add(act.getPlannedHour());
+                }
+            }
             return result;
         }
-        private void getListLeafProcess(WebPage wp1, User user, ArrayList al)
-        {
-            Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(wp1,wp1.getWebSite());
-            Activity act;
-            ArrayList ChildVisible=new ArrayList();
-            while(it.hasNext())
-            {
-                WebPage wp=(WebPage)it.next();
-                if(wp.isVisible())
-                    ChildVisible.add(wp);
+        private boolean parentActive(WebPage wp){
+            WebPage parent=wp.getParent();
+            boolean haveParent=true;
+            while(parent!=null){
+                if(!parent.isActive())
+                   haveParent=false;
+                parent=parent.getParent();
             }
-            it=ChildVisible.iterator();
-            if(it.hasNext()){
-                while(it.hasNext())
-                {
-                    act = (Activity)it.next();
-                    if(hasChild(act,user)){
-                        getListLeafProcess(act, user, al);}
-                    else{
-                            al.add(act.getCurrentPercentage());
-                            al.add(act.getPlannedHour());
-                    }
-                }
-            }else{
-                    SemanticObject obj= SemanticObject.createSemanticObject(wp1.getURI());
-                        act=(Activity)obj.createGenericInstance();
-                        al.add(act.getCurrentPercentage());
-                        al.add(act.getPlannedHour());
-            }
+            return haveParent;
         }
+
         private boolean hasChild(Activity act,User user)
         {
             boolean result = false;
@@ -198,7 +277,7 @@
                 result = true;
            return result;
         }
-        public String getWebPageListLevel(WebPage wp1,User user, int level, String title, String indentation)
+        public String getWebPageListLevel(WebPage wp1,User user, int level, String title, String indentation,String titleLan)
         {
             level=level+wp1.getLevel();
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(wp1,wp1.getWebSite());
@@ -215,58 +294,33 @@
             if(it.hasNext()){
                 st.append("<h2>"+title+"</h2>\n");
                 st.append("<br>\n");
-                st.append("<table width=\"91%\">\n");
+                st.append("  <div class=\"list\">\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                    String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-
-//                    if(act.getLevel()-1==level)//checar wp1
-//                        indentation="";
-                    if(level == act.getLevel()){
-                        st.append("     <tr>\n");
-                        st.append("     <td colspan=3 width=\"100%\">\n");
-                        st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                        st.append("     </td>\n");
-                        st.append("     </tr>\n");
-                        st.append("     <tr>\n");
-                        st.append("     <td width=\"15%\">\n");
-                        st.append("     </td>\n");
-                        st.append("     <td width=\"70%\">\n");
-                        st.append(pgrb);
-                        st.append("     </td>\n");
-                        st.append("     </tr>\n");
-                    }
-                    else if(pgrb!=null){
-                        st.append("     <tr>\n");
-                        st.append("     <td colspan=3 width=\"100%\">\n");
-                        st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                        st.append("     </td>\n");
-                        st.append("     </tr>\n");
-                        st.append("     <tr>\n");
-                        st.append("     <td width=\"15%\">\n");
-                        st.append("     </td>\n");
-                        st.append("     <td width=\"70%\">\n");
-                        st.append(pgrb);
-                        st.append("     </td>\n");
-                        st.append("     </tr>\n");
+                    String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
+                    st.append("<div class=\"espacio\">\n");
+                    st.append("<div class=\"contPorcentaje\">\n");
+                    st.append(pgrb);
+                    st.append("</div>\n");
+                    st.append("</div>\n");
+                    if(level!=act.getLevel()&&pgrb!=null){
                         StringBuffer st1=new StringBuffer();
                         indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
-                        String childp=getWebPageListLevel1(act,user,level,st1,indentation);
+                        String childp=getWebPageListLevel1(act,user,level,st1,indentation,titleLan);
                         indentation=indentation.substring(0, indentation.length()-24);
                         st.append(childp);
                     }
-
                 }
-                st.append("   </table>\n");
+                st.append("   </div>\n");
             }
             return st.toString();
         }
-        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation)
+        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation,String titleLan)
         {
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
             ArrayList ChildVisible=new ArrayList();
-            //int lvcurrent=0;
             while(it.hasNext())
             {
                 WebPage wp=(WebPage)it.next();
@@ -278,36 +332,16 @@
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                    String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-                    if(level == act.getLevel()){
-                        st1.append("     <tr>\n");
-                        st1.append("     <td colspan=3 width=\"100%\">\n");
-                        st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                        st1.append("     </td>\n");
-                        st1.append("     </tr>\n");
-                        st1.append("     <tr>\n");
-                        st1.append("     <td width=\"15%\">\n");
-                        st1.append("     </td>\n");
-                        st1.append("     <td width=\"70%\">\n");
-                        st1.append(pgrb);
-                        st1.append("     </td>\n");
-                        st1.append("     </tr>\n");
-                    }
-                    else if (pgrb!=null){
-                        st1.append("     <tr>\n");
-                        st1.append("     <td colspan=3 width=\"100%\">\n");
-                        st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                        st1.append("     </td>\n");
-                        st1.append("     </tr>\n");
-                        st1.append("     <tr>\n");
-                        st1.append("     <td width=\"15%\">\n");
-                        st1.append("     </td>\n");
-                        st1.append("     <td width=\"70%\">\n");
-                        st1.append(pgrb);
-                        st1.append("     </td>\n");
-                        st1.append("     </tr>\n");
+                    String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st1.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
+                    st1.append("<div class=\"espacio\">\n");
+                    st1.append("<div class=\"contPorcentaje\">\n");
+                    st1.append(pgrb);
+                    st1.append("</div>\n");
+                    st1.append("</div>\n");
+                    if(level != act.getLevel()&&pgrb!=null){
                         indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
-                        getWebPageListLevel1(act,user,level,st1,indentation);
+                        getWebPageListLevel1(act,user,level,st1,indentation,titleLan);
                         indentation=indentation.substring(0, indentation.length()-24);
                     }
                 }
