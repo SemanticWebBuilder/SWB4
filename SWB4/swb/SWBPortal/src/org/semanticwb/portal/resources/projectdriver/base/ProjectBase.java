@@ -1,10 +1,12 @@
 package org.semanticwb.portal.resources.projectdriver.base;
 
 
-public abstract class ProjectBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Searchable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Rankable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.portal.resources.projectdriver.Period,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Tagable
+public abstract class ProjectBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Searchable,org.semanticwb.model.Rankable,org.semanticwb.model.Expirable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Filterable
 {
+    public static final org.semanticwb.platform.SemanticProperty swbproy_endDatep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbproy#endDatep");
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swbproy_leader=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbproy#leader");
+    public static final org.semanticwb.platform.SemanticProperty swbproy_startDatep=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbproy#startDatep");
     public static final org.semanticwb.platform.SemanticClass swbproy_Project=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swbproy#Project");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swbproy#Project");
 
@@ -211,18 +213,6 @@ public abstract class ProjectBase extends org.semanticwb.model.WebPage implement
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByRuleRef(org.semanticwb.model.RuleRef value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
-            return it;
-        }
-
         public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
@@ -232,6 +222,18 @@ public abstract class ProjectBase extends org.semanticwb.model.WebPage implement
         public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.Project> listProjectByRuleRef(org.semanticwb.model.RuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Project> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -253,34 +255,14 @@ public abstract class ProjectBase extends org.semanticwb.model.WebPage implement
         super(base);
     }
 
-    public int getCurrentHour()
+    public java.util.Date getEndDatep()
     {
-        return getSemanticObject().getIntProperty(swbproy_currentHour);
+        return getSemanticObject().getDateProperty(swbproy_endDatep);
     }
 
-    public void setCurrentHour(int value)
+    public void setEndDatep(java.util.Date value)
     {
-        getSemanticObject().setIntProperty(swbproy_currentHour, value);
-    }
-
-    public float getCurrentPercentage()
-    {
-        return getSemanticObject().getFloatProperty(swbproy_currentPercentage);
-    }
-
-    public void setCurrentPercentage(float value)
-    {
-        getSemanticObject().setFloatProperty(swbproy_currentPercentage, value);
-    }
-
-    public int getPlannedHour()
-    {
-        return getSemanticObject().getIntProperty(swbproy_plannedHour);
-    }
-
-    public void setPlannedHour(int value)
-    {
-        getSemanticObject().setIntProperty(swbproy_plannedHour, value);
+        getSemanticObject().setDateProperty(swbproy_endDatep, value);
     }
 
     public void setLeader(org.semanticwb.model.User value)
@@ -304,24 +286,14 @@ public abstract class ProjectBase extends org.semanticwb.model.WebPage implement
          return ret;
     }
 
-    public java.util.Date getEndDate()
+    public java.util.Date getStartDatep()
     {
-        return getSemanticObject().getDateProperty(swbproy_endDate);
+        return getSemanticObject().getDateProperty(swbproy_startDatep);
     }
 
-    public void setEndDate(java.util.Date value)
+    public void setStartDatep(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbproy_endDate, value);
-    }
-
-    public java.util.Date getStartDate()
-    {
-        return getSemanticObject().getDateProperty(swbproy_startDate);
-    }
-
-    public void setStartDate(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swbproy_startDate, value);
+        getSemanticObject().setDateProperty(swbproy_startDatep, value);
     }
 
     public org.semanticwb.portal.resources.projectdriver.ProjectSite getProjectSite()

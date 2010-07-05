@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.projectdriver.base;
 
 
-public abstract class ActivityBase extends org.semanticwb.portal.resources.projectdriver.ActivityContainer implements org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Searchable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Rankable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.portal.resources.projectdriver.Period,org.semanticwb.model.Expirable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Tagable
+public abstract class ActivityBase extends org.semanticwb.portal.resources.projectdriver.ActivityContainer implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Searchable,org.semanticwb.model.Rankable,org.semanticwb.portal.resources.projectdriver.Period,org.semanticwb.model.Expirable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Viewable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable
 {
     public static final org.semanticwb.platform.SemanticClass swbproy_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swbproy#Activity");
     public static final org.semanticwb.platform.SemanticProperty swbproy_hasSuccessorInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbproy#hasSuccessorInv");
@@ -323,12 +323,14 @@ public abstract class ActivityBase extends org.semanticwb.portal.resources.proje
 
     public int getCurrentHour()
     {
-        return getSemanticObject().getIntProperty(swbproy_currentHour);
+        //Override this method in Activity object
+        return getSemanticObject().getIntProperty(swbproy_currentHour,false);
     }
 
     public void setCurrentHour(int value)
     {
-        getSemanticObject().setIntProperty(swbproy_currentHour, value);
+        //Override this method in Activity object
+        getSemanticObject().setIntProperty(swbproy_currentHour, value,false);
     }
 
     public boolean isCritical()
@@ -343,12 +345,14 @@ public abstract class ActivityBase extends org.semanticwb.portal.resources.proje
 
     public float getCurrentPercentage()
     {
-        return getSemanticObject().getFloatProperty(swbproy_currentPercentage);
+        //Override this method in Activity object
+        return getSemanticObject().getFloatProperty(swbproy_currentPercentage,false);
     }
 
     public void setCurrentPercentage(float value)
     {
-        getSemanticObject().setFloatProperty(swbproy_currentPercentage, value);
+        //Override this method in Activity object
+        getSemanticObject().setFloatProperty(swbproy_currentPercentage, value,false);
     }
 
     public String getActType()
@@ -363,12 +367,14 @@ public abstract class ActivityBase extends org.semanticwb.portal.resources.proje
 
     public int getPlannedHour()
     {
-        return getSemanticObject().getIntProperty(swbproy_plannedHour);
+        //Override this method in Activity object
+        return getSemanticObject().getIntProperty(swbproy_plannedHour,false);
     }
 
     public void setPlannedHour(int value)
     {
-        getSemanticObject().setIntProperty(swbproy_plannedHour, value);
+        //Override this method in Activity object
+        getSemanticObject().setIntProperty(swbproy_plannedHour, value,false);
     }
 
     public void setResponsible(org.semanticwb.model.User value)
@@ -394,12 +400,14 @@ public abstract class ActivityBase extends org.semanticwb.portal.resources.proje
 
     public java.util.Date getEndDate()
     {
-        return getSemanticObject().getDateProperty(swbproy_endDate);
+        //Override this method in Activity object
+        return getSemanticObject().getDateProperty(swbproy_endDate,false);
     }
 
     public void setEndDate(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbproy_endDate, value);
+        //Override this method in Activity object
+        getSemanticObject().setDateProperty(swbproy_endDate, value,false);
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.Activity> listPredecessors()
@@ -445,12 +453,14 @@ public abstract class ActivityBase extends org.semanticwb.portal.resources.proje
 
     public java.util.Date getStartDate()
     {
-        return getSemanticObject().getDateProperty(swbproy_startDate);
+        //Override this method in Activity object
+        return getSemanticObject().getDateProperty(swbproy_startDate,false);
     }
 
     public void setStartDate(java.util.Date value)
     {
-        getSemanticObject().setDateProperty(swbproy_startDate, value);
+        //Override this method in Activity object
+        getSemanticObject().setDateProperty(swbproy_startDate, value,false);
     }
 
     public String getStatus()

@@ -1,7 +1,7 @@
 package org.semanticwb.portal.resources.projectdriver.base;
 
 
-public abstract class ProjectSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Localeable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable
+public abstract class ProjectSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swbproy_ActivityContainer=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swbproy#ActivityContainer");
     public static final org.semanticwb.platform.SemanticClass swbproy_Activity=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/swbproy#Activity");
@@ -84,6 +84,18 @@ public abstract class ProjectSiteBase extends org.semanticwb.model.WebSite imple
         public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> listProjectSiteByParentWebSite(org.semanticwb.model.WebSite value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> listProjectSiteByOntology(org.semanticwb.model.Ontology value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntology, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> listProjectSiteByOntology(org.semanticwb.model.Ontology value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.projectdriver.ProjectSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasOntology,value.getSemanticObject(),sclass));
             return it;
         }
 
