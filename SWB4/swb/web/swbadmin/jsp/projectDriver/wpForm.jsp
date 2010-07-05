@@ -14,9 +14,9 @@
                proPage.add(page1);
         }
        if(!proPage.isEmpty())
-        out.println(printPage(proPage,"Proyectos"));
+        out.println(printPage(proPage,paramRequest.getLocaleString("projects")));
        if(!webPage.isEmpty())
-        out.println(printPage(webPage,"Secciones"));
+        out.println(printPage(webPage,paramRequest.getLocaleString("titleSections")));
 %><%!
     private String printPage(ArrayList mpag, String title)
     {
