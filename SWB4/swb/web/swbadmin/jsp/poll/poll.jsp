@@ -28,8 +28,8 @@
 <%
 
         Resource base = paramRequest.getResourceBase();
-        String webWorkPath = (String) SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
-       
+        String webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+
 
         try {
             Document dom = SWBUtils.XML.xmlToDom(base.getXml());
@@ -140,11 +140,9 @@
                     function buscaCookie(forma) {
                         var numcom = getCookie(forma.NombreCookie.value);
                         if(numcom == "SI") {
-                            <%
                             if ("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
-                            %>
                                 alert('<%=paramRequest.getLocaleString("usrmsg_Encuesta_doView_msgVote")%>');
-                            <%}%>
+                            }
                         }
                         grabaEncuesta(forma);
                     }
@@ -226,7 +224,7 @@
             }
         } catch (Exception e) {
             //log.error(paramRequest.getLocaleString("error_Encuesta_doView_resource") + " " + restype + " " + paramRequest.getLocaleString("error_Encuesta_doView_method"), e);
-        }        
+        }
 %>
 
 <%!
