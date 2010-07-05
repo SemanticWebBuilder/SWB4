@@ -1,18 +1,13 @@
-
     <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
     <%@page import="java.util.*,java.io.PrintWriter,java.text.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.resources.projectdriver.*,org.semanticwb.portal.api.*,org.semanticwb.portal.*,java.sql.Timestamp"%>
     <%
             Iterator it,res,listobj;
-            Iterator<SemanticObject> itso;
             ArrayList proBar=new ArrayList();
             Activity act1;
-            User us;
-            String id1="";
             String lang="es";
             WebPage wp=paramRequest.getWebPage();
             User user=paramRequest.getUser();
-            WebPage wp1=wp.getParent();
-            String parent=getParent(wp1);
+            WebPage parent=getProject(wp.getParent());
             it=wp.listVisibleChilds(user.getLanguage());
             SemanticObject obj=SemanticObject.createSemanticObject(wp.getURI());
             Activity act = (Activity)obj.createGenericInstance();
@@ -22,7 +17,13 @@
             proBar.add(act.getPlannedHour());
             if(paramRequest.getUser()!=null)
               lang=paramRequest.getUser().getLanguage();
-
+            boolean editAct = false;
+            if(user.getURI()!=null&&act.getResponsible()!=null){
+                if(user.getURI().equals(act.getResponsible().getURI())){
+                    editAct = true;
+                }
+            }
+            //String avanTot = "'Agrega horas planeadas'";
     %><script type="text/javascript">
                 function hideDiv(objDIV) {
                     document.getElementById(objDIV).style.visibility = 'hidden';
@@ -34,33 +35,33 @@
                     var val=true;
                     if(forma.status.value=='develop'){
                         if(forma.plannedHour.value==""||forma.plannedHour.value<=0){
-                            alert('Agrega horas planeadas');
+                            alert('<%=paramRequest.getLocaleString("msgAddPlannedh")%>');
                             forma.plannedHour.focus();
                             val = false;
                         }
                         if(forma.currentHour.value==""){
-                            alert('Agrega horas actuales');
+                            alert('<%=paramRequest.getLocaleString("msgAddCurrenth")%>');
                             forma.currentHour.focus();
                             val=false;
                         }
                         if(forma.currentPercentage.value==""){
-                            alert('Agrega porcentaje de Avance');
+                            alert('<%=paramRequest.getLocaleString("msgAddPercentagep")%>');
                             forma.currentPercentage.focus();
                             val =false;
                         }
                     }else if(forma.status.value=='ended'||forma.status.value=='paused'){
                         if(forma.plannedHour.value==""||forma.plannedHour.value<=0){
-                            alert('Agrega horas planeadas');
+                            alert('<%=paramRequest.getLocaleString("msgAddPlannedh")%>');
                             forma.plannedHour.focus();
                             val = false;
                         }
                         if(forma.currentHour.value==""||forma.currentHour.value<=0){
-                            alert('Agrega horas actuales');
+                            alert('<%=paramRequest.getLocaleString("msgAddCurrenth")%>');
                             forma.currentHour.focus();
                             val=false;
                         }
                         if(forma.currentPercentage.value==""||forma.currentPercentage.value<=0){
-                            alert('Agrega porcentaje de Avance');
+                            alert('<%=paramRequest.getLocaleString("msgAddPercentagep")%>');
                             forma.currentPercentage.focus();
                             val =false;
                         }
@@ -69,15 +70,15 @@
                         }
                     }
                     if(forma.plannedHour.value!=""&&isNaN(forma.plannedHour.value)==true){
-                        alert('Agrega un valor númerico para Horas Planeadas');
+                        alert('<%=paramRequest.getLocaleString("msgAddnumericPlannedh")%>');
                         val=false;
                     }
                     if(forma.currentHour.value!=""&&isNaN(forma.currentHour.value)==true){
-                        alert('Agrega un valor númerico para Horas Actuales');
+                        alert('<%=paramRequest.getLocaleString("msgAddnumericCurrenth")%>');
                         val=false;
                     }
                     if(forma.currentPercentage.value!=""&&isNaN(forma.currentPercentage.value)==true){
-                        alert('Agrega un valor númerico para Porcentaje Actual');
+                        alert('<%=paramRequest.getLocaleString("msgAddnumericCurrentp")%>');
                         val=false;
                     }
                     return val;
@@ -90,36 +91,212 @@
                         forma.currentPercentage.value=res.toFixed(2);
                     }
                 }
-    </script>
+</script>
+<style type="text/css">
+#proyecto .list .porcentajeAvance {
+   width: 95%;
+   float: left;
+   height: 20px;
+   background-color: #0099FF;
+}
+#proyecto .list .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #0099FF;
+}
+#proyecto .list .activity{
+   width:100%;
+   float:left;
+   padding: 2px;
+}
+#proyecto .barraProgreso{
+   width:82%;
+   float:left;
+   background-color : #EFEFEF;
+   padding: 0px;
+   border: 2px outset;
+   border-top: 1px solid #242424;
+   border-right: 1px solid #DDDDDD;
+   border-bottom: 1px solid #DDDDDD;
+   border-left: 1px solid #242424;
+   height: 20px;
+}
+#proyecto .contPorcentaje{
+    float:right;
+    width:92%;
+}
+#proyecto .espacio{
+    float:right;
+    width:97%;
+}
+#proyecto .list .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 29%;
+}
+#proyecto .list .text{
+   color:#FFFFFF;
+   font-weight: bold;
+   font-style: italic;
+}
+#proyecto .tag_porcentaje{
+   float:right;
+   background-color:#FFFFFF;
+   padding: 1px;
+   width:12%;
+}
+#proyecto .contenedor {width: 95%; height: 25px;
+   background-color: #FFFFFF;
+   padding: 4px;
+}
+#proyecto .list{
+    width:99%;
+}
+#proyecto .porcentaje{
+    width:98%;
+    float:left;
+    height:20px;
+    background-color: #EFEFEF;
+}
+#proyecto .datos .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 36%;
+}
+#proyecto .datos .etiquetas{
+    text-align: left;
+    float:left;
+    width: 30%;
+    padding-left:2%;
+}
+#proyecto .datos .porcentajeAvance {
+   width: 95%;
+   float: left;
+   height: 20px;
+   background-color: #006BD7;
+}
+#proyecto .datos .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #006BD7;
+}
+#proyecto .barraDatos{
+    width: 68%;
+    float: left;
+}
+#proyecto .barraGeneral{
+    width: 100%;
+    float: left;
+    padding-bottom: 6px;
+    padding-top:6px;
+    padding-left:20px;
+    padding-right:6px;
+    height: 30px;
+}
+#proyecto .datos .global{
+    width:100%;
+}
+#proyecto .datos{
+    padding-bottom:2%;
+    padding-top: 2%;
+}
+#proyecto .datos .elementos{
+    padding-bottom: 2%;
+}
+#proyecto .detalles{
+    width: 100%;
+    padding: 6px;
+    height: 25px;
+}
+#proyecto .botones{
+    padding:20px;
+    width:80%;
+}
+#proyecto .btnIzq{
+    width:60%;
+    float: right;
+}
+#proyecto .btnDer{
+    width:40%;
+    text-align:center;
+}
+table.detail {
+	font-size: 100%;
+	color: black;
+}
+table.detail td {
+	padding: 0.4em 0.5em 0.4em 0.5em;
+}
+table.detail th {
+	padding: 0.4em 0.5em 0.4em 0.5em;
+}
+#proyecto .porcentajeAvance {
+   float:left;
+   height: 20px;
+   background-color: #006BD7;
+}
+#proyecto .defaultPorcentaje{
+    width:2%;
+    float:left;
+    height:20px;
+    background-color: #006BD7;
+}
+#proyecto .estatusBarra{
+   border: 1px none #000000;
+   visibility:hidden;
+   background-color:#008040;
+   margin-left:10px;
+   margin-top:4px;
+   color:#FFFFFF;
+   font-weight: bold;
+   text-indent: 15px;
+   position: absolute;
+   left: 27%;
+}
+</style>
+    <div id="proyecto">
 <%
           if(it.hasNext())
           {//Si tiene hijos muestra una lista de ellos
             HashMap webPage=new HashMap();
-            WebPage page1;
-            String namewp="";
             while(it.hasNext()){
-              page1=(WebPage)it.next();
-              namewp=page1.getSemanticObject().getSemanticClass().getName();
+              WebPage page1=(WebPage)it.next();
+              String namewp=page1.getSemanticObject().getSemanticClass().getName();
               if(namewp.equals("WebPage"))
               webPage.put(page1, page1);
             }
     %>
-        <div>
-        <table  width="91%">
-          <tr>
-              <td width="180px">Proyecto: </td>
-            <td><%=parent%></td></tr>
-          <tr><td width="180px">Avance Actividad:</td>
-            <td><%=getProgressBar(getListLeaf(act,user),"66CCFF",null)%></td>
-          </tr>
-        </table>
-        </div>
+         <div class="datos">
+            <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
+            <div class="elementos"><%=parent.getDisplayName()%></div>
+            <div class="global">
+                <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivityProgress")%>: </div>
+                <div class="barraDatos"><%=getProgressBar(getListLeaf(act,user),paramRequest.getLocaleString("msgTotalHours"))%></div>
+            </div>
+         </div>
       <%
-          out.println(getWebPageListLevel(act,user,4,"Subactividades",""));
+          out.println(getWebPageListLevel(act,user,4,paramRequest.getLocaleString("titleSubactivities"),"",paramRequest.getLocaleString("msgTotalHours")));
           if(!webPage.isEmpty())
-            out.println(printPage(webPage,"Secciones"));
+            out.println(printPage(webPage,paramRequest.getLocaleString("titleSections")));
           }else{//Sino tiene hijos
-            if(user.isRegistered()){//Si esta registrado
+            ArrayList labels = getLabelStatus(act,user);
+            if(editAct){//Si esta registrado
               SWBFormMgr mgr = new SWBFormMgr(act.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
               mgr.setLang(lang);
               mgr.setType(mgr.TYPE_XHTML);
@@ -128,10 +305,9 @@
               url.setAction("update");
               mgr.addHiddenParameter(Activity.swb_active.getName(), Boolean.toString(act.isActive()));//dojoType="dijit.form.Form"
               boolean checkPrede=checkPredecesor(act);%>
-        <fieldset><legend>Seguimiento</legend>
+        <fieldset><legend><%=paramRequest.getLocaleString("labelMonitoring")%></legend>
         <form id="<%=mgr.getFormName()%>" name="<%=mgr.getFormName()%>" class="edit" action="<%=url.toString()%>" method="post">
             <%=mgr.getFormHiddens()%>
-
             <input type="hidden" name="status_ini" value="<%=act.getStatus()%>">
             <table class="detail">
               <tbody>
@@ -154,91 +330,49 @@
                    out.println(mgr.renderElement(request, act.swbproy_actType,mgr.MODE_EDIT));
     %>             </td>
               </tr>
-              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_EDIT)%></td>
-            <%  boolean un,as,ca,de,pa,en; un=as=ca=de=pa=en=false;
-                SemanticObject sobj=act.swbproy_status.getDisplayProperty();
-                String selectValues=null;
-                if(sobj!=null){
-                    DisplayProperty dobj=new DisplayProperty(sobj);
-                    selectValues=dobj.getDisplaySelectValues(user.getLanguage());
-                }
-                if(selectValues!=null){
-                    String value=act.swbproy_status.getName();String value1=act.getStatus().toString();
-                    if(value==null)value="";if(value1==null)value1="";
-                    if(value1.equals("unassigned")) un=ca=as=true;
-                    else if(value1.equals("assigned")) as=de=ca=true;
-                    else if(value1.equals("develop")) de=pa=en=ca=true;
-                    else if(value1.equals("paused")) pa=de=ca=true;
-                    else if(value1.equals("ended")) en=true;
-                    else if(value1.equals("canceled"))
-                        ca=true;%>
-                        <td><select name="<%=Activity.swbproy_status.getName()%>"<%if(checkPrede){%>disabled<%}%>>
-                     <%StringTokenizer st = new StringTokenizer(selectValues, "|");
-                        while (st.hasMoreTokens()) {
-                            String tok = st.nextToken();
-                            int    ind = tok.indexOf(':');
-                            String id  = tok;
-                            String val = tok;
-                            if (ind > 0) {
-                                id  = tok.substring(0, ind);
-                                val = tok.substring(ind + 1);
+              <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_EDIT)%></td><td><select name="<%=Activity.swbproy_status.getName()%>"<%if(checkPrede){%>disabled<%}%>>
+                     <%boolean un,as,ca,de,pa,en; un=as=ca=de=pa=en=false;
+                        String value1=act.getStatus().toString();
+                        if(value1.equals("unassigned")) un=ca=as=true;
+                        else if(value1.equals("assigned")) as=de=ca=true;
+                        else if(value1.equals("develop")) de=pa=en=ca=true;
+                        else if(value1.equals("paused")) pa=de=ca=true;
+                        else if(value1.equals("ended")) en=true;
+                        else if(value1.equals("canceled"))ca=true;
+                        Iterator itz = labels.iterator();
+                        while(itz.hasNext()){
+                            String as1 = itz.next().toString();
+                            String s = itz.next().toString();
+                            boolean s1 = Boolean.parseBoolean(itz.next().toString());
+                            if(as1.equals("unassigned")&&un){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
+                            }else if(as1.equals("assigned")&&as){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
+                            }else if(as1.equals("canceled")&&ca){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
+                            }else if(as1.equals("develop")&&de){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
+                            }else if(as1.equals("paused")&&pa){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
+                            }else if(as1.equals("ended")&&en){
+                            %><option value="<%=as1%>"<%
+                            if (s1){%>selected<%}%>><%=s%></option><%
                             }
-                            if(id.equals("unassigned")&&un){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }else if(id.equals("assigned")&&as){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }else if(id.equals("canceled")&&ca){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }else if(id.equals("develop")&&de){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }else if(id.equals("paused")&&pa){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }else if(id.equals("ended")&&en){
-                            %><option value="<%=id%>"<%
-                            if (id.equals(value1)){
-                            %>selected<%}%>><%=val%></option><%
-                            }
-                       }
-                %></select></td><%
-                }%>
+                        }
+                %></select></td>
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_hasPredecessor, mgr.MODE_EDIT)%></td>
                   <td><%
-                    //Obtiene las actividades predecesoras relacionadas a la actividad y que sean validas
-                    ArrayList actPre=new ArrayList();
-                    ArrayList<String> vals1=new ArrayList();
-                    listobj=act.listPredecessors();
-                    while(listobj.hasNext())
-                        actPre.add(listobj.next());
-                    actPre=validActivities(actPre);
-                    listobj = actPre.iterator();
-                    while(listobj.hasNext())
-                        vals1.add(listobj.next().toString());
-
-                    //Obtiene las actividades relacionadas al modelo o sitio web y que sean validas
-                    ArrayList listAll =new ArrayList();
-                    ArrayList container=getContainerActs(act,user.getLanguage());
-                    ArrayList actsByProj = getActivitiesByProject(container,act.getWebSite());
-                    Iterator<Activity> listActall=actsByProj.iterator();
-                    while(listActall.hasNext()){
-                        Activity act2 = listActall.next();
-                        if(!act2.equals(act))
-                            listAll.add(act2);
-                    }
-                    listAll = validActivities(listAll);
-                    listActall = listAll.iterator();
+                    ArrayList vals1=getActsPrede(act);
+                    ArrayList listAll=getActsForPrec(act, parent);
+                    Iterator listActall = listAll.iterator();
                    %><select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true" size="4" style="width:300px;" <%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){%>disabled<%}%>><%
-                   if(listActall.hasNext())%><option value=""<%
+                   if(listActall.hasNext())%><option value=""><%
                     while (listActall.hasNext()) {
                         WebPage sob = (WebPage)listActall.next();
                         if (!sob.isParentof(act) &&sob.getURI() != null) {
@@ -280,7 +414,7 @@
                   %><select name="<%=act.swbproy_hasParticipants.getName()%>" multiple="true"  size="4" style="width:300px;"<%
                     if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                             %>disabled<%
-                    }%>><%if(res.hasNext())%><option value=""<%
+                    }%>><%if(res.hasNext())%><option value=""><%
                     while (res.hasNext()) {
                         SemanticObject sob = SemanticObject.createSemanticObject(res.next().toString());//SemanticObject.createSemanticObject(res.next().toString());
                         if (sob.getURI() != null) {
@@ -309,8 +443,7 @@
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                     out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\"Sólo números\">");
-//                   out.println(mgr.renderElement(request, act.swbproy_plannedHour,mgr.MODE_EDIT));
+                     out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\""+paramRequest.getLocaleString("msgOnlyIntegers")+"\">");
     %>             </td>
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentHour, mgr.MODE_EDIT)%></td>
@@ -318,7 +451,7 @@
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                     out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\"Sólo números\">");
+                    out.println("<input id=\""+act.swbproy_currentHour.getName()+"\" name=\""+act.swbproy_currentHour.getName()+"\" value=\""+act.getCurrentHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\""+paramRequest.getLocaleString("msgOnlyIntegers")+"\">");
     %>             </td>
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_currentPercentage, mgr.MODE_EDIT)%></td>
@@ -326,38 +459,44 @@
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                     out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\""+form+"\" invalidMessage=\"Sólo números flotantes\">");
+                     out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\""+form+"\" invalidMessage=\"hoal nariz de bola\"/>");//paramRequest.getLocaleString("msgOnlyfloatingn")
+
         %>              </td>
               </tr>
-              <tr><td width="200px">
-    <%            if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")||checkPrede){%><%
-                    out.println("<button type=\"submit\" onclick=\"calcular(this.form)\">Calcular</button>");%><br><%
-                    out.println("<button type=\"submit\" onclick=\"return validar(this.form)\">Actualizar</button>");
-                   }
-                %></td>
-                  <td><%=getProgressBar(proBar,null,null)%></td>
-              </tr><%
-           %></tbody>
+            </tbody>
            </table>
+              <div class="barraGeneral"><%=getProgressBar(proBar,paramRequest.getLocaleString("msgTotalHours"))%></div>
+               <% if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")||checkPrede){%><div class="botones"><div class="btnIzq"><%
+                    out.println("<button type=\"button\" onclick=\"calcular(this.form)\">"+paramRequest.getLocaleString("btnCalculate")+"</button>");%></div><div class="btnDer"><%
+                    out.println("<button type=\"submit\" onclick=\"return validar(this.form)\">"+paramRequest.getLocaleString("btnUpdate")+"</button>");%></div></div><%
+                   }
+                %>
            </form>
+
         </fieldset>
     <%      }else{//si no esta registrado
               SWBFormMgr mgr = new SWBFormMgr(obj, null, SWBFormMgr.MODE_VIEW);
               mgr.setLang(lang);
               mgr.setType(mgr.TYPE_XHTML);
     %>
-        <fieldset><legend>Detalles de Actividad</legend>
-          <p class="indentation">
-          <label for="progress">Avance Actividad:</label>
-          <span name="progress"><%=getProgressBar(proBar,null,null)%></span>
-          </p>
-          <table class="detail">
+        <fieldset><legend><%=paramRequest.getLocaleString("labelActivityDetail")%></legend>
+            <br><label><%=paramRequest.getLocaleString("labelActivityProgress")%>:</label><br>
+          <div class="detalles">
+          <%=getProgressBar(proBar,paramRequest.getLocaleString("msgTotalHours"))%>
+          </div>
+          <br>
+          <table  class="detail">
             <tbody>
-                <tr><th width="150"><label for="proyect">Proyecto </label></th>
-                   <td><%=parent%></td>
+                <tr><th width="150"><label for="proyect"><%=paramRequest.getLocaleString("titleProject")%> </label></th>
+                   <td><%=parent.getDisplayName()%></td>
                </tr>
-               <tr><th><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_VIEW)%></th>
-                   <td><%=mgr.renderElement(request, act.swbproy_actType,mgr.MODE_VIEW)%></td>
+               <tr><th><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_VIEW)%></th><%
+                  if(act.getActType().equals("")){%>
+                  <td><%=paramRequest.getLocaleString("msgUnassigned")%></td>
+                  <%}else{%>
+                  <td><%=mgr.renderElement(request, act.swbproy_actType,mgr.MODE_VIEW)%></td>
+                  <%}
+                   %>
                </tr>
                <tr><th><%=mgr.renderLabel(request,act.swbproy_critical,mgr.MODE_VIEW)%></th>
                    <td><%=mgr.renderElement(request, act.swbproy_critical,mgr.MODE_VIEW)%></td>
@@ -366,41 +505,50 @@
                    <td>
                     <%GenericIterator <Activity> it1 = act.listPredecessors();
                     if(it1.hasNext()){%>
-                     <select name="<%=act.swbproy_hasPredecessor.getName()%>"  size="4" multiple="true" style="width:300px;">
+                     <select name="<%=act.swbproy_hasPredecessor.getName()%>"  size="2" multiple="true" style="width:200px;">
                       <%while(it1.hasNext()){
                        act1=it1.next();%>
                        <option value="<%=act1.getDisplayName()%>"><%=act1.getDisplayName()%></option>
                       <%}%>
                      </select>
                     <%}
-                    else%>
-                     Sin Predecesores
+                    else
+                       out.println(paramRequest.getLocaleString("msgNoPredecessors"));%>
                    </td>
                </tr>
-               <tr><th><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_VIEW)%></th>
-                   <td><%=mgr.renderElement(request, act.swbproy_status.getName(),mgr.MODE_VIEW)%></td>
+               <tr><th><%=mgr.renderLabel(request, act.swbproy_status, mgr.MODE_VIEW)%></th><%
+                    String label = act.getStatus()!=null?act.getStatus():paramRequest.getLocaleString("msgUnassigned");
+                    Iterator itz1 = labels.iterator();
+                    String value = paramRequest.getLocaleString("msgUnassigned");
+                    while(itz1.hasNext()){
+                        String aitz1 = itz1.next().toString();
+                        if(aitz1.equals(label))
+                           value = itz1.next().toString();
+                    }
+                    %>
+                   <td><%=value%></td>
                </tr>
                <tr><th><%=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_VIEW)%></th>
                    <td>
                      <%if(act.getResponsible()!=null){%>
                         <%=act.getResponsible().getFullName()%>
-                     <%}else%>
-                        Sin Asignar
+                     <%}else{
+                       out.println(paramRequest.getLocaleString("msgUnassigned"));}%>
                    </td>
                </tr>
                <tr><th><%=mgr.renderLabel(request, act.swbproy_hasParticipants, mgr.MODE_VIEW)%></th>
                    <td>
                     <%GenericIterator<User> it2 = act.listParticipantses();
                     if(it2.hasNext()){%>
-                     <select name="<%=act.swbproy_hasParticipants.getName()%>"  size="4" multiple="true" style="width:300px;">
+                     <select name="<%=act.swbproy_hasParticipants.getName()%>"  size="2" multiple="true" style="width:200px;">
                       <%while(it2.hasNext()){
-                        us=it2.next();%>
-                        <option value="<%=us.getFirstName()%>"><%=us.getFirstName()%></option>
+                        User us=it2.next();%>
+                        <option value="<%=us.getFullName()%>"><%=us.getFullName()%></option>
                       <%}%>
                      </select>
                     <%}
-                    else%>
-                     Sin Participantes
+                    else{
+                     out.println(paramRequest.getLocaleString("msgNoParticipants"));}%>
                    </td>
                </tr>
                <tr><th><%=mgr.renderLabel(request, act.swbproy_plannedHour, mgr.MODE_VIEW)%></th>
@@ -430,53 +578,72 @@
         </fieldset>
     <%      }
           }%>
+     </div>
     <%!
-        private ArrayList getContainerActs(WebPage wp,String language)
-        {
-            WebPage site = wp;
-            WebPage siteIni=wp;
-            ArrayList containers=new ArrayList();
-            boolean si=false;
-            while(!si){
-                if(site.getSemanticObject().getSemanticClass().getName().equals("Project")){
-                    si=true;
-                    siteIni=site;
+        private ArrayList getActsPrede(Activity act){
+            //Obtiene las actividades predecesoras relacionadas a la actividad y que sean validas
+            ArrayList actPre=new ArrayList();
+            ArrayList<String> vals1=new ArrayList();
+            Iterator listobj=act.listPredecessors();
+            while(listobj.hasNext())
+                actPre.add(listobj.next());
+            actPre=validActivities(actPre);
+            listobj = actPre.iterator();
+            while(listobj.hasNext())
+                vals1.add(listobj.next().toString());
+            return vals1;
+        }
+        private ArrayList getActsForPrec(Activity act, WebPage parent){
+            //Obtiene las actividades relacionadas al modelo o sitio web y que sean validas
+            ArrayList listAll =new ArrayList();
+            ArrayList actsByProj = getActivitiesByProject(parent,act.getWebSite());
+            Iterator<Activity> listActall=actsByProj.iterator();
+            while(listActall.hasNext()){
+                Activity act2 = listActall.next();
+                if(!act2.equals(act))
+                    listAll.add(act2);
+            }
+            listAll = validActivities(listAll);
+            return listAll;
+        }
+        private ArrayList getLabelStatus(Activity act, User user){
+            String value1=act.getStatus().toString();
+            ArrayList labels = new ArrayList();
+            SemanticObject sobj=act.swbproy_status.getDisplayProperty();
+            String selectValues=null;
+            boolean valid = true;
+            if(sobj!=null){
+                DisplayProperty dobj=new DisplayProperty(sobj);
+                selectValues=dobj.getDisplaySelectValues(user.getLanguage());
+            }
+            StringTokenizer st = new StringTokenizer(selectValues, "|");
+            while (st.hasMoreTokens()) {
+                String tok = st.nextToken();
+                int    ind = tok.indexOf(':');
+                String id  = tok;
+                String val = tok;
+                if (ind > 0) {
+                    id  = tok.substring(0, ind);
+                    val = tok.substring(ind + 1);
+                    if(id.equals(value1))valid=true;
+                    else valid=false;
+                    labels.add(id);
+                    labels.add(val);
+                    labels.add(valid);
                 }
-                site=site.getParent();
             }
-            Iterator<WebPage> itwp = siteIni.listVisibleChilds(language);
-            while(itwp.hasNext()){
-                WebPage pag = itwp.next();
-                String name = pag.getSemanticObject().getSemanticClass().getName();
-                if(name.equals("ActivityContainer"))
-                    containers.add(pag.getDisplayName());
-            }
-            return containers;
+            return labels;
         }
-        private ArrayList getActivitiesByProject(ArrayList containers,WebSite model){
-              ArrayList containActs = new ArrayList();
-              if(!containers.isEmpty()){
-                 Iterator contAct= Activity.ClassMgr.listActivities(model);
-                 while(contAct.hasNext()){
-                     Activity activ=(Activity)contAct.next();
-                     boolean p=false;
-                     String containerS="";
-                     WebPage parent=activ;
-                     while(!p){
-                         String clas=parent.getSemanticObject().getSemanticClass().getName();
-                         if(clas.equals("ActivityContainer")){
-                             containerS=parent.getDisplayName();p=true;
-                         }
-                         parent=parent.getParent();
-                     }
-                     if(containers.contains(containerS))
-                        containActs.add(activ);
-                 }
-              }
-              return containActs;
+        private ArrayList getActivitiesByProject(WebPage project,WebSite model){
+             ArrayList containActs = new ArrayList();
+             Iterator contAct= Activity.ClassMgr.listActivities(model);
+             while(contAct.hasNext()){
+                 Activity activ=(Activity)contAct.next();
+                 if(activ.isChildof(project))
+                     containActs.add(activ);
+             }
+             return containActs;
         }
-
-
         private void validAct(Activity act){
              if(act.getStatus()==null){
                 if(act.getResponsible()==null)
@@ -511,7 +678,6 @@
             }
             return usrs;
         }
-
         private boolean checkPredecesor(Activity act){
             boolean check=false;
             Iterator prede = act.listPredecessors();
@@ -525,14 +691,13 @@
             }
             return check;
         }
-
-        private String getParent(WebPage wp){
+        private WebPage getProject(WebPage wp){
            boolean p;p=false;
-           String parent="";
+           WebPage parent=wp;
            while(!p){
                 SemanticObject obj1= SemanticObject.createSemanticObject(wp.getURI());
                 if(obj1.instanceOf(Project.sclass)){
-                    parent=wp.getDisplayName();p=true;}
+                    parent=wp;p=true;}
                 wp=wp.getParent();
             }
             return parent;
@@ -578,7 +743,7 @@
             }
             return strb.toString();
         }
-        private String getProgressBar(ArrayList info, String colorBarra, String colorFondoBarra)
+        private String getProgressBar(ArrayList info,String titleLan)
         {
             String porcentaje = "", horas = "";
             float porcentajeTotal = 0, horasTotales = 0, horasParciales = 0;
@@ -613,49 +778,24 @@
                     }
                 }
                 porcentajeTotal = horasParciales / horasTotales * 100;
-                if (colorBarra == null)
-                    colorBarra = "006BD7";
-                if (colorFondoBarra == null)
-                    colorFondoBarra = "EFEFEF";
-                ret.append("        <table border=0 width=\"85%\" bgcolor=\"#FFFFFF\">\n");
-                ret.append("          <tr >\n");
-                ret.append("            <td align=\"left\" width=\"70%\">\n");
-                ret.append("              <div id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\"\n");
-                ret.append("                 style=\"position: absolute; border: 1px none #000000;\n");
-                ret.append("                 visibility:hidden; background-color:#008040;\n");
-                ret.append("                 margin-left:10px; margin-top:7px;\">\n");
-                ret.append("                 <font color=\"#FFFFFF\">\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                   <b>Horas Totales: <i> " + horasTotales + " </i></b>\n");
-                ret.append("                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                ret.append("                 </font>\n");
-                ret.append("               </div>\n");
-                ret.append("               <table width=\"100%\" border=\"\" cellpadding=\"1\" cellspacing=\"1\" bordercolor=\"#FFFFFF\" bgcolor=\"#FFFFFF\"\n");
-                ret.append("                 onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\"\n");
-                ret.append("                 onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
-                ret.append("                 <tr>\n");
-                ret.append("                   <td width=\"100%\" bgcolor=\"#" + colorFondoBarra + "\">\n");
-                ret.append("                     <table class=\"darkBar\" width=\"" + df.format(porcentajeTotal) + "%\" border=\"0\" bgcolor=\"#" + colorBarra + "\">\n");
-                ret.append("                       <tr>\n");
-                ret.append("                         <td><b>&nbsp;</b>\n");
-                ret.append("                         </td>\n");
-                ret.append("                       </tr>\n");
-                ret.append("                     </table>\n");
-                ret.append("                   </td>\n");
-                ret.append("                 </tr>\n");
-                ret.append("               </table>\n");
-                ret.append("            </td>\n");
-                ret.append("            <td align=\"left\" width=\"15%\">         " + df.format(porcentajeTotal) + "%\n");
-                ret.append("            </td>\n");
-                ret.append("          </tr>\n");
-                ret.append("        </table>\n");
-                ret.append("\n");
+                if(Float.isNaN(porcentajeTotal))
+                    porcentajeTotal=0;
+                ret.append("        <div class=\"contenedor\">\n");
+                ret.append("            <div class=\"barraProgreso\" onmouseover=\"javascript:showDiv('divStatusBar" + uuid + "'); return true;\" onmouseout=\"javascript:hideDiv('divStatusBar" + uuid + "'); return true;\">\n");
+                ret.append("                 <div class=\"defaultPorcentaje\"></div>\n");
+                ret.append("                 <div class=\"porcentaje\">\n");
+                ret.append("                     <div class=\"estatusBarra\" id=\"divStatusBar" + uuid + "\" name=\"divStatusBar" + uuid + "\">"+titleLan+":<span class=\"text\">" + horasTotales + "</span>&nbsp;&nbsp;&nbsp;&nbsp;</div>\n");
+                ret.append("                     <div class=\"porcentajeAvance\" style=\"width:"+df.format(porcentajeTotal)+"%\"></div>\n");
+                ret.append("                 </div>\n");
+                ret.append("            </div>\n");
+                ret.append("            <div class=\"tag_porcentaje\">"+ df.format(porcentajeTotal) +"%</div>\n");
+                ret.append("         </div>\n");
                 return ret.toString();
             }
             else
                 return null;
         }
-        public String getWebPageListLevel(Activity act,User user, int level, String title, String indentation)
+        public String getWebPageListLevel(Activity act,User user, int level, String title, String indentation,String titleLan)
         {
             level=level+act.getLevel();
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
@@ -671,50 +811,30 @@
             if(it.hasNext()){
                 st.append("<h2>"+title+"</h2>\n");
                 st.append("<br>\n");
-                st.append("<table width=\"91%\">\n");
+                st.append("  <div class=\"list\">\n");
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                        String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-                        if(level == act.getLevel()){
-                            st.append("     <tr>\n");
-                            st.append("     <td colspan=3 width=\"100%\">\n");
-                            st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                            st.append("     </td>\n");
-                            st.append("     </tr>\n");
-                            st.append("     <tr>\n");
-                            st.append("     <td width=\"15%\">\n");
-                            st.append("     </td>\n");
-                            st.append("     <td width=\"70%\">\n");
-                            st.append(pgrb);
-                            st.append("     </td>\n");
-                            st.append("     </tr>\n");
-                        }
-                        else if(pgrb!=null){
-                            st.append("     <tr>\n");
-                            st.append("     <td colspan=3 width=\"100%\">\n");
-                            st.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                            st.append("     </td>\n");
-                            st.append("     </tr>\n");
-                            st.append("     <tr>\n");
-                            st.append("     <td width=\"15%\">\n");
-                            st.append("     </td>\n");
-                            st.append("     <td width=\"70%\">\n");
-                            st.append(pgrb);
-                            st.append("     </td>\n");
-                            st.append("     </tr>\n");
-                            StringBuffer st1=new StringBuffer();
-                            indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
-                            String childp=getWebPageListLevel1(act,user,level,st1,indentation);
-                            indentation=indentation.substring(0, indentation.length()-24);
-                            st.append(childp);
-                        }
+                    String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
+                    st.append("<div class=\"espacio\">\n");
+                    st.append("<div class=\"contPorcentaje\">\n");
+                    st.append(pgrb);
+                    st.append("</div>\n");
+                    st.append("</div>\n");
+                    if(level!=act.getLevel()&&pgrb!=null){
+                        StringBuffer st1=new StringBuffer();
+                        indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                        String childp=getWebPageListLevel1(act,user,level,st1,indentation,titleLan);
+                        indentation=indentation.substring(0, indentation.length()-24);
+                        st.append(childp);
+                    }
                 }
-                st.append("</table>\n");
+                st.append("   </div>\n");
             }
             return st.toString();
         }
-        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation)
+        public String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation,String titleLan)
         {
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
             ArrayList ChildVisible=new ArrayList();
@@ -729,38 +849,18 @@
                 while(it.hasNext())
                 {
                     act = (Activity)it.next();
-                        String pgrb = getProgressBar(getListLeaf(act,user),null,null);
-                        if(level == act.getLevel()){
-                            st1.append("     <tr>\n");
-                            st1.append("     <td colspan=3 width=\"100%\">\n");
-                            st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                            st1.append("     </td>\n");
-                            st1.append("     </tr>\n");
-                            st1.append("     <tr>\n");
-                            st1.append("     <td width=\"15%\">\n");
-                            st1.append("     </td>\n");
-                            st1.append("     <td width=\"70%\">\n");
-                            st1.append(pgrb);
-                            st1.append("     </td>\n");
-                            st1.append("     </tr>\n");
-                        }
-                        else if (pgrb!=null){
-                            st1.append("     <tr>\n");
-                            st1.append("     <td colspan=3 width=\"100%\">\n");
-                            st1.append(indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a>\n");
-                            st1.append("     </td>\n");
-                            st1.append("     </tr>\n");
-                            st1.append("     <tr>\n");
-                            st1.append("     <td width=\"15%\">\n");
-                            st1.append("     </td>\n");
-                            st1.append("     <td width=\"70%\">\n");
-                            st1.append(pgrb);
-                            st1.append("     </td>\n");
-                            st1.append("     </tr>\n");
-                            indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
-                            getWebPageListLevel1(act,user,level,st1,indentation);
-                            indentation=indentation.substring(0, indentation.length()-24);
-                        }
+                    String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st1.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
+                    st1.append("<div class=\"espacio\">\n");
+                    st1.append("<div class=\"contPorcentaje\">\n");
+                    st1.append(pgrb);
+                    st1.append("</div>\n");
+                    st1.append("</div>\n");
+                    if(level != act.getLevel()&&pgrb!=null){
+                        indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";
+                        getWebPageListLevel1(act,user,level,st1,indentation,titleLan);
+                        indentation=indentation.substring(0, indentation.length()-24);
+                     }
                 }
             }
             return st1.toString();
