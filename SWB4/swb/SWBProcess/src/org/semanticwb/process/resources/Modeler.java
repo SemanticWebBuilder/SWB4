@@ -538,11 +538,14 @@ public class Modeler extends GenericResource {
                         ///////////////////////////////////////
                         if(semclass.equals(UserTask.swp_UserTask))
                         {
-                            Resource res = procsite.createResource();
-                            res.setResourceType(procsite.getResourceType("ProcessForm"));
-                            res.setTitle("Contenido autogenerado");
-                            res.setActive(Boolean.TRUE);
-                            ((WebPage)gi).addResource(res);
+                            if(procsite.getResourceType("ProcessForm")!=null)
+                            {
+                                Resource res = procsite.createResource();
+                                res.setResourceType(procsite.getResourceType("ProcessForm"));
+                                res.setTitle("Contenido autogenerado");
+                                res.setActive(Boolean.TRUE);
+                                ((WebPage)gi).addResource(res);
+                            }
                         }
                         ////////////////////////////////////////
 
