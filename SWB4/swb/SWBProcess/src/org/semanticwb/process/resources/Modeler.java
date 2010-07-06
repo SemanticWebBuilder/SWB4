@@ -17,7 +17,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -31,6 +33,7 @@ import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.ProcessSite;
+import org.semanticwb.process.model.UserTask;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -531,6 +534,19 @@ public class Modeler extends GenericResource {
                         ge.setHeight(h);
                         ge.setWidth(w);
                         hmnew.put(uri, gi.getURI());
+
+                        ///////////////////////////////////////
+                        if(semclass.equals(UserTask.swp_UserTask))
+                        {
+                            Resource res = procsite.createResource();
+                            res.setResourceType(procsite.getResourceType("ProcessForm"));
+                            res.setTitle("Contenido autogenerado");
+                            res.setActive(Boolean.TRUE);
+                            ((WebPage)gi).addResource(res);
+                        }
+                        ////////////////////////////////////////
+
+
                     }
                 }
             }
