@@ -89,6 +89,7 @@ public class ControlPanel extends GenericAdmResource
     private final static String strDefaultHref =
             "TaskDefinition.url|?suri=|TaskInstance.encodedURI|";
     private final static int intDefaultRowsPerPage = 3;
+    private static int intColumnCount = 1;
     private HashMap taskAttributes;
 
     /**
@@ -96,7 +97,7 @@ public class ControlPanel extends GenericAdmResource
      * Propiedades Grales de la tarea = TaskDefinition +  taskInstance
 	 *
      * @param           paramsRequest SWBParamRequest
-	 * @return          void
+	 * @return          Vector
 	 */
     public Vector getTaskProperties(SWBParamRequest paramRequest)
     {
@@ -128,8 +129,8 @@ public class ControlPanel extends GenericAdmResource
                 index++;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTaskProperties", e);
-            System.out.println("Error en ControlPanelReloaded.getTaskProperties:" +
+          //log.error("Error en ControlPanel.getTaskProperties", e);
+            System.out.println("Error en ControlPanel.getTaskProperties:" +
                     e.getMessage());
 		}
         return vProps;
@@ -140,7 +141,6 @@ public class ControlPanel extends GenericAdmResource
      * La información se refiere a la composicion del vinculo, leyenda y columnas para cada definicion de proceso seleccionada
 	 *
      * @param           paramsRequest SWBParamRequest
-	 * @return          void
 	 */
     public void getResourceTaskAttributesMap(SWBParamRequest paramRequest)
     {
@@ -169,23 +169,28 @@ public class ControlPanel extends GenericAdmResource
             }
             taskAttributes = hMap;
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getResourceTaskAttributesMap", e);
-            System.out.println("Error en ControlPanelReloaded.getResourceTaskAttributesMap:" +
+          //log.error("Error en ControlPanel.getResourceTaskAttributesMap", e);
+            System.out.println("Error en ControlPanel.getResourceTaskAttributesMap:" +
                     e.getMessage());
 		}
     }
 
-    //Actualiza el mapa donde se guardan los procesos seleccionados,
-    //las propiedades de tarea para cada proceso seleccionado y
-    //las propiedades de artefacto para cada proceso seleccionado
+    /**
+	 * Actualiza el mapa donde se guardan los procesos seleccionados, las
+     * propiedades de tarea para cada proceso seleccionado y las propiedades de
+     * artefacto para cada proceso seleccionado
+	 *
+     * @param           paramsRequest SWBParamRequest
+	 * @return          HashMap
+	 */
     public HashMap setTaskAttributesMap(SWBParamRequest paramRequest)
     {
         HashMap hTasks = new HashMap();
         try
         {
+            int columnCount = 1;
             Resource base = paramRequest.getResourceBase();
             Vector vSelTaskProps = new Vector();
-            //TODO: paginacion
             String strCPTaskParams = base.getAttribute("cpTaskParams")==null
                     ?""
                     :base.getAttribute("cpTaskParams");
@@ -219,6 +224,7 @@ public class ControlPanel extends GenericAdmResource
                         } else if(tProp.isAppliedOnTaskColumn())
                         {
                             strColumns = strColumns + tProp.getType() + "." + tProp.getName() + "|";
+                            columnCount++;
                         }
                     }
                 }
@@ -236,6 +242,7 @@ public class ControlPanel extends GenericAdmResource
                         } else if(pp.isAppliedOnTaskColumn())
                         {
                             strColumns = strColumns + pp.getURI() + "|";
+                            columnCount++;
                         }
                     }
                 }
@@ -246,17 +253,23 @@ public class ControlPanel extends GenericAdmResource
                 hTasks.put(process.getURI(), arrParams);
             }
             taskAttributes = hTasks;
+            intColumnCount = columnCount;
 
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.setTaskAttributesMap", e);
-            System.out.println("Error en ControlPanelReloaded.setTaskAttributesMap:" +
+          //log.error("Error en ControlPanel.setTaskAttributesMap", e);
+            System.out.println("Error en ControlPanel.setTaskAttributesMap:" +
                     e.getMessage());
 		}
         return hTasks;
     }
 
-    //Carga en la base del recurso las propiedades de tarea contenidas en un HashMap
-    //para su resguardo.
+    /**
+	 * Carga en la base del recurso las propiedades de tarea contenidas en un
+     * HashMap para su resguardo.
+	 *
+     * @param           hMap HashMap
+     * @param           paramsRequest SWBParamRequest
+	 */
     public void setResourceTaskAttributesMap(HashMap hMap, SWBParamRequest paramRequest)
     {
         try
@@ -279,16 +292,21 @@ public class ControlPanel extends GenericAdmResource
             }
             base.updateAttributesToDB();
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.setResourceTaskAttributesMap", e);
-            System.out.println("Error en ControlPanelReloaded.setResourceTaskAttributesMap:" +
+          //log.error("Error en ControlPanel.setResourceTaskAttributesMap", e);
+            System.out.println("Error en ControlPanel.setResourceTaskAttributesMap:" +
                     e.getMessage());
 		}
     }
 
-    //Obtiene de la base del recurso las propiedades generales de la tarea seleccionadas.
-    //Para cada una de las definiciones de proceso seleccionadas, verifica si se selecciono
-    //alguna propiedad general de la tarea, en cuyo caso genera un objeto TaskProperty
-    //indicando su configuración y la agrega al vector.
+    /**
+	 * Obtiene de la base del recurso las propiedades generales de la tarea
+     * seleccionadas. Para cada una de las definiciones de proceso seleccionadas,
+     * verifica si se selecciono alguna propiedad general de la tarea, en cuyo
+     * caso genera un objeto TaskProperty indicando su configuración y la agrega al vector.
+	 *
+     * @param           paramsRequest SWBParamRequest
+     * @return          Vector
+	 */
     public Vector getSelectedTaskProperties(SWBParamRequest paramRequest)
     {
         Vector vSelTaskProps = new Vector();
@@ -344,8 +362,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getSelectedTaskProperties", e);
-            System.out.println("Error en ControlPanelReloaded.getSelectedTaskProperties:" +
+          //log.error("Error en ControlPanel.getSelectedTaskProperties", e);
+            System.out.println("Error en ControlPanel.getSelectedTaskProperties:" +
                     e.getMessage());
 		}
         return vSelTaskProps;
@@ -353,14 +371,13 @@ public class ControlPanel extends GenericAdmResource
 
     //FILTROS
     /**
-    * Aplica al vector de objetos FlowObjectInstance el tipo de filtro
+    * Aplica al vector de objetos FlowNodeInstance el tipo de filtro
     * solicitado con el valor correspondiente
     *
     * @param            v Vector
     * @param            filter int
     * @param            filterValues String
-    * @return      		Vector de objetos FlowObjectInstance
-    * @see
+    * @return      		Vector de objetos FlowNodeInstance
     */
     public Vector filterTasks(Vector v, int filter, String filterValues)
     {
@@ -396,8 +413,8 @@ public class ControlPanel extends GenericAdmResource
                     break;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.filterTasks", e);
-            System.out.println("Error en ControlPanelReloaded.filterTasks:" +
+          //log.error("Error en ControlPanel.filterTasks", e);
+            System.out.println("Error en ControlPanel.filterTasks:" +
                     e.getMessage());
 		}
         return vFilteredTasks;
@@ -405,14 +422,13 @@ public class ControlPanel extends GenericAdmResource
 
     /**
     * Determina los filtros seleccionados por el usuario y los aplica al vector
-    * de objetos FlowObjectInstance
+    * de objetos FlowNodeInstance
     *
-    * @param            request HttpServletRequest
     * @param            vTasks Vector
+    * @param            request HttpServletRequest
     * @return      		Vector
     * @see
     */
-    //TODO: Mejorar este codigo
     public Vector applyFilters(Vector vTasks, HttpServletRequest request)
     {
         Vector vFiltered = new Vector();
@@ -474,8 +490,8 @@ public class ControlPanel extends GenericAdmResource
                 vFiltered = vTasks;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.applyFilters", e);
-            System.out.println("Error en ControlPanelReloaded.applyFilters:" +
+          //log.error("Error en ControlPanel.applyFilters", e);
+            System.out.println("Error en ControlPanel.applyFilters:" +
                     e.getMessage());
 		}
         return vFiltered;
@@ -541,8 +557,8 @@ public class ControlPanel extends GenericAdmResource
             }
             sb.append("<br/><br/>" );
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getUsedFilters", e);
-            System.out.println("Error en ControlPanelReloaded.getUsedFilters:"
+          //log.error("Error en ControlPanel.getUsedFilters", e);
+            System.out.println("Error en ControlPanel.getUsedFilters:"
                     + e.getMessage());
 		}
         return sb;
@@ -558,7 +574,6 @@ public class ControlPanel extends GenericAdmResource
 	 *
      * @param               paramRequest SWBParamRequest
 	 * @return      		Vector de objetos org.semanticwb.process.model.Process
-     * @see
 	 */
     public Vector getSelectedProcessDefinitions(SWBParamRequest paramRequest)
     {
@@ -582,24 +597,34 @@ public class ControlPanel extends GenericAdmResource
             {
                 ProcessWebPage pwp =
                         (ProcessWebPage) itProcessWebPages.next();
-                org.semanticwb.process.model.Process process = pwp.getProcess();
-                if(vSelected.contains(process.getURI()))
-                {
-                    vProcessDefinitions.add(index, process);
-                    index++;
+                if(pwp.isActive()){
+                    org.semanticwb.process.model.Process process = pwp.getProcess();
+                    if(vSelected.contains(process.getURI()))
+                    {
+                        vProcessDefinitions.add(index, process);
+                        index++;
+                    }
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getSelectedProcessDefinitions", e);
+          //log.error("Error en ControlPanel.getSelectedProcessDefinitions", e);
             System.out.println(
-                    "Error en ControlPanelReloaded.getSelectedProcessDefinitions:" +
+                    "Error en ControlPanel.getSelectedProcessDefinitions:" +
                     e.getMessage());
 		}
         return vProcessDefinitions;
     }
 
     //ARTEFACTOS
-    //Parsea y actualiza en la base del recurso las propiedades seleccionadas de los artefactos
+    /**
+	 * Parsea y actualiza en la base del recurso las propiedades seleccionadas
+     * de los artefactos.
+	 *
+     * @param               request HttpServletRequest
+     * @param               paramRequest SWBParamRequest
+	 * @return      		String con las propiedades seleccionadas
+     * @see
+	 */
     public String updateArtifactPropertiesValues(HttpServletRequest request,
             SWBParamRequest paramRequest)
     {
@@ -658,15 +683,22 @@ public class ControlPanel extends GenericAdmResource
                     "admin").toString()).append("';\n").append(
                     "</script>\n").toString());
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.updateArtifactPropertiesValues", e);
-            System.out.println("Error en ControlPanelReloaded.updateArtifactPropertiesValues:" +
+          //log.error("Error en ControlPanel.updateArtifactPropertiesValues", e);
+            System.out.println("Error en ControlPanel.updateArtifactPropertiesValues:" +
                     e.getMessage());
 		}
         return ret.toString();
     }
 
-    //Parsea  y actualiza en la base del recurso los valores seleccionados en el ProcessForm
-    //(definiciones de proceso seleccionadas, titulo, etc).
+    /**
+	 * Parsea y actualiza en la base del recurso los valores seleccionados en el
+     * ProcessForm (definiciones de proceso seleccionadas, titulo, etc).
+	 *
+     * @param               request HttpServletRequest
+     * @param               paramRequest SWBParamRequest
+	 * @return      		String
+     * @see
+	 */
     public String updateProcessFormValues(HttpServletRequest request,
             SWBParamRequest paramRequest)
     {
@@ -751,10 +783,9 @@ public class ControlPanel extends GenericAdmResource
                 base.setAttribute("taskProperties", strSelectedProperties);
             }
             base.updateAttributesToDB();
-            //TODO:Enviar mensaje???
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.updateProcessFormValues", e);
-            System.out.println("Error en ControlPanelReloaded.updateProcessFormValues:" +
+          //log.error("Error en ControlPanel.updateProcessFormValues", e);
+            System.out.println("Error en ControlPanel.updateProcessFormValues:" +
                     e.getMessage());
 		}
         return ret.toString();
@@ -782,8 +813,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.findProcessProperty", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.findProcessProperty", e);
+            System.out.println("Error en ControlPanel." +
                     "findProcessProperty:" + e.getMessage());
 		}
         return property;
@@ -816,6 +847,7 @@ public class ControlPanel extends GenericAdmResource
     * Obtener un vector con las propiedades seleccionadas por el usuario
     *
     * @param            paramRequest SWBParamRequest
+    * @param            strPropertyLegend String
     * @return      		Vector de ProcessProperty
     * @see
     */
@@ -868,8 +900,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getSelectedProcessProperties", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.getSelectedProcessProperties", e);
+            System.out.println("Error en ControlPanel." +
                     "getSelectedProcessProperties:" + e.getMessage());
 		}
         return vSelectedProcessProperties;
@@ -913,8 +945,8 @@ public class ControlPanel extends GenericAdmResource
                 itArtifacts = selectedProcess.listProcessClasses();
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.listArtifacts", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.listArtifacts", e);
+            System.out.println("Error en ControlPanel." +
                     "listArtifacts:" + e.getMessage());
 		}
         return itArtifacts;
@@ -953,14 +985,20 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getProcessArtifactDefinitionProperties", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.getProcessArtifactDefinitionProperties", e);
+            System.out.println("Error en ControlPanel." +
                     "getProcessArtifactDefinitionProperties:" + e.getMessage());
 		}
         return vProperties;
     }
 
-    //Obtiene el valor de una propiedad para un objeto FlowObjectInstance especifico
+    /**
+	 * Obtiene el valor de una propiedad para un objeto FlowNodeInstance especifico
+	 *
+     * @param           fobi FlowNodeInstance
+     * @param           propertyURI String
+	 * @return          String
+	 */
     public String getArtifactProperty(FlowNodeInstance fobi, String propertyURI)
     {
         //String strDisplayName = "";
@@ -972,8 +1010,8 @@ public class ControlPanel extends GenericAdmResource
             //strDisplayName = semprop.getDisplayName();
             strValue = parseFlowNodeInstanceProperties(fobi, propertyURI);
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getArtifactProperty", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.getArtifactProperty", e);
+            System.out.println("Error en ControlPanel." +
                     "getArtifactProperty:" + e.getMessage());
 		}
         return strValue;
@@ -981,12 +1019,12 @@ public class ControlPanel extends GenericAdmResource
 
     //TAREAS
     /**
-    * Genera un vector con todas las tareas (FlowObjectInstance) del usuario
+    * Genera un vector con todas las tareas (FlowNodeInstance) del usuario
     * correspondientes a la instancia de proceso proporcionada.
     *
     * @param            paramRequest SWBParamRequest
-    * @param            pinst ProcessInstance
-    * @return      		Vector de objetos FlowObjectInstance
+    * @param            pinst SubProcessInstance
+    * @return      		Vector de objetos FlowNodeInstance
     * @see
     */
     public Vector getTasks(SWBParamRequest paramRequest, SubProcessInstance pinst)
@@ -996,8 +1034,8 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             User currentUser = paramRequest.getUser();
-
-            Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
+            //Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
+            Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
 
             while(itFlowNodeInstances.hasNext())
             {
@@ -1011,27 +1049,26 @@ public class ControlPanel extends GenericAdmResource
                     intFobInstances = intFobInstances + aux.size();
                 } else if(flobInstType instanceof Task)
                 {
-                    if(currentUser.haveAccess(flobInstType))
-                    {
+                    //if(currentUser.haveAccess(flobInstType)){
                         vTaskLinks.add(intFobInstances,flobInst);
                         intFobInstances++;
-                    }
+                    //}
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTasks", e);
-            System.out.println("Error en ControlPanelReloaded.getTasks:" +
+          //log.error("Error en ControlPanel.getTasks", e);
+            System.out.println("Error en ControlPanel.getTasks:" +
                     e.getMessage());
 		}
         return vTaskLinks;
     }
 
     /**
-    * Genera un vector con todas las tareas (FlowObjectInstance) del usuario
+    * Genera un vector con todas las tareas (FlowNodeInstance) del usuario
     * correspondientes a todos los procesos del sitio.
     *
     * @param            paramRequest SWBParamRequest
-    * @return      		Vector de objetos FlowObjectInstance
+    * @return      		Vector de objetos FlowNodeInstance
     * @see
     */
     public Vector getTasks(SWBParamRequest paramRequest)
@@ -1047,16 +1084,16 @@ public class ControlPanel extends GenericAdmResource
             for(int index=0; index<vSelected.size(); index++)
             {
                 org.semanticwb.process.model.Process process = (org.semanticwb.process.model.Process) vSelected.get(index);
-
-                Iterator<ProcessInstance> itProcessInstances =
-                        BPMSProcessInstance.ClassMgr.listProcessInstancesByProcess(paramRequest, process.getURI()).iterator();
+                //Iterator<ProcessInstance> itProcessInstances = BPMSProcessInstance.ClassMgr.listProcessInstancesByProcess(paramRequest, process.getURI()).iterator();
                 //Iterator<ProcessInstance> itProcessInstances = SWBProcessMgr.getActiveProcessInstance(site, process).iterator();
+                Iterator<ProcessInstance> itProcessInstances = site.listProcessInstances();
                 while(itProcessInstances.hasNext())
                 {
                     ProcessInstance pinst = (ProcessInstance)itProcessInstances.next();
                     //TODO: Checar si esta activa pinst.getStatus() ????
-                    Iterator<FlowNodeInstance> itFlowNodeInstances =
-                            pinst.listFlowNodeInstances();
+                    //Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
+                    Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
+
                     while(itFlowNodeInstances.hasNext())
                     {
                         FlowNodeInstance flobInst = itFlowNodeInstances.next();
@@ -1068,44 +1105,64 @@ public class ControlPanel extends GenericAdmResource
                             intFobInstances = intFobInstances + aux.size();
                         } else if(flobInstType instanceof Task)
                         {
-                            if(currentUser.haveAccess(flobInstType))
-                            {
+                            //if(currentUser.haveAccess(flobInstType)){
                                 vTaskLinks.add(intFobInstances,flobInst);
                                 intFobInstances++;
-                            }
+                            //}
                         }
                     }
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTasks", e);
-            System.out.println("Error en ControlPanelReloaded.getTasks:" +
+          //log.error("Error en ControlPanel.getTasks", e);
+            System.out.println("Error en ControlPanel.getTasks:" +
                     e.getMessage());
 		}
         return vTaskLinks;
     }
 
-    //Verifica si un objeto TaskProperty existe en el vector
+    /**
+    * Verifica si un objeto TaskProperty existe en el vector y lo regresa
+    *
+    * @param            v Vector
+    * @param            processURI String
+    * @param            type String
+    * @param            propName String
+    * @return      		TaskProperty
+    * @see
+    */
     public TaskProperty findTaskProperty(Vector v, String processURI, String type, String propName)
     {
         TaskProperty tProp = new TaskProperty();
-        for(int i=0; i<v.size(); i++)
-        {
-            TaskProperty tmpProp = (TaskProperty)v.get(i);
-            if(tmpProp.getURI().equalsIgnoreCase(processURI)
-                    && tmpProp.getType().equalsIgnoreCase(type)
-                    && tmpProp.getName().equalsIgnoreCase(propName))
+        try{
+            for(int i=0; i<v.size(); i++)
             {
-                tProp = tmpProp;
-                break;
+                TaskProperty tmpProp = (TaskProperty)v.get(i);
+                if(tmpProp.getURI().equalsIgnoreCase(processURI)
+                        && tmpProp.getType().equalsIgnoreCase(type)
+                        && tmpProp.getName().equalsIgnoreCase(propName))
+                {
+                    tProp = tmpProp;
+                    break;
+                }
             }
-        }
+        } catch(Exception e){
+          //log.error("Error en ControlPanel.getTasks", e);
+            System.out.println("Error en ControlPanel.findTaskProperty:" +
+                    e.getMessage());
+		}
         return tProp;
     }
 
-    //Recibe un arreglo de objetos tipo String (URI de propiedad,
-    //tipo de propiedad, nombre de la propiedad, lugar de aplicación de
-    //la propiedad, orden) concatenados por pipes  y regresa un Vector de objetos TaskProperty
+    /**
+    * Recibe un arreglo de objetos tipo String (URI de propiedad, tipo de
+    * propiedad, nombre de la propiedad, lugar de aplicación de la propiedad,
+    * orden) concatenados por pipes  y regresa un Vector de objetos TaskProperty
+    *
+    * @param            strArray String
+    * @return      		Vector
+    * @see
+    */
     public Vector arrayToTaskProperties(String strArray)
     {
         Vector vTasks = new Vector();
@@ -1137,17 +1194,17 @@ public class ControlPanel extends GenericAdmResource
                 index++;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.arrayToTaskProperties", e);
-            System.out.println("Error en ControlPanelReloaded.arrayToTaskProperties:" +
+          //log.error("Error en ControlPanel.arrayToTaskProperties", e);
+            System.out.println("Error en ControlPanel.arrayToTaskProperties:" +
                     e.getMessage());
 		}
         return vTasks;
     }
 
     /**
-    * Obtiene el valor de una propiedad para un FlowObjectInstance
+    * Obtiene el valor de una propiedad para un FlowNodeInstance
     *
-    * @param            fobi FlowObjectInstance
+    * @param            fobi FlowNodeInstance
     * @param            strPropertyUri String
     * @return      		String con valor de la propiedad
     * @see
@@ -1177,9 +1234,7 @@ public class ControlPanel extends GenericAdmResource
                                 (SemanticProperty) itProps.next();
                         if(strPropertyUri.equalsIgnoreCase(property.getURI()))
                         {
-                            strResult =
-                                    BPMSProcessInstance.ClassMgr.getPropertyValue(
-                                        sob, property);
+                            strResult = BPMSProcessInstance.ClassMgr.getPropertyValue(sob, property);
                             bFound = true;
                             break;
                         }
@@ -1189,16 +1244,23 @@ public class ControlPanel extends GenericAdmResource
                 strResult = strPropertyUri;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.parseProperties", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.parseProperties", e);
+            System.out.println("Error en ControlPanel." +
                     "parseProperties:" + e.getMessage());
 		}
         return strResult;
     }
 
-    //Obtiene el nombre de despliegue de una propiedad general de la tarea.
-    //Recibe un vector de propiedades generales de la tarea, el tipo de propiedad
-    //de la tarea y su identificador.
+    /**
+    * Obtiene el nombre de despliegue de una propiedad general de la tarea.
+    * Recibe un vector de propiedades generales de la tarea, el tipo de
+    * propiedad de la tarea y su identificador.
+    *
+    * @param            v Vector
+    * @param            type String
+    * @param            id String
+    * @return      		String
+    */
     public String getTaskPropertyName(Vector v, String type, String id)
     {
         String strName = "";
@@ -1213,8 +1275,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTaskPropertyName", e);
-            System.out.println("Error en ControlPanelReloaded.getTaskPropertyName:" +
+          //log.error("Error en ControlPanel.getTaskPropertyName", e);
+            System.out.println("Error en ControlPanel.getTaskPropertyName:" +
                     e.getMessage());
 		}
         return strName;
@@ -1226,7 +1288,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            usrTask UserTask
     * @param            strProperty String
     * @return      		String con valor de la propiedad
-    * @see
     */
     public String getTaskDefinitionProperty(UserTask usrTask,String strProperty)
     {
@@ -1250,9 +1311,12 @@ public class ControlPanel extends GenericAdmResource
             {
                 strValue = usrTask.getDescription();
             }
+            if(null==strValue){
+                strValue="";
+            }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTaskDefinitionProperty", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.getTaskDefinitionProperty", e);
+            System.out.println("Error en ControlPanel." +
                     "getTaskDefinitionProperty:" + e.getMessage());
 		}
         return strValue;
@@ -1260,12 +1324,11 @@ public class ControlPanel extends GenericAdmResource
 
     /**
     * Obtiene el valor de una propiedad de la instancia de una tarea
-    * (FlowObjectInstance)
+    * (FlowNodeInstance)
     *
-    * @param            flobInst FlowObjectInstance
+    * @param            flobInst FlowNodeInstance
     * @param            strProperty String
     * @return      		String con valor de la propiedad
-    * @see
     */
     public String getTaskInstanceProperty(FlowNodeInstance flobInst,
             String strProperty)
@@ -1310,9 +1373,12 @@ public class ControlPanel extends GenericAdmResource
             {
                 strValue = flobInst.getProperty(strProperty);
             }
+            if(null==strValue){
+                strValue="";
+            }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTaskInstanceProperty", e);
-            System.out.println("Error en ControlPanelReloaded.getTaskInstanceProperty:"
+          //log.error("Error en ControlPanel.getTaskInstanceProperty", e);
+            System.out.println("Error en ControlPanel.getTaskInstanceProperty:"
                     + e.getMessage());
 		}
         return strValue;
@@ -1320,7 +1386,7 @@ public class ControlPanel extends GenericAdmResource
 
     /**
     * Recibe una cadena que contiene las propiedades seleccionadas de la tarea
-    * (generales y de artefacto), obtiene sus valores (para un objeto FlowObjectInstance) y los concatena.
+    * (generales y de artefacto), obtiene sus valores (para un objeto FlowNodeInstance) y los concatena.
     * Usa la variable parseType, para determinar si se deben concatenar para
     * formar el vínculo, la leyenda o las columnas de la tarea
     *
@@ -1328,7 +1394,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            strAttributes
     * @param            int parseType
     * @return      		String
-    * @see
     */
     public String parseTaskAttributes(FlowNodeInstance fobi,
             String strAttributes, int parseType)
@@ -1351,11 +1416,9 @@ public class ControlPanel extends GenericAdmResource
                         strPropName = strTemp;
                         strPropValue = getArtifactProperty(fobi, strPropName);
                     } else if(strTemp.contains("TaskDefinition.")) {
-
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[1];
                         strPropValue = getTaskDefinitionProperty(usrTask, strPropName);
-
                     } else if(strTemp.contains("TaskInstance.")){
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[1];
@@ -1369,6 +1432,7 @@ public class ControlPanel extends GenericAdmResource
                         }
                         countFixedParameters++;
                     }
+
                     switch(parseType)
                     {
                         case 0: //link
@@ -1386,18 +1450,24 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.parseTaskAttributes", e);
-            System.out.println("Error en ControlPanelReloaded.parseTaskAttributes:" +
+          //log.error("Error en ControlPanel.parseTaskAttributes", e);
+            System.out.println("Error en ControlPanel.parseTaskAttributes:" +
                     e.getMessage());
 		}
         return strParsed;
     }
 
-    //Recibe una cadena que contiene las propiedades seleccionadas de la tarea
-    //(generales y de artefacto), obtiene sus valores (para un objeto FlowObjectInstance)
-    //y los agrega a un objeto Hashtable, que puede usarse para formar parte de un TaskLink.
-    //Usa la variable parseType, para determinar si se deben concatenar para
-    //formar el vínculo, la leyenda o las columnas de la tarea
+    /**
+    * Recibe una cadena que contiene las propiedades seleccionadas de la tarea
+    * (generales y de artefacto), obtiene sus valores (para un objeto FlowNodeInstance)
+    * y los agrega a un objeto Hashtable, que puede usarse para formar parte de un TaskLink.
+    * Usa la variable parseType, para determinar si se deben concatenar para
+    * formar el vínculo, la leyenda o las columnas de la tarea
+    *
+    * @param            fobi FlowNodeInstance
+    * @param            strAttributes String
+    * @return      		Hashtable
+    */
     public Hashtable parseTaskAttributes(FlowNodeInstance fobi,
             String strAttributes)
     {
@@ -1420,11 +1490,9 @@ public class ControlPanel extends GenericAdmResource
                         strPropName = semprop.getDisplayName();
                         strPropValue = parseFlowNodeInstanceProperties(fobi, strTemp);
                     } else if(strTemp.contains("TaskDefinition.")) {
-
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[0] + "." + arrTemp[1];
                         strPropValue = getTaskDefinitionProperty(usrTask, arrTemp[1]);
-
                     } else if(strTemp.contains("TaskInstance.")){
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[0] + "." + arrTemp[1];
@@ -1435,15 +1503,15 @@ public class ControlPanel extends GenericAdmResource
 
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.parseTaskAttributes", e);
-            System.out.println("Error en ControlPanelReloaded.parseTaskAttributes:" +
+          //log.error("Error en ControlPanel.parseTaskAttributes", e);
+            System.out.println("Error en ControlPanel.parseTaskAttributes:" +
                     e.getMessage());
 		}
         return hash;
     }
 
     /**
-    * Recibe un vector con objetos FlowObjectInstance, obtiene sus propiedades
+    * Recibe un vector con objetos FlowNodeInstance, obtiene sus propiedades
     * configuradas y las usa para generar un Vector con objetos TaskLink
     *
     * @param            vTasks Vector de objetos FlowNodeInstance
@@ -1461,28 +1529,35 @@ public class ControlPanel extends GenericAdmResource
             for(int i=0; i<vTasks.size(); i++)
             {
                 FlowNodeInstance fobi = (FlowNodeInstance)vTasks.get(i);
-                FlowNode fobiType = (FlowNode)fobi.getFlowNodeType();
-                String strParentUri = fobiType.getParent().getURI();
-                if(attMap.containsKey(strParentUri))
-                {
-                    ArrayList arrAtt = (ArrayList) attMap.get(strParentUri);
-                    if(arrAtt.size()==3)
-                    {
-                        String strTempHref = strDefaultHref + arrAtt.get(0).toString();
-                        String strTempLegend = arrAtt.get(1).toString();
-                        String strTempColumns = arrAtt.get(2).toString();
-                        String strHref = parseTaskAttributes(fobi, strTempHref, 0);
-                        String strLegend = parseTaskAttributes(fobi, strTempLegend, 1);
-                        Hashtable htColumns = parseTaskAttributes(fobi, strTempColumns);
-                        TaskLink tlink = new TaskLink(fobi, strHref, strLegend, htColumns);
-                        vTaskLinks.add(intTasks,tlink);
-                        intTasks++;
+                //FlowNode fobiType = (FlowNode)fobi.getFlowNodeType();
+                ProcessInstance fpinst = fobi.getProcessInstance();
+                if(null!=fpinst){
+                    org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
+                    if(null!=fproc){
+                        String strParentUri = fproc.getURI();
+                        //String strParentUri = fobiType.getParent().getURI();
+                        if(attMap.containsKey(strParentUri))
+                        {
+                            ArrayList arrAtt = (ArrayList) attMap.get(strParentUri);
+                            if(arrAtt.size()==3)
+                            {
+                                String strTempHref = strDefaultHref + arrAtt.get(0).toString();
+                                String strTempLegend = arrAtt.get(1).toString();
+                                String strTempColumns = arrAtt.get(2).toString();
+                                String strHref = parseTaskAttributes(fobi, strTempHref, 0);
+                                String strLegend = parseTaskAttributes(fobi, strTempLegend, 1);
+                                Hashtable htColumns = parseTaskAttributes(fobi, strTempColumns);
+                                TaskLink tlink = new TaskLink(fobi, strHref, strLegend, htColumns);
+                                vTaskLinks.add(intTasks,tlink);
+                                intTasks++;
+                            }
+                        }
                     }
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.setTaskLinks", e);
-            System.out.println("Error en ControlPanelReloaded.setTaskLinks:" +
+          //log.error("Error en ControlPanel.setTaskLinks", e);
+            System.out.println("Error en ControlPanel.setTaskLinks:" +
                     e.getMessage());
 		}
         return vTaskLinks;
@@ -1534,14 +1609,15 @@ public class ControlPanel extends GenericAdmResource
                 Vector vTaskLinks = setTaskLinks(vFilteredTasks, paramRequest);
                 intSortType = getSortCriteria(paramRequest);
                 BPMSTask.ClassMgr.sortTasks(vTaskLinks,intSortType);
-
                 int endRow = getPageLastRow(vTaskLinks.size(),intRowsPerPage, intCurrPage);
                 int iniRow = getPageFirstRow(vTaskLinks.size(),intRowsPerPage,intCurrPage);
-                sb.append("<p>" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
-                StringBuffer sbPagination = getPagination(intRowsPerPage,
-                        intCurrPage,vTaskLinks.size(), paramRequest);
-                sb.append("<p>" + sbPagination + "</p>");
-                sb.append("<p>" + paramRequest.getLocaleString("lblTotalTask") + "</p>");
+                //sb.append("<p>" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
+                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
+                StringBuffer sbPagination = getPagination(intRowsPerPage, intCurrPage,vTaskLinks.size(), paramRequest);
+                //sb.append("<p>" + sbPagination + "</p>");
+                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
+                //sb.append("<p>" + paramRequest.getLocaleString("lblTotalTask") + "</p>");
+                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
                 for(int i=iniRow; i<endRow; i++)
                 {
                     TaskLink tlink = (TaskLink) vTaskLinks.get(i);
@@ -1550,10 +1626,10 @@ public class ControlPanel extends GenericAdmResource
                     if(!tlink.getFlowNodeParentProcess().equalsIgnoreCase(strTop))
                     {
                         String tmpUri = tlink.getFlowNodeParentProcess();
-                        sb.append("<ul><p>");
-                        sb.append(tmpUri);
-                        sb.append("</p>");
-                        sb.append("<li><ul><li>" + paramRequest.getLocaleString("lblTaskTitle") + "</li>");
+                        sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + tmpUri + "</td></tr>");
+                        //sb.append("<ul><p>" + tmpUri + "</p>");
+                        sb.append("<tr><td>" + paramRequest.getLocaleString("lblTaskTitle") + "</td>");
+                        //sb.append("<li><ul><li>" + paramRequest.getLocaleString("lblTaskTitle") + "</li>");
                         Iterator itProps = hash.keySet().iterator();
                         while(itProps.hasNext())
                         {
@@ -1563,32 +1639,37 @@ public class ControlPanel extends GenericAdmResource
                                 String[] tmpArr = keyProp.split("\\.");
                                 keyProp = getTaskPropertyName(vTaskProps, tmpArr[0], tmpArr[1]);
                             }
-                            sb.append("<li>");
-                            sb.append(keyProp);
-                            sb.append("</li>");
+                            //sb.append("<li>" + keyProp + "</li>");
+                            sb.append("<td>" + keyProp +  "</td>");
                         }
-                        sb.append("</ul></li>");
+                        //sb.append("</ul></li>");
+                        sb.append("</tr>");
                         strTop = tmpUri;
                     }
-                    sb.append("<li>");
+                    //sb.append("<li>");
+                    sb.append("<tr><td>");
                     sb.append("<a href=\"");
                     sb.append(tlink.getTaskLinkHref());
                     sb.append("\">");
                     sb.append(tlink.getTaskLinkLegend());
-                    sb.append("</a></li>");
+                    //sb.append("</a></li>");
+                    sb.append("</a></td>");
                     Enumeration eKeys = hash.keys();
                     while(eKeys.hasMoreElements())
                     {
                         String key = eKeys.nextElement().toString();
-                        String value = hash.get(key).toString();
-                        sb.append("<li>" + value + "</li>");
+                        String value = hash.get(key)==null ?"" :hash.get(key).toString();
+                        //sb.append("<li>" + value + "</li>");
+                        sb.append("<td>" + value + "</td>");
                     }
+                    sb.append("</tr>");
                 }
-                sb.append("<p>" + sbPagination + "</p>");
+                //sb.append("<p>" + sbPagination + "</p>");
+                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.printTaskLinks", e);
-            System.out.println("Error en ControlPanelReloaded.printTaskLinks:" +
+          //log.error("Error en ControlPanel.printTaskLinks", e);
+            System.out.println("Error en ControlPanel.printTaskLinks:" +
                     e.getMessage());
 		}
         return sb;
@@ -1622,8 +1703,8 @@ public class ControlPanel extends GenericAdmResource
                 intCriteria = Integer.parseInt(strSortingCtrl);
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getSortCriteria", e);
-            System.out.println("Error en ControlPanelReloaded.getSortCriteria:" +
+          //log.error("Error en ControlPanel.getSortCriteria", e);
+            System.out.println("Error en ControlPanel.getSortCriteria:" +
                     e.getMessage());
 		}
         return intCriteria;
@@ -1654,8 +1735,8 @@ public class ControlPanel extends GenericAdmResource
                 isActive = true;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.isClosedStatusFilterActive", e);
-            System.out.println("Error en ControlPanelReloaded." +
+          //log.error("Error en ControlPanel.isClosedStatusFilterActive", e);
+            System.out.println("Error en ControlPanel." +
                     "isClosedStatusFilterActive:" + e.getMessage());
 		}
         return isActive;
@@ -1677,6 +1758,7 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             intSortType = getSortCriteria(paramRequest);
+            SWBResourceURL url = paramRequest.getRenderUrl();
             boolean bClosedFilter = isClosedStatusFilterActive(paramRequest);
             sbPrint.append("<div class=\"swbform\">");
             sbPrint.append("<form name=\"frmAdmin\" action=\"" +
@@ -1736,10 +1818,16 @@ public class ControlPanel extends GenericAdmResource
             sbPrint.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
                     paramRequest.getLocaleString("btnCancel") +"\"/>");
             sbPrint.append("</form>");
+            sbPrint.append("<form name=\"frmReport\" action=\"" +
+                    url.setAction("goToView") + "\" method=\"POST\">");
+            sbPrint.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
+                    " value=\"" +
+                    paramRequest.getLocaleString("btnBack") + "\"/>");
+            sbPrint.append("</form>");
             sbPrint.append("</div>");
         } catch(Exception e){
-            //log.error("Error en ControlPanelReloaded.customizeDisplay", e);
-            System.out.println("Error en ControlPanelReloaded.customizeDisplay:" +
+            //log.error("Error en ControlPanel.customizeDisplay", e);
+            System.out.println("Error en ControlPanel.customizeDisplay:" +
             e.getMessage());
         }
         return sbPrint;
@@ -1804,8 +1892,8 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getRenderUrl().setAction(
                     "admin").toString()).append("';").append(
                     "\n</script>").toString());
-          //log.error("Error en ControlPanelReloaded.setCustomizedData", e);
-            System.out.println("Error en ControlPanelReloaded.setCustomizedData:"
+          //log.error("Error en ControlPanel.setCustomizedData", e);
+            System.out.println("Error en ControlPanel.setCustomizedData:"
                     + e.getMessage());
 		}
         return sbPrint;
@@ -1834,8 +1922,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getCustomizedData", e);
-            System.out.println("Error en ControlPanelReloaded.getCustomizedData:"
+          //log.error("Error en ControlPanel.getCustomizedData", e);
+            System.out.println("Error en ControlPanel.getCustomizedData:"
                     + e.getMessage());
 		}
         return htable;
@@ -1848,8 +1936,7 @@ public class ControlPanel extends GenericAdmResource
     *
     * @param            request HttpServletRequest
     * @param            paramRequest SWBParamRequest
-    * @return      		StringBuffer con codigo HTML del reporte
-    * @see
+    * @return      		Vector
     */
     public Vector filterReport(HttpServletRequest request,
             SWBParamRequest paramsRequest)
@@ -1897,12 +1984,11 @@ public class ControlPanel extends GenericAdmResource
                 vAllTasks = BPMSTask.ClassMgr.filterTasksByStatus(
                         vAllTasks,strReportStatus);
             }
-
             vAllTasks = BPMSTask.ClassMgr.flowNodeInstanceToTaskLink(vAllTasks, paramsRequest);
             BPMSTask.ClassMgr.sortTasks(vAllTasks, BPMSTask.ClassMgr.SORT_BY_DATE);
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.filterReport", e);
-            System.out.println("Error en ControlPanelReloaded.filterReport:"
+          //log.error("Error en ControlPanel.filterReport", e);
+            System.out.println("Error en ControlPanel.filterReport:"
                     + e.getMessage());
 		}
         return vAllTasks;
@@ -1910,9 +1996,10 @@ public class ControlPanel extends GenericAdmResource
 
     /**
     * Genera un StringBuffer que contiene el codigo HTML para presentar las
-    * propiedades de un FlowObjectInstance en modo informe personalizado.
+    * propiedades de un FlowNodeInstance en modo informe personalizado.
     *
-    * @param            fobi FlowObjectInstance
+    * @param            fobi FlowNodeInstance
+    * @param            paramsRequest SWBParamRequest
     * @return      		StringBuffer con codigo HTML del reporte
     * @see
     */
@@ -1929,10 +2016,16 @@ public class ControlPanel extends GenericAdmResource
         String strEndedBy = "";
         try
         {
-            String strProcessTitle =
-                    fobi.getFlowNodeType().getParent().getTitle()==null
-                    ?""
-                    :fobi.getFlowNodeType().getParent().getTitle();
+            String strProcessTitle = "";
+            //fobi.getFlowNodeType().getParent().getTitle()==null ?"" :fobi.getFlowNodeType().getParent().getTitle();
+            ProcessInstance fpinst = fobi.getProcessInstance();
+            if(null!=fpinst){
+                org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
+                if(null!=fproc){
+                    strProcessTitle = fproc.getTitle();
+                }
+            }
+
             String strId = fobi.getId()==null
                 ?""
                 :fobi.getId();
@@ -1983,8 +2076,8 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</tr>");
 
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.printReportTask", e);
-            System.out.println("Error en ControlPanelReloaded.printReportTask:"
+          //log.error("Error en ControlPanel.printReportTask", e);
+            System.out.println("Error en ControlPanel.printReportTask:"
                     + e.getMessage());
 		}
         return sb;
@@ -1994,12 +2087,10 @@ public class ControlPanel extends GenericAdmResource
     * Genera un objeto de tipo Document con la estructura del reporte XML
     * de tareas del usuario
     *
-    * @param            Vector de objetos TaskLink
-    * @param            SWBParamRequest
+    * @param            vTasks Vector de objetos TaskLink
+    * @param            paramsRequest SWBParamRequest
     * @return      		Document
-    * @see
     */
-
     public org.w3c.dom.Document createReportDocument(Vector vTasks, SWBParamRequest paramsRequest)
     {
         org.w3c.dom.Document doc = null;
@@ -2122,8 +2213,8 @@ public class ControlPanel extends GenericAdmResource
             pageFooter.setAttribute("pageFooterName", "pageFooterValue");
             root.appendChild(pageFooter);
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createReport", e);
-            System.out.println("error en ControlPanelReloaded.createReport: " +
+            //log.error("Error en ControlPanel.createReport", e);
+            System.out.println("error en ControlPanel.createReport: " +
                     e.getMessage());
         }
         return doc;
@@ -2133,10 +2224,9 @@ public class ControlPanel extends GenericAdmResource
     * Genera un reporte de tareas en formato XML y regresa un StringBuffer con
     * el vínculo´para descargarlo.
     *
-    * @param            HttpServletRequest
-    * @param            SWBParamRequest
+    * @param            request HttpServletRequest
+    * @param            paramsRequest SWBParamRequest
     * @return      		StringBuffer
-    * @see
     */
     public StringBuffer createXmlReport(HttpServletRequest request,
             SWBParamRequest paramsRequest)
@@ -2150,7 +2240,6 @@ public class ControlPanel extends GenericAdmResource
             Vector vAllTasks = filterReport(request, paramsRequest);
             BPMSTask.ClassMgr.sortTasks(vAllTasks,
                         BPMSTask.ClassMgr.SORT_BY_DATE);
-            //TODO: Checar si las sig 3 lineas se usan
             FileInputStream fis = new FileInputStream(filenameXml);
             InputStreamReader isr = new InputStreamReader(fis);
             LineNumberReader lnr = new LineNumberReader(isr);
@@ -2171,8 +2260,8 @@ public class ControlPanel extends GenericAdmResource
             String xmlString = sw.toString();
             //System.out.println("Prueba:\n\n" + xmlString);
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createXmlReport", e);
-            System.out.println("error en ControlPanelReloaded.createXmlReport: " +
+            //log.error("Error en ControlPanel.createXmlReport", e);
+            System.out.println("error en ControlPanel.createXmlReport: " +
                     e.getMessage());
         }
         return sb;
@@ -2182,12 +2271,10 @@ public class ControlPanel extends GenericAdmResource
     * Crear un objeto PdfPTable con el contenido de un Vector de objetos de tipo
     * TaskLink. El objeto resultante forma el cuerpo del reporte PDF.
     *
-    * @param            Vector de objetos tipo TaskLink
-    * @param            SWBParamRequest
+    * @param            vTasks Vector de objetos tipo TaskLink
+    * @param            paramsRequest SWBParamRequest
     * @return      		PdfPTable (libreria iText)
-    * @see
     */
-    //TODO: Dejar más configurable los alignment
     public PdfPTable createPdfTable(Vector vTasks,
             SWBParamRequest paramsRequest)
     {
@@ -2292,9 +2379,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            String subtitulo del reporte
     * @param            String[] titulos de las columnas del reporte
     * @return      		PdfPTable (libreria iText)
-    * @see
     */
-    //TODO: Dejar más configurable los alignment
     public PdfPTable createPdfTableHeader(String title, String subtitle,
             String[] columnNames)
     {
@@ -2331,8 +2416,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createPdfTableHeader", e);
-            System.out.println("error en ControlPanelReloaded.createPdfTableHeader: " +
+            //log.error("Error en ControlPanel.createPdfTableHeader", e);
+            System.out.println("error en ControlPanel.createPdfTableHeader: " +
                     e.getMessage());
         }
         return table;
@@ -2345,10 +2430,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            HttpServletRequest
     * @param            SWBParamRequest
     * @return      		StringBuffer
-    * @see
     */
-    //TODO: Hacer mas configurable
-    //TODO: tabs
     public StringBuffer createPdfReport(HttpServletRequest request,
             SWBParamRequest paramsRequest)
     {
@@ -2438,16 +2520,16 @@ public class ControlPanel extends GenericAdmResource
             document.add(table);
             document.close();
         } catch (DocumentException de) {
-            //log.error("Error en ControlPanelReloaded.createPdfReport", e);
-          System.err.println("error en ControlPanelReloaded.createPdfReport: " +
+            //log.error("Error en ControlPanel.createPdfReport", e);
+          System.err.println("error en ControlPanel.createPdfReport: " +
                   de.getMessage());
         } catch (IOException ioe) {
-            //log.error("Error en ControlPanelReloaded.createPdfReport", e);
-          System.err.println("error en ControlPanelReloaded.createPdfReport: " +
+            //log.error("Error en ControlPanel.createPdfReport", e);
+          System.err.println("error en ControlPanel.createPdfReport: " +
                   ioe.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createPdfReport", e);
-            System.out.println("error en ControlPanelReloaded.createPdfReport: " +
+            //log.error("Error en ControlPanel.createPdfReport", e);
+            System.out.println("error en ControlPanel.createPdfReport: " +
                     e.getMessage());
         }
         return sb;
@@ -2461,9 +2543,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            SWBParamRequest
     * @param            int[] ancho de los encabezados columnas del reporte
     * @return      		Table (libreria iText)
-    * @see
     */
-    //TODO: Dejar más configurable los alignment
     public Table createRtfTable(Vector vTasks,
             SWBParamRequest paramsRequest, int[] columnWidths)
     {
@@ -2545,12 +2625,12 @@ public class ControlPanel extends GenericAdmResource
                 table.addCell(infoCell);
             }
         } catch (com.lowagie.text.BadElementException be) {
-            //log.error("Error en ControlPanelReloaded.createRtfTable", e);
-            System.out.println("error en ControlPanelReloaded.createRtfTable: " +
+            //log.error("Error en ControlPanel.createRtfTable", e);
+            System.out.println("error en ControlPanel.createRtfTable: " +
                     be.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createRtfTable", e);
-            System.out.println("error en ControlPanelReloaded.createRtfTable: " +
+            //log.error("Error en ControlPanel.createRtfTable", e);
+            System.out.println("error en ControlPanel.createRtfTable: " +
                     e.getMessage());
         }
         return table;
@@ -2566,9 +2646,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            String[] titulos de las columnas del reporte
     * @param            int[] ancho de los encabezados columnas del reporte
     * @return      		Table (libreria iText)
-    * @see
     */
-    //TODO: Dejar más configurable los alignment
     public Table createRtfTableHeader(String title, String subtitle,
             String[] columnNames, int[] columnWidths)
     {
@@ -2605,12 +2683,12 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch (com.lowagie.text.BadElementException be) {
-            //log.error("Error en ControlPanelReloaded.createRtfTableHeader", e);
-            System.out.println("error en ControlPanelReloaded.createRtfTableHeader: " +
+            //log.error("Error en ControlPanel.createRtfTableHeader", e);
+            System.out.println("error en ControlPanel.createRtfTableHeader: " +
                     be.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createRtfTableHeader", e);
-            System.out.println("error en ControlPanelReloaded.createRtfTableHeader: " +
+            //log.error("Error en ControlPanel.createRtfTableHeader", e);
+            System.out.println("error en ControlPanel.createRtfTableHeader: " +
                     e.getMessage());
         }
         return table;
@@ -2620,12 +2698,10 @@ public class ControlPanel extends GenericAdmResource
     * Genera un reporte de tares en formato RTF y regresa un StringBuffer con
     * el vínculo´para descargarlo.
     *
-    * @param            HttpServletRequest
-    * @param            SWBParamRequest
+    * @param            request HttpServletRequest
+    * @param            paramsRequest SWBParamRequest
     * @return      		StringBuffer
-    * @see
     */
-    //TODO: tabs y checar rtf
     public StringBuffer createRtfReport(HttpServletRequest request,
             SWBParamRequest paramsRequest)
     {
@@ -2719,12 +2795,12 @@ public class ControlPanel extends GenericAdmResource
             document.add(table);
             document.close();
         } catch (IOException ioe) {
-            //log.error("Error en ControlPanelReloaded.createRtfReport", e);
-            System.err.println("error en ControlPanelReloaded.createRtfReport: " +
+            //log.error("Error en ControlPanel.createRtfReport", e);
+            System.err.println("error en ControlPanel.createRtfReport: " +
                     ioe.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.createRtfReport", e);
-            System.out.println("error en ControlPanelReloaded.createRtfReport: " +
+            //log.error("Error en ControlPanel.createRtfReport", e);
+            System.out.println("error en ControlPanel.createRtfReport: " +
                     e.getMessage());
         }
         return sb;
@@ -2733,9 +2809,9 @@ public class ControlPanel extends GenericAdmResource
     /**
     * Genera el codigo del reporte de tareas que se despliega en Control Panel
     *
-    * @param            Vector de objetos tipo TaskLink
-    * @param            HttpServletRequest
-    * @param            SWBParamRequest
+    * @param            vAllTasks Vector de objetos tipo TaskLink
+    * @param            request HttpServletRequest
+    * @param            paramsRequest SWBParamRequest
     * @return      		StringBuffer con el codigo del reporte
     * @see
     */
@@ -2819,8 +2895,8 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("btnBack") + "\"/>");
             sb.append("</form>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.displayReport", e);
-            System.out.println("Error en ControlPanelReloaded.displayReport:"
+          //log.error("Error en ControlPanel.displayReport", e);
+            System.out.println("Error en ControlPanel.displayReport:"
                     + e.getMessage());
 		}
         return sb;
@@ -2833,7 +2909,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            request HttpServletRequest
     * @param            paramRequest SWBParamRequest
     * @return      		StringBuffer con codigo HTML del reporte
-    * @see
     */
     public StringBuffer buildReport(HttpServletRequest request,
             SWBParamRequest paramsRequest)
@@ -2842,12 +2917,11 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             Vector vAllTasks = filterReport(request, paramsRequest);
-            BPMSTask.ClassMgr.sortTasks(vAllTasks,
-                    BPMSTask.ClassMgr.SORT_BY_DATE);
+            BPMSTask.ClassMgr.sortTasks(vAllTasks,BPMSTask.ClassMgr.SORT_BY_DATE);
             sb.append(displayReport(vAllTasks, request, paramsRequest));
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.buildReport", e);
-            System.out.println("Error en ControlPanelReloaded.buildReport:"
+          //log.error("Error en ControlPanel.buildReport", e);
+            System.out.println("Error en ControlPanel.buildReport:"
                     + e.getMessage());
 		}
         return sb;
@@ -2861,7 +2935,6 @@ public class ControlPanel extends GenericAdmResource
     *
     * @param            paramRequest SWBParamRequest
     * @return      		StringBuffer con codigo HTML del formato
-    * @see
     */
     public StringBuffer getReportForm(SWBParamRequest paramsRequest)
     {
@@ -2945,8 +3018,8 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
             sb.append("</form>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getFilterForm", e);
-            System.out.println("Error en ControlPanelReloaded.getReportForm:"
+          //log.error("Error en ControlPanel.getFilterForm", e);
+            System.out.println("Error en ControlPanel.getReportForm:"
                     + e.getMessage());
 		}
         return sb;
@@ -2957,7 +3030,6 @@ public class ControlPanel extends GenericAdmResource
     *
     * @param            paramRequest SWBParamRequest
     * @return      		StringBuffer con codigo HTML
-    * @see
     */
     public StringBuffer getArtifactPropertiesForm(SWBParamRequest paramRequest)
     {
@@ -2980,7 +3052,6 @@ public class ControlPanel extends GenericAdmResource
                     BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(
                         paramRequest);
             //TODO: Sort del vector de definiciones
-            //TODO: Validaciones
             sb.append("\n<script type=\"text/javascript\">");
             sb.append("\n   function getCheckedBoxesNumber(checkboxObj){");
             sb.append("\n      var selected_checkboxes = 0;");
@@ -3150,14 +3221,19 @@ public class ControlPanel extends GenericAdmResource
             sb.append("\n</form>");
             sb.append("\n</div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getArtifactPropertiesForm", e);
-            System.out.println("Error en ControlPanelReloaded.getArtifactPropertiesForm:" +
+          //log.error("Error en ControlPanel.getArtifactPropertiesForm", e);
+            System.out.println("Error en ControlPanel.getArtifactPropertiesForm:" +
                     e.getMessage());
 		}
         return sb;
     }
 
-    //Imprime el codigo Javascript para las validaciones del formato de admon
+    /**
+    * Imprime el codigo Javascript para las validaciones del formato de admon
+    *
+    * @param            paramRequest SWBParamRequest
+    * @return      		StringBuffer con codigo HTML
+    */
     public StringBuffer getValidatingScript(SWBParamRequest paramRequest)
     {
         StringBuffer sb = new StringBuffer();
@@ -3202,12 +3278,10 @@ public class ControlPanel extends GenericAdmResource
                     paramRequest.getLocaleString("jsMsg4") + "';");
             sb.append("\n      }");
             sb.append("\n   }");
-            //TODO: Terminar validaciones
-            //toggle(this)  verificar si esta seleccionado o no y usar show y hide
             sb.append("\n</script>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getValidatingScript", e);
-            System.out.println("Error en ControlPanelReloaded.getValidatingScript:" +
+          //log.error("Error en ControlPanel.getValidatingScript", e);
+            System.out.println("Error en ControlPanel.getValidatingScript:" +
                     e.getMessage());
 		}
         return sb;
@@ -3251,9 +3325,7 @@ public class ControlPanel extends GenericAdmResource
                     BPMSProcessInstance.ClassMgr.stringToVector(strCPProcessDefinitions);
             Vector vTaskProps = getTaskProperties(paramRequest);
             Vector vSelectedTaskProps = arrayToTaskProperties(strSelTaskProps);
-            //TODO:Validaciones
             sb.append(getValidatingScript(paramRequest));
-
             sb.append("\n<div class=\"swbform\">");
             sb.append("\n<form name=\"frmAdmin\" action=\"" +
                     paramRequest.getRenderUrl().setAction("selectArtProps") +
@@ -3273,9 +3345,6 @@ public class ControlPanel extends GenericAdmResource
                     paramRequest.getLocaleString("lblTasksPerPageNumber") +
                     "\" onKeyUp=\"validateNumeric(this)\" value=\"" +
                     strCPRowsPerPage + "\"/><br/><br/></div>");
-            //TODO: Internacionalizar paramRequest.getLocaleString("")
-            //Son parametros que se incluyen en el querystring se colocan
-            //antes que los que se configuran mediante propiedades
             sb.append("\n<div>" + paramRequest.getLocaleString("lblTaskParams")
                     + "<br/>");
             sb.append("\n<textarea id=\"cpTaskParams\"" +
@@ -3304,7 +3373,7 @@ public class ControlPanel extends GenericAdmResource
                 {
                     strChecked = "checked";
                 } else {
-                    strChecked="";
+                    strChecked = "";
                 }
                 sb.append("\n<li>");
                 sb.append("\n<input type=\"CHECKBOX\" " +
@@ -3387,8 +3456,8 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</form>");
             sb.append("</div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getProcessForm", e);
-            System.out.println("Error en ControlPanelReloaded.getProcessForm:" +
+          //log.error("Error en ControlPanel.getProcessForm", e);
+            System.out.println("Error en ControlPanel.getProcessForm:" +
                     e.getMessage());
 		}
         return sb;
@@ -3407,10 +3476,13 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             Resource base = paramsRequest.getResourceBase();
+            SWBResourceURL url = paramsRequest.getRenderUrl();
             String strControlPanelTaskStatus =
                     base.getAttribute("controlPanelTaskStatus")==null
                     ?""
                     :base.getAttribute("controlPanelTaskStatus");
+            System.out.println("----strControlPanelTaskStatus:" + strControlPanelTaskStatus);
+            strControlPanelTaskStatus = ALL_STATUS;
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
             sb.append("<script type=\"text/javascript\">");
@@ -3487,9 +3559,15 @@ public class ControlPanel extends GenericAdmResource
             sb.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
             sb.append("</form>");
+            sb.append("<form name=\"frmReport\" action=\"" +
+                    url.setAction("goToView") + "\" method=\"POST\">");
+            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
+                    " value=\"" +
+                    paramsRequest.getLocaleString("btnBack") + "\"/>");
+            sb.append("</form>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getFilterForm", e);
-            System.out.println("Error en ControlPanelReloaded.getFilterForm:"
+          //log.error("Error en ControlPanel.getFilterForm", e);
+            System.out.println("Error en ControlPanel.getFilterForm:"
                     + e.getMessage());
 		}
         return sb;
@@ -3501,7 +3579,6 @@ public class ControlPanel extends GenericAdmResource
      * @param           request HttpServletRequest
      * @param           response HttpServletResponse
      * @param           paramsRequest SWBParamRequest
-	 * @return          void
 	 */
     @Override
     public void doAdmin(HttpServletRequest request,
@@ -3530,8 +3607,8 @@ public class ControlPanel extends GenericAdmResource
                 out.print(getProcessForm(paramRequest));
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.doAdmin", e);
-            System.out.println("Error en ControlPanelReloaded.doAdmin:" +
+          //log.error("Error en ControlPanel.doAdmin", e);
+            System.out.println("Error en ControlPanel.doAdmin:" +
                     e.getMessage());
 		}
     }
@@ -3542,7 +3619,6 @@ public class ControlPanel extends GenericAdmResource
      * @param           request HttpServletRequest
      * @param           response HttpServletResponse
      * @param           paramsRequest SWBParamRequest
-	 * @return          void
 	 */
     @Override
     public void doView(HttpServletRequest request,
@@ -3574,11 +3650,13 @@ public class ControlPanel extends GenericAdmResource
                 out.println("<div id=\"worklist\">");
                 out.println("<p>" + strTitle + "</p>");
                 out.println("<p>" + getUsedFilters(paramsRequest, request).toString() + "</p>");
-                out.println("<ul>");
+                out.println("<table border=\"1\">");
+                //out.println("<ul>");
                 //out.println(getUsedFilters(paramsRequest, request).toString());
                 //out.println("<li>" + getUsedFilters + "</li>");
                 out.println(printTaskLinks(request,paramsRequest).toString());
-                out.println("</ul>");
+                //out.println("</ul>");
+                out.println("</table>");
                 out.println("</div>");
                 out.println("<form name=\"frmEditCustomization\" action=\"" +
                         paramsRequest.getRenderUrl().setAction(
@@ -3603,8 +3681,8 @@ public class ControlPanel extends GenericAdmResource
                 out.println("</form>");
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.doView", e);
-            System.out.println("Error en ControlPanelReloaded.doView:" +
+          //log.error("Error en ControlPanel.doView", e);
+            System.out.println("Error en ControlPanel.doView:" +
                     e.getMessage());
 		}
     }
@@ -3621,7 +3699,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            vectorSize int
     * @param            paramRequest SWBParamRequest
     * @return      		StringBuffer con codigo HTML
-    * @see
     */
     public StringBuffer getPagination(int intRowsPerPage, int intCurrPage,
             int vectorSize, SWBParamRequest paramRequest)
@@ -3675,8 +3752,8 @@ public class ControlPanel extends GenericAdmResource
             }
             sb.append("</tr></table>");
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getPagination", e);
-            System.out.println("Error en ControlPanelReloaded.getPagination:"
+          //log.error("Error en ControlPanel.getPagination", e);
+            System.out.println("Error en ControlPanel.getPagination:"
                     + e.getMessage());
 		}
         return sb;
@@ -3689,7 +3766,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            rowsPerPage int
     * @param            currentPage int
     * @return      		firstRow int
-    * @see
     */
     public int getPageFirstRow(int vectorSize, int rowsPerPage, int currentPage)
     {
@@ -3701,8 +3777,8 @@ public class ControlPanel extends GenericAdmResource
                 firstRow = (currentPage - 1) * rowsPerPage;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getPageFirstRow", e);
-            System.out.println("Error en ControlPanelReloaded.getPageFirstRow:"
+          //log.error("Error en ControlPanel.getPageFirstRow", e);
+            System.out.println("Error en ControlPanel.getPageFirstRow:"
                     + e.getMessage());
 		}
         return firstRow;
@@ -3715,7 +3791,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            rowsPerPage int
     * @param            currentPage int
     * @return      		firstRow int
-    * @see
     */
     public int getPageLastRow(int vectorSize, int rowsPerPage, int currentPage)
     {
@@ -3727,8 +3802,8 @@ public class ControlPanel extends GenericAdmResource
                 ?vectorSize
                 :rowsPerPage * currentPage;
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getPageLastRow", e);
-            System.out.println("Error en ControlPanelReloaded.getPageLastRow:"
+          //log.error("Error en ControlPanel.getPageLastRow", e);
+            System.out.println("Error en ControlPanel.getPageLastRow:"
                     + e.getMessage());
 		}
         return endRow;
@@ -3740,7 +3815,6 @@ public class ControlPanel extends GenericAdmResource
     * @param            vectorSize int
     * @param            rowsPerPage int
     * @return      		firstRow int
-    * @see
     */
     public int getTotalPages(int vectorSize, int rowsPerPage)
     {
@@ -3754,8 +3828,8 @@ public class ControlPanel extends GenericAdmResource
                 totalPages++;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.getTotalPages", e);
-            System.out.println("Error en ControlPanelReloaded.getTotalPages:"
+          //log.error("Error en ControlPanel.getTotalPages", e);
+            System.out.println("Error en ControlPanel.getTotalPages:"
                     + e.getMessage());
 		}
         return totalPages;
@@ -3766,10 +3840,9 @@ public class ControlPanel extends GenericAdmResource
     * Obtiene del archivo de propiedades la descripcion que corresponde a un
     * identificador de estatus.
     *
-    * @param            SWBParamRequest
-    * @param            int identificador de estatus
+    * @param            paramsRequest SWBParamRequest
+    * @param            status int identificador de estatus
     * @return      		String
-    * @see
     */
     public String getStatusDescription(SWBParamRequest paramsRequest,
             int status)
@@ -3805,8 +3878,8 @@ public class ControlPanel extends GenericAdmResource
                     break;
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanelReloaded.getStatusDescription", e);
-            System.out.println("error en ControlPanelReloaded.getStatusDescription: " +
+            //log.error("Error en ControlPanel.getStatusDescription", e);
+            System.out.println("error en ControlPanel.getStatusDescription: " +
                     e.getMessage());
         }
         return strDescription;
@@ -3823,7 +3896,6 @@ public class ControlPanel extends GenericAdmResource
      * @return      		String con los mismos elementos del arreglo,
      *                      separados por |
 	 * @see         		stringToVector
-     * @see
 	 */
     public String checkboxesToString(String[] strArray){
         String strConcat = "";
@@ -3835,8 +3907,8 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanelReloaded.checkboxesToString", e);
-            System.out.println("Error en ControlPanelReloaded.checkboxesToString:" +
+          //log.error("Error en ControlPanel.checkboxesToString", e);
+            System.out.println("Error en ControlPanel.checkboxesToString:" +
                     e.getMessage());
 		}
         return strConcat;
