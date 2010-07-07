@@ -285,8 +285,10 @@ table.detail th {
             }
     %>
          <div class="datos">
-            <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
-            <div class="elementos"><%=parent.getDisplayName()%></div>
+            <div class="global">
+                <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
+                <div class="elementos"><%=parent.getDisplayName()%></div>
+            </div>
             <div class="global">
                 <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivityProgress")%>: </div>
                 <div class="barraDatos"><%=getProgressBar(getListLeaf(act,user),paramRequest.getLocaleString("msgTotalHours"))%></div>

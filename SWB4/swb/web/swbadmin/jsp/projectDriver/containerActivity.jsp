@@ -138,6 +138,7 @@
 #proyecto .datos{
     padding-bottom:2%;
     padding-top: 2%;
+    
 }
 #proyecto .datos .elementos{
     padding-bottom: 2%;
@@ -145,8 +146,10 @@
 </style>
     <div id="proyecto">
         <div class="datos">
-            <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
-            <div class="elementos"><%=parent%></div>
+            <div class="global">
+                <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
+                <div class="elementos"><%=parent%></div>
+            </div>
             <div class="global">
                 <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivitiesProgress")%>: </div>
                 <div class="barraDatos"><%=avan%></div>
