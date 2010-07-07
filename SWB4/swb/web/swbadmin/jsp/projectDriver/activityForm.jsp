@@ -463,7 +463,7 @@ table.detail th {
                   if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
                      out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
-                     out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\""+form+"\" invalidMessage=\"hoal nariz de bola\"/>");//paramRequest.getLocaleString("msgOnlyfloatingn")
+                     out.println("<input id=\""+act.swbproy_currentPercentage.getName()+"\" name=\""+act.swbproy_currentPercentage.getName()+"\" value=\""+act.getCurrentPercentage()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\""+form+"\" invalidMessage=\""+paramRequest.getLocaleString("msgOnlyfloatingn")+"\">");//paramRequest.getLocaleString("msgOnlyfloatingn")
 
         %>              </td>
               </tr>
