@@ -71,7 +71,7 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left:28%;
+   left:10px;
 }
 #proyecto .list .text{
    color:#FFFFFF;
@@ -96,6 +96,7 @@
     float:left;
     height:20px;
     background-color: #EFEFEF;
+    position: relative;
 }
 #proyecto .datos .estatusBarra{
    border: 1px none #000000;
@@ -107,7 +108,7 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 36%;
+   left: 10px;
 }
 #proyecto .datos .etiquetas{
     text-align: left;

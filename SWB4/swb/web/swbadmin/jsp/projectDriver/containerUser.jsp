@@ -49,6 +49,7 @@
     float:left;
     height:20px;
     background-color: #EFEFEF;
+    position: relative;
 }
 #proyecto .defaultPorcentaje{
     width:2%;
@@ -66,7 +67,7 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 27%;
+   left: 10px;
 }
 #proyecto .porcentajeAvance {
    float:left;
@@ -112,7 +113,7 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 27%;
+   left: 10px;
 }
 </style>
   <div id="proyecto">
