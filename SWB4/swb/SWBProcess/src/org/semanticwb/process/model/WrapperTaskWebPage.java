@@ -68,6 +68,18 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
     }
 
     @Override
+    public GenericIterator<RoleRef> listInheritRoleRefs() {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.listInheritRoleRefs();
+        }
+        return super.listInheritRoleRefs();
+    }
+
+
+
+    @Override
     public boolean hasRoleRef(RoleRef value) {
         UserTask ut=getUserTask();
         if(ut!=null)
@@ -129,6 +141,16 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
     }
 
     @Override
+    public GenericIterator<RuleRef> listInheritRuleRefs() {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.listInheritRuleRefs();
+        }
+        return super.listInheritRuleRefs();
+    }
+
+    @Override
     public boolean hasRuleRef(RuleRef value) {
         UserTask ut=getUserTask();
         if(ut!=null)
@@ -158,6 +180,18 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         }
         return super.listUserGroupRefs();
     }
+
+    @Override
+    public GenericIterator<UserGroupRef> listInheritUserGroupRefs() {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.listInheritUserGroupRefs();
+        }
+        return super.listInheritUserGroupRefs();
+    }
+
+
 
     @Override
     public boolean hasUserGroupRef(UserGroupRef value) {
@@ -191,6 +225,16 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
     }
 
     @Override
+    public GenericIterator<TemplateRef> listInheritTemplateRefs() {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.listInheritTemplateRefs();
+        }
+        return super.listInheritTemplateRefs();
+    }
+
+    @Override
     public boolean hasTemplateRef(TemplateRef value) {
         UserTask ut=getUserTask();
         if(ut!=null)
@@ -209,6 +253,5 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         }
         return super.getTemplateRef();
     }
-
 
 }
