@@ -695,7 +695,9 @@
                             Iterator it = coll.iterator();
                             while (it.hasNext()) {
                                 RecGrpTemplate rgt = (RecGrpTemplate) it.next();
-                                TemplateGroup tgp = ws.createTemplateGroup(Integer.toString(rgt.getId()));
+                                TemplateGroup tgp = ws.getTemplateGroup(Integer.toString(rgt.getId()));
+                                if(tgp!=null) continue;
+                                tgp = ws.createTemplateGroup(Integer.toString(rgt.getId()));
                                 tgp.setTitle(rgt.getTitle());
                                 tgp.setDescription(rgt.getDescription());
                                 if (rgt.getId() > idmax) {
@@ -901,6 +903,7 @@
                                 TemplateGroup tplgp = ws.getTemplateGroup(Integer.toString(rtpl.getGrpid()));
 
                                 if (null != tplgp) {
+                                    tplgp=ws.getTemplateGroup("1");
                                     tpl.setGroup(tplgp);
                                 }
 
