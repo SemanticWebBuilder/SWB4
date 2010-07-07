@@ -105,7 +105,16 @@ public abstract class XMLRPCServlet extends HttpServlet
                 Object[] parameters = deserializeRequest(xmlrpcDocument, methods);
                 Method method = getMethod(methodName, methods, parameters);
                 String objectName = method.getDeclaringClass().getName();
-                Response objResponse = execute(objectName, method, parameters, parts, request.getAttribute("user").toString(), request.getAttribute("password").toString());
+                String user="",pass="";
+                if(request.getAttribute("user")!=null)
+                {
+                    user=request.getAttribute("user").toString();
+                }
+                if(request.getAttribute("password")!=null)
+                {
+                    pass=request.getAttribute("password").toString();
+                }
+                Response objResponse = execute(objectName, method, parameters, parts, user, pass);
                 Document docResponse = serializeResponse(objResponse.getObject());
                 sendResponse(response, docResponse, objResponse);
 
