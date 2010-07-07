@@ -93,10 +93,12 @@ public class BPMSProcessInstance {
                {
                     ProcessWebPage pwp =
                             (ProcessWebPage) itProcessWebPages.next();
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
-                    //org.semanticwb.process.Process process = org.semanticwb.process.SWBProcessMgr.getProcess(pwp);
-                    vAllProcessDefinitions.add(index, process);
-                    index++;
+                    if(pwp.isActive()){
+                        org.semanticwb.process.model.Process process = pwp.getProcess();
+                        //org.semanticwb.process.Process process = org.semanticwb.process.SWBProcessMgr.getProcess(pwp);
+                        vAllProcessDefinitions.add(index, process);
+                        index++;
+                    }
                }
 
             } catch(Exception e){
@@ -182,7 +184,7 @@ public class BPMSProcessInstance {
                 {
                     FlowNode flon = (FlowNode) gob;
                     vContained.add(index, flon);
-                    index++;              
+                    index++;
                 }
             }
             return vContained;
@@ -544,6 +546,9 @@ public class BPMSProcessInstance {
                         strValue = sobject.getDisplayName();
                     }
                 }
+                if(null==strValue){
+                    strValue="";
+                }
             } catch(com.hp.hpl.jena.rdf.model.ResourceRequiredException rre){
               //log.error("Error en ControlPanel.getPropertyValue2String", rre);
                 System.out.println("Error RRE en " +
@@ -733,26 +738,28 @@ public class BPMSProcessInstance {
                             getAllProcessDefinitions(paramRequest);
                     ProcessWebPage pwp =
                             (ProcessWebPage) itProcessWebPages.next();
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
-                    if(vSelectedProcesses.contains(process))
-                    {
-                        Iterator it = process.listContaineds();
-                        while(it.hasNext())
+                    if(pwp.isActive()){
+                        org.semanticwb.process.model.Process process = pwp.getProcess();
+                        if(vSelectedProcesses.contains(process))
                         {
-                            Object obj = it.next();
-                            if(obj instanceof org.semanticwb.process.model.FlowNodeInstance)
+                            Iterator it = process.listContaineds();
+                            while(it.hasNext())
                             {
-                                FlowNodeInstance floni = (FlowNodeInstance) obj;
-                                FlowNode type = floni.getFlowNodeType();
-                                if(floni instanceof SubProcessInstance)
+                                Object obj = it.next();
+                                if(obj instanceof org.semanticwb.process.model.FlowNodeInstance)
                                 {
-                                    arrProcessInstances.add(index, floni);
-                                    index++;
-                                    ArrayList aux = listProcessInstances((SubProcessInstance) floni);
-                                    if(aux.size()>0)
+                                    FlowNodeInstance floni = (FlowNodeInstance) obj;
+                                    FlowNode type = floni.getFlowNodeType();
+                                    if(floni instanceof SubProcessInstance)
                                     {
-                                        arrProcessInstances.addAll(index, aux);
-                                        index = index + aux.size();
+                                        arrProcessInstances.add(index, floni);
+                                        index++;
+                                        ArrayList aux = listProcessInstances((SubProcessInstance) floni);
+                                        if(aux.size()>0)
+                                        {
+                                            arrProcessInstances.addAll(index, aux);
+                                            index = index + aux.size();
+                                        }
                                     }
                                 }
                             }

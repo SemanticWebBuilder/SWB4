@@ -79,13 +79,13 @@ public class BPMSTask
         }
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) de vTasks
+        * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks
         * cuya fecha de creacion cumple con los parametros seleccionados.
         * Las fechas de filterValue estan separadas mediante pipes
         *
         * @param            vTasks Vector
         * @param            filterValue String
-        * @return      		Vector con objetos FlowObjectInstance
+        * @return      		Vector con objetos FlowNodeInstance
         * @see
         */
         public static Vector filterTasksByDate(Vector vTasks, String filterValue)
@@ -151,12 +151,12 @@ public class BPMSTask
         }
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) de vTasks que
+        * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks que
         * correspondan a la definicion de proceso seleccionada
         *
         * @param            vTasks Vector
         * @param            filterValue String
-        * @return      		Vector de objetos FlowObjectInstance
+        * @return      		Vector de objetos FlowNodeInstance
         * @see
         */
         public static Vector filterTasksByProcess(Vector vTasks,
@@ -172,16 +172,27 @@ public class BPMSTask
                             BPMSProcessInstance.ClassMgr.stringToVector(filterValue);
                     for(int i=0; i<vTasks.size();i++)
                     {
-                        FlowNodeInstance fobi =
-                                (FlowNodeInstance)vTasks.get(i);
-                        FlowNode fobiType =
-                                (FlowNode)fobi.getFlowNodeType();
+                        FlowNodeInstance fobi = (FlowNodeInstance)vTasks.get(i);
+                        ProcessInstance fpinst = fobi.getProcessInstance();
+                        if(null!=fpinst){
+                            org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
+                            if(null!=fproc){
+                                if(vFilterValues.contains(fproc.getURI()))
+                                {
+                                    vFilteredTasks.add(index,fobi);
+                                    index++;
+                                }
+                            }
+                        }
+                        /*
+                        FlowNode fobiType = (FlowNode)fobi.getFlowNodeType();
                         GraphicalElement parentProcess = fobiType.getParent();
                         if(vFilterValues.contains(parentProcess.getURI()))
                         {
                             vFilteredTasks.add(index,fobi);
                             index++;
                         }
+                         */
                     }
                 } else {
                     vFilteredTasks = vTasks;
@@ -195,12 +206,12 @@ public class BPMSTask
         }
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) de vTasks cuyo
+        * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks cuyo
         * estatus corresponda a los seleccionados
         *
         * @param            vTasks Vector
         * @param            filterValue String
-        * @return      		Vector con objetos FlowObjectInstance
+        * @return      		Vector con objetos FlowNodeInstance
         * @see
         */
         public static Vector filterTasksByStatus(Vector vTasks,
@@ -238,12 +249,12 @@ public class BPMSTask
         }
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) de vTasks cuyo
+        * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks cuyo
         * nombre de tarea (title) corresponda con el seleccionado.
         *
         * @param            vTasks Vector
         * @param            filterValue String
-        * @return      		Vector con objetos FlowObjectInstance
+        * @return      		Vector con objetos FlowNodeInstance
         * @see
         */
         public static Vector filterTasksByTitle(Vector vTasks,
@@ -284,12 +295,12 @@ public class BPMSTask
 
 
         /**
-         * Recibe un vector de objetos FlowObjectInstance y regresa un vector de
+         * Recibe un vector de objetos FlowNodeInstance y regresa un vector de
          * objetos TaskLink
          *
-         * @param               vTasks Vector de objetos FlowObjectInstance
+         * @param               vTasks Vector de objetos FlowNodeInstance
          * @param               paramsRequest SWBParamRequest
-         * @return      		Vector de objetos FlowObjectInstance
+         * @return      		Vector de objetos FlowNodeInstance
          * @see
          */
         public static Vector flowNodeInstanceToTaskLink(Vector vTasks,
@@ -309,9 +320,9 @@ public class BPMSTask
                     intTasks++;
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSTask.flowObjectInstanceToTaskLink", e);
+              //log.error("Error en BPMSTask.flowNodeInstanceToTaskLink", e);
                 System.out.println("Error en " +
-                        "BPMSProcessInstance.flowObjectInstanceToTaskLink:" +
+                        "BPMSProcessInstance.flowNodeInstanceToTaskLink:" +
                         e.getMessage());
             }
             return vTaskLinks;
@@ -319,11 +330,11 @@ public class BPMSTask
 
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) del sitio de
+        * Genera un vector con todas las tareas (FlowNodeInstance) del sitio de
         * procesos a las que tiene acceso el usuario actual
         *
         * @param            paramRequest SWBParamRequest
-        * @return      		Vector de objetos FlowObjectInstance
+        * @return      		Vector de objetos FlowNodeInstance
         * @see
         */
         public static Vector getAllUserTasks(SWBParamRequest paramsRequest)
@@ -344,29 +355,36 @@ public class BPMSTask
                                 paramsRequest);
                     ProcessWebPage pwp =
                             (ProcessWebPage) itProcessWebPages.next();
-                    org.semanticwb.process.model.Process process = pwp.getProcess();
-                    if(vSelectedProcesses.contains(process))
-                    {
-                        Iterator itge = process.listContaineds();
-                        while(itge.hasNext())
+                    if(pwp.isActive()){
+                        org.semanticwb.process.model.Process process = pwp.getProcess();
+                        if(vSelectedProcesses.contains(process))
                         {
-                            Object obj = itge.next();
-                            if(obj instanceof org.semanticwb.process.model.FlowNodeInstance)
-                            {
-                                FlowNodeInstance actins = (FlowNodeInstance)obj;
-                                FlowNode type = actins.getFlowNodeType();
-                                if(actins instanceof SubProcessInstance)
+                            //Iterator itge = process.listContaineds();
+                            Iterator<ProcessInstance> itPinst = site.listProcessInstances();
+                            while(itPinst.hasNext()){
+                                ProcessInstance pi = itPinst.next();
+                                Iterator<FlowNodeInstance> itge=SWBProcessMgr.getUserTaskInstances(pi, currentUser).iterator();
+                                while(itge.hasNext())
                                 {
-                                    Vector aux = getAllUserTasks((SubProcessInstance)actins, currentUser);
-                                    vTasks.addAll(index, aux);
-                                    index = index + aux.size();
-                                }else if(type instanceof Task)
-                                {
-                                    if(currentUser.haveAccess(type)){
-                                        vTasks.add(index,actins);
-                                        index++;
+                                    Object obj = itge.next();
+                                    if(obj instanceof org.semanticwb.process.model.FlowNodeInstance)
+                                    {
+                                        FlowNodeInstance actins = (FlowNodeInstance)obj;
+                                        FlowNode type = actins.getFlowNodeType();
+                                        if(actins instanceof SubProcessInstance)
+                                        {
+                                            Vector aux = getAllUserTasks((SubProcessInstance)actins, currentUser);
+                                            vTasks.addAll(index, aux);
+                                            index = index + aux.size();
+                                        }else if(type instanceof Task)
+                                        {
+                                            //if(currentUser.haveAccess(type)){
+                                                vTasks.add(index,actins);
+                                                index++;
+                                            //}
+                                        }
                                     }
-                                }                                
+                                }
                             }
                         }
                     }
@@ -380,12 +398,12 @@ public class BPMSTask
         }
 
         /**
-        * Genera un vector con todas las tareas (FlowObjectInstance) de una
+        * Genera un vector con todas las tareas (FlowNodeInstance) de una
         * instancia de un proceso a las que tiene acceso el usuario
         *
         * @param            pinst ProcessInstance
         * @param            user User
-        * @return      		Vector de objetos FlowObjectInstance
+        * @return      		Vector de objetos FlowNodeInstance
         * @see
         */
         public static Vector getAllUserTasks(SubProcessInstance pinst, User user)
@@ -406,10 +424,10 @@ public class BPMSTask
                         index = index + aux.size();
                     }else if(type instanceof Task)
                     {
-                        if(user.haveAccess(type)){
+                        //if(user.haveAccess(type)){
                             vTasks.add(index,actins);
                             index++;
-                        }
+                        //}
                     }
                 }
             } catch(Exception e){
@@ -424,8 +442,8 @@ public class BPMSTask
          * Ordena de manera descendente un Vector de objetos TaskLink.
          * Utiliza la clase estatica TaskLinkDateComparator para comparar
          * los elementos del vector y determinar el orden que corresponde
-         * Cada objeto TaskLink tiene un objeto FlowObjectInstance y Strings para
-         * los datos del vínculo y la leyenda. El objeto FlowObjectInstance
+         * Cada objeto TaskLink tiene un objeto FlowNodeInstance y Strings para
+         * los datos del vínculo y la leyenda. El objeto FlowNodeInstance
          * tiene un identificador y fecha de creación.
          * <p>
          * Este método no regresa ningun objeto.
@@ -451,8 +469,8 @@ public class BPMSTask
          * Ordena de manera ascendente un Vector de objetos TaskLink.
          * Utiliza la clase estatica TaskLinkProcessComparator para comparar
          * los elementos del vector y determinar el orden que corresponde
-         * Cada objeto TaskLink tiene un objeto FlowObjectInstance y Strings para
-         * los datos del vínculo y la leyenda. El objeto FlowObjectInstance
+         * Cada objeto TaskLink tiene un objeto FlowNodeInstance y Strings para
+         * los datos del vínculo y la leyenda. El objeto FlowNodeInstance
          * tiene un identificador, titulo y fecha de creación.
          * <p>
          * Este método no regresa ningun objeto.
@@ -478,8 +496,8 @@ public class BPMSTask
          * Ordena de manera ascendente un Vector de objetos TaskLink.
          * Utiliza la clase estatica TaskLinkTitleComparator para comparar
          * los elementos del vector y determinar el orden que corresponde
-         * Cada objeto TaskLink tiene un objeto FlowObjectInstance y Strings para
-         * los datos del vínculo y la leyenda. El objeto FlowObjectInstance
+         * Cada objeto TaskLink tiene un objeto FlowNodeInstance y Strings para
+         * los datos del vínculo y la leyenda. El objeto FlowNodeInstance
          * tiene un identificador, titulo y fecha de creación.
          * <p>
          * Este método no regresa ningun objeto.
