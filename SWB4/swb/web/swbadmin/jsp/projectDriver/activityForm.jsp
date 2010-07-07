@@ -1,5 +1,5 @@
     <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-    <%@page import="java.util.*,java.io.PrintWriter,java.text.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.resources.projectdriver.*,org.semanticwb.portal.api.*,org.semanticwb.portal.*,java.sql.Timestamp"%>
+    <%@page import="java.util.*,org.semanticwb.portal.SWBFormMgr,java.io.PrintWriter,java.text.*,org.semanticwb.model.*,org.semanticwb.platform.*,org.semanticwb.portal.resources.projectdriver.*,org.semanticwb.portal.api.*,org.semanticwb.portal.*,java.sql.Timestamp"%>
     <%
             Iterator it,res,listobj;
             ArrayList proBar=new ArrayList();
@@ -140,7 +140,8 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 29%;
+   left: 10px;
+
 }
 #proyecto .list .text{
    color:#FFFFFF;
@@ -165,6 +166,7 @@
     float:left;
     height:20px;
     background-color: #EFEFEF;
+    position:relative;
 }
 #proyecto .datos .estatusBarra{
    border: 1px none #000000;
@@ -176,7 +178,7 @@
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 36%;
+   left: 10px;
 }
 #proyecto .datos .etiquetas{
     text-align: left;
@@ -267,7 +269,7 @@ table.detail th {
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
-   left: 27%;
+   left: 10px;
 }
 </style>
     <div id="proyecto">
