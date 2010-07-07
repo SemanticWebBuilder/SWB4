@@ -91,9 +91,20 @@ public class TaskLink {
 
         public String getFlowNodeParentProcess()
         {
+            //TODO: Que pasa si es un subproceso???
+            String strProcessTitle = "";
+            ProcessInstance fpinst = this.fobi.getProcessInstance();
+            if(null!=fpinst){
+                org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
+                if(null!=fproc){
+                    strProcessTitle = fproc.getTitle();
+                }
+            }
+            /*
             String strProcessTitle = this.getFlowNodeType().getParent().getTitle()==null
                 ?""
                 :this.getFlowNodeType().getParent().getTitle();
+             */
             return strProcessTitle;
         }
 
@@ -236,9 +247,9 @@ public class TaskLink {
 	 * Si el entero es mayor a cero, el valor que invoca la funcion es mayor al
      * valor del argumento.
 	 * Si el entero es igual a cero, ambos valores son iguales.
-	 * Cada objeto TaskLink tiene un objeto FlowObjectInstancey Strings para
+	 * Cada objeto TaskLink tiene un objeto FlowNodeInstancey Strings para
      * los datos del vínculo y la leyenda.
-	 * El objeto FlowObjectInstance tiene un identificador y fecha de creacion.
+	 * El objeto FlowNodeInstance tiene un identificador y fecha de creacion.
 	 * <p>
 	 * Este método no regresa ningun objeto.
 	 *
