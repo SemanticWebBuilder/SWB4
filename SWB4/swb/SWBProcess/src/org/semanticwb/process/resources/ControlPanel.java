@@ -209,6 +209,10 @@ public class ControlPanel extends GenericAdmResource
                 strHref = strHref + strCPTaskParams + "|";
                 org.semanticwb.process.model.Process process =
                         (org.semanticwb.process.model.Process) vSelected.get(i);
+                Vector vLegend = new Vector();
+                Vector vColumns = new Vector();
+                int iLegend = 0;
+                int iColumns = 0;
                 for(int j=0; j<vSelTaskProps.size(); j++)
                 {
                     TaskProperty tProp = (TaskProperty) vSelTaskProps.get(j);
@@ -217,12 +221,22 @@ public class ControlPanel extends GenericAdmResource
                         if(tProp.isAppliedOnTaskLink())
                         {
                             strHref = strHref + tProp.getType() + "." + tProp.getName() + "|";
-                        } else if(tProp.isAppliedOnTaskLegend())
+                        }
+                        if(tProp.isAppliedOnTaskLegend())
                         {
-                            strLegend = strLegend + tProp.getType() + "." + tProp.getName() + "|";
-                        } else if(tProp.isAppliedOnTaskColumn())
+                            //strLegend = strLegend + tProp.getType() + "." + tProp.getName() + "|";
+                            String strTempName = tProp.getType() + "." + tProp.getName();
+                            ComparableProperty compy = new ComparableProperty(strTempName, tProp.getURI(), tProp.getOrderOnTask());
+                            vLegend.add(iLegend, compy);
+                            iLegend++;
+                        }
+                        if(tProp.isAppliedOnTaskColumn())
                         {
-                            strColumns = strColumns + tProp.getType() + "." + tProp.getName() + "|";
+                            //strColumns = strColumns + tProp.getType() + "." + tProp.getName() + "|";
+                            String strTempName = tProp.getType() + "." + tProp.getName();
+                            ComparableProperty compy = new ComparableProperty(strTempName, tProp.getURI(), tProp.getOrderOnTask());
+                            vColumns.add(iColumns, compy);
+                            iColumns++;
                             columnCount++;
                         }
                     }
@@ -235,15 +249,35 @@ public class ControlPanel extends GenericAdmResource
                         if(pp.isAppliedOnTaskLink())
                         {
                             strHref = strHref + pp.getURI() + "|";
-                        } else if(pp.isAppliedOnTaskLegend())
+                        }
+                        if(pp.isAppliedOnTaskLegend())
                         {
-                            strLegend = strLegend + pp.getURI() + "|";
-                        } else if(pp.isAppliedOnTaskColumn())
+                            //strLegend = strLegend + pp.getURI() + "|";
+                            ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
+                            vLegend.add(iLegend, compy);
+                            iLegend++;                            
+                        }
+                        if(pp.isAppliedOnTaskColumn())
                         {
-                            strColumns = strColumns + pp.getURI() + "|";
+                            //strColumns = strColumns + pp.getURI() + "|";
+                            ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
+                            vColumns.add(iColumns, compy);
+                            iColumns++;                            
                             columnCount++;
                         }
                     }
+                }
+                //ordenar leyendas y columnas
+                ComparableProperty.sortComparableProperty(vLegend);
+                ComparableProperty.sortComparableProperty(vColumns);
+                //convertir vectores ordenados a String
+                for(int k=0; k<vLegend.size(); k++){
+                    ComparableProperty compy = (ComparableProperty) vLegend.get(k);
+                    strLegend = strLegend + compy.getName() + "|";
+                }
+                for(int k=0; k<vColumns.size(); k++){
+                    ComparableProperty compy = (ComparableProperty) vColumns.get(k);
+                    strColumns = strColumns + compy.getName() + "|";
                 }
                 ArrayList arrParams = new ArrayList();
                 arrParams.add(0, strHref);
@@ -641,6 +675,7 @@ public class ControlPanel extends GenericAdmResource
         {
             Resource base = paramRequest.getResourceBase();
             String [] strIncludeProps = request.getParameterValues("cpIncludeProperty");
+            System.out.println("----updateArtifactPropertiesValues strIncludeProps:" + strIncludeProps.length);
             for(int i=0; i<strIncludeProps.length; i++)
             {
                 String strURI = strIncludeProps[i];
@@ -672,6 +707,7 @@ public class ControlPanel extends GenericAdmResource
                 strSelectedProps = strSelectedProps + strURI +
                         "|" + strApplyOnCriteria + "|" + strOrderValue + "|";
             }
+            System.out.println("----updateArtifactPropertiesValues strSelectedProps:" + strSelectedProps);
             if(strSelectedProps!=null && !strSelectedProps.equalsIgnoreCase("")){
                 base.setAttribute("cpSelectedProperties", strSelectedProps);
                 base.updateAttributesToDB();
@@ -1627,25 +1663,34 @@ public class ControlPanel extends GenericAdmResource
                 {
                     TaskLink tlink = (TaskLink) vTaskLinks.get(i);
                     Hashtable hash = tlink.getTaskLinkArtifactValues();
+                    java.util.List<String> colNames = new ArrayList();
 
                     if(!tlink.getFlowNodeParentProcess().equalsIgnoreCase(strTop))
                     {
-                        String tmpUri = tlink.getFlowNodeParentProcess();
+                        String tmpUri = tlink.getFlowNodeParentProcessURI();
+                        ArrayList arrAttributes = (ArrayList)taskAttributes.get(tmpUri);
+                        String strColumnsNames = String.valueOf(arrAttributes.get(2));
+                        String[] colNamesArr = strColumnsNames.split("\\|");
+                        java.util.List<String> listColNames = new ArrayList<String>(colNamesArr.length);
+                        for (String s : colNamesArr) {
+                         listColNames.add(s);
+                        }
+                        colNames = listColNames;
                         sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + tmpUri + "</td></tr>");
                         //sb.append("<ul><p>" + tmpUri + "</p>");
                         sb.append("<tr><td>" + paramRequest.getLocaleString("lblTaskTitle") + "</td>");
                         //sb.append("<li><ul><li>" + paramRequest.getLocaleString("lblTaskTitle") + "</li>");
-                        Iterator itProps = hash.keySet().iterator();
-                        while(itProps.hasNext())
-                        {
-                            String keyProp = itProps.next().toString();
-                            if(keyProp.contains("TaskDefinition.") || keyProp.contains("TaskInstance."))
-                            {
-                                String[] tmpArr = keyProp.split("\\.");
-                                keyProp = getTaskPropertyName(vTaskProps, tmpArr[0], tmpArr[1]);
+                        for(int j=0; j<colNamesArr.length; j++){
+                            String tmpName = colNamesArr[j];
+                            if(hash.containsKey(tmpName)){
+                                if(tmpName.contains("TaskDefinition.") || tmpName.contains("TaskInstance."))
+                                {
+                                    String[] tmpArr = tmpName.split("\\.");
+                                    tmpName = getTaskPropertyName(vTaskProps, tmpArr[0], tmpArr[1]);
+                                }
                             }
-                            //sb.append("<li>" + keyProp + "</li>");
-                            sb.append("<td>" + keyProp +  "</td>");
+                            //sb.append("<li>" + tmpName + "</li>");
+                            sb.append("<td>" + tmpName +  "</td>");
                         }
                         //sb.append("</ul></li>");
                         sb.append("</tr>");
@@ -1659,11 +1704,9 @@ public class ControlPanel extends GenericAdmResource
                     sb.append(tlink.getTaskLinkLegend());
                     //sb.append("</a></li>");
                     sb.append("</a></td>");
-                    Enumeration eKeys = hash.keys();
-                    while(eKeys.hasMoreElements())
-                    {
-                        String key = eKeys.nextElement().toString();
-                        String value = hash.get(key)==null ?"" :hash.get(key).toString();
+                    for(int j=0; j<colNames.size(); j++){
+                        String tmpName = colNames.get(j);
+                        String value = hash.get(tmpName)==null ?"" :hash.get(tmpName).toString();
                         //sb.append("<li>" + value + "</li>");
                         sb.append("<td>" + value + "</td>");
                     }
@@ -3486,7 +3529,6 @@ public class ControlPanel extends GenericAdmResource
                     base.getAttribute("controlPanelTaskStatus")==null
                     ?""
                     :base.getAttribute("controlPanelTaskStatus");
-            System.out.println("----strControlPanelTaskStatus:" + strControlPanelTaskStatus);
             strControlPanelTaskStatus = ALL_STATUS;
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
