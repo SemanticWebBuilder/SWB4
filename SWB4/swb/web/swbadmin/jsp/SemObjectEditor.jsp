@@ -1,6 +1,49 @@
+<%@page import="java.lang.reflect.Field"%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.platform.*,org.semanticwb.portal.*,org.semanticwb.model.*,java.util.*,org.semanticwb.base.util.*"%>
+<%!
+    public SemanticClass validateClass(HttpServletRequest request, SemanticClass cls)
+    {
+        SemanticClass ret=cls;
+        //System.out.println("cls"+cls);
+        Iterator<SemanticProperty> it=cls.listProperties();
+        while (it.hasNext())
+        {
+            SemanticProperty prop = it.next();
+            //System.out.println("prop"+prop);
+            SemanticObject dp=prop.getDisplayProperty();
+            if(dp!=null)
+            {
+                DisplayProperty disp=new DisplayProperty(dp);
+                if(disp.getFormElement() !=null && disp.getFormElement().instanceOf(ClassElement.sclass))
+                {
+                    String value=request.getParameter(prop.getName());
+                    if(value!=null)
+                    {
+                        try
+                        {
+                            Class cl=Class.forName(value);
+                            //System.out.println("Class:"+cl);
+                            Field field=cl.getField("classType");
+                            if(field!=null)
+                            {
+                                //System.out.println("field:"+field);
+                                Object obj=field.get(cl);
+                                if(obj instanceof SemanticClass)
+                                {
+                                    ret=(SemanticClass)obj;
+                                }
+                                //System.out.println("Field Val:"+field.get(cl));
+                            }
+                        }catch(Exception noe){}
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+%>
 <%
     User user=SWBContext.getAdminUser();
     if(user==null)
@@ -50,6 +93,10 @@ try
 
         boolean canAdd=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD);
         if(!canAdd)return;
+
+        //System.out.println("Validar...");
+        cls=validateClass(request, cls);
+        //System.out.println("Valido...");
 
         SWBFormMgr frm=new SWBFormMgr(cls,ref,null);
         frm.setLang(lang);
