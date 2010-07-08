@@ -89,7 +89,6 @@ public class ControlPanel extends GenericAdmResource
     private final static String strDefaultHref =
             "TaskDefinition.url|?suri=|TaskInstance.encodedURI|";
     private final static int intDefaultRowsPerPage = 3;
-    private static int intColumnCount = 1;
     private HashMap taskAttributes;
 
     /**
@@ -253,8 +252,8 @@ public class ControlPanel extends GenericAdmResource
                 hTasks.put(process.getURI(), arrParams);
             }
             taskAttributes = hTasks;
-            intColumnCount = columnCount;
-
+            base.setAttribute("intColumnCount", String.valueOf(columnCount));
+            base.updateAttributesToDB();
         } catch(Exception e){
           //log.error("Error en ControlPanel.setTaskAttributesMap", e);
             System.out.println("Error en ControlPanel.setTaskAttributesMap:" +
@@ -429,11 +428,13 @@ public class ControlPanel extends GenericAdmResource
     * @return      		Vector
     * @see
     */
-    public Vector applyFilters(Vector vTasks, HttpServletRequest request)
+    public Vector applyFilters(Vector vTasks, HttpServletRequest request, SWBParamRequest paramRequest)
     {
         Vector vFiltered = new Vector();
         try
         {
+            String strFilterPagination = "";
+            Resource base = paramRequest.getResourceBase();
             String strInitialFilterDate =
                 request.getParameter(INITIAL_DATE_FILTER_CTRL)==null
                 ?""
@@ -457,6 +458,7 @@ public class ControlPanel extends GenericAdmResource
                 if(!strFilterProcess.equalsIgnoreCase("0"))
                 {
                     vFiltered = filterTasks(vTasks, FILTER_BY_PROCESS, strFilterProcess);
+                    strFilterPagination = strFilterPagination + "&" + PROCESS_FILTER_CTRL + "=" + strFilterProcess;
                 }
                 if(!strFilterStatus.equalsIgnoreCase("-1"))
                 {
@@ -465,6 +467,7 @@ public class ControlPanel extends GenericAdmResource
                        vFiltered = vTasks;
                     }
                     vFiltered = filterTasks(vFiltered, FILTER_BY_STATUS, strFilterStatus);
+                    strFilterPagination = strFilterPagination + "&" + STATUS_FILTER_CTRL + "=" + strFilterStatus;
                 }
                 if(!strInitialFilterDate.equalsIgnoreCase(""))
                 {
@@ -473,22 +476,25 @@ public class ControlPanel extends GenericAdmResource
                     {
                        vFiltered = vTasks;
                     }
-                    strInitialFilterDate =
-                            BPMSTask.ClassMgr.changeDateFormat(
-                                strInitialFilterDate);
+                    strFilterPagination = strFilterPagination + "&" + INITIAL_DATE_FILTER_CTRL + "=" + strInitialFilterDate;
+                    strInitialFilterDate = BPMSTask.ClassMgr.changeDateFormat(strInitialFilterDate);
                     String strFilterValue = strInitialFilterDate+"|";
                     if(!strEndFilterDate.equalsIgnoreCase(""))
                     {
-                        strEndFilterDate =
-                                BPMSTask.ClassMgr.changeDateFormat(
-                                    strEndFilterDate);
-                        strFilterValue = strFilterValue + strEndFilterDate+"|";
+                        strFilterPagination = strFilterPagination + "&" + END_DATE_FILTER_CTRL + "=" + strEndFilterDate;
+                        strEndFilterDate = BPMSTask.ClassMgr.changeDateFormat(strEndFilterDate);
+                        strFilterValue = strFilterValue + strEndFilterDate+"|";                        
                     }
-                    vFiltered = filterTasks(vFiltered, FILTER_BY_DATE, strFilterValue);
+                    vFiltered = filterTasks(vFiltered, FILTER_BY_DATE, strFilterValue);                    
                 }
             } else {
                 vFiltered = vTasks;
             }
+            if(strFilterPagination!=null && !strFilterPagination.equalsIgnoreCase("")){
+                base.setAttribute("strFilterPagination", strFilterPagination);
+                base.updateAttributesToDB();
+            }
+
         } catch(Exception e){
           //log.error("Error en ControlPanel.applyFilters", e);
             System.out.println("Error en ControlPanel.applyFilters:" +
@@ -1034,9 +1040,8 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             User currentUser = paramRequest.getUser();
-            //Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
-            Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
-
+            Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
+            //Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
             while(itFlowNodeInstances.hasNext())
             {
                 FlowNodeInstance flobInst = itFlowNodeInstances.next();
@@ -1049,10 +1054,10 @@ public class ControlPanel extends GenericAdmResource
                     intFobInstances = intFobInstances + aux.size();
                 } else if(flobInstType instanceof Task)
                 {
-                    //if(currentUser.haveAccess(flobInstType)){
+                    if(currentUser.haveAccess(flobInstType)){
                         vTaskLinks.add(intFobInstances,flobInst);
                         intFobInstances++;
-                    //}
+                    }
                 }
             }
         } catch(Exception e){
@@ -1091,8 +1096,8 @@ public class ControlPanel extends GenericAdmResource
                 {
                     ProcessInstance pinst = (ProcessInstance)itProcessInstances.next();
                     //TODO: Checar si esta activa pinst.getStatus() ????
-                    //Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
-                    Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
+                    Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
+                    //Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
 
                     while(itFlowNodeInstances.hasNext())
                     {
@@ -1105,10 +1110,10 @@ public class ControlPanel extends GenericAdmResource
                             intFobInstances = intFobInstances + aux.size();
                         } else if(flobInstType instanceof Task)
                         {
-                            //if(currentUser.haveAccess(flobInstType)){
+                            if(currentUser.haveAccess(flobInstType)){
                                 vTaskLinks.add(intFobInstances,flobInst);
                                 intFobInstances++;
-                            //}
+                            }
                         }
                     }
                 }
@@ -1296,23 +1301,20 @@ public class ControlPanel extends GenericAdmResource
         {
             if(strProperty.equalsIgnoreCase("id"))
             {
-                strValue = usrTask.getId();
+                strValue = usrTask.getId()==null ?"" :usrTask.getId();
             } else if(strProperty.equalsIgnoreCase("title"))
             {
-                strValue = usrTask.getTitle();
+                strValue = usrTask.getTitle()==null ?"" :usrTask.getTitle();
 
             } else if(strProperty.equalsIgnoreCase("uri"))
             {
-                strValue = usrTask.getURI();
+                strValue = usrTask.getURI()==null ?"" :usrTask.getURI();
             } else if(strProperty.equalsIgnoreCase("url"))
             {
-                strValue = usrTask.getTaskWebPage().getUrl();
+                strValue = usrTask.getTaskWebPage().getUrl()==null ?"" :usrTask.getTaskWebPage().getUrl();
             } else if(strProperty.equalsIgnoreCase("description"))
             {
-                strValue = usrTask.getDescription();
-            }
-            if(null==strValue){
-                strValue="";
+                strValue = usrTask.getDescription()==null ?"" :usrTask.getDescription();
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.getTaskDefinitionProperty", e);
@@ -1338,43 +1340,43 @@ public class ControlPanel extends GenericAdmResource
         {
             if(strProperty.equalsIgnoreCase("id"))
             {
-                strValue = flobInst.getId();
+                strValue = flobInst.getId()==null ?"" :flobInst.getId();
             } else if(strProperty.equalsIgnoreCase("status"))
             {
                 strValue = String.valueOf(flobInst.getStatus());
             } else if(strProperty.equalsIgnoreCase("uri"))
             {
-                strValue = flobInst.getURI();
+                strValue = flobInst.getURI()==null ?"" :flobInst.getURI();
             } else if(strProperty.equalsIgnoreCase("encodedURI"))
             {
-                strValue = flobInst.getEncodedURI();
+                strValue = flobInst.getEncodedURI()==null ?"" :flobInst.getEncodedURI();
             } else if(strProperty.equalsIgnoreCase("created"))
             {
-                strValue = "" + flobInst.getCreated();
+                strValue = String.valueOf(flobInst.getCreated());
             } else if(strProperty.equalsIgnoreCase("creator"))
             {
-                User usr = flobInst.getCreator();
-                strValue = usr.getFullName();
+                    User usr = flobInst.getCreator();
+                    strValue = usr.getFullName();
             } else if(strProperty.equalsIgnoreCase("modified"))
             {
-                strValue = "" + flobInst.getUpdated();
+                strValue = String.valueOf(flobInst.getUpdated())=="null" ?"" :String.valueOf(flobInst.getUpdated());
             } else if(strProperty.equalsIgnoreCase("modifiedBy"))
             {
                 User usr = flobInst.getModifiedBy();
                 strValue = usr.getFullName();
+
             } else if(strProperty.equalsIgnoreCase("ended"))
             {
-                strValue = "" + flobInst.getEnded();
+                strValue = String.valueOf(flobInst.getEnded())=="null" ?"" :String.valueOf(flobInst.getEnded());
             } else if(strProperty.equalsIgnoreCase("endedBy"))
             {
-                User usr = flobInst.getEndedby();
-                strValue = usr.getFullName();
+                if(flobInst.getStatus()==Instance.STATUS_CLOSED){
+                    User usr = flobInst.getEndedby();
+                    strValue = usr.getFullName();
+                }
             } else
             {
                 strValue = flobInst.getProperty(strProperty);
-            }
-            if(null==strValue){
-                strValue="";
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.getTaskInstanceProperty", e);
@@ -1590,6 +1592,9 @@ public class ControlPanel extends GenericAdmResource
             int intCurrPage = request.getParameter("cpCurrPage")==null
                     ?1
                     :Integer.parseInt(request.getParameter("cpCurrPage"));
+            int intColumnCount = base.getAttribute("intColumnCount")==null
+                    ?1
+                    :Integer.parseInt(base.getAttribute("intColumnCount"));
             Vector vTasks = getTasks(paramRequest);
             if(vTasks.size()> 0)
             {
@@ -1603,7 +1608,7 @@ public class ControlPanel extends GenericAdmResource
                             Instance.STATUS_STOPED + "|";
                     vTasks = BPMSTask.ClassMgr.filterTasksByStatus(vTasks,strValue);
                 }
-                Vector vFilteredTasks = applyFilters(vTasks, request);
+                Vector vFilteredTasks = applyFilters(vTasks, request, paramRequest);
                 //Obtener el vector con las propiedades generales (taskDefinition y taskInstance)
                 Vector vTaskProps  = getTaskProperties(paramRequest);
                 Vector vTaskLinks = setTaskLinks(vFilteredTasks, paramRequest);
@@ -1613,7 +1618,7 @@ public class ControlPanel extends GenericAdmResource
                 int iniRow = getPageFirstRow(vTaskLinks.size(),intRowsPerPage,intCurrPage);
                 //sb.append("<p>" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
                 sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
-                StringBuffer sbPagination = getPagination(intRowsPerPage, intCurrPage,vTaskLinks.size(), paramRequest);
+                StringBuffer sbPagination = getPagination(intRowsPerPage, intCurrPage,vTaskLinks.size(),paramRequest,request);
                 //sb.append("<p>" + sbPagination + "</p>");
                 sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
                 //sb.append("<p>" + paramRequest.getLocaleString("lblTotalTask") + "</p>");
@@ -3701,12 +3706,17 @@ public class ControlPanel extends GenericAdmResource
     * @return      		StringBuffer con codigo HTML
     */
     public StringBuffer getPagination(int intRowsPerPage, int intCurrPage,
-            int vectorSize, SWBParamRequest paramRequest)
+            int vectorSize, SWBParamRequest paramRequest, HttpServletRequest request)
     {
         StringBuffer sb = new StringBuffer();
         int page = 0;
         try
         {
+            Resource base = paramRequest.getResourceBase();
+            String strFilterPagination =
+                base.getAttribute("strFilterPagination")==null
+                ?""
+                :base.getAttribute("strFilterPagination");
             int totalPages = getTotalPages(vectorSize,intRowsPerPage);
             int endRow = getPageLastRow(vectorSize,intRowsPerPage,intCurrPage);
             int iniRow = getPageFirstRow(vectorSize,intRowsPerPage,intCurrPage);
@@ -3715,13 +3725,18 @@ public class ControlPanel extends GenericAdmResource
                 int backPage = intCurrPage - 1;
                 SWBResourceURL sUrlFirstPage = paramRequest.getRenderUrl();
                 sUrlFirstPage.setParameter("cpCurrPage", "1");
-                sb.append("<td><a href=\"" + sUrlFirstPage +
-                        "\">" + paramRequest.getLocaleString("lblFirstPage") +
-                        "</a><td>");
+                sb.append("<td><a href=\"" + sUrlFirstPage);
+                if(!strFilterPagination.equalsIgnoreCase("")){
+                    sb.append(strFilterPagination);
+                }
+                sb.append("\">" + paramRequest.getLocaleString("lblFirstPage") + "</a><td>");
                 SWBResourceURL sUrlBack = paramRequest.getRenderUrl();
                 sUrlBack.setParameter("cpCurrPage", String.valueOf(backPage));
-                sb.append("<td><a href=\"" + sUrlBack + "\">" +
-                        paramRequest.getLocaleString("lblBackPage") +
+                sb.append("<td><a href=\"" + sUrlBack);
+                if(!strFilterPagination.equalsIgnoreCase("")){
+                    sb.append(strFilterPagination);
+                }
+                sb.append("\">" + paramRequest.getLocaleString("lblBackPage") +
                         "</a><td>");
             }
             for(int i=0; i<totalPages; i++){
@@ -3732,22 +3747,30 @@ public class ControlPanel extends GenericAdmResource
                 } else {
                     SWBResourceURL sUrlPage = paramRequest.getRenderUrl();
                     sUrlPage.setParameter("cpCurrPage", String.valueOf(page));
-                    sb.append("<td><a href=\"" + sUrlPage + "\">" + page +
-                            "</a><td>");
+                    sb.append("<td><a href=\"" + sUrlPage);
+                    if(!strFilterPagination.equalsIgnoreCase("")){
+                        sb.append(strFilterPagination);
+                    }
+                    sb.append("\">" + page + "</a><td>");
                 }
             }
             if(totalPages>1 && intCurrPage<totalPages){
                 int nextPage = intCurrPage + 1;
                 SWBResourceURL sUrlNext = paramRequest.getRenderUrl();
                 sUrlNext.setParameter("cpCurrPage", String.valueOf(nextPage));
-                sb.append("<td><a href=\"" + sUrlNext + "\">" +
-                        paramRequest.getLocaleString("lblNextPage") +
-                        "</a><td>");
+                sb.append("<td><a href=\"" + sUrlNext);
+                if(!strFilterPagination.equalsIgnoreCase("")){
+                    sb.append(strFilterPagination);
+                }
+                sb.append("\">" + paramRequest.getLocaleString("lblNextPage") + "</a><td>");
                 SWBResourceURL sUrlLastPage = paramRequest.getRenderUrl();
                 sUrlLastPage.setParameter("cpCurrPage",
                         String.valueOf(totalPages));
-                sb.append("<td><a href=\"" + sUrlLastPage +
-                        "\">" + paramRequest.getLocaleString("lblLastPage") +
+                sb.append("<td><a href=\"" + sUrlLastPage);
+                if(!strFilterPagination.equalsIgnoreCase("")){
+                    sb.append(strFilterPagination);
+                }                  
+                sb.append("\">" + paramRequest.getLocaleString("lblLastPage") +
                         "</a><td>");
             }
             sb.append("</tr></table>");
