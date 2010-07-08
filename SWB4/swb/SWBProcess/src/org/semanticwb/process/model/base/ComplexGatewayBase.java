@@ -3,6 +3,7 @@ package org.semanticwb.process.model.base;
 
 public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Gateway implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_startTokens=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#startTokens");
     public static final org.semanticwb.platform.SemanticClass swp_ComplexGateway=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateway");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#ComplexGateway");
 
@@ -147,6 +148,16 @@ public abstract class ComplexGatewayBase extends org.semanticwb.process.model.Ga
     public ComplexGatewayBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public int getStartTokens()
+    {
+        return getSemanticObject().getIntProperty(swp_startTokens);
+    }
+
+    public void setStartTokens(int value)
+    {
+        getSemanticObject().setIntProperty(swp_startTokens, value);
     }
 
     public org.semanticwb.process.model.ProcessSite getProcessSite()

@@ -35,7 +35,7 @@ public class ScalationEndEvent extends org.semanticwb.process.model.base.Scalati
                     source.abortDependencies(user);
 
                     FlowNode node=(FlowNode)graphicalElement;
-                    source.executeRelatedFlowNodeInstance(node,instance,null, user);
+                    instance.executeRelatedFlowNodeInstance(node,null, user);
                 }
             }
         }else

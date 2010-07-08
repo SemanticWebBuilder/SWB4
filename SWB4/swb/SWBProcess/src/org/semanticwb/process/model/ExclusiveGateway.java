@@ -14,30 +14,13 @@ public class ExclusiveGateway extends org.semanticwb.process.model.base.Exclusiv
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
-//        boolean ret=false;
-//        Iterator<ConnectionObject> it=listInputConnectionObjects();
-//        while (it.hasNext())
-//        {
-//            ConnectionObject connectionObject = it.next();
-//            GraphicalElement obj=connectionObject.getSource();
-//            if(obj instanceof FlowNode)
-//            {
-//                FlowNodeInstance inst=instance.getRelatedFlowNodeInstance((FlowNode)obj);
-//                if(inst!=null && inst.getStatus()>=Instance.STATUS_CLOSED)
-//                {
-//                    ret=true;
-//                    break;
-//                }
-//            }
-//        }
-//        if(ret)
-        {
-            instance.close(user,instance.getSourceInstance().getAction());
-        }
+        instance.close(user,instance.getSourceInstance().getAction());
     }
 
+    @Override
     public void nextObject(FlowNodeInstance instance, User user)
     {
+        //SI LA COMPUERTA ES DIVERGENTE, EVALUAR LAS CONDICIONES
         //System.out.println("nextObject:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         DefaultFlow def=null;
         boolean execute=false;
@@ -59,5 +42,7 @@ public class ExclusiveGateway extends org.semanticwb.process.model.base.Exclusiv
             }
         }
         if(!execute)def.execute(instance, user);
+
+        //SI LA COMPUERTA ES CONVERGENTE, PASAR EL CONTROL CON EL PRIMER FLUJO DE LLEGADA
     }
 }
