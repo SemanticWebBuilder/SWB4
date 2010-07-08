@@ -719,11 +719,11 @@ public class SemanticClass
 //    }
 
     /**
- * List instances.
- * 
- * @return the iterator
- */
-public Iterator<SemanticObject> listInstances()
+     * List instances.
+     *
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listInstances()
     {
         return listInstances(false);
     }
