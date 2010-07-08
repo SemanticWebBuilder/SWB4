@@ -23,6 +23,10 @@ import java.awt.print.PrinterJob;
  */
 public class PrintUtil
 {
+    /**
+     *
+     * @param bufferedImage
+     */
     public void print(BufferedImage bufferedImage[])
     {
         // Get the representation of the current printer and

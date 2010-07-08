@@ -1446,32 +1446,32 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Inclusive Start Event Gateway"
+                    text:"Exclusive Start Event Gateway"
                     image: "images/gate_eventos_str_1.png"
                     imageOver: "images/gate_eventos_str_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InclusiveStartEventGateway
+                        modeler.tempNode=ExclusiveStartEventGateway
                         {
                             modeler:modeler
-                            title:"Inclusive Start Event Gateway"
-                            uri:"new:inclusivestarteventgateway:{counter++}"
+                            title:"Exclusive Start Event Gateway"
+                            uri:"new:exclusivestarteventgateway:{counter++}"
                         }
                     }
                 },
                 ImgButton {
-                    text:"Inclusive Intermediate Event Gateway"
+                    text:"Exclusive Intermediate Event Gateway"
                     image: "images/gate_eventos_int_1.png"
                     imageOver: "images/gate_eventos_int_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=InclusiveIntermediateEventGateway
+                        modeler.tempNode=ExclusiveIntermediateEventGateway
                         {
                             modeler:modeler
-                            title:"Inclusive Intermediate Event Gateway"
-                            uri:"new:inclusiveintermediateeventgateway:{counter++}"
+                            title:"Exclusive Intermediate Event Gateway"
+                            uri:"new:exclusiveintermediateeventgateway:{counter++}"
                         }
                     }
                 },
@@ -1491,17 +1491,17 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
-                    text:"Parallel Event Gateway"
+                    text:"Parallel Start Event Gateway"
                     image: "images/gate_paralela_b_1.png"
                     imageOver: "images/gate_paralela_b_2.png"
                     action: function():Void
                     {
                         modeler.disablePannable=true;
-                        modeler.tempNode=ParallelEventGateway
+                        modeler.tempNode=ParallelStartEventGateway
                         {
                             modeler:modeler
-                            title:"Parallel Event Gateway"
-                            uri:"new:paralleleventgateway:{counter++}"
+                            title:"Parallel Start Event Gateway"
+                            uri:"new:parallelstarteventgateway:{counter++}"
                         }
                     }
                 },

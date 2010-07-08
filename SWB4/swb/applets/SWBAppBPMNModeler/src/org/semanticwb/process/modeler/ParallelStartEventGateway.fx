@@ -1,5 +1,5 @@
 /*
- * InclusiveStartEventGateway.fx
+ * ParallelEventGateway.fx
  *
  * Created on 13/02/2010, 11:24:44 AM
  */
@@ -18,7 +18,7 @@ import javafx.scene.effect.ColorAdjust;
  * @author javier.solis
  */
 
-public class InclusiveStartEventGateway extends EventBasedGateway
+public class ParallelStartEventGateway extends EventBasedGateway
 {
     public override function create(): Node
     {
@@ -44,11 +44,11 @@ public class InclusiveStartEventGateway extends EventBasedGateway
 
         var message=ImageView
         {
-            image:Styles.ICO_EVENT_W_MULTIPLE
-            x: 14
-            y: 13
-            scaleX: 1
-            scaleY: 1
+            image:Styles.ICO_EVENT_W_PARALLEL
+            x: 16
+            y: 16
+            scaleX: 1.1
+            scaleY: 1.1
             effect: colorAdjust
         };
 
@@ -71,7 +71,7 @@ public class InclusiveStartEventGateway extends EventBasedGateway
             scaleY: bind s;
             opacity: bind o;
             effect: Styles.dropShadow
-            visible:bind canView()
+            visible: bind canView()
         };
     }
 }
