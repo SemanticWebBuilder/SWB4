@@ -15,6 +15,7 @@ public class ParallelGateway extends org.semanticwb.process.model.base.ParallelG
     @Override
     public void execute(FlowNodeInstance instance, User user)
     {
+        //SI LA COMPUERTA ES CONVERGENTE, ESPERAR A QUE SE COMPLETEN LOS FLUJOS
         boolean ret=true;
         Iterator<ConnectionObject> it=listInputConnectionObjects();
         while (it.hasNext())
@@ -27,6 +28,7 @@ public class ParallelGateway extends org.semanticwb.process.model.base.ParallelG
                 if(inst==null)
                 {
                     ret=false;
+                    break;
                 }else if(inst.getStatus()<Instance.STATUS_CLOSED)
                 {
                     ret=false;
@@ -38,6 +40,8 @@ public class ParallelGateway extends org.semanticwb.process.model.base.ParallelG
         {
             instance.close(user,instance.getSourceInstance().getAction());
         }
+
+        //SI LA COMPUERTA ES DIVERGENTE, HABILITAR TODOS LOS FLUJOS
     }
 
 

@@ -35,7 +35,7 @@ public class ErrorEndEvent extends org.semanticwb.process.model.base.ErrorEndEve
                     source.abortDependencies(user);
 
                     FlowNode node=(FlowNode)graphicalElement;
-                    source.executeRelatedFlowNodeInstance(node,instance, null, user);
+                    instance.executeRelatedFlowNodeInstance(node, null, user);
                 }
             }
         }else

@@ -22,7 +22,7 @@ public class Activity extends org.semanticwb.process.model.base.ActivityBase
             GraphicalElement graphicalElement = it.next();
             if(graphicalElement instanceof IntermediateCatchEvent)
             {
-                instance.executeRelatedFlowNodeInstance((IntermediateCatchEvent)graphicalElement,instance,null, user);
+                instance.executeRelatedFlowNodeInstance((IntermediateCatchEvent)graphicalElement, null, user);
             }
         }
     }

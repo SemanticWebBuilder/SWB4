@@ -102,7 +102,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      * Si la instancia no esta creada la crea, la inicia y la executa
      * Si la instancia ya existe, la resetea y la executa
      */
-    public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, FlowNodeInstance ref, ConnectionObject con, User user)
+    public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, ConnectionObject con, User user)
     {
         FlowNodeInstance inst=getRelatedFlowNodeInstance(node);
         if(inst==null)
@@ -119,11 +119,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
         if(inst.getStatus()==Instance.STATUS_INIT)
         {
-            inst.start(ref,con,user);
+            inst.start(this,con,user);
         }else
         {
             if(con!=null)inst.setFromConnection(con);
-            inst.setSourceInstance(ref);
+            inst.setSourceInstance(this);
             inst.execute(user);
         }
         return inst;
