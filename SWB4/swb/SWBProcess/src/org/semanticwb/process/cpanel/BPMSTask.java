@@ -363,7 +363,8 @@ public class BPMSTask
                             Iterator<ProcessInstance> itPinst = site.listProcessInstances();
                             while(itPinst.hasNext()){
                                 ProcessInstance pi = itPinst.next();
-                                Iterator<FlowNodeInstance> itge=SWBProcessMgr.getUserTaskInstances(pi, currentUser).iterator();
+                                Iterator<FlowNodeInstance> itge = pi.listFlowNodeInstances();
+                                //Iterator<FlowNodeInstance> itge = SWBProcessMgr.getUserTaskInstances(pi, currentUser).iterator();
                                 while(itge.hasNext())
                                 {
                                     Object obj = itge.next();
@@ -378,10 +379,10 @@ public class BPMSTask
                                             index = index + aux.size();
                                         }else if(type instanceof Task)
                                         {
-                                            //if(currentUser.haveAccess(type)){
+                                            if(currentUser.haveAccess(type)){
                                                 vTasks.add(index,actins);
                                                 index++;
-                                            //}
+                                            }
                                         }
                                     }
                                 }
@@ -424,10 +425,10 @@ public class BPMSTask
                         index = index + aux.size();
                     }else if(type instanceof Task)
                     {
-                        //if(user.haveAccess(type)){
+                        if(user.haveAccess(type)){
                             vTasks.add(index,actins);
                             index++;
-                        //}
+                        }
                     }
                 }
             } catch(Exception e){
