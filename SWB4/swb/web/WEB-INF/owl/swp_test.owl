@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:swp="http://www.semanticwebbuilder.org/swb4/process#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:swpt="http://org.semanticwb.process.test/swp_test#"
+  xml:base="http://org.semanticwb.process.test/swp_test">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/process"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <swp:ProcessClass rdf:ID="test">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessObject"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swp:ProcessClass>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
