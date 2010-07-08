@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.Artifact;
+import org.semanticwb.process.modeler.EventBasedGateway;
 
 /**
  * @author javier.solis
@@ -38,6 +39,8 @@ public class Activity extends FlowNode
 
         if (link instanceof DirectionalAssociation and link.ini instanceof CompensationIntermediateCatchEvent) {
             ret = true;            
+        } else if (link.ini instanceof ExclusiveIntermediateEventGateway) {
+            ret = false;
         }
         return ret;
     }
