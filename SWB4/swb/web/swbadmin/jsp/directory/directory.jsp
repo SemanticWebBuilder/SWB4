@@ -34,10 +34,9 @@ SemanticClass semClass=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticC
 ArrayList aprops2display=new ArrayList();
 String props2display=(String)request.getAttribute("props2display");
 if(props2display!=null && semClass!=null){
-    StringTokenizer strTokens=new StringTokenizer(props2display,",");
+    StringTokenizer strTokens=new StringTokenizer(props2display,",;");
     while(strTokens.hasMoreTokens()){
-        String token=strTokens.nextToken();
-        if(token==null) return;
+        String token=strTokens.nextToken().trim();
         SemanticProperty semProp=semClass.getProperty(token);
         if(semProp!=null){
             aprops2display.add(semProp);
