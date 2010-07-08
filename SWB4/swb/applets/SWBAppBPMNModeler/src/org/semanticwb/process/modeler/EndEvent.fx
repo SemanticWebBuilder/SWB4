@@ -41,6 +41,9 @@ public class EndEvent extends ThrowEvent
         if (not(link instanceof SequenceFlow)) {
             ret = false;
             ModelerUtils.setErrorMessage("EndEvent must have only incoming SequenceFlow");
+        } else if (link instanceof SequenceFlow and link.ini instanceof ExclusiveIntermediateEventGateway) {
+            ret = false;
+            ModelerUtils.setErrorMessage("Event-based Gateway cannot be linked to EndEvent");
         }
         return ret;
     }
