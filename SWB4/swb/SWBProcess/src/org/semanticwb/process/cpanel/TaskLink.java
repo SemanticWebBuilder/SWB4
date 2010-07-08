@@ -108,6 +108,20 @@ public class TaskLink {
             return strProcessTitle;
         }
 
+        public String getFlowNodeParentProcessURI()
+        {
+            //TODO: Que pasa si es un subproceso???
+            String strProcessURI = "";
+            ProcessInstance fpinst = this.fobi.getProcessInstance();
+            if(null!=fpinst){
+                org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
+                if(null!=fproc){
+                    strProcessURI = fproc.getURI();
+                }
+            }
+            return strProcessURI;
+        }
+
         public String getFlowNodeTitle()
         {
             String strTaskTitle =

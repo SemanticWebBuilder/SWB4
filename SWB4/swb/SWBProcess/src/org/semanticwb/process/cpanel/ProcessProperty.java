@@ -193,10 +193,10 @@ public class ProcessProperty
                 ProcessProperty pProp1 = (ProcessProperty)obj1;
                 ProcessProperty pProp2 = (ProcessProperty)obj2;
                 Integer order1 = pProp1.getOrderOnTask();
-                Integer order2 = pProp1.getOrderOnTask();
+                Integer order2 = pProp2.getOrderOnTask();
                 String strName1 = pProp1.getProperty().getDisplayName();
                 String strName2 = pProp2.getProperty().getDisplayName();
-                result = order2.compareTo(order1);
+                result = order1.compareTo(order2);
                 if(result == 0){
                     result = strName1.compareTo(strName2);
                 }
