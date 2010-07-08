@@ -28,6 +28,7 @@
  */
 package com.infotec.wb.resources;
 
+import com.infotec.wb.lib.WBParamRequestImp;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBActionResponse;
+import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.lib.SWBResponse;
 
 /** Este recurso permite ejecutar un archivo jsp, dando la ruta del archivo a
@@ -65,7 +67,7 @@ public class JSPResource extends GenericAdmResource
     {
         String path = getResourceBase().getAttribute("jsppath");
         try {
-            request.setAttribute("paramRequest", paramRequest);
+            request.setAttribute("paramRequest", new WBParamRequestImp((SWBParamRequestImp)paramRequest));
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
             if (dispatcher != null) {
                 //System.out.println("forward:"+getResourceBase().getAttribute("forward"));

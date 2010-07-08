@@ -30,6 +30,7 @@
 
 package com.infotec.wb.resources;
 
+import com.infotec.wb.lib.WBParamRequestImp;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -40,8 +41,8 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBActionResponse;
-import org.semanticwb.portal.lib.SWBResponse;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.portal.api.SWBParamRequestImp;
 
 /**
  *
@@ -49,6 +50,9 @@ import org.semanticwb.portal.lib.SWBResponse;
  */
 public class JSPResourceType extends GenericResource
 {
+    //Subcalse de ResourceType
+    public static SemanticClass classType =  org.semanticwb.model.JSPResourceType.sclass;
+
     private static Logger log = SWBUtils.getLogger(JSPResourceType.class);
     /**
      * Creates a new instance of JSPResourceType
@@ -56,17 +60,13 @@ public class JSPResourceType extends GenericResource
     public JSPResourceType()
     {
     }
-    
-    
 
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        //TODO:
-        //String path=getResourceBase().getResourceType().getAttribute("jsppath");
-        String path=getResourceBase().getResourceType().getProperty("jsppath","Falta configurar");
+        String path=((org.semanticwb.model.JSPResourceType)getResourceBase().getResourceType()).getJspPath();
         try
         {
-            request.setAttribute("paramRequest", paramsRequest);
+            request.setAttribute("paramRequest", new WBParamRequestImp((SWBParamRequestImp)paramsRequest));
             RequestDispatcher dispatcher = request.getRequestDispatcher(path);
             if(dispatcher!=null)
             {
@@ -88,14 +88,12 @@ public class JSPResourceType extends GenericResource
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        //TODO:
-        //String path=getResourceBase().getResourceType().getAttribute("jsppath");
-        String path=getResourceBase().getResourceType().getProperty("jsppath","Falta configurar");
+        String path=((org.semanticwb.model.JSPResourceType)getResourceBase().getResourceType()).getJspPath();
         out.println("<div class=\"box\" align=\"left\">");
         out.println("<b>Actual JSP</b>:"+path+"<br>");
-        out.println("<b>Use ResourceType for configure jsppath.</b><br>");
+        out.println("<b>Use ResourceType for configure JSP Path.</b><br>");
         out.println("<b>Example:</b><br><pre>");
-        out.println("&lt;jsppath>/jsp/menu.jsp&lt;jsppath>");
+        out.println("/jsp/menu.jsp");
         out.println("</pre></div>");
     }
        
