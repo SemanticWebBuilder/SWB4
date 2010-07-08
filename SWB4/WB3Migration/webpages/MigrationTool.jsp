@@ -2397,13 +2397,16 @@
                         usr.setPasswordChanged(rusr.getPasswordChanged());
                         if (null!=rusr.getXml()){
                             com.infotec.wb.core.WBUser user = new com.infotec.wb.core.WBUser(rusr);
-                            Iterator attlist = DBUser.getInstance(user.getRepository()).getUserAttrsList().keySet().iterator();
-                            while (attlist.hasNext()){
-                                String attact = (String)attlist.next();
-                                String curratt = user.getAttribute(attact);
-                                if (null != curratt){
-                                    org.semanticwb.platform.SemanticProperty property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userExt_"+attact);
-                                    try {usr.getSemanticObject().setProperty(property, curratt);} catch (Exception ne) {}
+                            if(user!=null)
+                            {
+                                Iterator attlist = DBUser.getInstance(rusr.getRepository()).getUserAttrsList().keySet().iterator();
+                                while (attlist.hasNext()){
+                                    String attact = (String)attlist.next();
+                                    String curratt = user.getAttribute(attact);
+                                    if (null != curratt){
+                                        org.semanticwb.platform.SemanticProperty property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userExt_"+attact);
+                                        try {usr.getSemanticObject().setProperty(property, curratt);} catch (Exception ne) {}
+                                    }
                                 }
                             }
                         }
