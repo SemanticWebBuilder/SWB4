@@ -780,9 +780,11 @@ public class ControlPanel extends GenericAdmResource
                 {
                     if(strApplyOnValue[j].equalsIgnoreCase("0")){
                         arrApplyOn[0] = "true";
-                    } else if(strApplyOnValue[j].equalsIgnoreCase("1")){
+                    }
+                    if(strApplyOnValue[j].equalsIgnoreCase("1")){
                         arrApplyOn[1] = "true";
-                    } else if(strApplyOnValue[j].equalsIgnoreCase("2")){
+                    }
+                    if(strApplyOnValue[j].equalsIgnoreCase("2")){
                         arrApplyOn[2] = "true";
                     }
                 }
@@ -3445,10 +3447,12 @@ public class ControlPanel extends GenericAdmResource
                         if(tProp.isAppliedOnTaskLink())
                         {
                             strRadio1Checked = "checked";
-                        } else if(tProp.isAppliedOnTaskLegend())
+                        }
+                        if(tProp.isAppliedOnTaskLegend())
                         {
                             strRadio2Checked = "checked";
-                        } else if(tProp.isAppliedOnTaskColumn())
+                        }
+                        if(tProp.isAppliedOnTaskColumn())
                         {
                             strRadio3Checked = "checked";
                         }
