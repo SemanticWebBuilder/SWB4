@@ -65,7 +65,7 @@ public class SemanticObject
     public static final String ACT_CLONE="CLONE";
 
     /** The m_objs. */
-    private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap();
+    private static Map<String, SemanticObject>m_objs=new ConcurrentHashMap<String, SemanticObject>();
     
     /** The m_genobj. */
     private GenericObject m_genobj=null;
@@ -161,7 +161,7 @@ public class SemanticObject
     public static SemanticObject getSemanticObject(String uri)
     {
         SemanticObject ret=null;
-        if(hasCache)ret=m_objs.get(uri);
+        if(hasCache && null!=uri)ret=m_objs.get(uri);
         return ret;
     }
 
