@@ -72,4 +72,10 @@ public class Driver_MySQL_SWB extends Driver_MySQL {
             log.error("Unable to set connection for Driver:", e);
         }
     }
+
+    @Override
+    protected void getTblParams ( String [] param ){
+        super.getTblParams(param);
+        param[1] = SWBPlatform.getEnv("swb/mysqlJenaEngine", "INNODB");
+    }
 }
