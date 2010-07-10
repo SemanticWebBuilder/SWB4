@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEvent implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable
+public abstract class TimerStartEventBase extends org.semanticwb.process.model.StartEvent implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessPeriodRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable
 {
     public static final org.semanticwb.platform.SemanticClass swp_TimerStartEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerStartEvent");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#TimerStartEvent");
@@ -143,6 +143,18 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
             return it;
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessPeriodRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.TimerStartEvent> listTimerStartEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.TimerStartEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
@@ -159,6 +171,47 @@ public abstract class TimerStartEventBase extends org.semanticwb.process.model.S
     public TimerStartEventBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriodRef> listProcessPeriodRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriodRef>(getSemanticObject().listObjectProperties(swp_hasProcessPeriodRef));
+    }
+
+    public boolean hasProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasProcessPeriodRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public void addProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasProcessPeriodRef, value.getSemanticObject());
+    }
+
+    public void removeAllProcessPeriodRef()
+    {
+        getSemanticObject().removeProperty(swp_hasProcessPeriodRef);
+    }
+
+    public void removeProcessPeriodRef(org.semanticwb.process.model.ProcessPeriodRef value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasProcessPeriodRef,value.getSemanticObject());
+    }
+
+    public org.semanticwb.process.model.ProcessPeriodRef getProcessPeriodRef()
+    {
+         org.semanticwb.process.model.ProcessPeriodRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasProcessPeriodRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ProcessPeriodRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public org.semanticwb.process.model.ProcessSite getProcessSite()

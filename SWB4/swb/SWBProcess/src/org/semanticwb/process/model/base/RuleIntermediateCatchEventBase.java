@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class RuleIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ProcessRuleable,org.semanticwb.process.model.ActionCodeable
+public abstract class RuleIntermediateCatchEventBase extends org.semanticwb.process.model.IntermediateCatchEvent implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.process.model.ProcessRuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.process.model.ActionCodeable
 {
     public static final org.semanticwb.platform.SemanticClass swp_RuleIntermediateCatchEvent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RuleIntermediateCatchEvent");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#RuleIntermediateCatchEvent");
@@ -131,6 +131,18 @@ public abstract class RuleIntermediateCatchEventBase extends org.semanticwb.proc
             return it;
         }
 
+        public static java.util.Iterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> listRuleIntermediateCatchEventByProcessRuleRef(org.semanticwb.process.model.ProcessRuleRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessRuleRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> listRuleIntermediateCatchEventByProcessRuleRef(org.semanticwb.process.model.ProcessRuleRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swp_hasProcessRuleRef,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> listRuleIntermediateCatchEventByParent(org.semanticwb.process.model.GraphicalElement value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.process.model.RuleIntermediateCatchEvent> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swp_parent, value.getSemanticObject(),sclass));
@@ -149,14 +161,45 @@ public abstract class RuleIntermediateCatchEventBase extends org.semanticwb.proc
         super(base);
     }
 
-    public String getRule()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRuleRef> listProcessRuleRefs()
     {
-        return getSemanticObject().getProperty(swp_rule);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRuleRef>(getSemanticObject().listObjectProperties(swp_hasProcessRuleRef));
     }
 
-    public void setRule(String value)
+    public boolean hasProcessRuleRef(org.semanticwb.process.model.ProcessRuleRef value)
     {
-        getSemanticObject().setProperty(swp_rule, value);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swp_hasProcessRuleRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public void addProcessRuleRef(org.semanticwb.process.model.ProcessRuleRef value)
+    {
+        getSemanticObject().addObjectProperty(swp_hasProcessRuleRef, value.getSemanticObject());
+    }
+
+    public void removeAllProcessRuleRef()
+    {
+        getSemanticObject().removeProperty(swp_hasProcessRuleRef);
+    }
+
+    public void removeProcessRuleRef(org.semanticwb.process.model.ProcessRuleRef value)
+    {
+        getSemanticObject().removeObjectProperty(swp_hasProcessRuleRef,value.getSemanticObject());
+    }
+
+    public org.semanticwb.process.model.ProcessRuleRef getProcessRuleRef()
+    {
+         org.semanticwb.process.model.ProcessRuleRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swp_hasProcessRuleRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.process.model.ProcessRuleRef)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public org.semanticwb.process.model.ProcessSite getProcessSite()
