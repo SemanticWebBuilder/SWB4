@@ -663,6 +663,7 @@ public class SemanticProperty
     @Override
     public boolean equals(Object obj)
     {
+        if(obj==null)return false;
         return hashCode() == obj.hashCode();
     }
 
