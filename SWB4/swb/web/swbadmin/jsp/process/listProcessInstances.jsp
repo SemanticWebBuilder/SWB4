@@ -66,7 +66,7 @@
         <h3>Artefactos</h3>
 <%
             out.println("<ul>");
-            Iterator<ProcessObject> objit=pi.getAllProcessObjects().iterator();
+            Iterator<ProcessObject> objit=pi.listAllProcessObjects();
             while(objit.hasNext())
             {
                 ProcessObject obj =  objit.next();
