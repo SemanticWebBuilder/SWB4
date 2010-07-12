@@ -136,6 +136,10 @@ public class SemanticVocabulary
     //General
     /** The Constant URI. */
     public static final String URI = "http://www.semanticwebbuilder.org/swb4/ontology#";
+
+    public static final String PROCESS_URI = "http://www.semanticwebbuilder.org/swb4/process#";
+
+    public static final String PROCESS_CLASS = PROCESS_URI + "ProcessClass";
     
     /** The Constant SWBXF_URI. */
     public static final String SWBXF_URI = "http://www.semanticwebbuilder.org/swb4/xforms/ontology#";
