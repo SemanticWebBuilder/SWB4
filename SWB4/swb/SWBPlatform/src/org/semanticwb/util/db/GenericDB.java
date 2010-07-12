@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.StringTokenizer;
 import org.hibernate.dialect.*;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -262,7 +263,7 @@ public class GenericDB {
         int x = 0;
         try
             {
-                sqlScript = getSQLScript(XML, dbname);
+                sqlScript = getSQLScript(XML, dbname); 
                 if(poolname==null)
                 {
                     conn = SWBUtils.DB.getDefaultConnection("GenericDB.executeSQLScript()");
@@ -391,6 +392,7 @@ public class GenericDB {
             return null;
         }
         final String eleFin = "); ";
+        final String eleFinTblMysql = ") ENGINE="+SWBPlatform.getEnv("swb/mysqlJenaEngine", "INNODB") +" DEFAULT CHARSET=utf8 ;";
         Document dom = SWBUtils.XML.xmlToDom(strXML);
         
         if (dom != null) {
@@ -652,10 +654,14 @@ public class GenericDB {
                                 {
                                     haveCLOB=true;
                                 }
-                            }
+                            } 
                         }
                         // Cerrando tabla
-                        strBuff.append(eleFin + LFCR+LFCR);
+                        if (DBName.equals(DB_MYSQL)){
+                            strBuff.append(eleFinTblMysql + LFCR+LFCR);
+                        } else {
+                            strBuff.append(eleFin + LFCR+LFCR);
+                        }
 
                     }
                 }
