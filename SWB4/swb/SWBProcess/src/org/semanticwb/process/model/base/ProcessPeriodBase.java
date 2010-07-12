@@ -21,6 +21,12 @@ public abstract class ProcessPeriodBase extends org.semanticwb.process.model.Pro
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriod>(it, true);
         }
 
+        public static org.semanticwb.process.model.ProcessPeriod createProcessPeriod(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.ProcessPeriod.ClassMgr.createProcessPeriod(String.valueOf(id), model);
+        }
+
         public static org.semanticwb.process.model.ProcessPeriod getProcessPeriod(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.model.ProcessPeriod)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

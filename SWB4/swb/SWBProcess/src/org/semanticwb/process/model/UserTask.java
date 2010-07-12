@@ -19,6 +19,9 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
             wp=WrapperTaskWebPage.ClassMgr.createWrapperTaskWebPage("SWPTask_"+getId(), getProcessSite());
             setTaskWebPage(wp);
             wp.setActive(true);
+            //eliminar cache
+            getSemanticObject().removeCache(wp.getURI());
+            wp=super.getTaskWebPage();
         }
         return wp;
     }

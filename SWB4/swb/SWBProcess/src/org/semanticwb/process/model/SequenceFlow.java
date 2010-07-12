@@ -17,7 +17,7 @@ public class SequenceFlow extends org.semanticwb.process.model.base.SequenceFlow
         if(target instanceof FlowNode)
         {
             FlowNode node=(FlowNode)target;
-            source.executeRelatedFlowNodeInstance(node,this, user);
+            source.executeRelatedFlowNodeInstance(node, this, user);
         }
 
     }    

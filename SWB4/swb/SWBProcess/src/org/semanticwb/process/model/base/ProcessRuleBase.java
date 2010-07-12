@@ -22,6 +22,12 @@ public abstract class ProcessRuleBase extends org.semanticwb.process.model.Proce
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRule>(it, true);
         }
 
+        public static org.semanticwb.process.model.ProcessRule createProcessRule(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.ProcessRule.ClassMgr.createProcessRule(String.valueOf(id), model);
+        }
+
         public static org.semanticwb.process.model.ProcessRule getProcessRule(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.model.ProcessRule)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

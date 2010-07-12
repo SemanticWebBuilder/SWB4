@@ -306,6 +306,12 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
         return org.semanticwb.process.model.ProcessPeriod.ClassMgr.createProcessPeriod(id,this);
     }
 
+    public org.semanticwb.process.model.ProcessPeriod createProcessPeriod()
+    {
+        long id=getSemanticObject().getModel().getCounter(swp_ProcessPeriod);
+        return org.semanticwb.process.model.ProcessPeriod.ClassMgr.createProcessPeriod(String.valueOf(id),this);
+    } 
+
     public void removeProcessPeriod(String id)
     {
         org.semanticwb.process.model.ProcessPeriod.ClassMgr.removeProcessPeriod(id, this);
@@ -1085,6 +1091,12 @@ public abstract class ProcessSiteBase extends org.semanticwb.model.WebSite imple
     {
         return org.semanticwb.process.model.ProcessRule.ClassMgr.createProcessRule(id,this);
     }
+
+    public org.semanticwb.process.model.ProcessRule createProcessRule()
+    {
+        long id=getSemanticObject().getModel().getCounter(swp_ProcessRule);
+        return org.semanticwb.process.model.ProcessRule.ClassMgr.createProcessRule(String.valueOf(id),this);
+    } 
 
     public void removeProcessRule(String id)
     {

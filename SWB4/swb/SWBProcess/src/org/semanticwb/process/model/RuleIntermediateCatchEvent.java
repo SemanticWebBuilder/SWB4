@@ -2,6 +2,7 @@ package org.semanticwb.process.model;
 
 import bsh.Interpreter;
 import java.util.Date;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -20,29 +21,19 @@ public class RuleIntermediateCatchEvent extends org.semanticwb.process.model.bas
     public void execute(FlowNodeInstance instance, User user)
     {
         boolean cond=false;
-        String scond=getRule();
-
-        Object ret=null;
-        try
+        Iterator<ProcessRuleRef> it=listProcessRuleRefs();
+        while (it.hasNext())
         {
-            long ini=System.currentTimeMillis();
-            Interpreter i = new Interpreter();  // Construct an interpreter
-            //i.set("this",this);
-            i.set("instance", instance);
-            i.set("user", user);
-            i.eval("import org.semanticwb.process.model.*");
-
-            ret=i.eval(scond);
-            System.out.println("ret:"+ret);
-            System.out.println("time:"+ (System.currentTimeMillis()-ini ));
-        }catch(Exception e)
-        {
-            log.error(e);
-        }
-        //String action=source.getAction();
-        if(ret!=null && ret instanceof Boolean)
-        {
-            if((Boolean)ret)cond=true;
+            ProcessRuleRef ref = it.next();
+            if(ref.isActive())
+            {
+                ProcessRule rule=ref.getProcessRule();
+                if(rule.evaluate(instance, user))
+                {
+                    cond = true;
+                    break;
+                }
+            }
         }
 
         if(cond)
@@ -60,4 +51,6 @@ public class RuleIntermediateCatchEvent extends org.semanticwb.process.model.bas
             }
         }
     }
+
+
 }

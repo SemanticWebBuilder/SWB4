@@ -28,7 +28,7 @@ public class SignalIntermediateThrowEvent extends org.semanticwb.process.model.b
                     String code2=((SignalIntermediateCatchEvent)ge).getActionCode();
                     if((code!=null && code.equals(code2))  || (code==null && code2==null))
                     {
-                        instance.executeRelatedFlowNodeInstance((FlowNode)ge,null, user);
+                        instance.executeRelatedFlowNodeInstance((FlowNode)ge, null, user);
                     }
                 }
             }

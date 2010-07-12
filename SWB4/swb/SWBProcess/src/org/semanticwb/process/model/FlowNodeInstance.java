@@ -104,6 +104,17 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      */
     public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, ConnectionObject con, User user)
     {
+        return executeRelatedFlowNodeInstance(node, this, con, user);
+    }
+
+    /**
+     * Regresa instancia del FlowNode pasado por parametro,
+     * busca dentro de los nodo hermanos detro del mismo proceso
+     * Si la instancia no esta creada la crea, la inicia y la executa
+     * Si la instancia ya existe, la resetea y la executa
+     */
+    public FlowNodeInstance executeRelatedFlowNodeInstance(FlowNode node, FlowNodeInstance ref, ConnectionObject con, User user)
+    {
         FlowNodeInstance inst=getRelatedFlowNodeInstance(node);
         if(inst==null)
         {
@@ -119,11 +130,11 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         }
         if(inst.getStatus()==Instance.STATUS_INIT)
         {
-            inst.start(this,con,user);
+            inst.start(ref,con,user);
         }else
         {
             if(con!=null)inst.setFromConnection(con);
-            inst.setSourceInstance(this);
+            inst.setSourceInstance(ref);
             inst.execute(user);
         }
         return inst;
@@ -137,7 +148,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
      */
     public void abortDependencies(User user)
     {
-        //System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
+        System.out.println("abortDependencies:"+getId()+" "+getFlowNodeType().getClass().getName()+" "+getFlowNodeType().getTitle());
         FlowNode type=getFlowNodeType();
 
         //Cerrar dependencias

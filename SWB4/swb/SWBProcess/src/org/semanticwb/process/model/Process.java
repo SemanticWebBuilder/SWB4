@@ -21,6 +21,7 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
      */
     public ProcessInstance createInstance()
     {
+        System.out.println("createInstance process:"+this);
         ProcessInstance inst=null;
         inst=this.getProcessSite().createProcessInstance();
         inst.setProcessType(this);

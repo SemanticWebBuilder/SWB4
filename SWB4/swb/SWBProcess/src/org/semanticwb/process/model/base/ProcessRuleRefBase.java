@@ -23,6 +23,12 @@ public abstract class ProcessRuleRefBase extends org.semanticwb.model.Reference 
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessRuleRef>(it, true);
         }
 
+        public static org.semanticwb.process.model.ProcessRuleRef createProcessRuleRef(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.ProcessRuleRef.ClassMgr.createProcessRuleRef(String.valueOf(id), model);
+        }
+
         public static org.semanticwb.process.model.ProcessRuleRef getProcessRuleRef(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.model.ProcessRuleRef)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);

@@ -78,7 +78,6 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
     }
 
 
-
     @Override
     public boolean hasRoleRef(RoleRef value) {
         UserTask ut=getUserTask();

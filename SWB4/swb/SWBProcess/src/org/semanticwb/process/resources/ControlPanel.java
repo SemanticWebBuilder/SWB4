@@ -1262,8 +1262,7 @@ public class ControlPanel extends GenericAdmResource
             if(strPropertyUri.contains("http://"))
             {
                 boolean bFound = false;
-                Iterator<ProcessObject> objit =
-                        ppi.getAllProcessObjects().iterator();
+                Iterator<ProcessObject> objit = ppi.listHeraquicalProcessObjects().iterator();
                 while((objit.hasNext()) && (bFound==false))
                 {
                     ProcessObject obj = objit.next();
