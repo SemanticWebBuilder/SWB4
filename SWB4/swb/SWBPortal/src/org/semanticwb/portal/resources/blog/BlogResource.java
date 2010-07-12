@@ -48,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -142,17 +143,17 @@ public class BlogResource extends GenericResource
         try
         {
             con.setAutoCommit(false);
-            
-            PreparedStatement pt=con.prepareStatement("CREATE TABLE wbblog (blogid int(10) unsigned NOT NULL auto_increment,blogname varchar(255) NOT NULL, PRIMARY KEY  (blogid)) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
+            String engine = SWBPlatform.getEnv("swb/mysqlJenaEngine", "INNODB"); //MAPS74 Mysql Cluster compatibility
+            PreparedStatement pt=con.prepareStatement("CREATE TABLE wbblog (blogid int(10) unsigned NOT NULL auto_increment,blogname varchar(255) NOT NULL, PRIMARY KEY  (blogid)) ENGINE="+engine+" AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
             pt.execute();            
             
-            pt=con.prepareStatement("CREATE TABLE wbblogcomments (blogid int(10) unsigned NOT NULL auto_increment,postid int(10) unsigned NOT NULL,commentid int(10) unsigned NOT NULL,comment text NOT NULL,userid varchar(40) NOT NULL,fec_alta datetime NOT NULL, PRIMARY KEY  USING BTREE (blogid,postid,commentid)) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
+            pt=con.prepareStatement("CREATE TABLE wbblogcomments (blogid int(10) unsigned NOT NULL auto_increment,postid int(10) unsigned NOT NULL,commentid int(10) unsigned NOT NULL,comment text NOT NULL,userid varchar(40) NOT NULL,fec_alta datetime NOT NULL, PRIMARY KEY  USING BTREE (blogid,postid,commentid)) ENGINE="+engine+" AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
             pt.execute();
             
-            pt=con.prepareStatement("CREATE TABLE wbblogpermissions (blogid int(10) unsigned NOT NULL auto_increment, userid varchar(45) NOT NULL, level int(10) unsigned NOT NULL,isrol tinyint(1) NOT NULL,PRIMARY KEY  (blogid,userid)) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
+            pt=con.prepareStatement("CREATE TABLE wbblogpermissions (blogid int(10) unsigned NOT NULL auto_increment, userid varchar(45) NOT NULL, level int(10) unsigned NOT NULL,isrol tinyint(1) NOT NULL,PRIMARY KEY  (blogid,userid)) ENGINE="+engine+" AUTO_INCREMENT=4 DEFAULT CHARSET=latin1");
             pt.execute();
             
-            pt=con.prepareStatement("CREATE TABLE wbblogpost ( postid int(10) unsigned NOT NULL auto_increment,  blogid int(10) unsigned NOT NULL,  title varchar(255) NOT NULL,  description text NOT NULL,  fec_alta datetime NOT NULL,  userid varchar(255) NOT NULL,  PRIMARY KEY  (postid,blogid),  KEY FK_post_1 (blogid)) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1");
+            pt=con.prepareStatement("CREATE TABLE wbblogpost ( postid int(10) unsigned NOT NULL auto_increment,  blogid int(10) unsigned NOT NULL,  title varchar(255) NOT NULL,  description text NOT NULL,  fec_alta datetime NOT NULL,  userid varchar(255) NOT NULL,  PRIMARY KEY  (postid,blogid),  KEY FK_post_1 (blogid)) ENGINE="+engine+" AUTO_INCREMENT=8 DEFAULT CHARSET=latin1");
             pt.execute();
             con.commit();
             con.setAutoCommit(true);            
