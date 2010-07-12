@@ -26,8 +26,8 @@ public class BPMSTask
         public final static int SORT_BY_DATE = 0;
         public final static int SORT_BY_TITLE = 1;
         public final static int SORT_BY_PROCESS = 2;
-        //public final static int SORT_BY_PRIORITY = 4; Al descomentar, aumentar MAX_SORT
-        public final static int MAX_SORT = 3;
+        public final static int SORT_BY_PRIORITY = 3;
+        public final static int MAX_SORT = 4;
 
         /**
         * Recibe una fecha en formato YYYY-MM-DD (del control Dojo) y lo convierte
@@ -204,6 +204,54 @@ public class BPMSTask
             }
             return vFilteredTasks;
         }
+
+        /**
+        * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks cuya
+        * prioridad corresponda a los seleccionados
+        *
+        * @param            vTasks Vector
+        * @param            filterValue String
+        * @return      		Vector con objetos FlowNodeInstance
+        * @see
+        */
+        public static Vector filterTasksByPriority(Vector vTasks,
+                String filterValue)
+        {
+            Vector vFilteredTasks = new Vector();
+            int index = 0;
+            try
+            {
+                if(filterValue.length()>0)
+                {
+                    Vector vFilterValues =
+                            BPMSProcessInstance.ClassMgr.stringToVector(
+                                filterValue);
+                    for(int i=0; i<vTasks.size();i++)
+                    {
+                        FlowNodeInstance fobi = (FlowNodeInstance)vTasks.get(i);
+                        if(null!=fobi){
+                            ProcessInstance pinst = fobi.getProcessInstance();
+                            if(null!=pinst){
+                                String strPriority = String.valueOf(pinst.getPriority());
+                                if(vFilterValues.contains(strPriority))
+                                {
+                                    vFilteredTasks.add(index,fobi);
+                                    index++;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    vFilteredTasks = vTasks;
+                }
+            }catch(Exception e){
+                System.out.println("Error en BPMSTask.filterByStatus:" +
+                        e.getMessage());
+                //log.error("Error en BPMSTask.filterByStatus", e);
+            }
+            return vFilteredTasks;
+        }
+
 
         /**
         * Genera un vector con todas las tareas (FlowNodeInstance) de vTasks cuyo
@@ -493,6 +541,20 @@ public class BPMSTask
             }
         }
 
+        public static void sortByPriority(Vector v){
+            try {
+                TaskLink.TaskLinkPriorityComparator comparator =
+                        new TaskLink.TaskLinkPriorityComparator();
+                Collections.sort(v,comparator);
+            }
+            catch(Exception e){
+                System.out.println("Error en BPMSTask.sortByPriority:" +
+                        e.getMessage());
+                //log.error("Error en BPMSTask.sortByPriority", e);
+            }
+        }
+
+
        /**
          * Ordena de manera ascendente un Vector de objetos TaskLink.
          * Utiliza la clase estatica TaskLinkTitleComparator para comparar
@@ -543,11 +605,9 @@ public class BPMSTask
                     case BPMSTask.ClassMgr.SORT_BY_PROCESS:
                         sortByProcess(v);
                         break;
-                        /*
                     case BPMSTask.ClassMgr.SORT_BY_PRIORITY:
                         sortByPriority(v);
                         break;
-                         */
                     default:
                         sortByDate(v);
                         break;
