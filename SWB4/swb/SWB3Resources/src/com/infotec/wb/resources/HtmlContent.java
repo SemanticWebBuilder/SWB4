@@ -38,7 +38,7 @@ import org.semanticwb.portal.api.*;
  *
  * @author Jei
  */
-public class HtmlContent extends GenericResource
+public class HtmlContent extends org.semanticwb.portal.api.GenericResource
 {
 
     @Override

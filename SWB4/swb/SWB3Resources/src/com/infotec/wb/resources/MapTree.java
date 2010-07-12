@@ -41,7 +41,7 @@ import org.semanticwb.portal.api.*;
  *
  * @author juan.fernandez
  */
-public class MapTree extends GenericResource{
+public class MapTree extends org.semanticwb.portal.api.GenericResource{
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {

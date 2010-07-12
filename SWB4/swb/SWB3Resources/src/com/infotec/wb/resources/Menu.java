@@ -40,7 +40,7 @@ import org.semanticwb.portal.api.*;
  *
  * @author Jei
  */
-public class Menu extends GenericResource
+public class Menu extends org.semanticwb.portal.api.GenericResource
 {
 
     @Override
