@@ -58,7 +58,7 @@ import org.semanticwb.servlet.internal.DistributorParams;
  * @since September 4th 2002, 13:09
  */
 
-public class RemoteWebApp extends GenericAdmResource
+public class RemoteWebApp extends org.semanticwb.portal.api.GenericAdmResource
 {
     private static Logger log = SWBUtils.getLogger(RemoteWebApp.class);
     

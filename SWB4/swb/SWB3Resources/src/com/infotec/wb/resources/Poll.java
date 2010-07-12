@@ -63,7 +63,7 @@ import org.semanticwb.portal.util.FileUpload;
  * @author :Jorge Alberto Jim�nez Sandoval (JAJS)
  */
 
-public class Poll extends GenericResource 
+public class Poll extends org.semanticwb.portal.api.GenericResource
 {
     private static Logger log = SWBUtils.getLogger(Poll.class);
     

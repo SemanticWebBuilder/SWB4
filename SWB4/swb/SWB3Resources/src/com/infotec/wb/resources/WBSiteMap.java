@@ -50,7 +50,7 @@ import org.semanticwb.portal.api.*;
  * @since : October 23th 2002, 19:11
  * @author : Infotec
  */
-public class WBSiteMap extends GenericAdmResource
+public class WBSiteMap extends org.semanticwb.portal.api.GenericAdmResource
 {
     private static Logger log = SWBUtils.getLogger(WBSiteMap.class);
     
