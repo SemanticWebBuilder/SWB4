@@ -53,7 +53,7 @@ public class ProcessForm extends GenericResource
         mgr.setAction(paramRequest.getActionUrl().setAction("process").toString());
         mgr.clearProperties();
 
-        Iterator<ProcessObject> it=foi.getAllProcessObjects().iterator();
+        Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
         while(it.hasNext())
         {
             ProcessObject obj=it.next();
@@ -98,7 +98,7 @@ public class ProcessForm extends GenericResource
         if("savecnf".equals(response.getAction()))
         {
             String data="";
-            Iterator<ProcessObject> it=foi.getAllProcessObjects().iterator();
+            Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
             while(it.hasNext())
             {
                 ProcessObject obj=it.next();
@@ -124,7 +124,7 @@ public class ProcessForm extends GenericResource
             SWBProcessFormMgr mgr=new SWBProcessFormMgr(foi);
             mgr.clearProperties();
 
-            Iterator<ProcessObject> it=foi.getAllProcessObjects().iterator();
+            Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
             while(it.hasNext())
             {
                 ProcessObject obj=it.next();
@@ -180,10 +180,11 @@ public class ProcessForm extends GenericResource
 
         out.println("<form action=\""+paramRequest.getActionUrl().setAction("savecnf")+"\" method=\"post\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+suri+"\">");
-        Iterator<ProcessObject> it=foi.getAllProcessObjects().iterator();
+        Iterator<ProcessObject> it=foi.listHeraquicalProcessObjects().iterator();
         while(it.hasNext())
         {
             ProcessObject obj=it.next();
+            System.out.println("inst:"+foi+" obj:"+obj);
             SemanticClass cls=obj.getSemanticObject().getSemanticClass();
             out.println("<h3>"+cls.getDisplayName(lang)+"</h3>");
             Iterator<SemanticProperty> itp=cls.listProperties();

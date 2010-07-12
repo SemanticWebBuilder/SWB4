@@ -58,15 +58,14 @@ public class SWBProcessFormMgr
         views=new HashMap();
         hidden=new HashMap();
         buttons=new ArrayList();
-        //TODO:
-//        Iterator<ProcessObject> objs=inst.getAllProcessObjects().iterator();
-//        while (objs.hasNext())
-//        {
-//            ProcessObject processObject = objs.next();
-//            SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
-//            mgr.setType(m_type);
-//            mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);
-//        }
+        Iterator<ProcessObject> objs=inst.listHeraquicalProcessObjects().iterator();
+        while (objs.hasNext())
+        {
+            ProcessObject processObject = objs.next();
+            SWBFormMgr mgr=new SWBFormMgr(processObject.getSemanticObject(),null,SWBFormMgr.MODE_EDIT);
+            mgr.setType(m_type);
+            mgrs.put(processObject.getSemanticObject().getSemanticClass().getURI(),mgr);
+        }
     }
     
     public void clearProperties()

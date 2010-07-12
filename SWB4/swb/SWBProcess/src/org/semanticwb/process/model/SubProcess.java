@@ -23,6 +23,7 @@ public class SubProcess extends org.semanticwb.process.model.base.SubProcessBase
     @Override
     public FlowNodeInstance createInstance(ContainerInstanceable pinst)
     {
+        System.out.println("createInstance subprocess:"+this);
         SubProcessInstance inst=(SubProcessInstance)super.createInstance(pinst);
         Iterator<SemanticObject> it=listProcessClasses();
         while(it.hasNext())
@@ -32,7 +33,15 @@ public class SubProcess extends org.semanticwb.process.model.base.SubProcessBase
             SemanticClass cls=sobj.transformToSemanticClass();
             long id=model.getCounter(cls);
             SemanticObject ins=model.createSemanticObjectById(String.valueOf(id), cls);
+            //System.out.println(sobj+" "+model+" "+cls+" "+id+" "+ins);
             inst.addProcessObject((ProcessObject)ins.createGenericInstance());
+
+//            Iterator it2=inst.listProcessObjects();
+//            while (it2.hasNext())
+//            {
+//                Object object = it2.next();
+//                System.out.println("obj:"+object);
+//            }
         }
         return inst;
     }

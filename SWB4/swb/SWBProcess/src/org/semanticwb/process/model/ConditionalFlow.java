@@ -1,6 +1,7 @@
 package org.semanticwb.process.model;
 
 import bsh.Interpreter;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -19,41 +20,19 @@ public class ConditionalFlow extends org.semanticwb.process.model.base.Condition
     public boolean evaluate(FlowNodeInstance sourceInstance, User user)
     {
         boolean cond=false;
-        String scond=getFlowCondition();
-
-        FlowNodeInstance targetInstance=null;
-        GraphicalElement target=getTarget();
-        if(target instanceof FlowNode)
+        Iterator<ProcessRuleRef> it=listProcessRuleRefs();
+        while (it.hasNext())
         {
-            FlowNode node=(FlowNode)target;
-            targetInstance=sourceInstance.getRelatedFlowNodeInstance(node);
-        }
-        
-        Object ret=null;
-        try
-        {
-            long ini=System.currentTimeMillis();
-            Interpreter i = new Interpreter();  // Construct an interpreter
-            //i.set("this",this);
-            i.set("source", sourceInstance);
-            i.set("target", targetInstance);
-            i.set("user", user);
-            i.set("accepted", Instance.ACTION_ACCEPT.equals(sourceInstance.getAction()));
-            i.set("rejected", Instance.ACTION_REJECT.equals(sourceInstance.getAction()));
-            i.set("canceled", Instance.ACTION_CANCEL.equals(sourceInstance.getAction()));
-            i.eval("import org.semanticwb.process.model.*");
-
-            ret=i.eval(getFlowCondition());
-            System.out.println("ret:"+ret);
-            System.out.println("time:"+ (System.currentTimeMillis()-ini ));
-        }catch(Exception e)
-        {
-            log.error(e);
-        }
-        //String action=source.getAction();
-        if(ret!=null && ret instanceof Boolean)
-        {
-            if((Boolean)ret)cond=true;
+            ProcessRuleRef ref = it.next();
+            if(ref.isActive())
+            {
+                ProcessRule rule=ref.getProcessRule();
+                if(rule.evaluate(sourceInstance, user))
+                {
+                    cond = true;
+                    break;
+                }
+            }
         }
         return cond;
     }

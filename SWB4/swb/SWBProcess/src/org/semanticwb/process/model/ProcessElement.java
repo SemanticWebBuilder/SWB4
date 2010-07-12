@@ -1,5 +1,7 @@
 package org.semanticwb.process.model;
 
+import java.util.Iterator;
+
 
 public class ProcessElement extends org.semanticwb.process.model.base.ProcessElementBase 
 {
@@ -7,4 +9,5 @@ public class ProcessElement extends org.semanticwb.process.model.base.ProcessEle
     {
         super(base);
     }
+
 }

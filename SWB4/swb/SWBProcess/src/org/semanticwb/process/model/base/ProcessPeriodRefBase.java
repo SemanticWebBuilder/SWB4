@@ -23,6 +23,12 @@ public abstract class ProcessPeriodRefBase extends org.semanticwb.model.Referenc
             return new org.semanticwb.model.GenericIterator<org.semanticwb.process.model.ProcessPeriodRef>(it, true);
         }
 
+        public static org.semanticwb.process.model.ProcessPeriodRef createProcessPeriodRef(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.process.model.ProcessPeriodRef.ClassMgr.createProcessPeriodRef(String.valueOf(id), model);
+        }
+
         public static org.semanticwb.process.model.ProcessPeriodRef getProcessPeriodRef(String id, org.semanticwb.model.SWBModel model)
         {
             return (org.semanticwb.process.model.ProcessPeriodRef)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
