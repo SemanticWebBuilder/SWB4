@@ -38,7 +38,6 @@ import org.semanticwb.platform.SessionUser;
 import java.security.Principal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
