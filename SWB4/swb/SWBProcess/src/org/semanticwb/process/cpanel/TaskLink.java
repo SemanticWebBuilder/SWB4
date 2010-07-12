@@ -19,6 +19,7 @@ public class TaskLink {
     private String tlLegend;
     private FlowNodeInstance fobi;
     private Hashtable artifactValues;
+    private int tlPriority;
 
         public TaskLink(FlowNodeInstance fobi, String tlHref,
                 String tlLegend, Hashtable artifactValues)
@@ -27,6 +28,7 @@ public class TaskLink {
             this.tlHref = tlHref;
             this.tlLegend = tlLegend;
             this.artifactValues = artifactValues;
+            this.tlPriority = getFlowNodePriority();
         }
 
         public TaskLink(FlowNodeInstance fobi, String tlHref, String tlLegend)
@@ -34,6 +36,7 @@ public class TaskLink {
             this.fobi = fobi;
             this.tlHref = tlHref;
             this.tlLegend = tlLegend;
+            this.tlPriority = getFlowNodePriority();
         }
 
         public TaskLink(FlowNodeInstance fobi)
@@ -41,6 +44,7 @@ public class TaskLink {
             this.fobi = fobi;
             this.tlHref = "";
             this.tlLegend = "";
+            this.tlPriority = getFlowNodePriority();
         }
 
         public Hashtable getTaskLinkArtifactValues(){
@@ -106,6 +110,25 @@ public class TaskLink {
                 :this.getFlowNodeType().getParent().getTitle();
              */
             return strProcessTitle;
+        }
+
+        public int getPriority(){
+            return this.tlPriority;
+        }
+
+        public int getFlowNodePriority(){
+            int intPriority = 2;
+            try{
+                ProcessInstance pinst = this.fobi.getProcessInstance();
+                if(null!=pinst){
+                    intPriority = pinst.getPriority();
+                }
+            }catch(Exception e){
+                //log.error("Error en TaskLink.getFlowNodePriority", e);
+                System.out.println("Error en TaskLink.getFlowNodePriority:" +
+                    e.getMessage());
+            }
+            return intPriority;
         }
 
         public String getFlowNodeParentProcessURI()
@@ -291,6 +314,30 @@ public class TaskLink {
 			if(result==0){
 				result = date1.compareTo(date2);
 			}
+            return result;
+        }
+    }
+
+    static class TaskLinkPriorityComparator implements Comparator{
+        public int compare(Object obj1, Object obj2){
+            int result=0;
+            int int1 = 0;
+            int int2 = 0;
+            TaskLink tlink1 = (TaskLink)obj1;
+            TaskLink tlink2 = (TaskLink)obj2;
+            FlowNodeInstance fobi1 = tlink1.getTaskLinkFlowNodeInstance();
+            FlowNodeInstance fobi2 = tlink2.getTaskLinkFlowNodeInstance();
+            int1 = tlink1.getFlowNodePriority();
+            int2 = tlink2.getFlowNodePriority();
+            Date date1 = (Date)fobi1.getCreated();
+            Date date2 = (Date)fobi2.getCreated();
+            if( int1 > int2 ){
+                result = 1;
+            } else if( int1 < int2 ) {
+                result = -1;
+            } else {
+                result = date1.compareTo(date2);
+            }
             return result;
         }
     }
