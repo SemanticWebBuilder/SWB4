@@ -347,7 +347,7 @@ public class Distributor implements InternalServlet
             try//Traer template y comprimir salida..
             {
                 TemplateImp currTemplate = (TemplateImp)SWBPortal.getTemplateMgr().getTemplate(user, webpage);
-                //Trae pkantilla por defecto
+                //Trae plantilla por defecto
                 if(currTemplate==null)
                 {
                     Template aux=webpage.getWebSite().getDefaultTemplate();
@@ -360,7 +360,7 @@ public class Distributor implements InternalServlet
                 if(currTemplate==null)
                 {
                     log.warn("No se encontro template para la seccion:" + webpage.getId());
-                    response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento... ");
+                    response.sendError(500, "La pagina " + request.getRequestURI() + " no esta disponible por el momento, no se encontro plantilla...");
                     log.debug("Distributor: SendError 500");
                     return false;
                 }
