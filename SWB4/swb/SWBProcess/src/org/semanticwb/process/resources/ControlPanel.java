@@ -35,10 +35,10 @@ public class ControlPanel extends GenericAdmResource
 {
 
     private static Font rtfTitleFont = new Font(Font.HELVETICA, 14, Font.BOLD, new Color(255, 255, 255));
-    private static Font rtfColumnTitleFont = new Font(Font.HELVETICA, 10, Font.BOLD);
+    private static Font rtfColumnTitleFont = new Font(Font.HELVETICA, 8, Font.BOLD);
     private static Font rtfCellFont = new Font(Font.HELVETICA, 8);
     private static Font pdfTitleFont = new Font(Font.HELVETICA, 14, Font.BOLD, new Color(255, 255, 255));
-    private static Font pdfColumnTitleFont = new Font(Font.HELVETICA, 10, Font.BOLD);
+    private static Font pdfColumnTitleFont = new Font(Font.HELVETICA, 8, Font.BOLD);
     private static Font pdfCellFont = new Font(Font.HELVETICA, 8);
     private static Font pdfFooterFont = new Font(Font.HELVETICA, 10);
     private static Color pdfHeaderTitleBackground = new Color (0, 153, 153);
@@ -58,7 +58,7 @@ public class ControlPanel extends GenericAdmResource
             "/swbadmin/ControlPanelReport.rtf";
     public final static String strDownloadRtf  = SWBPortal.getContextPath() +
             "/swbadmin/ControlPanelReport.rtf";
-    public final static int reportColumnNumber = 10;
+    public final static int reportColumnNumber = 11;
     public final static int reportCellPadding = 4;
     public final static int reportHeaderPadding = 6;
     public final static int pdfTableWidthPercentage = 100;
@@ -68,22 +68,25 @@ public class ControlPanel extends GenericAdmResource
     public final static int FILTER_BY_TITLE = 1;
     public final static int FILTER_BY_PROCESS = 2;
     public final static int FILTER_BY_STATUS = 3;
-    //public final static int FILTER_BY_PRIORITY = 4; Al descomentar, aumentar MAX_FILTER
-    public final static int MAX_FILTER = 4;
+    public final static int FILTER_BY_PRIORITY = 4;
+    public final static int MAX_FILTER = 5;
     public final static String END_DATE_FILTER_CTRL = "fechaFin";
     public final static String INITIAL_DATE_FILTER_CTRL = "fechaIni";
     public final static String PROCESS_FILTER_CTRL = "cboFilterProcess";
     public final static String STATUS_FILTER_CTRL = "cboFilterStatus";
     public final static String TITLE_FILTER_CTRL = "cboFilterTaskTitle";
+    public final static String PRIORITY_FILTER_CTRL = "cboPriority";
     public final static String SORTING_CTRL = "cboSortBy";
     public final static String END_DATE_REPORT_CTRL="repFechaFin";
     public final static String INITIAL_DATE_REPORT_CTRL="repFechaIni";
     public final static String PROCESS_REPORT_CTRL = "cboReportProcess";
     public final static String STATUS_REPORT_CTRL = "cboReportStatus";
+    public final static String PRIORITY_REPORT_CTRL = "cboReportPriority";
     //org.semanticwb.process.model.Activity
     public final static String ALL_STATUS = Instance.STATUS_PROCESSING + "|" +
             Instance.STATUS_OPEN + "|" + Instance.STATUS_ABORTED + "|"
             + Instance.STATUS_CLOSED + "|" + Instance.STATUS_STOPED + "|";
+    public final static String ALL_PRIORITY = 1 + "|" + 2 + "|" + 3 + "|" + 4 + "|" + 5 + "|";
 
     private static Logger log = SWBUtils.getLogger(ControlPanel.class);
     private final static String strDefaultHref =
@@ -255,14 +258,14 @@ public class ControlPanel extends GenericAdmResource
                             //strLegend = strLegend + pp.getURI() + "|";
                             ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
                             vLegend.add(iLegend, compy);
-                            iLegend++;                            
+                            iLegend++;
                         }
                         if(pp.isAppliedOnTaskColumn())
                         {
                             //strColumns = strColumns + pp.getURI() + "|";
                             ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
                             vColumns.add(iColumns, compy);
-                            iColumns++;                            
+                            iColumns++;
                             columnCount++;
                         }
                     }
@@ -434,11 +437,9 @@ public class ControlPanel extends GenericAdmResource
                             BPMSTask.ClassMgr.filterTasksByTitle(v,
                                 filterValues);
                     break;
-                    /*
                 case FILTER_BY_PRIORITY:
-                    vFilteredTasks = filterByPriority(v,filterValues);
+                    vFilteredTasks = BPMSTask.ClassMgr.filterTasksByPriority(v,filterValues);
                     break;
-                     */
                 default:
                     vFilteredTasks =
                             BPMSTask.ClassMgr.filterTasksByDate(v,
@@ -485,9 +486,14 @@ public class ControlPanel extends GenericAdmResource
                 request.getParameter(STATUS_FILTER_CTRL)==null
                 ?"-1"
                 :request.getParameter(STATUS_FILTER_CTRL);
+            String strFilterPriority =
+                request.getParameter(PRIORITY_FILTER_CTRL)==null
+                ?"-1"
+                :request.getParameter(PRIORITY_FILTER_CTRL);
             if(!strFilterStatus.equalsIgnoreCase("-1") ||
                     !strFilterProcess.equalsIgnoreCase("0") ||
-                    !strInitialFilterDate.equalsIgnoreCase(""))
+                    !strInitialFilterDate.equalsIgnoreCase("") ||
+                    !strFilterPriority.equalsIgnoreCase("-1"))
             {
                 if(!strFilterProcess.equalsIgnoreCase("0"))
                 {
@@ -503,10 +509,21 @@ public class ControlPanel extends GenericAdmResource
                     vFiltered = filterTasks(vFiltered, FILTER_BY_STATUS, strFilterStatus);
                     strFilterPagination = strFilterPagination + "&" + STATUS_FILTER_CTRL + "=" + strFilterStatus;
                 }
-                if(!strInitialFilterDate.equalsIgnoreCase(""))
+                if(!strFilterPriority.equalsIgnoreCase("-1"))
                 {
                     if(strFilterProcess.equalsIgnoreCase("0") &&
                             strFilterStatus.equalsIgnoreCase("-1"))
+                    {
+                       vFiltered = vTasks;
+                    }
+                    strFilterPagination = strFilterPagination + "&" + PRIORITY_FILTER_CTRL + "=" + strFilterPriority;
+                    vFiltered = filterTasks(vFiltered, FILTER_BY_PRIORITY, strFilterPriority);
+                }
+                if(!strInitialFilterDate.equalsIgnoreCase(""))
+                {
+                    if(strFilterProcess.equalsIgnoreCase("0") &&
+                            strFilterStatus.equalsIgnoreCase("-1") &&
+                            strFilterPriority.equalsIgnoreCase("-1"))
                     {
                        vFiltered = vTasks;
                     }
@@ -517,9 +534,9 @@ public class ControlPanel extends GenericAdmResource
                     {
                         strFilterPagination = strFilterPagination + "&" + END_DATE_FILTER_CTRL + "=" + strEndFilterDate;
                         strEndFilterDate = BPMSTask.ClassMgr.changeDateFormat(strEndFilterDate);
-                        strFilterValue = strFilterValue + strEndFilterDate+"|";                        
+                        strFilterValue = strFilterValue + strEndFilterDate+"|";
                     }
-                    vFiltered = filterTasks(vFiltered, FILTER_BY_DATE, strFilterValue);                    
+                    vFiltered = filterTasks(vFiltered, FILTER_BY_DATE, strFilterValue);
                 }
             } else {
                 vFiltered = vTasks;
@@ -571,6 +588,11 @@ public class ControlPanel extends GenericAdmResource
                 request.getParameter(TITLE_FILTER_CTRL)==null
                 ?"-1"
                 :request.getParameter(TITLE_FILTER_CTRL);
+            String strFilterPriority =
+                request.getParameter(PRIORITY_FILTER_CTRL)==null
+                ?"-1"
+                :request.getParameter(PRIORITY_FILTER_CTRL);
+
             sb.append(paramsRequest.getLocaleString("lblAppliedFilters") +
                     "<br/>");
             if(!strFilterProcess.equalsIgnoreCase("0")){
@@ -579,7 +601,11 @@ public class ControlPanel extends GenericAdmResource
             }
             if(!strFilterStatus.equalsIgnoreCase("-1")){
                 sb.append(paramsRequest.getLocaleString("lblFilterStatus") +
-                        " " + strFilterStatus+ "<br/>");
+                        " " +  getStatusDescription(paramsRequest, Integer.parseInt(strFilterStatus)) + "<br/>");
+            }
+            if(!strFilterPriority.equalsIgnoreCase("-1")){
+                sb.append(paramsRequest.getLocaleString("lblFilterPriority") +
+                        " " + strFilterPriority+ "<br/>");
             }
             if(!strFilterTitle.equalsIgnoreCase("-1")){
                 sb.append(paramsRequest.getLocaleString("lblFilterTaskName") +
@@ -590,7 +616,7 @@ public class ControlPanel extends GenericAdmResource
                         " " + strInitialFilterDate);
                 if(!strEndFilterDate.equalsIgnoreCase(""))
                 {
-                    sb.append(paramsRequest.getLocaleString("lblFilterEndDate")
+                    sb.append(" " + paramsRequest.getLocaleString("lblFilterEndDate")
                             + " " + strEndFilterDate );
                 }
                 sb.append("<br/>" );
@@ -1262,6 +1288,7 @@ public class ControlPanel extends GenericAdmResource
             if(strPropertyUri.contains("http://"))
             {
                 boolean bFound = false;
+                //Iterator<ProcessObject> objit = ppi.getAllProcessObjects().iterator();
                 Iterator<ProcessObject> objit = ppi.listHeraquicalProcessObjects().iterator();
                 while((objit.hasNext()) && (bFound==false))
                 {
@@ -1370,7 +1397,7 @@ public class ControlPanel extends GenericAdmResource
     * @return      		String con valor de la propiedad
     */
     public String getTaskInstanceProperty(FlowNodeInstance flobInst,
-            String strProperty)
+            String strProperty, SWBParamRequest paramRequest)
     {
         String strValue = "";
         try
@@ -1380,7 +1407,8 @@ public class ControlPanel extends GenericAdmResource
                 strValue = flobInst.getId()==null ?"" :flobInst.getId();
             } else if(strProperty.equalsIgnoreCase("status"))
             {
-                strValue = String.valueOf(flobInst.getStatus());
+                //strValue = String.valueOf(flobInst.getStatus());
+                strValue = getStatusDescription(paramRequest, flobInst.getStatus());
             } else if(strProperty.equalsIgnoreCase("uri"))
             {
                 strValue = flobInst.getURI()==null ?"" :flobInst.getURI();
@@ -1435,7 +1463,7 @@ public class ControlPanel extends GenericAdmResource
     * @return      		String
     */
     public String parseTaskAttributes(FlowNodeInstance fobi,
-            String strAttributes, int parseType)
+            String strAttributes, int parseType, SWBParamRequest paramRequest)
     {
         String strParsed = "";
         try
@@ -1461,7 +1489,7 @@ public class ControlPanel extends GenericAdmResource
                     } else if(strTemp.contains("TaskInstance.")){
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[1];
-                        strPropValue = getTaskInstanceProperty(fobi, strPropName);
+                        strPropValue = getTaskInstanceProperty(fobi, strPropName, paramRequest);
                     } else {
                         if(countFixedParameters==0)
                         {
@@ -1508,7 +1536,7 @@ public class ControlPanel extends GenericAdmResource
     * @return      		Hashtable
     */
     public Hashtable parseTaskAttributes(FlowNodeInstance fobi,
-            String strAttributes)
+            String strAttributes, SWBParamRequest paramRequest)
     {
         Hashtable hash = new Hashtable();
         try
@@ -1535,7 +1563,7 @@ public class ControlPanel extends GenericAdmResource
                     } else if(strTemp.contains("TaskInstance.")){
                         String[] arrTemp = strTemp.split("\\.");
                         strPropName = arrTemp[0] + "." + arrTemp[1];
-                        strPropValue = getTaskInstanceProperty(fobi, arrTemp[1]);
+                        strPropValue = getTaskInstanceProperty(fobi, arrTemp[1],paramRequest);
                     }
                     hash.put(strPropName, strPropValue);
                 }
@@ -1583,9 +1611,9 @@ public class ControlPanel extends GenericAdmResource
                                 String strTempHref = strDefaultHref + arrAtt.get(0).toString();
                                 String strTempLegend = arrAtt.get(1).toString();
                                 String strTempColumns = arrAtt.get(2).toString();
-                                String strHref = parseTaskAttributes(fobi, strTempHref, 0);
-                                String strLegend = parseTaskAttributes(fobi, strTempLegend, 1);
-                                Hashtable htColumns = parseTaskAttributes(fobi, strTempColumns);
+                                String strHref = parseTaskAttributes(fobi, strTempHref, 0, paramRequest);
+                                String strLegend = parseTaskAttributes(fobi, strTempLegend, 1, paramRequest);
+                                Hashtable htColumns = parseTaskAttributes(fobi, strTempColumns, paramRequest);
                                 TaskLink tlink = new TaskLink(fobi, strHref, strLegend, htColumns);
                                 vTaskLinks.add(intTasks,tlink);
                                 intTasks++;
@@ -1660,24 +1688,25 @@ public class ControlPanel extends GenericAdmResource
                 sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
                 //sb.append("<p>" + paramRequest.getLocaleString("lblTotalTask") + "</p>");
                 sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
+                java.util.List<String> colNames = new ArrayList();
                 for(int i=iniRow; i<endRow; i++)
                 {
                     TaskLink tlink = (TaskLink) vTaskLinks.get(i);
                     Hashtable hash = tlink.getTaskLinkArtifactValues();
-                    java.util.List<String> colNames = new ArrayList();
 
-                    if(!tlink.getFlowNodeParentProcess().equalsIgnoreCase(strTop))
+                    if(!tlink.getFlowNodeParentProcessURI().equalsIgnoreCase(strTop))
                     {
                         String tmpUri = tlink.getFlowNodeParentProcessURI();
+                        String parentName = tlink.getFlowNodeParentProcess();
                         ArrayList arrAttributes = (ArrayList)taskAttributes.get(tmpUri);
                         String strColumnsNames = String.valueOf(arrAttributes.get(2));
                         String[] colNamesArr = strColumnsNames.split("\\|");
                         java.util.List<String> listColNames = new ArrayList<String>(colNamesArr.length);
                         for (String s : colNamesArr) {
-                         listColNames.add(s);
+                            listColNames.add(s);
                         }
                         colNames = listColNames;
-                        sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + tmpUri + "</td></tr>");
+                        sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + parentName + "</td></tr>");
                         //sb.append("<ul><p>" + tmpUri + "</p>");
                         sb.append("<tr><td>" + paramRequest.getLocaleString("lblTaskTitle") + "</td>");
                         //sb.append("<li><ul><li>" + paramRequest.getLocaleString("lblTaskTitle") + "</li>");
@@ -1701,7 +1730,7 @@ public class ControlPanel extends GenericAdmResource
                     sb.append("<tr><td>");
                     sb.append("<a href=\"");
                     sb.append(tlink.getTaskLinkHref());
-                    sb.append("\">");
+                    sb.append("\" >");
                     sb.append(tlink.getTaskLinkLegend());
                     //sb.append("</a></li>");
                     sb.append("</a></td>");
@@ -1809,6 +1838,13 @@ public class ControlPanel extends GenericAdmResource
             intSortType = getSortCriteria(paramRequest);
             SWBResourceURL url = paramRequest.getRenderUrl();
             boolean bClosedFilter = isClosedStatusFilterActive(paramRequest);
+            sbPrint.append("\n<script type=\"text/javascript\">");
+            sbPrint.append("\n   function direcciona(action){");
+            sbPrint.append("\n      document.forms['frmAdmin'].action = action;");
+            sbPrint.append("\n      document.forms['frmAdmin'].submit();");
+            sbPrint.append("\n   }");
+            sbPrint.append("\n</script>");
+
             sbPrint.append("<div class=\"swbform\">");
             sbPrint.append("<form name=\"frmAdmin\" action=\"" +
                     paramRequest.getRenderUrl().setAction("updateCustomization")
@@ -1866,12 +1902,9 @@ public class ControlPanel extends GenericAdmResource
                     paramRequest.getLocaleString("btnSave") + "\"/>");
             sbPrint.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
                     paramRequest.getLocaleString("btnCancel") +"\"/>");
-            sbPrint.append("</form>");
-            sbPrint.append("<form name=\"frmReport\" action=\"" +
-                    url.setAction("goToView") + "\" method=\"POST\">");
             sbPrint.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
-                    " value=\"" +
-                    paramRequest.getLocaleString("btnBack") + "\"/>");
+                    " onclick=\"direcciona('" + url.setAction("goToView") + "');\"" +
+                    " value=\"" + paramRequest.getLocaleString("btnBack") + "\"/>");
             sbPrint.append("</form>");
             sbPrint.append("</div>");
         } catch(Exception e){
@@ -2066,21 +2099,24 @@ public class ControlPanel extends GenericAdmResource
         try
         {
             String strProcessTitle = "";
+            int intPriority = 2;
             //fobi.getFlowNodeType().getParent().getTitle()==null ?"" :fobi.getFlowNodeType().getParent().getTitle();
             ProcessInstance fpinst = fobi.getProcessInstance();
             if(null!=fpinst){
+                intPriority = fpinst.getPriority();
                 org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
                 if(null!=fproc){
                     strProcessTitle = fproc.getTitle();
                 }
             }
-
             String strId = fobi.getId()==null
                 ?""
                 :fobi.getId();
             int intStatus = fobi.getStatus();
             String strStatus  =
                     getStatusDescription(paramsRequest, intStatus);
+            String strPriority  =
+                    getPriorityDescription(paramsRequest, intPriority);
             FlowNode fobType = fobi.getFlowNodeType();
             if(fobType!=null){
                 strTaskTitle = fobType.getTitle()==null
@@ -2122,6 +2158,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("<td class=\"cpCell\">" + strModifiedBy + "</td>");
             sb.append("<td class=\"cpCell\">" + strDateEnded + "</td>");
             sb.append("<td class=\"cpCell\">" + strEndedBy + "</td>");
+            sb.append("<td class=\"cpCell\">" + strPriority + "</td>");
             sb.append("</tr>");
 
         } catch(Exception e){
@@ -2257,6 +2294,16 @@ public class ControlPanel extends GenericAdmResource
                 org.w3c.dom.Text taskEndedByText =
                         doc.createTextNode(strTaskEndedBy);
                 taskEndedBy.appendChild(taskEndedByText);
+
+                int intTaskPriority = tlink.getPriority();
+                //TODO: getPriority Description
+                String strTaskPriority =
+                        String.valueOf(intTaskPriority);
+                org.w3c.dom.Element taskPriority = doc.createElement("taskPriority");
+                row.appendChild(taskPriority);
+                org.w3c.dom.Text taskPriorityText =
+                        doc.createTextNode(strTaskPriority);
+                taskPriority.appendChild(taskPriorityText);
             }
             org.w3c.dom.Element pageFooter = doc.createElement("pageFooter");
             pageFooter.setAttribute("pageFooterName", "pageFooterValue");
@@ -2377,6 +2424,9 @@ public class ControlPanel extends GenericAdmResource
                         ?""
                         :tlink.getFlowNodeInstanceEndedByName();
                 }
+                int intPriority = tlink.getPriority();
+                String strPriority = getPriorityDescription(paramsRequest, intPriority);
+
                 PdfPCell infoCell =
                         new PdfPCell(new Phrase(strProcessName,pdfCellFont));
                 infoCell.setPadding(reportCellPadding);
@@ -2408,6 +2458,9 @@ public class ControlPanel extends GenericAdmResource
                 infoCell.setPadding(reportCellPadding);
                 table.addCell(infoCell);
                 infoCell = new PdfPCell(new Phrase(strTaskEndedBy,pdfCellFont));
+                infoCell.setPadding(reportCellPadding);
+                table.addCell(infoCell);
+                infoCell = new PdfPCell(new Phrase(strPriority,pdfCellFont));
                 infoCell.setPadding(reportCellPadding);
                 table.addCell(infoCell);
             }
@@ -2492,13 +2545,11 @@ public class ControlPanel extends GenericAdmResource
             String strInitialReportDate =
                 request.getParameter(INITIAL_DATE_REPORT_CTRL)==null
                 ?""
-                :BPMSTask.ClassMgr.changeDateFormat(
-                    request.getParameter(INITIAL_DATE_REPORT_CTRL));
+                :BPMSTask.ClassMgr.changeDateFormat(request.getParameter(INITIAL_DATE_REPORT_CTRL));
             String strEndReportDate =
                 request.getParameter(END_DATE_REPORT_CTRL)==null
                 ?""
-                :BPMSTask.ClassMgr.changeDateFormat(
-                    request.getParameter(END_DATE_REPORT_CTRL));
+                :BPMSTask.ClassMgr.changeDateFormat(request.getParameter(END_DATE_REPORT_CTRL));
             String strAuthor =
                 currentUser.getFullName()==null
                 ?""
@@ -2513,10 +2564,11 @@ public class ControlPanel extends GenericAdmResource
                  paramsRequest.getLocaleString("cpHeaderRow6"),
                  paramsRequest.getLocaleString("cpHeaderRow7"),
                  paramsRequest.getLocaleString("cpHeaderRow8"),
-                 paramsRequest.getLocaleString("cpHeaderRow9")};
+                 paramsRequest.getLocaleString("cpHeaderRow9"),
+                 paramsRequest.getLocaleString("cpHeaderRow10")
+                };
             String strReportDates =
-                    paramsRequest.getLocaleString("lblCrReportStart") +
-                        strInitialReportDate;
+                    paramsRequest.getLocaleString("lblCrReportStart") + " " + strInitialReportDate;
             if(!strEndReportDate.equalsIgnoreCase(""))
             {
                 strReportDates = strReportDates + " " +
@@ -2629,6 +2681,9 @@ public class ControlPanel extends GenericAdmResource
                     getStatusDescription(paramsRequest, intStatus)==null
                     ?""
                     :getStatusDescription(paramsRequest, intStatus);
+                int intPriority = tlink.getPriority();
+                String strTaskPriority = getPriorityDescription(paramsRequest, intPriority);
+                //TODO: get description priority
                 String strTaskUpdated =
                     tlink.getFlowNodeInstanceModified()==null
                     ?""
@@ -2671,6 +2726,8 @@ public class ControlPanel extends GenericAdmResource
                 infoCell = new Cell(new Phrase(strTaskEnded,rtfCellFont));
                 table.addCell(infoCell);
                 infoCell = new Cell(new Phrase(strTaskEndedBy,rtfCellFont));
+                table.addCell(infoCell);
+                infoCell = new Cell(new Phrase(strTaskPriority,rtfCellFont));
                 table.addCell(infoCell);
             }
         } catch (com.lowagie.text.BadElementException be) {
@@ -2763,13 +2820,11 @@ public class ControlPanel extends GenericAdmResource
             String strInitialReportDate =
                 request.getParameter(INITIAL_DATE_REPORT_CTRL)==null
                 ?""
-                :BPMSTask.ClassMgr.changeDateFormat(
-                    request.getParameter(INITIAL_DATE_REPORT_CTRL));
+                :BPMSTask.ClassMgr.changeDateFormat(request.getParameter(INITIAL_DATE_REPORT_CTRL));
             String strEndReportDate =
                 request.getParameter(END_DATE_REPORT_CTRL)==null
                 ?""
-                :BPMSTask.ClassMgr.changeDateFormat(
-                    request.getParameter(END_DATE_REPORT_CTRL));
+                :BPMSTask.ClassMgr.changeDateFormat(request.getParameter(END_DATE_REPORT_CTRL));
             String strAuthor =
                 currentUser.getFullName()==null
                 ?""
@@ -2784,7 +2839,9 @@ public class ControlPanel extends GenericAdmResource
                  paramsRequest.getLocaleString("cpHeaderRow6"),
                  paramsRequest.getLocaleString("cpHeaderRow7"),
                  paramsRequest.getLocaleString("cpHeaderRow8"),
-                 paramsRequest.getLocaleString("cpHeaderRow9")};
+                 paramsRequest.getLocaleString("cpHeaderRow9"),
+                 paramsRequest.getLocaleString("cpHeaderRow10")
+            };
             int[] columnWidths;
             columnWidths = new int[strTableColumnNames.length];
             int colWidth = 100 / strTableColumnNames.length;
@@ -2793,7 +2850,7 @@ public class ControlPanel extends GenericAdmResource
                 columnWidths[i] = colWidth;
             }
             String strReportDates =
-                    paramsRequest.getLocaleString("lblCrReportStart") +
+                    paramsRequest.getLocaleString("lblCrReportStart") + " " +
                         strInitialReportDate;
             if(!strEndReportDate.equalsIgnoreCase(""))
             {
@@ -2882,13 +2939,20 @@ public class ControlPanel extends GenericAdmResource
                 ?""
                 :BPMSTask.ClassMgr.changeDateFormat(
                     request.getParameter(END_DATE_REPORT_CTRL));
+            sb.append("\n<script type=\"text/javascript\">");
+            sb.append("\n   function direcciona(action){");
+            sb.append("\n      document.forms['frmReport'].action = action;");
+            sb.append("\n      document.forms['frmReport'].submit();");
+            sb.append("\n   }");
+            sb.append("\n</script>");
+
             sb.append("<div class=\"swbform\">");
             sb.append("<div>" +
                     paramsRequest.getLocaleString("lblCrReportTitle") + " " +
                     currentUser.getFullName() + "</div>");
             sb.append("<div>" +
-                    paramsRequest.getLocaleString("lblCrReportStart") +
-                    strInitialReportDate +
+                    paramsRequest.getLocaleString("lblCrReportStart") + " " +
+                    strInitialReportDate + " " +
                     paramsRequest.getLocaleString("lblCrReportEnd") +
                     strEndReportDate + "</div>");
             //TODO: Agregar criterios
@@ -2914,7 +2978,9 @@ public class ControlPanel extends GenericAdmResource
                     "<th class=\"cpHeaderRow\">" +
                     paramsRequest.getLocaleString("cpHeaderRow8") + "</th>" +
                     "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow9") + "</th>");
+                    paramsRequest.getLocaleString("cpHeaderRow9") + "</th>" +
+                    "<th class=\"cpHeaderRow\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow10") + "</th>");
             for(int i=0; i<vAllTasks.size(); i++){
                 TaskLink tLink = (TaskLink) vAllTasks.get(i);
                 FlowNodeInstance fobi = tLink.getTaskLinkFlowNodeInstance();
@@ -2931,17 +2997,10 @@ public class ControlPanel extends GenericAdmResource
             sb.append(createRtfReport(request, paramsRequest));
             sb.append("</td></tr></table>");
             sb.append("</div>");
-            sb.append("<form name=\"frmReport\" action=\"" +
-                    url.setAction("selectReport") + "\" method=\"POST\">");
-            sb.append("<input type=\"SUBMIT\" " +
-                    "name=\"btnReport\"  value=\"" +
-                    paramsRequest.getLocaleString("btnNewReport") + "\"/>");
-            sb.append("</form>");
-            sb.append("<form name=\"frmReport\" action=\"" +
-                    url.setAction("goToView") + "\" method=\"POST\">");
-            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
-                    " value=\"" +
-                    paramsRequest.getLocaleString("btnBack") + "\"/>");
+            sb.append("<form name=\"frmReport\" action=\"" + url.setAction("selectReport") + "\" method=\"POST\">");
+            sb.append("<input type=\"SUBMIT\" " + "name=\"btnReport\"  value=\"" + paramsRequest.getLocaleString("btnNewReport") + "\"/>");
+            sb.append("<input type=\"SUBMIT\" " + "name=\"btnBack2View\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" +
+                    " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
             sb.append("</form>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.displayReport", e);
@@ -2990,6 +3049,7 @@ public class ControlPanel extends GenericAdmResource
         StringBuffer sb = new StringBuffer();
         try
         {
+            SWBResourceURL url = paramsRequest.getRenderUrl();
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
             sb.append("<script type=\"text/javascript\">");
@@ -3004,6 +3064,14 @@ public class ControlPanel extends GenericAdmResource
             sb.append("dojo.require(\"dijit.form.ComboBox\");");
             sb.append("dojo.require(\"dojox.validate.regexp\");");
             sb.append("</script>");
+
+            sb.append("\n<script type=\"text/javascript\">");
+            sb.append("\n   function direcciona(action){");
+            sb.append("\n      document.forms['frmSelectReport'].action = action;");
+            sb.append("\n      document.forms['frmSelectReport'].submit();");
+            sb.append("\n   }");
+            sb.append("\n</script>");
+
             sb.append("<div class=\"swbform\">" +
                     paramsRequest.getLocaleString("lblReportTitle") +
                     "<br/><br/>");
@@ -3018,7 +3086,7 @@ public class ControlPanel extends GenericAdmResource
                     "invalidMessage=\"" +
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/>");
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
             sb.append(paramsRequest.getLocaleString("lblReportEndDate")
                     + "<input id=\"" +END_DATE_REPORT_CTRL +
                     "\" name=\"" + END_DATE_REPORT_CTRL +"\"" +
@@ -3027,7 +3095,7 @@ public class ControlPanel extends GenericAdmResource
                     "invalidMessage=\"" +
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%; \"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/>");
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
             sb.append(paramsRequest.getLocaleString("lblReportProcess")
                     + " <select name=\""+PROCESS_REPORT_CTRL+ ""
                 + "\" id=\""+PROCESS_REPORT_CTRL+"\">");
@@ -3049,7 +3117,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("<label>" +
                     paramsRequest.getLocaleString("lblReportStatus")
                     + "</label><select name=\"" + STATUS_REPORT_CTRL +
-                    "\" id=\""+ STATUS_REPORT_CTRL + "\" MULTIPLE SIZE=10>");
+                    "\" id=\""+ STATUS_REPORT_CTRL + "\" MULTIPLE SIZE=6>");
                 sb.append("<option ");
                 sb.append("value=\"-1\">" +
                         paramsRequest.getLocaleString("cpAllTaskStatus") +
@@ -3061,10 +3129,32 @@ public class ControlPanel extends GenericAdmResource
                         vTaskStatus.get(i)) + "</option>");
             }
             sb.append("</select><br/><br/>");
+            Vector vTaskPriority =
+                    BPMSProcessInstance.ClassMgr.stringToVector(ALL_PRIORITY);
+            sb.append("<label>" +
+                    paramsRequest.getLocaleString("lblReportPriority")
+                    + "</label><select name=\"" + PRIORITY_REPORT_CTRL +
+                    "\" id=\""+ PRIORITY_REPORT_CTRL + "\" MULTIPLE SIZE=6>");
+                sb.append("<option ");
+                sb.append("value=\"-1\">" +
+                        paramsRequest.getLocaleString("cpAllTaskPriority") +
+                        "</option>");
+            for(int i=0; i<vTaskPriority.size(); i++){
+                sb.append("<option ");
+                sb.append("value=\"" + vTaskPriority.get(i) + "\">" +
+                        paramsRequest.getLocaleString("cpTaskPriority" +
+                        vTaskPriority.get(i)) + "</option>");
+            }
+            sb.append("</select><br/><br/>");
+
             sb.append("<input type=\"SUBMIT\" name=\"btnEdit\"  value=\"" +
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
             sb.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
+            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\"  value=\"" +
+                    paramsRequest.getLocaleString("btnBack") + "\"" +
+                    " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
+
             sb.append("</form>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getFilterForm", e);
@@ -3532,7 +3622,12 @@ public class ControlPanel extends GenericAdmResource
                     base.getAttribute("controlPanelTaskStatus")==null
                     ?""
                     :base.getAttribute("controlPanelTaskStatus");
+            String strControlPanelTaskPriority =
+                    base.getAttribute("controlPanelTaskPriority")==null
+                    ?""
+                    :base.getAttribute("controlPanelTaskPriority");
             strControlPanelTaskStatus = ALL_STATUS;
+            strControlPanelTaskPriority = ALL_PRIORITY;
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
             sb.append("<script type=\"text/javascript\">");
@@ -3547,6 +3642,14 @@ public class ControlPanel extends GenericAdmResource
             sb.append("dojo.require(\"dijit.form.ComboBox\");");
             sb.append("dojo.require(\"dojox.validate.regexp\");");
             sb.append("</script>");
+
+            sb.append("\n<script type=\"text/javascript\">");
+            sb.append("\n   function direcciona(action){");
+            sb.append("\n      document.forms['frmFilter'].action = action;");
+            sb.append("\n      document.forms['frmFilter'].submit();");
+            sb.append("\n   }");
+            sb.append("\n</script>");
+
             sb.append("<div class=\"swbform\">" +
                     paramsRequest.getLocaleString("lblFilterTitle") +
                     "<br/><br/>");
@@ -3561,7 +3664,7 @@ public class ControlPanel extends GenericAdmResource
                     "invalidMessage=\"" +
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/>");
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
             sb.append(paramsRequest.getLocaleString("lblFilterEndDate")
                     + "<input id=\"" + END_DATE_FILTER_CTRL +
                     "\" name=\"" + END_DATE_FILTER_CTRL +"\"" +
@@ -3570,7 +3673,7 @@ public class ControlPanel extends GenericAdmResource
                     "invalidMessage=\"" +
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/>");
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
             sb.append(paramsRequest.getLocaleString("lblFilterProcess")
                     + " <select name=\""+PROCESS_FILTER_CTRL+ ""
                 + "\" id=\""+PROCESS_FILTER_CTRL+"\">");
@@ -3604,16 +3707,31 @@ public class ControlPanel extends GenericAdmResource
                         vTaskStatus.get(i)) + "</option>");
             }
             sb.append("</select><br/><br/>");
+
+            Vector vTaskPriority =
+                    BPMSProcessInstance.ClassMgr.stringToVector(
+                        strControlPanelTaskPriority);
+            sb.append(paramsRequest.getLocaleString("lblFilterPriority")
+                    + " <select name=\""+PRIORITY_FILTER_CTRL+ ""
+                    + "\" id=\""+PRIORITY_FILTER_CTRL+"\">");
+                sb.append("<option ");
+                sb.append("value=\"-1\">" +
+                        paramsRequest.getLocaleString("cpAllTaskPriority") +
+                        "</option>");
+            for(int i=0; i<vTaskPriority.size(); i++){
+                sb.append("<option ");
+                sb.append("value=\"" + vTaskPriority.get(i) + "\">" +
+                        paramsRequest.getLocaleString("cpTaskPriority"+
+                        vTaskPriority.get(i)) + "</option>");
+            }
+            sb.append("</select><br/><br/>");
             sb.append("<input type=\"SUBMIT\" name=\"btnEdit\"  value=\"" +
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
             sb.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
-            sb.append("</form>");
-            sb.append("<form name=\"frmReport\" action=\"" +
-                    url.setAction("goToView") + "\" method=\"POST\">");
-            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
-                    " value=\"" +
-                    paramsRequest.getLocaleString("btnBack") + "\"/>");
+            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" value=\"" +
+                    paramsRequest.getLocaleString("btnBack") +
+                    "\" onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
             sb.append("</form>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getFilterForm", e);
@@ -3697,6 +3815,12 @@ public class ControlPanel extends GenericAdmResource
                 Resource base = paramsRequest.getResourceBase();
                 getResourceTaskAttributesMap(paramsRequest);
                 String strTitle = base.getAttribute("title");
+                out.println("\n<script type=\"text/javascript\">");
+                out.println("\n   function direcciona(action){");
+                out.println("\n      document.forms['frmEditCustomization'].action = action;");
+                out.println("\n      document.forms['frmEditCustomization'].submit();");
+                out.println("\n   }");
+                out.println("\n</script>");
                 out.println("<div id=\"worklist\">");
                 out.println("<p>" + strTitle + "</p>");
                 out.println("<p>" + getUsedFilters(paramsRequest, request).toString() + "</p>");
@@ -3708,26 +3832,19 @@ public class ControlPanel extends GenericAdmResource
                 //out.println("</ul>");
                 out.println("</table>");
                 out.println("</div>");
-                out.println("<form name=\"frmEditCustomization\" action=\"" +
+                out.println("<form id=\"frmEditCustomization\" name=\"frmEditCustomization\" action=\"" +
                         paramsRequest.getRenderUrl().setAction(
                         "editCustomization") + "\" method=\"POST\">");
                 out.println("<input type=\"SUBMIT\" name=\"btnEdit\" " +
-                        " value=\"" +
-                        paramsRequest.getLocaleString("btnCustomize") + "\"/>");
-                out.println("</form>");
-                out.println("<form name=\"frmEditFilters\" action=\"" +
-                        paramsRequest.getRenderUrl().setAction("editFilters") +
-                        "\" method=\"POST\">");
+                        " value=\"" + paramsRequest.getLocaleString("btnCustomize") + "\"/>");
                 out.println("<input type=\"SUBMIT\" name=\"btnFilter\" " +
                         " value=\"" +
-                        paramsRequest.getLocaleString("btnFilter") + "\"/>");
-                out.println("</form>");
-                out.println("<form name=\"frmReport\" action=\"" +
-                        paramsRequest.getRenderUrl().setAction("selectReport")
-                        + "\" method=\"POST\">");
-                out.println("<input type=\"SUBMIT\" " +
-                        "name=\"btnReport\"  value=\"" +
-                        paramsRequest.getLocaleString("btnReport") +  "\"/>");
+                        paramsRequest.getLocaleString("btnFilter") + "\" " +
+                        "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\" />");
+                out.println("<input type=\"SUBMIT\" name=\"btnReport\" " +
+                        " value=\"" +
+                        paramsRequest.getLocaleString("btnReport") + "\" " +
+                        "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\" />");
                 out.println("</form>");
             }
         } catch(Exception e){
@@ -3814,7 +3931,7 @@ public class ControlPanel extends GenericAdmResource
                 sb.append("<td><a href=\"" + sUrlLastPage);
                 if(!strFilterPagination.equalsIgnoreCase("")){
                     sb.append(strFilterPagination);
-                }                  
+                }
                 sb.append("\">" + paramRequest.getLocaleString("lblLastPage") +
                         "</a><td>");
             }
@@ -3904,6 +4021,46 @@ public class ControlPanel extends GenericAdmResource
     }
 
     //UTILERIAS
+    public String getPriorityDescription(SWBParamRequest paramsRequest,
+            int priority)
+    {
+        String strDescription = "";
+        try
+        {
+            switch(priority)
+            {
+                case 0:
+                    strDescription =
+                            paramsRequest.getLocaleString("cpTaskPriority0");
+                    break;
+                case 1:
+                    strDescription =
+                            paramsRequest.getLocaleString("cpTaskPriority1");
+                    break;
+                case 2:
+                    strDescription = paramsRequest.getLocaleString("cpTaskPriority2");
+                    break;
+                case 3:
+                    strDescription =
+                            paramsRequest.getLocaleString("cpTaskPriority3");
+                    break;
+                case 4:
+                    strDescription =
+                            paramsRequest.getLocaleString("cpTaskPriority4");
+                    break;
+                case 5:
+                    strDescription =
+                            paramsRequest.getLocaleString("cpTaskPriority5");
+                    break;
+            }
+        } catch (Exception e) {
+            //log.error("Error en ControlPanel.getPriorityDescription", e);
+            System.out.println("error en ControlPanel.getPriorityDescription: " +
+                    e.getMessage());
+        }
+        return strDescription;
+    }
+
     /**
     * Obtiene del archivo de propiedades la descripcion que corresponde a un
     * identificador de estatus.
