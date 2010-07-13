@@ -17,6 +17,22 @@
        dijit.byId(suri+"/endhour").setDisabled(true);
    }
 }
+
+ function enableIntervalTime(suri) {
+     var time='off';
+   if (dijit.byId(suri+"/time").checked) {
+       time='on';
+   }
+   if (time=='on') {
+       dijit.byId(suri+"/inter").setDisabled(false);
+       dijit.byId(suri+"/endhour").setDisabled(false);
+       dijit.byId(suri+"/inter").focus();
+   }
+   else if (time=='off') {
+       dijit.byId(suri+"/inter").setDisabled(true);
+       dijit.byId(suri+"/endhour").setDisabled(true);
+   }
+}
  
  function disablePeriodicity(suri) {
     var useP = false;
