@@ -490,6 +490,7 @@ public class BPMSProcessInstance {
             int index = 0;
             try
             {
+                //java.util.List<ProcessObject> arrPob = floni.getAllProcessObjects();
                 java.util.List<ProcessObject> arrPob = floni.listHeraquicalProcessObjects();
                 for(int j=0; j<arrPob.size(); j++)
                 {
