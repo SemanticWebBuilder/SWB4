@@ -34,17 +34,17 @@
     </xsl:template>
 
     <xsl:template match="subtitle">
-        <h2><xsl:apply-templates/></h2>
+        <h3><xsl:apply-templates/></h3>
     </xsl:template>
 
     <xsl:template match="content">
-        <xsl:apply-templates/>
+        <p><xsl:apply-templates/></p>
     </xsl:template>
 
     <xsl:template match="more">
         <div class="more">
             <p>
-                <a href="{@url}" title="Ver más" target="_blank" style="text-decoration: none;">
+                <a href="{@url}" title="Ver más" style="text-decoration: none;">
                     <xsl:apply-templates/>
                 </a>
             </p>
