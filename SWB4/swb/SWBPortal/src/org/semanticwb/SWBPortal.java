@@ -1690,7 +1690,7 @@ public class SWBPortal
                                             value = findFileName(value);
                                         }
                                     }
-                                    else if (value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
+                                    else if ((name.toLowerCase().equals("src") || name.toLowerCase().equals("href") || name.toLowerCase().equals("background") || name.toLowerCase().equals("codebase") || name.toLowerCase().equals("value")) &&  !value.startsWith("http://") && !value.toLowerCase().startsWith("wbrelpath://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("{") && !value.startsWith("../") && value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
 	                            {
                                         sruta = ruta;
                                         value = findFileName(value);
