@@ -1690,7 +1690,7 @@ public class SWBPortal
                                             value = findFileName(value);
                                         }
                                     }
-                                    else if (iswordcontent && value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
+                                    else if (value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
 	                                    {
 	                                        sruta = ruta;
 	                                        value = findFileName(value);
