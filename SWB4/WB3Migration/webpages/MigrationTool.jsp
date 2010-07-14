@@ -90,8 +90,8 @@
                     SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb.owl");
                     SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_rep.owl");
                     SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/office.owl");
-                    SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_usuarios.owl");
-                    SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_userTypes.owl");
+                    //SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_usuarios.owl");
+                    //SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_userTypes.owl");
                     SWBPlatform.getSemanticMgr().loadBaseVocabulary();
                     SWBPlatform.getSemanticMgr().loadDBModels();
                     SWBPlatform.getSemanticMgr().getOntology().rebind();
@@ -341,6 +341,13 @@
                 <%
                         } else {
                             int nsecs = tm.getHome().getChildAll().size();
+                            //int nsecsactivas = 0;
+                            //Iterator it = tm.getHome().getChildAll().iterator();
+                            //while (it.hasNext())
+                            //{
+                            //   com.infotec.topicmaps.Topic elem = (com.infotec.topicmaps.Topic)it.next();
+                            //   if(!elem.isDeleted())nsecsactivas++;
+                            //}
                             int nasoc = tm.getAssociations().size();
                 %>
                 <input type="hidden" name="act" value="step3" />
@@ -352,6 +359,7 @@
                     <legend>Sitio <%=tm.getDbdata().getTitle()%></legend>
                     <ul>
                         <li>Se importarán <%=nsecs + 1%> secciones que componen la estructura del sitio.</li>
+                        
                         <li>Se importarán <%=nasoc%> asociaciones encontradas en el sitio.</li>
                     </ul>
                 </fieldset>
@@ -398,9 +406,22 @@
                 <p>Tiene <%=nwp%> secciones
                 <%
                 if(nwsasoc==0) out.println(".");
-                else out.println("y, "+nwsasoc+" asociones");
-                %>
+                else out.println("y, "+nwsasoc+" asociones.");
+                int nsecsnactivas = 0;
+                Iterator it = tm.getHome().getChildAll().iterator();
+                while (it.hasNext())
+                {
+                   com.infotec.topicmaps.Topic elem = (com.infotec.topicmaps.Topic)it.next();
+                   if(!elem.isDeleted())
+                    nsecsnactivas++;
+                }
+                
+    %>
+
                 </p>
+                <ul>
+                    <li>Se encontraron <%=nsecsnactivas + 1%> secciones activas, inactivas, ocultas y no borradas.</li>
+                </ul>
                 <%
 
                         } else {
@@ -409,8 +430,8 @@
                             ws.getSemanticObject().getModel().setTraceable(false);
 
                             //Crea grupo de templates de defecto
-                            TemplateGroup grp = ws.createTemplateGroup();
-                            grp.setTitle("Default");
+                            //TemplateGroup grp = ws.createTemplateGroup();
+                            //grp.setTitle("Default");
 
                             home = copyValues(tp, ws);
 
@@ -521,8 +542,9 @@
                         <li><input type="checkbox" name="catalog" id="cat9" value="dns" <%=hmcat.get("dns") != null ? "disabled" : "checked"%>><label for="cat9">DNS <%=hmcat.get("dns") != null ? "(" + hmcat.get("dns") + ")" : ""%></label></li>
                         <li><input type="checkbox" name="catalog" id="cat11" value="rules" <%=hmcat.get("rules") != null ? "disabled" : "checked"%>><label for="cat11">Reglas <%=hmcat.get("rules") != null ? "(" + hmcat.get("rules") + ")" : ""%></label></li>
                         <li><input type="checkbox" name="catalog" id="cat4" value="pflow" <%=hmcat.get("pflow") != null ? "disabled" : "checked"%>><label for="cat4">Flujos de publicación <%=hmcat.get("pflow") != null ? "(" + hmcat.get("pflow") + ")" : ""%></label></li>
-                        <li><input type="checkbox" name="catalog" id="cat3" value="resourcetype" <%=hmcat.get("resourcetype") != null ? "disabled" : "checked"%>><label for="cat3">Tipos de recursos <%=hmcat.get("resourcetype") != null ? "(" + hmcat.get("resourcetype") + ")" : ""%></label></li>
-                        <li><input type="checkbox" name="catalog" id="cat6" value="grouptemplate" <%=hmcat.get("grouptemplate") != null ? "disabled" : "checked"%>><label for="cat6">Grupos de plantillas <%=hmcat.get("grouptemplate") != null ? "(" + hmcat.get("grouptemplate") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat3" value="resourcetype" <%=hmcat.get("resourcetype") != null ? "" : "checked"%>><label for="cat3">Tipos de recursos <%=hmcat.get("resourcetype") != null ? "(" + hmcat.get("resourcetype") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat6" value="grouptemplate" <%=hmcat.get("grouptemplate") != null ? "" : "checked"%>><label for="cat6">Grupos de plantillas <%=hmcat.get("grouptemplate") != null ? "(" + hmcat.get("grouptemplate") + ")" : ""%></label></li>
+                        <!-- <li><input type="checkbox" name="catalog" id="cat6" value="grouptemplate" < %=hmcat.get("grouptemplate") != null ? "disabled" : "checked"%>><label for="cat6">Grupos de plantillas < %=hmcat.get("grouptemplate") != null ? "(" + hmcat.get("grouptemplate") + ")" : ""%></label></li> -->
                         <!-- li><input type="checkbox" name="catalog" id="cat8" value="camp"><label for="cat8">Campañas</label></li -->
                     </ul>
                 </fieldset>
@@ -596,6 +618,7 @@
 
                             String idName = null;
                             // Copiando tipos de recursos de GLOBAL
+                            System.out.println("Inicio de copiado de tipo de recursos globales.");
                             Collection colresty = DBResourceType.getInstance().getResourceTypes(TopicMgr.TM_GLOBAL).values();
                             numResType = colresty.size();
                             Iterator itresty = colresty.iterator();
@@ -607,37 +630,45 @@
                                 idName = idName.replaceAll(" ", "");
 
                                 if (!idName.equals("ExcelContent") && !idName.equals("PPTContent")) {
-                                    ResourceType rtype = ws.createResourceType(idName);
-                                    rtype.setTitle(rrtyp.getDisplayName());
-                                    rtype.setDescription(rrtyp.getDescription());
-                                    String strObjClass = rrtyp.getObjclass();
-                                    if(strObjClass.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjClass = "com.infotec.wb.resources.TematicIndexXSL";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Imprimir")) strObjClass = "com.infotec.wb.resources.Print";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "org.semanticwb.portal.resources.Recommend";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Recommend")) strObjClass = "org.semanticwb.portal.resources.Recommend";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.MenuMap")) strObjClass = "com.infotec.wb.resources.WBMenuMap";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.WBSearch")) strObjClass = "org.semanticwb.portal.resources.WBSearch";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Login")) strObjClass = "org.semanticwb.portal.resources.Login";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.Content")) strObjClass = "org.semanticwb.portal.resources.sem.HTMLContent";
-                                    else if(strObjClass.equals("com.infotec.wb.resources.UserRegistration")) strObjClass = "org.semanticwb.portal.resources.UserRegistration";
-                                    rtype.setResourceClassName(strObjClass);
-                                    String strObjBundle = rrtyp.getObjclass();
-                                    if(strObjBundle.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjBundle = "com.infotec.wb.resources.TematicIndexXSL";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Imprimir")) strObjBundle = "com.infotec.wb.resources.Print";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recommend")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.MenuMap")) strObjBundle = "com.infotec.wb.resources.WBMenuMap";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.Content")) strObjBundle = "org.semanticwb.portal.resources.sem.HTMLContent";
-                                    else if(strObjBundle.equals("com.infotec.wb.resources.UserRegistration")) strObjBundle = "org.semanticwb.portal.resources.UserRegistration";
-                                    rtype.setResourceBundle(strObjBundle);
-                                    rtype.setResourceMode(rrtyp.getType());
-                                    rtype.setResourceCache(rrtyp.getCache());
+
+                                    ResourceType rtype = ws.getResourceType(idName);
+
+                                    if(rtype==null)
+                                    {
+                                        rtype=ws.createResourceType(idName);
+                                        rtype.setTitle(rrtyp.getDisplayName());
+                                        rtype.setDescription(rrtyp.getDescription());
+                                        String strObjClass = rrtyp.getObjclass();
+                                        if(strObjClass.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjClass = "com.infotec.wb.resources.TematicIndexXSL";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.Imprimir")) strObjClass = "com.infotec.wb.resources.Print";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "org.semanticwb.portal.resources.Recommend";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.Recommend")) strObjClass = "org.semanticwb.portal.resources.Recommend";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.MenuMap")) strObjClass = "com.infotec.wb.resources.WBMenuMap";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.WBSearch")) strObjClass = "org.semanticwb.portal.resources.WBSearch";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.Login")) strObjClass = "org.semanticwb.portal.resources.Login";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.Content")) strObjClass = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                        else if(strObjClass.equals("com.infotec.wb.resources.UserRegistration")) strObjClass = "org.semanticwb.portal.resources.UserRegistration";
+                                        rtype.setResourceClassName(strObjClass);
+                                        String strObjBundle = rrtyp.getObjclass();
+                                        if(strObjBundle.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjBundle = "com.infotec.wb.resources.TematicIndexXSL";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.Imprimir")) strObjBundle = "com.infotec.wb.resources.Print";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.Recommend")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.MenuMap")) strObjBundle = "com.infotec.wb.resources.WBMenuMap";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.Content")) strObjBundle = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                        else if(strObjBundle.equals("com.infotec.wb.resources.UserRegistration")) strObjBundle = "org.semanticwb.portal.resources.UserRegistration";
+                                        rtype.setResourceBundle(strObjBundle);
+                                        rtype.setResourceMode(rrtyp.getType());
+                                        rtype.setResourceCache(rrtyp.getCache());
+                                        System.out.println("Copiando tipo:"+idName+"("+strObjClass+")- ("+strObjBundle+")");
+                                    }
                                 }
                             }
 
                             // COPIANDO TIPO DE RECURSOS DEL SITIO SELECCIONADO
+                            System.out.println("Inicio de copiado de tipo de recursos del sitio.");
                             colresty = DBResourceType.getInstance().getResourceTypes(site).values();
                             itresty = colresty.iterator();
                             while (itresty.hasNext()) {
@@ -650,6 +681,7 @@
                                 String clsBundle = rrtyp.getBundle();
                                 String clsName = rrtyp.getObjclass();
 
+                                System.out.println("Copiando tipo:"+idName+"("+clsName+")- ("+clsBundle+")");
                                 //Revisar su equivalente de WB3.2 a SWB4.0
 
                                 if (idName.equals("Content") && clsName.equals("com.infotec.wb.resources.Content")) {
@@ -657,13 +689,18 @@
                                     idName = "HTMLContent";
                                 }
 
-                                ResourceType rtype = ws.createResourceType(idName);
-                                rtype.setTitle(rrtyp.getDisplayName());
-                                //rtype.setTitle(rrtyp.getName());
-                                rtype.setDescription(rrtyp.getDescription());
-                                rtype.setResourceClassName(clsName);
-                                rtype.setResourceBundle(clsBundle);
-                                rtype.setResourceMode(rrtyp.getType());
+                                ResourceType rtype = ws.getResourceType(idName);
+
+                                if(rtype==null)
+                                {
+                                    rtype = ws.createResourceType(idName);
+                                    rtype.setTitle(rrtyp.getDisplayName());
+                                    //rtype.setTitle(rrtyp.getName());
+                                    rtype.setDescription(rrtyp.getDescription());
+                                    rtype.setResourceClassName(clsName);
+                                    rtype.setResourceBundle(clsBundle);
+                                    rtype.setResourceMode(rrtyp.getType());
+                                }
                             }
                         }
 
@@ -693,16 +730,25 @@
                             Collection coll = DBCatalogs.getInstance().getGrpTemplates(site).values();
                             numGTemplate = coll.size();
                             Iterator it = coll.iterator();
+                            System.out.println("Creacion de grupos de templates....");
                             while (it.hasNext()) {
-                                RecGrpTemplate rgt = (RecGrpTemplate) it.next();
-                                TemplateGroup tgp = ws.getTemplateGroup(Integer.toString(rgt.getId()));
-                                if(tgp!=null) continue;
-                                tgp = ws.createTemplateGroup(Integer.toString(rgt.getId()));
-                                tgp.setTitle(rgt.getTitle());
-                                tgp.setDescription(rgt.getDescription());
-                                if (rgt.getId() > idmax) {
-                                    idmax = rgt.getId();
-                                }
+                                try
+                                {
+                                    RecGrpTemplate rgt = (RecGrpTemplate) it.next();
+                                    System.out.println("Temp. Grupo:"+rgt.getId()+" ("+rgt.getTitle()+")");
+                                    TemplateGroup tgp = ws.getTemplateGroup(Integer.toString(rgt.getId()));
+                                    if(tgp==null)
+                                    {
+                                        System.out.println("Creando grupo....");
+                                        tgp = ws.createTemplateGroup(Integer.toString(rgt.getId()));
+                                        tgp.setTitle(rgt.getTitle());
+                                        tgp.setDescription(rgt.getDescription());
+                                        if (rgt.getId() > idmax) {
+                                            idmax = rgt.getId();
+                                        }
+                                    }
+                                    else System.out.println("Grupo existente.");
+                                }catch(Exception e){}
                             }
                             idmax++;
                             ws.getSemanticObject().getModel().setCounterValue(TemplateGroup.sclass.getClassGroupId(), idmax);
@@ -902,14 +948,13 @@
 
                                 TemplateGroup tplgp = ws.getTemplateGroup(Integer.toString(rtpl.getGrpid()));
 
-                                if (null != tplgp) {
-                                    tplgp=ws.getTemplateGroup("1");
-                                    tpl.setGroup(tplgp);
+                                if (null == tplgp) { 
+                                    tplgp=ws.getTemplateGroup("1");  
                                 }
 
+                                tpl.setGroup(tplgp);
 
                                 System.out.println("filename: "+templ.getFileName(rtpl.getActualversion())+", version actual: "+rtpl.getActualversion());
-
 
                                 VersionInfo vi = ws.createVersionInfo();
                                 vi.setVersionFile(templ.getFileName(rtpl.getActualversion()));
@@ -1137,248 +1182,251 @@
                             SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                             while (itres.hasNext()) {
                                 WBResource rres = (WBResource) itres.next();
-                                com.infotec.wb.core.db.RecResource rresb = rres.getResourceBase().getRecResource();
-
+                                com.infotec.wb.core.db.RecResource rresb = null;
                                 numRes++;
                                 if((numRes%10)==0)System.out.println("========>"+numRes);
                                 try{
-                                    org.semanticwb.model.Resource res = null;
-                                    String user = (String) session.getAttribute("user");
-                                    String password = (String) session.getAttribute("password");
-                                    String siteid = tm.getId();
+                                    if(rres.getResourceBase()!=null)
+                                    {
+                                        rresb = rres.getResourceBase().getRecResource();
+                                        org.semanticwb.model.Resource res = null;
+                                        String user = (String) session.getAttribute("user");
+                                        String password = (String) session.getAttribute("password");
+                                        String siteid = tm.getId();
 
-                                    res = ws.getResource(Long.toString(rresb.getId()));
+                                        res = ws.getResource(Long.toString(rresb.getId()));
 
-                                    if(res==null)
-                                        {
-                                            try
+                                        if(res==null)
                                             {
-                                                res = MigrateOfficeContents.migrateResourceFrom32(rres, siteid, new File(path2));
-                                            }
-                                            catch(Exception e)
-                                            {
-                                                System.out.println("Error al migrar LocalContent."+e.getMessage());
-                                                System.out.println(e.getStackTrace());
-                                                res=null;
-                                            }
-                                            if (res == null) {
-                                                res = ws.createResource(Long.toString(rresb.getId()));
-                                                String idName = rresb.getResourceType().getName();
-                                                idName = idName.trim();
-                                                idName = idName.replaceAll(" ", "");
-
-                                                String clsName = rresb.getResourceType().getObjclass();
-
-                                                // Validacion de recursos de WB3.2 a SWB4.0
-                                                if (clsName.equals("com.infotec.wb.resources.Content")||clsName.equals("com.infotec.wb.resources.PPTContent")||clsName.equals("com.infotec.wb.resources.ExcelContent")) {
-                                                    idName = "HTMLContent";
-                                                }
-                                                org.semanticwb.model.ResourceType restype = ws.getResourceType(idName);
-
-                                                if(restype!=null)out.println("restype: "+restype.getTitle()+" "+restype.getResourceClassName());
-                                                if (restype == null)
+                                                try
                                                 {
-                                                    restype = ws.createResourceType("HTMLContent");
-                                                    restype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
-                                                    restype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
-                                                    restype.setResourceMode(1);
-                                                    //ptype.setResourceCache(600);
-                                                    restype.setTitle("HTMLContent");
+                                                    res = MigrateOfficeContents.migrateResourceFrom32(rres, siteid, new File(path2));
                                                 }
-
-
-                                                res.setResourceType(restype);
-
-                                                RecSubType rsty = DBCatalogs.getInstance().getSubType(site,rresb.getIdSubType());
-
-                                                if(rsty!=null)
+                                                catch(Exception e)
                                                 {
-                                                    org.semanticwb.model.ResourceSubType resSubtype = ws.getResourceSubType(Integer.toString(rsty.getId()));  //rsty.getTitle()
-                                                    if (null != resSubtype) {
-                                                        res.setResourceSubType(resSubtype);
+                                                    System.out.println("Error al migrar LocalContent."+e.getMessage());
+                                                    System.out.println(e.getStackTrace());
+                                                    res=null;
+                                                }
+                                                if (res == null) {
+                                                    res = ws.createResource(Long.toString(rresb.getId()));
+                                                    String idName = rresb.getResourceType().getName();
+                                                    idName = idName.trim();
+                                                    idName = idName.replaceAll(" ", "");
+
+                                                    String clsName = rresb.getResourceType().getObjclass();
+
+                                                    // Validacion de recursos de WB3.2 a SWB4.0
+                                                    if (clsName.equals("com.infotec.wb.resources.Content")||clsName.equals("com.infotec.wb.resources.PPTContent")||clsName.equals("com.infotec.wb.resources.ExcelContent")) {
+                                                        idName = "HTMLContent";
                                                     }
-                                                }
+                                                    org.semanticwb.model.ResourceType restype = ws.getResourceType(idName);
 
-                                                // validando tipo de contenido para agregar version 1 al recurso
-                                                String actVersion = "";
-                                                String initVersion = "";
-                                                if(idName.equals("HTMLContent"))
-                                                {
-                                                    actVersion = Integer.toString(rresb.getActualversion())+"/";
-                                                    initVersion = "1/";
-                                                }
-
-
-
-                                                String sourceWebPath = "/work/sites/" + site + "/resources/" + rresb.getResourceType().getName() + "/" + rresb.getId() + "/"+actVersion; //WBUtils.getInstance().getWebWorkPath() +
-                                                String targetWebPath = "/work/models/" + site + "/Resource/"  + rresb.getId() + "/"+initVersion; //+ restype.getId() + "/"
-
-                                                //System.out.println("source WEBPATH:"+sourceWebPath);
-                                                //System.out.println("target WEBPATH:"+targetWebPath);
-
-
-                                                res.setTitle(rresb.getTitle());
-                                                res.setDescription(rresb.getDescription());
-                                                //res.setActive(rresb.getActive() == 1 ? true : false);
-                                                if (null != rresb.getXml()) {
-
-                                                    String xmlTemp = rresb.getXml();
-                                                    //Document domdoc = SWBUtils.XML.xmlToDom(xmlTemp);
-                                                    String fileName = null;
-                                                    xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/", "/work/models/"+site+"/");
-                                                    // validando tipo de contenido para obtener el nombre del archivo
-
-                                                    if(idName.equals("HTMLContent")) //&& domdoc!=null
+                                                    //if(restype!=null)out.println("restype: "+restype.getTitle()+" "+restype.getResourceClassName());
+                                                    if (restype == null)
                                                     {
-                                                        //System.out.println("Es HTMLContent...");
-                                                        fileName = rres.getResourceBase().getAttribute("url"+rresb.getActualversion());
-                                                        //System.out.println("Obteniendo el nombre del archivo...."+fileName);
-                                                        ///String id = res.getURI();
-                                                        SWBResource go = SWBPortal.getResourceMgr().getResource(res);
-                                                        if(go!=null && go instanceof Versionable)
-                                                        {
-                                                            Versionable gov = (Versionable) go;
-                                                            VersionInfo vi = VersionInfo.ClassMgr.createVersionInfo(ws);
-                                                            vi.setVersionNumber(1);
-                                                            vi.setVersionComment("contenido migrado");
-                                                            vi.setVersionFile(fileName);
-                                                            gov.setActualVersion(vi);
-                                                            gov.setLastVersion(vi);
-
-                                                            //System.out.println("Asignando versiones...");
-                                                        }
+                                                        restype = ws.createResourceType("HTMLContent");
+                                                        restype.setResourceClassName("org.semanticwb.portal.resources.sem.HTMLContent");
+                                                        restype.setResourceBundle("org.semanticwb.portal.resources.sem.HTMLContent");
+                                                        restype.setResourceMode(1);
+                                                        //ptype.setResourceCache(600);
+                                                        restype.setTitle("HTMLContent");
                                                     }
-                                                    res.getSemanticObject().setProperty(org.semanticwb.model.Resource.swb_xml, xmlTemp);
-                                                }
 
-                                               
-                                                if (rresb.getId() > idmax) {
-                                                    idmax = rresb.getId();
-                                                }
-                                                numres++;
 
-                                                //Copiando archivos
+                                                    res.setResourceType(restype);
 
-                                                String sourceDirectory = "/sites/" + site + "/resources/" + rresb.getResourceType().getName() + "/" + rresb.getId() + "/"+actVersion;
-                                                String targetDirectory = path2 + site + "/Resource/" + rresb.getId() + "/" + initVersion; //"1/"; + restype.getId() + "/"
+                                                    RecSubType rsty = DBCatalogs.getInstance().getSubType(site,rresb.getIdSubType());
 
-                                                if (path2 != null && path2.trim().length() > 0) {
-                                                    // copiando version actual
-                                                    File sourcePath = new File(WBUtils.getInstance().getWorkPath() + sourceDirectory);
-                                                    if (sourcePath.exists() && sourcePath.isDirectory()) //revisar si existe la fuente, si no hace nada y regresa false
+                                                    if(rsty!=null)
                                                     {
-                                                        File targetPath = new File(targetDirectory);
-                                                        if (!targetPath.exists()) // si no existe el target lo crea
-                                                        {
-                                                            targetPath.mkdirs();
-                                                        }
-                                                        if (targetPath != null && targetPath.exists()) //si existe el target
-                                                        {
-
-                                                            System.out.println("AFUtils.getInstance().copyStructure("+WBUtils.getInstance().getWorkPath() + sourceDirectory+","+targetDirectory+",true,"+ WBUtils.getInstance().getWebWorkPath() + sourceDirectory+","+targetWebPath+")");
-
-                                                            AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceWebPath, targetWebPath);
+                                                        org.semanticwb.model.ResourceSubType resSubtype = ws.getResourceSubType(Integer.toString(rsty.getId()));  //rsty.getTitle()
+                                                        if (null != resSubtype) {
+                                                            res.setResourceSubType(resSubtype);
                                                         }
                                                     }
+
+                                                    // validando tipo de contenido para agregar version 1 al recurso
+                                                    String actVersion = "";
+                                                    String initVersion = "";
+                                                    if(idName.equals("HTMLContent"))
+                                                    {
+                                                        actVersion = Integer.toString(rresb.getActualversion())+"/";
+                                                        initVersion = "1/";
+                                                    }
+
+
+
+                                                    String sourceWebPath = "/work/sites/" + site + "/resources/" + rresb.getResourceType().getName() + "/" + rresb.getId() + "/"+actVersion; //WBUtils.getInstance().getWebWorkPath() +
+                                                    String targetWebPath = "/work/models/" + site + "/Resource/"  + rresb.getId() + "/"+initVersion; //+ restype.getId() + "/"
+
+                                                    //System.out.println("source WEBPATH:"+sourceWebPath);
+                                                    //System.out.println("target WEBPATH:"+targetWebPath);
+
+
+                                                    res.setTitle(rresb.getTitle());
+                                                    res.setDescription(rresb.getDescription());
+                                                    //res.setActive(rresb.getActive() == 1 ? true : false);
+                                                    if (null != rresb.getXml()) {
+
+                                                        String xmlTemp = rresb.getXml();
+                                                        //Document domdoc = SWBUtils.XML.xmlToDom(xmlTemp);
+                                                        String fileName = null;
+                                                        xmlTemp = xmlTemp.replaceAll("/work/sites/"+site+"/", "/work/models/"+site+"/");
+                                                        // validando tipo de contenido para obtener el nombre del archivo
+
+                                                        if(idName.equals("HTMLContent")) //&& domdoc!=null
+                                                        {
+                                                            //System.out.println("Es HTMLContent...");
+                                                            fileName = rres.getResourceBase().getAttribute("url"+rresb.getActualversion());
+                                                            //System.out.println("Obteniendo el nombre del archivo...."+fileName);
+                                                            ///String id = res.getURI();
+                                                            SWBResource go = SWBPortal.getResourceMgr().getResource(res);
+                                                            if(go!=null && go instanceof Versionable)
+                                                            {
+                                                                Versionable gov = (Versionable) go;
+                                                                VersionInfo vi = VersionInfo.ClassMgr.createVersionInfo(ws);
+                                                                vi.setVersionNumber(1);
+                                                                vi.setVersionComment("contenido migrado");
+                                                                vi.setVersionFile(fileName);
+                                                                gov.setActualVersion(vi);
+                                                                gov.setLastVersion(vi);
+
+                                                                //System.out.println("Asignando versiones...");
+                                                            }
+                                                        }
+                                                        res.getSemanticObject().setProperty(org.semanticwb.model.Resource.swb_xml, xmlTemp);
+                                                    }
+
+
+                                                    if (rresb.getId() > idmax) {
+                                                        idmax = rresb.getId();
+                                                    }
+                                                    numres++;
+
+                                                    //Copiando archivos
+
+                                                    String sourceDirectory = "/sites/" + site + "/resources/" + rresb.getResourceType().getName() + "/" + rresb.getId() + "/"+actVersion;
+                                                    String targetDirectory = path2 + site + "/Resource/" + rresb.getId() + "/" + initVersion; //"1/"; + restype.getId() + "/"
+
+                                                    if (path2 != null && path2.trim().length() > 0) {
+                                                        // copiando version actual
+                                                        File sourcePath = new File(WBUtils.getInstance().getWorkPath() + sourceDirectory);
+                                                        if (sourcePath.exists() && sourcePath.isDirectory()) //revisar si existe la fuente, si no hace nada y regresa false
+                                                        {
+                                                            File targetPath = new File(targetDirectory);
+                                                            if (!targetPath.exists()) // si no existe el target lo crea
+                                                            {
+                                                                targetPath.mkdirs();
+                                                            }
+                                                            if (targetPath != null && targetPath.exists()) //si existe el target
+                                                            {
+
+                                                                System.out.println("AFUtils.getInstance().copyStructure("+WBUtils.getInstance().getWorkPath() + sourceDirectory+","+targetDirectory+",true,"+ WBUtils.getInstance().getWebWorkPath() + sourceDirectory+","+targetWebPath+")");
+
+                                                                AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceWebPath, targetWebPath);
+                                                            }
+                                                        }
+                                                    }
+
                                                 }
+                                                 if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
 
-                                            }
-                                             if(res!=null) res.setActive(rresb.getActive() == 1 ? true : false);
-
-                                            //System.out.println("Reviando roles...." + rresb.getId());
-                                            Iterator itroles = rres.getResourceBase().getRoles();
-                                            while (itroles.hasNext()) {
-                                                Integer irole = (Integer) itroles.next();
-                                                //System.out.println("role: " + irole.toString());
-                                                org.semanticwb.model.Role rrole = urep.getRole(irole.toString());
-                                                if (rrole != null) {
-                                                    RoleRef rolref = ws.createRoleRef();
-                                                    rolref.setRole(rrole);
-                                                    rolref.setActive(Boolean.TRUE);
-                                                    res.addRoleRef(rolref);
-                                                }
-                                            }
-
-                                            if (rres.getResourceBase().getInterval() != null) {
-                                                //System.out.println("Revisando Intervalo... ");
-
-                                                String xmlconfig = rresb.getXmlConf();
-
-                                                if (xmlconfig != null) {
-                                                    if (xmlconfig.indexOf("<interval>") > 0) {
-                                                        String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"), xmlconfig.lastIndexOf("</interval>") + 11);
-                                                        //System.out.println("Intervalo: " + intervalo);
-
-                                                        Document dom = SWBUtils.XML.xmlToDom(intervalo);
-                                                        String titulo = dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
-                                                        //System.out.println("Titulo: " + titulo);
-
-                                                        org.semanticwb.model.Calendar schedule = ws.createCalendar();
-                                                        schedule.setActive(Boolean.TRUE);
-                                                        schedule.setTitle(titulo);
-                                                        schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
-
-                                                        CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
-                                                        calRef.setCalendar(schedule);
-                                                        calRef.setActive(Boolean.TRUE);
-                                                        res.addCalendarRef(calRef);
-
+                                                //System.out.println("Reviando roles...." + rresb.getId());
+                                                Iterator itroles = rres.getResourceBase().getRoles();
+                                                while (itroles.hasNext()) {
+                                                    Integer irole = (Integer) itroles.next();
+                                                    //System.out.println("role: " + irole.toString());
+                                                    org.semanticwb.model.Role rrole = urep.getRole(irole.toString());
+                                                    if (rrole != null) {
+                                                        RoleRef rolref = ws.createRoleRef();
+                                                        rolref.setRole(rrole);
+                                                        rolref.setActive(Boolean.TRUE);
+                                                        res.addRoleRef(rolref);
                                                     }
                                                 }
-                                            }
 
-                                            if (rres.getResourceBase().getFilterMap() != null) {
-                                                //System.out.println("Revisando Filtro... ");
+                                                if (rres.getResourceBase().getInterval() != null) {
+                                                    //System.out.println("Revisando Intervalo... ");
 
-                                                String xmlconfig = rresb.getXmlConf();
+                                                    String xmlconfig = rresb.getXmlConf();
 
-                                                if (xmlconfig != null) {
-                                                    if (xmlconfig.indexOf("<filter>") > 0) {
-                                                        String filtro = xmlconfig.substring(xmlconfig.indexOf("<filter>"), xmlconfig.lastIndexOf("</filter>") + 9);
-                                                        //System.out.println("Filtro: " + filtro);
+                                                    if (xmlconfig != null) {
+                                                        if (xmlconfig.indexOf("<interval>") > 0) {
+                                                            String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"), xmlconfig.lastIndexOf("</interval>") + 11);
+                                                            //System.out.println("Intervalo: " + intervalo);
 
-                                                        Document dom = SWBUtils.XML.xmlToDom(filtro);
+                                                            Document dom = SWBUtils.XML.xmlToDom(intervalo);
+                                                            String titulo = dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+                                                            //System.out.println("Titulo: " + titulo);
 
-                                                        ResourceFilter resfilter = ws.createResourceFilter();
-                                                        resfilter.getSemanticObject().setProperty(ResourceFilter.swb_xml, SWBUtils.XML.domToXml(dom));
-                                                        res.setResourceFilter(resfilter);
+                                                            org.semanticwb.model.Calendar schedule = ws.createCalendar();
+                                                            schedule.setActive(Boolean.TRUE);
+                                                            schedule.setTitle(titulo);
+                                                            schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
+
+                                                            CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
+                                                            calRef.setCalendar(schedule);
+                                                            calRef.setActive(Boolean.TRUE);
+                                                            res.addCalendarRef(calRef);
+
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            //System.out.println("Revisando reglas asociadas al recurso");
-                                            //Revisando reglas asociadas al recurso
-                                            Iterator itrules = rres.getResourceBase().getRules();
-                                            while (itrules.hasNext()) {
-                                                Integer irule = (Integer) itrules.next();
-                                                org.semanticwb.model.Rule rrule = ws.getRule(Integer.toString(irule.intValue()));
-                                                RuleRef rulref = ws.createRuleRef();
-                                                rulref.setRule(rrule);
-                                                rulref.setActive(Boolean.TRUE);
-                                                res.addRuleRef(rulref);
-                                            }
+                                                if (rres.getResourceBase().getFilterMap() != null) {
+                                                    //System.out.println("Revisando Filtro... ");
 
-                                            //System.out.println("Revisando PFLows asociados al recurso");
-                                            //Revisando PFLows asociados al recurso
+                                                    String xmlconfig = rresb.getXmlConf();
 
-                                            PFlowSrv pfsrv = new PFlowSrv();
-                                            HashMap hmpf = PFlowMgr.getInstance().getPFlows(site);
-                                            Iterator itpflow = hmpf.values().iterator();
-                                            while (itpflow.hasNext()) {
-                                                com.infotec.wb.core.PFlow pf = (com.infotec.wb.core.PFlow) itpflow.next();
-                                                org.semanticwb.model.PFlow spf = ws.getPFlow(Integer.toString(pf.getId()));
+                                                    if (xmlconfig != null) {
+                                                        if (xmlconfig.indexOf("<filter>") > 0) {
+                                                            String filtro = xmlconfig.substring(xmlconfig.indexOf("<filter>"), xmlconfig.lastIndexOf("</filter>") + 9);
+                                                            //System.out.println("Filtro: " + filtro);
 
-                                                if (null != spf) {
-                                                    Iterator itocc = pfsrv.getContentsAtFlow(pf);
-                                                    while (itocc.hasNext()) {
-                                                        Occurrence occ = (Occurrence) itocc.next();
-                                                        if (occ.getResourceData() != null) {
-                                                            org.semanticwb.model.Resource sres = ws.getResource(occ.getResourceData());
-                                                            //RecResource recres = DBResource.getInstance().getResource(occ.getDbdata().getIdtm(), Long.parseLong(occ.getResourceData()));
-                                                            if (null != sres) {
-                                                                PFlowRef spfr = ws.createPFlowRef();
-                                                                spfr.setActive(occ.isActive());
-                                                                spfr.setPflow(spf);
+                                                            Document dom = SWBUtils.XML.xmlToDom(filtro);
+
+                                                            ResourceFilter resfilter = ws.createResourceFilter();
+                                                            resfilter.getSemanticObject().setProperty(ResourceFilter.swb_xml, SWBUtils.XML.domToXml(dom));
+                                                            res.setResourceFilter(resfilter);
+                                                        }
+                                                    }
+                                                }
+
+                                                //System.out.println("Revisando reglas asociadas al recurso");
+                                                //Revisando reglas asociadas al recurso
+                                                Iterator itrules = rres.getResourceBase().getRules();
+                                                while (itrules.hasNext()) {
+                                                    Integer irule = (Integer) itrules.next();
+                                                    org.semanticwb.model.Rule rrule = ws.getRule(Integer.toString(irule.intValue()));
+                                                    RuleRef rulref = ws.createRuleRef();
+                                                    rulref.setRule(rrule);
+                                                    rulref.setActive(Boolean.TRUE);
+                                                    res.addRuleRef(rulref);
+                                                }
+
+                                                //System.out.println("Revisando PFLows asociados al recurso");
+                                                //Revisando PFLows asociados al recurso
+
+                                                PFlowSrv pfsrv = new PFlowSrv();
+                                                HashMap hmpf = PFlowMgr.getInstance().getPFlows(site);
+                                                Iterator itpflow = hmpf.values().iterator();
+                                                while (itpflow.hasNext()) {
+                                                    com.infotec.wb.core.PFlow pf = (com.infotec.wb.core.PFlow) itpflow.next();
+                                                    org.semanticwb.model.PFlow spf = ws.getPFlow(Integer.toString(pf.getId()));
+
+                                                    if (null != spf) {
+                                                        Iterator itocc = pfsrv.getContentsAtFlow(pf);
+                                                        while (itocc.hasNext()) {
+                                                            Occurrence occ = (Occurrence) itocc.next();
+                                                            if (occ.getResourceData() != null) {
+                                                                org.semanticwb.model.Resource sres = ws.getResource(occ.getResourceData());
+                                                                //RecResource recres = DBResource.getInstance().getResource(occ.getDbdata().getIdtm(), Long.parseLong(occ.getResourceData()));
+                                                                if (null != sres) {
+                                                                    PFlowRef spfr = ws.createPFlowRef();
+                                                                    spfr.setActive(occ.isActive());
+                                                                    spfr.setPflow(spf);
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -1388,9 +1436,10 @@
                                     }
                                     catch(Exception ex)
                                     {
-                                        System.out.println("Exception... al migrar recurso ...id:"+rresb.getId()+"\n\r"+ex.getMessage());
+                                        System.out.println("Exception... al migrar recurso ...id:\n\r"+ex.getMessage());
                                         System.out.println(ex.getStackTrace());
                                     }
+
 
                             }  // while
                             idmax++;
@@ -1924,7 +1973,7 @@
                     String siteid=tp.getMap().getId();
                     WBResource wbresource=ResourceMgr.getInstance().getResource(siteid, Long.parseLong(idElement));
                     if(null!=wbresource&&!MigrateOfficeContents.isOfficeDocument(wbresource,siteid))
-                    {
+                    { 
                         org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
                         if(resource!=null)
@@ -1976,6 +2025,7 @@
     //MIGRACION DE LA ESTRUCTURA DE TOPICOS A ESTRUCTURA DE WEBPAGES
     boolean tp2wp(com.infotec.topicmaps.Topic tp, WebPage wpp, WebSite ws)
     {
+        
         if(tp!=null)
         {
             Iterator it = tp.getSortChild(false);
@@ -2117,26 +2167,31 @@
                 Occurrence occ = (Occurrence) itocc.next();
                 String xmlconfig = occ.getResourceData();
 
-                //System.out.println("XML intervalo: "+xmlconfig);
-                if(null!=xmlconfig&&xmlconfig.trim().length()>0)
+                try
                 {
-                    String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"),xmlconfig.lastIndexOf("</interval>")+11);
-                    //System.out.println("Intervalo (Topic): "+intervalo);
+                    //System.out.println("XML intervalo: "+xmlconfig);
+                    if(null!=xmlconfig&&xmlconfig.trim().length()>0)
+                    {
+                        String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"),xmlconfig.lastIndexOf("</interval>")+11);
+                        System.out.println("Intervalo (Topic): "+intervalo);
 
-                    Document dom = SWBUtils.XML.xmlToDom(intervalo);
-                    String titulo=dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
-                    //System.out.println("Titulo (Topic): "+titulo);
+                        Document dom = SWBUtils.XML.xmlToDom(intervalo);
+                        String titulo=dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+                        //System.out.println("Titulo (Topic): "+titulo);
 
-                    org.semanticwb.model.Calendar schedule = ws.createCalendar();
-                    schedule.setActive(Boolean.TRUE);
-                    schedule.setTitle(titulo);
-                    schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
+                        org.semanticwb.model.Calendar schedule = ws.createCalendar();
+                        schedule.setActive(Boolean.TRUE);
+                        schedule.setTitle(titulo);
+                        schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
 
-                    CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
-                    calRef.setCalendar(schedule);
-                    calRef.setActive(Boolean.TRUE);
-                    wp.addCalendarRef(calRef);
+                        CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
+                        calRef.setCalendar(schedule);
+                        calRef.setActive(Boolean.TRUE);
+                        wp.addCalendarRef(calRef);
+                    }
                 }
+                catch(Exception intexc){System.out.println("Error al procesar el intervalo del Topic."+topic.getId());}
+
              }
 
             }
@@ -2395,21 +2450,24 @@
                             usr.setSecurityAnswer(rusr.getConfirmValue());
                         }
                         usr.setPasswordChanged(rusr.getPasswordChanged());
-                        if (null!=rusr.getXml()){
-                            com.infotec.wb.core.WBUser user = new com.infotec.wb.core.WBUser(rusr);
-                            if(user!=null)
-                            {
-                                Iterator attlist = DBUser.getInstance(rusr.getRepository()).getUserAttrsList().keySet().iterator();
-                                while (attlist.hasNext()){
-                                    String attact = (String)attlist.next();
-                                    String curratt = user.getAttribute(attact);
-                                    if (null != curratt){
-                                        org.semanticwb.platform.SemanticProperty property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userExt_"+attact);
-                                        try {usr.getSemanticObject().setProperty(property, curratt);} catch (Exception ne) {}
+                        try
+                        {
+                            if (null!=rusr.getXml()){
+                                com.infotec.wb.core.WBUser user = new com.infotec.wb.core.WBUser(rusr);
+                                if(user!=null)
+                                {
+                                    Iterator attlist = DBUser.getInstance(rusr.getRepository()).getUserAttrsList().keySet().iterator();
+                                    while (attlist.hasNext()){
+                                        String attact = (String)attlist.next();
+                                        String curratt = user.getAttribute(attact);
+                                        if (null != curratt){
+                                            org.semanticwb.platform.SemanticProperty property=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userExt_"+attact);
+                                            try {usr.getSemanticObject().setProperty(property, curratt);} catch (Exception ne) {}
+                                        }
                                     }
                                 }
                             }
-                        }
+                        } catch(Exception e){System.out.println("Error al procesar el XML del usuario ID:"+rusr.getId());}
 
                         numelem++;
                         Iterator itwbroles = rusr.getRoles();
