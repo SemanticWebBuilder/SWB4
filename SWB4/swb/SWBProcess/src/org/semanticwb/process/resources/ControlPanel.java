@@ -3824,7 +3824,7 @@ public class ControlPanel extends GenericAdmResource
                 out.println("<div id=\"worklist\">");
                 out.println("<p>" + strTitle + "</p>");
                 out.println("<p>" + getUsedFilters(paramsRequest, request).toString() + "</p>");
-                out.println("<table border=\"1\">");
+                out.println("<table border=\"0\">");
                 //out.println("<ul>");
                 //out.println(getUsedFilters(paramsRequest, request).toString());
                 //out.println("<li>" + getUsedFilters + "</li>");
