@@ -1691,9 +1691,9 @@ public class SWBPortal
                                         }
                                     }
                                     else if (value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
-	                                    {
-	                                        sruta = ruta;
-	                                        value = findFileName(value);
+	                            {
+                                        sruta = ruta;
+                                        value = findFileName(value);
                                     }
                                     else if (value.startsWith("wbrelpath://"))
                                     {
