@@ -7,4 +7,9 @@ public class CatchEvent extends org.semanticwb.process.model.base.CatchEventBase
     {
         super(base);
     }
+
+    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
+    {
+        //Implementar
+    }
 }

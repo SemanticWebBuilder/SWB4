@@ -57,10 +57,23 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
     @Override
     public void close(User user, int status, String action)
     {
+        close(user, status, action, true);
+    }
+
+    /**
+     * Cierra la instancia de objeto y continua el flujo al siguiente objeto si nexObjects = true
+     * @param user
+     */
+    public void close(User user, int status, String action, boolean nextObjects)
+    {
         super.close(user,status,action);
         abortDependencies(user);
-        FlowNode type=getFlowNodeType();
-        type.nextObject(this, user);
+        if(nextObjects)
+        {
+            FlowNode type=getFlowNodeType();
+            type.nextObject(this, user);
+        }
+        this.getFlowNodeType().close(this, user);
     }
 
     /**
@@ -73,6 +86,12 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
         super.execute(user);
         FlowNode type=getFlowNodeType();
         type.execute(this, user);
+    }
+
+    public void notifyEvent(FlowNodeInstance from)
+    {
+        CatchEvent type=(CatchEvent)getFlowNodeType();
+        type.notifyEvent(this, from);
     }
 
     /**
@@ -172,11 +191,7 @@ public class FlowNodeInstance extends org.semanticwb.process.model.base.FlowNode
                         }
                         if(inst.getStatus()<Instance.STATUS_ABORTED)
                         {
-                            inst.setStatus(Instance.STATUS_ABORTED);
-                            inst.setAction(Instance.ACTION_CANCEL);
-                            inst.setEnded(new Date());
-                            inst.setEndedby(user);
-                            inst.abortDependencies(user);
+                            inst.close(user, STATUS_ABORTED, ACTION_CANCEL, false);
                         }
                     }
                 }
