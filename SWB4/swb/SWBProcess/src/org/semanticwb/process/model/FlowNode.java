@@ -38,6 +38,11 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         //Implementar en subclases
     }
 
+    public void close(FlowNodeInstance instance, User user)
+    {
+        //Implementar en subclases
+    }
+
     /**
      * Continua el flujo al siguiente FlowNode
      * @param user

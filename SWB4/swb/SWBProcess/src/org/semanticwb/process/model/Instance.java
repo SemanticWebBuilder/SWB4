@@ -97,6 +97,11 @@ public class Instance extends org.semanticwb.process.model.base.InstanceBase
         setExecution(getExecution()+1);
     }
 
+    public void notifyEvent(FlowNodeInstance from)
+    {
+        System.out.println("notifyEvent:"+getId()+" "+getProcessElementType().getClass().getName()+" "+getProcessElementType().getTitle());
+    }
+
 
     /**
      * Regresa los objetos de la instancia e instancias padres

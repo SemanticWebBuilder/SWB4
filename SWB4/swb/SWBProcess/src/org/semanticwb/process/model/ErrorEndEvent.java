@@ -26,16 +26,22 @@ public class ErrorEndEvent extends org.semanticwb.process.model.base.ErrorEndEve
                 GraphicalElement graphicalElement = it.next();
                 if(graphicalElement instanceof ErrorIntermediateCatchEvent)
                 {
-                    FlowNodeInstance source=(FlowNodeInstance)parent;
-                    //TODO: Interruptora o no
-                    source.setStatus(Instance.STATUS_CLOSED);
-                    source.setAction(Instance.ACTION_EVENT);
-                    source.setEnded(new Date());
-                    source.setEndedby(user);
-                    source.abortDependencies(user);
+                    ErrorIntermediateCatchEvent event=(ErrorIntermediateCatchEvent)graphicalElement;
+                    String c1=event.getActionCode();
+                    String c2=((Event)instance.getFlowNodeType()).getActionCode();
+                    if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
+                    {
+                        FlowNodeInstance source=(FlowNodeInstance)parent;
+                        source.setStatus(Instance.STATUS_CLOSED);
+                        source.setAction(Instance.ACTION_EVENT);
+                        source.setEnded(new Date());
+                        source.setEndedby(user);
+                        source.abortDependencies(user);
 
-                    FlowNode node=(FlowNode)graphicalElement;
-                    source.executeRelatedFlowNodeInstance(node, instance, null, user);
+                        FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                        fn.setSourceInstance(instance);
+                        event.notifyEvent(fn, instance);
+                    }
                 }
             }
         }else

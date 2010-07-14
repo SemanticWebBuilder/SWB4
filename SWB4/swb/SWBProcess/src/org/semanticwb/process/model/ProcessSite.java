@@ -7,4 +7,14 @@ public class ProcessSite extends org.semanticwb.process.model.base.ProcessSiteBa
     {
         super(base);
     }
+
+    public synchronized ProcessObserver getProcessObserver()
+    {
+        ProcessObserver obs=ProcessObserver.ClassMgr.getProcessObserver("Instance",this);
+        if(obs==null)
+        {
+            obs=ProcessObserver.ClassMgr.createProcessObserver("Instance",this);
+        }
+        return obs;
+    }
 }
