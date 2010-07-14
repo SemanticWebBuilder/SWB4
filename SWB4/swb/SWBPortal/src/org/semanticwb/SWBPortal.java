@@ -24,10 +24,12 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -154,6 +156,7 @@ public class SWBPortal
      * <p>Crea los mensajes hacia los archivos de bit&aacute;cora.</p>
      */
     private static Logger log = SWBUtils.getLogger(SWBPortal.class);
+    //private static Logger log = null;//SWBUtils.getLogger(SWBPortal.class);
     /**
      * Holds the only one instance of this object in the application.
      * <p>Mantiene la &uacute;nica instancia de este objeto en la aplicaci&oacute;n</p>
@@ -1542,6 +1545,14 @@ public class SWBPortal
             {
                 iswordcontent = true;
             }
+            else
+            {
+                posword = datos.toLowerCase().indexOf("name=\"generator\" content=\"microsoft word");
+                if (posword > -1)
+                {
+                    iswordcontent = true;
+                }
+            }
             //termina detección de si es contenido de word
 
             HtmlTag tag = new HtmlTag();
@@ -1679,6 +1690,11 @@ public class SWBPortal
                                             value = findFileName(value);
                                         }
                                     }
+                                    else if (iswordcontent && value.indexOf("/work/sites/")!=-1 && value.indexOf(".")!=-1) // es Archivo
+	                                    {
+	                                        sruta = ruta;
+	                                        value = findFileName(value);
+                                    }
                                     else if (value.startsWith("wbrelpath://"))
                                     {
                                         value = value.substring("wbrelpath://".length());
@@ -1759,6 +1775,28 @@ public class SWBPortal
             }
             return ret.toString();
         }
+        /*public static void main(String[] args)
+        {
+            StringBuilder html=new StringBuilder();
+            File file=new File("C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\Remunera.html");
+            try
+            {
+                BufferedReader br=new BufferedReader(new FileReader(file));
+                String line=br.readLine();
+                while(line!=null)
+                {
+                    html.append(line);
+                    html.append("\r\n");
+                    line=br.readLine();
+                }
+                String htmlres=parseHTML(html.toString(),"/patito/",0);
+                System.out.println(htmlres);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }*/
 
         /**
          * Retrieves a file name from a string representing a relative path.
@@ -3160,4 +3198,5 @@ public class SWBPortal
             //log.error("Problem Updating HSQL Header", e);
         }
     }
+    
 }
