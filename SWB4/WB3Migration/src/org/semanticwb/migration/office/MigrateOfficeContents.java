@@ -32,6 +32,7 @@ import com.infotec.wb.lib.WBResource;
 import com.infotec.wb.util.WBUtils;
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
@@ -123,14 +124,16 @@ public class MigrateOfficeContents
 
     }
 
-    private static String getTopics(final com.infotec.wb.core.Resource resource,final Topic topic)
+    private static String getTopics(final com.infotec.wb.core.Resource resource,final Topic topic,HashSet<String> topics)
     {
+        //System.out.println("revisando tpid:"+topic.getId());
+        topics.add(topic.getId());
         final Iterator occs=topic.getOccurrencesOfType("REC_WBContent");
         while(occs.hasNext())
         {
             final Occurrence occ=(Occurrence)occs.next();
             if(occ.getResourceData().equals(String.valueOf(resource.getId())))
-            {
+            {                
                 return topic.getId();
             }
         }
@@ -138,10 +141,14 @@ public class MigrateOfficeContents
         while(ctopics.hasNext())
         {
             final Topic childtopic=(Topic)ctopics.next();
-            final String id=getTopics(resource,childtopic);
-            if(id!=null)
+            if(!topics.contains(childtopic.getId()))
             {
-                return id;
+                topics.add(childtopic.getId());
+                final String id=getTopics(resource,childtopic,topics);
+                if(id!=null)
+                {
+                    return id;
+                }
             }
 
         }
@@ -149,18 +156,14 @@ public class MigrateOfficeContents
     }
     private static String getTopics(final com.infotec.wb.core.Resource resource,final String siteid)
     {
-        final TopicMap map=TopicMgr.getInstance().getTopicMap(siteid);
-        final HashMap topics= map.getTopics();
-        final Iterator ctopics=topics.values().iterator();
-        while(ctopics.hasNext())
+        final TopicMap map=TopicMgr.getInstance().getTopicMap(siteid);              
+        final Topic topic= map.getHome();
+        HashSet<String> hs=new HashSet<String>();        
+        hs.add(topic.getId());
+        final String id=getTopics(resource,topic,hs);
+        if(id!=null)
         {
-            final Topic topic=(Topic)ctopics.next();
-            final String id=getTopics(resource,topic);
-            if(id!=null)
-            {
-                return id;
-            }
-
+            return id;
         }
         return null;       
     }
