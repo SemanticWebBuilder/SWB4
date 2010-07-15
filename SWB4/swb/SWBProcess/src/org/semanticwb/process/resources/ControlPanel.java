@@ -46,6 +46,8 @@ public class ControlPanel extends GenericAdmResource
     private static Color rtfHeaderTitleBackground = new Color (0, 153, 153);
     private static Color rtfHeaderColumnBackground = new Color (102, 204, 204);
 
+    public final static String imgPath = SWBUtils.getApplicationPath() +
+            "/swbutil/panel/";
     public final static String filenamePdf = SWBUtils.getApplicationPath() +
             "/swbadmin/ControlPanelReport.pdf";
     public final static String strDownloadPdf  = SWBPortal.getContextPath() +
@@ -592,36 +594,33 @@ public class ControlPanel extends GenericAdmResource
                 request.getParameter(PRIORITY_FILTER_CTRL)==null
                 ?"-1"
                 :request.getParameter(PRIORITY_FILTER_CTRL);
-
-            sb.append(paramsRequest.getLocaleString("lblAppliedFilters") +
-                    "<br/>");
+            sb.append("<ul>");
             if(!strFilterProcess.equalsIgnoreCase("0")){
-                sb.append(paramsRequest.getLocaleString("lblFilterProcess") +
-                        " " + SemanticObject.getSemanticObject(strFilterProcess).getDisplayName() + "<br/>");
+                sb.append("<li class=\"f-pro\">" + paramsRequest.getLocaleString("lblFilterProcess") +
+                        " " + SemanticObject.getSemanticObject(strFilterProcess).getDisplayName() + "</li>");
             }
             if(!strFilterStatus.equalsIgnoreCase("-1")){
-                sb.append(paramsRequest.getLocaleString("lblFilterStatus") +
-                        " " +  getStatusDescription(paramsRequest, Integer.parseInt(strFilterStatus)) + "<br/>");
+                sb.append("<li class=\"f-est\">" + paramsRequest.getLocaleString("lblFilterStatus") +
+                        " " +  getStatusDescription(paramsRequest, Integer.parseInt(strFilterStatus)) + "</li>");
             }
             if(!strFilterPriority.equalsIgnoreCase("-1")){
-                sb.append(paramsRequest.getLocaleString("lblFilterPriority") +
-                        " " + strFilterPriority+ "<br/>");
+                sb.append("<li class=\"f-est\">" + paramsRequest.getLocaleString("lblFilterPriority") +
+                        " " + strFilterPriority+ "</li>");
             }
             if(!strFilterTitle.equalsIgnoreCase("-1")){
-                sb.append(paramsRequest.getLocaleString("lblFilterTaskName") +
-                        " " + strFilterTitle+ "<br/>");
+                sb.append("<li class=\"f-est\">" + paramsRequest.getLocaleString("lblFilterTaskName") +
+                        " " + strFilterTitle+ "</li>");
             }
             if(!strInitialFilterDate.equalsIgnoreCase("")){
-                sb.append(paramsRequest.getLocaleString("lblFilterIniDate") +
-                        " " + strInitialFilterDate);
+                sb.append("<li class=\"f-ini\">" + paramsRequest.getLocaleString("lblFilterIniDate") +
+                        " " + strInitialFilterDate + "</li>");
                 if(!strEndFilterDate.equalsIgnoreCase(""))
                 {
-                    sb.append(" " + paramsRequest.getLocaleString("lblFilterEndDate")
-                            + " " + strEndFilterDate );
+                    sb.append("<li class=\"f-fin\">" + paramsRequest.getLocaleString("lblFilterEndDate")
+                            + " " + strEndFilterDate + "</li>");
                 }
-                sb.append("<br/>" );
             }
-            sb.append("<br/><br/>" );
+            sb.append("</ul>" );
         } catch(Exception e){
           //log.error("Error en ControlPanel.getUsedFilters", e);
             System.out.println("Error en ControlPanel.getUsedFilters:"
@@ -1681,13 +1680,15 @@ public class ControlPanel extends GenericAdmResource
                 BPMSTask.ClassMgr.sortTasks(vTaskLinks,intSortType);
                 int endRow = getPageLastRow(vTaskLinks.size(),intRowsPerPage, intCurrPage);
                 int iniRow = getPageFirstRow(vTaskLinks.size(),intRowsPerPage,intCurrPage);
-                //sb.append("<p>" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
-                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
+                sb.append("<div id=\"tareas\">");
+                sb.append("<p class=\"izq\">" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
+                sb.append("<p class=\"der cerradas-si\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','hide','personalizar','','show');selectedTab('personalizar');\">Personalizar</a></p></div>");
+                
+                //TODO: Tareas cerradas (filtro)
                 StringBuffer sbPagination = getPagination(intRowsPerPage, intCurrPage,vTaskLinks.size(),paramRequest,request);
-                //sb.append("<p>" + sbPagination + "</p>");
-                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
+                sb.append("<p class=\"paginado\">" + sbPagination + "</p>");
                 //sb.append("<p>" + paramRequest.getLocaleString("lblTotalTask") + "</p>");
-                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + paramRequest.getLocaleString("lblTotalTask") + "</td></tr>");
+                sb.append("<table ><thead><tr>");
                 java.util.List<String> colNames = new ArrayList();
                 for(int i=iniRow; i<endRow; i++)
                 {
@@ -1706,10 +1707,8 @@ public class ControlPanel extends GenericAdmResource
                             listColNames.add(s);
                         }
                         colNames = listColNames;
-                        sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + parentName + "</td></tr>");
-                        //sb.append("<ul><p>" + tmpUri + "</p>");
-                        sb.append("<tr><td>" + paramRequest.getLocaleString("lblTaskTitle") + "</td>");
-                        //sb.append("<li><ul><li>" + paramRequest.getLocaleString("lblTaskTitle") + "</li>");
+                        //sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + parentName + "</td></tr>");
+                        sb.append("<th class=\"orden-no\"><a href=\"#\">" + paramRequest.getLocaleString("lblTaskTitle") + "</a></th>");
                         for(int j=0; j<colNamesArr.length; j++){
                             String tmpName = colNamesArr[j];
                             if(hash.containsKey(tmpName)){
@@ -1719,31 +1718,25 @@ public class ControlPanel extends GenericAdmResource
                                     tmpName = getTaskPropertyName(vTaskProps, tmpArr[0], tmpArr[1]);
                                 }
                             }
-                            //sb.append("<li>" + tmpName + "</li>");
-                            sb.append("<td>" + tmpName +  "</td>");
+                            sb.append("<th class=\"orden-no\"><a href=\"#\">" + tmpName +  "</a></th>");
                         }
-                        //sb.append("</ul></li>");
-                        sb.append("</tr>");
+                        sb.append("</tr></thead><tbody>");
                         strTop = tmpUri;
                     }
-                    //sb.append("<li>");
                     sb.append("<tr><td>");
                     sb.append("<a href=\"");
                     sb.append(tlink.getTaskLinkHref());
                     sb.append("\" >");
                     sb.append(tlink.getTaskLinkLegend());
-                    //sb.append("</a></li>");
                     sb.append("</a></td>");
                     for(int j=0; j<colNames.size(); j++){
                         String tmpName = colNames.get(j);
                         String value = hash.get(tmpName)==null ?"" :hash.get(tmpName).toString();
-                        //sb.append("<li>" + value + "</li>");
                         sb.append("<td>" + value + "</td>");
                     }
                     sb.append("</tr>");
                 }
-                //sb.append("<p>" + sbPagination + "</p>");
-                sb.append("<tr><td colspan=\"" + intColumnCount + "\">" + sbPagination + "</td></tr>");
+                sb.append("</tbody></table>");
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.printTaskLinks", e);
@@ -1839,21 +1832,19 @@ public class ControlPanel extends GenericAdmResource
             SWBResourceURL url = paramRequest.getRenderUrl();
             boolean bClosedFilter = isClosedStatusFilterActive(paramRequest);
             sbPrint.append("\n<script type=\"text/javascript\">");
-            sbPrint.append("\n   function direcciona(action){");
+            sbPrint.append("\n   function direccionaP(action){");
             sbPrint.append("\n      document.forms['frmAdmin'].action = action;");
             sbPrint.append("\n      document.forms['frmAdmin'].submit();");
             sbPrint.append("\n   }");
             sbPrint.append("\n</script>");
-
-            sbPrint.append("<div class=\"swbform\">");
+            sbPrint.append("<div id=\"personalizar\"><div class=\"pleca\"><h3>" +
+                    paramRequest.getLocaleString("lblCustomizeTitle") +
+                    "</h3>");
             sbPrint.append("<form name=\"frmAdmin\" action=\"" +
                     paramRequest.getRenderUrl().setAction("updateCustomization")
                     + "\" method=\"POST\">");
-            sbPrint.append("<div>" +
-                    paramRequest.getLocaleString("lblCustomizeTitle") +
-                    "</div>");
-            sbPrint.append(paramRequest.getLocaleString("lblSort") +
-                    " <select name=\""+SORTING_CTRL+ ""
+	        sbPrint.append("<label for=\"" + SORTING_CTRL +"\" >" + paramRequest.getLocaleString("lblSort") + ":</label>");
+            sbPrint.append(" <select name=\""+SORTING_CTRL+ ""
                     + "\" id=\""+SORTING_CTRL+"\">");
             for(int i=0; i<BPMSTask.ClassMgr.MAX_SORT; i++){
                 sbPrint.append("<option ");
@@ -1862,51 +1853,45 @@ public class ControlPanel extends GenericAdmResource
                         paramRequest.getLocaleString("cpSortType"+i)
                         +"</option>");
             }
-            sbPrint.append("</select><br/>");
+            sbPrint.append("</select><br/><br/>");
             if(bClosedFilter)
             {
-                sbPrint.append(paramRequest.getLocaleString("lblClosedFilter")
-                        + " <input type=\"RADIO\" id=\"hideClosedTasks\""
+                sbPrint.append("<label for=\"hideClosedTasks\" >" +
+                        paramRequest.getLocaleString("lblClosedFilter")
+                        + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""
                         + "name=\"hideClosedTasks\" " +
-                        " label=\"" +
-                        paramRequest.getLocaleString("cpClosedFilter0") +
-                        "\" value=\"0\">" +
+                        " value=\"0\">" +
                         paramRequest.getLocaleString("cpClosedFilter0") +
                         "<br/>" +
                         "<input type=\"RADIO\" id=\"hideClosedTasks\""
                         + "name=\"hideClosedTasks\" " +
-                        " label=\"" +
+                        " checked value=\"1\">" +
                         paramRequest.getLocaleString("cpClosedFilter1") +
-                        "\" checked value=\"1\">" +
-                        paramRequest.getLocaleString("cpClosedFilter1") +
-                        "<br/>");
+                        "<br/><br/>");
             } else {
-                sbPrint.append(paramRequest.getLocaleString("lblClosedFilter")
-                        + " <input type=\"RADIO\" id=\"hideClosedTasks\""
+                sbPrint.append("<label for=\"hideClosedTasks\" >" +
+                        paramRequest.getLocaleString("lblClosedFilter")
+                        + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""
                         + "name=\"hideClosedTasks\" " +
-                        " label=\"" +
-                        paramRequest.getLocaleString("cpClosedFilter0") +
-                        "\" checked value=\"0\" >" +
+                        "  checked value=\"0\" >" +
                         paramRequest.getLocaleString("cpClosedFilter0") +
                         "<br/>" +
                         "<input type=\"RADIO\" id=\"hideClosedTasks\""
                         + "name=\"hideClosedTasks\" " +
-                        " label=\"" +
+                        "  value=\"1\">" +
                         paramRequest.getLocaleString("cpClosedFilter1") +
-                        "\" value=\"1\">" +
-                        paramRequest.getLocaleString("cpClosedFilter1") +
-                        "<br/>");
+                        "<br/><br/>");
             }
             sbPrint.append("<br/><br/>");
-            sbPrint.append("<input type=\"SUBMIT\" name=\"btnSave\" value=\"" +
+            sbPrint.append("<input type=\"SUBMIT\" name=\"btnSave\" class=\"pleca_boton\" value=\"" +
                     paramRequest.getLocaleString("btnSave") + "\"/>");
-            sbPrint.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
+            sbPrint.append("<input type=\"RESET\" name=\"btnReset\" class=\"pleca_boton\" value=\"" +
                     paramRequest.getLocaleString("btnCancel") +"\"/>");
-            sbPrint.append("<input type=\"SUBMIT\" name=\"btnBack2View\" " +
-                    " onclick=\"direcciona('" + url.setAction("goToView") + "');\"" +
+            sbPrint.append("<input type=\"SUBMIT\" name=\"btnBack2View\" class=\"pleca_boton\" " +
+                    " onclick=\"direccionaP('" + url.setAction("goToView") + "');\"" +
                     " value=\"" + paramRequest.getLocaleString("btnBack") + "\"/>");
             sbPrint.append("</form>");
-            sbPrint.append("</div>");
+            sbPrint.append("</div></div>");
         } catch(Exception e){
             //log.error("Error en ControlPanel.customizeDisplay", e);
             System.out.println("Error en ControlPanel.customizeDisplay:" +
@@ -2147,18 +2132,18 @@ public class ControlPanel extends GenericAdmResource
                     ?""
                     :fobi.getEndedby().getFullName();
             }
-            sb.append("<tr class=\"cpRow\">");
-            sb.append("<td class=\"cpCell\">" + strProcessTitle + "</td>");
-            sb.append("<td class=\"cpCell\">" + strId + "</td>");
-            sb.append("<td class=\"cpCell\">" + strTaskTitle + "</td>");
-            sb.append("<td class=\"cpCell\">" + strDateCreated + "</td>");
-            sb.append("<td class=\"cpCell\">" + strCreator + "</td>");
-            sb.append("<td class=\"cpCell\">" + strStatus + "</td>");
-            sb.append("<td class=\"cpCell\">" + strDateModified + "</td>");
-            sb.append("<td class=\"cpCell\">" + strModifiedBy + "</td>");
-            sb.append("<td class=\"cpCell\">" + strDateEnded + "</td>");
-            sb.append("<td class=\"cpCell\">" + strEndedBy + "</td>");
-            sb.append("<td class=\"cpCell\">" + strPriority + "</td>");
+            sb.append("<tr >");
+            sb.append("<td >" + strProcessTitle + "</td>");
+            sb.append("<td >" + strId + "</td>");
+            sb.append("<td >" + strTaskTitle + "</td>");
+            sb.append("<td >" + strDateCreated + "</td>");
+            sb.append("<td >" + strCreator + "</td>");
+            sb.append("<td >" + strStatus + "</td>");
+            sb.append("<td >" + strDateModified + "</td>");
+            sb.append("<td >" + strModifiedBy + "</td>");
+            sb.append("<td >" + strDateEnded + "</td>");
+            sb.append("<td >" + strEndedBy + "</td>");
+            sb.append("<td >" + strPriority + "</td>");
             sb.append("</tr>");
 
         } catch(Exception e){
@@ -2331,7 +2316,7 @@ public class ControlPanel extends GenericAdmResource
         try
         {
 
-            sb.append("<a href=\"" + strDownloadXml + "\">" +
+            sb.append("<a href=\"" + strDownloadXml + "\" class=\"xml\">" +
                     paramsRequest.getLocaleString("lblXmlReport") + "</a>");
             Vector vAllTasks = filterReport(request, paramsRequest);
             BPMSTask.ClassMgr.sortTasks(vAllTasks,
@@ -2539,7 +2524,7 @@ public class ControlPanel extends GenericAdmResource
         StringBuffer sb = new StringBuffer();
         try
         {
-            sb.append("<a href=\"" + strDownloadPdf + "\">" +
+            sb.append("<a href=\"" + strDownloadPdf + "\" class=\"pdf\" >" +
                     paramsRequest.getLocaleString("lblPdfReport") + "</a>");
             User currentUser = paramsRequest.getUser();
             String strInitialReportDate =
@@ -2814,7 +2799,7 @@ public class ControlPanel extends GenericAdmResource
         StringBuffer sb = new StringBuffer();
         try
         {
-            sb.append("<a href=\"" + strDownloadRtf + "\">" +
+            sb.append("<a href=\"" + strDownloadRtf + "\" class=\"rtf\">" +
                     paramsRequest.getLocaleString("lblRtfReport") + "</a>");
             User currentUser = paramsRequest.getUser();
             String strInitialReportDate =
@@ -2945,7 +2930,16 @@ public class ControlPanel extends GenericAdmResource
             sb.append("\n      document.forms['frmReport'].submit();");
             sb.append("\n   }");
             sb.append("\n</script>");
-
+            sb.append("<div id=\"tareas\">");
+            sb.append("<p class=\"izq\">" + paramsRequest.getLocaleString("lblCrReportTitle") + " " +
+                    currentUser.getFullName() + " " +
+                    paramsRequest.getLocaleString("lblCrReportStart") + " " +
+                    strInitialReportDate + " " +
+                    paramsRequest.getLocaleString("lblCrReportEnd") + " " +
+                    strEndReportDate +
+                    "</p>");
+            sb.append("<p class=\"der cerradas-si\"></p></div>");
+            /*
             sb.append("<div class=\"swbform\">");
             sb.append("<div>" +
                     paramsRequest.getLocaleString("lblCrReportTitle") + " " +
@@ -2959,49 +2953,52 @@ public class ControlPanel extends GenericAdmResource
             sb.append("<div>" +
                     paramsRequest.getLocaleString("lblCrReportCriteria") +
                     "</div>");
-            sb.append("<table class=\"cpTable\"><th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow0") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow1") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow2") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow3") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow4") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow5") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow6") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow7") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow8") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow9") + "</th>" +
-                    "<th class=\"cpHeaderRow\">" +
-                    paramsRequest.getLocaleString("cpHeaderRow10") + "</th>");
+            */
+            
+            sb.append("<table><thead><th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow0") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow1") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow2") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow3") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow4") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow5") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow6") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow7") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow8") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow9") + "</a></th>" +
+                    "<th class=\"orden-no\"><a href=\"#\">" +
+                    paramsRequest.getLocaleString("cpHeaderRow10") + "</a></th></thead><tbody>");
             for(int i=0; i<vAllTasks.size(); i++){
                 TaskLink tLink = (TaskLink) vAllTasks.get(i);
                 FlowNodeInstance fobi = tLink.getTaskLinkFlowNodeInstance();
-                sb.append(printReportTask(fobi, paramsRequest));
+                sb.append(printReportTask(fobi, paramsRequest));  
             }
-            sb.append("</table>");
-            sb.append("</div>");
-            sb.append("<div>");
-            sb.append("<table class=\"cpExport\"><tr><td>");
+            sb.append("</tbody></table>");
+             
+            //sb.append("</div>");
+            sb.append("<div id=\"descarga\">");
+            sb.append("<ul><li>");
             sb.append(createXmlReport(request, paramsRequest));
-            sb.append("</td><td>");
+            sb.append("</li><li>");
             sb.append(createPdfReport(request, paramsRequest));
-            sb.append("</td><td>");
+            sb.append("</li><li>");
             sb.append(createRtfReport(request, paramsRequest));
-            sb.append("</td></tr></table>");
-            sb.append("</div>");
+            sb.append("</li></ul>");
+            sb.append("");
             sb.append("<form name=\"frmReport\" action=\"" + url.setAction("selectReport") + "\" method=\"POST\">");
-            sb.append("<input type=\"SUBMIT\" " + "name=\"btnReport\"  value=\"" + paramsRequest.getLocaleString("btnNewReport") + "\"/>");
-            sb.append("<input type=\"SUBMIT\" " + "name=\"btnBack2View\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" +
+            //sb.append("<input type=\"SUBMIT\" " + "name=\"btnReport\"  value=\"" + paramsRequest.getLocaleString("btnNewReport") + "\"/>");
+            sb.append("<input type=\"SUBMIT\" " + "name=\"btnBack2View\" class=\"pleca_boton\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" +
                     " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
-            sb.append("</form>");
+            sb.append("</form></div>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.displayReport", e);
             System.out.println("Error en ControlPanel.displayReport:"
@@ -3052,32 +3049,30 @@ public class ControlPanel extends GenericAdmResource
             SWBResourceURL url = paramsRequest.getRenderUrl();
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
-            sb.append("<script type=\"text/javascript\">");
-            sb.append("dojo.require(\"dojo.parser\");");
-            sb.append("dojo.require(\"dijit.Dialog\");");
-            sb.append("dojo.require(\"dijit.form.Form\");");
-            sb.append("dojo.require(\"dijit.form.Button\");");
-            sb.append("dojo.require(\"dijit.form.DateTextBox\");");
-            sb.append("dojo.require(\"dijit.form.ValidationTextBox\");");
-            sb.append("dojo.require(\"dijit.form.TimeTextBox\");");
-            sb.append("dojo.require(\"dijit.form.Textarea\");");
-            sb.append("dojo.require(\"dijit.form.ComboBox\");");
-            sb.append("dojo.require(\"dojox.validate.regexp\");");
-            sb.append("</script>");
-
             sb.append("\n<script type=\"text/javascript\">");
-            sb.append("\n   function direcciona(action){");
+            sb.append("\n   function direccionaI(action){");
             sb.append("\n      document.forms['frmSelectReport'].action = action;");
             sb.append("\n      document.forms['frmSelectReport'].submit();");
             sb.append("\n   }");
             sb.append("\n</script>");
 
-            sb.append("<div class=\"swbform\">" +
+            sb.append("<div id=\"informe\"><div class=\"pleca\"><h3>" +
                     paramsRequest.getLocaleString("lblReportTitle") +
-                    "<br/><br/>");
+                    "</h3>");
             sb.append("<form name=\"frmSelectReport\" action=\"" +
                     paramsRequest.getRenderUrl().setAction("buildReport") +
                     "\" dojoType=\"dijit.form.Form\" method=\"POST\">");
+
+            sb.append("<label for=\"" + INITIAL_DATE_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportIniDate") + ":</label>");
+            sb.append("<input type=\"text\" name=\"" + INITIAL_DATE_REPORT_CTRL + "\" id=\"" + INITIAL_DATE_REPORT_CTRL +"\" class=\"pleca_txt\" " +
+                  "dojoType=\"dijit.form.DateTextBox\"" +
+                    " required=\"false\""+
+                    "invalidMessage=\"" +
+                    paramsRequest.getLocaleString("msgErrEventFecha")
+                    + " style=\"width: 25%;\"" +
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\" />");
+            sb.append("<br />");
+            /*
             sb.append(paramsRequest.getLocaleString("lblReportIniDate")
                     + "<input id=\"" +INITIAL_DATE_REPORT_CTRL +
                     "\" name=\"" + INITIAL_DATE_REPORT_CTRL +"\"" +
@@ -3087,6 +3082,17 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%;\"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
+             */
+            sb.append("<label for=\"" + END_DATE_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportEndDate") + ":</label>");
+            sb.append("<input type=\"text\" name=\"" + END_DATE_REPORT_CTRL + "\" id=\"" + END_DATE_REPORT_CTRL +"\" class=\"pleca_txt\" " +
+                  "dojoType=\"dijit.form.DateTextBox\"" +
+                    " required=\"false\""+
+                    "invalidMessage=\"" +
+                    paramsRequest.getLocaleString("msgErrEventFecha")
+                    + " style=\"width: 25%;\"" +
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\" />");
+            sb.append("<br />");
+            /*
             sb.append(paramsRequest.getLocaleString("lblReportEndDate")
                     + "<input id=\"" +END_DATE_REPORT_CTRL +
                     "\" name=\"" + END_DATE_REPORT_CTRL +"\"" +
@@ -3096,8 +3102,9 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%; \"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-            sb.append(paramsRequest.getLocaleString("lblReportProcess")
-                    + " <select name=\""+PROCESS_REPORT_CTRL+ ""
+            */
+	        sb.append("<label for=\"" + PROCESS_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportProcess") + ":</label>");
+            sb.append(" <select name=\""+PROCESS_REPORT_CTRL+ ""
                 + "\" id=\""+PROCESS_REPORT_CTRL+"\">");
             sb.append("<option ");
             sb.append("value=\"0\">" +
@@ -3114,9 +3121,8 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</select><br/><br/>");
             Vector vTaskStatus =
                     BPMSProcessInstance.ClassMgr.stringToVector(ALL_STATUS);
-            sb.append("<label>" +
-                    paramsRequest.getLocaleString("lblReportStatus")
-                    + "</label><select name=\"" + STATUS_REPORT_CTRL +
+	        sb.append("<label for=\"" + STATUS_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportStatus") + ":</label>");
+            sb.append("<select name=\"" + STATUS_REPORT_CTRL +
                     "\" id=\""+ STATUS_REPORT_CTRL + "\" MULTIPLE SIZE=6>");
                 sb.append("<option ");
                 sb.append("value=\"-1\">" +
@@ -3131,9 +3137,8 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</select><br/><br/>");
             Vector vTaskPriority =
                     BPMSProcessInstance.ClassMgr.stringToVector(ALL_PRIORITY);
-            sb.append("<label>" +
-                    paramsRequest.getLocaleString("lblReportPriority")
-                    + "</label><select name=\"" + PRIORITY_REPORT_CTRL +
+	        sb.append("<label for=\"" + PRIORITY_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportPriority") + ":</label>");
+            sb.append("<select name=\"" + PRIORITY_REPORT_CTRL +
                     "\" id=\""+ PRIORITY_REPORT_CTRL + "\" MULTIPLE SIZE=6>");
                 sb.append("<option ");
                 sb.append("value=\"-1\">" +
@@ -3147,15 +3152,13 @@ public class ControlPanel extends GenericAdmResource
             }
             sb.append("</select><br/><br/>");
 
-            sb.append("<input type=\"SUBMIT\" name=\"btnEdit\"  value=\"" +
+            sb.append("<input type=\"SUBMIT\" class=\"pleca_boton\" name=\"btnEdit\"  value=\"" +
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
-            sb.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
+            sb.append("<input type=\"RESET\" class=\"pleca_boton\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
-            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\"  value=\"" +
-                    paramsRequest.getLocaleString("btnBack") + "\"" +
-                    " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
+            //sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" + " onclick=\"direccionaI('" + url.setAction("goToView") + "');\" />");
 
-            sb.append("</form>");
+            sb.append("</form></div></div>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getFilterForm", e);
             System.out.println("Error en ControlPanel.getReportForm:"
@@ -3630,32 +3633,39 @@ public class ControlPanel extends GenericAdmResource
             strControlPanelTaskPriority = ALL_PRIORITY;
             Vector vSelectedProcessDefinitions =
                         getSelectedProcessDefinitions(paramsRequest);
-            sb.append("<script type=\"text/javascript\">");
-            sb.append("dojo.require(\"dojo.parser\");");
-            sb.append("dojo.require(\"dijit.Dialog\");");
-            sb.append("dojo.require(\"dijit.form.Form\");");
-            sb.append("dojo.require(\"dijit.form.Button\");");
-            sb.append("dojo.require(\"dijit.form.DateTextBox\");");
-            sb.append("dojo.require(\"dijit.form.ValidationTextBox\");");
-            sb.append("dojo.require(\"dijit.form.TimeTextBox\");");
-            sb.append("dojo.require(\"dijit.form.Textarea\");");
-            sb.append("dojo.require(\"dijit.form.ComboBox\");");
-            sb.append("dojo.require(\"dojox.validate.regexp\");");
-            sb.append("</script>");
-
             sb.append("\n<script type=\"text/javascript\">");
-            sb.append("\n   function direcciona(action){");
+            sb.append("\n   function direccionaF(action){");
             sb.append("\n      document.forms['frmFilter'].action = action;");
             sb.append("\n      document.forms['frmFilter'].submit();");
             sb.append("\n   }");
             sb.append("\n</script>");
 
-            sb.append("<div class=\"swbform\">" +
+            sb.append("<div id=\"filtrado\"><div class=\"pleca\"><h3>" +
                     paramsRequest.getLocaleString("lblFilterTitle") +
-                    "<br/><br/>");
+                    "</h3>");
             sb.append("<form name=\"frmFilter\" action=\"" +
                     paramsRequest.getRenderUrl().setAction("filter") +
                     "\" dojoType=\"dijit.form.Form\" method=\"POST\">");
+
+	      sb.append("<label for=\"" + INITIAL_DATE_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterIniDate") + ":</label>");
+	      sb.append("<input type=\"text\" name=\"" + INITIAL_DATE_FILTER_CTRL + "\" id=\"" + INITIAL_DATE_FILTER_CTRL +"\" class=\"pleca_txt\" " +
+                  "dojoType=\"dijit.form.DateTextBox\"" +
+                    " required=\"false\""+
+                    "invalidMessage=\"" +
+                    paramsRequest.getLocaleString("msgErrEventFecha")
+                    + " style=\"width: 25%;\"" +
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\" />");
+          sb.append("<br />");
+	      sb.append("<label for=\"" + END_DATE_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterEndDate") + ":</label>");
+	      sb.append("<input type=\"text\" name=\"" + END_DATE_FILTER_CTRL + "\" id=\"" + END_DATE_FILTER_CTRL +"\" class=\"pleca_txt\" " +
+                  "dojoType=\"dijit.form.DateTextBox\"" +
+                    " required=\"false\""+
+                    "invalidMessage=\"" +
+                    paramsRequest.getLocaleString("msgErrEventFecha")
+                    + " style=\"width: 25%;\"" +
+                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/>");
+          sb.append("<br />");
+            /*
             sb.append(paramsRequest.getLocaleString("lblFilterIniDate")
                     + "<input id=\"" +INITIAL_DATE_FILTER_CTRL +
                     "\" name=\"" + INITIAL_DATE_FILTER_CTRL +"\"" +
@@ -3674,9 +3684,14 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("msgErrEventFecha")
                     + " style=\"width: 25%;\"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-            sb.append(paramsRequest.getLocaleString("lblFilterProcess")
+            */
+	      sb.append("<label for=\"" + PROCESS_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterProcess") + ":</label>");
+	      sb.append("<select name=\"" + PROCESS_FILTER_CTRL + "\" id=\"" + PROCESS_FILTER_CTRL +"\" />");
+          /*
+          sb.append(paramsRequest.getLocaleString("lblFilterProcess")
                     + " <select name=\""+PROCESS_FILTER_CTRL+ ""
                 + "\" id=\""+PROCESS_FILTER_CTRL+"\">");
+            */
             sb.append("<option ");
             sb.append("value=\"0\">" +
                     paramsRequest.getLocaleString("cpAllProcesses") +
@@ -3689,12 +3704,14 @@ public class ControlPanel extends GenericAdmResource
                 sb.append("value=\"" + selectedProcess.getURI()
                     + "\">" + selectedProcess.getTitle() +"</option>");
             }
-            sb.append("</select><br/><br/>");
+            sb.append("</select><br/>");
+
             Vector vTaskStatus =
                     BPMSProcessInstance.ClassMgr.stringToVector(
                         strControlPanelTaskStatus);
-            sb.append(paramsRequest.getLocaleString("lblFilterStatus")
-                    + " <select name=\""+STATUS_FILTER_CTRL+ ""
+	        sb.append("<label for=\"" + STATUS_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterStatus") + ":</label>");
+            //sb.append(paramsRequest.getLocaleString("lblFilterStatus")
+            sb.append(" <select name=\""+STATUS_FILTER_CTRL+ ""
                     + "\" id=\""+STATUS_FILTER_CTRL+"\">");
                 sb.append("<option ");
                 sb.append("value=\"-1\">" +
@@ -3711,8 +3728,9 @@ public class ControlPanel extends GenericAdmResource
             Vector vTaskPriority =
                     BPMSProcessInstance.ClassMgr.stringToVector(
                         strControlPanelTaskPriority);
-            sb.append(paramsRequest.getLocaleString("lblFilterPriority")
-                    + " <select name=\""+PRIORITY_FILTER_CTRL+ ""
+	        sb.append("<label for=\"" + PRIORITY_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterPriority") + ":</label>");
+            //sb.append(paramsRequest.getLocaleString("lblFilterPriority")
+            sb.append(" <select name=\""+PRIORITY_FILTER_CTRL+ ""
                     + "\" id=\""+PRIORITY_FILTER_CTRL+"\">");
                 sb.append("<option ");
                 sb.append("value=\"-1\">" +
@@ -3725,14 +3743,13 @@ public class ControlPanel extends GenericAdmResource
                         vTaskPriority.get(i)) + "</option>");
             }
             sb.append("</select><br/><br/>");
-            sb.append("<input type=\"SUBMIT\" name=\"btnEdit\"  value=\"" +
+            sb.append("<input type=\"SUBMIT\" class=\"pleca_boton\" name=\"btnEdit\"  value=\"" +
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
-            sb.append("<input type=\"RESET\" name=\"btnReset\" value=\"" +
+            sb.append("<input type=\"RESET\" class=\"pleca_boton\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
-            sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" value=\"" +
-                    paramsRequest.getLocaleString("btnBack") +
-                    "\" onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
+            //sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" value=\"" + paramsRequest.getLocaleString("btnBack") + "\" onclick=\"direccionaF('" + url.setAction("goToView") + "');\" />");
             sb.append("</form>");
+            sb.append("</div></div>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getFilterForm", e);
             System.out.println("Error en ControlPanel.getFilterForm:"
@@ -3808,8 +3825,6 @@ public class ControlPanel extends GenericAdmResource
             } else if(paramsRequest.getAction().equalsIgnoreCase("selectReport"))
             {
                 out.println(getReportForm(paramsRequest).toString());
-            } else if(paramsRequest.getAction().equalsIgnoreCase("buildReport")){
-                out.println(buildReport(request, paramsRequest).toString());
             } else {
                 //pintar tabla de tareas
                 Resource base = paramsRequest.getResourceBase();
@@ -3821,31 +3836,48 @@ public class ControlPanel extends GenericAdmResource
                 out.println("\n      document.forms['frmEditCustomization'].submit();");
                 out.println("\n   }");
                 out.println("\n</script>");
-                out.println("<div id=\"worklist\">");
-                out.println("<p>" + strTitle + "</p>");
-                out.println("<p>" + getUsedFilters(paramsRequest, request).toString() + "</p>");
-                out.println("<table border=\"0\">");
-                //out.println("<ul>");
-                //out.println(getUsedFilters(paramsRequest, request).toString());
-                //out.println("<li>" + getUsedFilters + "</li>");
-                out.println(printTaskLinks(request,paramsRequest).toString());
-                //out.println("</ul>");
-                out.println("</table>");
+                out.println("<div id=\"panel\" >");
+                out.println("<h2>" + strTitle + "</h2>");
+                out.println("<div id=\"filtros\"><p>" + paramsRequest.getLocaleString("lblAppliedFilters") + "</p>");
+                out.println(getUsedFilters(paramsRequest, request).toString() + "");
                 out.println("</div>");
+                if(paramsRequest.getAction().equalsIgnoreCase("buildReport")){
+                    out.println(buildReport(request, paramsRequest).toString());
+                } else {
+                    out.println(printTaskLinks(request,paramsRequest).toString());
+                }
+                out.println("<div id=\"tabs\">");
                 out.println("<form id=\"frmEditCustomization\" name=\"frmEditCustomization\" action=\"" +
                         paramsRequest.getRenderUrl().setAction(
                         "editCustomization") + "\" method=\"POST\">");
-                out.println("<input type=\"SUBMIT\" name=\"btnEdit\" " +
-                        " value=\"" + paramsRequest.getLocaleString("btnCustomize") + "\"/>");
-                out.println("<input type=\"SUBMIT\" name=\"btnFilter\" " +
-                        " value=\"" +
-                        paramsRequest.getLocaleString("btnFilter") + "\" " +
-                        "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\" />");
-                out.println("<input type=\"SUBMIT\" name=\"btnReport\" " +
-                        " value=\"" +
-                        paramsRequest.getLocaleString("btnReport") + "\" " +
-                        "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\" />");
+                //out.println("<li><input type=\"SUBMIT\" name=\"btnEdit\" " + " value=\"" + paramsRequest.getLocaleString("btnCustomize") + "\"/></li>");
+                out.println("<ul>");
+                //out.println("<li class=\"tab-on\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
+                //out.println("<li class=\"tab-off\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
+                out.println("<li id=\"li_filtrado\" class=\"tab-on\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','show','informe','','hide','personalizar','','hide');selectedTab('filtrado');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
+                out.println("<li id=\"li_informe\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','show','personalizar','','hide');selectedTab('informe');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
+                out.println("</ul>");
+                //out.println("<input type=\"SUBMIT\" name=\"btnFilter\" " + " value=\"" + paramsRequest.getLocaleString("btnFilter") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\" />");
+                //out.println("<input type=\"SUBMIT\" name=\"btnReport\" " + " value=\"" + paramsRequest.getLocaleString("btnReport") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\" />");
                 out.println("</form>");
+                out.println("</div>");
+            out.println("<script type=\"text/javascript\">");
+            out.println("dojo.require(\"dojo.parser\");");
+            out.println("dojo.require(\"dijit.Dialog\");");
+            out.println("dojo.require(\"dijit.form.Form\");");
+            out.println("dojo.require(\"dijit.form.Button\");");
+            out.println("dojo.require(\"dijit.form.DateTextBox\");");
+            out.println("dojo.require(\"dijit.form.ValidationTextBox\");");
+            out.println("dojo.require(\"dijit.form.TimeTextBox\");");
+            out.println("dojo.require(\"dijit.form.Textarea\");");
+            out.println("dojo.require(\"dijit.form.ComboBox\");");
+            out.println("dojo.require(\"dojox.validate.regexp\");");
+            out.println("</script>");
+                out.println("<div id=\"plecas-padre\">");
+                out.println(getFilterForm(paramsRequest));
+                out.println(getReportForm(paramsRequest));
+                out.print(customizeDisplay(request, response, paramsRequest));
+                out.println("</div>");
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.doView", e);
@@ -3882,60 +3914,60 @@ public class ControlPanel extends GenericAdmResource
             int totalPages = getTotalPages(vectorSize,intRowsPerPage);
             int endRow = getPageLastRow(vectorSize,intRowsPerPage,intCurrPage);
             int iniRow = getPageFirstRow(vectorSize,intRowsPerPage,intCurrPage);
-            sb.append("<table border=1><tr>");
+            //sb.append("<table border=1><tr>");
             if(totalPages>1 && intCurrPage>1){
                 int backPage = intCurrPage - 1;
                 SWBResourceURL sUrlFirstPage = paramRequest.getRenderUrl();
                 sUrlFirstPage.setParameter("cpCurrPage", "1");
-                sb.append("<td><a href=\"" + sUrlFirstPage);
+                sb.append("<a href=\"" + sUrlFirstPage);
                 if(!strFilterPagination.equalsIgnoreCase("")){
                     sb.append(strFilterPagination);
                 }
-                sb.append("\">" + paramRequest.getLocaleString("lblFirstPage") + "</a><td>");
+                sb.append("\">" + paramRequest.getLocaleString("lblFirstPage") + "</a>");
                 SWBResourceURL sUrlBack = paramRequest.getRenderUrl();
                 sUrlBack.setParameter("cpCurrPage", String.valueOf(backPage));
-                sb.append("<td><a href=\"" + sUrlBack);
+                sb.append("<a href=\"" + sUrlBack);
                 if(!strFilterPagination.equalsIgnoreCase("")){
                     sb.append(strFilterPagination);
                 }
-                sb.append("\">" + paramRequest.getLocaleString("lblBackPage") +
-                        "</a><td>");
+                sb.append("\" class=\"pag_ant\" >" + paramRequest.getLocaleString("lblBackPage") +
+                        "</a>");
             }
             for(int i=0; i<totalPages; i++){
                 page = i+1;
                 if(page==intCurrPage)
                 {
-                    sb.append("<td>" + page + "<td>");
+                    sb.append(page);
                 } else {
                     SWBResourceURL sUrlPage = paramRequest.getRenderUrl();
                     sUrlPage.setParameter("cpCurrPage", String.valueOf(page));
-                    sb.append("<td><a href=\"" + sUrlPage);
+                    sb.append("<a href=\"" + sUrlPage);
                     if(!strFilterPagination.equalsIgnoreCase("")){
                         sb.append(strFilterPagination);
                     }
-                    sb.append("\">" + page + "</a><td>");
+                    sb.append("\">" + page + "</a>");
                 }
             }
             if(totalPages>1 && intCurrPage<totalPages){
                 int nextPage = intCurrPage + 1;
                 SWBResourceURL sUrlNext = paramRequest.getRenderUrl();
                 sUrlNext.setParameter("cpCurrPage", String.valueOf(nextPage));
-                sb.append("<td><a href=\"" + sUrlNext);
+                sb.append("<a href=\"" + sUrlNext);
                 if(!strFilterPagination.equalsIgnoreCase("")){
                     sb.append(strFilterPagination);
                 }
-                sb.append("\">" + paramRequest.getLocaleString("lblNextPage") + "</a><td>");
+                sb.append("\" class=\"pag_sig\" >" + paramRequest.getLocaleString("lblNextPage") + "</a>");
                 SWBResourceURL sUrlLastPage = paramRequest.getRenderUrl();
                 sUrlLastPage.setParameter("cpCurrPage",
                         String.valueOf(totalPages));
-                sb.append("<td><a href=\"" + sUrlLastPage);
+                sb.append("<a href=\"" + sUrlLastPage);
                 if(!strFilterPagination.equalsIgnoreCase("")){
                     sb.append(strFilterPagination);
                 }
                 sb.append("\">" + paramRequest.getLocaleString("lblLastPage") +
-                        "</a><td>");
+                        "</a>");
             }
-            sb.append("</tr></table>");
+            //sb.append("</tr></table>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getPagination", e);
             System.out.println("Error en ControlPanel.getPagination:"
