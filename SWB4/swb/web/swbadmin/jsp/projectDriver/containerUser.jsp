@@ -62,12 +62,13 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height:18px;
 }
 #proyecto .porcentajeAvance {
    float:left;
@@ -81,7 +82,7 @@
 }
 #proyecto .liespa{
     width:100%;
-
+    height:58px;
 }
 .indentation{
     padding-left:10px;
@@ -108,12 +109,18 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height: 18px;
+}
+#proyecto .text{
+   color:#FFFFFF;
+   font-weight: bold;
+   font-style: italic;
 }
 </style>
   <div id="proyecto">
@@ -178,7 +185,7 @@
         ita=userValid.iterator();
         if(ita.hasNext()){
 %>
-      <h2><%=paramRequest.getLocaleString("titleAssociatedPersonnel")%></h2>
+      <h2><%=paramRequest.getLocaleString("titleAssociatedPersonnel")%></h2><br>
 <%      //Recorre los usuarios validos y recorre las actividades validas asociadas a cada usuario, obtiene la barra de progreso para cada usuario
         while(ita.hasNext()){
             UserWebPage wpu=(UserWebPage)ita.next();

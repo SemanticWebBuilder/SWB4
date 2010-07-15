@@ -62,12 +62,13 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height: 18px;
 }
 #proyecto .porcentajeAvance {
    float:left;
@@ -80,9 +81,9 @@
     height:38px;
 }
 #proyecto .liespa{
-    padding-top: 10px;
+    
     width:100%;
-
+    height:56px;
 }
 .indentation{
     padding-left:10px;
@@ -93,13 +94,13 @@
     height:35px;
 }
 #proyecto .datosUsuIzq{
-    width:19%;
+    width:22%;
     float: left;
     padding-left:11px;
     padding-bottom: 4px;
 }
 #proyecto .datosUsuDer{
-    width:77%;
+    width:75%;
     float: right;
     padding-left:3px;
     padding-bottom: 4px;
@@ -125,14 +126,19 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height:18px;
 }
-
+#proyecto .text{
+   color:#FFFFFF;
+   font-weight: bold;
+   font-style: italic;
+}
 </style>
 <div id="proyecto">
 <%
@@ -150,8 +156,12 @@
             while(ita.hasNext()){
                 WebPage acts= (WebPage)ita.next();
                 boolean valid=validaPage(acts,user.getLanguage());
-                if(valid&&acts.isChildof(project))
-                    listAct.add(acts);
+                if(valid&&acts.isChildof(project)){
+                    Activity acti = (Activity)acts;
+                    if(acti.getStatus().equals("unassigned"))
+                        acti.setStatus("assigned");
+                    listAct.add(acti);
+                }
             }
             ita = listAct.iterator();
             listAct=new ArrayList();
@@ -194,27 +204,27 @@
         <%
         if(!assig.isEmpty()){
         %>
-        <h3><%=paramRequest.getLocaleString("titleNoBeginActivities")%></h3>
+        <h3><%=paramRequest.getLocaleString("titleNoBeginActivities")%></h3><br>
         <%out.println(printStatusActivity(assig,paramRequest.getLocaleString("msgTotalHours")));
         }
         if(!devel.isEmpty()){
         %>
-        <h3><%=paramRequest.getLocaleString("titleDevelopmentActivities")%></h3>
+        <h3><%=paramRequest.getLocaleString("titleDevelopmentActivities")%></h3><br>
         <%out.println(printStatusActivity(devel,paramRequest.getLocaleString("msgTotalHours")));
         }
         if(!paus.isEmpty()){
         %>
-        <h3><%=paramRequest.getLocaleString("titleInterruptedActivities")%></h3>
+        <h3><%=paramRequest.getLocaleString("titleInterruptedActivities")%></h3><br>
         <%out.println(printStatusActivity(paus,paramRequest.getLocaleString("msgTotalHours")));
         }
         if(!canc.isEmpty()){
         %>
-        <h3><%=paramRequest.getLocaleString("titleCanceledActivities")%></h3>
+        <h3><%=paramRequest.getLocaleString("titleCanceledActivities")%></h3><br>
         <%out.println(printStatusActivity(canc,paramRequest.getLocaleString("msgTotalHours")));
         }
         if(!end.isEmpty()){
         %>
-        <h3><%=paramRequest.getLocaleString("titleCompletedActivities")%></h3>
+        <h3><%=paramRequest.getLocaleString("titleCompletedActivities")%></h3><br>
         <%out.println(printStatusActivity(end,paramRequest.getLocaleString("msgTotalHours")));
         }
    }else{%>
