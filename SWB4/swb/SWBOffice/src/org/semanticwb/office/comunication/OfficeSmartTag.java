@@ -92,6 +92,27 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag{
     private Iterator<SemanticObject> searchObject(String text)
     {
         ArrayList<SemanticObject> searchObject=new ArrayList<SemanticObject>();
+        /*SearchQuery query = new SearchQuery();
+        SearchQuery tquery = new SearchQuery(SearchQuery.OPER_AND);
+        query.addQuery(tquery);
+
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TITLE, text, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DESCRIPTION, text, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_TAGS, text, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_DATA, text, SearchTerm.OPER_OR));
+        tquery.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, text, SearchTerm.OPER_OR));
+
+        SWBIndexer indexer = SWBPortal.getIndexMgr().getDefaultIndexer();
+        if(indexer != null) {
+            SearchResults results = indexer.search(query, user);
+            Iterator<SearchDocument>it = results.listDocuments();
+            while(it.hasNext()) {
+                SearchDocument obj = it.next();
+                Searchable srch = obj.getSearchable();
+                searchObject.add(srch.getSemanticObject());
+            }
+        }*/
+        
         Iterator<org.semanticwb.model.User> users=org.semanticwb.model.User.ClassMgr.listUsers();
         while(users.hasNext())
         {
