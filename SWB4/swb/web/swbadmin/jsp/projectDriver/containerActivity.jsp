@@ -66,14 +66,15 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left:10px;
+   height:18px;
 }
-#proyecto .list .text{
+#proyecto .text{
    color:#FFFFFF;
    font-weight: bold;
    font-style: italic;
@@ -103,12 +104,13 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height:18px;
 }
 #proyecto .datos .etiquetas{
     text-align: left;
@@ -135,13 +137,21 @@
 #proyecto .datos .global{
     width:100%;
 }
+#proyecto .datos .globalA{
+    width:100%;
+    height:30px;
+}
 #proyecto .datos{
     padding-bottom:2%;
     padding-top: 2%;
     
 }
 #proyecto .datos .elementos{
-    padding-bottom: 2%;
+    padding-bottom: 4px;
+}
+#proyecto .liespa{
+   height:56px;
+   width:100%;
 }
 </style>
     <div id="proyecto">
@@ -150,7 +160,7 @@
                 <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
                 <div class="elementos"><%=parent%></div>
             </div>
-            <div class="global">
+            <div class="globalA">
                 <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivitiesProgress")%>: </div>
                 <div class="barraDatos"><%=avan%></div>
             </div>
@@ -303,11 +313,15 @@
                 {
                     act = (Activity)it.next();
                     String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st.append("<div class=\"liespa\">\n");
+
                     st.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
                     st.append("<div class=\"espacio\">\n");
                     st.append("<div class=\"contPorcentaje\">\n");
                     st.append(pgrb);
                     st.append("</div>\n");
+                    st.append("</div>\n");
+
                     st.append("</div>\n");
                     if(level!=act.getLevel()&&pgrb!=null){
                         StringBuffer st1=new StringBuffer();
@@ -337,10 +351,13 @@
                 {
                     act = (Activity)it.next();
                     String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st1.append("<div class=\"liespa\">\n");
+
                     st1.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
                     st1.append("<div class=\"espacio\">\n");
                     st1.append("<div class=\"contPorcentaje\">\n");
                     st1.append(pgrb);
+                    st1.append("</div>\n");
                     st1.append("</div>\n");
                     st1.append("</div>\n");
                     if(level != act.getLevel()&&pgrb!=null){

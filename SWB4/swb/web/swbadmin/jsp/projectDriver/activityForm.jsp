@@ -11,7 +11,6 @@
             it=wp.listVisibleChilds(user.getLanguage());
             SemanticObject obj=SemanticObject.createSemanticObject(wp.getURI());
             Activity act = (Activity)obj.createGenericInstance();
-            ArrayList responsible = listUserRepository(act.getWebSite());
             validAct(act);
             proBar.add(act.getCurrentPercentage());
             proBar.add(act.getPlannedHour());
@@ -130,20 +129,24 @@
     float:right;
     width:97%;
 }
+#proyecto .liespa{
+    width:100%;
+    height:56px;
+}
 #proyecto .list .estatusBarra{
    border: 1px none #000000;
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
-
+   height:18px;
 }
-#proyecto .list .text{
+#proyecto .text{
    color:#FFFFFF;
    font-weight: bold;
    font-style: italic;
@@ -173,12 +176,13 @@
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height:18px;
 }
 #proyecto .datos .etiquetas{
     text-align: left;
@@ -214,12 +218,16 @@
 #proyecto .datos .global{
     width:100%;
 }
+#proyecto .datos .globalA{
+    width:100%;
+    height:30px;
+}
 #proyecto .datos{
     padding-bottom:2%;
     padding-top: 2%;
 }
 #proyecto .datos .elementos{
-    padding-bottom: 2%;
+    padding-bottom: 4px;
 }
 #proyecto .detalles{
     width: 100%;
@@ -241,6 +249,7 @@
 table.detail {
 	font-size: 100%;
 	color: black;
+        
 }
 table.detail td {
 	padding: 0.4em 0.5em 0.4em 0.5em;
@@ -264,12 +273,13 @@ table.detail th {
    visibility:hidden;
    background-color:#008040;
    margin-left:10px;
-   margin-top:4px;
+   margin-top:2px;
    color:#FFFFFF;
    font-weight: bold;
    text-indent: 15px;
    position: absolute;
    left: 10px;
+   height:18px;
 }
 </style>
     <div id="proyecto">
@@ -289,7 +299,7 @@ table.detail th {
                 <div class="etiquetas"><%=paramRequest.getLocaleString("titleProject")%>: </div>
                 <div class="elementos"><%=parent.getDisplayName()%></div>
             </div>
-            <div class="global">
+            <div class="globalA">
                 <div class="etiquetas"><%=paramRequest.getLocaleString("labelActivityProgress")%>: </div>
                 <div class="barraDatos"><%=getProgressBar(getListLeaf(act,user),paramRequest.getLocaleString("msgTotalHours"))%></div>
             </div>
@@ -317,7 +327,7 @@ table.detail th {
               <tbody>
               <tr><td width="200px"><%=mgr.renderLabel(request,act.swbproy_critical,mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){String checked="";
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")){String checked="";
                       if(act.isCritical()){checked="checked=\"checked\"";}
                       out.println("<input type=\"checkbox\" id=\""+act.swbproy_critical.getName()+"\" name=\""+act.swbproy_critical.getName()+"\""+checked+"\" disabled=\"disabled\">");
                   }else
@@ -326,7 +336,7 @@ table.detail th {
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_actType, mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")){
                      String value=act.getActType();
                      if(value==null)value="";
                      out.println("<input id=\""+act.swbproy_actType.getName()+"\" name=\""+act.swbproy_actType.getName()+"\" value=\""+value+"\" style=\"width:300px\" disabled=\"disabled\">");
@@ -375,7 +385,7 @@ table.detail th {
                     ArrayList vals1=getActsPrede(act);
                     ArrayList listAll=getActsForPrec(act, parent);
                     Iterator listActall = listAll.iterator();
-                   %><select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true" size="4" style="width:300px;" <%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){%>disabled<%}%>><%
+                   %><select name="<%=act.swbproy_hasPredecessor.getName()%>" multiple="true" size="4" style="width:300px;" <%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")){%>disabled<%}%>><%
                    if(listActall.hasNext())%><option value=""><%
                     while (listActall.hasNext()) {
                         WebPage sob = (WebPage)listActall.next();
@@ -389,6 +399,20 @@ table.detail th {
               </tr>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_EDIT)%></td>
                   <td><%
+                  //res = responsible.iterator();
+                  %><select name="<%=act.swbproy_responsible.getName()%>" disabled><%
+                  SemanticObject uri=null;
+                  if(act.getResponsible()!=null)
+                    uri = SemanticObject.createSemanticObject(act.getResponsible().getURI());
+                  if (uri!=null) {
+                  %><option value="<%=uri.getURI()%>" selected><%=uri.getDisplayName(user.getLanguage())%></option><%
+                  }else
+                  %><option value=" " selected> </option>
+                  </select>
+                 </td>
+              </tr>
+              <!--tr><td width="200px"><%/*=mgr.renderLabel(request, act.swbproy_responsible, mgr.MODE_EDIT)%></td>
+                  <td><%
                   res = responsible.iterator();
                    %><select name="<%=act.swbproy_responsible.getName()%>"<%if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){ %>disabled<%}%>><%
                         String uri="";
@@ -401,22 +425,23 @@ table.detail th {
                   %><option value="<%=sob.getURI()%>"<%
                                 if (sob.getURI().equals(uri)) {
                                     %>selected<%
-                                }
-                                    %>><%=sob.getDisplayName(user.getLanguage())%></option><%
-                            }
-                        }
+                                }*/
+                                    %>><%/*=sob.getDisplayName(user.getLanguage())*/%></option><%
+                           /* }
+                        }*/
                     %></select><%
     %>             </td>
-              </tr>
+              </tr-->
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_hasParticipants, mgr.MODE_EDIT)%></td>
                   <td><%
                     ArrayList<String> vals=new ArrayList();
                     listobj=act.listParticipantses();
                     while(listobj.hasNext())
                         vals.add(listobj.next().toString());
+                    ArrayList responsible = listUserRepository(act.getWebSite());
                     res = responsible.iterator();
                   %><select name="<%=act.swbproy_hasParticipants.getName()%>" multiple="true"  size="4" style="width:300px;"<%
-                    if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
+                    if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")){
                             %>disabled<%
                     }%>><%if(res.hasNext())%><option value=""><%
                     while (res.hasNext()) {
@@ -444,7 +469,7 @@ table.detail th {
     <%         }%>
               <tr><td width="200px"><%=mgr.renderLabel(request, act.swbproy_plannedHour, mgr.MODE_EDIT)%></td>
                   <td><%
-                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")||checkPrede){
+                  if(act.getStatus().equals("canceled")||act.getStatus().equals("ended")){
                      out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" disabled=\"disabled\">");
                   }else
                      out.println("<input id=\""+act.swbproy_plannedHour.getName()+"\" name=\""+act.swbproy_plannedHour.getName()+"\" value=\""+act.getPlannedHour()+"\" style=\"width:300px\" dojoType=\"dijit.form.ValidationTextBox\" regExp=\"\\d+\" invalidMessage=\""+paramRequest.getLocaleString("msgOnlyIntegers")+"\">");
@@ -470,7 +495,7 @@ table.detail th {
             </tbody>
            </table>
               <div class="barraGeneral"><%=getProgressBar(proBar,paramRequest.getLocaleString("msgTotalHours"))%></div>
-               <% if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")||checkPrede){%><div class="botones"><div class="btnIzq"><%
+               <% if(!act.getStatus().equals("canceled")&&!act.getStatus().equals("ended")){%><div class="botones"><div class="btnIzq"><%
                     out.println("<button type=\"button\" onclick=\"calcular(this.form)\">"+paramRequest.getLocaleString("btnCalculate")+"</button>");%></div><div class="btnDer"><%
                     out.println("<button type=\"submit\" onclick=\"return validar(this.form)\">"+paramRequest.getLocaleString("btnUpdate")+"</button>");%></div></div><%
                    }
@@ -820,11 +845,15 @@ table.detail th {
                 {
                     act = (Activity)it.next();
                     String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st.append("<div class=\"liespa\">\n");
+
                     st.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
                     st.append("<div class=\"espacio\">\n");
                     st.append("<div class=\"contPorcentaje\">\n");
                     st.append(pgrb);
                     st.append("</div>\n");
+                    st.append("</div>\n");
+
                     st.append("</div>\n");
                     if(level!=act.getLevel()&&pgrb!=null){
                         StringBuffer st1=new StringBuffer();
@@ -854,11 +883,15 @@ table.detail th {
                 {
                     act = (Activity)it.next();
                     String pgrb = getProgressBar(getListLeaf(act,user),titleLan);
+                    st1.append("<div class=\"liespa\">\n");
+
                     st1.append("  <div class=\"activity\">"+indentation+"      <a href=\""+act.getUrl()+"\">"+act.getDisplayName()+"</a></div>\n");
                     st1.append("<div class=\"espacio\">\n");
                     st1.append("<div class=\"contPorcentaje\">\n");
                     st1.append(pgrb);
                     st1.append("</div>\n");
+                    st1.append("</div>\n");
+
                     st1.append("</div>\n");
                     if(level != act.getLevel()&&pgrb!=null){
                         indentation=indentation+"&nbsp;&nbsp;&nbsp;&nbsp;";

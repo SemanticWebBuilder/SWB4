@@ -22,17 +22,23 @@
                                 height:20px;
                                 background-color: #0099FF;
                             }
+                            #proyecto .text{
+                               color:#FFFFFF;
+                               font-weight: bold;
+                               font-style: italic;
+                            }
                             #proyecto .estatusBarra{
                                border: 1px none #000000;
                                visibility:hidden;
                                background-color:#008040;
                                margin-left:10px;
-                               margin-top:4px;
+                               margin-top:2px;
                                color:#FFFFFF;
                                font-weight: bold;
                                text-indent: 15px;
                                position: absolute;
                                left: 10px;
+                               height:18px;
                             }
                             #proyecto .porcentajeAvance {
                                float:left;
@@ -75,10 +81,11 @@
                             }
                             #proyecto .liespa{
                                 width:100%;
-                                
+                                height:58px;
                             }
                             .indentation{
                                 padding-left:10px;
+                                width:100%;
                             }
                             #proyecto .avanceProy{
                                 width: 100%;
@@ -116,7 +123,7 @@
                                 float:right;
                             }
                             #proyecto .fechas .columnasDer{
-                                width:50%;
+                                width:49%;
                                 float:left;
                             }
                             #proyecto .fechas .columIzq{
@@ -124,8 +131,14 @@
                                 float:right;
                             }
                             #proyecto .fechas .columDer{
-                                width:50%;
+                                width:49%;
                                 float:left;
+                            }
+                            #proyecto .fechas .tag{
+                                width:100%;
+                            }
+                            #proyecto .fechas .value{
+                                width:100%;
                             }
                             #proyecto .avanDer .defaultPorcentaje{
                                 width:2%;
@@ -144,12 +157,13 @@
                                visibility:hidden;
                                background-color:#008040;
                                margin-left:10px;
-                               margin-top:4px;
+                               margin-top:2px;
                                color:#FFFFFF;
                                font-weight: bold;
                                text-indent: 15px;
                                position: absolute;
                                left: 10px;
+                               height:18px;
                             }
                        </style>
 <div id="proyecto">
@@ -346,9 +360,10 @@
                     String avan=getProgressBar(listActu,titleLan);
                     if(avan==null)
                         avan=label;//"Sin avance"
-                    buff.append("                             <div class=\"liespa\">");
-                    buff.append("                             <span class=\"indentation\"><a href=\""+wpu.getUrl()+"\">"+wpu.getDisplayName()+"</a></span>\n");
+                    buff.append("                             <div class=\"liespa\">\n");
+                    buff.append("                             <div class=\"indentation\"><a href=\""+wpu.getUrl()+"\">"+wpu.getDisplayName()+"</a></div>\n");
                     buff.append("                               <div class=\"espa\">"+avan+"</div>\n");
+                    buff.append("                             </div>\n");
                   }
               }
               return buff.toString();
@@ -398,7 +413,7 @@
                 {
                     wp = (WebPage)it.next();
                     st.append("                             <div class=\"liespa\">");
-                    st.append("                               <span class=\"indentation\"><a href=\""+wp.getUrl()+"\">"+wp.getDisplayName()+"</a></span>\n");
+                    st.append("                               <div class=\"indentation\"><a href=\""+wp.getUrl()+"\">"+wp.getDisplayName()+"</a></div>\n");
                     st.append("                               <div class=\"espa\">"+ getProgressBar(getListLeaf(wp,user,false),titleLan)+"</div>");
                     st.append("                             </div>");
                 }
