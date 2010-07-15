@@ -70,56 +70,51 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
         String action= response.getAction();
         if(action.equals("update")&& request.getParameter("uri")!=null){
             SemanticObject obj = SemanticObject.createSemanticObject(request.getParameter("uri"));
+            Activity act=(Activity)obj.createGenericInstance();
             int currHour=0,planHour=0;
             float currPerc=0;
-            String responsible="", critical="",actType="",status="";
+            String critical="",actType="",status="",status_ini="",status_act="";//responsible="",
             String vals[]=new String[0], valsParts[]=new String[0];
             try
             {
-                String status_ini=request.getParameter("status_ini");
-                String status_act=request.getParameter("status");
-
-                if(request.getParameter("currentHour")!=null&&!request.getParameter("currentHour").equals(""))
-                    currHour = Integer.parseInt(request.getParameter("currentHour"));
-                if(request.getParameter("currentHour")!=null&&!request.getParameter("currentPercentage").equals(""))
-                    currPerc = Float.parseFloat(request.getParameter("currentPercentage"));
-                if(request.getParameter("currentHour")!=null&&!request.getParameter("plannedHour").equals(""))
-                    planHour = Integer.parseInt(request.getParameter("plannedHour"));
-                if(request.getParameter("actType")!=null)
-                    actType = request.getParameter("actType");
-                if(request.getParameter("critical")!=null)
-                    critical = request.getParameter("critical");
-                if(request.getParameter("responsible")!=null)
-                    responsible = request.getParameter("responsible");
-                if(request.getParameterValues("hasPredecessor")!=null)
-                    vals=request.getParameterValues("hasPredecessor");
-                if(request.getParameterValues("hasParticipants")!=null)
-                    valsParts = request.getParameterValues("hasParticipants");
+                if(request.getParameter("status_ini")!=null)
+                    status_ini=request.getParameter("status_ini");
                 if(request.getParameter("status")!=null)
-                    status=request.getParameter("status");
-
-                Activity act=(Activity)obj.createGenericInstance();
+                    status_act=request.getParameter("status");
                 if((status_act.equals("develop")&&act.getStartDate()==null)||(status_act.equals("develop")&&status_ini.equals("paused"))||status_act.equals("develop")){
                     act.setStartDate(new Timestamp(new Date().getTime()));
                 }
                 if(status_act.equals("ended")||status_act.equals("canceled")){
                     act.setEndDate(new Timestamp(new Date().getTime()));
                 }
-
-                act.setCurrentHour(currHour);
-                act.setCurrentPercentage(currPerc);
-                act.setPlannedHour(planHour);
-                act.setStatus(status);
-                act.setActType(actType);
+                if(request.getParameter("currentHour")!=null&&!request.getParameter("currentHour").equals("")){
+                    currHour = Integer.parseInt(request.getParameter("currentHour"));
+                    act.setCurrentHour(currHour);
+                }
+                if(request.getParameter("currentPercentage")!=null&&!request.getParameter("currentPercentage").equals("")){
+                    currPerc = Float.parseFloat(request.getParameter("currentPercentage"));
+                    act.setCurrentPercentage(currPerc);
+                }
+                if(request.getParameter("plannedHour")!=null&&!request.getParameter("plannedHour").equals("")){
+                    planHour = Integer.parseInt(request.getParameter("plannedHour"));
+                    act.setPlannedHour(planHour);
+                }
+                if(request.getParameter("actType")!=null){
+                    actType = request.getParameter("actType");
+                    act.setActType(actType);
+                }
+                if(request.getParameter("status")!=null){
+                    status=request.getParameter("status");
+                    act.setStatus(status);
+                }
+                if(request.getParameter("critical")!=null)
+                    critical = request.getParameter("critical");
                 if(critical!=null && (critical.equals("true")||(critical.equals("on"))))
                     act.setCritical(true);
                 else
                     act.setCritical(false);
-                act.removeResponsible();
-                SemanticObject objs = SemanticObject.createSemanticObject(responsible);
-                User usrs = (User)objs.createGenericInstance();
-                act.setResponsible(usrs);
-
+                if(request.getParameterValues("hasParticipants")!=null)
+                    valsParts = request.getParameterValues("hasParticipants");
                 Iterator<User> usr = act.listParticipantses();
                 while(usr.hasNext()){
                     User usr1 = usr.next();
@@ -132,12 +127,13 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
                         act.addParticipants(us);
                     }
                 }
+                if(request.getParameterValues("hasPredecessor")!=null)
+                    vals=request.getParameterValues("hasPredecessor");
                 Iterator<Activity> ix=act.listPredecessors();
                 while(ix.hasNext()){
                     Activity actsx = ix.next();
                     act.removePredecessor(actsx);
                 }
-
                 for (int x = 0; x < vals.length; x++) {
                     if(!vals[x].equals("")){
                         SemanticObject obj1 = SemanticObject.createSemanticObject(vals[x]);
@@ -145,7 +141,6 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
                         act.addPredecessor(actsx1);
                     }
                 }
-                
                 getListPredecessores(act,response.getUser());
             }catch(Exception e){
                 log.error(e);
