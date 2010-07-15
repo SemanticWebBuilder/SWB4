@@ -168,7 +168,7 @@ public class RegisterUser extends GenericAdmResource {
                     response.setRenderParameter("msg", "ok");
                     response.setMode(response.Mode_VIEW);
                     response.setCallMethod(response.Call_CONTENT);
-                    SWBUtils.EMAIL.sendBGEmail(newUser.getEmail(), "Contacto del Sitio - Confirmación de registro", staticText);
+                    SWBUtils.EMAIL.sendBGEmail(newUser.getEmail(), "Contacto del Sitio "+siteName+"- Confirmación de registro", staticText);
                 }
                 return;
             } else {
