@@ -2895,12 +2895,22 @@ public class SWBUtils {
      */
     public static class EMAIL {
 
+        private static boolean smtpssl = false;
         /**
          * Represents the domain name or IP addres for the SMTP server to use.
          * <p>Reresenta el nombre de dominio o direcci&oacute;n IP del servidor
          * SMTP a usar.</p>
          */
         private static String smtpserver = null;
+        /**
+         * Represents the portof the IP addres for the SMTP server to use.
+         * <p>Reresenta el puerto de la IP del servidor
+         * SMTP a usar.</p>
+         */
+        private static int smtpport = 0;
+        /**
+         */
+        private static boolean smtptls = false;
         /**
          * Represents the user name registered in the SMTP server for sending messages.
          * <p>Representa el nombre de usuario registrado en el servidor SMTP para
@@ -2920,6 +2930,12 @@ public class SWBUtils {
          */
         private static String adminEmail = null;
 
+        public static void setSMTPSsl(boolean ssl)
+        {
+            SWBUtils.EMAIL.smtpssl = ssl;
+        }
+
+
         /**
          * Sets the domain name or IP address for the SMTP server to use.
          * <p>Fija el nombre de dominio o la direcci&oacute;n IP del servidor
@@ -2932,6 +2948,16 @@ public class SWBUtils {
         public static void setSMTPServer(String smtpserver)
         {
             SWBUtils.EMAIL.smtpserver = smtpserver;
+        }
+
+        public static void setSMTPPort(int port)
+        {
+            SWBUtils.EMAIL.smtpport = port;
+        }
+
+        public static void setSMTPTls(boolean tls)
+        {
+            SWBUtils.EMAIL.smtptls = smtptls;
         }
 
         /**
@@ -3004,6 +3030,7 @@ public class SWBUtils {
             String ret = null;
             try {
                 HtmlEmail email = new HtmlEmail();
+                email.setSSL(SWBUtils.EMAIL.smtpssl);
 
                 if (attachments != null && attachments.size() > 0)
                 {
@@ -3016,6 +3043,7 @@ public class SWBUtils {
                 }
 
                 email.setHostName(SWBUtils.EMAIL.smtpserver);
+                if(SWBUtils.EMAIL.smtpport>0)email.setSmtpPort(SWBUtils.EMAIL.smtpport);
                 email.setFrom(fromEmail, fromName);
                 email.setTo(address);
                 if (ccEmail != null)
@@ -3041,6 +3069,7 @@ public class SWBUtils {
                 {
                     email.setAuthentication(login, password);
                 }
+                if(SWBUtils.EMAIL.smtptls)email.setTLS(true);
                 ret = email.send();
             } catch (Exception e)
             {
@@ -3069,6 +3098,7 @@ public class SWBUtils {
             try
             {
                 HtmlEmail email = new HtmlEmail();
+                email.setSSL(SWBUtils.EMAIL.smtpssl);
 
                 Iterator itAttaches = message.getAttachments().iterator();
                 while (itAttaches.hasNext())
@@ -3078,6 +3108,7 @@ public class SWBUtils {
                 }
 
                 email.setHostName(SWBUtils.EMAIL.smtpserver);
+                if(SWBUtils.EMAIL.smtpport>0)email.setSmtpPort(SWBUtils.EMAIL.smtpport);
                 email.setFrom(message.getFromEmail(), message.getFromName());
                 email.setTo(message.getAddresses());
                 if (message.getCcEmail() != null)
@@ -3102,6 +3133,7 @@ public class SWBUtils {
                 {
                     email.setAuthentication(message.getLogin(), message.getPassword());
                 }
+                if(SWBUtils.EMAIL.smtptls)email.setTLS(true);
                 ret = email.send();
             } catch (Exception e)
             {
@@ -3206,8 +3238,8 @@ public class SWBUtils {
                 acol.add(address);
             }
             SWBUtils.EMAIL.sendBGEmail(SWBUtils.EMAIL.adminEmail, null, acol,
-                    null, null, subject, null, body, null,
-                    null, null);
+                    null, null, subject, null, body, SWBUtils.EMAIL.smtpuser,
+                    SWBUtils.EMAIL.smtppassword, null);
         }
 
         /**
