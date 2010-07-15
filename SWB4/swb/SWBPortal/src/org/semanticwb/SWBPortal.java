@@ -341,7 +341,10 @@ public class SWBPortal
 
         workPath = getEnv("swb/workPath");
 
+        SWBUtils.EMAIL.setSMTPSsl(Boolean.parseBoolean(getEnv("swb/smtpSsl","false")));
         SWBUtils.EMAIL.setSMTPServer(getEnv("swb/smtpServer"));
+        SWBUtils.EMAIL.setSMTPPort(Integer.parseInt(getEnv("swb/smtpPort","0")));
+        SWBUtils.EMAIL.setSMTPTls(Boolean.parseBoolean(getEnv("swb/smtpTls","false")));
         SWBUtils.EMAIL.setSMTPUser(getEnv("swb/smtpUser"));
         SWBUtils.EMAIL.setSMTPPassword(getEnv("swb/smtpPassword"));
         SWBUtils.EMAIL.setAdminEmail(getEnv("af/adminEmail"));
