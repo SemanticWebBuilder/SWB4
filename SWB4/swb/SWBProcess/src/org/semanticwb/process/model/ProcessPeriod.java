@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -102,6 +103,8 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
         Date exdate = null;
         Date cdate=new Date(today.getYear(),today.getMonth(),today.getDate(),today.getHours(),today.getMinutes());
 
+        boolean hasInter=((Element)interval).getElementsByTagName("inter").getLength()>0;
+
         if (interval != null) {
             NodeList nl = interval.getChildNodes();
 
@@ -158,7 +161,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                         exdate.setSeconds(s);
 
                         System.out.println("exdate:"+exdate+" "+cdate);
-                        if (exdate.compareTo(cdate)!=0){
+                        if (!hasInter && exdate.compareTo(cdate)!=0){
                             ret = false;
                             break;
                         }
@@ -167,6 +170,7 @@ public class ProcessPeriod extends org.semanticwb.process.model.base.ProcessPeri
                         long inter=Long.parseLong(time)*1000*60;
                         long act=cdate.getTime()-exdate.getTime();
 
+                        System.out.println("inter:"+act%inter);
                         if(act%inter!=0){
                             ret = false;
                             break;

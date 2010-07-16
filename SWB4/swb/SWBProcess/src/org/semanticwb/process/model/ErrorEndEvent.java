@@ -32,11 +32,7 @@ public class ErrorEndEvent extends org.semanticwb.process.model.base.ErrorEndEve
                     if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                     {
                         FlowNodeInstance source=(FlowNodeInstance)parent;
-                        source.setStatus(Instance.STATUS_CLOSED);
-                        source.setAction(Instance.ACTION_EVENT);
-                        source.setEnded(new Date());
-                        source.setEndedby(user);
-                        source.abortDependencies(user);
+                        source.close(user, Instance.STATUS_ABORTED, Instance.ACTION_EVENT, false);
 
                         FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
                         fn.setSourceInstance(instance);

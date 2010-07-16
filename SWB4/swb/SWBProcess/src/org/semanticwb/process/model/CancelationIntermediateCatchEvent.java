@@ -7,4 +7,10 @@ public class CancelationIntermediateCatchEvent extends org.semanticwb.process.mo
     {
         super(base);
     }
+    
+    @Override
+    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
+    {
+        instance.close(from.getCreator(),from.getSourceInstance().getAction());
+    }
 }
