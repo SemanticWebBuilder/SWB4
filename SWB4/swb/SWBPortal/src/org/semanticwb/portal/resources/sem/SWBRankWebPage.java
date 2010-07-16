@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted msg_has cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 package org.semanticwb.portal.resources.sem;
 
 import java.io.File;
@@ -51,28 +51,27 @@ import org.semanticwb.portal.api.*;
  */
 public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWBRankWebPageBase
 {
-    
+
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRankWebPage.class);
-    // http://www.semanticwebbuilder.org/swb4/ontology#rank
-    // http://www.semanticwebbuilder.org/swb4/ontology#reviews
 
+    private static final String PREFIX = "_voted";
 
     /** The full star path. */
     private String fullStarPath;
-    
+
     /** The half star path. */
     private String halfStarPath;
-    
+
     /** The empty star path. */
     private String emptyStarPath;
-    
+
     /** The Constant sp_rank. */
     private static final org.semanticwb.platform.SemanticProperty sp_rank = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rank");
-    
+
     /** The Constant sp_reviews. */
     private static final org.semanticwb.platform.SemanticProperty sp_reviews = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
-
+    
     /**
      * Instantiates a new sWB rank web page.
      */
@@ -82,7 +81,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
 
     /**
      * Instantiates a new sWB rank web page.
-     * 
+     *
      * @param base the base
      */
     public SWBRankWebPage(org.semanticwb.platform.SemanticObject base)
@@ -114,213 +113,262 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-     */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-        /*
-
-        <script language="javascript" type="text/javascript">
-var request = false;
-try {
-  request = new XMLHttpRequest();
-} catch (trymicrosoft) {
-  try {
-    request = new ActiveXObject("Msxml2.XMLHTTP");
-  } catch (othermicrosoft) {
-    try {
-      request = new ActiveXObject("Microsoft.XMLHTTP");
-    } catch (failed) {
-      request = false;
-    }
-  }
-}
-
-if (!request)
-  alert("Error initializing XMLHttpRequest!");
-
-
-function getCustomerInfo() {
-     var phone = document.getElementById("phone").value;
-     var url = "/cgi-local/lookupCustomer.php?phone=" + escape(phone);
-     request.open("GET", url, true);
-     request.onreadystatechange = updatePage;
-     request.send(null);
-   }
-
-function vote(val){
-    var url = "url+"value="+escape(val);
-    request.open("GET", url, true);
-    request.onreadystatechange = votedPage;
-    request.send(null);
-}
-
-function votedPage(){
-    var response = request.responseText;
-    if ('OK'==response)
-        alert('Vote acepted!');
-}
-
-
-</script>
-        */
-        String tmpUrl = "";
-        String URI = request.getParameter("uri");
-        SemanticObject obj = SemanticObject.createSemanticObject(URI);// paramRequest.getWebPage().getWebSite().;
-        PrintWriter out = response.getWriter();
-        int rank = 0;
-        if (null!=obj)
-        {
-            tmpUrl = "+\"&uri=\"+escape('"+URI+"')";
-            rank = (int) Math.round(Math.floor(obj.getDoubleProperty(sp_rank)* 10));
-        }
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if( paramRequest.getMode().equals("vote") )
+            doVote(request, response, paramRequest);
         else
-        {
-         rank = (int) Math.round(Math.floor(paramRequest.getWebPage().getRank() * 10));
-        }
-        //System.out.println("Rank:" + rank);
-        SWBResourceURL url = paramRequest.getActionUrl();
-        url.setAction("vote");
-        url.setMode(SWBResourceURL.Mode_HELP);
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        out.println("\n<script type=\"text/javascript\">\nvar request = false;\ntry {\n" +
-                "  request = new XMLHttpRequest();\n} " +
-                "catch (trymicrosoft) {\n  try {\n    request = new ActiveXObject(\"Msxml2.XMLHTTP\");\n" +
-                "  } catch (othermicrosoft) {\n    try {\n " +
-                "      request = new ActiveXObject(\"Microsoft.XMLHTTP\");\n    } catch (failed) {\n" +
-                "      request = false;\n    }\n  }\n}\nif " +
-                "(!request)\n  alert(\"Error initializing XMLHttpRequest!\");\n\nfunction vote(val){\n" +
-                "    if (!invoke) return;\n    var url = \""+url+"?value=\"+escape(val)"+tmpUrl+";\n" +
-                "    request.onreadystatechange = votedPage;\n    request.open(\"GET\", url, true);\n" +
-                "    request.send(null);\n}\n\nfunction votedPage(){\n" +
-                "    if (request.readyState==4){\n"+
-                "    var response = request.responseText;\n    if ('OK'==response)\n" +
-                "        alert('"+paramRequest.getLocaleString("votoAceptado")+"');\n\n    invoke = false;}}\nvar invoke = true;\n</script>\n");
-        out.print("<table summary=\""+paramRequest.getLocaleString("califCont")+"\"><tr>");
-        for (int i =1;i<=5;i++)
-        printStar(i, rank, out, paramRequest);
-        out.print("</tr></table>");
+            super.processRequest(request, response, paramRequest);
+    }
 
+
+    public void doVote(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        PrintWriter out = response.getWriter();
+
+        String URI = request.getParameter("uri");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
+
+        WebPage wp = null;
+        double rank;
+        if( obj!=null ) {
+            //rank = Math.round(Math.floor(obj.getDoubleProperty(sp_rank)));
+            rank = obj.getDoubleProperty(sp_rank);
+        }else {
+            wp = paramRequest.getWebPage();
+            //rank = Math.round(Math.floor(wp.getRank()));
+            rank = wp.getRank();
+        }
+
+        out.println("<ul>");
+        for(int i=1; i<=5; i++) {
+            out.println("<li><a href=\"#\" title=\""+paramRequest.getLocaleString("rate")+"="+Math.round(Math.floor(rank))+"\">");
+            out.println("<img src=\""+SWBPlatform.getContextPath()+getStar(i,rank*10)+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+            out.println("</a></li>");
+        }
+        out.println("</ul>");
+        if( obj!=null )
+            out.println("<p>Número de votos: "+obj.getLongProperty(sp_reviews)+"</p>");
+        else
+            out.println("<p>Número de votos: "+wp.getReviews()+"</p>");
+
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url.setMode("vote");
+        out.println("<script type=\"text/javascript\">");
+        out.println("<!--");
+        out.println("function vote(val) {");
+        if( obj!=null ) {
+            out.println("  var uri='"+URI+"';");
+            out.println("  uri=escape(uri);");
+            out.println("  var url = '"+url+"?rating='+escape(val)+'&uri='+uri;");
+            out.println("  postHtml(url,'rate_"+obj.getId()+"');");
+        }else {
+            out.println("  var url = '"+url+"?rating='+escape(val);");
+            out.println("  postHtml(url,'rate_"+wp.getId()+"');");
+        }
+        out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
+        out.println("}");
+        out.println("-->");
+        out.println("</script>");
+
+        out.flush();
+        out.close();
+    }
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        PrintWriter out = response.getWriter();
+        
+        String URI = request.getParameter("uri");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
+        
+        WebPage wp = null;
+        double rank;
+        if( obj!=null ) {
+            //rank = Math.round(Math.floor(obj.getDoubleProperty(sp_rank)));
+            rank = obj.getDoubleProperty(sp_rank);
+        }else {
+            wp = paramRequest.getWebPage();
+            //rank = Math.round(Math.floor(wp.getRank()));
+            rank = wp.getRank();
+        }
+
+        boolean isVoted = false;
+        String cookieName = obj==null?paramRequest.getWebPage().getSemanticObject().getId()+PREFIX:obj.getId()+PREFIX;
+        Cookie[] cookies = request.getCookies();
+        if( cookies!=null )
+            for(Cookie cookie: cookies) {
+                if(cookie.getName().equals(cookieName)) {
+                   isVoted = true;
+                   break;
+                }
+            }
+
+        if( obj!=null )
+            out.println("<div class=\"swb-rate\" id=\"rate_"+obj.getId()+"\">");
+        else
+            out.println("<div class=\"swb-rate\" id=\"rate_"+wp.getId()+"\">");
+        out.println("<ul>");
+        for(int i=1; i<=5; i++) {
+            if(isVoted) {
+                out.println("<li><a href=\"#\" title=\""+paramRequest.getLocaleString("rate")+"="+Math.round(Math.floor(rank))+"\">");
+                out.println("<a href=\"#\" title=\""+paramRequest.getLocaleString("rate")+"="+Math.round(Math.floor(rank))+"\">");
+                out.println("<img src=\""+SWBPlatform.getContextPath()+getStar(i,rank*10)+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+                out.println("</a></li>");
+            }else {
+                out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+                out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+                out.println("</a></li>");
+            }
+        }
+        out.println("</ul>");
+//        if( obj!=null )
+//            out.println("<p>Número de votos: "+obj.getLongProperty(sp_reviews)+"</p>");
+//        else
+//            out.println("<p>Número de votos: "+wp.getReviews()+"</p>");
+
+        if( !isVoted ) {
+            SWBResourceURL url = paramRequest.getActionUrl();
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
+            url.setMode("vote");
+            out.println("<script type=\"text/javascript\">");
+            out.println("<!--");
+            out.println("function vote(val) {");
+            if( obj!=null ) {
+                out.println("  var uri='"+URI+"';");
+                out.println("  uri=escape(uri);");
+                out.println("  var url = '"+url+"?rating='+escape(val)+'&uri='+uri;");
+                out.println("  postHtml(url,'rate_"+obj.getId()+"');");
+            }else {
+                out.println("  var url = '"+url+"?rating='+escape(val);");
+                out.println("  postHtml(url,'rate_"+wp.getId()+"');");
+            }            
+            out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
+            out.println("}");
+            out.println("-->");
+            out.println("</script>");
+        }
+        out.println("</div>");
+        out.flush();
+        out.close();
     }
 
     /**
      * Prints the star.
-     * 
+     *
      * @param current the current
      * @param rank the rank
      * @param out the out
      * @param paramRequest the param request
      * @throws SWBResourceException the sWB resource exception
      */
-    private void printStar(int current, int rank, PrintWriter out, SWBParamRequest paramRequest) throws SWBResourceException
+    private String getStar(int current, double rank)
     {
-        /*SWBResourceURL url = paramRequest.getActionUrl();
-        url.setAction("vote");
-        url.setParameter("value", "" + current);
-        */
-        String url = "vote("+current+");";
+        String imgRank = emptyStarPath;
         int midl = (current*10)-7;
         int midt = (current*10)-2;
-        String imgRank = emptyStarPath;
-        if (rank>=midl&&rank<=midt) imgRank = halfStarPath;
-        if (rank>midt) imgRank = fullStarPath;
-        out.print("<td><a href=\"#\" onclick=\"" + url + "\" title=\""+paramRequest.getLocaleString("dar")+" "+current+" "+paramRequest.getLocaleString("estrellas")+"\">" +
-                "<img src=\"" + SWBPlatform.getContextPath()+imgRank +"\" alt=\""+paramRequest.getLocaleString("tiene")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("estrellas")+"\"/></a></td>");
-
+        if (rank>=midl&&rank<=midt)
+            imgRank = halfStarPath;
+        if (rank>midt)
+            imgRank = fullStarPath;
+        System.out.println("-rank="+rank+", midl="+midl+", midt="+midt+", imgRank="+imgRank);
+        return imgRank;
     }
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericSemResource#processAction(javax.servlet.http.HttpServletRequest, org.semanticwb.portal.api.SWBActionResponse)
      */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String URI = request.getParameter("uri");
-        SemanticObject obj = null;
-        if (null!=URI) obj = SemanticObject.createSemanticObject(URI);
-        Cookie[] cookies= request.getCookies();
-        for (Cookie cookie: cookies){
-            //System.out.println(cookie.getName());
-            SemanticObject tmp = response.getWebPage().getSemanticObject();
-            if (null!=obj) tmp = obj;
-         if (cookie.getName().equals(tmp.getId()+"_voted"))
-         {
-             response.setMode(SWBResourceURL.Mode_EDIT);
-             //System.out.println("VotedOff ");
-             return;
-         }
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
 
-        }
-        int vote = 0;
-        //System.out.println("value got: "+request.getParameter("value"));
-        if (null!=request.getParameter("value")){
-            try {vote = Integer.parseInt(request.getParameter("value"));} catch (Exception ne){}
-        WebPage ws = response.getWebPage();
-        //System.out.println("ws: "+ws+" vote:"+vote);
-        double rank = 0;
-        long rev = 0;
-        String tmpUrl = "";
+        String cookieName = obj==null?response.getWebPage().getSemanticObject().getId()+PREFIX:obj.getId()+PREFIX;
+        Cookie[] cookies = request.getCookies();
+        if( cookies!=null )
+            for(Cookie cookie: cookies) {
+                if(cookie.getName().equals(cookieName)) {
+                    if( URI!=null )
+                        response.setRenderParameter("uri", URI);
+                    response.setMode("vote");
+                    return;
+                }
+            }
         
-        if (null==obj)
-        {
-            rank = ws.getRank();
-            rev = ws.getReviews();
+        int vote;
+        try {
+            vote = Integer.parseInt(request.getParameter("rating"));
+        }catch(NumberFormatException nfe) {
+            vote = 0;
         }
-        else
-        {
-            rank = obj.getDoubleProperty(sp_rank);
-            rev = obj.getLongProperty(sp_reviews);
-            response.setRenderParameter("uri", URI);
-        }
-        rank = rank * rev;
-        rev++;
-        rank = rank + vote;
-        rank = rank / rev;
+        if( vote>0 ) {
+            WebPage ws = response.getWebPage();
+            double rank;
+            long rev;
 
-        if (null==obj)
-        {
-        ws.setRank(rank);
-        ws.setReviews(rev);
-        }
-        else
-        {
-            obj.setDoubleProperty(sp_rank, rank);
-            obj.setLongProperty(sp_reviews, rev);
-        }
-        //System.out.println("rev:"+rev+" rank:"+rank);
-        }
+            if( obj==null ) {
+                rank = ws.getRank();
+                rev = ws.getReviews();
+            }else {
+                rank = obj.getDoubleProperty(sp_rank);
+                rev = obj.getLongProperty(sp_reviews);
+                response.setRenderParameter("uri", URI);
+            }
+            System.out.println("votar con"+vote);
+            rank = rank * rev;
+            rev++;
+            rank = rank + vote;
+            rank = rank / rev;
 
+            if( obj==null ) {
+                ws.setRank(rank);
+                ws.setReviews(rev);
+            }else {
+                obj.setDoubleProperty(sp_rank, rank);
+                obj.setLongProperty(sp_reviews, rev);
+            }
+            System.out.println("rank="+rank+", rev="+rev);
+            response.setMode(response.Mode_HELP);
+        }
     }
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doHelp(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
     @Override
-    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String URI = request.getParameter("uri");
-        SemanticObject obj = null;
-        if (null!=URI) obj = SemanticObject.createSemanticObject(URI);
-        else obj = paramRequest.getWebPage().getSemanticObject();
-        Cookie cookie = new Cookie(obj.getId()+"_voted", "true");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
+        if( obj==null )
+             obj = paramRequest.getWebPage().getSemanticObject();
+        Cookie cookie = new Cookie(obj.getId()+PREFIX, "true");
         cookie.setPath("/");
         response.addCookie(cookie);
-            //response.setHeader(fullStarPath, fullStarPath);
-             PrintWriter out = response.getWriter();
-             out.print("OK");
+
+        doVote(request, response, paramRequest);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#doEdit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-     */
-    @Override
-    public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-             PrintWriter out = response.getWriter();
-             out.print("Not OK");
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    @Override
 //    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -406,7 +454,7 @@ function votedPage(){
 //            out.println("                        <div class=\"progresscontainer\" style=\"display: none;\"><div class=\"progressbar\" id=\"emptyStar_progress\"></div></div>");
 //            out.println("                        </form>");
 //            out.println("                    </td></tr>");
-//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"cleanStars\">Limpiar estrellas &nbsp;</label></td>");
+//            out.println("                    <tr><td width=\"200px\" align=\"right\"><label for=\"cleanStars\">Limpiar lbl_stars &nbsp;</label></td>");
 //            out.println("                    <td><form action=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_ADMHLP)
 //                    .setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_REMOVE)+"\">");
 //            out.println("                    <button type=\"submit\">Limpiar</button></form></td></tr>");
@@ -531,29 +579,29 @@ function votedPage(){
         }
     }
 
- 
+
     /**
      * The Class Percentage.
      */
     private class Percentage
     {
-        
+
         /** The per. */
         int per = 0;
-        
+
         /**
          * Sets the percentage.
-         * 
+         *
          * @param per the new percentage
          */
         public void setPercentage(int per)
         {
             this.per = per;
         }
-        
+
         /**
          * Gets the percentage.
-         * 
+         *
          * @return the percentage
          */
         public int getPercentage()
