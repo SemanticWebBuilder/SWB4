@@ -69,7 +69,13 @@ public abstract class ProcessRuleRefBase extends org.semanticwb.model.Reference 
 
     public void setProcessRule(org.semanticwb.process.model.ProcessRule value)
     {
-        getSemanticObject().setObjectProperty(swp_processRule, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_processRule, value.getSemanticObject());
+        }else
+        {
+            removeProcessRule();
+        }
     }
 
     public void removeProcessRule()

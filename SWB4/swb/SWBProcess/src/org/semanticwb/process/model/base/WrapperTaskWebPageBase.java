@@ -255,7 +255,13 @@ public abstract class WrapperTaskWebPageBase extends org.semanticwb.model.WebPag
 
     public void setUserTask(org.semanticwb.process.model.UserTask value)
     {
-        getSemanticObject().setObjectProperty(swp_userTaskInv, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_userTaskInv, value.getSemanticObject());
+        }else
+        {
+            removeUserTask();
+        }
     }
 
     public void removeUserTask()

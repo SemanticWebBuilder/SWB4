@@ -69,7 +69,13 @@ public abstract class ProcessPeriodRefBase extends org.semanticwb.model.Referenc
 
     public void setProcessPeriod(org.semanticwb.process.model.ProcessPeriod value)
     {
-        getSemanticObject().setObjectProperty(swp_processPeriod, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_processPeriod, value.getSemanticObject());
+        }else
+        {
+            removeProcessPeriod();
+        }
     }
 
     public void removeProcessPeriod()

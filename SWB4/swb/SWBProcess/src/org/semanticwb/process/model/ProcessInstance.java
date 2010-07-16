@@ -31,11 +31,20 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
                 if(flownode instanceof StartEvent)
                 {
                     StartEvent init=(StartEvent)flownode;
-                    FlowNodeInstance eventins=init.createInstance(this);
-                    eventins.start(user);
+                    start(user, init);
                 }
             }
         }
+    }
+
+    /**
+     * Se ejecuta cada que se crea la intancia del objeto de flujo
+     * @param user
+     */
+    public void start(User user, StartEvent event)
+    {
+        FlowNodeInstance eventins=event.createInstance(this);
+        eventins.start(user);
     }
 
     private void listAllProcessObjects(ContainerInstanceable inst, ArrayList arr)

@@ -4,9 +4,13 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 
-public class ProcessObserver extends org.semanticwb.process.model.base.ProcessObserverBase 
+public class ProcessObserver extends org.semanticwb.process.model.base.ProcessObserverBase implements SemanticObserver
 {
     private static Logger log=SWBUtils.getLogger(ProcessObserver.class);
 
@@ -37,6 +41,8 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
         timer = new Timer("ProcessObserver("+delays+"s)", true);
         timer.scheduleAtFixedRate(t, delays*1000, delays*1000);
         log.event("Initializing ProcessObserver("+delays+"s)...");
+
+        SWBPlatform.getSemanticMgr().registerObserver(this);
     }
 
     public ProcessObserver(org.semanticwb.platform.SemanticObject base)
@@ -91,6 +97,46 @@ public class ProcessObserver extends org.semanticwb.process.model.base.ProcessOb
                         }catch(Exception e){log.error(e);}
                     }
                 }
+            }
+        }
+
+        Iterator<StartEvent> sit=listTimeObserverNodes();
+        while (sit.hasNext())
+        {
+            StartEvent startEvent = sit.next();
+            Containerable cont=startEvent.getContainer();
+            if(cont!=null && cont instanceof Process && ((Process)cont).isActive())
+            {
+                ProcessPeriodRefable pr=((ProcessPeriodRefable)startEvent);
+                Iterator<ProcessPeriodRef> it2=pr.listProcessPeriodRefs();
+                while (it2.hasNext()) {
+                    ProcessPeriodRef ppr = it2.next();
+                    if(ppr.isActive())
+                    {
+                        System.out.println("checking:"+ppr.getProcessPeriod());
+                        if(ppr.getProcessPeriod().isOnSchedule())
+                        {
+                            try
+                            {
+                                System.out.println("ok...");
+                                ProcessInstance inst=((Process)cont).createInstance();
+                                inst.start(null,startEvent);
+                            }catch(Exception e){log.error(e);}
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    public void notify(SemanticObject obj, Object prop, String lang, String action)
+    {
+        if(SemanticObject.ACT_CREATE.equals(action))
+        {
+            if(obj.instanceOf(TimerStartEvent.sclass))
+            {
+                addTimeObserverNode((StartEvent)obj.createGenericInstance());
             }
         }
     }

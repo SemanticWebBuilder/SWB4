@@ -100,7 +100,13 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
 
     public void setSource(org.semanticwb.process.model.GraphicalElement value)
     {
-        getSemanticObject().setObjectProperty(swp_source, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_source, value.getSemanticObject());
+        }else
+        {
+            removeSource();
+        }
     }
 
     public void removeSource()
@@ -121,7 +127,13 @@ public abstract class ConnectionObjectBase extends org.semanticwb.process.model.
 
     public void setTarget(org.semanticwb.process.model.GraphicalElement value)
     {
-        getSemanticObject().setObjectProperty(swp_target, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_target, value.getSemanticObject());
+        }else
+        {
+            removeTarget();
+        }
     }
 
     public void removeTarget()

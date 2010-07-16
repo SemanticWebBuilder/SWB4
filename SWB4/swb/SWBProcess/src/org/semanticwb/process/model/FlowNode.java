@@ -70,4 +70,25 @@ public class FlowNode extends org.semanticwb.process.model.base.FlowNodeBase
         }
         if(def!=null && !execute)def.execute(instance, user);
     }
+
+    /**
+     * Regresa proceso padre asociado
+     * @return
+     */
+    public Process getProcess()
+    {
+        Process ret=null;
+        Containerable cont=getContainer();
+        if(cont!=null)
+        {
+            if(cont instanceof  Process)
+            {
+                ret = (Process) cont;
+            }else
+            {
+                ret=((FlowNode)cont).getProcess();
+            }
+        }
+        return ret;
+    }
 }

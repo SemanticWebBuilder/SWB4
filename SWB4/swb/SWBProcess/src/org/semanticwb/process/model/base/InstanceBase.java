@@ -131,7 +131,13 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -202,7 +208,13 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()
@@ -223,7 +235,13 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setAssignedto(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swp_assignedto, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_assignedto, value.getSemanticObject());
+        }else
+        {
+            removeAssignedto();
+        }
     }
 
     public void removeAssignedto()
@@ -244,7 +262,13 @@ public abstract class InstanceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setEndedby(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swp_endedby, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_endedby, value.getSemanticObject());
+        }else
+        {
+            removeEndedby();
+        }
     }
 
     public void removeEndedby()
