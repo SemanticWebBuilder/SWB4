@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmWBBanner" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset>
-        <statictext name="txtLocal">Banner local ou externo:</statictext>
-        <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
+    <fieldset legend="Configuración básica">
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
-        <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
+
+        <input type="text" id="url" name="url" label="Site:" maxlength="50" regExp="(http|https):\/\/.+" invalidMessage="URL inválido" promptMessage="Website patrocinador" />
+        <input type="text" id="axn" name="axn" label="Acción:" maxlength="50" promptMessage="Javascript ação, proposta no evento onclick" />
+
         <input type="FILE" name="img" label="** Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
         <input type="text" id="alt" name="alt" label="Texto alternativo:" maxlength="20" promptMessage="Descrição indicativa do banner. Acessibilidade Orientação" />
 
         <textarea id="longdesc" name="longdesc" label="Descrição Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
+    </fieldset>
 
-        <input type="text" id="width"  name="width" label="Anchura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura do banner. Exemplo: 500em, 600px, 100%" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="6" regExp="\d{1,4}(px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura do banner. Exemplo: 120em, 75px, 100%" />
-        <input type="text" name="cssClass" id="cssClass" label="Classe Attribute Anchor:" size="30" promptMessage="CSS nome da classe da âncora" />
-        <input type="text" id="url" name="url" label="Site:" maxlength="50" regExp="(http|https):\/\/.+" invalidMessage="URL inválido" promptMessage="Website patrocinador" />
-        <input type="text" id="axn" name="axn" label="Acción:" maxlength="50" promptMessage="Javascript ação" />
+    <fieldset legend="Aparência">
+        <input type="text" id="width"  name="width" label="Largura da imagem (pixeles):" maxlength="6" regExp="\d{1,4}" invalidMessage="Largura inválido" promptMessage="Largura da imagem, pixels considerados" />
+        <input type="text" id="height" name="height" label="Altura da imagem (pixeles):" maxlength="6" regExp="\d{1,4}" invalidMessage="Altura inválido" promptMessage="Altura da imagem, pixels considerados" />
+    </fieldset>
 
-        <statictext name="txtTarget">Dirigir a una nueva ventana:</statictext>
-        <input type="radio" id="target1" name="target" label="Se" value="1"/>
-        <input type="radio" id="target0" name="target" label="Não" value="0" checked="true"/>
+    <fieldset legend="Avançado">
+        <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
+        <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
 
         <statictext name="note">
         <![CDATA[
@@ -31,15 +32,11 @@
             </font>
         ]]>
         </statictext>
-
     </fieldset>
+
     <fieldset>
-        <statictext name="cmd">
-        <![CDATA[
-        <button id="btnSave" type="submit" dojoType="dijit.form.Button">Guardar</button>
-        <button id="btnReset" type="reset" dojoType="dijit.form.Button">Reestablecer</button>
-        ]]>
-        </statictext>
+        <input type="submit" name="btnSave" id="btnSave" value="Salvar" onclick="return jsValida(this.form)" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Restaurar" />
     </fieldset>
     </form>
 
@@ -52,7 +49,7 @@
             function() {
                 dojo.connect(dijit.byId("btnSave"), "onSubmit",
                     function() {
-                        if(jsValida(dojo.byId("frmWBBanner")))
+                        if(jsValida(dojo.byId("frmAdmRes")))
                             return true;
                         else
                             return false;
@@ -64,9 +61,6 @@
                 }
                 if(!dojo.byId('local1').checked) {
                     dojo.byId('code').disabled=true;
-                }
-                if(!dojo.byId('target0').checked && !dojo.byId('target1').checked) {
-                    dojo.byId('target0').checked=true;
                 }
             }
         );
