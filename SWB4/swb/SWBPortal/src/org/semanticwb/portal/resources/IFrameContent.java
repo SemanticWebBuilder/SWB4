@@ -70,70 +70,88 @@ public class IFrameContent extends GenericAdmResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base=getResourceBase();
-        if("".equals(base.getAttribute("url","").trim())) {          
+        /*if("".equals(base.getAttribute("url","").trim())) {
             response.getWriter().print(""); return; 
-        }
+        }*/
 
-        StringBuffer ret = new StringBuffer("");        
-        String ind = request.getParameter("WBIndexer");
+        StringBuilder ret = new StringBuilder("");
+        /*String ind = request.getParameter("WBIndexer");
         if (!"indexing".equals(ind))
-        {
-            try
-            {
-                if (paramRequest.getCallMethod()==paramRequest.Call_CONTENT)
-                {
-                    String align=base.getAttribute("align", "top").trim();
-                    if("center".equals(align)) {
-                        ret.append("<p align=center>");
-                    }
-                    ret.append("<iframe id=\"WBIFrame_\""+base.getId()+" src=\"" + base.getAttribute("url").trim());
-                    Enumeration en = request.getParameterNames();
-                    for (int i=0; en.hasMoreElements(); i++)
-                    {
-                        String param = en.nextElement().toString();
-                        if (param.equals("x") || param.equals("y")) {
-                            continue;
-                        }
-                        if (request.getParameter(param).trim().length() > 0)
-                        {
-                            if ( i > 0) {
-                                ret.append("&");
-                            }
-                            else {
-                                ret.append("?");
-                            }
-                            ret.append(param +"=" + request.getParameter(param));
-                        }
-                    }
-                    ret.append("\" width=\""+base.getAttribute("width", "100%").trim() +"\"");
-                    ret.append(" height=\""+base.getAttribute("height", "100%").trim() +"\"");
-                    ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0").trim() +"\"");
-                    ret.append(" marginheight=\""+base.getAttribute("marginheight", "0").trim() +"\"");
-                    if(!"center".equals(align)) {
-                        ret.append(" align=\""+ align +"\"");
-                    }
-                    ret.append(" scrolling=\""+base.getAttribute("scrollbars", "auto").trim() +"\"");
-                    ret.append(" frameborder=\""+base.getAttribute("frameborder", "0").trim() +"\"");
-                    if (!"".equals(base.getAttribute("style", "").trim())) {
-                        ret.append(" style=\""+base.getAttribute("style").trim() +"\"");
-                    }
-                    ret.append(">");
-                    ret.append(paramRequest.getLocaleString("msgRequiredInternetExplorer"));
+        {*/
+            /*try
+            {*/
+                if (paramRequest.getCallMethod()==paramRequest.Call_CONTENT) {
+
+//                    ret.append("");
+//                    ret.append("");
+
+                    ret.append("<object type=\"text/html\" ");
+                    String userAgent = request.getHeader("User-Agent").toLowerCase();
+                    if( userAgent.indexOf("msie")!=-1 )
+                        ret.append("classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\" ");
+                    ret.append("data=\"").append(base.getAttribute("url")).append("\" ");
+                    ret.append("width=\"").append(base.getAttribute("width","100%")).append("\" ");
+                    ret.append("height=\"").append(base.getAttribute("height","100%")).append("\"> ");
+
+                    ret.append("<iframe ");
+                    ret.append(" src=\"").append(base.getAttribute("url")).append("\" ");
+                    ret.append(" width=\"").append(base.getAttribute("width","100%")).append("\" ");
+                    ret.append(" height=\"").append(base.getAttribute("height","100%")).append("\"");
                     ret.append("</iframe>");
-                    if("center".equals(align)) {
-                        ret.append("</p>");
-                    }
-                } 
-                else
-                {
+
+                    ret.append("</object>");
+
+//                    String align=base.getAttribute("align", "top").trim();
+//                    if("center".equals(align)) {
+//                        ret.append("<p align=center>");
+//                    }
+//                    ret.append("<iframe id=\"WBIFrame_\""+base.getId()+" src=\"" + base.getAttribute("url").trim());
+//                    /*Enumeration en = request.getParameterNames();
+//                    for (int i=0; en.hasMoreElements(); i++)
+//                    {
+//                        String param = en.nextElement().toString();
+//                        if (param.equals("x") || param.equals("y")) {
+//                            continue;
+//                        }
+//                        if (request.getParameter(param).trim().length() > 0)
+//                        {
+//                            if ( i > 0) {
+//                                ret.append("&");
+//                            }
+//                            else {
+//                                ret.append("?");
+//                            }
+//                            ret.append(param +"=" + request.getParameter(param));
+//                        }
+//                    }*/
+//                    ret.append("\" width=\""+base.getAttribute("width", "100%").trim() +"\"");
+//                    ret.append(" height=\""+base.getAttribute("height", "100%").trim() +"\"");
+//                    ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0").trim() +"\"");
+//                    ret.append(" marginheight=\""+base.getAttribute("marginheight", "0").trim() +"\"");
+//                    if(!"center".equals(align)) {
+//                        ret.append(" align=\""+ align +"\"");
+//                    }
+//                    ret.append(" scrolling=\""+base.getAttribute("scrollbars", "auto").trim() +"\"");
+//                    ret.append(" frameborder=\""+base.getAttribute("frameborder", "0").trim() +"\"");
+//                    if (!"".equals(base.getAttribute("style", "").trim())) {
+//                        ret.append(" style=\""+base.getAttribute("style").trim() +"\"");
+//                    }
+//                    ret.append(">");
+//                    ret.append(paramRequest.getLocaleString("msgRequiredInternetExplorer"));
+//                    ret.append("</iframe>");
+//                    if("center".equals(align)) {
+//                        ret.append("</p>");
+//                    }
+                }else {
                     URL page = new URL(base.getAttribute("url").trim());
                     URLConnection conn = page.openConnection();
                     InputStream in = conn.getInputStream();
                     ret.append(SWBUtils.IO.readInputStream(in));
                 }
-            } 
-            catch (Exception e) { log.error("Error in resource IFrameContent while bringing HTML.", e); }            
-        }
+            /*}catch (Exception e) {
+                log.error("Error in resource IFrameContent while bringing HTML.", e);
+            }*/
+        /*}
         else 
         {
             try
@@ -144,8 +162,8 @@ public class IFrameContent extends GenericAdmResource
                 ret.append(SWBUtils.IO.readInputStream(in));
             } 
             catch (Exception e) { log.error("Error in resource IFrameContent while bringing HTML.", e); }
-        }
+        }*/
        PrintWriter out=response.getWriter();
-       out.print(ret.toString());        
+       out.print(ret.toString());
     }
 }
