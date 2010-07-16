@@ -747,6 +747,24 @@ public class WebPage extends WebPageBase
         }
     }
 
+
+     /** Regresa string con la fecha de ultima actualizacion de los contenidos.
+     * @return String
+     */
+    public String getContentsAuthor()
+    {
+        String ret = "";
+        Iterator<Resource> it = listResources();
+        while (it.hasNext())
+        {
+            Resource recRes=it.next();
+            if(recRes!=null){
+                return recRes.getCreator().getName();
+            }
+        }
+        return ret;
+    }
+    
     /**
      * Gets the contents last update.
      * 
