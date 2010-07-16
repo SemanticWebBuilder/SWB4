@@ -28,12 +28,12 @@ public class LinkIntermediateThrowEvent extends IntermediateThrowEvent
     public override function canEndLink(link:ConnectionObject) {
         //El evento intermedio de enlace tipo throw no puede tener más de un flujo de
         //secuencia de entrada y no puede tener flujos de mensaje de entrada
-        var ret = super.canStartLink(link);
+        var ret = super.canEndLink(link);
         if (link instanceof MessageFlow) {
             ret = false;
         }
 
-        return false;
+        return ret;
     }
 
 }
