@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Aparência">
+            <input type="file" name="template" label="Modelo (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remover modelo de processamento" msg="Modelo atual transformação: " bydefault="{@webpath}swbadmin/xsl/Promo/Promo.xsl" msgbydefault="Modelo padrão de processamento: " jsrequired="false" />
+            <input type="text" id="imgWidth" name="imgWidth" label="Largura da imagem (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Largura inválido" promptMessage="Largura da imagem, pixels considerados" />
+            <input type="text" id="imgHeight" name="imgHeight" label="Altura da imagem (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválido" promptMessage="Altura da imagem, pixels considerados" />
+        </fieldset>
+
+        <fieldset legend="Definição da estratégia">
+            <input type="text" name="title" label="Título:" maxlength="50" promptMessage="Título" />
+            <input type="text" name="subtitle" label="Subtítulo:" maxlength="50" promptMessage="Subtítulo" />
+            <input type="file" name="imgfile" label="Imagem (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remover imagem" size="40"/>
+            <input type="text" name="caption" label="Pie de foto:" maxlength="50" promptMessage="Pie de foto" />
+            <textarea name="text" label="Texto:" rows="5" cols="50"  jsrequired="true"/>
+            <input type="text" name="more" label="O texto da ligação:" maxlength="50" promptMessage="O texto da ligação" />
+            <input type="text" name="url" label="URL:" maxlength="50" promptMessage="Site" />
+
+            <statictext name="txtTarget">Gerir uma nova janela:</statictext>
+            <input type="radio" id="target1" name="target" label="Si" value="1"/>
+            <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
+
+            <statictext name="note">
+            <![CDATA[
+                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+                * Os dados necessários
+                </font>
+            ]]>
+            </statictext>
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" name="btnSave" value="Salvar" />
+            <input type="reset"  name="btnReset" value="Restabelecer"/>
+        </fieldset>
+    </form>
+</admresource>
+
+
+
+
+
+
+
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<xslfile>admresource.xslt</xslfile>
 	<form name="frmPromo" action="true" method="post" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
