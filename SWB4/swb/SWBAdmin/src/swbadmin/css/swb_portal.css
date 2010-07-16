@@ -39,260 +39,199 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 
 
 /* CSS Document */
-
 #WBWikiTextbox{
     width: 100%;
     height: 300px;
 }
 
-/*------------------- Menu ---------*/
-.swb-menu {
-	width: 11.23em;
-	border:#336699 solid 0.06em;
-	font-family:Arial;
-	font-size:1em;
-	}
-.swb-menu ul{
-	margin: 0;
-	padding: 0;
-	font-size: 12px;
-	list-style:none;
-	list-style-position:inside;
-	}
-.swb-menu li {padding: 0.2em 0.3em 0.2em .5em;}
-.swb-menu strong{color: #3399CC;} /*Padre seleccionada*/
-.swb-menu em{ background:#99FFFF; font-style:normal;} /*Hijo o nieto seleccionado*/
-.swb-menu a{text-decoration:none;}
+/*------------------- Ranking ---------*/
+.swb-rate ul {margin:0; padding:0}
+.swb-rate li {float:left; list-style:none}
+.swb-rate img {border:0}
+.swb-rate p {clear:both}
+.swb-rate a {outline:none}
+/*------------------- Ranking ---------*/
 
-/* -- PADRE -- */
-.swb-menu-pr{	font-weight:bold;}
-.swb-menu-pr a:link{color: #336699;}
-.swb-menu-pr a:visited{color: #336699;}
-.swb-menu-pr a:hover{color: #3399FF;}
-.swb-menu-pr a:active{color: #FFFFFF;}
-/* -- HIJOS -- */
-.swb-menu-ch{
-	font-weight:bold;
-	margin-left:10px;
-}
-.swb-menu-ch a:link{color: #336699;}
-.swb-menu-ch a:visited{color: #336699;}
-.swb-menu-ch a:hover{color: #3399FF;}
-.swb-menu-ch li a:active{color: #FFFFFF;}
-/* -- NIETOS -- */
-.swb-menu-gs {font-weight:normal} /*Descendientes de seleccionada*/
-.swb-menu-gs a:link{color:#3399CC; padding-left:.5em}
-.swb-menu-gs a:visited{color:#33CCFF;}
-.swb-menu-gs a:hover{color: #33CCFF;}
-.swb-menu-gs a:active{color:#33CCFF;}
-
-.swb-menu-gs li a:link{color: #999999; padding-left:1em}
-.swb-menu-gs li a:visited{color: #999999;}
-.swb-menu-gs li a:hover{color: #666666;}
-.swb-menu-gs li a:active{color: #999999;}
 /*------------------- Menu ---------*/
+.swb-menu{ list-style: none; width:200px; font-size:1em; border-collapse:collapse; font-family:Geneva, Arial, Helvetica, sans-serif;}
+.swb-menu-parent{display:block; color:#025788; text-decoration:none; padding:5px; font-size:1em; font-weight:bold; background:#eee;}
+.swb-menu-active{background:#367498; display:block; color:#fff; text-decoration:none; padding:6px 6px 6px 15px; font-size:.9em;border-top:1px solid #205473;}
+.swb-menu-current{background:#265a79; display:block; color:#fff; text-decoration:none; padding:10px 10px 10px 15px; font-weight:bold; font-size:.9em;border-top:1px solid #205473;}
+.swb-menu-child a{background:#b6d0df; display:block; color:#fff; text-decoration:none; padding:8px; padding-left:20px; font-size:.8em; color:#333;border-top:1px solid #306A8C;}
+/*------------------- Menu ---------*/
+
+/*------------------- Poll (Encuesta de opinión) ---------*/
+.swb-poll {width: 13em; border:#336699 solid .06em; font-family:Arial; font-size:1em; padding:0; margin:0; }
+.showhide {position:relative}
+.showhide:hover .holderEncuesta {display:block}
+.holderEncuesta {position:absolute; width:300px}
+.arrowEncuesta {float:left; width:7px}
+.resultadosEncuesta * {margin:0}
+.resultadosEncuesta {width:250px; background:#ededed; padding:10px; float:right}
+.entradaEncuesta {float:left; width:85px; height:15px; display:block;}
+.porcentajeHolder {background: #fff; border:solid 1px #999; width:160px; height:15px; float:right}
+.noVotos {clear:both; text-align:right; font-size:0.7em}
+.porcentaje {background:#093; height:15px}
+
+/*------------------- Promo ---------*/
+.swb-promo * {margin:0}
+.leftPromo .promoImage {width:auto; display:block; float:left; margin-right:10px}
+.rightPromo .promoImage {width:auto; display:block; float:right; margin-right:10px}
+.topPromo .promoImage {width:auto; display:block; float:none; text-align:center}
+.bottomPromo .promoImage {width:auto; display:block; float:none; text-align:center}
+.more {clear:both; text-align:center}
+.promoFoot {background:#999}
+.promoInfo_LeftAlign {float:right; width:70%}
+.promoInfo_RightAlign {float:left; width:70%}
+.swb-promo p {text-align: justify}
+.swb-promo h2 {text-align: center}
+
+
+
+
+
+
+
+
 
 /*------------------- Encuesta  ----*/
-.swb-encuesta {
-    width: 11.23em;
-    border:#336699 solid .06em;
-    font-family:Arial;
-    font-size:1em;
+.swb-poll-title {
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	font-weight:bold;
+	margin:0;
+	padding:.2em 0 .2em 0;
+	color: #FFF;
+	font-size:.9em;
+	text-align: center;
+	text-transform: capitalize;
 }
-.swb-encuesta h1{
-    background: url(bg_titulos.gif) #336699 repeat-x;
-    margin: 0 0 0.63em 0;
-    padding: 0;
-    line-height:1.56em;
-    font-size:0.88em;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: center;
-    text-transform: capitalize;
+.swb-poll-quest {
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+	margin:0em; padding:0em;
 }
-.swb-encuesta h2{
-    font-size:0.8em;
-    font-weight: bold;
-    color: #336699;
-    text-align: center;
+.swb-poll ul{
+	margin:0;
+	padding:0;
+	list-style:none;
+        color: #00CCCC;
+        font-size:0.8em;
+        font-weight: bold;
 }
-.swb-encuesta label{
-    /* margin-top:.63;  Activar para */
-    /* display: block;   espaciar opciones*/
-    padding-left:1.25em;
-    font-size: 0.75em;
-    color:#336699;
-    text-align:left;
+.swb-poll label{
+	margin-top:.3em;
+	display: block;
+	padding-left:1.25em;
+	font-size: 0.75em;
+	color:#336699;
 }
-.swb-encuesta-boton {
-    background-color:#336699;
-    color:#FFFFFF;
-    margin: 0.3em 1.25em 0.3em 1.25em;
-    font-size:.75em;
+.swb-poll-button {
+	font-size:.8em;
+	margin-top:1em;
+	text-transform:capitalize;
 }
-.swb-encuesta p{
-    line-height:0em;
-    text-align:center;
-    font-size: 0.75em;
+.swb-poll-link {
+	margin:.3em 0em .3em 0em;
+	text-align:center;
+	font-size: 0.75em;
+	color:#369;
 }
-.swb-encuesta ul{
-    padding-left:1.25em;
-    font-size: 0.75em;
-    color:#336699;
-    font-weight:normal;
+.swb-poll-more {
+	margin:.3em 0em .3em 0em;
+	text-align:center;
+	font-size: 0.75em;
+	color:#369;
 }
-.swb-encuesta a, .swb-resultado-h a, .swb-resultado-v a{
-    text-align: center;
-    font-size: 0.75em;
-    margin-top: 0.5em;
-    color:#336699;
-    font-weight:normal;
-    text-decoration:none;
+.swb-poll-warning {
+        margin-top:.3em;
+	display: block;
+	padding-left:1.25em;
+	font-size: 0.75em;
+	color:#FF6600;
 }
-.swb-resultado-h , .swb-resultado-v {
-    text-align: center;
+.swb-poll-close {
+        margin-top:.3em;
+	display: block;
+	padding-left:1.25em;
+	font-size: 0.75em;
+	color:#FF6600;
 }
-/* horizontal */
-.swb-resultado-h {
-    border:#336699 solid .06em;
-    font-family:Arial;
-    font-size:1em;
+.swb-poll-link a:link, .swb-poll-link a:visited{
+	color:#369;
 }
-.swb-resultado-h h1{
-    background: url(bg_titulos.gif) #336699 repeat-x;
-    margin: 0 0 0.63em 0;
-    padding: 0;
-    line-height:1.56em;
-    font-size:0.88em;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: center;
-    text-transform: capitalize;
+.swb-poll-res {
+	text-align: center;
 }
-.swb-resultado-h caption{
-    font-size:0.8em;
-    font-weight: bold;
-    color: #336699;
-    text-align: center;
-    margin-bottom:10px;
+/* resultados en forma horizontal */
+.swb-poll-res {
+	border:#336699 solid .06em;
+	font-family:Arial;
+	font-size:1em;
 }
-.swb-resultado-h table{
-    width:100%;
+.swb-poll-res h1 {
+	background: url(bg_titulos.gif) #336699 repeat-x;
+	margin: 0 0 0.63em 0;
+	padding: 0;
+	line-height:1.56em;
+	font-size:0.88em;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	text-transform: capitalize;
 }
-.swb-resultado-h tr{
-    margin:10px 0px 10px 0px;
+.swb-poll-res caption {
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
+	margin-bottom:10px;
 }
-.swb-resultado-h th{
-    display:none;
+.swb-poll-res table {
+	width:100%;
 }
-.swb-resultado-h tfoot{
-    font-size:0.8em;
-    font-weight: bold;
-    color: #336699;
-    text-align: center;
+.swb-poll-res tr {
+	margin:10px 0px 10px 0px;
 }
-.swb-resultado-h span{
+.swb-poll-res th {
+	display:none;
 }
-.swb-res-opciones-h{
-    width:20%;
-    font-size:12px;
-    color:#336699;
-    text-align:right;
-    font-weight:bold;
+.swb-poll-res tfoot {
+	font-size:0.8em;
+	font-weight: bold;
+	color: #336699;
+	text-align: center;
 }
-.swb-res-porciento-h{
-    padding:7px 3px 7px 0px;
+.swb-poll-res span {
 }
-.swb-res-porciento-si-h{
-    background: #6699CC;
-    font-size:12px;
-    text-align:right;
-    color: #003366;
-    height:20px;
-    width:30px;
-    padding-top:5px;
+.swb-res-options-h {
+	width:20%;
+	font-size:12px;
+	color:#336699;
+	text-align:right;
+	font-weight:bold;
 }
-.swb-res-porciento-no-h{
-    border:#336699 solid 1px;
-    background: #DBDBDB;
+.swb-res-percent-h {
+	padding:7px 3px 7px 0px;
 }
-.swb-res-votos-h{
-    width:20%;
-    font-size:12px;
-    color:#336699;
+.swb-res-percent-si-h {
+	background: #6699CC;
+	font-size:12px;
+	text-align:right;
+	color: #003366;
+	height:20px;
+	width:30px;
+	padding-top:5px;
 }
-/* vertical */
-.swb-resultado-v {
-    border:#336699 solid .06em;
-    font-family:Arial;
-    font-size:1em;
+.swb-res-percent-no-h {
+	border:#336699 solid 1px;
+	background: #DBDBDB;
 }
-.swb-resultado-v h1{
-    background: url(bg_titulos.gif) #336699 repeat-x;
-    margin: 0 0 0.63em 0;
-    padding: 0;
-    line-height:1.56em;
-    font-size:0.88em;
-    font-weight: bold;
-    color: #FFFFFF;
-    text-align: center;
-    text-transform: capitalize;
-}
-.swb-resultado-v caption{
-    font-size:0.8em;
-    font-weight: bold;
-    text-align: center;
-    color: #336699;
-    margin-bottom:10px;
-}
-.swb-resultado-v table{
-    width:100%;
-}
-.swb-resultado-v td{
-    margin:10px;
-}
-.swb-resultado-v th{
-    display:none;
-}
-.swb-resultado-v tfoot{
-    font-size:0.8em;
-    font-weight: bold;
-    color: #336699;
-    text-align: center;
-}
-.swb-resultado-v span{
-}
-.swb-res-opciones-v{
-    font-size:12px;
-    color:#336699;
-    text-align:center;
-    font-weight:bold;
-    padding-top:10px;
-}
-.swb-res-porciento-v{
-    margin:0px;
-    padding:0px;
-    vertical-align:bottom;
-    background: #DBDBDB;
-    border:#336699 solid 1px;
-}
-.swb-res-porciento-si-v{
-    background: #6699CC;
-    font-size:12px;
-    text-align:center;
-    color: #003366;
-    width: 100%;
-    font-weight:bold;
-}
-.swb-res-porciento-no-v{
-    vertical-align:bottom;
-}
-.swb-res-votos-v{
-    width:20%;
-    font-size:12px;
-    color:#336699;
-    text-align:center;
-    font-weight:bold;
+.swv-res-votes-h {
+	width:20%;
+	font-size:12px;
+	color:#336699;
 }
 /*------------------- Encuesta  ----*/
 
@@ -586,84 +525,7 @@ color: #ff0000; /* Dummy definition to overcome IE bug */
 }
 /*------------------- Comentarios semánticos  ----*/
 
-/*------------------- PROMO        ----*/
-.swb-promo {
-    width: 21.3em;
-    min-height: 12em;
-    border: #336699 solid .06em;
-    padding: .6em .6em .6em .6em;
-}
-.swb-promo h1{
-    font-family:Arial;
-    font-size: 1em;
-    font-weight: bold;
-    color: #336699;
-    text-align:center;
-    margin: 0;
-    padding:0;
-}
-.swb-promo h2{
-    font-family:Arial;
-    font-size: .75em;
-    font-weight: bold;
-    color: #336699;
-    text-align:center;
-}
-.swb-promo img{
-    width: 120px;
-    height: 100px;
-    border: #999999 solid 1px;
-    margin: .3em .3em 0em .3em;
-    display:block;
-    float: left;
-}
-.swb-promo h6{
-    background-color: #999999;
-    width:120px;
-    border:#999999 solid 1px;
-    font-family:Arial;
-    font-size: .6em;
-    font-weight: bold;
-    text-align:center;
-    color: #FFFFFF;
-    float: left;
-    clear:left;
-    margin: 0em .3em 1em .5em;
-}
-.swb-promo p{
-    font-family:Arial;
-    font-size: .75em;
-    color: #336699;
-    text-align:justify;
-}
-.swb-promo ul {
-    padding: 0;
-    margin: 0;
-    font-family:Arial;
-    font-size: 0.75em;
-    margin-left: 13em;
-}
-.swb-promo li{
-    list-style:url(bullet-mas1.gif);
-    color:#336699;
-}
-.swb-promo li a:link{
-    list-style:url(bullet-mas1.gif);
-    color:#336699;
-}
-.swb-promo li a:visited{
-    list-style:url(bullet-mas1.gif);
-    color: #336699;
-}
-.swb-promo li a:hover{
-    list-style:url(bullet-mas2.gif);
-    color: #99ccff;
-}
-.swb-promo li a:active{
-    list-style:url(bullet-mas3.gif);
-    color:#FFFFFF;
-}
-/*------------------- PROMO        ----*/
+
 
 /*------------------- QUERY        ----*/
 #swb-query {
@@ -1169,12 +1031,19 @@ div.sitesectiontree ul.treeres {
     padding:0px;
     margin:0px;
 }
+.swb-contact-stgy {
+    border:solid 0px #999;
+    padding-top:4px;
+    margin:5px;
+    font-size:1em;
+    color:#369;
+}
 .swb-contact-inst {
     font-weight: bold;
 }
 .swb-contact label {
     border:solid 0px #999;
-    width:70px;
+    width:160px;
     display:block;
     float:left;
     clear:both;
@@ -1205,12 +1074,11 @@ div.sitesectiontree ul.treeres {
     color:#8A4B08;
 }
 .swb-contact-tks{
-    border:solid 0px #999;
-    width:70px;
+    border:solid 1px #999;
+    width:270px;
     display:block;
     float:left;
     clear:both;
-    height:19px;
     padding-top:4px;
     text-align:right;
     margin:0px 5px 0px 5px;
