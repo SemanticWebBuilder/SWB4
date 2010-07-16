@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="POST" enctype="multipart/form-data" jsframework="dojo" >
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Configuraci贸n de contenido">
-            <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" jsrequired="false"/>
-            <input type="text" name="title" label="T铆tulo:" maxlength="60" promptMessage="T铆tulo" />
-            <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor num茅rico" promptMessage="Nivel de despliegue" />
+        <fieldset legend="Aspecto">
+            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformaci髇: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
+            <input type="text" name="title" label="T韙ulo:" maxlength="60" promptMessage="T韙ulo" />
+            <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nivel debe ser un valor num閞ico" promptMessage="Nivel de despliegue" />
         </fieldset>
 
-        <fieldset legend="Configuraci贸n de estrategia">
-            <statictext name="txtTarget">驴C贸mo desea acceder al recurso de mapa de sitio?:</statictext>
+        <fieldset legend="Configuraci髇 de estrategia">
+            <statictext name="txtTarget">緾髆o desea acceder al recurso de mapa de sitio?:</statictext>
             <input type="text" name="lnktexto" label="Texto de la liga:" maxlength="50" promptMessage="Texto de la liga" />
-            <input type="text" name="btntexto" label="Etiqueta del bot贸n:" maxlength="50" promptMessage="Etiqueta del bot贸n" />
+            <input type="text" name="btntexto" label="Etiqueta del bot髇:" maxlength="50" promptMessage="Etiqueta del bot髇" />
             <input type="file" name="img" label="Imagen (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" />
             <input type="text" name="alt" label="Texto alterno:" maxlength="50" promptMessage="Texto alterno para la imagen. Pauta de accesibilidad" />
 
@@ -26,32 +26,13 @@
         </fieldset>
 
         <fieldset>
-            <statictext name="cmd">
-            <![CDATA[
-            <button id="btnSave" type="submit" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" type="reset" dojoType="dijit.form.Button" type="reset">Reestablecer</button>
-            ]]>
-            </statictext>
+            <input type="submit" name="btnSave" value="Guardar" onclick="jsValida(this.form)" />
+            <input type="reset"  name="btnReset" value="Restablecer"/>
         </fieldset>
     </form>
 
     <script type="text/javascript">
         <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(
-            function(){
-                dojo.connect(dijit.byId("btnSave"), "onSubmit",
-                    function() {
-                        if( jsValida(dojo.byId("frmAddNew")) )
-                            return true;
-                        else
-                            return false;
-                    }
-                );
-            }
-        );
-
         function jsValida(frm) {
             if( !frm.lnktexto.value && !frm.btntexto.value && !frm.img.value  && !dojo.byId('wbNoFile_img') ) {
                 alert('Indique el mecanismo para acceder al recurso de mapa de sitio.');

@@ -69,7 +69,7 @@ public class WBSiteMap extends GenericAdmResource
     int maxLevel;
     
     /** The path. */
-    String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
+    String path;
 
     private javax.xml.transform.Templates tpl;
 
@@ -86,7 +86,7 @@ public class WBSiteMap extends GenericAdmResource
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+            webWorkPath = (String) SWBPortal.getWebWorkPath()+ base.getWorkPath()+"/";
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
@@ -94,6 +94,7 @@ public class WBSiteMap extends GenericAdmResource
         if( base.getAttribute("template")!=null ) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path = webWorkPath;
             }catch(Exception e) {
                 log.error("Error while loading resource template: "+base.getId(), e);
             }
@@ -101,6 +102,7 @@ public class WBSiteMap extends GenericAdmResource
         if( tpl==null ) {
             try {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/WBSiteMap/WBSiteMap.xsl"));
+                path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSiteMap/";
             }catch(Exception e) {
                 log.error("Error while loading default resource template: "+base.getId(), e);
             }
@@ -131,7 +133,7 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws SWBResourceException the sWB resource exception
      */
-    public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=getResourceBase();
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_DIRECT);
@@ -149,24 +151,8 @@ public class WBSiteMap extends GenericAdmResource
             String name = names.nextElement();
             params.put(name, request.getParameter(name));
         }
-
-        /*String width = base.getAttribute("width");
-        String height = base.getAttribute("height");
-        if(width != null) {
-            if(!width.endsWith("%")) {
-                width += "px";
-            }
-            tree.setWidth(base.getAttribute("width"));
-        }
-        if(height != null) {
-            if(!height.endsWith("%")) {
-                height += "px";
-            }
-            tree.setHeight(base.getAttribute("height"));
-        }*/
         return tree.renderXHTMLFirstTime(params);
     }
-
 
     /**
      * Do bind.
@@ -199,6 +185,7 @@ public class WBSiteMap extends GenericAdmResource
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
             try {
+                System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
                 out.print(SWBUtils.XML.transformDom(tpl, dom));
             }catch(TransformerException te) {
                 log.error("doBind Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
@@ -217,7 +204,6 @@ public class WBSiteMap extends GenericAdmResource
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doChilds(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //response.setContentType("text/html; charset=ISO-8859-1");
         PrintWriter out = response.getWriter();
         String lang = paramRequest.getUser().getLanguage();
         WebPage home = paramRequest.getWebPage().getWebSite().getHomePage();
@@ -312,10 +298,14 @@ public class WBSiteMap extends GenericAdmResource
         }
         return json.toString();
     }
-   
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
-     */
+
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Document dom=getDom(request, response, paramRequest);
+        if( dom!=null )
+            response.getWriter().println(SWBUtils.XML.domToXml(dom));
+    }
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -334,23 +324,26 @@ public class WBSiteMap extends GenericAdmResource
             }
 
             if( base.getAttribute("lnktexto")!=null ) {
-                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">"+base.getAttribute("lnktexto")+"</a>");
+                out.println("<a href=\""+surl+"\">"+base.getAttribute("lnktexto")+"</a>");
             }else if( base.getAttribute("btntexto")!=null ) {
-                out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-mapa\">");
-                out.println("  <input type=\"submit\" value=\""+base.getAttribute("btntexto")+"\" />");
+                out.println("<form method=\"post\" action=\""+surl+"\">");
+                out.println("<input type=\"submit\" value=\""+base.getAttribute("btntexto")+"\" />");
                 out.println("</form>");
             }else if( base.getAttribute("img")!=null ) {
-                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">");
-                out.println("  <img src=\""+webWorkPath+"/"+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgSiteMap"))+"\" />");
+                out.println("<a href=\""+surl+"\">");
+                out.println("<img src=\""+webWorkPath+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgSiteMap"))+"\" />");
                 out.println("</a>");
             }else {
-                out.println("<a href=\""+surl+"\" class=\"swb-mapa\">"+paramRequest.getLocaleString("msgSiteMap")+"</a>");
+                out.println("<div class=\"swb-sitemap\">");
+                out.println("<a href=\""+surl+"\">"+paramRequest.getLocaleString("msgSiteMap")+"</a>");
+                out.println("</div>");
             }
         }else {
             // Mapa de sitio
             Document dom = getDom(request, response, paramRequest);
             if(dom != null)  {
                 try {
+                    System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
                     out.print(SWBUtils.XML.transformDom(tpl, dom));
                 }catch(TransformerException te) {
                     log.error("doView Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
@@ -359,13 +352,6 @@ public class WBSiteMap extends GenericAdmResource
         }
         out.flush();
     }
-
-
-
-
-
-
-
     
     /**
      * The Class SelectTree.

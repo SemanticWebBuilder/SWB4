@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Configuração de Conteúdo">
-            <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" jsrequired="false"/>
+        <fieldset legend="Aparência">
+            <input type="file" name="template" label="Modelo (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remover modelo de processamento: " msg="Pessoal atual: " bydefault="{@webpath}swbadmin/xsl/WBSiteMap/WBSiteMap.xsl" msgbydefault="Modelo padrão de processamento: " jsrequired="false"/>
             <input type="text" name="title" label="Título:" maxlength="60" promptMessage="Título" />
-            <input type="text" name="level" label="Nivel de despliegue:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nível deve ser um valor numérico" promptMessage="Nivel de despliegue" />
+            <input type="text" name="level" label="Nível de implantação:" value="1" maxlength="3" jsvaltype="js_numbers" invalidMessage="Nível deve ser um valor numérico" promptMessage="Nivel de despliegue" />
         </fieldset>
 
         <fieldset legend="Configuração da estratégia">
@@ -26,32 +27,13 @@
         </fieldset>
 
         <fieldset>
-            <statictext name="cmd">
-            <![CDATA[
-            <button id="btnSave" type="submit" dojoType="dijit.form.Button">Salvar</button>
-            <button id="btnReset" type="reset" dojoType="dijit.form.Button" type="reset">Restabelecer</button>
-            ]]>
-            </statictext>
+            <input type="submit" name="btnSave" value="Salvar" onclick="jsValida(this.form)" />
+            <input type="reset"  name="btnReset" value="Restabelecer"/>
         </fieldset>
     </form>
 
     <script type="text/javascript">
         <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(
-            function(){
-                dojo.connect(dijit.byId("btnSave"), "onSubmit",
-                    function() {
-                        if( jsValida(dojo.byId("frmAddNew")) )
-                            return true;
-                        else
-                            return false;
-                    }
-                );
-            }
-        );
-
         function jsValida(frm) {
             if( !frm.lnktexto.value && !frm.btntexto.value && !frm.img.value  && !dojo.byId('wbNoFile_img') ) {
                 alert('Fornecer o mecanismo para acessar o site de recursos mapa.');

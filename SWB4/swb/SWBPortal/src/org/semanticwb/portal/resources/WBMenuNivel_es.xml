@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmWBMenu" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40" jsrequired="false"/>
-                <input type="TEXT" name="basetopic" label="Tópico base:" size="20" jsrequired="true"/>
-                <input type="TEXT" name="niveles" label="Niveles:" size="10" jsvaltype="js_numbers" jsrequired="true"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Guardar" />
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
-	</form>
+    <xslfile>admresource.xslt</xslfile>
+
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Aspecto">
+            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenuNivel/WBMenuNivel.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
+        </fieldset>
+
+        <fieldset legend="Configuración de estrategia">
+            <input type="text" name="basetopic" label="Sección base:" promptMessage="Id de la sección que sirve como inicio o base" />
+            <input type="text" name="niveles" label="Mostrar el menú hasta este nivel:" maxlength="3" jsvaltype="js_numbers" invalidMessage="Límite inválido" promptMessage="Mostrar hasta este nivel a partir de la sección base" />
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" name="btnSave"  value="Guardar" />
+            <input type="reset"  name="btnReset" value="Restablecer"/>
+        </fieldset>
+    </form>
 </admresource>
