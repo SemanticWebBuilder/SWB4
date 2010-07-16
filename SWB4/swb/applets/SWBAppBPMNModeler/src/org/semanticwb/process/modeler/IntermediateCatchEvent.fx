@@ -29,7 +29,14 @@ public class IntermediateCatchEvent extends CatchEvent
         stkw=2;
         stkwo=2;
         scaleOff=-0.1;
-
+        text=EditableText
+        {
+            text: bind title with inverse
+            x:bind x
+            y:bind y + 30
+            width: bind w + 60
+            height: bind h
+        }
         colorAdjust.hue=-0.83;
         colorAdjust.brightness=-0.07;
         colorAdjust.contrast=0.25;
@@ -62,7 +69,7 @@ public class IntermediateCatchEvent extends CatchEvent
                     style: Styles.style_event
                     //smooth:true;
                 },
-                message
+                message, text
             ]
             scaleX: bind s;
             scaleY: bind s;
