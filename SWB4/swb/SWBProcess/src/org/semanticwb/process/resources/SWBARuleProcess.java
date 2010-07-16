@@ -364,11 +364,10 @@ public class SWBARuleProcess extends GenericResource {
         int numero = 0;
 
         log.debug("Propiedades clases....");
-        SemanticModel model = ws.getSemanticObject().getModel();
         log.debug("ProcessSite:"+ws.getDisplayTitle(user.getLanguage()));
         SemanticClass pcls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SemanticVocabulary.PROCESS_CLASS);
         log.debug("SemClass:"+pcls);
-        Iterator<SemanticObject> it = model.listInstancesOfClass(pcls);
+        Iterator<SemanticObject> it = pcls.listInstances();
 
         while (it.hasNext()) {
             SemanticObject semanticObject = it.next();
