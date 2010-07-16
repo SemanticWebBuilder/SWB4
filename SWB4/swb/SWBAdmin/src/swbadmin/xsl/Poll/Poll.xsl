@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <xsl:output method="html" encoding="ISO-8859-1"/>
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="ISO-8859-1"/>
     
     <xsl:template match="/poll">
-        <div class="swb-encuesta">
+        <div class="swb-poll">
             <xsl:apply-templates select="title"/>
             <xsl:apply-templates select="imgTitle"/>
             <xsl:apply-templates select="question"/>
@@ -11,19 +11,20 @@
             <xsl:apply-templates select="vote"/>
             <xsl:apply-templates select="results"/>
             <xsl:apply-templates select="links"/>
+            <br />
         </div>
     </xsl:template>
 
     <xsl:template match="title">
-        <h2 class="">
+        <p class="swb-poll-title">
             <xsl:apply-templates/>
-        </h2>
+        </p>
     </xsl:template>
     <xsl:template match="imgTitle">
         <img src="{@src}" alt="{@alt}"/>
     </xsl:template>
     <xsl:template match="question">
-        <p class="">
+        <p class="swb-poll-quest">
             <xsl:apply-templates/>
         </p>
     </xsl:template>
@@ -42,22 +43,26 @@
     </xsl:template>
 
     <xsl:template match="vote">
-        <p class="">
-            <a href="#" onClick="{@action}">
+        <p class="swb-poll-link">
+            <a href="#" onclick="{@action}">
                 <img src="{@path}images/votar.png" alt="vota" />
             </a>
         </p>
     </xsl:template>
     <xsl:template match="results">
-        <p class="">
-            <a href="#" onclick="{@action}">
+        <p class="swb-poll-link">
+            <a href="#" onclick="{@action}" title="{@title}">
                 <xsl:apply-templates/>
             </a>
         </p>
     </xsl:template>
     <xsl:template match="links">
         <xsl:for-each select="link">
-            <a href="{@url}"><xsl:apply-templates/></a><br></br>
+            <p class="swb-poll-link">
+                <a href="{@url}" title="{@title}">
+                    <xsl:apply-templates/>
+                </a>
+            </p>
         </xsl:for-each>
     </xsl:template>
 </xsl:stylesheet>
