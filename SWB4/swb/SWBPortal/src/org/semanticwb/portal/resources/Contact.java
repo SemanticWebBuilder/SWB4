@@ -46,6 +46,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -72,15 +73,9 @@ public class Contact extends GenericAdmResource {
      */
     @Override
     public void setResourceBase(Resource base) {
-//        try {
-//            super.setResourceBase(base);
-//            webWorkPath = SWBPortal.getWebWorkPath() +  base.getWorkPath();
-//        }catch(Exception e) {
-//            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
-//        }
         try {
             super.setResourceBase(base);
-            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath();
+            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
         }catch(Exception e) {
             log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
@@ -130,7 +125,7 @@ public class Contact extends GenericAdmResource {
         String contactEmail = base.getAttribute("email");
         String contactPhone = base.getAttribute("phone");
         String contactAddress = base.getAttribute("address");
-        String title = base.getAttribute("title");
+        String degree = base.getAttribute("degree");
 
 
         if( !isEmpty(subject) && !isEmpty(message) && SWBUtils.EMAIL.isValidEmailAddress(contactEmail) ) {
@@ -140,7 +135,7 @@ public class Contact extends GenericAdmResource {
             msgToCustomer.append(paramRequest.getLocaleString("greating"));
             msgToCustomer.append(contactName+"\n");
             msgToCustomer.append(contactEmail+"\n");
-            msgToCustomer.append(title==null?"":title+"\n");
+            msgToCustomer.append(degree==null?"":degree+"\n");
             msgToCustomer.append(contactPhone==null?"":contactPhone+"\n");
             msgToCustomer.append(contactAddress==null?"":contactAddress);
             msgToCustomer.append("\n");
@@ -198,14 +193,14 @@ public class Contact extends GenericAdmResource {
         String contactEmail = base.getAttribute("email");
         String contactPhone = base.getAttribute("phone");
         String contactAddress = base.getAttribute("address");
-        String title = base.getAttribute("title");
+        String degree = base.getAttribute("degree");
 
         StringBuilder msgToCustomer = new StringBuilder();
         msgToCustomer.append(response.getLocaleString("dear")+" "+customerName+" :\n");
         msgToCustomer.append(response.getLocaleString("greating"));
         msgToCustomer.append(contactName+"\n");
         msgToCustomer.append(contactEmail+"\n");
-        msgToCustomer.append(title==null?"":title+"\n");
+        msgToCustomer.append(degree==null?"":degree+"\n");
         msgToCustomer.append(contactPhone==null?"":contactPhone+"\n");
         msgToCustomer.append(contactAddress==null?"":contactAddress);
         msgToCustomer.append("\n");
@@ -284,9 +279,11 @@ public class Contact extends GenericAdmResource {
         Element insts = dom.createElement("instructions");
         econtact.appendChild(insts);
 
-        e = dom.createElement("instruction");
-        e.appendChild(dom.createTextNode(paramRequest.getLocaleString("instruction1")+" "+contactPhone));
-        insts.appendChild(e);
+        if( contactPhone!=null ) {
+            e = dom.createElement("instruction");
+            e.appendChild(dom.createTextNode(paramRequest.getLocaleString("instruction1")+" "+contactPhone));
+            insts.appendChild(e);
+        }
 
         e = dom.createElement("instruction");
         e.appendChild(dom.createTextNode(paramRequest.getLocaleString("instruction2")));
@@ -296,30 +293,31 @@ public class Contact extends GenericAdmResource {
         e = dom.createElement("name");
         e.setAttribute("id", "name");
         e.setAttribute("label", paramRequest.getLocaleString("name"));
-        e.setTextContent( user.isSigned()?user.getFullName():"" );
+        e.appendChild(dom.createTextNode(user.isSigned()?user.getFullName():""));
         econtact.appendChild(e);
 
         e = dom.createElement("email");
         e.setAttribute("id", "email");
         e.setAttribute("label", paramRequest.getLocaleString("email"));
-        e.setTextContent( user.isSigned()?user.getEmail():"" );
+        e.appendChild(dom.createTextNode(user.isSigned()?user.getEmail():""));
         econtact.appendChild(e);
 
         e = dom.createElement("subject");
         e.setAttribute("id", "subject");
         e.setAttribute("label", paramRequest.getLocaleString("subject"));
-        e.setTextContent( request.getParameter("subject")==null?"":request.getParameter("subject") );
+        e.appendChild(dom.createTextNode(request.getParameter("subject")==null?"":request.getParameter("subject")));
         econtact.appendChild(e);
 
         e = dom.createElement("message");
         e.setAttribute("id", "message");
         e.setAttribute("label", paramRequest.getLocaleString("message"));
-        e.setTextContent( request.getParameter("message")==null?"":request.getParameter("message") );
+        e.appendChild(dom.createTextNode(request.getParameter("message")==null?"   ":request.getParameter("message")));
         econtact.appendChild(e);
 
         e = dom.createElement("command");
         e.setAttribute("submit", paramRequest.getLocaleString("send"));
         e.setAttribute("reset", paramRequest.getLocaleString("reset"));
+        e.setAttribute("action", "if(validateContactFrm(this.form))return true; else return false;");
         econtact.appendChild(e);
         return dom;
     }
@@ -340,7 +338,7 @@ public class Contact extends GenericAdmResource {
         boolean modal = Boolean.parseBoolean(base.getAttribute("modal"));
         if(modal) {
             out.println("<script type=\"text/javascript\">");
-
+            out.println("<!--");
             out.println("  function sendEmail(url) {");
             out.println("    alert(postText(url));");
             out.println("  }");
@@ -432,15 +430,26 @@ public class Contact extends GenericAdmResource {
             out.println("    contactHolder.style.height=cheight+'px';");
             out.println("    document.body.appendChild(contactHolder);");
             out.println("  }");
-
+            out.println("-->");
             out.println("</script>");
 
-            if ( base.getAttribute("link")!=null )
-                out.println("<a href=\"#\" onclick=\"showContactDialog('cover01','#000000',80)\">"+base.getAttribute("link")+"</a>");
-            else if ( base.getAttribute("label")!=null )
-                out.println("<input type=\"button\" onclick=\"showContactDialog('cover01','#000000',80)\" value=\""+base.getAttribute("label")+"\" />");
-            else
-                out.println("<img alt=\""+base.getAttribute("alt")+"\" src=\""+webWorkPath+"/"+base.getAttribute("image")+"\" onclick=\"showContactDialog('cover01','#000000',80)\" />");
+            if( base.getAttribute("link")!=null ) {
+                out.println("<a href=\"#\" class=\"swb-contact-stgy\" onclick=\"showContactDialog('cover01','#000000',80)\" title=\""+paramRequest.getLocaleString("msgContact")+"\">");
+                out.println(base.getAttribute("link"));
+                out.println("</a>");
+            }else if ( base.getAttribute("label")!=null ) {
+                out.println("<input type=\"button\" class=\"swb-contact-stgy\" onclick=\"showContactDialog('cover01','#000000',80)\" value=\""+base.getAttribute("label")+"\" />");
+            }else if( base.getAttribute("image")!=null ) {
+                out.println("<a href=\"#\" class=\"swb-contact-stgy\" onclick=\"showContactDialog('cover01','#000000',80)\" title=\""+paramRequest.getLocaleString("msgContact")+"\">");
+                out.println("<img alt=\""+base.getAttribute("alt")+"\" src=\""+webWorkPath+base.getAttribute("image")+"\" />");
+                out.println("</a>");
+            }else {
+                out.println("<div class=\"swb-contact\">");
+                out.println("<a href=\"#\" class=\"swb-contact-stgy\" onclick=\"showContactDialog('cover01','#000000',80)\" title=\""+paramRequest.getLocaleString("msgContact")+"\">");
+                out.println(paramRequest.getLocaleString("msgContact"));
+                out.println("</a>");
+                out.println("</div>");
+            }
         }
         else {
             if(paramRequest.getCallMethod()==paramRequest.Call_STRATEGY) {
@@ -455,28 +464,34 @@ public class Contact extends GenericAdmResource {
                 }
 
                 if( base.getAttribute("link")!=null ) {
-                    out.println("<a href=\""+surl+"\" class=\"swb-contact\">"+base.getAttribute("link")+"</a>");
+                    out.println("<a href=\""+surl+"\" class=\"swb-contact-stgy\" title=\""+paramRequest.getLocaleString("msgContact")+"\">"+base.getAttribute("link")+"</a>");
                 }else if( base.getAttribute("label")!=null ) {
-                    out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-contact\" >");
-                    out.println("  <input type=\"submit\" value=\""+base.getAttribute("label")+"\" class=\"swb-contact-button\" />");
+                    out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-contact-stgy\" >");
+                    out.println("<input type=\"submit\" value=\""+base.getAttribute("label")+"\" />");
                     out.println("</form>");
                 }else if( base.getAttribute("image")!=null ) {
-                    out.println("<a href=\""+surl+"\" class=\"swb-contact\">");
-                    out.println("  <img src=\""+webWorkPath+"/"+base.getAttribute("image")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgContact"))+"\" class=\"cntct-stg-img\" />");
+                    out.println("<a href=\""+surl+"\" class=\"swb-contact-stgy\" title=\""+paramRequest.getLocaleString("msgContact")+"\">");
+                    out.println("<img src=\""+webWorkPath+base.getAttribute("image")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgContact"))+"\" class=\"cntct-stg-img\" />");
                     out.println("</a>");
                 }else {
-                    out.println("<a href=\""+surl+"\" class=\"\">"+paramRequest.getLocaleString("msgContact")+"</a>");
+                    out.println("<div class=\"swb-contact\">");
+                    out.println("<a href=\""+surl+"\" class=\"swb-contact-stgy\" title=\""+paramRequest.getLocaleString("msgContact")+"\">"+paramRequest.getLocaleString("msgContact")+"</a>");
+                    out.println("</div>");
                 }
             }else {
                 Document dom =getDom(request, response, paramRequest);
+                System.out.println("\n\nxml=\n"+SWBUtils.XML.domToXml(dom));
                 try {
                     if(dom != null) {
-                        out.println(SWBUtils.XML.transformDom(tpl, dom));
+                        String html = SWBUtils.XML.transformDom(tpl, dom);
+                        System.out.println("\n\nhtml=\n"+html);
+                        out.println(html);
                     }
                 }catch(TransformerException e) {
                     log.error(e);
                 }
                 out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
                 out.println("function validateContactFrm(frm) {");
                 out.println("   if(!isValidEmail(frm.email.value)) {");
                 out.println("      alert('"+paramRequest.getLocaleString("emailInvalid")+"');");
@@ -485,6 +500,7 @@ public class Contact extends GenericAdmResource {
                 out.println("   }");
                 out.println("   return true;");
                 out.println("}");
+                out.println("-->");
                 out.println("</script>");
             }
         }
@@ -501,6 +517,115 @@ public class Contact extends GenericAdmResource {
         out.println(paramRequest.getLocaleString("thanks"));
         out.println("</p></div>");
     }
+
+    /*@Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        Resource base=getResourceBase();
+        String msg=paramRequest.getLocaleString("lblDoAdmin_undefinedOperation");
+        String action = null!=request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+
+        if(action.equals("add") || action.equals("edit")) {
+            StringBuilder html = new StringBuilder();
+            html.append("<div class=\"swbform\">");
+            html.append("<form id=\"frmResource\" name=\"frmResource\" method=\"post\" dojoType=\"dijit.form.Form\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
+
+            html.append("<fieldset> ");
+            html.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_ContentSetting")+"</legend>");
+            html.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
+            html.append("<tr><td width=\"250\"></td><td></td></tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_HowDisplyaResource")+":</td>");
+            html.append(" <td class=\"valores\"></td>");
+            html.append("</tr>");
+
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_Modal")+"</td>");
+            html.append(" <td class=\"valores\"><input type=\"radio\" name=\"modal\" dojoType=\"dijit.form.RadioButton\" value=\""+Boolean.TRUE.toString()+"\" checked=\""++"\" /></td>");
+            html.append("</tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_NoModal")+"</td>");
+            html.append(" <td class=\"valores\"><input type=\"radio\" name=\"modal\" dojoType=\"dijit.form.RadioButton\" value=\""+Boolean.FALSE.toString()+"\" checked=\""++"\" /></td>");
+            html.append("</tr>");
+            html.append("</table> ");
+            html.append("</fieldset> ");
+
+            html.append("<fieldset>");
+            html.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_StrategySetting")+"</legend>");
+            html.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
+            html.append("<tr><td width=\"250\"></td><td></td></tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_HowAccess")+":</td>");
+            html.append(" <td class=\"valores\"></td>");
+            html.append("</tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("msgDoView_link")+":</td>");
+            html.append(" <td class=\"valores\"><input type=\"text\" id=\"link\" name=\"link\" promptMessage=\""+paramRequest.getLocaleString("msgDoAdmin_link")+"\" dojoType=\"dijit.form.ValidationTextBox\" maxlength=\"50\"/></td>");
+            html.append("</tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("msgDoView_label")+":</td>");
+            html.append(" <td class=\"valores\"><input type=\"text\" id=\"label\" name=\"label\" promptMessage=\""+paramRequest.getLocaleString("msgDoAdmin_label")+"\" dojoType=\"dijit.form.ValidationTextBox\" maxlength=\"50\"/></td>");
+            html.append("</tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_image")+" <span class=\"enfasis\">(gif, jpg, jpeg, png)</span>:</td>");
+            html.append(" <td class=\"valores\"><input type=\"file\" id=\"image\" name=\"image\" size=\"40\"/><br><br></td>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_altText")+":</td>");
+            html.append(" <td class=\"valores\"><input type=\"text\" id=\"alt\" name=\"alt\" promptMessage=\"Texto alterno de la imagen\" dojoType=\"dijit.form.ValidationTextBox\" maxlength=\"50\"/></td>");
+            html.append("</tr>");
+            html.append("</table> ");
+            html.append("</fieldset> ");
+            
+            html.append("<fieldset> ");
+            html.append("<legend>"+paramRequest.getLocaleString("lblDoAdmin_PollData")+"</legend>");
+            html.append("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
+            html.append("<tr><td width=\"250\"></td><td></td></tr>");
+            html.append("<tr>");
+            html.append(" <td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdmin_contact")+":&nbsp;</td>");
+            html.append(" <td class=\"valores\">");
+            html.append("  <input type=\"text\" name=\"contact\" maxlength=\"60\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"to do\" />");
+            html.append("  <input type=\"hidden\" name=\"link\" value=\""+base.getAttribute("link","").trim().replaceAll("\"", "&#34;")+"\" />");
+            html.append("  <input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnAdd")+"\" onClick=\"addOption(this.form.selLink, this.form.txtLink)\" />");
+            html.append("  <input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnEdit")+"\" onClick=\"updateOption(this.form.selLink, this.form.txtLink)\" />");
+            html.append(" </td> ");
+            html.append("</tr> ");
+            html.append("<tr> ");
+            html.append(" <td class=\"datos\">&nbsp;</td> ");
+            html.append(" <td class=\"valores\">");
+            html.append("  <select name=\"selLink\" size=\"5\" multiple=\"multiple\" onChange=\"editOption(this.form.selLink, this.form.txtLink)\">");
+            String value = "";
+            Document dom = SWBUtils.XML.xmlToDom(base.getXml());
+            if(dom!=null) {
+                NodeList node = dom.getElementsByTagName("contact");
+                for(int i = 0; i < node.getLength(); i++) {
+                    value = node.item(i).getChildNodes().item(0).getNodeValue().trim();
+                    if(!"".equals(value.trim())) {
+                        html.append("<option value=\"" + value.trim().replaceAll("\"","&#34;")+"\">"+value.trim()+"</option>");
+                    }
+                }
+            }
+            html.append("  </select>");
+            html.append("  <input type=\"button\" value=\""+paramRequest.getLocaleString("lblDoAdmin_btnDelete")+"\" onClick=\"deleteOption(this.form.selLink, this.form.txtLink)\" />");
+            html.append(" </td>");
+            html.append("</tr>");
+            html.append("</table> ");
+            html.append("</fieldset> ");
+
+            html.append("<fieldset>");
+            html.append("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
+            html.append(" <tr><td>");
+            html.append(" <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida(dojo.byId('frmResource'))) return true; else return false;\">"+paramRequest.getLocaleString("lblDoAdmin_submit")+"</button>&nbsp;");
+            html.append(" <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("lblDoAdmin_reset")+"</button>");
+            html.append(" </td></tr>");
+            html.append("</table> ");
+            html.append("</fieldset>");
+            html.append("</form> ");
+            html.append("<span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblDoAdmin_required"));
+            html.append("</div>");
+        }else if(action.equals("update")) {
+
+        }
+    }*/
 
 
     @Override
@@ -524,11 +649,11 @@ public class Contact extends GenericAdmResource {
         return empty;
     }
 
-    public void doSent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    /*public void doSent(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String res = request.getParameter("email");
         if( "success".equalsIgnoreCase(res) ) {
         }else if( "missdata".equalsIgnoreCase(res) ) {
         }else {
         }
-    }
+    }*/
 }
