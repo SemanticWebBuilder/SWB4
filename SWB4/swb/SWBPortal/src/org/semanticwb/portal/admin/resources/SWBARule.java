@@ -415,18 +415,18 @@ public class SWBARule extends GenericResource {
             hmValues = new HashMap();
             hmAttr.put("Etiqueta", paramRequest.getLocaleString("msgUserGroups"));   ///////////////////////////
             hmAttr.put("Tipo", "select");
-            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
-            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
-            hmAttr.put("Operador", hmOper);
             Iterator<UserGroup> enumUsrG = usrRepo.listUserGroups();
             while (enumUsrG.hasNext()) {
                 UserGroup usrGroup = enumUsrG.next();
                 hmValues.put(usrGroup.getURI(), usrGroup.getDisplayTitle(user.getLanguage()));
             }
             hmAttr.put("Valor", hmValues);
-            //TODO: RuleMgr ???ROLE
-            comboAtt.put(SWBRuleMgr.TAG_INT_USERGROUP, hmAttr); //RuleMgr.TAG_INT_USERGROUP
-            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERGROUP); //RuleMgr.TAG_INT_USERGROUP
+            hmOper.put("=", paramRequest.getLocaleString("msgHave"));
+            hmOper.put("!=", paramRequest.getLocaleString("msgNotHave"));
+            hmAttr.put("Operador", hmOper);
+
+            comboAtt.put(SWBRuleMgr.TAG_INT_USERGROUP, hmAttr); 
+            vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_USERGROUP); 
 
             // Se agrega la parte de roles
             hmAttr = new HashMap();
@@ -895,7 +895,9 @@ public class SWBARule extends GenericResource {
         PrintWriter out = response.getWriter();
         //log.debug("doGateway: URI"+request.getParameter("suri")+", id:"+request.getParameter("id"));
         ServletInputStream in = request.getInputStream();
-        Document dom = SWBUtils.XML.xmlToDom(in);
+        String sin=SWBUtils.IO.readInputStream(in);
+        //System.out.println("sin:"+sin);
+        Document dom = SWBUtils.XML.xmlToDom(sin);
 
         if (!dom.getFirstChild().getNodeName().equals("req")) {
             response.sendError(404, request.getRequestURI());
