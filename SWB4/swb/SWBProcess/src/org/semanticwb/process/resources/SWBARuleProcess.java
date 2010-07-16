@@ -390,7 +390,6 @@ public class SWBARuleProcess extends GenericResource {
                 hmValues.put("false", paramRequest.getLocaleString("msgNo"));
                 hmAttr.put("Valor", hmValues);
 
-
                 comboAtt.put(semProp.getName(), hmAttr);
                 vecOrderAtt.add(numero++, semProp.getName());
 
