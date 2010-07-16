@@ -46,7 +46,4 @@ public class SignalIntermediateCatchEvent extends org.semanticwb.process.model.b
         obs.removeSignalObserverInstance(instance);
     }
 
-
-
-
 }
