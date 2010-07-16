@@ -1,46 +1,25 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmMenuMap" action="true" method="POST" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
-            <input type="FILE" name="template" label="Plantilla (xsl, xslt):" showfile="true" msg="Plantilla actual " bydefault="{@webpath}/swbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Plantilla por defecto " filetype="xsl|xslt" isshowfiletype="true" size="40" jsrequired="false"/>
-            <input type="TEXT" name="basetopic" label="Página web base:" size="20"/>
-            <input type="TEXT" name="nini" label="Nivel inicial:" size="3" maxlength="3" jsvaltype="js_numbers"/>
-            <input type="CHECKBOX" name="bro" label="Ocultar hermanos" value="false"/>
-            <input type="CHECKBOX" name="bro4ch" label="Si no hay hijos mostrar hermanos" value="true"/>
-            <input type="TEXT" name="nsup" label="Límite de niveles superiores:" size="3" maxlength="3" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="ninf" label="Límite de niveles inferiores:" size="3" maxlength="3" jsvaltype="js_numbers"/>
+    <xslfile>admresource.xslt</xslfile>
+    
+    <form name="frmMenuMap" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Aspecto">
+            <input type="file" name="template" label="Plantilla (xsl, xslt):" showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación"  msg="Plantilla de transformación actual: " bydefault="{@webpath}swbadmin/xsl/WBMenuMap/WBMenuMap.xslt" msgbydefault="Plantilla de transformación por defecto: " jsrequired="false"/>
+        </fieldset>
+
+        <fieldset legend="Configuración de estrategia">            
+            <input type="text" id="basetopic" name="basetopic" label="Sección inicial:" promptMessage="Id de la sección que sirve como inicio o base" />
+            <input type="text" id="nini" name="nini" label="Mostrar el menu hasta estar en este nivel:" promptMessage="Mostrar menú mapa a partir de este nivel. Por ejemplo, home se halla en el nivel 1" />
+            <input type="checkbox" name="bro" label="Ocultar hermanos" value="false" promptMessage="Marque esta opción para ocultar las secciones del mismo nivel" />
+            <input type="checkbox" name="bro4ch" label="Si no hay hijos mostrar hermanos" value="true" promptMessage="Marque esta opción para mostrar las secciones del mismo nivel" />
+            <input type="text" name="nsup" label="Mostrar el menú hasta este nivel:" maxlength="3" jsvaltype="js_numbers" invalidMessage="Límite inválido" promptMessage="Mostrar hasta este nivel contando de arriba a abajo" />
+            <input type="text" name="ninf" label="Límite de niveles inferiores:" maxlength="3" jsvaltype="js_numbers" invalidMessage="Límite inválido" promptMessage="Mostrar hasta este nivel contando de abajo a arriba" />
         </fieldset>
 
         <fieldset>
-            <statictext name="b">
-            <![CDATA[
-            <button id="btnSave" type="submit" name="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" type="reset" name="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
-            ]]>
-            </statictext>
+            <input type="submit" name="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" value="Restablecer"/>
         </fieldset>
-	</form>
-    <script type="text/javascript">
-        <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    dojo.byId("frmMenuMap").submit();
-                }
-            );
-        });
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmMenuMap").reset();
-                }
-            );
-        });
-        ]]>
-    </script>
+    </form>
 </admresource>

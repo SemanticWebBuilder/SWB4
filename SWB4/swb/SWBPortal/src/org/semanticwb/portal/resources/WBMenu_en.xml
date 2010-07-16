@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" size="40" >
+
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
-            <input type="file" name="template" id="template" label="Template (xsl, xslt): " showfile="true" msg="Current Template: " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Template by default: " filetype="xsl|xslt" isshowfiletype="true" />
-            <input type="checkbox" name="justsons" id="justsons" label="Show Just Sons" value="true"/>
+        <fieldset legend="Look and Feel">
+            <input type="file" name="template" label="Template (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template: " msg="Current template: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Default Template: " jsrequired="false" />
+            <input type="checkbox" name="justsons" id="justsons" label="Mostrar solamente hijos" value="true"/>
         </fieldset>
 
         <fieldset>
-            <input type="submit" name="btnSave" value="Save" />
-            <input type="reset"  name="btnReset" value="Reset"/>
+            <input type="submit" name="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" value="Restablecer"/>
         </fieldset>
     </form>
 </admresource>

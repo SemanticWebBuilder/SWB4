@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
-    <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" size="40" >
+
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo">
         <admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
-            <input type="file" name="template" id="template" label="Plantilla (xsl, xslt): " showfile="true" msg="Plantilla actual: " bydefault="{@webpath}wbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " filetype="xsl|xslt" isshowfiletype="true" />
+        <fieldset legend="Aspecto">
+            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/WBMenu/WBMenu.xslt" msgbydefault="Plantilla por defecto: " jsrequired="false" />
             <input type="checkbox" name="justsons" id="justsons" label="Mostrar solamente hijos" value="true"/>
         </fieldset>
 
