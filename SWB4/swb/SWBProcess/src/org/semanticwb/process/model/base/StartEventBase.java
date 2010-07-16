@@ -165,7 +165,13 @@ public abstract class StartEventBase extends org.semanticwb.process.model.CatchE
 
     public void setNext(org.semanticwb.process.model.FlowNode value)
     {
-        getSemanticObject().setObjectProperty(swp_ie_next, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_ie_next, value.getSemanticObject());
+        }else
+        {
+            removeNext();
+        }
     }
 
     public void removeNext()

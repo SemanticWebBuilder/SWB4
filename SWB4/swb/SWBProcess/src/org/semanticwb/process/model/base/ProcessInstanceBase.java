@@ -142,7 +142,13 @@ public abstract class ProcessInstanceBase extends org.semanticwb.process.model.I
 
     public void setProcessType(org.semanticwb.process.model.Process value)
     {
-        getSemanticObject().setObjectProperty(swp_processType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_processType, value.getSemanticObject());
+        }else
+        {
+            removeProcessType();
+        }
     }
 
     public void removeProcessType()

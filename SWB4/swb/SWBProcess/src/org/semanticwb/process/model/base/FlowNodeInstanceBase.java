@@ -171,7 +171,13 @@ public abstract class FlowNodeInstanceBase extends org.semanticwb.process.model.
 
     public void setContainerInstance(org.semanticwb.process.model.ContainerInstanceable value)
     {
-        getSemanticObject().setObjectProperty(swp_containerInstance, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_containerInstance, value.getSemanticObject());
+        }else
+        {
+            removeContainerInstance();
+        }
     }
 
     public void removeContainerInstance()
@@ -218,7 +224,13 @@ public abstract class FlowNodeInstanceBase extends org.semanticwb.process.model.
 
     public void setFlowNodeType(org.semanticwb.process.model.FlowNode value)
     {
-        getSemanticObject().setObjectProperty(swp_flowNodeType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_flowNodeType, value.getSemanticObject());
+        }else
+        {
+            removeFlowNodeType();
+        }
     }
 
     public void removeFlowNodeType()
@@ -239,7 +251,13 @@ public abstract class FlowNodeInstanceBase extends org.semanticwb.process.model.
 
     public void setFromConnection(org.semanticwb.process.model.ConnectionObject value)
     {
-        getSemanticObject().setObjectProperty(swp_fromConnection, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_fromConnection, value.getSemanticObject());
+        }else
+        {
+            removeFromConnection();
+        }
     }
 
     public void removeFromConnection()
@@ -260,7 +278,13 @@ public abstract class FlowNodeInstanceBase extends org.semanticwb.process.model.
 
     public void setSourceInstance(org.semanticwb.process.model.FlowNodeInstance value)
     {
-        getSemanticObject().setObjectProperty(swp_sourceInstance, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_sourceInstance, value.getSemanticObject());
+        }else
+        {
+            removeSourceInstance();
+        }
     }
 
     public void removeSourceInstance()

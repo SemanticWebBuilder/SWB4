@@ -390,7 +390,13 @@ public abstract class UserTaskBase extends org.semanticwb.process.model.Task imp
 
     public void setTaskWebPage(org.semanticwb.process.model.WrapperTaskWebPage value)
     {
-        getSemanticObject().setObjectProperty(swp_taskWebPage, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_taskWebPage, value.getSemanticObject());
+        }else
+        {
+            removeTaskWebPage();
+        }
     }
 
     public void removeTaskWebPage()

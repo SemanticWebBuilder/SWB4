@@ -255,7 +255,13 @@ public abstract class ProcessWebPageBase extends org.semanticwb.model.WebPage im
 
     public void setProcess(org.semanticwb.process.model.Process value)
     {
-        getSemanticObject().setObjectProperty(swp_process, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_process, value.getSemanticObject());
+        }else
+        {
+            removeProcess();
+        }
     }
 
     public void removeProcess()

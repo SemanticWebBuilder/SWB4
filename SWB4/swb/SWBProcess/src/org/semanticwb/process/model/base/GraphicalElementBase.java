@@ -154,7 +154,13 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
 
     public void setContainer(org.semanticwb.process.model.Containerable value)
     {
-        getSemanticObject().setObjectProperty(swp_container, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_container, value.getSemanticObject());
+        }else
+        {
+            removeContainer();
+        }
     }
 
     public void removeContainer()
@@ -283,7 +289,13 @@ public abstract class GraphicalElementBase extends org.semanticwb.process.model.
 
     public void setParent(org.semanticwb.process.model.GraphicalElement value)
     {
-        getSemanticObject().setObjectProperty(swp_parent, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swp_parent, value.getSemanticObject());
+        }else
+        {
+            removeParent();
+        }
     }
 
     public void removeParent()
