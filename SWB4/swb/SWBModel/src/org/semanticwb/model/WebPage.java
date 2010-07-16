@@ -748,7 +748,7 @@ public class WebPage extends WebPageBase
     }
 
 
-     /** Regresa string con la fecha de ultima actualizacion de los contenidos.
+     /** Regresa string con el nombre del usuario que actualizo el primer contenido.
      * @return String
      */
     public String getContentsAuthor()
