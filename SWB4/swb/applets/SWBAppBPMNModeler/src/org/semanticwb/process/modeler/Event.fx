@@ -70,6 +70,14 @@ public class Event extends FlowNode
         cursor=Cursor.HAND;
         w=30;
         h=30;
+        text=EditableText
+        {
+            text: bind title with inverse
+            x:bind x
+            y:bind y + 30
+            width: bind w + 60
+            height: bind h
+        }
 
         shape= Circle
         {
@@ -87,7 +95,7 @@ public class Event extends FlowNode
         {
             content: [
                 shape,
-                //text,
+                text,
                 message
             ]
             scaleX: bind s;
