@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-    <xsl:output method="html" encoding="ISO-8859-1"/>
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="ISO-8859-1"/>
 
     <xsl:template match="/contact">
         <xsl:apply-templates select="apologies"/>
@@ -38,35 +38,42 @@
 
     <xsl:template match="name">
         <p>
-            <label for="{@id}"><xsl:value-of select="@label"/></label>
-            <input name="{@id}" id="{@id}" value="{name}" class="swb-contact-field" />
+            <label for="{@id}">
+                <xsl:value-of select="@label"/>: 
+            </label>
+            <input name="{@id}" id="{@id}" value="{.}" class="swb-contact-field" />
         </p>
     </xsl:template>
     <xsl:template match="email">
         <p>
-            <label for="{@id}"><xsl:value-of select="@label"/></label>
-            <input name="{@id}" id="{@id}" value="{email}" class="swb-contact-field" />
+            <label for="{@id}">
+                <xsl:value-of select="@label"/>:
+            </label>
+            <input name="{@id}" id="{@id}" value="{.}" class="swb-contact-field" />
         </p>
     </xsl:template>
     <xsl:template match="subject">
         <p>
-            <label for="{@id}"><xsl:value-of select="@label"/></label>
-            <input name="{@id}" id="{@id}" value="{subject}" class="swb-contact-field" />
+            <label for="{@id}">
+                <xsl:value-of select="@label"/>:
+            </label>
+            <input name="{@id}" id="{@id}" value="{.}" class="swb-contact-field" />
         </p>
     </xsl:template>
     <xsl:template match="message">
         <p>
-            <label for="{@id}"><xsl:value-of select="@label"/></label>
+            <label for="{@id}">
+                <xsl:value-of select="@label"/>:
+            </label>
             <textarea name="{@id}" id="{@id}" cols="40" rows="5">
-                <xsl:value-of select="message"/>
+                <xsl:apply-templates/>
             </textarea>
         </p>
     </xsl:template>
     <xsl:template match="command">
         <p class="swb-contact-cmd">
-            <input name="submit" id="contactoEnviar" type="submit" value="{@submit}" onClick="if(validateContactFrm(this.form))return true; else return false;" class="swb-contact-button" />
+            <input name="submit" id="contactoEnviar" type="submit" value="{@submit}" onclick="{@action}" class="swb-contact-button" />
             <input name="reset" id="contactoRestablecer" type="reset" value="{@reset}" class="swb-contact-button" />
         </p>
     </xsl:template>
-    
 </xsl:stylesheet>
