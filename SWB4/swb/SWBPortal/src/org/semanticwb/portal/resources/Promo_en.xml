@@ -1,230 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmPromo" action="true" method="post" enctype="multipart/form-data">
-		<admdbconnmgr defconn="true"/>
-        <fieldset legend="Data">
-            <input type="TEXT" name="title" label="Title:" size="50"/>
-            <input type="TEXT" name="subtitle" label="Subtitle:" size="50"/>
-            <textarea name="text" label="* Text:" rows="5" cols="50"  jsrequired="true"/>
-            <input type="FILE" name="imgfile" label="Image (bmp, gif, jpg, jpeg, png):" showfile="true" filetype="bmp|jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
-            <input type="TEXT" name="caption" label="Caption:" size="50"/>
-            <input type="TEXT" name="more" label="Text for the link:" size="50"/>
-            <input type="TEXT" name="url" label="Link:" size="50"/>
-            <statictext name="txtTarget">View in a new window:</statictext>
-            <input type="RADIO" name="target" label="Sí" value="1"/>
-            <input type="RADIO" name="target" label="No" value="0"/>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Look and Feel">
+            <input type="file" name="template" label="Template (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Remove template: " msg="Current template: " bydefault="{@webpath}swbadmin/xsl/Promo/Promo.xsl" msgbydefault="Default template: " jsrequired="false" />
+            <input type="text" id="imgWidth" name="imgWidth" label="Image Width (pixels):" maxlength="4" regExp="\d{1,4}" invalidMessage="Invalid Width" promptMessage="Image width, considered in pixels" />
+            <input type="text" id="imgHeight" name="imgHeight" label="Image Height (pixels):" maxlength="4" regExp="\d{1,4}" invalidMessage="Invalid Height" promptMessage="Image height, considered in pixels" />
         </fieldset>
 
-        <fieldset legend="Look and Feel">
-            <input type="TEXT" name="cssClass" label="CSS Class:" size="50" />
+        <fieldset legend="Setting Strategy">
+            <input type="text" name="title" label="Title:" maxlength="50" promptMessage="Title" />
+            <input type="text" name="subtitle" label="Subtitle:" maxlength="50" promptMessage="Subtitle" />
+            <input type="file" name="imgfile" label="Image (gif, jpg, jpeg, png):" showfile="true" filetype="jpg|jpeg|gif|png" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40"/>
+            <input type="text" name="caption" label="Caption:" maxlength="50" promptMessage="Caption" />
+            <textarea name="text" label="Text:" rows="5" cols="50"  jsrequired="true"/>
+            <input type="text" name="more" label="Link text:" maxlength="50" promptMessage="Link text" />
+            <input type="text" name="url" label="URL:" maxlength="50" promptMessage="Web Address" />
 
-            <input type="TEXT" name="width" label="Width of the vignette (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
-            <input type="TEXT" name="height" label="Height of the vignette (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"  />
+            <statictext name="txtTarget">Send to new Window:</statictext>
+            <input type="radio" id="target1" name="target" label="Yes" value="1"/>
+            <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
 
-            <input type="TEXT" name="titleStyle" label="Style of the title:" size="80" />
-            <input type="TEXT" name="subtitleStyle" label="Style of the subtitle:" size="80" />
-            <input type="TEXT" name="textStyle" label="Style of the text:" size="80" />
-            <input type="TEXT" name="captionStyle" label="Style of the caption:" size="80" />
-            <input type="TEXT" name="moreStyle" label="Style of the link:" size="80" />
-            <statictext name="txtUline">Underline text link:</statictext>
-            <input type="RADIO" name="uline" label="Yes" value="1"/>
-            <input type="RADIO" name="uline" label="No" value="0"/>
-            <input type="TEXT" name="imgWidth" label="Width of the image (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="imgHeight" label="Height of the image (pixeles):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-
-            <input type="TEXT" name="imgPos" label="Position of the image with the text:" size="2" maxlength="1" jsvaltype="js_numbers" value="2" />
-            <img label="Change the position of the image:" src="{@webpath}/swbadmin/images/posicion.gif" usemap="#positionmap" border="0" />
-            <map name="positionmap">
-                <area shape="rect" coords="1,1,20,17"   onclick="javascript:document.frmPromo.imgPos.value=1;" title="1" alt="1.- Top left" />
-                <area shape="rect" coords="24,3,44,18"  onclick="javascript:document.frmPromo.imgPos.value=3;" title="3" alt="3.- Right" />
-                <area shape="rect" coords="48,1,68,18"  onclick="javascript:document.frmPromo.imgPos.value=5;" title="5" alt="5.- Top center" />
-                <area shape="rect" coords="0,22,20,40"  onclick="javascript:document.frmPromo.imgPos.value=2;" title="2" alt="2.- Top right" />
-                <area shape="rect" coords="24,22,44,40" onclick="javascript:document.frmPromo.imgPos.value=4;" title="4" alt="4.- Left" />
-                <area shape="rect" coords="48,21,68,40" onclick="javascript:document.frmPromo.imgPos.value=6;" title="6" alt="6.- Bottom" />
-            </map>
-
-            <statictext name="showCurrentTextColor">
-                <![CDATA[
-                <table border="0" width="100%">
-                    <tr>
-                    <td class="datos" width="200px" align="right">
-                        Text color (hexadecimal):
-                    </td>
-                    <td class="valores">
-                        <input type="TEXT" id="textcolor" name="textcolor" value="{@db_textcolor}" size="7" maxlength="7" />
-                        <span style="background-color:{@db_textcolor};">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    </td>
-                    </tr>
-                </table>
-                ]]>
+            <statictext name="note">
+            <![CDATA[
+                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+                * Data required
+                </font>
+            ]]>
             </statictext>
-            <statictext name="chooseColor">
-                <![CDATA[
-                <script type="text/javascript">
-                    dojo.require("dijit.ColorPalette");
-                    dojo.addOnLoad(function(){
-                        var myPalette = new dijit.ColorPalette( {palette:"7x10", onChange: function(val){ dojo.byId("textcolor").value=val; dojo.byId("pselcolor").style.color=val; dojo.byId("pselcolor").innerHTML=val;}}, "cptextcolor" );
-                    });
-                </script>
-
-                <table border="0" width="100%">
-                    <tr>
-                    <td class="datos" width="200px" align="right">
-                        Another text color:
-                        <span id="pselcolor"></span>
-                    </td>
-                    <td class="valores">
-                        <div id="cptextcolor"></div>
-                    </td>
-                    </tr>
-                </table>
-                ]]>
-            </statictext>
-
         </fieldset>
 
         <fieldset>
-            <statictext name="b">
-            <![CDATA[
-            <button id="btnSave" dojoType="dijit.form.Button">Save</button>
-            <button id="btnReset" dojoType="dijit.form.Button">Reset</button>
-            ]]>
-            </statictext>
+            <input type="submit" name="btnSave" value="Save" />
+            <input type="reset"  name="btnReset" value="Reset"/>
         </fieldset>
     </form>
-    <statictext name="txtNote">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				* Data requirements.
-			</font>
-		]]>
-	</statictext>
-
-	<script type="text/javascript">
-        <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmPromo"))) {
-                        dojo.byId("frmPromo").submit();
-                    }
-                }
-            );
-        });
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmPromo").reset();
-                }
-            );
-        });
-        ]]>
-    </script>
-    <script language="JavaScript">
-            <![CDATA[
-                if(!document.frmPromo.uline[0].checked && !document.frmPromo.uline[1].checked)
-                        document.frmPromo.uline[1].checked=true;
-                if(!document.frmPromo.target[0].checked && !document.frmPromo.target[1].checked)
-                        document.frmPromo.target[1].checked=true;
-                function jsValida(frm)
-                {
-                    /*if(frm.textcolor.value==null || frm.textcolor.value=='' || frm.textcolor.value==' ') {
-                        frm.textcolor.value='#'+ document.wbcolor.getColor();
-                    }else {
-                        frm.textcolor.value=frm.textcolor.value;
-                    }*/
-
-                    if(frm.imgPos.value==null || frm.imgPos.value=='' || frm.imgPos.value==' ')
-                    {
-                            if(frm.imgfile.value!=null && frm.imgfile.value!='' && frm.imgfile.value!=' ')
-                            {
-                                    alert('Indique la posición de la imagen.');
-                                    frm.pos.focus();
-                                    return false;
-                            }
-                    }
-                    if(frm.textcolor.value!=null && frm.textcolor.value!='' && frm.textcolor.value!=' ' && !isFormat(frm.textcolor)) {
-                        return false;
-                    }
-                    replaceChars(frm.text);
-                    return true;
-                }
-                function isFormat(pIn)
-                {
-                    var swFormat="0123456789ABCDEF";
-                    pIn.value=pIn.value.toUpperCase();
-                    if(pIn.value.length<7)
-                    {
-                            alert('La longitud del campo no corresponde al formato.');
-                            if(pIn.type=="text") pIn.focus();
-                            return false;
-                    }
-                    if(!setPrefix(pIn, '#')) {
-                        return false;
-                    }
-
-                    for(var i=1; i < pIn.value.length; i++)
-                    {
-                            swOk= pIn.value.substring(i, i+1);
-                            if (swFormat.indexOf(swOk, 0)==-1)
-                            {
-                                    alert('El valor definido no corresponde al formato hexadecimal.');
-                                    if(pIn.type=="text") pIn.focus();
-                                    return false;
-                            }
-                    }
-                    return true;
-                }
-                function setPrefix(pIn, pPx)
-                {
-                        if(pIn.type=="text" || pIn.type=="hidden")
-                        {
-                                if (pIn.value.substring(0, pPx.length).indexOf(pPx)==-1)
-                                {
-                                        alert('El valor definido no corresponde al formato: ' + pPx);
-                                        pIn.value=pPx+pIn.value;
-                                        if(pIn.type=="text") pIn.focus();
-                                        return false;
-                                }
-                        }
-                        if(pIn.type=="select-one" || pIn.type=="select-multiple")
-                        {
-                                for(var i=0; i<pIn.length; i++)
-                                {
-                                        if (pIn.options[i].value.substring(0, pPx.length).indexOf(pPx)==-1)
-                                        {
-                                                alert('El valor definido no corresponde al formato: ' + pPx);
-                                                pIn.focus();
-                                                return false;
-                                        }
-                                }
-                        }
-                        return true;
-                }
-                function replaceChars(pIn)
-                {
-                        out = "\r"; // replace this
-                        add = "<br/>"; // with this
-                        temp = "" + pIn.value; // temporary holder
-                        while (temp.indexOf(out)>-1)
-                        {
-                                pos= temp.indexOf(out);
-                                temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-                        }
-                        out = "\n"; // replace this
-                        add = " "; // with this
-                        temp = "" + temp; // temporary holder
-                        while (temp.indexOf(out)>-1)
-                        {
-                                pos= temp.indexOf(out);
-                                temp = "" + (temp.substring(0, pos) + add + temp.substring((pos + out.length), temp.length));
-                        }
-                        pIn.value = temp;
-                }
-            ]]>
-	</script>
 </admresource>

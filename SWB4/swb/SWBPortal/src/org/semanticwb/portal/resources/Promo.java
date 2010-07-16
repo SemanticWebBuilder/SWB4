@@ -25,8 +25,11 @@ package org.semanticwb.portal.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Templates;
+
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -37,6 +40,11 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,13 +60,22 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @Autor:Jorge Jiménez
  */
 
-public class Promo extends GenericAdmResource {
-    
+public class Promo extends GenericAdmResource {    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Promo.class);
+
+    private Templates tpl;
     
+    /** The work path. */
+    private String workPath;
+
     /** The web work path. */
-    String webWorkPath= "/work";
+    private String webWorkPath;
+
+    private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/Poll/";
+
+    /** The restype. */
+    private static String restype;
     
     /**
      * Sets the resource base.
@@ -69,30 +86,103 @@ public class Promo extends GenericAdmResource {
     public void setResourceBase(Resource base) {
         try {
             super.setResourceBase(base);
-            webWorkPath = (String) SWBPortal.getWebWorkPath() +  base.getWorkPath();
+            workPath    = SWBPortal.getWorkPath()+base.getWorkPath()+"/";
+            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+            restype = base.getResourceType().getResourceClassName();
         }catch(Exception e) {
-            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);  
+            log.error("Error while setting resource base: "+base.getId() +"-"+ base.getTitle(), e);
         }
-    }    
+        if(!"".equals(base.getAttribute("template","").trim())) {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() +"/"+ base.getAttribute("template").trim()));
+                path = webWorkPath;
+            }catch(Exception e) {
+                log.error("Error while loading resource template: "+base.getId(), e);
+            }
+        }
+        if( tpl==null ) {
+            try {
+                tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/Promo/PromoRightAligned.xsl"));
+            }catch(Exception e) {
+                log.error("Error while loading default resource template: "+base.getId(), e);
+            }
+        }
+    }
+
+    public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException {
+        Resource base=paramRequest.getResourceBase();
+
+        Document  dom = SWBUtils.XML.getNewDocument();
+        Element root = dom.createElement("promo");
+        root.setAttribute("id", "promo_"+base.getId());
+        root.setAttribute("width", base.getAttribute("width",""));
+        root.setAttribute("height", base.getAttribute("height",""));
+        dom.appendChild(root);
+
+        Element e;
+        e = dom.createElement("title");
+        e.appendChild(dom.createTextNode( base.getAttribute("title","") ));
+        root.appendChild(e);
+
+        e = dom.createElement("subtitle");
+        e.appendChild(dom.createTextNode( base.getAttribute("subtitle","") ));
+        root.appendChild(e);
+
+        Element img = dom.createElement("image");
+        img.setAttribute("width", base.getAttribute("imgWidth","90"));
+        img.setAttribute("height", base.getAttribute("imgHeight","140"));
+        img.setAttribute("src", webWorkPath+base.getAttribute("imgfile"));
+        img.setAttribute("alt", base.getAttribute("caption",base.getAttribute("title","image promo")));
+        img.setAttribute("url", base.getAttribute("url",""));
+        root.appendChild(img);
+
+        e = dom.createElement("imageFoot");
+        e.appendChild(dom.createTextNode( base.getAttribute("caption","") ));
+        img.appendChild(e);
+
+        e = dom.createElement("content");
+        e.setAttribute("url", base.getAttribute("url",""));
+        e.appendChild(dom.createTextNode( base.getAttribute("text","") ));
+        root.appendChild(e);
+
+        e = dom.createElement("more");
+        e.setAttribute("url", base.getAttribute("url",""));
+        e.appendChild(dom.createTextNode( base.getAttribute("more","Ver más") ));
+        root.appendChild(e);
+
+        return dom;
+    }
+
+    @Override
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Document dom=getDom(request, response, paramRequest);
+        if( dom!=null )
+            response.getWriter().println(SWBUtils.XML.domToXml(dom));
+    }
     
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=utf-8");
-        Resource base=getResourceBase();
-        String out;
-
-        String cssClass = base.getAttribute("cssClass");
-        if(cssClass == null) {
-            out = renderWithStyle();
-        }else {
-            out = render();
-        }
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
         
-        PrintWriter pw = response.getWriter();
-        pw.print(out);        
+        Resource base = paramRequest.getResourceBase();
+         try {
+            Document dom = getDom(request, response, paramRequest);
+
+            System.out.println("\n\nPromo \ndom=\n"+SWBUtils.XML.domToXml(dom));
+            String html = SWBUtils.XML.transformDom(tpl, dom);
+            System.out.println("\n\ndoView.... html=\n"+html);
+
+            response.getWriter().print(html);
+            //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+        }
+        catch(Exception e) {
+            log.error("Error in doView method while rendering the resource base: "+base.getId() +"-"+ base.getTitle(), e);
+        }
     }
 
     /**
@@ -169,9 +259,9 @@ public class Promo extends GenericAdmResource {
 
             //title
             if(title != null) {
-                out.append("<h1 style=\""+titleStyle+"\"><span> \n");
+                out.append("<h2 style=\""+titleStyle+"\"><span> \n");
                 out.append(title);
-                out.append("</span></h1> \n");
+                out.append("</span></h2> \n");
             }
 
             //image
