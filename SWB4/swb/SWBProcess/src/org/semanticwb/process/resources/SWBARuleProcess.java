@@ -339,9 +339,8 @@ public class SWBARuleProcess extends GenericResource {
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest, HttpServletRequest request) throws SWBResourceException, java.io.IOException {
-
-
+    private void loadComboAttr(String tmid, String ruleid, SWBParamRequest paramRequest, HttpServletRequest request) throws SWBResourceException, java.io.IOException
+    {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         String rrid = request.getParameter("suri");
         ProcessRule rRule = (ProcessRule) ont.getGenericObject(rrid);
@@ -392,13 +391,8 @@ public class SWBARuleProcess extends GenericResource {
 
                 comboAtt.put(semProp.getName(), hmAttr);
                 vecOrderAtt.add(numero++, semProp.getName());
-
             }
-
         }
-
-
-
 
         // Agreando valores iniciales al HashMap como son isloged, isregistered, language, device
         
@@ -445,7 +439,6 @@ public class SWBARuleProcess extends GenericResource {
         hmAttr.put("Operador", hmOper);
         comboAtt.put(SWBRuleMgr.TAG_INT_DEVICE, hmAttr); //RuleMgr.TAG_INT_DEVICE
 
-        
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISREGISTERED); //RuleMgr.TAG_INT_ISREGISTERED
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISSIGNED); //RuleMgr.TAG_INT_ISLOGED
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_DEVICE); //RuleMgr.TAG_INT_DEVICE
