@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-<xsl:output method="html" encoding="ISO-8859-1"/>
-<xsl:template match="/menu">
-<LINK href="{@path}images/WBMenu.css" rel="stylesheet" type="text/css"></LINK>
-<DIV class="wmn_box">
-<TABLE border="0" cellpadding="0" cellspacing="2" width="100%" >
-	<xsl:for-each select="parent">
-		<TR><TD>
-			<A href="{@path}" class="wmn_title" ><xsl:value-of select="@name"/></A>
-		</TD></TR>
-	</xsl:for-each>
-	<xsl:for-each select="brothers">
-		<xsl:for-each select="brother">
-			<TR><TD>
-				<A href="{@path}" class="wmn_link"><xsl:value-of select="@name"/></A>
-			</TD></TR>
-			<xsl:if test="@current ='1'">
-				<xsl:for-each select="child">
-					<TR><TD class="wmn_data">::
-						<A href="{@path}" class="wmn_link"><xsl:value-of select="@name"/></A>
-					</TD></TR>
-				</xsl:for-each>
-			</xsl:if>
-		</xsl:for-each>
-	</xsl:for-each>
-</TABLE>
-</DIV>
-</xsl:template>
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="ISO-8859-1"/>
+    
+    <xsl:template match="/menu">
+        <div class="swb-menu">
+            <table>
+                <xsl:for-each select="parent">
+                    <tr>
+                        <td>
+                            <a href="{@path}" class="swb-menu-parent"><xsl:value-of select="@name"/></a>
+                        </td>
+                    </tr>
+                </xsl:for-each>
+                <xsl:for-each select="brothers">
+                    <xsl:for-each select="brother">
+                        <xsl:choose>
+                            <xsl:when test="@current = '1'">
+                                <tr>
+                                    <td>
+                                        <a href="{@path}" class="swb-menu-current"><xsl:value-of select="@name"/></a>
+                                    </td>
+                                </tr>
+                                <xsl:for-each select="child">
+                                    <tr>
+                                        <td class="wmn_data">
+                                            ::<a href="{@path}" class="swb-menu-child"><xsl:value-of select="@name"/></a>
+                                        </td>
+                                    </tr>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <tr>
+                                    <td>
+                                        <a href="{@path}" class="swb-menu-active"><xsl:value-of select="@name"/></a>
+                                    </td>
+                                </tr>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:for-each>
+            </table>
+        </div>
+    </xsl:template>
 </xsl:stylesheet>
