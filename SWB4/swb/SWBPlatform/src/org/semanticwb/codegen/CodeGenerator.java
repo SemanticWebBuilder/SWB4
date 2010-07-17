@@ -2201,7 +2201,13 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getCodePackage() + "." + toUpperCase(tpcToReturn.getClassCodeName()) + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
+                javaClassContent.append("        if(value!=null)" + ENTER);
+                javaClassContent.append("        {" + ENTER);
+                javaClassContent.append("            get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
+                javaClassContent.append("        }else" + ENTER);
+                javaClassContent.append("        {" + ENTER);
+                javaClassContent.append("            remove" + objectName + "();" + ENTER);
+                javaClassContent.append("        }" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                 javaClassContent.append(ENTER);
