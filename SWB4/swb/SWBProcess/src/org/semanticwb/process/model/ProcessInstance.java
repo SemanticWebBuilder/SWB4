@@ -28,7 +28,7 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
             if(ele instanceof FlowNode)
             {
                 FlowNode flownode = (FlowNode)ele;
-                if(flownode instanceof StartEvent)
+                if(flownode.getClass().equals(StartEvent.class))
                 {
                     StartEvent init=(StartEvent)flownode;
                     start(user, init);

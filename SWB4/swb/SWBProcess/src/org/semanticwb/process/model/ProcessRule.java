@@ -37,9 +37,12 @@ public class ProcessRule extends org.semanticwb.process.model.base.ProcessRuleBa
             i.set("instance", instance);
             //i.set("target", targetInstance);
             i.set("user", user);
-            i.set("accepted", Instance.ACTION_ACCEPT.equals(instance.getAction()));
-            i.set("rejected", Instance.ACTION_REJECT.equals(instance.getAction()));
-            i.set("canceled", Instance.ACTION_CANCEL.equals(instance.getAction()));
+            if(instance!=null)
+            {
+                i.set("accepted", Instance.ACTION_ACCEPT.equals(instance.getAction()));
+                i.set("rejected", Instance.ACTION_REJECT.equals(instance.getAction()));
+                i.set("canceled", Instance.ACTION_CANCEL.equals(instance.getAction()));
+            }
             i.eval("import org.semanticwb.process.model.*");
 
             ret=i.eval(scond);

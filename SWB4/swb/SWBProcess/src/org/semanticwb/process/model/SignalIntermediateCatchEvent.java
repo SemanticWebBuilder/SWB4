@@ -21,22 +21,22 @@ public class SignalIntermediateCatchEvent extends org.semanticwb.process.model.b
         }
     }
 
-    @Override
-    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
-    {
-        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
-        obs.removeSignalObserverInstance(instance);
-        if(isInterruptor())
-        {
-            GraphicalElement subpro=instance.getFlowNodeType().getParent();
-            if(subpro!=null && subpro instanceof SubProcess)
-            {
-                FlowNodeInstance source=instance.getRelatedFlowNodeInstance((SubProcess)subpro);
-                source.close(from.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
-            }
-        }
-        instance.close(from.getCreator(),from.getSourceInstance().getAction());
-    }
+//    @Override
+//    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
+//    {
+//        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+//        obs.removeSignalObserverInstance(instance);
+//        if(isInterruptor())
+//        {
+//            GraphicalElement subpro=instance.getFlowNodeType().getParent();
+//            if(subpro!=null && subpro instanceof FlowNode)
+//            {
+//                FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)subpro);
+//                source.close(from.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+//            }
+//        }
+//        instance.close(from.getCreator(),from.getSourceInstance().getAction());
+//    }
 
     @Override
     public void close(FlowNodeInstance instance, User user)

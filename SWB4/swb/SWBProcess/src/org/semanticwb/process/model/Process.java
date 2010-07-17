@@ -1,13 +1,9 @@
 package org.semanticwb.process.model;
 
 import java.util.Iterator;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.model.SWBVocabulary;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticVocabulary;
-
 
 public class Process extends org.semanticwb.process.model.base.ProcessBase 
 {
