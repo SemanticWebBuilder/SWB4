@@ -46,8 +46,7 @@ public class ControlPanel extends GenericAdmResource
     private static Color rtfHeaderTitleBackground = new Color (0, 153, 153);
     private static Color rtfHeaderColumnBackground = new Color (102, 204, 204);
 
-    public final static String imgPath = SWBUtils.getApplicationPath() +
-            "/swbutil/panel/";
+    public final static String imgPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/images/";
     public final static String filenamePdf = SWBUtils.getApplicationPath() +
             "/swbadmin/ControlPanelReport.pdf";
     public final static String strDownloadPdf  = SWBPortal.getContextPath() +
