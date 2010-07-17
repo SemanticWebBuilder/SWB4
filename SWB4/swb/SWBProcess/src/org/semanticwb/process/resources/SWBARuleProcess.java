@@ -422,14 +422,20 @@ public class SWBARuleProcess extends GenericResource {
                     }
 
                 }
-                else
+                // Object property
+                else if(semProp.isObjectProperty())
                 {
                     hmAttr.put("Tipo", "select");
                     hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
                     hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                    hmOper.put("[", paramRequest.getLocaleString("msgContains"));
+                    hmOper.put("![", paramRequest.getLocaleString("msgNotContains"));
                     hmAttr.put("Operador", hmOper);
-                    hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-                    hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+                    Iterator<SemanticObject> itsemobj = semProp.getRangeClass().listInstances();
+                    while (itsemobj.hasNext()) {
+                        SemanticObject semanticObject1 = itsemobj.next();
+                        hmValues.put(semanticObject1.getId(), semanticObject1.getDisplayName(user.getLanguage()));
+                    }
                     hmAttr.put("Valor", hmValues);
                 }
 
