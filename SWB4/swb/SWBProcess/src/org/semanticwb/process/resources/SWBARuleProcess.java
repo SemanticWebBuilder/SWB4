@@ -368,6 +368,8 @@ public class SWBARuleProcess extends GenericResource {
         log.debug("SemClass:"+pcls);
         Iterator<SemanticObject> it = pcls.listInstances();
 
+        String tipoControl ="";
+
         while (it.hasNext()) {
             SemanticObject semanticObject = it.next();
             SemanticClass cls=semanticObject.transformToSemanticClass();
@@ -380,20 +382,63 @@ public class SWBARuleProcess extends GenericResource {
                 hmAttr = new HashMap();
                 hmOper = new HashMap();
                 hmValues = new HashMap();
-                hmAttr.put("Etiqueta", semProp.getDisplayName(user.getLanguage()));  ///////////////////////////
-                hmAttr.put("Tipo", "select");
-                hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
-                hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
-                hmAttr.put("Operador", hmOper);
-                hmValues.put("true", paramRequest.getLocaleString("msgYes"));
-                hmValues.put("false", paramRequest.getLocaleString("msgNo"));
-                hmAttr.put("Valor", hmValues);
+                hmAttr.put("Etiqueta", cls.getName()+"."+semProp.getName());  ///////////////////////////
 
-                comboAtt.put(semProp.getName(), hmAttr);
-                vecOrderAtt.add(numero++, semProp.getName());
+                if (semProp.isDataTypeProperty()) {
+                    log.debug("DP: DataTypeProperty");
+                    if (semProp.isInt()||semProp.isFloat()||semProp.isLong()) {
+                        tipoControl = "TEXT";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("&gt;", paramRequest.getLocaleString("msgGreaterThan"));
+                        hmOper.put("&lt;", paramRequest.getLocaleString("msgLessThan"));
+                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                        hmAttr.put("Operador", hmOper);
+
+                    } else if (semProp.isBoolean()) {
+                        tipoControl = "select";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                        hmAttr.put("Operador", hmOper);
+                        hmValues.put("true", paramRequest.getLocaleString("msgTrue"));
+                        hmValues.put("false", paramRequest.getLocaleString("msgFalse"));
+                        hmAttr.put("Valor", hmValues);
+
+                    } else if (semProp.isString()) {
+                        tipoControl = "TEXT";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                        hmAttr.put("Operador", hmOper);
+
+                    } else  {
+                        tipoControl = "TEXT";
+                        hmAttr.put("Tipo", tipoControl);
+                        hmOper.put("=", paramRequest.getLocaleString("msgIs"));
+                        hmOper.put("!=", paramRequest.getLocaleString("msgNotIs"));
+                        hmAttr.put("Operador", hmOper);
+
+                    }
+
+                }
+                else
+                {
+                    hmAttr.put("Tipo", "select");
+                    hmOper.put("=", paramRequest.getLocaleString("msgSameAs"));
+                    hmOper.put("!=", paramRequest.getLocaleString("msgNotEqual"));
+                    hmAttr.put("Operador", hmOper);
+                    hmValues.put("true", paramRequest.getLocaleString("msgYes"));
+                    hmValues.put("false", paramRequest.getLocaleString("msgNo"));
+                    hmAttr.put("Valor", hmValues);
+                }
+
+                comboAtt.put(semProp.getPrefix()+"_"+semProp.getName(), hmAttr);
+                vecOrderAtt.add(numero++, semProp.getPrefix()+"_"+semProp.getName());
             }
         }
 
+        /*
         // Agreando valores iniciales al HashMap como son isloged, isregistered, language, device
         
         hmAttr = new HashMap();
@@ -443,7 +488,7 @@ public class SWBARuleProcess extends GenericResource {
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_ISSIGNED); //RuleMgr.TAG_INT_ISLOGED
         vecOrderAtt.add(numero++, SWBRuleMgr.TAG_INT_DEVICE); //RuleMgr.TAG_INT_DEVICE
 
-        /*
+        
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Grupo de usuarios
         try {
@@ -932,7 +977,9 @@ public class SWBARuleProcess extends GenericResource {
         PrintWriter out = response.getWriter();
         //log.debug("doGateway: URI"+request.getParameter("suri")+", id:"+request.getParameter("id"));
         ServletInputStream in = request.getInputStream();
-        Document dom = SWBUtils.XML.xmlToDom(in);
+        String sin=SWBUtils.IO.readInputStream(in);
+        log.debug("doGateway: "+sin);
+        Document dom = SWBUtils.XML.xmlToDom(sin);
 
         if (!dom.getFirstChild().getNodeName().equals("req")) {
             response.sendError(404, request.getRequestURI());
