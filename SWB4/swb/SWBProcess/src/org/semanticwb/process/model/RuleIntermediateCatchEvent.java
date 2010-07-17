@@ -39,17 +39,31 @@ public class RuleIntermediateCatchEvent extends org.semanticwb.process.model.bas
         if(cond)
         {
             instance.close(user);
-            GraphicalElement parent=getParent();
-            if(parent!=null)
+            if(isInterruptor())
             {
-                FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)parent);
-                source.setStatus(Instance.STATUS_CLOSED);
-                source.setAction(Instance.ACTION_EVENT);
-                source.setEnded(new Date());
-                source.setEndedby(user);
-                source.abortDependencies(user);
+                GraphicalElement parent=getParent();
+                if(parent!=null)
+                {
+                    FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)parent);
+                    source.close(user, Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+                }
+            }
+        }else
+        {
+            ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+            if(!obs.hasRuleObserverInstance(instance))
+            {
+                obs.addRuleObserverInstance(instance);
             }
         }
+    }
+
+    @Override
+    public void close(FlowNodeInstance instance, User user)
+    {
+        super.close(instance, user);
+        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+        obs.removeRuleObserverInstance(instance);
     }
 
 

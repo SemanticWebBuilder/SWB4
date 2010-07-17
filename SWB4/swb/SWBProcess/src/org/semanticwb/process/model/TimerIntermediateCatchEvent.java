@@ -20,22 +20,22 @@ public class TimerIntermediateCatchEvent extends org.semanticwb.process.model.ba
         }
     }
 
-    @Override
-    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
-    {
-        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
-        obs.removeTimeObserverInstance(instance);
-        if(isInterruptor())
-        {
-            GraphicalElement subpro=instance.getFlowNodeType().getParent();
-            if(subpro!=null && subpro instanceof SubProcess)
-            {
-                FlowNodeInstance source=instance.getRelatedFlowNodeInstance((SubProcess)subpro);
-                source.close(instance.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
-            }
-        }
-        instance.close(instance.getCreator(),instance.ACTION_EVENT);
-    }
+//    @Override
+//    public void notifyEvent(FlowNodeInstance instance, FlowNodeInstance from)
+//    {
+//        ProcessObserver obs=instance.getProcessSite().getProcessObserver();
+//        obs.removeTimeObserverInstance(instance);
+//        if(isInterruptor())
+//        {
+//            GraphicalElement subpro=instance.getFlowNodeType().getParent();
+//            if(subpro!=null && subpro instanceof FlowNode)
+//            {
+//                FlowNodeInstance source=instance.getRelatedFlowNodeInstance((FlowNode)subpro);
+//                source.close(instance.getCreator(), Instance.STATUS_CLOSED, Instance.ACTION_EVENT, false);
+//            }
+//        }
+//        instance.close(instance.getCreator(),instance.ACTION_EVENT);
+//    }
 
     @Override
     public void close(FlowNodeInstance instance, User user)
