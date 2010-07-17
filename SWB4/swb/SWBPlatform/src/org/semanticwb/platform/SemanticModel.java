@@ -65,7 +65,6 @@ import org.semanticwb.rdf.RemoteGraph;
  */
 public class SemanticModel 
 {
-    
     /** The log. */
     private static Logger log=SWBUtils.getLogger(SemanticModel.class);
     
@@ -290,7 +289,7 @@ public SemanticObject getSemanticObject(String uri)
         Resource res=m_model.createResource(uri);
         res.addProperty(m_model.getProperty(SemanticVocabulary.RDF_TYPE), cls.getOntClass());
         SemanticObject ret=cls.newInstance(res);
-        SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, "CREATE");
+        SWBPlatform.getSemanticMgr().notifyChange(ret, null,null, SemanticObject.ACT_CREATE);
         //Default Values
         Iterator<SemanticProperty> it=cls.listProperties();
         while(it.hasNext())

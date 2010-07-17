@@ -88,7 +88,6 @@ public class SemanticMgr implements SWBInstanceObject
 {
     private static String NULL="__NULL__";
 
-
     /**
      * The Enum ModelSchema.
      */
