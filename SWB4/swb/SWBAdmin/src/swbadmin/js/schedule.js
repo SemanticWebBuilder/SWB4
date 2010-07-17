@@ -18,6 +18,31 @@
    }
 }
 
+ function enableTimer(suri) {
+   var waittime='off';
+   if (dijit.byId(suri+"/timerinter1").checked) {
+       waittime='on';
+   } else if (dijit.byId(suri+"/timerinter2").checked) {
+       waittime='off';
+   }
+   if (waittime=='on') {
+       dijit.byId(suri+"/timer").setDisabled(false);
+       dijit.byId(suri+"/exechour").setDisabled(true);
+       dijit.byId(suri+"/endhour").setDisabled(true);
+       dijit.byId(suri+"/inter").setDisabled(true);
+       dijit.byId(suri+"/time").setDisabled(true);
+       dijit.byId(suri+"/timer").focus();
+   }
+   else if (waittime=='off') {
+       dijit.byId(suri+"/timer").setDisabled(true);
+       dijit.byId(suri+"/exechour").setDisabled(false);
+       dijit.byId(suri+"/time").setDisabled(false);
+       enableIntervalTime(suri);
+       dijit.byId(suri+"/exechour").focus();
+   }
+}
+
+
  function enableIntervalTime(suri) {
      var time='off';
    if (dijit.byId(suri+"/time").checked) {
