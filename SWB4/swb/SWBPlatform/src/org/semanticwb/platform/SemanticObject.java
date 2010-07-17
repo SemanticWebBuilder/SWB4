@@ -59,6 +59,7 @@ public class SemanticObject
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
+    public static final String ACT_CREATE="CREATE";
     public static final String ACT_REMOVE="REMOVE";
     public static final String ACT_ADD="ADD";
     public static final String ACT_SET="SET";
