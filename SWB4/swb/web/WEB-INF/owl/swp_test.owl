@@ -14,11 +14,60 @@
     >Created with TopBraid Composer</owl:versionInfo>
     <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/process"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="Poliza">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessObject"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cliente">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessObject"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+  </owl:Class>
   <owl:Class rdf:ID="test">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessObject"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessClass"/>
   </owl:Class>
+  <owl:ObjectProperty rdf:ID="poliza">
+    <rdfs:domain rdf:resource="#Cliente"/>
+    <rdfs:range rdf:resource="#Poliza"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="cliente">
+    <rdfs:domain>
+      <swp:ProcessClass rdf:ID="Incidente">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/process#ProcessObject"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swp:ProcessClass>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="#Cliente"/>
+    <rdfs:label>Cliente</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cliente">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:ID="cliTelefono"/>
+  <owl:DatatypeProperty rdf:ID="cliNombre">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="polTipo">
+    <rdfs:domain rdf:resource="#Poliza"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label>Tipo</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_polTipo">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >1:Basica|2:Extendida</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="direccion">
     <rdfs:label xml:lang="en">Address</rdfs:label>
     <rdfs:label xml:lang="es">Direccion</rdfs:label>
