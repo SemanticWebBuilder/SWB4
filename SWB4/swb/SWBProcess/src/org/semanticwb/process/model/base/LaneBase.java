@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable
+public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Lane");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Lane");
