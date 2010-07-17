@@ -145,6 +145,7 @@ public class SWBAScheduleProcess extends GenericResource {
         String inidate = "";
         String enddate = "";
         String speriod = "";
+        String timer = "";
         String starthour = "";
         String endhour = "";
         String interval = "";
@@ -187,8 +188,13 @@ public class SWBAScheduleProcess extends GenericResource {
         String months = "";
         String years = "";
 
+
+        String waithourc = "checked";
+        String waithourcd = "";
         String hourc = "";
         String hourcd = "disabled";
+        String intervalhourc = "";
+        String intervalhourcd = "disabled";
 
         String yearlyd = "disabled";
         String pchk = "";
@@ -219,18 +225,41 @@ public class SWBAScheduleProcess extends GenericResource {
                     enddate = cambiaFormato(enddate, 2);
                     sendselect = "endselect";
                 }
+                timer = SWBUtils.XML.getAttribute(doc, "timer");
                 starthour = SWBUtils.XML.getAttribute(doc, "exechour");
                 endhour = SWBUtils.XML.getAttribute(doc, "endhour");
                 interval = SWBUtils.XML.getAttribute(doc, "inter");
 
                 log.debug("start hour:"+starthour);
 
-                if(endhour!=null&&endhour.trim().length()>0)
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+                if(timer!=null&&timer.trim().length()>0)
+                {
+                    hourc = "";
+                    hourcd = "disabled";
+                    waithourc = "checked";
+                    waithourcd = "";
+                    intervalhourc = "";
+                    intervalhourcd = "disabled";
+
+                }
+                else if(starthour!=null&&starthour.trim().length()>0)
                 {
                     hourc = "checked";
                     hourcd = "";
+                    waithourc = "";
+                    waithourcd = "disabled";
+                    intervalhourc = "";
+                    intervalhourcd = "disabled";
+                    if(interval!=null&&interval.trim().length()>0)
+                    {
+                        intervalhourc = "checked";
+                        intervalhourcd = "";
+                    }
                 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 
                 NodeList nodes = doc.getElementsByTagName("interval");
@@ -474,33 +503,59 @@ public class SWBAScheduleProcess extends GenericResource {
         out.println("    </td>");
         out.println("  </tr>");
         out.println("  <tr><td><hr size=\"1\" noshade></td></tr>");
+
+        /////////////////////////// Intervalo de tiempo
+
+        /*
+                    hourc = "";
+                    hourcd = "disabled";
+                    waithourc = "checked";
+                    waithourcd = "";
+                    intervalhourc = "";
+                    intervalhourcd = "disabled";
+         */
+
         out.println("  <tr>");
         out.println("    <td>");
         out.println("      <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=0>");
         out.println("        <tbody>");
         out.println("        <tr>");
+        out.println("          <td width=\"20\" ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/timerinter1\" name=\"" + id + "/timerinter\" onclick=\"enableTimer('" + id + "');\" " + waithourc + " value=\"tiempoespera\"></td>");
+        out.println("          <td >" + paramRequest.getLocaleString("frmTemporizador") + ":&nbsp;<input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/timer\" maxLength=\"2\" size=\"3\" style=\"width:30px;\" name=\"" + id + "/timer\" value=\""+(timer!=null&&timer.trim().length()>0?timer:"")+"\" " + waithourcd + " ></td>");
+        out.println("         </tr>");
+        out.println("         <tr>");
         out.println("          <td width=20 >&nbsp;</td>");
-        out.println("          <td >" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/exechour\" id=\"" + id + "/exechour\"  value=\"" + (starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00") + "\"  constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />");
-        out.println("</td>");
+        out.println("          <td ><hr size=\"1\" noshade></td>");
         out.println("         </tr>");
         out.println("        </tbody>");
         out.println("      </table>");
         out.println("    </td>");
         out.println("  </tr>");
+
         out.println("  <tr>");
         out.println("    <td>");
         out.println("      <table cellSpacing=\"0\" cellPadding=\"1\" width=\"100%\" border=0>");
         out.println("        <tbody>");
         out.println("        <tr>");
-        out.println("          <td width=20 ><input type=\"checkbox\" id=\"" + id + "/time\" name=\"" + id + "/time\" dojoType=\"dijit.form.CheckBox\" onClick=\"enableIntervalTime('" + id + "');\" " + hourc + "></td>");
-        out.println("          <td >" + paramRequest.getLocaleString("frmInterval") + ":&nbsp;<input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/inter\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\"" + id + "/inter\" value=\""+(interval!=null&&interval.trim().length()>0?interval:"")+"\" " + hourcd + " >");
-        out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/endhour\" id=\"" + id + "/endhour\" value=\"" + (endhour!=null&&endhour.trim().length() > 0 ? "T"+endhour+":00" : "T00:00:00") + "\"  " + hourcd + " constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />");
-        out.println("</td>");
+        out.println("          <td width=\"20\"><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/timerinter2\" name=\"" + id + "/timerinter\" onClick=\"enableTimer('" + id + "');\" " + hourc + " value=\"tiempoexec\"></td>");
+        out.println("          <td colspan=\"2\">" + paramRequest.getLocaleString("frmStartHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/exechour\" id=\"" + id + "/exechour\"  value=\"" + (starthour!=null&&starthour.trim().length() > 0 ? "T"+starthour+":00" : "T00:00:00") + "\"  "+ hourcd +" constraints=constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'}  /></td>");
+        out.println("         </tr>");
+        out.println("        <tr>");
+        out.println("          <td width=\"20\" >&nbsp;</td>");
+        out.println("          <td width=\"20\"><input type=\"checkbox\" id=\"" + id + "/time\" name=\"" + id + "/time\" dojoType=\"dijit.form.CheckBox\" onClick=\"enableIntervalTime('" + id + "');\" " + intervalhourc + "></td>");
+        out.println("          <td >" + paramRequest.getLocaleString("frmInterval") + ":&nbsp;<input  type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/inter\" maxLength=\"2\" size=\"2\" style=\"width:30px;\" name=\"" + id + "/inter\" value=\""+(interval!=null&&interval.trim().length()>0?interval:"")+"\" " + intervalhourcd + " >");
+        out.println("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + paramRequest.getLocaleString("frmEndHour") + ":&nbsp;<input dojoType=\"dijit.form.TimeTextBox\" name=\"" + id + "/endhour\" id=\"" + id + "/endhour\" value=\"" + (endhour!=null&&endhour.trim().length() > 0 ? "T"+endhour+":00" : "T00:00:00") + "\"  " + intervalhourcd + " constraints={formatLength:'short',selector:'timeOnly',timePattern:'HH:mm'} />");
+        out.println("          </td>");
         out.println("         </tr>");
         out.println("        </tbody>");
         out.println("      </table>");
         out.println("    </td>");
         out.println("  </tr>");
+
+
+        //////////////////////////// Termina la parte de intervalo de tiempo
+
+
         out.println("  <tr>");
         out.println("    <td>");
         out.println("      <hr size=\"1\" noshade>");
@@ -553,7 +608,9 @@ public class SWBAScheduleProcess extends GenericResource {
         out.println("          <td></td>");
         out.println("        </tr>");
         out.println("        <tr>");
-        out.println("          <td colSpan=5>");
+        out.println("          <td >");
+        out.println("          </td>");
+        out.println("          <td colSpan=4>");
         out.println("            <hr size=\"1\" noshade>");
         out.println("          </td>");
         out.println("        </tr>");
@@ -1026,18 +1083,36 @@ public class SWBAScheduleProcess extends GenericResource {
                     String fechaFin = request.getParameter(id + "/enddate");
                     addElem(doc, interval, "enddate", cambiaFormato(fechaFin, 1));
                 }
-                String starthour = request.getParameter(id + "/exechour");
-                log.debug("Hora ejecucion:" + starthour);
-                starthour = starthour.substring(1, 6);
-                addElem(doc, interval, "exechour", starthour);
-                if (request.getParameter(id + "/time") != null) {
-                    String intervalo = request.getParameter(id + "/inter");
-                    log.debug("Intervalo:" + intervalo);
-                    addElem(doc, interval, "inter", intervalo);
-                    String endhour = request.getParameter(id + "/endhour");
-                    log.debug("Hora final:" + endhour);
-                    endhour = endhour.substring(1, 6);
-                    addElem(doc, interval, "endhour", endhour);
+
+                if (request.getParameter(id + "/timerinter") != null)
+                {
+                    String tinterval = request.getParameter(id + "/timerinter");
+                    if(tinterval.equals("tiempoespera"))
+                    {
+                        String timer = request.getParameter(id + "/timer");
+                        if (timer != null) {
+                            log.debug("Temporizador:" + timer);
+                            addElem(doc, interval, "timer", timer);
+                        }
+                    }
+                    else
+                    {       // tiempo ejecucion e intervalo
+                        String starthour = request.getParameter(id + "/exechour");
+                        if (starthour != null) {
+                            log.debug("Hora ejecucion:" + starthour);
+                            starthour = starthour.substring(1, 6);
+                            addElem(doc, interval, "exechour", starthour);
+                        }
+                        if (request.getParameter(id + "/time") != null) {
+                            String intervalo = request.getParameter(id + "/inter");
+                            log.debug("Intervalo:" + intervalo);
+                            addElem(doc, interval, "inter", intervalo);
+                            String endhour = request.getParameter(id + "/endhour");
+                            log.debug("Hora final:" + endhour);
+                            endhour = endhour.substring(1, 6);
+                            addElem(doc, interval, "endhour", endhour);
+                        }
+                    }
                 }
                 if (request.getParameter(id + "/periodicidad") != null) {
                     Element iterations = doc.createElement("iterations");
