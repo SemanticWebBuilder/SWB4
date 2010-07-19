@@ -72,10 +72,13 @@
             {
                 %>
                         <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
-                        </ul>
-                    </div>
+                        
                 <%
             }
+            %>
+                </ul>
+                    </div>
+            <%
             
         }
         else if(act!=null&&act.equals("view"))
