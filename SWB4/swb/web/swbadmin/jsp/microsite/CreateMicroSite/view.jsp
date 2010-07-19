@@ -68,11 +68,14 @@
                     <li><a href="<%=urlAddElement%>">Agregar anuncio o entrada a directorio</a></li>
                 <%
             }
-            %>
-                    <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
-                    </ul>
-                </div>
-            <%
+            if(urlAdd!=null)
+            {
+                %>
+                        <li><a href="<%=urlAdd%>">Agregar una comunidad</a></li>
+                        </ul>
+                    </div>
+                <%
+            }
             
         }
         else if(act!=null&&act.equals("view"))
