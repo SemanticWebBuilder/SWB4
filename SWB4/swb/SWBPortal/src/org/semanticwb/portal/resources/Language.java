@@ -115,7 +115,7 @@ public class Language extends GenericAdmResource
             Element root = dom.createElement("resource");
             root.setAttribute("currentlang", paramRequest.getUser().getLanguage());
 
-            System.out.println("\n\npath="+path);
+            //System.out.println("\n\npath="+path);
 
             root.setAttribute("path", path);
             dom.appendChild(root);

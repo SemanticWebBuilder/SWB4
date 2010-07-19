@@ -772,7 +772,7 @@ public class AdvancedSearch extends GenericAdmResource {
                 sbf.append("<font size=\"2\" face=\"verdana\" color=\"red\">" + paramRequest.getLocaleString("msgNoSuggestions") + "</font>");
             }
         } else {
-            System.out.println("Suggesting for " + word);
+            //System.out.println("Suggesting for " + word);
             String tag = lex.getLexicon(lang).getWord(word, true).getTags().get(0).getId();
             //String tag = lex.getObjWordTag(word).getObjId();
 

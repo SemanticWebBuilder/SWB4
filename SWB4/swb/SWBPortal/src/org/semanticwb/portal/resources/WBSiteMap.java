@@ -185,7 +185,7 @@ public class WBSiteMap extends GenericAdmResource
         Document dom = tree.renderXHTML(params);
         if(dom != null)  {
             try {
-                System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
+                //System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
                 out.print(SWBUtils.XML.transformDom(tpl, dom));
             }catch(TransformerException te) {
                 log.error("doBind Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);
@@ -343,7 +343,7 @@ public class WBSiteMap extends GenericAdmResource
             Document dom = getDom(request, response, paramRequest);
             if(dom != null)  {
                 try {
-                    System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
+                    //System.out.println("\n\nsitemap=\n"+SWBUtils.XML.domToXml(dom));
                     out.print(SWBUtils.XML.transformDom(tpl, dom));
                 }catch(TransformerException te) {
                     log.error("doView Method. Error while building site map: "+base.getId() +"-"+ base.getTitle(), te);

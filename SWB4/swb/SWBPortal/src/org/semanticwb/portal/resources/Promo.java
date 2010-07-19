@@ -173,9 +173,9 @@ public class Promo extends GenericAdmResource {
          try {
             Document dom = getDom(request, response, paramRequest);
 
-            System.out.println("\n\nPromo \ndom=\n"+SWBUtils.XML.domToXml(dom));
+            //System.out.println("\n\nPromo \ndom=\n"+SWBUtils.XML.domToXml(dom));
             String html = SWBUtils.XML.transformDom(tpl, dom);
-            System.out.println("\n\ndoView.... html=\n"+html);
+            //System.out.println("\n\ndoView.... html=\n"+html);
 
             response.getWriter().print(html);
             //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
