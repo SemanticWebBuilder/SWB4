@@ -272,16 +272,16 @@ public class TematicIndexXSL extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        System.out.println("\n\nEntra a TematicIndex/doView");
+        //System.out.println("\n\nEntra a TematicIndex/doView");
         try
         {
             Document dom =getDom(request, response, paramRequest);
-            System.out.println("dom=\n"+SWBUtils.XML.domToXml(dom));
+            //System.out.println("dom=\n"+SWBUtils.XML.domToXml(dom));
 //            if(tpl==null)
 //                setResourceBase(getResourceBase());
             if(dom != null) {
                 String html = SWBUtils.XML.transformDom(tpl, dom);
-                System.out.println("\nhtml=\n"+html);
+                //System.out.println("\nhtml=\n"+html);
                 response.getWriter().println(html);
             }
         }

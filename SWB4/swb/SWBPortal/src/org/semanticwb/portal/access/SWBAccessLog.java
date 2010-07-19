@@ -254,7 +254,6 @@ public class SWBAccessLog implements SWBAppObject
             file.getParentFile().mkdirs();
         }catch(Exception e){log.error("Error Creating Log Directory:"+workp,e);}
 
-
         datePatern=getPatern();
         lenPatern=datePatern.length();
 

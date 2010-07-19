@@ -480,11 +480,11 @@ public class Contact extends GenericAdmResource {
                 }
             }else {
                 Document dom =getDom(request, response, paramRequest);
-                System.out.println("\n\nxml=\n"+SWBUtils.XML.domToXml(dom));
+                //System.out.println("\n\nxml=\n"+SWBUtils.XML.domToXml(dom));
                 try {
                     if(dom != null) {
                         String html = SWBUtils.XML.transformDom(tpl, dom);
-                        System.out.println("\n\nhtml=\n"+html);
+                        //System.out.println("\n\nhtml=\n"+html);
                         out.println(html);
                     }
                 }catch(TransformerException e) {
