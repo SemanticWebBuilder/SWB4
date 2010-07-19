@@ -48,7 +48,7 @@
         <!--script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js" ></script-->
     </head>
     <body class="soria">
-        <h1>Test de Procesos</h1>
+        <h1><a href="/swbadmin/jsp/process/test.jsp">Test de Procesos</a></h1>
 <%
         User user=SWBContext.getAdminUser();
         String login=request.getParameter("user");
@@ -155,5 +155,52 @@
             out.println("</ul>");
         }
 %>
+
+        <h3>Process Observer</h3>
+        <h4>SignalObserverInstances</h4>
+<%
+        out.println("<ul>");
+        Iterator<FlowNodeInstance> actit=site.getProcessObserver().listSignalObserverInstances();
+        while(actit.hasNext())
+        {
+            FlowNodeInstance obj =  actit.next();
+            printActivityInstance(obj, out);
+        }
+        out.println("</ul>");
+%>
+        <h4>SignalObserverNodes</h4>
+<%
+        out.println("<ul>");
+        Iterator<StartEvent> sigit=site.getProcessObserver().listSignalObserverNodes();
+        while(sigit.hasNext())
+        {
+            StartEvent obj =  sigit.next();
+            out.println("StartEvent:"+obj+"<BR>");
+        }
+        out.println("</ul>");
+%>
+        <h4>TimeObserverInstances</h4>
+<%
+        out.println("<ul>");
+        Iterator<FlowNodeInstance> timit=site.getProcessObserver().listTimeObserverInstances();
+        while(timit.hasNext())
+        {
+            FlowNodeInstance obj =  timit.next();
+            printActivityInstance(obj, out);
+        }
+        out.println("</ul>");
+%>
+        <h4>TimeObserverNodes</h4>
+<%
+        out.println("<ul>");
+        Iterator<StartEvent> timnit=site.getProcessObserver().listTimeObserverNodes();
+        while(timnit.hasNext())
+        {
+            StartEvent obj =  timnit.next();
+            out.println("StartEvent:"+obj+"<BR>");
+        }
+        out.println("</ul>");
+%>
+
     </body>
 </html>

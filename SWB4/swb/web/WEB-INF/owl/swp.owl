@@ -20,6 +20,10 @@
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="ProcessTraceable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
   <owl:Class rdf:ID="CompensationIntermediateCatchEvent">
     <rdfs:subClassOf>
       <swb:Class rdf:ID="IntermediateCatchEvent">
@@ -48,10 +52,6 @@
     >true</swb:autogenId>
     <swb:displayObject rdf:resource="#do_IntermediateCatchEvent"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="ProcessTraceable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="ContainerInstanceable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
@@ -1438,6 +1438,18 @@
   <owl:DatatypeProperty rdf:ID="y">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#GraphicalElement"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="scriptCode">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_scriptCode">
+        <swbxf:propGroup rdf:resource="#grp_Process"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#CodeEditorTest"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >70</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ScriptTask"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="status">
     <rdfs:domain rdf:resource="#Instance"/>
