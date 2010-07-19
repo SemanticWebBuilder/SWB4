@@ -62,7 +62,7 @@
                 <div id="opcionesHeader" class="opt3">
                     <ul class="listaOpciones">
             <%
-            if(nivelWP!=3)
+            if(nivelWP!=3 && urlAdd!=null)
             {
                 %>
                     <li><a href="<%=urlAddElement%>">Agregar anuncio o entrada a directorio</a></li>
