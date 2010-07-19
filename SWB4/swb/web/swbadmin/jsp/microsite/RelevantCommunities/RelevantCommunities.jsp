@@ -1,6 +1,7 @@
 <%@page import="org.semanticwb.portal.api.*,org.semanticwb.portal.community.*,org.semanticwb.model.*,java.util.*"%>
 <h3>Las m&aacute;s activas</h3>
 <ul class="comunidades">
+    
     <%
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             //WebPage webpage = (WebPage) request.getAttribute("webpage");
@@ -37,9 +38,18 @@
                             break;
                         }
                     }
-                    }catch(Exception e){}
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                 }
             }
+                        
+            if(i==0)
+                {
+                %>
+                <li><p>No hay comunidades activas</p></li>
+                <%
+                }
 
     %>
 </ul>
