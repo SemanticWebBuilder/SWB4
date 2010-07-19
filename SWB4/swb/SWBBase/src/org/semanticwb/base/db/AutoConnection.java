@@ -60,6 +60,8 @@ public class AutoConnection implements Connection
     /** The isclosed. */
     private boolean isclosed=false;
 
+    private boolean debug=false;
+
     /**
      * Instantiates a new auto connection.
      * 
@@ -80,6 +82,10 @@ public class AutoConnection implements Connection
      */
     public boolean checkConnection()
     {
+        if (debug)
+        {
+            System.out.println("checkConnection");
+        }
         boolean ret=false;
         if(!isclosed)
         {
@@ -112,6 +118,10 @@ public class AutoConnection implements Connection
      */
     public void changeConnection()
     {
+        if (debug)
+        {
+            System.out.println("changeConnection");
+        }
         log.error("Error checking connection, Auto Reconnect...");
         con=pool.newNoPoolConnection();
     }
@@ -183,6 +193,10 @@ public class AutoConnection implements Connection
      */
     public void close() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("close");
+        }
         isclosed=true;
         con.close();
         log.trace("close:("+getId()+","+pool.getName()+"):"+pool.checkedOut);
@@ -203,6 +217,10 @@ public class AutoConnection implements Connection
      */
     public void setAutoCommit(boolean param) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("setAutoCommit");
+        }
         checkConnection();
         con.setAutoCommit(param);
     }
@@ -212,6 +230,10 @@ public class AutoConnection implements Connection
      */
     public SQLWarning getWarnings() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getWarnings");
+        }
         checkConnection();
         return con.getWarnings();
     }
@@ -221,6 +243,10 @@ public class AutoConnection implements Connection
      */
     public String getCatalog() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getCatalog");
+        }
         checkConnection();
         return con.getCatalog();
     }
@@ -230,6 +256,10 @@ public class AutoConnection implements Connection
      */
     public void setTypeMap(java.util.Map map) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("setTypeMap");
+        }
         checkConnection();
         con.setTypeMap(map);
     }
@@ -239,6 +269,10 @@ public class AutoConnection implements Connection
      */
     public java.util.Map getTypeMap() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getTypeMap");
+        }
         checkConnection();
         return con.getTypeMap();
     }
@@ -248,6 +282,10 @@ public class AutoConnection implements Connection
      */
     public int getTransactionIsolation() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getTransactionIsolation");
+        }
         checkConnection();
         return con.getTransactionIsolation();
     }
@@ -257,6 +295,10 @@ public class AutoConnection implements Connection
      */
     public boolean isReadOnly() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("isReadOnly");
+        }
         checkConnection();
         return con.isReadOnly();
     }
@@ -266,6 +308,10 @@ public class AutoConnection implements Connection
      */
     public DatabaseMetaData getMetaData() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getMetaData");
+        }
         checkConnection();
         return con.getMetaData();
     }
@@ -275,6 +321,10 @@ public class AutoConnection implements Connection
      */
     public void clearWarnings() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("clearWarnings");
+        }
         checkConnection();
         con.clearWarnings();
     }
@@ -284,6 +334,10 @@ public class AutoConnection implements Connection
      */
     public String nativeSQL(String str) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("nativeSQL");
+        }
         checkConnection();
         return con.nativeSQL(str);
     }
@@ -293,6 +347,10 @@ public class AutoConnection implements Connection
      */
     public PreparedStatement prepareStatement(String str, int param, int param2) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         return con.prepareStatement(str, param, param2);
     }
@@ -302,6 +360,10 @@ public class AutoConnection implements Connection
      */
     public void setTransactionIsolation(int param) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("setTransactionIsolation");
+        }
         checkConnection();
         con.setTransactionIsolation(param);
     }
@@ -311,6 +373,10 @@ public class AutoConnection implements Connection
      */
     public void setReadOnly(boolean param) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("setReadOnly");
+        }
         checkConnection();
         con.setReadOnly(param);
     }
@@ -320,6 +386,10 @@ public class AutoConnection implements Connection
      */
     public void setCatalog(String str) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("setCatalog");
+        }
         checkConnection();
         con.setCatalog(str);
     }
@@ -329,6 +399,10 @@ public class AutoConnection implements Connection
      */
     public boolean isClosed() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("isClosed");
+        }
         checkConnection();
         return con.isClosed();
     }
@@ -338,6 +412,10 @@ public class AutoConnection implements Connection
      */
     public Statement createStatement() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("createStatement");
+        }
         checkConnection();
         Statement st = new AutoStatement(this);
         return st;
@@ -348,6 +426,10 @@ public class AutoConnection implements Connection
      */
     public Statement createStatement(int param, int param1) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("createStatement");
+        }
         checkConnection();
         Statement st = new AutoStatement(this,param, param1);
         return st;
@@ -358,6 +440,10 @@ public class AutoConnection implements Connection
      */
     public PreparedStatement prepareStatement(String str) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         PreparedStatement st = new AutoPreparedStatement(this,str);
         return st;
@@ -368,6 +454,10 @@ public class AutoConnection implements Connection
      */
     public boolean getAutoCommit() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("getAutoCommit");
+        }
         checkConnection();
         return con.getAutoCommit();
     }
@@ -377,6 +467,10 @@ public class AutoConnection implements Connection
      */
     public CallableStatement prepareCall(String str) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareCall");
+        }
         checkConnection();
         return con.prepareCall(str);
     }
@@ -386,6 +480,10 @@ public class AutoConnection implements Connection
      */
     public void commit() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("commit");
+        }
         checkConnection();
         con.commit();
     }
@@ -395,6 +493,10 @@ public class AutoConnection implements Connection
      */
     public CallableStatement prepareCall(String str, int param, int param2) throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareCall");
+        }
         checkConnection();
         return con.prepareCall(str, param, param2);
     }
@@ -404,6 +506,10 @@ public class AutoConnection implements Connection
      */
     public void rollback() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("rollback");
+        }
         checkConnection();
         con.rollback();
     }
@@ -414,6 +520,10 @@ public class AutoConnection implements Connection
     @Override
     protected void finalize() throws Throwable
     {
+        if (debug)
+        {
+            System.out.println("finalize");
+        }
         log.warn("finalize()..., connection was not closed, "+description);
     }
 
@@ -421,8 +531,12 @@ public class AutoConnection implements Connection
     /* (non-Javadoc)
  * @see java.sql.Connection#setSavepoint()
  */
-public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
+    public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("setSavepoint");
+        }
         checkConnection();
         return con.setSavepoint();
     }
@@ -432,6 +546,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public void setHoldability(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("setHoldability");
+        }
         checkConnection();
         con.setHoldability(param);
     }
@@ -441,6 +559,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         return con.prepareStatement(str, param);
     }
@@ -450,6 +572,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int param, int param2, int param3) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         return con.prepareStatement(str, param, param2, param3);
     }
@@ -459,6 +585,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, int[] values) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         return con.prepareStatement(str, values);
     }
@@ -468,6 +598,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public int getHoldability() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("getHoldability");
+        }
         checkConnection();
         return con.getHoldability();
     }
@@ -477,6 +611,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.Savepoint setSavepoint(java.lang.String str) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("setSavepoint");
+        }
         checkConnection();
         return con.setSavepoint(str);
     }
@@ -486,6 +624,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.Statement createStatement(int param, int param1, int param2) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("createStatement");
+        }
         checkConnection();
         return con.createStatement(param, param1, param2);
     }
@@ -495,6 +637,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.CallableStatement prepareCall(java.lang.String str, int param, int param2, int param3) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareCall");
+        }
         checkConnection();
         return con.prepareCall(str, param, param2, param3);
     }
@@ -504,6 +650,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public void releaseSavepoint(java.sql.Savepoint savepoint) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("releaseSavepoint");
+        }
         checkConnection();
         con.releaseSavepoint(savepoint);
     }
@@ -513,6 +663,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public java.sql.PreparedStatement prepareStatement(java.lang.String str, java.lang.String[] str1) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("prepareStatement");
+        }
         checkConnection();
         return con.prepareStatement(str, str1);
     }
@@ -522,6 +676,10 @@ public java.sql.Savepoint setSavepoint() throws java.sql.SQLException
      */
     public void rollback(java.sql.Savepoint savepoint) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("rollback");
+        }
         checkConnection();
         con.rollback(savepoint);
     }

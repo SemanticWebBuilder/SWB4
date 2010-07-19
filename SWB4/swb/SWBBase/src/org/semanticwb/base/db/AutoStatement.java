@@ -97,6 +97,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     private void checkStatement() throws SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.checkStatement");
+        }
         if (!closed && aconn.getNativeConnection() != conn)
         {
             //MAPS74 if redundante
@@ -123,6 +127,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void addBatch(String str) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.addBatch");
+        }
         checkStatement();
         st.addBatch(str);
     }
@@ -132,6 +140,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void cancel() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.cancel");
+        }
         checkStatement();
         st.cancel();
     }
@@ -141,6 +153,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void clearBatch() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.clearBatch");
+        }
         checkStatement();
         st.clearBatch();
     }
@@ -150,6 +166,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void clearWarnings() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.clearWarnings");
+        }
         checkStatement();
         st.clearWarnings();
     }
@@ -159,6 +179,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void close() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.close");
+        }
         closed = true;
         st.close();
     }
@@ -168,6 +192,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public boolean execute(String str) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.execute");
+        }
         checkStatement();
         return st.execute(str);
     }
@@ -193,7 +221,8 @@ public class AutoStatement implements java.sql.Statement {
     {
         if (debug)
         {
-            System.out.println("s.executeQuery:" + str);
+            //System.out.println("s.executeQuery:" + str);
+            System.out.println("s.executeQuery");
         }
         checkStatement();
         try
@@ -201,7 +230,13 @@ public class AutoStatement implements java.sql.Statement {
             return st.executeQuery(str);
         } catch (SQLException se)
         {
-            if (aconn.checkConnection())
+            System.out.println("Error conexion dañada..., "+se);
+            if(se.getMessage().contains("java.net.SocketException"))
+            {
+                aconn.changeConnection();
+                checkStatement();
+                return st.executeQuery(str);
+            }else if (aconn.checkConnection())
             {
                 checkStatement();
                 return st.executeQuery(str);
@@ -230,6 +265,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getConnection");
+        }
         checkStatement();
         return st.getConnection();
     }
@@ -239,6 +278,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getFetchDirection() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getFetchDirection");
+        }
         checkStatement();
         return st.getFetchDirection();
     }
@@ -248,6 +291,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getFetchSize() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getFetchSize");
+        }
         checkStatement();
         return st.getFetchSize();
     }
@@ -257,6 +304,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getMaxFieldSize() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getMaxFieldSize");
+        }
         checkStatement();
         return st.getMaxFieldSize();
     }
@@ -266,6 +317,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getMaxRows() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getMaxRows");
+        }
         checkStatement();
         return st.getMaxRows();
     }
@@ -275,6 +330,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public boolean getMoreResults() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getMoreResults");
+        }
         checkStatement();
         return st.getMoreResults();
     }
@@ -284,6 +343,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getQueryTimeout() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getQueryTimeout");
+        }
         checkStatement();
         return st.getQueryTimeout();
     }
@@ -293,6 +356,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public java.sql.ResultSet getResultSet() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getResultSet");
+        }
         checkStatement();
         return st.getResultSet();
     }
@@ -302,6 +369,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getResultSetConcurrency() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getResultSetConcurrency");
+        }
         checkStatement();
         return st.getResultSetConcurrency();
     }
@@ -311,6 +382,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getResultSetType() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getResultSetType");
+        }
         checkStatement();
         return st.getResultSetType();
     }
@@ -320,6 +395,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public int getUpdateCount() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getUpdateCount");
+        }
         checkStatement();
         return st.getUpdateCount();
     }
@@ -329,6 +408,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public java.sql.SQLWarning getWarnings() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getWarnings");
+        }
         checkStatement();
         return st.getWarnings();
     }
@@ -338,6 +421,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setCursorName(String str) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setCursorName");
+        }
         checkStatement();
         st.setCursorName(str);
     }
@@ -347,6 +434,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setEscapeProcessing(boolean param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setEscapeProcessing");
+        }
         checkStatement();
         st.setEscapeProcessing(param);
     }
@@ -356,6 +447,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setFetchDirection(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setFetchDirection");
+        }
         checkStatement();
         st.setFetchDirection(param);
     }
@@ -365,6 +460,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setFetchSize(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setFetchSize");
+        }
         checkStatement();
         st.setFetchSize(param);
     }
@@ -374,6 +473,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setMaxFieldSize(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setMaxFieldSize");
+        }
         checkStatement();
         st.setMaxFieldSize(param);
     }
@@ -383,6 +486,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setMaxRows(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setMaxRows");
+        }
         checkStatement();
         st.setMaxRows(param);
     }
@@ -392,6 +499,10 @@ public class AutoStatement implements java.sql.Statement {
      */
     public void setQueryTimeout(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.setQueryTimeout");
+        }
         checkStatement();
         st.setQueryTimeout(param);
     }
@@ -412,6 +523,10 @@ public class AutoStatement implements java.sql.Statement {
  */
 public boolean execute(String str, String[] str1) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.execute");
+        }
         checkStatement();
         return st.execute(str, str1);
     }
@@ -421,6 +536,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public boolean execute(String str, int[] values) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.execute");
+        }
         checkStatement();
         return st.execute(str, values);
     }
@@ -430,6 +549,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public boolean execute(String str, int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.execute");
+        }
         checkStatement();
         return st.execute(str, param);
     }
@@ -439,6 +562,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public int getResultSetHoldability() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getResultSetHoldability");
+        }
         checkStatement();
         return st.getResultSetHoldability();
     }
@@ -448,6 +575,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public boolean getMoreResults(int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getMoreResults");
+        }
         checkStatement();
         return st.getMoreResults(param);
     }
@@ -457,6 +588,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public int executeUpdate(String str, String[] str1) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.executeUpdate");
+        }
         checkStatement();
         return st.executeUpdate(str, str1);
     }
@@ -466,6 +601,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public int executeUpdate(String str, int param) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.executeUpdate");
+        }
         checkStatement();
         return st.executeUpdate(str, param);
     }
@@ -475,6 +614,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public int executeUpdate(String str, int[] values) throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.executeUpdate");
+        }
         checkStatement();
         return st.executeUpdate(str, values);
     }
@@ -484,6 +627,10 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
      */
     public java.sql.ResultSet getGeneratedKeys() throws java.sql.SQLException
     {
+        if (debug)
+        {
+            System.out.println("s.getGeneratedKeys");
+        }
         checkStatement();
         return st.getGeneratedKeys();
     }
