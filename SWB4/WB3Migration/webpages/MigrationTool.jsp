@@ -1008,10 +1008,10 @@
                             //Revisando y relacionando templates con las secciones
 
                             //Para el home
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep);
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
 
                             //Para el resto de la estructura del sitio
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep);
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
                         }
                     }
                 }
@@ -1066,7 +1066,14 @@
                     <ul>
                         <li><input type="checkbox" name="catalog" id="cat7" value="resource" ><label for="cat7">Recursos <%=hmcat.get("resource") != null ? "(" + hmcat.get("resource") + ")" : ""%></label></li>
                         <li><input type="checkbox" name="wpassoc" id="cat10" value="assoc" ><label for="cat10">Revisar Asociaciones de Recursos con Secciones (se debe hacer sólo una vez, si ya se acabaron de migrar todos los recursos)</label></li>
+                        <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" ><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones (comprobar si ya se asociaron los recursos a secciones.)</label></li>
                     </ul>
+                </fieldset>
+                <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
+                <ul>
+                    <li><input type="checkbox" name="resdata" id="cat13" value="resdata" disabled><label for="cat13">Datos de recursos</label></li>
+                    <li><input type="checkbox" name="assocsbtwp" id="cat12" value="assocsbtwp" disabled><label for="cat12">Revisar Asociaciones entre Secciones (se debe hacer sólo una vez) </label></li>
+                </ul>
                 </fieldset>
                 <fieldset>
                     <button name="b_send" id="b_send" type="submit">Continuar</button>
@@ -1080,6 +1087,7 @@
                 HashMap hmpfres = new HashMap();
 
                 boolean reviewWP = false;
+                boolean reviewActiveUnactiveResources = false;
                 TopicMap tm = TopicMgr.getInstance().getTopicMap(site);
                 WebSite ws = null;
                 ws = WebSite.ClassMgr.getWebSite(tm.getId());
@@ -1096,6 +1104,8 @@
                 String[] arrCat = request.getParameterValues("catalog");
                 String wpassoc = request.getParameter("wpassoc");
                 if(null!=wpassoc&&wpassoc.equals("assoc")) reviewWP=true;
+                String wpassocreview = request.getParameter("wpassocreview");
+                if(null!=wpassocreview&&wpassocreview.equals("reviewactive")) reviewActiveUnactiveResources=true;
                 if (null != arrCat) {
                     for (int i = 0; i < arrCat.length; i++) {
 
@@ -1366,51 +1376,65 @@
                         //Revisando y relacionando recursos con las secciones
                         try{
                             //Para el home
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep);
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los recursos con secciones Home.");}
 
                         try{
                             //Para el resto de la estructura del sitio
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep);
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los recursos con secciones restantes.");}
                         // Asociaciones de los webpages si existen asociaciones con roles y reglas
                         System.out.println("Revisando asociaciones de roles con webpages");
 
                         try{
                             //Para el home se revisan asociaciones con roles
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBRole, usrrep);
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBRole, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los roles con el Home.");}
 
                         try{
                             //Para el resto de la estructura del sitio las asociaciones de roles
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBRole, usrrep);
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBRole, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los roles con secciones restantes.");}
 
                         System.out.println("Revisando asociaciones de reglas con webpages");
 
                         try{
                             //Para el home se revisan las asociaciones con las reglas
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBRule, usrrep);
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBRule, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de las reglas con el Home.");}
 
                         try{
                             //Para el resto de la estructura del sitio las asociaciones con reglas
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBRule, usrrep);
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBRule, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de las reglas con secciones restantes.");}
 
                         System.out.println("Revisando asociaciones de PFlows con webpages");
 
                         try{
                             //Para el home se revisan las asociaciones con los flujos de publicacion
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBPFlow, usrrep);
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBPFlow, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los flujos de publicación con el Home.");}
 
                         try{
                             //Para el resto de la estructura del sitio las asociaciones con los flujos de publicacion
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBPFlow, usrrep);
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBPFlow, usrrep,Boolean.FALSE);
                         } catch(Exception err){System.out.println("Error al revisar asociaciones de los flujos de publicación con secciones restantes.");}
 
                         System.out.println("Terminando de Revisar asociaciones con webpages");
+                }
+                if(reviewActiveUnactiveResources)
+                {
+                        System.out.println("Revisando ocurrencias de contenidos activos e inactivos en secciones");
+                        //Revisando y relacionando recursos con las secciones
+                        try{
+                            //Para el home
+                            setWebPageAssociation(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep, Boolean.TRUE);
+                        } catch(Exception err){System.out.println("Error al revisar asociaciones de los recursos con secciones Home.");}
+
+                        try{
+                            //Para el resto de la estructura del sitio
+                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.REC_WBContent, usrrep, Boolean.TRUE);
+                        } catch(Exception err){System.out.println("Error al revisar asociaciones de los recursos con secciones restantes.");}
                 }
 
         %>
@@ -1452,6 +1476,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat7" value="resource" disabled><label for="cat7">Recursos <%=hmcat.get("resource") != null ? "(" + hmcat.get("resource") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="wpassoc" id="cat10" value="assoc" disabled><label for="cat10">Revisar Asociaciones de Recursos con Secciones (se debe hacer sólo una vez, si y solo si ya se acabaron de migrar todos los recursos)</label></li>
+                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones (comprobar si ya se asociaron los recursos a secciones.)</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#F7BE81;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
@@ -1791,6 +1816,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat7" value="resource" disabled><label for="cat7">Recursos <%=hmcat.get("resource") != null ? "(" + hmcat.get("resource") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="wpassoc" id="cat10" value="assoc" disabled><label for="cat10">Revisar Asociaciones de Recursos con Secciones (se debe hacer sólo una vez, si y solo si ya se acabaron de migrar todos los recursos)</label></li>
+                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones (comprobar si ya se asociaron los recursos a secciones.)</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
@@ -1837,7 +1863,7 @@
         }
     }
 
-    void setWebPageAssociation(com.infotec.topicmaps.Topic tp, WebSite ws, String occType, String UserRepId)
+    void setWebPageAssociation(com.infotec.topicmaps.Topic tp, WebSite ws, String occType, String UserRepId, boolean reviewActUnact)
     {
         WebPage wp = ws.getWebPage(tp.getId()); // obtiene el WebPage home
         if(wp!=null)
@@ -1900,9 +1926,16 @@
 
                             if(resource!=null)
                             {
-                                wp.addResource(resource);
+                                if(!reviewActUnact) wp.addResource(resource);
                                 try {
-                                    resource.setActive(occ.isActive());
+                                    if(occ.isActive())
+                                    {
+                                        resource.setActive(Boolean.TRUE);
+                                    }
+                                    else
+                                    {
+                                        resource.setActive(Boolean.FALSE);
+                                    }
                                 } catch (Exception e) { System.out.println("Error al activar el recurso..."+resource.getId()); }
                             }
                         }
@@ -1925,7 +1958,7 @@
     }
 
     //MIGRACION DE LA Referencias DE TOPICOS A a los WEBPAGES
-    boolean reviewWebPageAsoc(com.infotec.topicmaps.Topic tp, WebSite ws, String occType, String UserRepId)
+    boolean reviewWebPageAsoc(com.infotec.topicmaps.Topic tp, WebSite ws, String occType, String UserRepId, boolean reviewActUnact)
     {
         if(tp!=null)
         {
@@ -1935,8 +1968,8 @@
                 com.infotec.topicmaps.Topic tpc = (com.infotec.topicmaps.Topic) it.next();
                 if(null!=tpc&&tpc.isChildof(tp))
                 {
-                    setWebPageAssociation(tpc, ws, occType, UserRepId);
-                    reviewWebPageAsoc(tpc, ws, occType, UserRepId);
+                    setWebPageAssociation(tpc, ws, occType, UserRepId,reviewActUnact);
+                    reviewWebPageAsoc(tpc, ws, occType, UserRepId,reviewActUnact);
                 }
             }
         }
