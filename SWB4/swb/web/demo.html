@@ -1,0 +1,57 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<script src="http://dl.javafx.com/1.3/dtfx.js"></script>
+</head>
+ <body style="margin-top:0; margin-left:0;">
+  <div style="width: 100%; height: 100%">
+<!--
+    <script>
+    javafx(
+        {
+              archive: "/swbadmin/lib/SWBAppBPMNModeler.jar,/swbadmin/lib/json.jar,/swbadmin/lib/SWBAplCommons.jar",
+              draggable: true,
+              width: document.body.scrollWidth,
+              height: document.body.scrollHeight,
+              code: "org.semanticwb.process.modeler.Main",
+              name: "SWBAppBPMNModeler"
+        },
+        {
+              jsess: "0BEE9E3E612C91462556C08716B473C4",
+              cgipath: "/es/SWBAdmin/bh_Modeler/_rid/86/_mto/3/_mod/gateway?suri=http%3A%2F%2Fwww.process.swb%23swp_Process%3A18"
+        }
+    );
+    </script>
+-->
+<script>
+var u10only = '';
+var webstartAllowed = '';
+
+if(u10only=='true' && !deployJava.isPlugin2()) {
+    document.write("<p class='u10warning'>");
+    document.write("This sample needs Java SE 6 Update 10 or higher with Internet Explorer 7+ or FireFox 3+");
+    document.write("");
+    if(webstartAllowed=='true') {
+        document.write(" Please <a href='webstart/DragAndDrop.jnlp'>run this example with Java Webstart<a> instead");
+    }
+    document.write("</p>");
+} else {
+
+    javafx(
+        {
+            //archive: "/swbadmin/lib/SWBAppBPMNModeler.jar,/swbadmin/lib/json.jar,/swbadmin/lib/SWBAplCommons.jar,",
+            archive: "DragAndDrop.jar,",
+            width: 240,
+            height: 320,
+            code: "org.semanticwb.process.modeler.Main",
+            name: "appl"
+        }
+    );
+}
+</script>
+
+<a href="http://javafx.com/samples/DragAndDrop/webstart/DragAndDrop_browser.jnlp"> aqui</a>
+  </div>
+ </body>
+</html>
+
