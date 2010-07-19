@@ -1681,8 +1681,8 @@ public class ControlPanel extends GenericAdmResource
                 int iniRow = getPageFirstRow(vTaskLinks.size(),intRowsPerPage,intCurrPage);
                 sb.append("<div id=\"tareas\">");
                 sb.append("<p class=\"izq\">" + vTaskLinks.size() + " " + paramRequest.getLocaleString("lblTotalTask") + "</p>");
-                sb.append("<p class=\"der cerradas-si\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','hide','personalizar','','show');selectedTab('personalizar');\">Personalizar</a></p></div>");
-                
+                //sb.append("<p class=\"der cerradas-si\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','hide','personalizar','','show');selectedTab('personalizar');\">Personalizar</a></p></div>");
+                sb.append("<p class=\"der cerradas-si\"></p></div>");
                 //TODO: Tareas cerradas (filtro)
                 StringBuffer sbPagination = getPagination(intRowsPerPage, intCurrPage,vTaskLinks.size(),paramRequest,request);
                 sb.append("<p class=\"paginado\">" + sbPagination + "</p>");
@@ -1836,7 +1836,7 @@ public class ControlPanel extends GenericAdmResource
             sbPrint.append("\n      document.forms['frmAdmin'].submit();");
             sbPrint.append("\n   }");
             sbPrint.append("\n</script>");
-            sbPrint.append("<div id=\"personalizar\"><div class=\"pleca\"><h3>" +
+            sbPrint.append("<div id=\"personaliza\"><div class=\"pleca\"><h3>" +
                     paramRequest.getLocaleString("lblCustomizeTitle") +
                     "</h3>");
             sbPrint.append("<form name=\"frmAdmin\" action=\"" +
@@ -1855,35 +1855,24 @@ public class ControlPanel extends GenericAdmResource
             sbPrint.append("</select><br/><br/>");
             if(bClosedFilter)
             {
-                sbPrint.append("<label for=\"hideClosedTasks\" >" +
-                        paramRequest.getLocaleString("lblClosedFilter")
-                        + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""
-                        + "name=\"hideClosedTasks\" " +
-                        " value=\"0\">" +
-                        paramRequest.getLocaleString("cpClosedFilter0") +
-                        "<br/>" +
-                        "<input type=\"RADIO\" id=\"hideClosedTasks\""
-                        + "name=\"hideClosedTasks\" " +
-                        " checked value=\"1\">" +
-                        paramRequest.getLocaleString("cpClosedFilter1") +
-                        "<br/><br/>");
+                //sbPrint.append("<label for=\"hideClosedTasks\" >" + paramRequest.getLocaleString("lblClosedFilter") + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\">" + paramRequest.getLocaleString("cpClosedFilter0") + "<br/>" + "<input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + " checked value=\"1\">" + paramRequest.getLocaleString("cpClosedFilter1") + "<br/><br/>");
+                sbPrint.append("<div class=\"radios\"><p class=\"cerradas\">" + paramRequest.getLocaleString("lblClosedFilter") + ":</p></div>");
+                sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\" class=\"radio\">");
+                sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter0") + "</label></div>");
+                sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"1\" checked class=\"radio\">");
+                sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter1") + "</label></div>");
             } else {
-                sbPrint.append("<label for=\"hideClosedTasks\" >" +
-                        paramRequest.getLocaleString("lblClosedFilter")
-                        + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""
-                        + "name=\"hideClosedTasks\" " +
-                        "  checked value=\"0\" >" +
-                        paramRequest.getLocaleString("cpClosedFilter0") +
-                        "<br/>" +
-                        "<input type=\"RADIO\" id=\"hideClosedTasks\""
-                        + "name=\"hideClosedTasks\" " +
-                        "  value=\"1\">" +
-                        paramRequest.getLocaleString("cpClosedFilter1") +
-                        "<br/><br/>");
+                //sbPrint.append("<label for=\"hideClosedTasks\" >" + paramRequest.getLocaleString("lblClosedFilter") + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + "  checked value=\"0\" >" + paramRequest.getLocaleString("cpClosedFilter0") + "<br/>" + "<input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + "  value=\"1\">" + paramRequest.getLocaleString("cpClosedFilter1") + "<br/><br/>");
+                sbPrint.append("<div class=\"radios\"><p class=\"cerradas\">" + paramRequest.getLocaleString("lblClosedFilter") + ":</p></div>");
+                sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\" checked class=\"radio\">");
+                sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter0") + "</label></div>");
+                sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"1\" class=\"radio\">");
+                sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter1") + "</label></div>");
+
             }
             sbPrint.append("<br/><br/>");
             sbPrint.append("<input type=\"SUBMIT\" name=\"btnSave\" class=\"pleca_boton\" value=\"" +
-                    paramRequest.getLocaleString("btnSave") + "\"/>");
+                    paramRequest.getLocaleString("btnSaveCustomize") + "\"/>");
             sbPrint.append("<input type=\"RESET\" name=\"btnReset\" class=\"pleca_boton\" value=\"" +
                     paramRequest.getLocaleString("btnCancel") +"\"/>");
             sbPrint.append("<input type=\"SUBMIT\" name=\"btnBack2View\" class=\"pleca_boton\" " +
@@ -3853,8 +3842,9 @@ public class ControlPanel extends GenericAdmResource
                 out.println("<ul>");
                 //out.println("<li class=\"tab-on\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
                 //out.println("<li class=\"tab-off\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
-                out.println("<li id=\"li_filtrado\" class=\"tab-on\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','show','informe','','hide','personalizar','','hide');selectedTab('filtrado');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
-                out.println("<li id=\"li_informe\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','show','personalizar','','hide');selectedTab('informe');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
+                out.println("<li id=\"li_filtrado\" class=\"tab-on\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','show','informe','','hide','personaliza','','hide');selectedTab('filtrado');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
+                out.println("<li id=\"li_informe\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','show','personaliza','','hide');selectedTab('informe');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
+                out.println("<li id=\"li_personaliza\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','hide','personaliza','','show');selectedTab('personaliza');\">" + paramsRequest.getLocaleString("btnCustomize") + "</a></li>");
                 out.println("</ul>");
                 //out.println("<input type=\"SUBMIT\" name=\"btnFilter\" " + " value=\"" + paramsRequest.getLocaleString("btnFilter") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\" />");
                 //out.println("<input type=\"SUBMIT\" name=\"btnReport\" " + " value=\"" + paramsRequest.getLocaleString("btnReport") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\" />");
