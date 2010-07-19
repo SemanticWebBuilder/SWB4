@@ -34,7 +34,12 @@ public class LinkIntermediateThrowEvent extends org.semanticwb.process.model.bas
                 String c2=((Event)instance.getFlowNodeType()).getActionCode();
                 if((c1!=null && c1.equals(c2)) || c1==null && c2==null)
                 {
-                    FlowNodeInstance fn=((FlowNodeInstance)parent).getRelatedFlowNodeInstance(event);
+                    FlowNodeInstance fn=instance.getRelatedFlowNodeInstance(event);
+                    if(fn==null)
+                    {
+                        fn=event.createInstance(parent);
+                        fn.start(user);
+                    }
                     fn.setSourceInstance(instance);
                     event.notifyEvent(fn, instance);
                 }
