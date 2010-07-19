@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
-<!--
-    Document   : WBSiteMap.xsl
-    Created on : 7 de junio de 2010, 09:59 PM
-    Author     : carlos.ramos
-    Description:
-        Purpose of transformation follows.
--->
-
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html" encoding="ISO-8859-1"/>
+    <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" encoding="ISO-8859-1"/>
 
     <xsl:template name="child">
         <li>
             <xsl:if test="@leaf = '0'">
                 <a class="icomap">
-                    <xsl:attribute name="onClick"><xsl:value-of select="@onclick"/></xsl:attribute>
+                    <xsl:attribute name="onclick"><xsl:value-of select="@onclick"/></xsl:attribute>
                     <span>
                         <xsl:value-of select="@key"/>
                     </span>
@@ -23,12 +14,11 @@
             </xsl:if>
             <xsl:if test="@leaf = '1'">
                 <a class="icomap-trans">
-                    <xsl:attribute name="onClick"><xsl:value-of select="@onclick"/></xsl:attribute>
+                    <xsl:attribute name="onclick"><xsl:value-of select="@onclick"/></xsl:attribute>
                 </a>
             </xsl:if>
-
             <a>
-                <xsl:attribute name="onClick"><xsl:value-of select="@url"/></xsl:attribute>
+                <xsl:attribute name="onclick"><xsl:value-of select="@url"/></xsl:attribute>
                 <xsl:value-of select="@title"/>
             </a>
             <xsl:for-each select="branch">
@@ -38,11 +28,19 @@
     </xsl:template>
 
     <xsl:template name="subchild">
-        <ul>
-            <xsl:for-each select="node">
-                <xsl:call-template name="child" />
-            </xsl:for-each>
-        </ul>
+        <xsl:for-each select="node">
+            <xsl:if test="position()=1">
+                <xsl:text  disable-output-escaping="yes">
+                    &lt;ul>
+                </xsl:text>
+            </xsl:if>
+            <xsl:call-template name="child" />
+            <xsl:if test="position()=last()">
+                <xsl:text  disable-output-escaping="yes">
+                    &lt;/ul>
+                </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
 
