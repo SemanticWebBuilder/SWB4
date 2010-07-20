@@ -1085,9 +1085,10 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
 
     private String getClassName(SemanticClass clazz)
     {
-        String uuid=UUID.randomUUID().toString();
+        /*String uuid=UUID.randomUUID().toString();
         uuid=uuid.replace('-', '_');
-        return "_"+uuid+clazz.getName();
+        return "_"+uuid+clazz.getName();*/
+        return clazz.getName();
     }
     private void addSemanticClass(String clasName,SemanticClass clazz,MemoryClassLoader mls) throws Exception
     {        
@@ -1098,7 +1099,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     {        
         SemanticClass clazz=object.getSemanticClass();
         String clasName=getClassName(clazz);
-        String varname=object.getDisplayName();
+        String varname=object.getSemanticClass().getName().toLowerCase();
         i.set(clasName+" "+varname+"=", object);
     }
     private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
