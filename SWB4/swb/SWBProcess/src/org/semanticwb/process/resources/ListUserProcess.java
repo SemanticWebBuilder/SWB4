@@ -42,6 +42,7 @@ public class ListUserProcess extends GenericResource {
 	out.println("<p class=\"tit1\">Procesos</p>");
 	out.println("<ul class=\"tarea\">");
 
+        int cuantos = 0;
         String styleclass = "";
         Iterator<Process> itpro = psite.listProcesses();
         while (itpro.hasNext()) {
@@ -52,11 +53,14 @@ public class ListUserProcess extends GenericResource {
                 List<FlowNodeInstance> lfnins = SWBProcessMgr.getUserTaskInstances(procins, user);
                 if(lfnins.size()>0)
                 {
+                    cuantos++;
                     styleclass = "t1";
                     if(wp.getURI().equals(process.getProcessWebPage().getURI())) styleclass = "t2-sel";
-                    out.println("<li class=\"t1\">"+process.getTitle(user.getLanguage())+"(<a href=\""+process.getProcessWebPage().getUrl()+"\">"+lfnins.size()+"</a>)</li>");
+                    out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+process.getProcessWebPage().getUrl()+"\">"+lfnins.size()+"</a>)</li>");
                 }
             }
+            if(cuantos==0)
+                out.println("<li class=\"t1\">No hay tareas pendientes</li>");
         }
 //        out.println("<li class=\"t1 \"><a href=\"#\">Todas</a></li>");
 //        out.println("<li class=\"t2-sel\"><a href=\"#\">Pendientes</a></li>");
