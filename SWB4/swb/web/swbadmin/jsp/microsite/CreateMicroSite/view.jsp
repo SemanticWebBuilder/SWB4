@@ -146,7 +146,27 @@
 
 
         %>
-        <div id="opcionesHeader" class="opt3">
+        <div class="opt3" id="opcionesHeader">
+            <div class="comboOpciones">
+                <p>Seleccione la categoria para crear el elemento:</p>
+                <form method="post" action="<%=urlAdd%>" id="faddMS">
+                    <p class="comboSelect">
+                       <%=select.toString()%>
+                    </p>
+                    <p class="comboBtns">
+                        <button type="submit" name="btnsubmit">Agregar</button>
+                        <button onclick="javascript:Cancel('<%=paramRequest.getRenderUrl()%>');" type="button" name="btnsubmit">Cancelar</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+                    <script type="text/javascript">
+                    function Cancel(url)
+                    {
+                        window.location=url;
+                    }
+                    </script>
+        <%-- <div id="opcionesHeader" class="opt3">
             
             <ul class="listaOpciones">
                 <li>Seleccione la categoria para crear la comunidad:
@@ -162,6 +182,7 @@
                         window.location=url;
                     }
                     </script>
+        --%>
 <%
         }
      }
