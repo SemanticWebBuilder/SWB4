@@ -38,7 +38,7 @@ public class ListUserProcess extends GenericResource {
         User user = paramRequest.getUser();
         ProcessSite psite = (ProcessSite)paramRequest.getWebPage().getWebSite();
         WebPage wp = paramRequest.getWebPage();
-        out.println("<h2>"+psite.getDisplayTitle(user.getLanguage())+"</h2>");
+        //out.println("<h2>"+psite.getDisplayTitle(user.getLanguage())+"</h2>");
 	out.println("<p class=\"tit1\">Procesos</p>");
 	out.println("<ul class=\"tarea\">");
 
