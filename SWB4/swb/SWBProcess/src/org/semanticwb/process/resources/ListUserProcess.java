@@ -55,8 +55,12 @@ public class ListUserProcess extends GenericResource {
                 {
                     cuantos++;
                     styleclass = "t1";
-                    if(wp.getURI().equals(process.getProcessWebPage().getURI())) styleclass = "t2-sel";
-                    out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+process.getProcessWebPage().getUrl()+"\">"+lfnins.size()+"</a>)</li>");
+                    WebPage ppage=process.getProcessWebPage();
+                    if(ppage!=null)
+                    {
+                        if(wp.getURI().equals(ppage.getURI())) styleclass = "t2-sel";
+                        out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+ppage.getUrl()+"\">"+lfnins.size()+"</a>)</li>");
+                    }
                 }
             }
             
