@@ -347,7 +347,6 @@ public class Comment extends GenericResource {
      * son nulos. <p>if sender's name, e-mail account and message is null.</p>
      */
     public Document getDomEmail(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
-        System.out.println("\n\n**********************\ngetDomEmail");
         Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
 
@@ -684,12 +683,12 @@ public class Comment extends GenericResource {
         out.println("</p><p>");
         out.println("<a class=\"swb-comment-othr\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">"+paramRequest.getLocaleString("msgDoViewAnotherMsg")+"</a>");
         out.println("</p></div>");
+        out.flush();
+        out.close();
     }
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
-        System.out.println("\n\n...processAction\n");
-
         try {
             processEmails(request, response);
             try {
@@ -701,21 +700,17 @@ public class Comment extends GenericResource {
         }catch(TransformerException te) {
             log.error("Error in resource Comment, while trying to send the email. ", te);
             response.setRenderParameter(_FAIL, te.getMessage());
-            System.out.println("\n\n error...................\n"+te);
         }catch(SWBResourceException re) {
             log.error("Error in resource Comment, while trying to send the email. ", re);
             response.setRenderParameter(_FAIL, re.getMessage());
-            System.out.println("\n\n error...................\n"+re);
         }catch(Exception e) {
             log.error("Error in resource Comment, while trying to send the email. ", e);
             response.setRenderParameter(_FAIL, e.getMessage());
-            System.out.println("\n\n error...................\n"+e);
         }
     }
 
     private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws TransformerException, SWBResourceException, Exception {
         Document dom = getDomEmail(request, response);
-        System.out.println("\n\nprocessEmails\n   dom email="+SWBUtils.XML.domToXml(dom));
 
         String from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
         if( from==null )
@@ -738,7 +733,6 @@ public class Comment extends GenericResource {
             throw new Exception(response.getLocaleString("msgErrMessageRequired"));
 
         String html = SWBUtils.XML.transformDom(tpl, dom);
-        System.out.println("html="+html);
         
         InternetAddress iaddress = new InternetAddress();
         iaddress.setAddress(to);
