@@ -157,7 +157,8 @@ private Vector<SWBMonitorData> buffer;
                     //SecretKey secretKey = ka.generateSecret("AES");
                 }
             }
-        } catch (java.security.GeneralSecurityException gse)
+        //} catch (java.security.GeneralSecurityException gse)
+        } catch (Exception gse)
         {
             log.error(gse);
             // assert (false);
