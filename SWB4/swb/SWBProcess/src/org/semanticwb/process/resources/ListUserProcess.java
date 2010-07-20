@@ -38,33 +38,33 @@ public class ListUserProcess extends GenericResource {
         User user = paramRequest.getUser();
         ProcessSite psite = (ProcessSite)paramRequest.getWebPage().getWebSite();
         WebPage wp = paramRequest.getWebPage();
-        //out.println("<h2>"+psite.getDisplayTitle(user.getLanguage())+"</h2>");
 	out.println("<p class=\"tit1\">Procesos</p>");
 	out.println("<ul class=\"tarea\">");
 
         int cuantos = 0;
+        int numpen=0;
         String styleclass = "";
         Iterator<Process> itpro = psite.listProcesses();
         while (itpro.hasNext()) {
+            numpen=0;
+            styleclass = "t1";
             Process process = itpro.next();
+            WebPage ppage= process.getProcessWebPage();
             Iterator<ProcessInstance> itprocins = SWBProcessMgr.getActiveProcessInstance(psite, process).iterator();
             while (itprocins.hasNext()) {
                 ProcessInstance procins = itprocins.next();
                 List<FlowNodeInstance> lfnins = SWBProcessMgr.getUserTaskInstances(procins, user);
                 if(lfnins.size()>0)
                 {
+                    numpen++;
                     cuantos++;
-                    styleclass = "t1";
-                    WebPage ppage=process.getProcessWebPage();
-                    if(ppage!=null)
-                    {
-                        if(wp.getURI().equals(ppage.getURI())) styleclass = "t2-sel";
-                        out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+ppage.getUrl()+"\">"+lfnins.size()+"</a>)</li>");
-                    }
                 }
             }
-            
-                
+            if(numpen>0&&ppage!=null)
+            {
+                if(wp.getURI().equals(ppage.getURI())) styleclass = "t2-sel";
+                out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+ppage.getUrl()+"\">"+numpen+"</a>)</li>");
+            }
         }
         if(cuantos==0)
             out.println("<li class=\"t1\">No hay tareas pendientes</li>");
