@@ -47,7 +47,7 @@ public class ListUserProcess extends GenericResource {
         Iterator<Process> itpro = psite.listProcesses();
         while (itpro.hasNext()) {
             Process process = itpro.next();
-            Iterator<ProcessInstance> itprocins = process.listProcessInstances();
+            Iterator<ProcessInstance> itprocins = SWBProcessMgr.getActiveProcessInstance(psite, process).iterator();
             while (itprocins.hasNext()) {
                 ProcessInstance procins = itprocins.next();
                 List<FlowNodeInstance> lfnins = SWBProcessMgr.getUserTaskInstances(procins, user);
