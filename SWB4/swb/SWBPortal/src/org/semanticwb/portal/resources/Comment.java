@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 
 
 /*
@@ -39,30 +39,34 @@ import java.util.StringTokenizer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.Resource;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.portal.util.FileUpload;
+import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
+import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
+
 import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.api.SWBResourceURLImp;
-import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
-import org.semanticwb.portal.api.SWBResourceException;
+import javax.xml.transform.TransformerException;
+import org.semanticwb.portal.api.SWBActionResponse;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * Presenta la interfaz para el env&iacute;o de comentarios al sitio en la categor&iacute;a
  * seleccionada por el usuario. Este recurso cuenta con facilidades de administraci&oacute;n
@@ -78,13 +82,21 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @version 1.0
  */
 public class Comment extends GenericResource {
-    
+
+    /** The log. */
+    private static Logger log = SWBUtils.getLogger(Comment.class);
+
+    private static String webWorkPath;
+
+    private static String path;
+
+    private static final String _FAIL = "failure";
 
     /**
      * Contiene la definici&oacute;n del layout para la interfaz de captura de comentarios.
      * <p>Contains the layout definition for the commentaries capture interface.</p>
      */
-    javax.xml.transform.Templates tpl = null;
+    private javax.xml.transform.Templates tpl = null;
 
 
     /**
@@ -92,7 +104,7 @@ public class Comment extends GenericResource {
      */
     public Comment() {
     }
-    
+
     /**
      * Fija la plantilla del layout para la interfaz de captura de comentarios y
      * la mantiene en memoria.<p>Sets this resource layout template for the commentaries
@@ -102,39 +114,28 @@ public class Comment extends GenericResource {
      */
     @Override
     public void setResourceBase(Resource base) {
-
-        String name = getClass().getName().substring(
-                      getClass().getName().lastIndexOf(".") + 1);
-        String webWorkPath = "/work";
-        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
-        Logger log = SWBUtils.getLogger(Comment.class);
-
+        String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
         try {
             super.setResourceBase(base);
-            webWorkPath = SWBPortal.getWebWorkPath() + base.getWorkPath();
+            webWorkPath = SWBPortal.getWebWorkPath()+base.getWorkPath() + "/";
+            path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         } catch (Exception e) {
-            log.error("Error while setting resource base: " + base.getId() 
-                    + "-" + base.getTitle(), e);
+            log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
-        if (!"".equals(base.getAttribute("template", "").trim())) {
+
+        if( !"".equals(base.getAttribute("template", "").trim()) ) {
             try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(
-                        SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/"
-                        + base.getAttribute("template").trim()));
+                tpl = SWBUtils.XML.loadTemplateXSLT( SWBPortal.getFileFromWorkPath(base.getWorkPath()+"/"+base.getAttribute("template").trim()) );
                 path = webWorkPath + "/";
             } catch (Exception e) {
-                log.error("Error while loading resource template: " 
-                        + base.getId(), e);
+                log.error("Error while loading resource template: " + base.getId(), e);
             }
         }
-        if (tpl == null) {
+        if( tpl==null ) {
             try {
-                tpl = SWBUtils.XML.loadTemplateXSLT(
-                        SWBPortal.getAdminFileStream("/swbadmin/xsl/" + name 
-                        + "/" + name + ".xslt"));
+                tpl = SWBUtils.XML.loadTemplateXSLT( SWBPortal.getAdminFileStream("/swbadmin/xsl/" + name + "/" + name + ".xsl"));
             } catch (Exception e) {
-                log.error("Error while loading default resource template: "
-                        + base.getId(), e);
+                log.error("Error while loading default resource template: " + base.getId(), e);
             }
         }
     }
@@ -144,45 +145,43 @@ public class Comment extends GenericResource {
      * cuenta aquellos para el env&iacute;o del correo y genera un objeto
      * <code>Document</code> con ellos. <p>Gets this resource's configuration data (whithout
      * those to send e-mails) and generates a <code>Document</code> object with it</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
      * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @return  estructura de la interfaz de captura de comentarios.
-     * 
+     *
      * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
      * <p>if there is no file message of the corresponding language.</p>
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    public Document getDom(HttpServletRequest request,
-            HttpServletResponse response, SWBParamRequest reqParams)
-            throws SWBResourceException, IOException {
-        
-        String webWorkPath = "/work";
+    public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String action = ((null != request.getParameter("com_act"))
                          && (!"".equals(request.getParameter("com_act").trim()))
                          ? request.getParameter("com_act").trim()
                          : "com_step2");
         Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
-        
+
         try {
             Document dom = SWBUtils.XML.getNewDocument();
-            
-            if ("com_step3".equals(action)) {
-                dom = getDomEmail(request, response, reqParams); // Envia correo
-            } else {
+
+//            if ("com_step3".equals(action)) {
+//                dom = getDomEmail(request, response, paramRequest); // Envia correo
+//            }else {
                 // Nueva ventana con formulario
-                User user = reqParams.getUser();
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
-                url.setResourceBase(base);
-                url.setMode(SWBResourceURLImp.Mode_VIEW);
-                url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
-                url.setParameter("com_act", "com_step3");
-                url.setTopic(reqParams.getWebPage());
-                url.setCallMethod(reqParams.Call_DIRECT);
+                User user = paramRequest.getUser();
+
+//                SWBResourceURLImp url = new SWBResourceURLImp(request, base,
+//                paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+//                url.setResourceBase(base);
+//                url.setMode(SWBResourceURLImp.Mode_VIEW);
+//                /*url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);*/
+//                url.setParameter("com_act", "com_step3");
+//                url.setTopic(paramRequest.getWebPage());
+//                /*url.setCallMethod(reqParams.Call_DIRECT);*/
+                SWBResourceURL url = paramRequest.getActionUrl();
 
                 Element root = dom.createElement("form");
                 root.setAttribute("path",
@@ -195,14 +194,14 @@ public class Comment extends GenericResource {
                 root.setAttribute("styleClassClose", "</div>");
                 dom.appendChild(root);
                 Element emn = null;
-                
+
                 emn = dom.createElement("msgComments");
-                emn.appendChild(dom.createTextNode(reqParams.getLocaleString("msgComments")));
+                emn.appendChild(dom.createTextNode(paramRequest.getLocaleString("msgComments")));
                 root.appendChild(emn);
                 if (!"".equals(base.getAttribute("comentario", "").trim())) {
                     emn = dom.createElement("fselect");
                     emn.setAttribute("tag",
-                            reqParams.getLocaleString("msgViewTypeComment"));
+                            paramRequest.getLocaleString("msgViewTypeComment"));
                     emn.setAttribute("inname", "selTipo");
 
                     if (base.getDom() != null) {
@@ -223,18 +222,18 @@ public class Comment extends GenericResource {
                 }
 
                 emn = dom.createElement("ftext");
-                emn.setAttribute("tag", reqParams.getLocaleString("msgName"));
+                emn.setAttribute("tag", paramRequest.getLocaleString("msgName"));
                 emn.setAttribute("inname", "txtFromName");
                 if (user.isSigned()) {
                     String strFromName = ("1".equals(
                             base.getAttribute("firstname", "0").trim())
-                            && (null != user.getFirstName() 
+                            && (null != user.getFirstName()
                                 && !"".equals(user.getFirstName().trim()))
                             ? user.getFirstName().trim()
                             : "");
                     strFromName += ("1".equals(
                             base.getAttribute("lastname", "0").trim())
-                            && (null != user.getLastName() 
+                            && (null != user.getLastName()
                                 && !"".equals(user.getLastName().trim()))
                             ? " " + user.getLastName().trim()
                             : "");
@@ -248,43 +247,42 @@ public class Comment extends GenericResource {
                 }
                 root.appendChild(emn);
                 emn = dom.createElement("ftext");
-                emn.setAttribute("tag", reqParams.getLocaleString("msgViewEmail"));
+                emn.setAttribute("tag", paramRequest.getLocaleString("msgViewEmail"));
                 emn.setAttribute("inname", "txtFromEmail");
                 if (user.isSigned()) {
-                    String strFromEmail = (null != user.getEmail() 
+                    String strFromEmail = (null != user.getEmail()
                             && !"".equals(user.getEmail().trim())
                             ? user.getEmail().trim()
                             : "");
-                    emn.setAttribute("invalue", strFromEmail);                    
+                    emn.setAttribute("invalue", strFromEmail);
                 }
                 root.appendChild(emn);
 
                 emn = dom.createElement("ftext");
-                emn.setAttribute("tag", reqParams.getLocaleString("msgPhone"));
+                emn.setAttribute("tag", paramRequest.getLocaleString("msgPhone"));
                 emn.setAttribute("inname", "txtPhone");
                 root.appendChild(emn);
 
                 emn = dom.createElement("ftext");
-                emn.setAttribute("tag", reqParams.getLocaleString("msgFax"));
+                emn.setAttribute("tag", paramRequest.getLocaleString("msgFax"));
                 emn.setAttribute("inname", "txtFax");
                 root.appendChild(emn);
 
                 emn = dom.createElement("ftextarea");
-                emn.setAttribute("tag", reqParams.getLocaleString("msgMessage"));
+                emn.setAttribute("tag", paramRequest.getLocaleString("msgMessage"));
                 emn.setAttribute("inname", "tarMsg");
                 root.appendChild(emn);
                 emn = dom.createElement("fsubmit");
-                
+
                 if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                     emn.setAttribute("img", "1");
-                    emn.setAttribute("src", webWorkPath + "/" 
-                            + base.getAttribute("imgenviar").trim());
-                    
+                    emn.setAttribute("src", webWorkPath + base.getAttribute("imgenviar").trim());
+
                     if (!"".equals(base.getAttribute("altenviar", "").trim()))
                         emn.setAttribute("alt",
                                 base.getAttribute("altenviar").trim());
-                    else emn.setAttribute("alt", 
-                            reqParams.getLocaleString("msgViewSubmitAlt"));
+                    else emn.setAttribute("alt",
+                            paramRequest.getLocaleString("msgViewSubmitAlt"));
                 } else {
                     emn.setAttribute("img", "0");
                     if (!"".equals(base.getAttribute("btnenviar", "").trim())) {
@@ -292,23 +290,22 @@ public class Comment extends GenericResource {
                                 base.getAttribute("btnenviar").trim());
                     } else {
                         emn.setAttribute("tag",
-                                reqParams.getLocaleString("msgViewSubmitButton"));
+                                paramRequest.getLocaleString("msgViewSubmitButton"));
                     }
                 }
                 root.appendChild(emn);
                 emn = dom.createElement("freset");
-                
+
                 if (!"".equals(base.getAttribute("imglimpiar", "").trim())) {
                     emn.setAttribute("img", "1");
-                    emn.setAttribute("src", webWorkPath + "/"
-                            + base.getAttribute("imglimpiar").trim());
-                    
+                    emn.setAttribute("src", webWorkPath + base.getAttribute("imglimpiar").trim());
+
                     if (!"".equals(base.getAttribute("altlimpiar", "").trim())) {
                         emn.setAttribute("alt",
                                 base.getAttribute("altlimpiar").trim());
                     } else {
                         emn.setAttribute("alt",
-                                reqParams.getLocaleString("msgViewResetAlt"));
+                                paramRequest.getLocaleString("msgViewResetAlt"));
                     }
                 } else {
                     emn.setAttribute("img", "0");
@@ -317,11 +314,11 @@ public class Comment extends GenericResource {
                                 base.getAttribute("btnlimpiar").trim());
                     } else {
                         emn.setAttribute("tag",
-                                reqParams.getLocaleString("msgViewResetButton"));
+                                paramRequest.getLocaleString("msgViewResetButton"));
                     }
                 }
                 root.appendChild(emn);
-            }
+//            }
             return dom;
         } catch (SWBResourceException swbre) {
             throw swbre;
@@ -339,25 +336,23 @@ public class Comment extends GenericResource {
      * un objeto <b>Document</b> con ellos.<p>Gets all the
      * configuration data for this resource and generates a <b>Document</b> object
      * with it.</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param response la respuesta hacia el usuario.<p>the response to the user</p>
      * @param reqParams el objeto generado por SWB y asociado a la petici&oacute;n
      * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @return  informaci&oacute;n de un comentario para su env&iacute;o.
-     * 
+     *
      * @throws SWBResourceException si el nombre del remitente, su correo y mensaje
      * son nulos. <p>if sender's name, e-mail account and message is null.</p>
-     */    
-    public Document getDomEmail(HttpServletRequest request, 
-            HttpServletResponse response, SWBParamRequest reqParams)
-            throws SWBResourceException {
-        
+     */
+    public Document getDomEmail(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
+        System.out.println("\n\n**********************\ngetDomEmail");
         Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
-        
+
         try {
-            String strFromName = (null != request.getParameter("txtFromName") 
+            String strFromName = (null != request.getParameter("txtFromName")
                     && !"".equals(request.getParameter("txtFromName").trim())
                     ? request.getParameter("txtFromName").trim()
                     : null);
@@ -369,26 +364,26 @@ public class Comment extends GenericResource {
                     && !"".equals(request.getParameter("tarMsg").trim())
                     ? request.getParameter("tarMsg").trim()
                     : null);
-            
+
             if (strFromName != null && strFromEmail != null && strTarMsg != null) {
                 Document  dom = SWBUtils.XML.getNewDocument();
-                String strSubject = reqParams.getLocaleString("emlSubject");
+                String strSubject = response.getLocaleString("emlSubject");
                 String commentType = (null != request.getParameter("selTipo")
                         && !"".equals(request.getParameter("selTipo").trim())
                         ? request.getParameter("selTipo").trim()
                         : strSubject);
-                
+
                 if (!"".equals(base.getAttribute("subject", "").trim())) {
                     strSubject = base.getAttribute("subject").trim();
                 } else if (commentType != null ) {
                     strSubject = commentType + "...";
                 }
-                
-                WebPage topic = reqParams.getWebPage();
-                String lang = reqParams.getUser().getLanguage();
+
+                WebPage topic = response.getWebPage();
+                String lang = response.getUser().getLanguage();
                 Element emn = dom.createElement("form");
                 emn.setAttribute("path", "http://" + request.getServerName()
-                        + (request.getServerPort() != 80 
+                        + (request.getServerPort() != 80
                         ? ":" + request.getServerPort()
                         : "") + SWBPlatform.getContextPath() + "/swbadmin/css/");
                 emn.setAttribute("email", "1");
@@ -406,34 +401,34 @@ public class Comment extends GenericResource {
                 addElem(dom, emn, "fromemail", strFromEmail);
                 addElem(dom, emn, "subject", strSubject);
                 addElem(dom, emn, "message", strTarMsg);
-                addElem(dom, emn, "msgTo", reqParams.getLocaleString("msgTo"));
-                addElem(dom, emn, "msgName", reqParams.getLocaleString("msgName"));
+                addElem(dom, emn, "msgTo", response.getLocaleString("msgTo"));
+                addElem(dom, emn, "msgName", response.getLocaleString("msgName"));
                 addElem(dom, emn, "msgViewEmail",
-                        reqParams.getLocaleString("msgViewEmail"));
-                addElem(dom, emn, "msgPhone", reqParams.getLocaleString("msgPhone"));
-                addElem(dom, emn, "msgFax", reqParams.getLocaleString("msgFax"));
+                        response.getLocaleString("msgViewEmail"));
+                addElem(dom, emn, "msgPhone", response.getLocaleString("msgPhone"));
+                addElem(dom, emn, "msgFax", response.getLocaleString("msgFax"));
                 addElem(dom, emn, "msgMessage",
-                        reqParams.getLocaleString("msgMessage"));
-                
+                        response.getLocaleString("msgMessage"));
+
                 String value = "";
                 String area = "";
                 String responsable = "";
                 String toemail = "";
-                
+
                 if (commentType != null ) {
                     addElem(dom, emn, "commenttype", commentType);
                     Document dom2 = base.getDom();
                     NodeList node = dom2.getElementsByTagName("comentario");
-                    
+
                     for (int i = 0; i < node.getLength(); i++) {
                         area = "";
                         responsable = "";
                         toemail = "";
                         value = node.item(i).getFirstChild().getNodeValue().trim();
-                        
+
                         if (value.equals(commentType)) {
                             NodeList child = node.item(i).getChildNodes();
-                            
+
                             for (int j = 0; j < child.getLength(); j++) {
                                 if (child.item(j) != null) {
                                     if ("area".equals(child.item(j).getNodeName())) {
@@ -456,20 +451,20 @@ public class Comment extends GenericResource {
                             break;
                         }
                     }
-                    
+
                     if (!"".equals(area)) {
                         addElem(dom, emn, "area", area);
                     }
-                    
+
                     if (!"".equals(responsable)) {
                         addElem(dom, emn, "responsable", responsable);
                     }
-                    
+
                     if (!"".equals(toemail)) {
                         addElem(dom, emn, "toemail", toemail);
                     }
                 }
-                
+
                 if ("".equals(toemail)) {
                     addElem(dom, emn, "area", base.getAttribute("area","").trim());
                     addElem(dom, emn, "responsable",
@@ -481,22 +476,22 @@ public class Comment extends GenericResource {
                 StringBuilder strHeadermsg = new StringBuilder(800);
                 strHeadermsg.append("<br> \n");
                 strHeadermsg.append("----------------------------------------------------------------------<br> \n");
-                strHeadermsg.append(reqParams.getLocaleString("emlSite"));
+                strHeadermsg.append(response.getLocaleString("emlSite"));
                 strHeadermsg.append(" <b>" + topic.getWebSiteId() + ".");
                 strHeadermsg.append((topic.getTitle(lang) != null
                         ? topic.getTitle(lang) : "Sin título") + "</b> \n <br>");
-                strHeadermsg.append(reqParams.getLocaleString("emlCommentType"));
+                strHeadermsg.append(response.getLocaleString("emlCommentType"));
                 strHeadermsg.append(" <b> \n");
-                
+
                 if (commentType != null ) {
                     strHeadermsg.append(commentType);
                 } else {
-                    strHeadermsg.append(reqParams.getLocaleString(
+                    strHeadermsg.append(response.getLocaleString(
                             "emlHeaderMessage1"));
                 }
                 strHeadermsg.append("</b><br> \n");
                 strHeadermsg.append("----------------------------------------------------------------------<br> \n");
-                
+
                 if (!"".equals(base.getAttribute("headermsg", "").trim())) {
                     addElem(dom, emn, "headermsg",
                             base.getAttribute("headermsg").trim());
@@ -511,32 +506,32 @@ public class Comment extends GenericResource {
                 strHeadermsg.append("<br>" + base.getAttribute("area", "").trim());
                 strHeadermsg.append("<br><br></td></tr> \n");
                 strHeadermsg.append("<tr><td><b> \n");
-                strHeadermsg.append(reqParams.getLocaleString("emlName"));
+                strHeadermsg.append(response.getLocaleString("emlName"));
                 strHeadermsg.append("</b></td><td> \n");
                 strHeadermsg.append(strFromName + "</td></tr> \n");
                 strHeadermsg.append("<tr><td><b>");
-                strHeadermsg.append(reqParams.getLocaleString("emlEmail"));
+                strHeadermsg.append(response.getLocaleString("emlEmail"));
                 strHeadermsg.append("</b></td> \n");
                 strHeadermsg.append("<td>");
                 strHeadermsg.append(strFromEmail + "</td></tr> \n");
-                
+
                 if (request.getParameter("txtPhone") != null
                         && !"".equals(request.getParameter("txtPhone").trim())) {
                     addElem(dom, emn, "phone",
                             request.getParameter("txtPhone").trim());
                     strHeadermsg.append("<tr><td><b>");
-                    strHeadermsg.append(reqParams.getLocaleString("emlPhone"));
+                    strHeadermsg.append(response.getLocaleString("emlPhone"));
                     strHeadermsg.append("</b></td> \n");
                     strHeadermsg.append("<td>");
                     strHeadermsg.append(request.getParameter("txtPhone").trim());
                     strHeadermsg.append("</td></tr> \n");
                 }
-                
+
                 if (request.getParameter("txtFax") != null
                         && !"".equals(request.getParameter("txtFax").trim())) {
                     addElem(dom, emn, "fax", request.getParameter("txtFax").trim());
                     strHeadermsg.append("<tr><td><b>");
-                    strHeadermsg.append(reqParams.getLocaleString("emlFax"));
+                    strHeadermsg.append(response.getLocaleString("emlFax"));
                     strHeadermsg.append("</b></td> \n");
                     strHeadermsg.append("<td>");
                     strHeadermsg.append(request.getParameter("txtFax").trim());
@@ -544,13 +539,13 @@ public class Comment extends GenericResource {
                 }
                 strTarMsg = "<tr><td colspan=2> \n";
                 strTarMsg += ("<br><br>"
-                        + reqParams.getLocaleString("emlHeaderMessage2")
+                        + response.getLocaleString("emlHeaderMessage2")
                         + " <br><br>" + request.getParameter("tarMsg").trim()
                         +" \n");
                 strTarMsg += "</td></tr> \n";
 
                 String strFootermsg = "</table> \n";
-                
+
                 if (!"".equals(base.getAttribute("footermsg", "").trim())) {
                     addElem(dom, emn, "footermsg",
                             base.getAttribute("footermsg").trim());
@@ -572,7 +567,7 @@ public class Comment extends GenericResource {
             log.error("Error while generating email message in resource " + base.getResourceType().getResourceClassName() + " with identifier " + base.getId() + " - " + base.getTitle(), e);
         }
         return null;
-    }         
+    }
 
     /**
      * Muestra la estructura de datos generada por <code>getDom()</code>.
@@ -587,13 +582,10 @@ public class Comment extends GenericResource {
      *         <p>if <code>getDom</code> propagates this exception</p>.
      */
     @Override
-    public void doXML(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        
-        Logger log = SWBUtils.getLogger(Comment.class);
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         try {
             org.w3c.dom.Document dom = getDom(request, response, paramsRequest);
-            
+
             if (dom != null) {
                 response.getWriter().println(SWBUtils.XML.domToXml(dom));
             }
@@ -601,8 +593,8 @@ public class Comment extends GenericResource {
             log.error(e);
             throw e;
         }
-    }    
-    
+    }
+
     /**
      * Muestra la liga o la pantalla de captura de comentarios en base al valor
      * del par&aacute;metro <code>com_act</code> en el <code>request</code> del usuario.
@@ -619,156 +611,141 @@ public class Comment extends GenericResource {
      *         <p>if there is no file message of the corresponding language.</p>
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest reqParams) throws IOException, SWBResourceException {
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException, SWBResourceException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
 
-        StringBuffer ret = new StringBuffer(600);
-        String webWorkPath = "/work";
+        PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
-        String action = (null != request.getParameter("com_act")
-                && !"".equals(request.getParameter("com_act").trim())
-                ? request.getParameter("com_act").trim()
-                : (reqParams.getCallMethod() == SWBParamRequest.Call_CONTENT) ? "com_step2" : "com_step1");
-        Logger log = SWBUtils.getLogger(Comment.class);
 
-        response.setContentType("text/html");
-        
-        if ("com_step1".equals(action)) {
-            // Objeto (imagen/botón) para invocar la nueva ventana con formulario
-            StringBuilder windowProps = new StringBuilder(200);
-            StringBuilder link = new StringBuilder(350);
-            
-                windowProps.append("menubar="
-                        + base.getAttribute("menubar", "no").trim());
-                windowProps.append(",toolbar="
-                        + base.getAttribute("toolbar", "no").trim());
-                windowProps.append(",status="
-                        + base.getAttribute("status", "no").trim());
-                windowProps.append(",location="
-                        + base.getAttribute("location", "no").trim());
-                windowProps.append(",directories="
-                        + base.getAttribute("directories", "no").trim());
-                windowProps.append(",scrollbars="
-                        + base.getAttribute("scrollbars", "no").trim());
-                windowProps.append(",resizable="
-                        + base.getAttribute("resizable", "no").trim());
-                windowProps.append(",width="
-                        + base.getAttribute("width", "450").trim());
-                windowProps.append(",height="
-                        + base.getAttribute("height", "330").trim());
-                windowProps.append(",top="
-                        + base.getAttribute("top", "10").trim());
-                windowProps.append(",left="
-                        + base.getAttribute("left", "10").trim());
-
-                SWBResourceURLImp url = new SWBResourceURLImp(request, base,
-                        reqParams.getWebPage(), SWBResourceURL.UrlType_RENDER);
-                url.setResourceBase(base);
-                url.setMode(SWBResourceURLImp.Mode_VIEW);
-                url.setWindowState(SWBResourceURLImp.WinState_MAXIMIZED);
-                url.setParameter("com_act", "com_step2");
-                url.setTopic(reqParams.getWebPage());
-                url.setCallMethod(reqParams.Call_DIRECT);
-                link.append("javascript:window.open('");
-                link.append(url.toString() + "','_newcom','");
-                link.append(windowProps.toString() + "'); return false;");
-
-                if (!"".equals(base.getAttribute("img", "").trim())) {
-                    ret.append("\n<a href=\""+link.toString()+"\"><img onClick=\"");
-                    ret.append(link.toString() +"\" src=\"");
-                    ret.append(webWorkPath + "/");
-                    ret.append(base.getAttribute("img").trim() + "\" alt=\"");
-                    ret.append(base.getAttribute("alt", "").trim().replaceAll(
-                            "\"","&#34;"));
-                    ret.append("\" border=0></a>");
-                } else if (!"".equals(base.getAttribute("btntexto", "").trim())) {
-                    ret.append("\n<form name=frmComentario>");
-                    ret.append("\n<input type=button name=btnComentario onClick=\"");
-                    ret.append(link.toString() + "\" value=\"");
-                    ret.append(base.getAttribute("btntexto").trim().replaceAll(
-                            "\"","&#34;") + "\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                        ret.append(" style=\""
-                                + base.getAttribute("blnstyle").trim().replaceAll(
-                                "\"","&#34;") + "\"");
-                    }
-                    ret.append("\n></form>");
-                } else {
-                    ret.append("\n<a href=\""+link.toString()+"\" onClick=\"" + link.toString()
-                            + "\"");
-                    if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                        ret.append(" style=\"");
-                        ret.append(base.getAttribute("blnstyle").trim(
-                                ).replaceAll("\"","&#34;") + "\"");
-                    }
-                    ret.append(">");
-                    if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
-                        ret.append(base.getAttribute("lnktexto").trim());
-                    } else {
-                        ret.append(reqParams.getLocaleString("msgComments"));
-                    }
-                    ret.append("</a>");
+        if( paramRequest.getCallMethod()==paramRequest.Call_STRATEGY ) {
+            String surl = paramRequest.getWebPage().getUrl();
+            SWBResourceURLImp url = null;
+            Iterator<Resourceable> res = base.listResourceables();
+            while(res.hasNext()) {
+                Resourceable re = res.next();
+                if( re instanceof WebPage ) {
+                    surl = ((WebPage)re).getUrl();
+                    break;
                 }
-        } else {
-            try {
-                Document dom = getDom(request, response, reqParams);
-                String generateLog = base.getAttribute("generatelog", "");
-                
-                if (dom != null) {
-                    ret.append(SWBUtils.XML.transformDom(tpl, dom));
-                    
-                    if ("com_step3".equals(action)) {
-                        String from = dom.getElementsByTagName("fromemail").item(
-                                0).getFirstChild().getNodeValue();
-                        String to = dom.getElementsByTagName("toemail").item(
-                                0).getFirstChild().getNodeValue();
-                        String subject = dom.getElementsByTagName(
-                                "subject").item(0).getFirstChild().getNodeValue();
-                        String fromname = dom.getElementsByTagName(
-                                "fromname").item(0).getFirstChild().getNodeValue();
-                        InternetAddress address1 = new InternetAddress();
-                        boolean mailSent = false;
-                        address1.setAddress(to);
-                        ArrayList<InternetAddress> aAddress = new ArrayList<InternetAddress>();
-                        aAddress.add(address1);
-                        
-                        if ((from != null && to != null && subject != null)
-                                && (SWBUtils.EMAIL.sendMail(from, fromname, aAddress,
-                                        null, null, subject, "HTML",
-                                        ret.toString(), null, null,
-                                        null) != null)) {
-                            ret.append("\n<script>");
-                            ret.append("\nalert('"
-                                    + reqParams.getLocaleString("msgSendEmail")
-                                    + "');");
-                            ret.append("\nwindow.close();");
-                            ret.append("\n</script>");
-                            mailSent = true;
-                        } else {
-                            ret.append("\n<script>");
-                            ret.append("\nalert('"
-                                    + reqParams.getLocaleString("msgSenderRequired")
-                                    + "');");
-                            ret.append("\nhistory.go(-1);");
-                            ret.append("\n</script>");
-                        }
-                        if (mailSent && generateLog.length() > 0) {
-                            try {
-                                feedCommentLog(dom, reqParams.getUser());
-                            } catch (Exception e) {
-                                log.error(e);
-                            }
-                        }
-                    }
+            }
+
+            if( base.getAttribute("link")!=null ) {
+                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">"+base.getAttribute("link")+"</a>");
+            }else if( base.getAttribute("label")!=null ) {
+                out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-comment-stgy\" >");
+                out.println("<input type=\"submit\" value=\""+base.getAttribute("label")+"\" />");
+                out.println("</form>");
+            }else if( base.getAttribute("image")!=null ) {
+                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">");
+                out.println("<img src=\""+webWorkPath+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgComments"))+"\" class=\"cmt-stg-img\" />");
+                out.println("</a>");
+            }else {
+                out.println("<div class=\"swb-comment\">");
+                out.println("<a href=\""+surl+"\" class=\"swb-contact-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">"+paramRequest.getLocaleString("msgComments")+"</a>");
+                out.println("</div>");
+            }
+        }else {
+            if( request.getParameter(_FAIL)!=null ) {
+                out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
+                out.println("alert('");
+                out.println(paramRequest.getLocaleString("msgSenderRequired"));
+                out.println("');");
+                out.println("history.go(-1);");
+                out.println("-->");
+                out.println("</script>");
+            }else {
+                Document dom = getDom(request, response, paramRequest);
+                String html;
+                try {
+                     html = SWBUtils.XML.transformDom(tpl, dom);
+                }catch(TransformerException te) {
+                    html = te.getMessage();
+                    log.error(te.getMessage());
                 }
-            } catch (javax.xml.transform.TransformerException te) {
-                log.error(te);
+                out.println(html);
             }
         }
-        
+        out.flush();
+        out.close();
+    }
+    
+    @Override
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=utf-8");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
         PrintWriter out = response.getWriter();
-        out.print(ret.toString());
+        out.println("<div class=\"swb-comment\"><p class=\"swb-comment-tnks\">");
+        out.println(paramRequest.getLocaleString("msgSendEmail"));
+        out.println("</p><p>");
+        out.println("<a class=\"swb-comment-othr\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">"+paramRequest.getLocaleString("msgDoViewAnotherMsg")+"</a>");
+        out.println("</p></div>");
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
+        System.out.println("\n\n...processAction\n");
+
+        try {
+            processEmails(request, response);
+            try {
+                feedCommentLog(request, response);
+            }catch (IOException ioe) {
+                log.error("Error in resource Comment, while trying to log the action. ", ioe);
+            }
+            response.setMode(response.Mode_HELP);
+        }catch(TransformerException te) {
+            log.error("Error in resource Comment, while trying to send the email. ", te);
+            response.setRenderParameter(_FAIL, te.getMessage());
+            System.out.println("\n\n error...................\n"+te);
+        }catch(SWBResourceException re) {
+            log.error("Error in resource Comment, while trying to send the email. ", re);
+            response.setRenderParameter(_FAIL, re.getMessage());
+            System.out.println("\n\n error...................\n"+re);
+        }catch(Exception e) {
+            log.error("Error in resource Comment, while trying to send the email. ", e);
+            response.setRenderParameter(_FAIL, e.getMessage());
+            System.out.println("\n\n error...................\n"+e);
+        }
+    }
+
+    private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws TransformerException, SWBResourceException, Exception {
+        Document dom = getDomEmail(request, response);
+        System.out.println("\n\nprocessEmails\n   dom email="+SWBUtils.XML.domToXml(dom));
+
+        String from = dom.getElementsByTagName("fromemail").item(0).getFirstChild().getNodeValue();
+        if( from==null )
+            throw new Exception(response.getLocaleString("msgErrCustomerEmailRequired"));
+
+        String fromname = dom.getElementsByTagName("fromname").item(0).getFirstChild().getNodeValue();
+        if( fromname==null )
+            throw new Exception(response.getLocaleString("msgErrCustomerNameRequired"));
+
+        String to = dom.getElementsByTagName("toemail").item(0).getFirstChild().getNodeValue();
+        if( to==null )
+            throw new Exception(response.getLocaleString("msgErrManagerEmailRequired"));
+
+        String subject = dom.getElementsByTagName("subject").item(0).getFirstChild().getNodeValue();
+        if( subject==null )
+            throw new Exception(response.getLocaleString("msgErrSubjectRequired"));
+
+        String message = dom.getElementsByTagName("message").item(0).getFirstChild().getNodeValue();
+        if( message==null )
+            throw new Exception(response.getLocaleString("msgErrMessageRequired"));
+
+        String html = SWBUtils.XML.transformDom(tpl, dom);
+        System.out.println("html="+html);
         
+        InternetAddress iaddress = new InternetAddress();
+        iaddress.setAddress(to);
+        ArrayList<InternetAddress> addresses = new ArrayList<InternetAddress>();
+        addresses.add(iaddress);
+        if( SWBUtils.EMAIL.sendMail(from, fromname, addresses, null, null, subject, "HTML", html, null, null, null)==null )
+            throw new Exception(response.getLocaleString("msgErrSending"));
     }
 
     /**
@@ -784,12 +761,11 @@ public class Comment extends GenericResource {
      *         when getting the corresponding <code>response</code>'s <code>Writer</code>.
      * @throws SWBResourceException si no existe el archivo de mensajes del idioma utilizado.
      *         <p>if there is no file message of the corresponding language.</p>
-     */    
+     */
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest) throws IOException, SWBResourceException {
-        
-        StringBuffer ret = new StringBuffer(400);
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException, SWBResourceException {
+
+        StringBuilder ret = new StringBuilder();
         Resource base = getResourceBase();
         String msg = paramsRequest.getLocaleString("msgUndefinedOperation");
         String action = ((null != request.getParameter("act"))
@@ -797,13 +773,12 @@ public class Comment extends GenericResource {
                 ? request.getParameter("act").trim()
                 : paramsRequest.getAction());
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
-        Logger log = SWBUtils.getLogger(Comment.class);
-        
+
         if (action.equals("add") || action.equals("edit")) {
             ret.append(getForm(request, paramsRequest));
         } else if (action.equals("update")) {
             FileUpload fup = new FileUpload();
-            
+
             try {
                 fup.getFiles(request, response);
                 String applet = null;
@@ -836,7 +811,7 @@ public class Comment extends GenericResource {
                          && !"".equals(fup.getValue("noimg").trim())
                          ? fup.getValue("noimg").trim()
                          : "0");
-                
+
                 if ("1".equals(value)
                         && !"".equals(base.getAttribute("img", "").trim())) {
                     SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
@@ -867,8 +842,8 @@ public class Comment extends GenericResource {
                             msg = paramsRequest.getLocaleString("msgErrUploadFile")
                                     + " <i>" + value + "</i>.";
                         }
-                    } 
-                } 
+                    }
+                }
 
                 value = (null != fup.getValue("noimgenviar")
                          && !"".equals(fup.getValue("noimgenviar").trim())
@@ -915,7 +890,7 @@ public class Comment extends GenericResource {
                     SWBUtils.IO.removeDirectory(SWBPortal.getWorkPath()
                             + base.getWorkPath() + "/"
                             + base.getAttribute("imglimpiar").trim());
-                    base.removeAttribute("imglimpiar");                        
+                    base.removeAttribute("imglimpiar");
                 } else {
                     value = (null != fup.getFileName("imglimpiar")
                              && !"".equals(fup.getFileName("imglimpiar").trim())
@@ -992,7 +967,7 @@ public class Comment extends GenericResource {
                                  && !"".equals(fup.getValue("actype").trim())
                                  ? fup.getValue("actype").trim()
                                  : "edit");
-                
+
                 if (value != null) {
                     StringTokenizer stk = new StringTokenizer(value, "|");
                     for (int i = 1; stk.hasMoreTokens(); i++) {
@@ -1077,8 +1052,6 @@ public class Comment extends GenericResource {
      *        contains the attribute's name.
      */
     protected void setAttribute(Resource base, FileUpload fup, String att) {
-
-        Logger log = SWBUtils.getLogger(Comment.class);
         try {
             if (null != fup.getValue(att)
                     && !"".equals(fup.getValue(att).trim())) {
@@ -1091,7 +1064,7 @@ public class Comment extends GenericResource {
                     + base.getId() + "-" + base.getTitle(), e);
         }
     }
-    
+
     /**
      * Fija un atributo en el objeto base con el nombre y el valor indicados.
      * Si el atributo no existe en el objeto fup o tiene otro valor al indicado,
@@ -1109,11 +1082,8 @@ public class Comment extends GenericResource {
      * @param value contiene el valor del atributo a fijar en base.
      *        <p>value to set in the attribute, validated against the value for the
      *        attribute in <code>fup</code>.</p>
-     */  
-    protected void setAttribute(Resource base, FileUpload fup, String att,
-                                String value) {
-
-        Logger log = SWBUtils.getLogger(Comment.class);
+     */
+    protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
         try {
             if (null != fup.getValue(att)
                     && value.equals(fup.getValue(att).trim())) {
@@ -1125,8 +1095,7 @@ public class Comment extends GenericResource {
             log.error("Error while setting resource attribute: " + att + ", "
                     + base.getId() + "-" + base.getTitle(), e);
         }
-    }    
-    
+    }
     /**
      * Elimina del dom recibido todos los elementos correspondientes al nodeType
      * y name especificados. <p>Removes from <code>dom</code> all the elements whose
@@ -1138,7 +1107,7 @@ public class Comment extends GenericResource {
      */
     protected void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
-        
+
         for (int i = 0; i < list.getLength(); i++) {
             Node node = list.item(i);
             if (node.getNodeType() == nodeType) {
@@ -1150,29 +1119,26 @@ public class Comment extends GenericResource {
         }
     }
 
-    
     /**
      * Arma una cadena que contiene el c&oacute;digo HTML para mostrar la forma de los
      * datos presentados por la pantalla de administraci&oacute;n del recurso.
      * <p>Gets the HTML code for this resource's administration screen.</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
      * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @return el c&oacute;digo HTML a mostrar.
-     * 
-     */       
-    private String getForm(HttpServletRequest request, 
-                           SWBParamRequest paramsRequest) {
-        
+     *
+     */
+    private String getForm(HttpServletRequest request, SWBParamRequest paramsRequest) {
+
         String name = getClass().getName().substring(
                       getClass().getName().lastIndexOf(".") + 1);
-        String webWorkPath = "/work";
-        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
+//        String webWorkPath = "/work";
+//        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
-        StringBuffer ret = new StringBuffer(1000);
+        StringBuilder ret = new StringBuilder();
         Resource base = getResourceBase();
-        Logger log = SWBUtils.getLogger(Comment.class);
 
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
@@ -1210,7 +1176,7 @@ public class Comment extends GenericResource {
             ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 ret.append("<p>"
-                        + admResUtils.displayImage(base, 
+                        + admResUtils.displayImage(base,
                         base.getAttribute("img").trim(), "img")
                         + "<input type=checkbox name=noimg value=1>"
                         + paramsRequest.getLocaleString("msgCutImage") + " <i>"
@@ -1275,7 +1241,7 @@ public class Comment extends GenericResource {
                 ret.append(" checked");
             }
             ret.append("></td> \n");
-            ret.append("</tr> \n");  
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgLastName") + "</td> \n");
@@ -1285,7 +1251,7 @@ public class Comment extends GenericResource {
                 ret.append(" checked");
             }
             ret.append("></td> \n");
-            ret.append("</tr> \n");  
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgMiddleName") + "</td> \n");
@@ -1295,7 +1261,7 @@ public class Comment extends GenericResource {
                 ret.append(" checked");
             }
             ret.append("></td> \n");
-            ret.append("</tr> \n");             
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSubmitImage")
@@ -1375,7 +1341,7 @@ public class Comment extends GenericResource {
             }
             ret.append("></td> \n");
             ret.append("</tr> \n");
-            
+
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgGenerateLog") + "</td> \n");
@@ -1386,7 +1352,7 @@ public class Comment extends GenericResource {
             }
             ret.append("></td> \n");
             ret.append("</tr> \n");
-            
+
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgStyleClass") + "</td> \n");
@@ -1435,7 +1401,7 @@ public class Comment extends GenericResource {
                         "&#34;"));
             }
             ret.append("</textarea></td> \n");
-            ret.append("</tr> \n");               
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgMessageFooter")
@@ -1447,7 +1413,7 @@ public class Comment extends GenericResource {
                         "&#34;"));
             }
             ret.append("</textarea></td> \n");
-            ret.append("</tr> \n");          
+            ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td colspan=2>");
             ret.append("<table> \n");
@@ -1488,7 +1454,7 @@ public class Comment extends GenericResource {
                         + "/swbadmin/images/eliminar.gif\" border=0 alt=\""
                         + paramsRequest.getLocaleString("msgRemoveTypeComment")
                         + "\">");
-                ret.append("</a>&nbsp; \n");                
+                ret.append("</a>&nbsp; \n");
                 ret.append("<a onClick=\"javascript:document.frmResource.type.value="
                         + String.valueOf(i)
                         + "; document.frmResource.actype.value='edit'; jsLoad(document.frmResource, '"
@@ -1498,7 +1464,7 @@ public class Comment extends GenericResource {
                         + "/swbadmin/images/i_contenido.gif\" border=0 alt=\""
                         + paramsRequest.getLocaleString("msgEditTypeComment")
                         + "\">");
-                ret.append("</a></td> \n"); 
+                ret.append("</a></td> \n");
                 ret.append("<td>" + tc.getComentario() + "</td> \n");
                 ret.append("<td>" + tc.getArea() + "</td> \n");
                 ret.append("<td>" + tc.getResponsable() + "</td> \n");
@@ -1547,7 +1513,7 @@ public class Comment extends GenericResource {
             ret.append("\n<input type=submit name=btnSave value="
                     + paramsRequest.getLocaleString("btnSubmit")
                     + " onClick=\"if(jsValida(this.form, " + i + ", '" + area
-                    + "', '" + responsable + "', '" + email 
+                    + "', '" + responsable + "', '" + email
                     + "')) return true; else return false;\">&nbsp;");
             ret.append("<input type=reset name=btnReset value="
                     + paramsRequest.getLocaleString("btnReset") + ">");
@@ -1564,13 +1530,13 @@ public class Comment extends GenericResource {
         }
         return ret.toString();
     }
-        
+
     /**
      * Agrupa los datos del &aacute;rea, responsable y cuenta de correo por cada
      * comentario contenido en <code>dom</code>.
      * <p>Parses <code>dom</code> looking for the following data: area, recipient
      * and e-mail account; of each commentary.</p>
-     * 
+     *
      * @param dom <code>Document</code> con los datos a extraer <p>data to parse</p>
      * @return  que
      * almacenan los datos del &aacute;rea, responsable y cuenta de correo
@@ -1579,7 +1545,7 @@ public class Comment extends GenericResource {
      */
     private ArrayList getTypesComment(Document dom) {
         ArrayList<TypeComment> list = new ArrayList<TypeComment>();
-        
+
         if (dom != null) {
             TypeComment tc = new TypeComment();
             String comentario = "";
@@ -1587,7 +1553,7 @@ public class Comment extends GenericResource {
             String responsable = "";
             String email = "";
             NodeList node = dom.getElementsByTagName("comentario");
-            
+
             for (int i = 0; i < node.getLength(); i++) {
                 area = "";
                 responsable = "";
@@ -1637,72 +1603,62 @@ public class Comment extends GenericResource {
         }
         return list;
     }
-    
+
     /**
      * Obtiene el c&oacute;digo de JavaScript necesario para validar los datos
      * capturados en la forma presentada por <code>getForm()</code>. <p>Gets the
      * JavaScript code which performs the validations asociated with the code
      * generated by <code>getForm()</code>.</p>
-     * 
+     *
      * @param request la petici&oacute;n HTTP generada por el usuario. <p>the user's HTTP request</p>
      * @param paramsRequest el objeto generado por SWB y asociado a la petici&oacute;n
      * del usuario.<p>the object gnerated by SWB and asociated to the user's request</p>
      * @return  contiene el c&oacute;digo de JavaScript a ejecutar
-     * 
+     *
      */
-    private String getScript(HttpServletRequest request,
-            SWBParamRequest paramsRequest) {
-        
-        StringBuffer ret = new StringBuffer("");
+    private String getScript(HttpServletRequest request, SWBParamRequest paramsRequest) {
+
+        StringBuilder ret = new StringBuilder();
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
-        Logger log = SWBUtils.getLogger(Comment.class);
-        
+
         try {
-            ret.append("\n<script>");
+            ret.append("\n<script type=\"text/javascript\">");
+            ret.append("\n<!--");
             ret.append("\nfunction jsValida(pForm, count, area, responsable, email) {");
-            //ret.append("\n");
+
             ret.append("\n   trim(pForm.comentario);");
             ret.append("\n   trim(pForm.area);");
             ret.append("\n   trim(pForm.responsable);");
-            ret.append("\n   trim(pForm.email);");  
+            ret.append("\n   trim(pForm.email);");
             ret.append("\n   if (count < 1) {");
-            //ret.append("\n   ");
+
             ret.append("\n      if (pForm.comentario.value=='') {");
             ret.append("\n      ");
-            ret.append("\n         alert('"
-                    + paramsRequest.getLocaleString("msgCommentRequired")
-                    + "');");
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
             ret.append("\n         pForm.comentario.focus();");
             ret.append("\n         return false;");
             ret.append("\n      }");
             ret.append("\n      if (pForm.area.value=='') {");
-            //ret.append("\n      ");
-            ret.append("\n         alert('"
-                    + paramsRequest.getLocaleString("msgAreaRequired")
-                    + "');");
+            
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
             ret.append("\n         pForm.area.focus();");
             ret.append("\n         return false;");
             ret.append("\n      }");
             ret.append("\n      if (pForm.responsable.value=='') {");
-            //ret.append("\n      ");
-            ret.append("\n         alert('"
-                    + paramsRequest.getLocaleString("msgManagerRequired")
-                    + "');");
+            
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
             ret.append("\n         pForm.responsable.focus();");
             ret.append("\n         return false;");
             ret.append("\n      }");
             ret.append("\n      if (pForm.email.value=='') {");
-            //ret.append("\n      ");
-            ret.append("\n         alert('"
-                    + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+            
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
             ret.append("\n         pForm.email.focus();");
             ret.append("\n         return false;");
-            ret.append("\n      }");            
+            ret.append("\n      }");
             ret.append("\n   } else { ");
-            //ret.append("\n   ");
-            //ret.append("\n   ");
+            
             ret.append("\n      if (pForm.comentario.value!='') {");
-            //ret.append("\n      ");
             ret.append("\n          if (pForm.area.value=='') pForm.area.value=area;");
             ret.append("\n          if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
             ret.append("\n          if (pForm.email.value=='') pForm.email.value=email;");
@@ -1719,30 +1675,26 @@ public class Comment extends GenericResource {
             ret.append("\n   replaceChars(pForm.headermsg);");
             ret.append("\n   replaceChars(pForm.footermsg);");
             ret.append("\n   if (pForm.actype.value=='add' && pForm.comentario.value!='') {");
-            //ret.append("\n   ");
+            
             ret.append("\n      trim(pForm.comentarios);");
             ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
             ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
             ret.append("\n   }");
             ret.append("\n   return true;");
             ret.append("\n}");
+
             ret.append("\nfunction jsLoad(pForm, comentario, area, responsable, email) {");
-            //ret.append("\n");
-            ret.append("\n   pForm.btnType.value='"
-                    + paramsRequest.getLocaleString("msgUpdate") + "';");
+            ret.append("\n   pForm.btnType.value='" + paramsRequest.getLocaleString("msgUpdate") + "';");
             ret.append("\n   pForm.comentario.value=comentario;");
             ret.append("\n   pForm.area.value=area;");
             ret.append("\n   pForm.responsable.value=responsable;");
             ret.append("\n   pForm.email.value=email;");
             ret.append("\n}");
-            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");
-            //ret.append("\n");
+
+            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");            
             ret.append("\n   trim(pForm.comentario);");
-            ret.append("\n   if (pForm.comentario.value=='') {");
-            //ret.append("\n   ");
-            ret.append("\n       alert('"
-                    + paramsRequest.getLocaleString("msgCommentRequired")
-                    + "');");
+            ret.append("\n   if (pForm.comentario.value=='') {");            
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
             ret.append("\n       pForm.comentario.focus();");
             ret.append("\n       return false;");
             ret.append("\n   }");
@@ -1754,31 +1706,24 @@ public class Comment extends GenericResource {
             ret.append("\n   if (pForm.email.value=='') pForm.email.value=email;");
             ret.append("\n   trim(pForm.area);");
             ret.append("\n   if (pForm.area.value=='') {");
-            //ret.append("\n   ");
-            ret.append("\n       alert('"
-                    + paramsRequest.getLocaleString("msgAreaRequired") + "');");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
             ret.append("\n       pForm.area.focus();");
             ret.append("\n       return false;");
             ret.append("\n   }");
             ret.append("\n   trim(pForm.responsable);");
             ret.append("\n   if (pForm.responsable.value=='') {");
-            //ret.append("\n   ");
-            ret.append("\n       alert('"
-                    + paramsRequest.getLocaleString("msgManagerRequired") + "');");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
             ret.append("\n       pForm.responsable.focus();");
             ret.append("\n       return false;");
             ret.append("\n   }");
-            ret.append("\n   trim(pForm.email);");            
+            ret.append("\n   trim(pForm.email);");
             ret.append("\n   if (pForm.email.value=='') {");
-            //ret.append("\n   ");
-            ret.append("\n       alert('"
-                    + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
             ret.append("\n       pForm.email.focus();");
             ret.append("\n       return false;");
             ret.append("\n   }");
             ret.append("\n   else if (!isEmail(pForm.email)) return false;");
             ret.append("\n   if (pForm.actype.value=='add') {");
-            //ret.append("\n   ");
             ret.append("\n      trim(pForm.comentarios);");
             ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
             ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
@@ -1795,7 +1740,8 @@ public class Comment extends GenericResource {
             ret.append(admResUtils.loadReplaceChars());
             ret.append(admResUtils.loadIsNumber());
             ret.append(admResUtils.loadTrim());
-            ret.append("\n</script>");  
+            ret.append("\n-->");
+            ret.append("\n</script>");
         } catch (Exception e) {
             log.error(e);
         }
@@ -1812,17 +1758,16 @@ public class Comment extends GenericResource {
      * @param elemName nombre del elemento a agregar. <p>new element's name</p>
      * @param elemValue valor del elemento a agregar. <p>new element's value</p>
      */
-    private void addElem(Document doc, Element parent, String elemName,
-            String elemValue) {
+    private void addElem(Document doc, Element parent, String elemName, String elemValue) {
         Element elem = doc.createElement(elemName);
         elem.appendChild(doc.createTextNode(elemValue));
         parent.appendChild(elem);
     }
-    
+
     /**
      * Agrega la informaci&oacute;n enviada por correo, al archivo log de este
      * recurso. <p>Adds to this resource's log the commentaries' data set by mail.</p>
-     * 
+     *
      * @param dom <code>Document</code> que contiene los datos enviados por correo.
      * <p>comment's data sent by mail</p>
      * @param user objeto <code>User</code> que identifica al usuario que ejecuta la
@@ -1830,61 +1775,55 @@ public class Comment extends GenericResource {
      * <p>user who executes the action of sending the comment</p>
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    protected void feedCommentLog(Document dom, User user) throws IOException {
-        
+    protected void feedCommentLog(HttpServletRequest request, SWBActionResponse response) throws IOException {
+
         Resource base = getResourceBase();
-        String logPath = SWBPortal.getWorkPath() + base.getWorkPath()
-                + "/Comment.log";
-        StringBuilder toLog = new StringBuilder(500);
+        String logPath = SWBPortal.getWorkPath() + base.getWorkPath() + "/Comment.log";
+        StringBuilder toLog = new StringBuilder();
         Date now = new Date();
         NodeList nl = null;
 
         toLog.append(SWBUtils.TEXT.iso8601DateFormat(now));
-        
-        if (user != null && user.isSigned()) {
+
+        User user =  response.getUser();
+        if( user.isSigned() ) {
             toLog.append("\n    User:");
-            toLog.append((null != user.getFirstName() 
-                          && !"".equals(user.getFirstName().trim()))
-                         ? user.getFirstName().trim()
-                         : "");
-            toLog.append((null != user.getLastName() 
-                          && !"".equals(user.getLastName().trim()))
-                         ? user.getLastName().trim()
-                         : "");
-            toLog.append((null != user.getSecondLastName() 
-                          && !"".equals(user.getSecondLastName().trim()))
-                         ? user.getSecondLastName().trim()
-                         : "");
+            toLog.append((null != user.getFirstName() && !"".equals(user.getFirstName().trim())) ? user.getFirstName().trim() : "");
+            toLog.append((null != user.getLastName() && !"".equals(user.getLastName().trim())) ? user.getLastName().trim() : "");
+            toLog.append((null != user.getSecondLastName() && !"".equals(user.getSecondLastName().trim())) ? user.getSecondLastName().trim() : "");
         }
         
-/*        toLog.append("\n    Site:" + dom.getElementsByTagName("site").item(
-                                0).getFirstChild().getNodeValue()); */
-        nl = dom.getElementsByTagName("fromname");
-        toLog.append("\n    From:" + (nl != null && nl.getLength() > 0
-                ? nl.item(0).getFirstChild().getNodeValue() : ""));
-        nl = dom.getElementsByTagName("fromemail");
-        if (nl != null && nl.getLength() > 0) {
-            toLog.append("<" + nl.item(0).getFirstChild().getNodeValue() + ">");
+        try {
+            Document dom = getDomEmail(request, response);
+            nl = dom.getElementsByTagName("fromname");
+            toLog.append("\n    From:" + (nl != null && nl.getLength() > 0
+                    ? nl.item(0).getFirstChild().getNodeValue() : ""));
+            nl = dom.getElementsByTagName("fromemail");
+            if (nl != null && nl.getLength() > 0) {
+                toLog.append("<" + nl.item(0).getFirstChild().getNodeValue() + ">");
+            }
+    /*        toLog.append("\n    To:" + dom.getElementsByTagName("responsable").item(
+                                    0).getFirstChild().getNodeValue());
+            toLog.append("<" + dom.getElementsByTagName("toemail").item(
+                                    0).getFirstChild().getNodeValue() + ">"); */
+            nl = dom.getElementsByTagName("subject");
+            toLog.append("\n    Subject:" + (nl != null && nl.getLength() > 0
+                    ? nl.item(0).getFirstChild().getNodeValue() : ""));
+    /*        toLog.append("\n    Area:" + dom.getElementsByTagName("area").item(
+                                    0).getFirstChild().getNodeValue()); */
+            nl = dom.getElementsByTagName("phone");
+            toLog.append("\n    Phone:" + (nl != null && nl.getLength() > 0
+                    ? nl.item(0).getFirstChild().getNodeValue() : ""));
+            nl = dom.getElementsByTagName("fax");
+            toLog.append("\n    Fax:" + (nl != null && nl.getLength() > 0
+                    ? nl.item(0).getFirstChild().getNodeValue() : ""));
+            nl = dom.getElementsByTagName("message");
+            toLog.append("\n    Message:" + (nl != null && nl.getLength() > 0
+                    ? nl.item(0).getFirstChild().getNodeValue() : ""));
+            toLog.append("\n");
+        }catch(SWBResourceException te) {
+            log.error(te);
         }
-/*        toLog.append("\n    To:" + dom.getElementsByTagName("responsable").item(
-                                0).getFirstChild().getNodeValue());
-        toLog.append("<" + dom.getElementsByTagName("toemail").item(
-                                0).getFirstChild().getNodeValue() + ">"); */
-        nl = dom.getElementsByTagName("subject");
-        toLog.append("\n    Subject:" + (nl != null && nl.getLength() > 0
-                ? nl.item(0).getFirstChild().getNodeValue() : ""));
-/*        toLog.append("\n    Area:" + dom.getElementsByTagName("area").item(
-                                0).getFirstChild().getNodeValue()); */
-        nl = dom.getElementsByTagName("phone");
-        toLog.append("\n    Phone:" + (nl != null && nl.getLength() > 0
-                ? nl.item(0).getFirstChild().getNodeValue() : ""));
-        nl = dom.getElementsByTagName("fax");
-        toLog.append("\n    Fax:" + (nl != null && nl.getLength() > 0
-                ? nl.item(0).getFirstChild().getNodeValue() : ""));
-        nl = dom.getElementsByTagName("message");
-        toLog.append("\n    Message:" + (nl != null && nl.getLength() > 0
-                ? nl.item(0).getFirstChild().getNodeValue() : ""));
-        toLog.append("\n");
 
         File file = new File(SWBPortal.getWorkPath() + base.getWorkPath());
         if (!file.exists()) {
@@ -1894,8 +1833,7 @@ public class Comment extends GenericResource {
     }
 }
 
-
-/** 
+/**
  * Objeto: Tipos de comentario en memoria.
  *
  * Object: Comment types in memory.
@@ -1904,19 +1842,19 @@ public class Comment extends GenericResource {
  * @version 1.0
  */
 class TypeComment {
-    
-    
+
+
     private String comentario;
     private String area;
     private String responsable;
     private String email;
 
-    /** 
-     * Creates a new instance of TypeComment 
-     */        
+    /**
+     * Creates a new instance of TypeComment
+     */
     public TypeComment() {
     }
-    
+
     /**
      * Creates a new instance of TypeComment
      *
@@ -1933,23 +1871,23 @@ class TypeComment {
         this.email = email;
     }
 
-    /** 
+    /**
      * Obtiene el texto del comentario. <p>Gets the commentary's text.</p>
      * @return <code>String</code> el texto del comentario. <p>commentary's text.</p>
      */
     public String getComentario() {
         return this.comentario;
     }
-    
-    /** 
+
+    /**
      * Fija el texto del comentario. <p>Sets the commentary's text.</p>
-     * @param comentario texto a enviar como comentario. <p>text to send as a 
+     * @param comentario texto a enviar como comentario. <p>text to send as a
      * comment.</p>
      */
     public void setComentario(String comentario) {
         this.comentario = comentario;
     }
-    
+
     /**
      * Obtiene el nombre del &aacute;rea del destinatario. <p>Gets the recipient's area.</p>
      * @return <code>String</code> nombre del &aacute;rea del destinatario. <p>recipient's
@@ -1958,8 +1896,8 @@ class TypeComment {
     public String getArea() {
         return this.area;
     }
-    
-    /** 
+
+    /**
      * Fija una nueva &aacute;rea del destinatario. <p>Sets the recipient's area.</p>
      * @param area nuevo nombre del &aacute;rea del destinatario. <p>new recipient's
      * area's name.</p>
@@ -1967,24 +1905,24 @@ class TypeComment {
     public void setArea(String area) {
         this.area = area;
     }
-    
-    /** 
+
+    /**
      * Obtiene el nombre del destinatario del comentario. <p>Gets the recipient's name</p>
      * @return <code>String</code> nombre del destinatario del comentario. <p>recipient's name.</p>
      */
     public String getResponsable() {
         return this.responsable;
     }
-    
-    /** 
+
+    /**
      * Fija un nuevo nombre del destinatario. <p>Sets the recipient's name.</p>
      * @param responsable nuevo nombre del destinatario. <p>new recipient's name.</p>
      */
     public void setResponsable(String responsable) {
         this.responsable = responsable;
     }
-    
-    /** 
+
+    /**
      * Obtiene cuenta de correo del destinatario. <p>Gets the recipient's e-mail account.</p>
      * @return <code>String</code> cuenta de correo del destinatario. <p>recipient's
      * e-mail account.</p>
@@ -1992,8 +1930,8 @@ class TypeComment {
     public String getEmail() {
         return this.email;
     }
-    
-    /** 
+
+    /**
      * Fija una nueva cuenta de correo del destinatario. <p>Sets a new recipient's e-mail account.</p>
      * @param email nueva cuenta de correo del destinatario. <p>new recipient's
      * e-mail account.</p>
