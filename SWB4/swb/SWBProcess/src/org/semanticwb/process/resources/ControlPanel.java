@@ -3867,6 +3867,7 @@ public class ControlPanel extends GenericAdmResource
                 out.println(getReportForm(paramsRequest));
                 out.print(customizeDisplay(request, response, paramsRequest));
                 out.println("</div>");
+            out.println("</div>");
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.doView", e);
