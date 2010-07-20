@@ -59,9 +59,11 @@ public class ListUserProcess extends GenericResource {
                     out.println("<li class=\"t1\">"+process.getDisplayTitle(user.getLanguage())+"(<a href=\""+process.getProcessWebPage().getUrl()+"\">"+lfnins.size()+"</a>)</li>");
                 }
             }
-            if(cuantos==0)
-                out.println("<li class=\"t1\">No hay tareas pendientes</li>");
+            
+                
         }
+        if(cuantos==0)
+            out.println("<li class=\"t1\">No hay tareas pendientes</li>");
 //        out.println("<li class=\"t1 \"><a href=\"#\">Todas</a></li>");
 //        out.println("<li class=\"t2-sel\"><a href=\"#\">Pendientes</a></li>");
 //        out.println("<li class=\"t3\"><a href=\"#\">Terminados</a></li>");
