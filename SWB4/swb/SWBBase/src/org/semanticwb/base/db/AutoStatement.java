@@ -103,14 +103,13 @@ public class AutoStatement implements java.sql.Statement {
         }
         if (!closed && aconn.getNativeConnection() != conn)
         {
-            //MAPS74 if redundante
-//            if (aconn.getNativeConnection() != conn)
-//            {
-                if (conn != null)
-                {
-                    System.out.println("Recreating Statement...");
-                }
-                conn = aconn.getNativeConnection();
+            if (conn != null)
+            {
+                System.out.println("Recreating Statement...");
+            }
+            conn = aconn.getNativeConnection();
+            try
+            {
                 if (param != null && param1 != null)
                 {
                     st = conn.createStatement(param, param1);
@@ -118,7 +117,21 @@ public class AutoStatement implements java.sql.Statement {
                 {
                     st = conn.createStatement();
                 }
-//            }
+            }catch(SQLException se)
+            {
+                if(se.getMessage().toLowerCase().contains("socket"))
+                {
+                    aconn.changeConnection();
+                    conn = aconn.getNativeConnection();
+                }
+                if (param != null && param1 != null)
+                {
+                    st = conn.createStatement(param, param1);
+                } else
+                {
+                    st = conn.createStatement();
+                }
+            }
         }
     }
 
@@ -231,7 +244,7 @@ public class AutoStatement implements java.sql.Statement {
         } catch (SQLException se)
         {
             System.out.println("Error conexion dañada..., "+se);
-            if(se.getMessage().contains("java.net.SocketException"))
+            if(se.getMessage().toLowerCase().contains("socket"))
             {
                 aconn.changeConnection();
                 checkStatement();
