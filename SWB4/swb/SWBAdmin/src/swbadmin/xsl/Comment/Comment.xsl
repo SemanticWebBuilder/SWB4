@@ -88,7 +88,9 @@
                             <xsl:for-each select="fsubmit">
                                 <xsl:if test="@img ='1'">
                                     <a href="javascript:if(jsValida(document.frmSendEmail)) document.frmSendEmail.submit();" >
-                                        <img src="{@src}" alt="{@alt}" title="{@alt}"/>
+                                        <img alt="{@alt}" title="{@alt}">
+                                            <xsl:attribute name="src"><xsl:value-of select="@src"/></xsl:attribute>
+                                        </img>
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="@img ='0'">
@@ -98,7 +100,9 @@
                             <xsl:for-each select="freset">
                                 <xsl:if test="@img='1'">
                                     <a href="javascript:document.frmSendEmail.reset();" >
-                                        <img src="{@src}" alt="{@alt}" title="{@alt}"/>
+                                        <img alt="{@alt}" title="{@alt}">
+                                            <xsl:attribute name="src"><xsl:value-of select="@src"/></xsl:attribute>
+                                        </img>
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="@img ='0'">
