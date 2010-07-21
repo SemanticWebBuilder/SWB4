@@ -21,12 +21,11 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
 /**
- *
- * @author victor.lorenzana
+ * @author Sergey A. Malenkov
  */
 public final class MemoryClassLoader extends ClassLoader {
 
-    
+
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
@@ -60,8 +59,10 @@ public final class MemoryClassLoader extends ClassLoader {
         addAll(Collections.singletonMap(classname, filecontent));
     }
 
+
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
+
         synchronized (this.manager) {
             Output mc = this.manager.map.remove(name);
             if (mc != null) {
@@ -69,7 +70,15 @@ public final class MemoryClassLoader extends ClassLoader {
                 return defineClass(name, array, 0, array.length);
             }
         }
-        return super.findClass(name);
+        if(getParent()!=null)
+        {
+            return getParent().loadClass(name);
+        }
+        else
+        {
+            return super.findClass(name);
+        }
+
     }
 
     private static final class MemoryFileManager extends ForwardingJavaFileManager<JavaFileManager> {
@@ -118,4 +127,3 @@ public final class MemoryClassLoader extends ClassLoader {
         }
     }
 }
-
