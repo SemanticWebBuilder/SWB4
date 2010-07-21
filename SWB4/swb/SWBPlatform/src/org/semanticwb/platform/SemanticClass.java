@@ -272,6 +272,30 @@ public class SemanticClass
         return m_classCodePackage;
     }
 
+    public static String toUpperCase(String data)
+    {
+        String letter = data.substring(0, 1);
+        return letter.toUpperCase() + data.substring(1);
+    }
+    public String getFullName()
+    {
+       String spackage=getCodePackage();
+       if(spackage==null)
+       {
+           spackage="";
+       }
+       else
+       {
+           spackage=spackage+".";
+       }
+       spackage+=toUpperCase(getClassCodeName());
+       return spackage;
+    }
+    public String getUpperClassName()
+    {
+       return toUpperCase(getClassCodeName());
+    }
+
 
     /**
      * Regresa nombre de la clase definida por la ontologia
