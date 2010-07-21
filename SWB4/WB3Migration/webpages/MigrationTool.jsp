@@ -624,13 +624,34 @@
 
                                 if(rtype==null)
                                 {
-                                    rtype = ws.createResourceType(idName);
+                                    rtype=ws.createResourceType(idName);
                                     rtype.setTitle(rrtyp.getDisplayName());
-                                    //rtype.setTitle(rrtyp.getName());
                                     rtype.setDescription(rrtyp.getDescription());
-                                    rtype.setResourceClassName(clsName);
-                                    rtype.setResourceBundle(clsBundle);
+                                    String strObjClass = rrtyp.getObjclass();
+                                    if(strObjClass.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjClass = "com.infotec.wb.resources.TematicIndexXSL";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Imprimir")) strObjClass = "com.infotec.wb.resources.Print";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Recomendar")) strObjClass = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Recommend")) strObjClass = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.MenuMap")) strObjClass = "com.infotec.wb.resources.WBMenuMap";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.WBSearch")) strObjClass = "org.semanticwb.portal.resources.WBSearch";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Login")) strObjClass = "org.semanticwb.portal.resources.Login";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.Content")) strObjClass = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                    else if(strObjClass.equals("com.infotec.wb.resources.UserRegistration")) strObjClass = "org.semanticwb.portal.resources.UserRegistration";
+                                    rtype.setResourceClassName(strObjClass);
+                                    String strObjBundle = rrtyp.getObjclass();
+                                    if(strObjBundle.equals("com.infotec.wb.resources.IndiceTematicoXSL")) strObjBundle = "com.infotec.wb.resources.TematicIndexXSL";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Imprimir")) strObjBundle = "com.infotec.wb.resources.Print";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recomendar")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Recommend")) strObjBundle = "org.semanticwb.portal.resources.Recommend";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.MenuMap")) strObjBundle = "com.infotec.wb.resources.WBMenuMap";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.WBSearch")) strObjBundle = "org.semanticwb.portal.resources.WBSearch";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Login")) strObjBundle = "org.semanticwb.portal.resources.Login";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.Content")) strObjBundle = "org.semanticwb.portal.resources.sem.HTMLContent";
+                                    else if(strObjBundle.equals("com.infotec.wb.resources.UserRegistration")) strObjBundle = "org.semanticwb.portal.resources.UserRegistration";
+                                    rtype.setResourceBundle(strObjBundle);
                                     rtype.setResourceMode(rrtyp.getType());
+                                    rtype.setResourceCache(rrtyp.getCache());
+                                    System.out.println("Copiando tipo del sitio:"+idName+"("+strObjClass+")- ("+strObjBundle+")");
                                 }
                             }
                         }
