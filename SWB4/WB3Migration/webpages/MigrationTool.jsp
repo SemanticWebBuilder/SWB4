@@ -1945,6 +1945,8 @@
                         {
                             org.semanticwb.model.Resource resource = ws.getResource(idElement);
 
+                            resource.setPriority(occ.getPriority());
+
                             if(resource!=null)
                             {
                                 if(!reviewActUnact) wp.addResource(resource);
