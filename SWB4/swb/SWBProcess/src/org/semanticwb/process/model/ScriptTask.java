@@ -35,13 +35,18 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     {           
         String varname=object.getSemanticClass().getUpperClassName().toLowerCase();        
         String className=object.getSemanticClass().getUpperClassName();
+        log.debug("Para el objeto "+object.getURI()+" de la instancia de proceso "+ instance.getURI() +" se econtró la clase "+className);
         try
         {
+            log.debug("Cargando clase "+className+" ...");
             Class clazz=mcls.loadClass(className);
+            log.debug("Obteniendo constructor...");
             Constructor c=clazz.getConstructor(SemanticObject.class);
+            log.debug("Instanciando objeto...");
             Object instanceObject=c.newInstance(object);
             log.debug("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
             i.set(varname, instanceObject);
+            log.debug("Variable "+ varname +" agregada");
         }
         catch(ClassNotFoundException cnfe)
         {
