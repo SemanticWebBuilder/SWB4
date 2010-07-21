@@ -48,13 +48,14 @@ import static org.semanticwb.SWBUtils.TEXT.*;
  */
 public class CodeGenerator
 {
+    private static final String SEMANTIC_ITERATOR_FULL_NAME="org.semanticwb.platform.SemanticIterator";
     private static final String MODEL_FULL_NAME = "org.semanticwb.platform.SemanticModel";
     private static final String SEMANTIC_MANANGER_FULL_NAME = "org.semanticwb.platform.SemanticMgr";
     private static final String SEMANTIC_MODEL_FULL_NAME = "org.semanticwb.model.SWBModel";
     private static final String SEMANTIC_PROPERTY_FULL_NAME = "org.semanticwb.platform.SemanticProperty";
     private static final String GET_SEMANTIC_CLASS = ".getSemanticMgr().getVocabulary().getSemanticClass(\"";
     private static final String SEMANTIC_PLATFORM_FULL_NAME="org.semanticwb.SWBPlatform";
-    private static final String SEMANTIC_ITERATOR_FULL_NAME="org.semanticwb.model.GenericIterator";
+    private static final String GENERIC_ITERATOR_FULL_NAME="org.semanticwb.model.GenericIterator";
     private static final String SEMANTIC_LITERAL_FULL_NAME="org.semanticwb.platform.SemanticLiteral";
 
     private static final String UTIL_ITERATOR_FULL_NAME="java.util.Iterator";
@@ -520,14 +521,13 @@ public class CodeGenerator
             {
                 javaClassContent.append("package " + spackage + ";" + ENTER);
                 javaClassContent.append("" + ENTER);
-            }
-            javaClassContent.append("import org.semanticwb.Logger;" + ENTER);
+            }            
             javaClassContent.append("import org.semanticwb.SWBUtils;" + ENTER);
             javaClassContent.append("import org.semanticwb.model.base.SWBContextBase;" + ENTER + ENTER);
             javaClassContent.append("public class SWBContext extends SWBContextBase" + ENTER);
             javaClassContent.append("{" + ENTER);
 
-            javaClassContent.append("    private static Logger log=SWBUtils.getLogger(SWBContext.class);" + ENTER);
+            javaClassContent.append("    private static org.semanticwb.Logger log=SWBUtils.getLogger(SWBContext.class);" + ENTER);
             javaClassContent.append("    private static SWBContext instance=null;" + ENTER);
 
             javaClassContent.append("    static public synchronized SWBContext createInstance()" + ENTER);
@@ -583,7 +583,7 @@ public class CodeGenerator
         javaClassContent.append("public class SWBContextBase" + ENTER);
         javaClassContent.append("{" + ENTER);
 
-        javaClassContent.append("    private static SemanticMgr mgr="+SEMANTIC_PLATFORM_FULL_NAME+".getSemanticMgr();" + ENTER);
+        javaClassContent.append("    private static "+SEMANTIC_MANANGER_FULL_NAME+" mgr="+SEMANTIC_PLATFORM_FULL_NAME+".getSemanticMgr();" + ENTER);
 
         Iterator<SemanticClass> tpcit = mgr.getVocabulary().listSemanticClasses();
         while (tpcit.hasNext())
@@ -962,14 +962,14 @@ public class CodeGenerator
         javaClassContent.append("        public static "+UTIL_ITERATOR_FULL_NAME+"<" + fullpathClass + "> list" + tpc.getNameInPlural() + "("+SEMANTIC_MODEL_FULL_NAME+" model)" + ENTER);
         javaClassContent.append("        {" + ENTER);
         javaClassContent.append("            "+UTIL_ITERATOR_FULL_NAME+" it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);" + ENTER);
-        javaClassContent.append("            return new "+SEMANTIC_ITERATOR_FULL_NAME+"<" + fullpathClass + ">(it, true);" + ENTER);
+        javaClassContent.append("            return new "+GENERIC_ITERATOR_FULL_NAME+"<" + fullpathClass + ">(it, true);" + ENTER);
         javaClassContent.append("        }" + ENTER);
 
         javaClassContent.append(ENTER);
         javaClassContent.append("        public static "+UTIL_ITERATOR_FULL_NAME+"<" + fullpathClass + "> list" + tpc.getNameInPlural() + "()" + ENTER);
         javaClassContent.append("        {" + ENTER);
         javaClassContent.append("            "+UTIL_ITERATOR_FULL_NAME+" it=sclass.listInstances();" + ENTER);
-        javaClassContent.append("            return new "+SEMANTIC_ITERATOR_FULL_NAME+"<" + fullpathClass + ">(it, true);" + ENTER);
+        javaClassContent.append("            return new "+GENERIC_ITERATOR_FULL_NAME+"<" + fullpathClass + ">(it, true);" + ENTER);
         javaClassContent.append("        }" + ENTER);
 
 
@@ -989,7 +989,7 @@ public class CodeGenerator
             javaClassContent.append(ENTER);
             javaClassContent.append("        public static " + fullpathClass + " get" + tpc.getUpperClassName() + "(String id)" + ENTER);
             javaClassContent.append("        {" + ENTER);
-            javaClassContent.append("            org.semanticwb.platform.SemanticMgr mgr="+SEMANTIC_PLATFORM_FULL_NAME+".getSemanticMgr();" + ENTER);
+            javaClassContent.append("            "+SEMANTIC_MANANGER_FULL_NAME+" mgr="+SEMANTIC_PLATFORM_FULL_NAME+".getSemanticMgr();" + ENTER);
             javaClassContent.append("            " + fullpathClass + " ret=null;" + ENTER);
             javaClassContent.append("            "+MODEL_FULL_NAME+" model=mgr.getModel(id);" + ENTER);
             javaClassContent.append("            if(model!=null)" + ENTER);
@@ -1073,14 +1073,14 @@ public class CodeGenerator
                     javaClassContent.append(ENTER);
                     javaClassContent.append("        public static "+UTIL_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> list" + tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ","+SEMANTIC_MODEL_FULL_NAME+" model)" + ENTER);
                     javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("            "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> it=new "+SEMANTIC_ITERATOR_FULL_NAME+"(model.getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject(),sclass));" + ENTER);
+                    javaClassContent.append("            "+GENERIC_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> it=new "+GENERIC_ITERATOR_FULL_NAME+"(model.getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject(),sclass));" + ENTER);
                     javaClassContent.append("            return it;" + ENTER);
                     javaClassContent.append("        }" + ENTER);
 
                     javaClassContent.append(ENTER);
                     javaClassContent.append("        public static "+UTIL_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> list" + tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                     javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("            "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> it=new "+SEMANTIC_ITERATOR_FULL_NAME+"(" + "value" + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
+                    javaClassContent.append("            "+GENERIC_ITERATOR_FULL_NAME+"<" + tpc.getCanonicalName() + "> it=new "+GENERIC_ITERATOR_FULL_NAME+"(" + "value" + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
                     javaClassContent.append("            return it;" + ENTER);
                     javaClassContent.append("        }" + ENTER);
                 }
@@ -1118,7 +1118,7 @@ public class CodeGenerator
                 javaClassContent.append("    public "+UTIL_ITERATOR_FULL_NAME+"<"+GENERIC_OBJECT_FULL_NAME+"> listRelatedObjects()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
 
-                javaClassContent.append("        return new "+SEMANTIC_ITERATOR_FULL_NAME+"(getSemanticObject().listRelatedObjects(),true);" + ENTER);
+                javaClassContent.append("        return new "+GENERIC_ITERATOR_FULL_NAME+"(getSemanticObject().listRelatedObjects(),true);" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
             insertLinkToClass4Model(tpc, javaClassContent, parent);
@@ -1394,11 +1394,11 @@ public class CodeGenerator
                             // son varios
                             objectName = objectName.substring(3);
                             javaClassContent.append(ENTER);
-                            javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> list" + getPlural(objectName) + "();" + ENTER);
+                            javaClassContent.append("    public "+GENERIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> list" + getPlural(objectName) + "();" + ENTER);
                             javaClassContent.append("    public boolean has" + objectName + "(" + classToReturn + " " + "value" + ");" + ENTER);
                             if (tpp.isInheritProperty())
                             {
-                                javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> listInherit" + getPlural(objectName) + "();" + ENTER);
+                                javaClassContent.append("    public "+GENERIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> listInherit" + getPlural(objectName) + "();" + ENTER);
                             }
                         }
                         else
@@ -1406,12 +1406,12 @@ public class CodeGenerator
                             // son varios
                             objectName = objectName.substring(3);
                             javaClassContent.append(ENTER);
-                            javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + classToReturn + "> list" + getPlural(objectName) + "();" + ENTER);
+                            javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> list" + getPlural(objectName) + "();" + ENTER);
                             //TODO
                             //javaClassContent.append("    public boolean has" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ");" + ENTER);
                             if (tpp.isInheritProperty())
                             {
-                                javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + classToReturn + "> listInherit" + getPlural(objectName) + "();" + ENTER);
+                                javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> listInherit" + getPlural(objectName) + "();" + ENTER);
                             }
                         }
 
@@ -2111,9 +2111,9 @@ public class CodeGenerator
                 // son varios
                 objectName = objectName.substring(3);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + "> list" + getPlural(objectName) + "()" + ENTER);
+                javaClassContent.append("    public "+GENERIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + "> list" + getPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        return new "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
+                javaClassContent.append("        return new "+GENERIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
@@ -2128,9 +2128,9 @@ public class CodeGenerator
                 if (tpp.isInheritProperty())
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + "> listInherit" + getPlural(objectName) + "()" + ENTER);
+                    javaClassContent.append("    public "+GENERIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + "> listInherit" + getPlural(objectName) + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return new "+SEMANTIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
+                    javaClassContent.append("        return new "+GENERIC_ITERATOR_FULL_NAME+"<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
 
@@ -2209,11 +2209,11 @@ public class CodeGenerator
                 // son varios
                 objectName = objectName.substring(3);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public org.semanticwb.platform.SemanticIterator<" + classToReturn + "> list" + getPlural(objectName) + "()" + ENTER);
+                javaClassContent.append("    public "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + "> list" + getPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
 //                
                 javaClassContent.append("        "+JENA_ITERATOR_FULL_NAME+" stit=getSemanticObject().getRDFResource().listProperties(" + tpp.getPrefix() + "_" + tpp.getName() + ".getRDFProperty());" + ENTER);
-                javaClassContent.append("        return new org.semanticwb.platform.SemanticIterator<" + classToReturn + ">(stit);" + ENTER);
+                javaClassContent.append("        return new "+SEMANTIC_ITERATOR_FULL_NAME+"<" + classToReturn + ">(stit);" + ENTER);
 //               
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
 
@@ -2349,7 +2349,7 @@ public class CodeGenerator
                 if (!properties.contains(tpp.getPrefix() + "_" + tpp.getName()))
                 {
                     properties.add(tpp.getPrefix() + "_" + tpp.getName());
-                    javaClassContent.append("    public final SemanticProperty " + tpp.getPrefix() + "_" + tpp.getName() + ";" + ENTER);
+                    javaClassContent.append("    public final "+SEMANTIC_PROPERTY_FULL_NAME+" " + tpp.getPrefix() + "_" + tpp.getName() + ";" + ENTER);
                 }
             }
         }
