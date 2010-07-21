@@ -841,7 +841,7 @@ public class CodeGenerator
         if(usesufix)
             javaClassContent.append("public abstract class " + tpc.getUpperClassName() + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
         else
-            javaClassContent.append("public abstract class " + tpc.getUpperClassName() + " extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
+            javaClassContent.append("public class " + tpc.getUpperClassName() + " extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
 
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
