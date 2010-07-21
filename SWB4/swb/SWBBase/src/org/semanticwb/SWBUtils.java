@@ -981,6 +981,15 @@ public class SWBUtils {
             return aux;
         }
 
+        public static String scape4Script(String txt)
+        {
+            String aux = txt;
+            aux = aux.replace("'", "\\'");
+            aux = aux.replace("\"", "\\\"");
+            return aux;
+        }
+
+
         /**
          * Gets the value for a {@code key} in the specified {@code Bundle} with
          * the default {@code locale}. <p>Obtiene el valor correspondiente al {@code key}
