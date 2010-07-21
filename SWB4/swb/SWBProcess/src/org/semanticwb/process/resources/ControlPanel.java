@@ -603,8 +603,9 @@ public class ControlPanel extends GenericAdmResource
                         " " +  getStatusDescription(paramsRequest, Integer.parseInt(strFilterStatus)) + "</li>");
             }
             if(!strFilterPriority.equalsIgnoreCase("-1")){
+                int iPriority = Integer.parseInt(strFilterPriority);
                 sb.append("<li class=\"f-est\">" + paramsRequest.getLocaleString("lblFilterPriority") +
-                        " " + strFilterPriority+ "</li>");
+                        " " + getPriorityDescription(paramsRequest, iPriority) + "</li>");
             }
             if(!strFilterTitle.equalsIgnoreCase("-1")){
                 sb.append("<li class=\"f-est\">" + paramsRequest.getLocaleString("lblFilterTaskName") +
@@ -1553,7 +1554,6 @@ public class ControlPanel extends GenericAdmResource
                         //SemanticProperty semprop = SemanticObject.createSemanticObject(strTemp).transformToSemanticProperty();
                         //strPropName = semprop.getDisplayName();
                         strPropName = strTemp;
-                        System.out.println("----strPropName:" + strPropName);
                         strPropValue = parseFlowNodeInstanceProperties(fobi, strTemp);
                     } else if(strTemp.contains("TaskDefinition.")) {
                         String[] arrTemp = strTemp.split("\\.");
@@ -3909,57 +3909,61 @@ public class ControlPanel extends GenericAdmResource
             int endRow = getPageLastRow(vectorSize,intRowsPerPage,intCurrPage);
             int iniRow = getPageFirstRow(vectorSize,intRowsPerPage,intCurrPage);
             //sb.append("<table border=1><tr>");
-            if(totalPages>1 && intCurrPage>1){
-                int backPage = intCurrPage - 1;
-                SWBResourceURL sUrlFirstPage = paramRequest.getRenderUrl();
-                sUrlFirstPage.setParameter("cpCurrPage", "1");
-                sb.append("<a href=\"" + sUrlFirstPage);
-                if(!strFilterPagination.equalsIgnoreCase("")){
-                    sb.append(strFilterPagination);
-                }
-                sb.append("\">" + paramRequest.getLocaleString("lblFirstPage") + "</a>");
-                SWBResourceURL sUrlBack = paramRequest.getRenderUrl();
-                sUrlBack.setParameter("cpCurrPage", String.valueOf(backPage));
-                sb.append("<a href=\"" + sUrlBack);
-                if(!strFilterPagination.equalsIgnoreCase("")){
-                    sb.append(strFilterPagination);
-                }
-                sb.append("\" class=\"pag_ant\" >" + paramRequest.getLocaleString("lblBackPage") +
-                        "</a>");
-            }
-            for(int i=0; i<totalPages; i++){
-                page = i+1;
-                if(page==intCurrPage)
-                {
-                    sb.append(page);
-                } else {
-                    SWBResourceURL sUrlPage = paramRequest.getRenderUrl();
-                    sUrlPage.setParameter("cpCurrPage", String.valueOf(page));
-                    sb.append("<a href=\"" + sUrlPage);
+            if(totalPages>1){
+                //if(totalPages>1 && intCurrPage>1){
+                if(intCurrPage>1){
+                    int backPage = intCurrPage - 1;
+                    SWBResourceURL sUrlFirstPage = paramRequest.getRenderUrl();
+                    sUrlFirstPage.setParameter("cpCurrPage", "1");
+                    sb.append("<a href=\"" + sUrlFirstPage);
                     if(!strFilterPagination.equalsIgnoreCase("")){
                         sb.append(strFilterPagination);
                     }
-                    sb.append("\">" + page + "</a>");
+                    sb.append("\">" + paramRequest.getLocaleString("lblFirstPage") + "</a>");
+                    SWBResourceURL sUrlBack = paramRequest.getRenderUrl();
+                    sUrlBack.setParameter("cpCurrPage", String.valueOf(backPage));
+                    sb.append("<a href=\"" + sUrlBack);
+                    if(!strFilterPagination.equalsIgnoreCase("")){
+                        sb.append(strFilterPagination);
+                    }
+                    sb.append("\" class=\"pag_ant\" >" + paramRequest.getLocaleString("lblBackPage") +
+                            "</a>");
                 }
-            }
-            if(totalPages>1 && intCurrPage<totalPages){
-                int nextPage = intCurrPage + 1;
-                SWBResourceURL sUrlNext = paramRequest.getRenderUrl();
-                sUrlNext.setParameter("cpCurrPage", String.valueOf(nextPage));
-                sb.append("<a href=\"" + sUrlNext);
-                if(!strFilterPagination.equalsIgnoreCase("")){
-                    sb.append(strFilterPagination);
+                for(int i=0; i<totalPages; i++){
+                    page = i+1;
+                    if(page==intCurrPage)
+                    {
+                        sb.append(page);
+                    } else {
+                        SWBResourceURL sUrlPage = paramRequest.getRenderUrl();
+                        sUrlPage.setParameter("cpCurrPage", String.valueOf(page));
+                        sb.append("<a href=\"" + sUrlPage);
+                        if(!strFilterPagination.equalsIgnoreCase("")){
+                            sb.append(strFilterPagination);
+                        }
+                        sb.append("\">" + page + "</a>");
+                    }
                 }
-                sb.append("\" class=\"pag_sig\" >" + paramRequest.getLocaleString("lblNextPage") + "</a>");
-                SWBResourceURL sUrlLastPage = paramRequest.getRenderUrl();
-                sUrlLastPage.setParameter("cpCurrPage",
-                        String.valueOf(totalPages));
-                sb.append("<a href=\"" + sUrlLastPage);
-                if(!strFilterPagination.equalsIgnoreCase("")){
-                    sb.append(strFilterPagination);
-                }
-                sb.append("\">" + paramRequest.getLocaleString("lblLastPage") +
-                        "</a>");
+                //if(totalPages>1 && intCurrPage<totalPages){
+                if(intCurrPage<totalPages){
+                    int nextPage = intCurrPage + 1;
+                    SWBResourceURL sUrlNext = paramRequest.getRenderUrl();
+                    sUrlNext.setParameter("cpCurrPage", String.valueOf(nextPage));
+                    sb.append("<a href=\"" + sUrlNext);
+                    if(!strFilterPagination.equalsIgnoreCase("")){
+                        sb.append(strFilterPagination);
+                    }
+                    sb.append("\" class=\"pag_sig\" >" + paramRequest.getLocaleString("lblNextPage") + "</a>");
+                    SWBResourceURL sUrlLastPage = paramRequest.getRenderUrl();
+                    sUrlLastPage.setParameter("cpCurrPage",
+                            String.valueOf(totalPages));
+                    sb.append("<a href=\"" + sUrlLastPage);
+                    if(!strFilterPagination.equalsIgnoreCase("")){
+                        sb.append(strFilterPagination);
+                    }
+                    sb.append("\">" + paramRequest.getLocaleString("lblLastPage") +
+                            "</a>");
+                }                
             }
             //sb.append("</tr></table>");
         } catch(Exception e){
