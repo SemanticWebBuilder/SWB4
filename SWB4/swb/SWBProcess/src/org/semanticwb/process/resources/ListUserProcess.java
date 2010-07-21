@@ -38,7 +38,7 @@ public class ListUserProcess extends GenericResource {
         User user = paramRequest.getUser();
         ProcessSite psite = (ProcessSite)paramRequest.getWebPage().getWebSite();
         WebPage wp = paramRequest.getWebPage();
-	out.println("<p class=\"tit1\">Procesos</p>");
+	out.println("<p class=\"tit1\">"+paramRequest.getLocaleString("lblProcess")+"</p>");
 	out.println("<ul class=\"tarea\">");
 
         int cuantos = 0;
@@ -67,7 +67,7 @@ public class ListUserProcess extends GenericResource {
             }
         }
         if(cuantos==0)
-            out.println("<li class=\"t1\">No hay tareas pendientes</li>");
+            out.println("<li class=\"t1\">"+paramRequest.getLocaleString("lblNoActivities")+"No hay tareas pendientes"+"</li>");
 //        out.println("<li class=\"t1 \"><a href=\"#\">Todas</a></li>");
 //        out.println("<li class=\"t2-sel\"><a href=\"#\">Pendientes</a></li>");
 //        out.println("<li class=\"t3\"><a href=\"#\">Terminados</a></li>");
