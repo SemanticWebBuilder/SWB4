@@ -253,4 +253,25 @@ public class WrapperTaskWebPage extends org.semanticwb.process.model.base.Wrappe
         return super.getTemplateRef();
     }
 
+    @Override
+    public String getDisplayName() {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.getDisplayTitle(null);
+        }
+        return super.getDisplayName();
+    }
+
+    @Override
+    public String getDisplayName(String lang)
+    {
+        UserTask ut=getUserTask();
+        if(ut!=null)
+        {
+            return ut.getDisplayTitle(lang);
+        }
+        return super.getDisplayName(lang);
+    }
+
 }
