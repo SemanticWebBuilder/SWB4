@@ -507,6 +507,22 @@ public class BPMSProcessInstance {
             return vArtifacts;
         }
 
+        public static String getPropertyName(String URI){
+            String strPropName = "";
+            try
+            {
+                SemanticProperty semprop =
+                        SemanticObject.createSemanticObject(URI).transformToSemanticProperty();
+                strPropName = semprop.getDisplayName();
+            } catch(Exception e){
+              //log.error("Error en ControlPanel.getPropertyName", e);
+                System.out.println("Error en " +
+                        "BPMSProcessInstance.getPropertyName:"
+                        + e.getMessage());
+            }
+            return strPropName;
+        }
+
         /**
         * Obtener el valor de una propiedad para una instancia de un artefacto
         * (SemanticObject)
