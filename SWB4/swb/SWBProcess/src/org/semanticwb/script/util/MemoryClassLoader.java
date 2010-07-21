@@ -52,7 +52,8 @@ public final class MemoryClassLoader extends ClassLoader {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
-        this.compiler.getTask(null, this.manager, null, null, null, list).call();
+        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
+        task.call();
     }
     public void add(String classname, String filecontent)
     {
