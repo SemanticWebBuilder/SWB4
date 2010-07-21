@@ -1087,7 +1087,11 @@ public class CodeGenerator
         javaClassContent.append("    }" + ENTER); // ennd ClassMgr
 
         javaClassContent.append(ENTER);
-        javaClassContent.append(PUBLIC + tpc.getUpperClassName() + "Base("+SEMANTIC_OBJECT_FULL_NAME+" base)" + ENTER);
+        if(usesufix)
+            javaClassContent.append(PUBLIC + tpc.getUpperClassName() + "Base("+SEMANTIC_OBJECT_FULL_NAME+" base)" + ENTER);
+        else
+            javaClassContent.append(PUBLIC + tpc.getUpperClassName() + "("+SEMANTIC_OBJECT_FULL_NAME+" base)" + ENTER);
+
         javaClassContent.append(OPEN_BLOCK + ENTER);
         javaClassContent.append("        super(base);" + ENTER);
         javaClassContent.append(CLOSE_BLOCK + ENTER);
