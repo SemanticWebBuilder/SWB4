@@ -42,8 +42,8 @@ public final class MemoryClassLoader extends ClassLoader {
         }
         this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }
-    public MemoryClassLoader() {
-
+    public MemoryClassLoader(ClassLoader parent) {
+        super(parent);
 
     }
     public void addAll(Map<String, String> map)
