@@ -272,6 +272,51 @@ public class SemanticClass
         return m_classCodePackage;
     }
 
+    /**
+     * Gets the name in plural.
+     *
+     * @param name the name
+     * @return the name in plural
+     */
+    public String getNameInPlural()
+    {
+        String name=getUpperClassName();
+        return getPlural(name);
+    }
+
+    public static String getPlural(String name)
+    {        
+        if (name.endsWith("y") && !(name.endsWith("ay") || name.endsWith("ey") || name.endsWith("iy") || name.endsWith("oy") || name.endsWith("uy")))
+        {
+            name = name.substring(0, name.length() - 1);
+            name += "ies";
+        }
+        else if (name.endsWith("s") || name.endsWith("z") || name.endsWith("x") || name.endsWith("ch") || name.endsWith("sh"))
+        {
+            name += "es";
+        }
+        else if (name.endsWith("is"))
+        {
+            name = name.substring(0, name.length() - 2);
+            name += "es";
+        }
+        /*else if(name.endsWith("f"))
+        {
+        name=name.substring(0,name.length()-1);
+        name+="ves";
+        }*/
+        else if (name.endsWith("fe"))
+        {
+            name = name.substring(0, name.length() - 2);
+            name += "ves";
+        }
+        else
+        {
+            name += "s";
+        }
+        return name;
+    }
+    
     public static String toUpperCase(String data)
     {
         String letter = data.substring(0, 1);
