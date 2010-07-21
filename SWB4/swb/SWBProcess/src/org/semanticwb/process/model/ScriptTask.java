@@ -1046,7 +1046,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         /*String uuid=UUID.randomUUID().toString();
         uuid=uuid.replace('-', '_');
         return "_"+uuid+clazz.getName();*/
-        return clazz.getName();
+        return clazz.getUpperClassName();
     }
     private void addSemanticClass(String clasName,SemanticClass clazz,MemoryClassLoader mls) throws Exception
     {        
