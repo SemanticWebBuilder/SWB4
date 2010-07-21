@@ -826,7 +826,7 @@ public class CodeGenerator
             dir.mkdirs();
         }
         StringBuilder javaClassContent = new StringBuilder();
-        if (!tpc.getCodePackage().equals(""))
+        if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
         {
             javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
             javaClassContent.append("" + ENTER);
@@ -1173,7 +1173,7 @@ public class CodeGenerator
         File dir = createPackage(tpc.getCodePackage(), pDirectory);
         StringBuilder javaClassContent = new StringBuilder();
 
-        if (!tpc.getCodePackage().equals(""))
+        if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
         {
             javaClassContent.append("package " + tpc.getCodePackage() + ";" + ENTER);
             javaClassContent.append("" + ENTER);
@@ -1206,7 +1206,7 @@ public class CodeGenerator
     {
         File dir = createPackage(tpc.getCodePackage() + ".base", pDirectory);
         StringBuilder javaClassContent = new StringBuilder();
-        if (!tpc.getCodePackage().equals(""))
+        if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
         {
             javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
             javaClassContent.append("" + ENTER);
