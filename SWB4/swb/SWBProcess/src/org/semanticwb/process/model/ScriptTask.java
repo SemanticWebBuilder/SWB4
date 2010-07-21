@@ -1,6 +1,8 @@
 package org.semanticwb.process.model;
 
 import bsh.Interpreter;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
@@ -13,32 +15,32 @@ import org.semanticwb.script.util.MemoryClassLoader;
 
 public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase 
 {
-    
+    private static HashMap<String, MemoryClassLoader> loaders=new HashMap<String, MemoryClassLoader>();
     public static Logger log=SWBUtils.getLogger(ProcessRule.class);
     
     public ScriptTask(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
+    }  
     
-    private String getClassName(SemanticClass clazz)
-    {        
-        return clazz.getUpperClassName();
-    }
-    private void addSemanticClass(SemanticClass clazz,MemoryClassLoader mls) throws Exception
+    private void addSemanticClass(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
     {
         CodeGenerator cg=new CodeGenerator();
         String createdClass=cg.createClassBase(clazz,false);
-        mls.add(clazz.getUpperClassName(), createdClass);
+        log.debug("Agregando clase "+clazz.getUpperClassName()+" a MemoryClassLoader");
+        log.debug(createdClass);
+        mcls.add(clazz.getUpperClassName(), createdClass);
     }
-    private void addSemanticObject(Interpreter i,SemanticObject object) throws Exception
-    {        
-        SemanticClass clazz=object.getSemanticClass();
-        String clasName=getClassName(clazz);
+    private void addSemanticObject(Interpreter i,SemanticObject object,MemoryClassLoader mcls) throws Exception
+    {           
         String varname=object.getSemanticClass().getName().toLowerCase();
-        String statement=clasName+" "+varname;
-        log.debug("Agregando variable "+statement+"="+object);
-        i.set(statement, object);
+        String statement=varname;
+        String className=object.getSemanticClass().getUpperClassName();
+        Class clazz=mcls.loadClass(className);
+        Constructor c=clazz.getConstructor(SemanticObject.class);
+        Object instanceObject=c.newInstance(object);
+        log.debug("Agregando variable "+statement+"="+instanceObject+" de tipo "+instanceObject.getClass());
+        i.set(statement, instanceObject);
     }
     private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
     {
@@ -64,10 +66,19 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         {
             long ini=System.currentTimeMillis();
             Interpreter i = new Interpreter();  // Construct an interpreter
-            i.setClassLoader(loadClasses(instance));
-            //i.set("this",this);
-            i.set("instance", instance);
-            //i.set("target", targetInstance);
+            MemoryClassLoader mcls=null;
+
+            if(loaders.containsKey(instance.getURI()))
+            {
+                mcls=loaders.get(instance.getURI());
+            }
+            else
+            {
+                mcls=loadClasses(instance);
+                loaders.put(instance.getURI(), mcls);
+            }
+            i.setClassLoader(mcls);            
+            i.set("instance", instance);            
             i.set("user", user);
             if(instance!=null)
             {
@@ -80,7 +91,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             List<ProcessObject> processObjects=instance.getProcessInstance().listHeraquicalProcessObjects();
             for(ProcessObject po : processObjects)
             {
-                addSemanticObject(i,po.getSemanticObject());
+                addSemanticObject(i,po.getSemanticObject(),mcls);
             }
 
             Object ret=i.eval(code);
