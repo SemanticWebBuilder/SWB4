@@ -310,7 +310,14 @@ public class SemanticClass
     }
     public String getUpperClassName()
     {
-       return toUpperCase(getClassCodeName());
+        if(getClassCodeName()!=null)
+        {
+            return toUpperCase(getClassCodeName());
+        }
+        else
+        {
+            return toUpperCase(getName());
+        }
     }
 
 
