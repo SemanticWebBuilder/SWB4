@@ -1550,9 +1550,10 @@ public class ControlPanel extends GenericAdmResource
                     UserTask usrTask = (UserTask)fobi.getFlowNodeType();
                     if(strTemp.contains("http://"))
                     {
-                        SemanticProperty semprop =
-                                SemanticObject.createSemanticObject(strTemp).transformToSemanticProperty();
-                        strPropName = semprop.getDisplayName();
+                        //SemanticProperty semprop = SemanticObject.createSemanticObject(strTemp).transformToSemanticProperty();
+                        //strPropName = semprop.getDisplayName();
+                        strPropName = strTemp;
+                        System.out.println("----strPropName:" + strPropName);
                         strPropValue = parseFlowNodeInstanceProperties(fobi, strTemp);
                     } else if(strTemp.contains("TaskDefinition.")) {
                         String[] arrTemp = strTemp.split("\\.");
@@ -1702,7 +1703,8 @@ public class ControlPanel extends GenericAdmResource
                         String strColumnsNames = String.valueOf(arrAttributes.get(2));
                         String[] colNamesArr = strColumnsNames.split("\\|");
                         java.util.List<String> listColNames = new ArrayList<String>(colNamesArr.length);
-                        for (String s : colNamesArr) {
+                        for (int k=0; k<colNamesArr.length; k++) {
+                            String s = colNamesArr[k];
                             listColNames.add(s);
                         }
                         colNames = listColNames;
@@ -1715,6 +1717,8 @@ public class ControlPanel extends GenericAdmResource
                                 {
                                     String[] tmpArr = tmpName.split("\\.");
                                     tmpName = getTaskPropertyName(vTaskProps, tmpArr[0], tmpArr[1]);
+                                } else if(tmpName.contains("http://")) {
+                                    tmpName = BPMSProcessInstance.ClassMgr.getPropertyName(tmpName);
                                 }
                             }
                             sb.append("<th class=\"orden-no\"><a href=\"#\">" + tmpName +  "</a></th>");
