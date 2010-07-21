@@ -304,7 +304,7 @@ public class SemanticClass
        }
        else
        {
-           spackage+=toUpperCase(getName());
+           spackage+=getNameInPlural();
        }
        return spackage;
     }
