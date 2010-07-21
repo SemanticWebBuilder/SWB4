@@ -39,7 +39,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticMgr;
-import static org.semanticwb.platform.SemanticClass.*;
+import static org.semanticwb.SWBUtils.TEXT.*;
 // TODO: Auto-generated Javadoc
 /**
  * The Class CodeGenerator.
