@@ -12,7 +12,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.script.util.MemoryClassLoader;
-import static org.semanticwb.platform.SemanticClass.*;
+import static org.semanticwb.SWBUtils.TEXT.*;
 
 public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase 
 {
