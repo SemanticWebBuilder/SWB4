@@ -16,6 +16,7 @@ import static org.semanticwb.SWBUtils.TEXT.*;
 
 public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase 
 {
+    private static final String SEMANTIC_CLASS_FULL_NAME="org.semanticwb.platform.SemanticClass";
      /** The Constant CLOSE_BLOCK. */
     private static final String CLOSE_BLOCK = "    }";
     private static final String PUBLIC = "    public ";
@@ -91,7 +92,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             SemanticClass clazz = it.next();
             if (clazz.isSWBInterface())
             {
-                interfaces.append(clazz.getFullName() + ",");
+                interfaces.append(clazz.getCanonicalName() + ",");
             }
         }
         if (interfaces.length() > 0)
@@ -125,30 +126,30 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             SemanticClass tpc = tpcit.next();
             javaClassContent.append(ENTER);
 
-            javaClassContent.append("    public " + tpc.getFullName() + " get" + tpc.getUpperClassName() + "(String id)" + ENTER);
+            javaClassContent.append("    public " + tpc.getCanonicalName() + " get" + tpc.getUpperClassName() + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".get" + tpc.getUpperClassName() + "(id, this);" + ENTER);
+            javaClassContent.append("        return " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".get" + tpc.getUpperClassName() + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
             javaClassContent.append(ENTER);
 
-            javaClassContent.append("    public java.util.Iterator<" + tpc.getFullName() + "> list" + tpc.getNameInPlural() + "()" + ENTER);
+            javaClassContent.append("    public java.util.Iterator<" + tpc.getCanonicalName() + "> list" + tpc.getNameInPlural() + "()" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".list" + tpc.getNameInPlural() + "(this);" + ENTER);
+            javaClassContent.append("        return " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".list" + tpc.getNameInPlural() + "(this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             javaClassContent.append(ENTER);
-            javaClassContent.append("    public " + tpc.getFullName() + " create" + tpc.getUpperClassName() + "(String id)" + ENTER);
+            javaClassContent.append("    public " + tpc.getCanonicalName() + " create" + tpc.getUpperClassName() + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".create" + tpc.getUpperClassName() + "(id,this);" + ENTER);
+            javaClassContent.append("        return " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".create" + tpc.getUpperClassName() + "(id,this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             if (tpc.isAutogenId())
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public " + tpc.getFullName() + " create" + tpc.getUpperClassName() + "()" + ENTER);
+                javaClassContent.append("    public " + tpc.getCanonicalName() + " create" + tpc.getUpperClassName() + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
                 javaClassContent.append("        long id=getSemanticObject().getModel().getCounter(" + tpc.getPrefix() + "_" + tpc.getUpperClassName() + ");" + ENTER);
-                javaClassContent.append("        return " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".create" + tpc.getUpperClassName() + "(String.valueOf(id),this);" + ENTER);
+                javaClassContent.append("        return " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".create" + tpc.getUpperClassName() + "(String.valueOf(id),this);" + ENTER);
                 javaClassContent.append("    } " + ENTER);
 
 
@@ -157,12 +158,12 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             javaClassContent.append(ENTER);
             javaClassContent.append("    public void remove" + tpc.getUpperClassName() + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".remove" + tpc.getUpperClassName() + "(id, this);" + ENTER);
+            javaClassContent.append("        " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".remove" + tpc.getUpperClassName() + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
 
             javaClassContent.append("    public boolean has" + tpc.getUpperClassName() + "(String id)" + ENTER);
             javaClassContent.append("    {" + ENTER);
-            javaClassContent.append("        return " + tpc.getFullName() + "." + GLOBAL_CLASS_NAME + ".has" + tpc.getUpperClassName() + "(id, this);" + ENTER);
+            javaClassContent.append("        return " + tpc.getCanonicalName() + "." + GLOBAL_CLASS_NAME + ".has" + tpc.getUpperClassName() + "(id, this);" + ENTER);
             javaClassContent.append("    }" + ENTER);
         }
 
@@ -182,7 +183,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             parent = it.next();
             if (parent.isSWBClass() || parent.isSWBModel() || parent.isSWBFormElement())
             {
-                exts = parent.getFullName();
+                exts = parent.getCanonicalName();
                 break;
             }
             else
@@ -262,7 +263,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 {
                     if (!staticClasses.contains(range))
                     {
-                        javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + range.getPrefix() + "_" + range.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
+                        javaClassContent.append("    public static final "+SEMANTIC_CLASS_FULL_NAME+" " + range.getPrefix() + "_" + range.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + range.getURI() + "\");" + ENTER);
                         staticClasses.add(range);
                     }
                 }
@@ -288,7 +289,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 {
                     if (!staticClasses.contains(clazzOfModel))
                     {
-                        javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + clazzOfModel.getPrefix() + "_" + clazzOfModel.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + clazzOfModel.getURI() + "\");" + ENTER);
+                        javaClassContent.append("    public static final "+SEMANTIC_CLASS_FULL_NAME+" " + clazzOfModel.getPrefix() + "_" + clazzOfModel.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + clazzOfModel.getURI() + "\");" + ENTER);
                         staticClasses.add(clazzOfModel);
                     }
                 }
@@ -296,18 +297,18 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         }
         if (!staticClasses.contains(tpc))
         {
-            javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass " + tpc.getPrefix() + "_" + tpc.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
+            javaClassContent.append("    public static final "+SEMANTIC_CLASS_FULL_NAME+" " + tpc.getPrefix() + "_" + tpc.getUpperClassName() + "=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
             staticClasses.add(tpc);
         }
 
-        javaClassContent.append("    public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
+        javaClassContent.append("    public static final "+SEMANTIC_CLASS_FULL_NAME+" sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(\"" + tpc.getURI() + "\");" + ENTER);
 
         javaClassContent.append(ENTER);
         javaClassContent.append("    public static class " + GLOBAL_CLASS_NAME + ENTER);
         javaClassContent.append("    {" + ENTER);
 
 
-        String fullpathClass = tpc.getFullName();
+        String fullpathClass = tpc.getCanonicalName();
 
 
 
@@ -424,16 +425,16 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                         nameList = nameList.substring(3);
                     }
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("        public static java.util.Iterator<" + tpc.getFullName() + "> list" +tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getFullName() + " " + "value" + ",org.semanticwb.model.SWBModel model)" + ENTER);
+                    javaClassContent.append("        public static java.util.Iterator<" + tpc.getCanonicalName() + "> list" +tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ",org.semanticwb.model.SWBModel model)" + ENTER);
                     javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getFullName() + "> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject(),sclass));" + ENTER);
+                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getCanonicalName() + "> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject(),sclass));" + ENTER);
                     javaClassContent.append("            return it;" + ENTER);
                     javaClassContent.append("        }" + ENTER);
 
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("        public static java.util.Iterator<" + tpc.getFullName()+ "> list" + tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getFullName() + " " + "value" + ")" + ENTER);
+                    javaClassContent.append("        public static java.util.Iterator<" + tpc.getCanonicalName()+ "> list" + tpc.getUpperClassName() + "By" + toUpperCase(nameList) + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                     javaClassContent.append("        {" + ENTER);
-                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getFullName() + "> it=new org.semanticwb.model.GenericIterator(" + "value" + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
+                    javaClassContent.append("            org.semanticwb.model.GenericIterator<" + tpc.getCanonicalName() + "> it=new org.semanticwb.model.GenericIterator(" + "value" + ".getSemanticObject().getModel().listSubjectsByClass(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject(),sclass));" + ENTER);
                     javaClassContent.append("            return it;" + ENTER);
                     javaClassContent.append("        }" + ENTER);
                 }
@@ -506,9 +507,9 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             {
                 SemanticClass tpc = tpcit.next();
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public " + tpc.getFullName() + " get" + tpc.getUpperClassName() + "()" + ENTER);
+                javaClassContent.append("    public " + tpc.getCanonicalName() + " get" + tpc.getUpperClassName() + "()" + ENTER);
                 javaClassContent.append("    {" + ENTER);
-                javaClassContent.append("        return (" + tpc.getFullName() + ")getSemanticObject().getModel().getModelObject().createGenericInstance();" + ENTER);
+                javaClassContent.append("        return (" + tpc.getCanonicalName() + ")getSemanticObject().getModel().getModelObject().createGenericInstance();" + ENTER);
                 javaClassContent.append("    }" + ENTER);
             }
         }
@@ -881,12 +882,12 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 // son varios
                 objectName = objectName.substring(3);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getFullName() + "> list" + getPlural(objectName) + "()" + ENTER);
+                javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCanonicalName() + "> list" + getPlural(objectName) + "()" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getFullName() + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
+                javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listObjectProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getFullName() + " " + "value" + ")" + ENTER);
+                javaClassContent.append("    public boolean has" + objectName + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        boolean ret=false;" + ENTER);
                 javaClassContent.append("        if(" + "value" + "!=null)" + ENTER);
@@ -898,16 +899,16 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 if (tpp.isInheritProperty())
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getFullName()+ "> listInherit" + getPlural(objectName) + "()" + ENTER);
+                    javaClassContent.append("    public org.semanticwb.model.GenericIterator<" + tpcToReturn.getCanonicalName()+ "> listInherit" + getPlural(objectName) + "()" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
-                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getFullName() + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
+                    javaClassContent.append("        return new org.semanticwb.model.GenericIterator<" + tpcToReturn.getCanonicalName() + ">(getSemanticObject().listInheritProperties(" + tpp.getPrefix() + "_" + tpp.getName() + "));" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
                 }
 
                 if (!tpp.hasInverse())
                 {
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void add" + objectName + "(" + tpcToReturn.getFullName() + " " + "value" + ")" + ENTER);
+                    javaClassContent.append("    public void add" + objectName + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        get" + semanticObject + "().addObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -919,7 +920,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
 
                     javaClassContent.append(ENTER);
-                    javaClassContent.append("    public void remove" + objectName + "(" + tpcToReturn.getFullName() + " " + "value" + ")" + ENTER);
+                    javaClassContent.append("    public void remove" + objectName + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
                     javaClassContent.append("        get" + semanticObject + "().removeObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + "," + "value" + ".getSemanticObject());" + ENTER);
                     javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -928,7 +929,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             else
             {
                 javaClassContent.append(ENTER);
-                javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getFullName() + " " + "value" + ")" + ENTER);
+                javaClassContent.append("    public void set" + objectName + "(" + tpcToReturn.getCanonicalName() + " " + "value" + ")" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
                 javaClassContent.append("        get" + semanticObject + "().setObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", " + "value" + ".getSemanticObject());" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -947,13 +948,13 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
 
             javaClassContent.append(ENTER);
-            javaClassContent.append(PUBLIC + tpcToReturn.getFullName() + " get" + objectName + "()" + ENTER);
+            javaClassContent.append(PUBLIC + tpcToReturn.getCanonicalName() + " get" + objectName + "()" + ENTER);
             javaClassContent.append(OPEN_BLOCK + ENTER);
-            javaClassContent.append("         " + tpcToReturn.getFullName() + " ret=null;" + ENTER);
+            javaClassContent.append("         " + tpcToReturn.getCanonicalName() + " ret=null;" + ENTER);
             javaClassContent.append("         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ");" + ENTER);
             javaClassContent.append("         if(obj!=null)" + ENTER);
             javaClassContent.append("         {" + ENTER);
-            javaClassContent.append("             ret=(" + tpcToReturn.getFullName() + ")obj.createGenericInstance();" + ENTER);
+            javaClassContent.append("             ret=(" + tpcToReturn.getCanonicalName() + ")obj.createGenericInstance();" + ENTER);
             javaClassContent.append("         }" + ENTER);
             javaClassContent.append("         return ret;" + ENTER);
             javaClassContent.append(CLOSE_BLOCK + ENTER);
@@ -984,6 +985,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
 
                 if (!tpp.hasInverse())
                 {
+                    
                     javaClassContent.append(ENTER);
                     javaClassContent.append("    public void add" + objectName + "(" + pack + "." + valueToReturn + " " + "value" + ")" + ENTER);
                     javaClassContent.append(OPEN_BLOCK + ENTER);
