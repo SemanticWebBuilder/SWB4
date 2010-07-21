@@ -86,7 +86,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
             else
             {
-                mcls=loadClasses(instance,ScriptTask.class.getClassLoader());
+                mcls=loadClasses(instance,Runtime.getRuntime().getClass().getClassLoader());
                 loaders.put(instance.getURI(), mcls);
             }
             i.setClassLoader(mcls);            
