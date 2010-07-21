@@ -58,9 +58,9 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     {
         addSemanticClass(clazz,mcls);
     }
-    private MemoryClassLoader loadClasses(FlowNodeInstance instance) throws Exception
+    private MemoryClassLoader loadClasses(FlowNodeInstance instance,ClassLoader parent) throws Exception
     {
-        MemoryClassLoader mcls=new MemoryClassLoader();
+        MemoryClassLoader mcls=new MemoryClassLoader(parent);
         List<ProcessObject> processObjects=instance.getProcessInstance().listHeraquicalProcessObjects();
         for(ProcessObject po : processObjects)
         {
@@ -86,7 +86,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
             else
             {
-                mcls=loadClasses(instance);
+                mcls=loadClasses(instance,ScriptTask.class.getClassLoader());
                 loaders.put(instance.getURI(), mcls);
             }
             i.setClassLoader(mcls);            
