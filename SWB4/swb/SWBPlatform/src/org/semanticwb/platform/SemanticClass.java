@@ -287,7 +287,7 @@ public class SemanticClass
     
     
     
-    public String getFullName()
+    public String getCanonicalName()
     {
        String spackage=getCodePackage();
        if(spackage==null)
@@ -298,7 +298,14 @@ public class SemanticClass
        {
            spackage=spackage+".";
        }
-       spackage+=toUpperCase(getClassCodeName());
+       if(getClassCodeName()!=null)
+       {
+            spackage+=toUpperCase(getClassCodeName());
+       }
+       else
+       {
+           spackage+=toUpperCase(getName());
+       }
        return spackage;
     }
     public String getUpperClassName()
