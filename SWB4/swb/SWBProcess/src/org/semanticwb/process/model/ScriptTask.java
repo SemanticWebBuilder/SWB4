@@ -22,8 +22,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     }
     
     private String getClassName(SemanticClass clazz)
-    {
-        
+    {        
         return clazz.getUpperClassName();
     }
     private void addSemanticClass(SemanticClass clazz,MemoryClassLoader mls) throws Exception
@@ -37,7 +36,9 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         SemanticClass clazz=object.getSemanticClass();
         String clasName=getClassName(clazz);
         String varname=object.getSemanticClass().getName().toLowerCase();
-        i.set(clasName+" "+varname+"=", object);
+        String statement=clasName+" "+varname;
+        log.debug("Agregando variable "+statement+"="+object);
+        i.set(statement, object);
     }
     private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
     {
