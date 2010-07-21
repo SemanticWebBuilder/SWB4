@@ -695,7 +695,7 @@ public class CodeGenerator
             dir.mkdirs();
         }
         StringBuilder javaClassContent = new StringBuilder();
-        if (!tpc.getCodePackage().equals(""))
+        if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
         {
             javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
             javaClassContent.append("" + ENTER);
