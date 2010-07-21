@@ -33,14 +33,13 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
     }
     private void addSemanticObject(Interpreter i,SemanticObject object,MemoryClassLoader mcls) throws Exception
     {           
-        String varname=object.getSemanticClass().getName().toLowerCase();
-        String statement=varname;
+        String varname=object.getSemanticClass().getUpperClassName().toLowerCase();        
         String className=object.getSemanticClass().getUpperClassName();
         Class clazz=mcls.loadClass(className);
         Constructor c=clazz.getConstructor(SemanticObject.class);
         Object instanceObject=c.newInstance(object);
-        log.debug("Agregando variable "+statement+"="+instanceObject+" de tipo "+instanceObject.getClass());
-        i.set(statement, instanceObject);
+        log.debug("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+        i.set(varname, instanceObject);
     }
     private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
     {
