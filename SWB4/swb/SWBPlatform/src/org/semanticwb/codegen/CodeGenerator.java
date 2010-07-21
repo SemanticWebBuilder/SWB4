@@ -802,16 +802,8 @@ public class CodeGenerator
         createSemanticResource(tpc, pDirectory);
     }
 
-    /**
-     * Creates the class base.
-     * 
-     * @param tpc the tpc
-     * @param pDirectory the directory
-     * @throws CodeGeneratorException the code generator exception
-     */
-    private void createClassBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
+    public String createClassBase(SemanticClass tpc,boolean usesufix) throws CodeGeneratorException
     {
-
         String exts = "org.semanticwb.model.base.GenericObjectBase";
         if (tpc.isSWBFormElement())
         {
@@ -832,21 +824,25 @@ public class CodeGenerator
                 parent = null;
             }
         }
-        File dir = createPackage(tpc.getCodePackage(), pDirectory);
-        dir = new File(dir.getPath() + File.separatorChar + "base");
 
-        if (!dir.exists())
-        {
-            dir.mkdirs();
-        }
         StringBuilder javaClassContent = new StringBuilder();
         if (tpc.getCodePackage()!=null && !tpc.getCodePackage().equals(""))
         {
-            javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
+            if(usesufix)
+                javaClassContent.append("package " + tpc.getCodePackage() + ".base;" + ENTER);
+            else
+                javaClassContent.append("package " + tpc.getCodePackage() + ";" + ENTER);
+
+
             javaClassContent.append("" + ENTER);
         }
         javaClassContent.append(ENTER);
-        javaClassContent.append("public abstract class " + tpc.getUpperClassName() + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
+
+        if(usesufix)
+            javaClassContent.append("public abstract class " + tpc.getUpperClassName() + "Base extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
+        else
+            javaClassContent.append("public abstract class " + tpc.getUpperClassName() + " extends " + exts + " " + getInterfacesAsString(tpc, false) + "" + ENTER);
+
         javaClassContent.append("{" + ENTER);
         HashSet<SemanticClass> staticClasses = new HashSet<SemanticClass>();
         HashSet<SemanticProperty> staticProperties = new HashSet<SemanticProperty>();
@@ -1124,6 +1120,26 @@ public class CodeGenerator
             insertLinkToClass4Model(tpc, javaClassContent, parent);
         }
         javaClassContent.append("}" + ENTER);
+        return javaClassContent.toString();
+    }
+    /**
+     * Creates the class base.
+     * 
+     * @param tpc the tpc
+     * @param pDirectory the directory
+     * @throws CodeGeneratorException the code generator exception
+     */
+    private void createClassBase(SemanticClass tpc, File pDirectory) throws CodeGeneratorException
+    {
+
+        String code=createClassBase(tpc,true);
+        File dir = createPackage(tpc.getCodePackage(), pDirectory);
+        dir = new File(dir.getPath() + File.separatorChar + "base");
+
+        if (!dir.exists())
+        {
+            dir.mkdirs();
+        }
         File fileClass = new File(dir.getPath() + File.separatorChar + tpc.getUpperClassName() + "Base.java");
         try
         {
@@ -1133,7 +1149,21 @@ public class CodeGenerator
         {
             e.printStackTrace();
         }
-        saveFile(fileClass, javaClassContent.toString());
+        saveFile(fileClass, code);
+        SemanticClass parent = null;
+        Iterator<SemanticClass> it = tpc.listSuperClasses(true);
+        while (it.hasNext())
+        {
+            parent = it.next();
+            if (parent.isSWBClass() || parent.isSWBModel() || parent.isSWBFormElement())
+            {                
+                break;
+            }
+            else
+            {
+                parent = null;
+            }
+        }
         createClass(tpc, parent, pDirectory);
     }
 
