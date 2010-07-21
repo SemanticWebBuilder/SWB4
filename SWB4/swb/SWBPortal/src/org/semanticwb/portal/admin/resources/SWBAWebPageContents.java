@@ -137,7 +137,7 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticObject snobj = ont.getSemanticObject(request.getParameter("nsuri"));
             if (snobj != null) {
                 log.debug("addNewTab");
-                out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + snobj.getDisplayName() + "');");
+                out.println("  addNewTab('" + snobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(snobj.getDisplayName()) + "');");
             }
         }
 
@@ -336,7 +336,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
-                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + sobj.getDisplayName(user.getLanguage()) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
+                out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
 
                 SWBResourceURL urlpre = paramRequest.getRenderUrl();
                 urlpre.setParameter("suri", id);
@@ -349,7 +349,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("preview", "true");
                 out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("previewdocument")+"\" onclick=\"submitUrl('" + urlpre + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/preview.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("previewdocument")+"\"></a>");
 
-                out.println("<a href=\"#\"  title=\""+ paramRequest.getLocaleString("documentAdmin")+"\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+"documentAdmin"+"\"></a>");
+                out.println("<a href=\"#\"  title=\""+ paramRequest.getLocaleString("documentAdmin")+"\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+"documentAdmin"+"\"></a>");
 
                 if (send2Flow) {
                     String pfid = null;
@@ -379,7 +379,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sprop", idp);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -506,7 +506,7 @@ public class SWBAWebPageContents extends GenericResource {
                         urlchoose.setParameter("sprop", idp);
                         urlchoose.setParameter("sobj", sobj.getURI());
                         urlchoose.setParameter("act", "edit");
-                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + sobj.getDisplayName() + "');return false;\">" + stitle + "</a>");
+                        out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "');return false;\">" + stitle + "</a>");
                         out.println("</td>");
                         if (hmprop.get(Traceable.swb_created) != null) {
                             semprop = (SemanticProperty) hmprop.get(Traceable.swb_created);
@@ -1287,7 +1287,7 @@ public class SWBAWebPageContents extends GenericResource {
                             soc.removeProperty(Activeable.swb_active);
                         }
                         sbreload.append("\n reloadTab('" + soc.getURI() + "'); ");
-                        sbreload.append("\n setTabTitle('" + soc.getURI() + "','" + soc.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(soc) + "');");
+                        sbreload.append("\n setTabTitle('" + soc.getURI() + "','" + SWBUtils.TEXT.scape4Script(soc.getDisplayName(user.getLanguage())) + "','" + SWBContext.UTILS.getIconClass(soc) + "');");
 
                     }
               } catch (Exception e) {
@@ -1302,7 +1302,7 @@ public class SWBAWebPageContents extends GenericResource {
         if (errormsg.length() == 0) {
             out.println("<script type=\"text/javascript\">");
             out.println(" reloadTab('" + so.getURI() + "');");//so
-            out.println(" setTabTitle('" + so.getURI() + "','" + so.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(so) + "')");
+            out.println(" setTabTitle('" + so.getURI() + "','" + SWBUtils.TEXT.scape4Script(so.getDisplayName(user.getLanguage())) + "','" + SWBContext.UTILS.getIconClass(so) + "')");
 //            out.println(" reloadTab('" + obj.getURI() + "');");//so
 //            out.println(" setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + SWBContext.UTILS.getIconClass(obj) + "');");
             out.println(sbreload.toString());
