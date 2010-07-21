@@ -180,10 +180,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.antlrworks-1.2.3.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.arthurdo.jar-1}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
