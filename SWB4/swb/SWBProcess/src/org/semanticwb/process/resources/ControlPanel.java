@@ -52,9 +52,9 @@ public class ControlPanel extends GenericAdmResource
     public final static String strDownloadPdf  = SWBPortal.getContextPath() +
             "/swbadmin/ControlPanelReport.pdf";
     public final static String filenameXml = SWBUtils.getApplicationPath() +
-            "/swbadmin/ControlPanelReport.xml";
+            "/swbadmin/jsp/process/ControlPanelReport.xml";
     public final static String strDownloadXml  = SWBPortal.getContextPath() +
-            "/swbadmin/ControlPanelReport.xml";
+            "/swbadmin/jsp/process/ControlPanelReport.xml";
     public final static String filenameRtf = SWBUtils.getApplicationPath() +
             "/swbadmin/ControlPanelReport.rtf";
     public final static String strDownloadRtf  = SWBPortal.getContextPath() +
@@ -97,7 +97,7 @@ public class ControlPanel extends GenericAdmResource
 
     /**
 	 * Regresa un vector con las propiedades (generales) de la tarea que pueden seleccionarse
-     * Propiedades Grales de la tarea = TaskDefinition +  taskInstance
+     * Propiedades Grales de la tarea = TaskDefinition +  TaskInstance
 	 *
      * @param           paramsRequest SWBParamRequest
 	 * @return          Vector
@@ -461,6 +461,7 @@ public class ControlPanel extends GenericAdmResource
     *
     * @param            vTasks Vector
     * @param            request HttpServletRequest
+    * @param            paramRequest SWBParamRequest
     * @return      		Vector
     * @see
     */
@@ -542,10 +543,8 @@ public class ControlPanel extends GenericAdmResource
             } else {
                 vFiltered = vTasks;
             }
-            if(strFilterPagination!=null && !strFilterPagination.equalsIgnoreCase("")){
-                base.setAttribute("strFilterPagination", strFilterPagination);
-                base.updateAttributesToDB();
-            }
+            base.setAttribute("strFilterPagination", strFilterPagination);
+            base.updateAttributesToDB();
 
         } catch(Exception e){
           //log.error("Error en ControlPanel.applyFilters", e);
@@ -700,7 +699,6 @@ public class ControlPanel extends GenericAdmResource
         {
             Resource base = paramRequest.getResourceBase();
             String [] strIncludeProps = request.getParameterValues("cpIncludeProperty");
-            System.out.println("----updateArtifactPropertiesValues strIncludeProps:" + strIncludeProps.length);
             for(int i=0; i<strIncludeProps.length; i++)
             {
                 String strURI = strIncludeProps[i];
@@ -732,7 +730,6 @@ public class ControlPanel extends GenericAdmResource
                 strSelectedProps = strSelectedProps + strURI +
                         "|" + strApplyOnCriteria + "|" + strOrderValue + "|";
             }
-            System.out.println("----updateArtifactPropertiesValues strSelectedProps:" + strSelectedProps);
             if(strSelectedProps!=null && !strSelectedProps.equalsIgnoreCase("")){
                 base.setAttribute("cpSelectedProperties", strSelectedProps);
                 base.updateAttributesToDB();
