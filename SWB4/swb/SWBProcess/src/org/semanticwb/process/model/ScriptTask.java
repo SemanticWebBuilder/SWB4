@@ -31,15 +31,23 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         log.debug(createdClass);
         mcls.add(clazz.getUpperClassName(), createdClass);
     }
-    private void addSemanticObject(Interpreter i,SemanticObject object,MemoryClassLoader mcls) throws Exception
+    private void addSemanticObject(Interpreter i,SemanticObject object,MemoryClassLoader mcls,FlowNodeInstance instance) throws Exception
     {           
         String varname=object.getSemanticClass().getUpperClassName().toLowerCase();        
         String className=object.getSemanticClass().getUpperClassName();
-        Class clazz=mcls.loadClass(className);
-        Constructor c=clazz.getConstructor(SemanticObject.class);
-        Object instanceObject=c.newInstance(object);
-        log.debug("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
-        i.set(varname, instanceObject);
+        try
+        {
+            Class clazz=mcls.loadClass(className);
+            Constructor c=clazz.getConstructor(SemanticObject.class);
+            Object instanceObject=c.newInstance(object);
+            log.debug("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+            i.set(varname, instanceObject);
+        }
+        catch(ClassNotFoundException cnfe)
+        {
+            log.error("No se agrego variable "+varname+" a script relacionada con el objeto "+object.getURI()+" en la instancia de proceso "+instance.getURI());
+            log.error(cnfe);
+        }
     }
     private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
     {
@@ -90,7 +98,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             List<ProcessObject> processObjects=instance.getProcessInstance().listHeraquicalProcessObjects();
             for(ProcessObject po : processObjects)
             {
-                addSemanticObject(i,po.getSemanticObject(),mcls);
+                addSemanticObject(i,po.getSemanticObject(),mcls,instance);
             }
 
             Object ret=i.eval(code);
