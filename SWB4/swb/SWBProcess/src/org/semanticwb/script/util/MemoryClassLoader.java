@@ -6,9 +6,11 @@
 package org.semanticwb.script.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +93,17 @@ public final class MemoryClassLoader extends ClassLoader {
         {
             cnfe.printStackTrace();
         }
-        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
+        URLClassLoader urlClassLoader = (URLClassLoader) this.getParent();
+        StringBuilder sb = new StringBuilder();
+        List<String> options = new ArrayList<String>();
+        options.add("-classpath");
+
+        for (URL url : urlClassLoader.getURLs())
+            sb.append(url.getFile()).append(File.pathSeparator);
+
+        options.add(sb.toString());
+
+        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
         task.call();
     }    
 
