@@ -62,15 +62,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         for(ProcessObject po : processObjects)
         {
             String code=addSemanticClass(po.getSemanticObject().getSemanticClass());
-            log.debug("Agregando clase "+po.getSemanticObject().getSemanticClass().getUpperClassName());
-            log.debug(code);
+            System.out.println("Agregando clase "+po.getSemanticObject().getSemanticClass().getUpperClassName());
+            System.out.println(code);
             classes.put(po.getSemanticObject().getSemanticClass().getUpperClassName(), code);
         }
         if(!classes.isEmpty())
         {
-            log.debug("Compilando classes...");
+            System.out.println("Compilando classes...");
             mcls.addAll(classes);
-            log.debug("Classes compiladas");
+            System.out.println("Classes compiladas");
         }
         return mcls;
     }
