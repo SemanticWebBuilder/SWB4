@@ -1168,7 +1168,7 @@ public class TemplateImp extends Template
                                         String intraBR=(String)args.get("intrabr");
                                         if(it.hasNext() && (intraBR==null || intraBR.equalsIgnoreCase("true")))
                                         {
-                                            out.println("<BR>");
+                                            out.println("<br/>");
                                         }
                                         if(savelog)
                                         {
@@ -1479,7 +1479,7 @@ public class TemplateImp extends Template
                         //if(it.hasNext() && (intraBR==null || intraBR.equalsIgnoreCase("true")))
                         if(it.hasNext())
                         {
-                            out.println("<BR>");
+                            out.println("<br/>");
                         }
                         if (savelog)
                         {
