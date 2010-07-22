@@ -82,8 +82,21 @@ public final class MemoryClassLoader extends ClassLoader {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
-        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
-        task.call();
+        if(System.getenv("classpath")!=null && !System.getenv("classpath").trim().equals(""))
+        {
+            ArrayList<String> options=new ArrayList<String>();
+            options.add("-cp");
+            options.add(System.getenv("classpath"));
+            JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
+            task.call();
+        }
+        else
+        {
+            JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
+            task.call();
+        }
+
+        
     }    
 
 
