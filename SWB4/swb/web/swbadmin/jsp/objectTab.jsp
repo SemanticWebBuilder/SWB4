@@ -36,7 +36,7 @@
 
     //Div dummy para detectar evento de carga y modificar titulo
     String icon=SWBContext.UTILS.getIconClass(obj);
-    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+obj.getDisplayName(lang)+"','"+icon+"');\" />");
+    out.println("<div dojoType=\"dijit.layout.ContentPane\" postCreate=\"setTabTitle('"+id+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');\" />");
 
     out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\""+id+"/tab2\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");
 
@@ -52,6 +52,7 @@
         if(!SWBObjectFilter.filter(obj, ob.getPropertyFilter()))continue;
 
         String title=ob.getDisplayName(lang);
+        if(title!=null)title=title.replace("\"", "&cuote;");
         //DisplayObject dpobj=ob.getDisplayObject();
         SemanticObject interf=ob.getInterface();
         boolean refresh=ob.isRefreshOnShow();

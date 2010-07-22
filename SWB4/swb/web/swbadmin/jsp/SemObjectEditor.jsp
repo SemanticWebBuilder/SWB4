@@ -152,8 +152,8 @@ try
                 out.println("hideDialog();");
                 out.println("reloadTreeNodeByURI('"+ref.getURI()+"');");
                 if(reloadTab!=null && reloadTab.equals("true"))out.println("reloadTab('"+ref.getURI()+"');");
-                out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" creado');");
-                out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+obj.getDisplayName(lang)+"');");
+                out.println("showStatus('"+SWBUtils.TEXT.scape4Script(obj.getSemanticClass().getDisplayName(lang))+" creado');");
+                out.println("addNewTab('"+obj.getURI()+"','"+SWBPlatform.getContextPath()+"/swbadmin/jsp/objectTab.jsp"+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"');");
                 out.println("</script>");
             }
         }else
@@ -210,14 +210,14 @@ try
             out.println("updateTreeNodeByURI('"+obj.getURI()+"');");
 
             String icon=SWBContext.UTILS.getIconClass(obj);
-            out.println("setTabTitle('"+obj.getURI()+"','"+obj.getDisplayName(lang)+"','"+icon+"');");
+            out.println("setTabTitle('"+obj.getURI()+"','"+SWBUtils.TEXT.scape4Script(obj.getDisplayName(lang))+"','"+icon+"');");
             Iterator<SemanticObject> it2=obj.listRelatedObjects();
             while(it2.hasNext())
             {
                 SemanticObject aux=it2.next();
                 out.println("reloadTab('"+aux.getURI()+"');");
             }
-            out.println("showStatus('"+obj.getSemanticClass().getDisplayName(lang)+" actualizado');");
+            out.println("showStatus('"+SWBUtils.TEXT.scape4Script(obj.getSemanticClass().getDisplayName(lang))+" actualizado');");
             out.println("</script>");
         }
         frm.setAction(SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp");
