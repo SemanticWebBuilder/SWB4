@@ -23,13 +23,12 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         super(base);
     }  
     
-    private void addSemanticClass(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
+    private String addSemanticClass(SemanticClass clazz) throws Exception
     {
         CodeGenerator cg=new CodeGenerator();
-        String createdClass=cg.createClassBase(clazz,false);
-        log.debug("Agregando clase "+clazz.getUpperClassName()+" a MemoryClassLoader");
-        log.debug(createdClass);
-        mcls.add(clazz.getUpperClassName(), createdClass);
+        return cg.createClassBase(clazz,false);
+        
+
     }
     private void addSemanticObject(Interpreter i,SemanticObject object,MemoryClassLoader mcls,FlowNodeInstance instance) throws Exception
     {           
@@ -54,18 +53,19 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             log.error(cnfe);
         }
     }
-    private void addSemanticClasses(SemanticClass clazz,MemoryClassLoader mcls) throws Exception
-    {
-        addSemanticClass(clazz,mcls);
-    }
+    
     private MemoryClassLoader loadClasses(FlowNodeInstance instance,ClassLoader parent) throws Exception
     {
         MemoryClassLoader mcls=new MemoryClassLoader(parent);
+        HashMap<String,String> classes=new HashMap<String, String>();
         List<ProcessObject> processObjects=instance.getProcessInstance().listHeraquicalProcessObjects();
         for(ProcessObject po : processObjects)
         {
-            addSemanticClasses(po.getSemanticObject().getSemanticClass(),mcls);
+            String code=addSemanticClass(po.getSemanticObject().getSemanticClass());
+            classes.put(po.getSemanticObject().getSemanticClass().getUpperClassName(), code);
         }
+        if(!classes.isEmpty())
+            mcls.addAll(classes);
         return mcls;
     }
     @Override
@@ -86,7 +86,7 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
             }
             else
             {
-                mcls=loadClasses(instance,Runtime.getRuntime().getClass().getClassLoader());
+                mcls=loadClasses(instance,ProcessObject.class.getClassLoader());
                 loaders.put(instance.getURI(), mcls);
             }
             i.setClassLoader(mcls);            
