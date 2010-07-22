@@ -29,7 +29,7 @@ public final class MemoryClassLoader extends ClassLoader {
     private final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     private final MemoryFileManager manager = new MemoryFileManager(this.compiler);
 
-    public MemoryClassLoader(String classname, String filecontent) {
+    /*public MemoryClassLoader(String classname, String filecontent) {
         this(Collections.singletonMap(classname, filecontent));
     }
 
@@ -40,7 +40,7 @@ public final class MemoryClassLoader extends ClassLoader {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
         this.compiler.getTask(null, this.manager, null, null, null, list).call();
-    }
+    }*/
     public MemoryClassLoader(ClassLoader parent) {
         super(parent);
 
@@ -53,11 +53,7 @@ public final class MemoryClassLoader extends ClassLoader {
         }
         JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
         task.call();
-    }
-    public void add(String classname, String filecontent)
-    {
-        addAll(Collections.singletonMap(classname, filecontent));
-    }
+    }    
 
 
     @Override
