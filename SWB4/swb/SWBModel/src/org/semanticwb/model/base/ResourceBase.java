@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Tagable,org.semanticwb.model.Searchable,org.semanticwb.model.Traceable,org.semanticwb.model.XMLConfable,org.semanticwb.model.FilterableClass,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Expirable,org.semanticwb.model.Viewable,org.semanticwb.model.XMLable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Sortable,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable,org.semanticwb.model.Indexable,org.semanticwb.model.Campable,org.semanticwb.model.Priorityable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Deviceable
+public abstract class ResourceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Priorityable,org.semanticwb.model.Tagable,org.semanticwb.model.Searchable,org.semanticwb.model.XMLable,org.semanticwb.model.Deviceable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Campable,org.semanticwb.model.Referensable,org.semanticwb.model.Sortable,org.semanticwb.model.XMLConfable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Viewable,org.semanticwb.model.Filterable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Hitable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceFilter");
@@ -49,7 +49,7 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
         public static org.semanticwb.model.Resource createResource(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Resource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeResource(String id, org.semanticwb.model.SWBModel model)
@@ -296,7 +296,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCamp(org.semanticwb.model.Camp value)
     {
-        getSemanticObject().setObjectProperty(swb_camp, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_camp, value.getSemanticObject());
+        }else
+        {
+            removeCamp();
+        }
     }
 
     public void removeCamp()
@@ -379,7 +385,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setResourceFilter(org.semanticwb.model.ResourceFilter value)
     {
-        getSemanticObject().setObjectProperty(swb_resourceFilter, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_resourceFilter, value.getSemanticObject());
+        }else
+        {
+            removeResourceFilter();
+        }
     }
 
     public void removeResourceFilter()
@@ -400,7 +412,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setLanguage(org.semanticwb.model.Language value)
     {
-        getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        }else
+        {
+            removeLanguage();
+        }
     }
 
     public void removeLanguage()
@@ -488,7 +506,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setResourceType(org.semanticwb.model.ResourceType value)
     {
-        getSemanticObject().setObjectProperty(swb_resourceType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_resourceType, value.getSemanticObject());
+        }else
+        {
+            removeResourceType();
+        }
     }
 
     public void removeResourceType()
@@ -539,7 +563,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -632,7 +662,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setPflowInstance(org.semanticwb.model.PFlowInstance value)
     {
-        getSemanticObject().setObjectProperty(swb_pflowInstance, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_pflowInstance, value.getSemanticObject());
+        }else
+        {
+            removePflowInstance();
+        }
     }
 
     public void removePflowInstance()
@@ -663,7 +699,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setResourceSubType(org.semanticwb.model.ResourceSubType value)
     {
-        getSemanticObject().setObjectProperty(swb_resourceSubType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_resourceSubType, value.getSemanticObject());
+        }else
+        {
+            removeResourceSubType();
+        }
     }
 
     public void removeResourceSubType()
@@ -740,7 +782,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setDevice(org.semanticwb.model.Device value)
     {
-        getSemanticObject().setObjectProperty(swb_device, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_device, value.getSemanticObject());
+        }else
+        {
+            removeDevice();
+        }
     }
 
     public void removeDevice()
@@ -799,7 +847,13 @@ public abstract class ResourceBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

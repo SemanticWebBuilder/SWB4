@@ -29,7 +29,7 @@ public abstract class TimeElementBase extends org.semanticwb.model.base.FormElem
 
         public static org.semanticwb.model.TimeElement createTimeElement(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.TimeElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.TimeElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTimeElement(String id, org.semanticwb.model.SWBModel model)

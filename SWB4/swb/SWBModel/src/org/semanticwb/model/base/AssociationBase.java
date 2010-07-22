@@ -38,7 +38,7 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
 
         public static org.semanticwb.model.Association createAssociation(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Association)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Association)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeAssociation(String id, org.semanticwb.model.SWBModel model)
@@ -124,7 +124,13 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
 
     public void setType(org.semanticwb.model.Topic value)
     {
-        getSemanticObject().setObjectProperty(swb_assType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_assType, value.getSemanticObject());
+        }else
+        {
+            removeType();
+        }
     }
 
     public void removeType()

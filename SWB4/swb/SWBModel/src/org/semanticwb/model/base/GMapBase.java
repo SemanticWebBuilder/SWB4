@@ -31,7 +31,7 @@ public abstract class GMapBase extends org.semanticwb.model.base.FormElementBase
 
         public static org.semanticwb.model.GMap createGMap(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.GMap)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.GMap)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeGMap(String id, org.semanticwb.model.SWBModel model)

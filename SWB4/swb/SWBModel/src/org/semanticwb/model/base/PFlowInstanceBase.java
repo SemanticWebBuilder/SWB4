@@ -42,7 +42,7 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
 
         public static org.semanticwb.model.PFlowInstance createPFlowInstance(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.PFlowInstance)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.PFlowInstance)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removePFlowInstance(String id, org.semanticwb.model.SWBModel model)
@@ -97,7 +97,13 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
 
     public void setPfinstResource(org.semanticwb.model.Resource value)
     {
-        getSemanticObject().setObjectProperty(swb_pfinstResource, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_pfinstResource, value.getSemanticObject());
+        }else
+        {
+            removePfinstResource();
+        }
     }
 
     public void removePfinstResource()
@@ -118,7 +124,13 @@ public abstract class PFlowInstanceBase extends org.semanticwb.model.SWBClass im
 
     public void setPflow(org.semanticwb.model.PFlow value)
     {
-        getSemanticObject().setObjectProperty(swb_pfiPFlow, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_pfiPFlow, value.getSemanticObject());
+        }else
+        {
+            removePflow();
+        }
     }
 
     public void removePflow()

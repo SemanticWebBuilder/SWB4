@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
+public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceFilter");
@@ -34,7 +34,7 @@ public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass i
 
         public static org.semanticwb.model.ResourceFilter createResourceFilter(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.ResourceFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeResourceFilter(String id, org.semanticwb.model.SWBModel model)
@@ -89,7 +89,13 @@ public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass i
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -130,7 +136,13 @@ public abstract class ResourceFilterBase extends org.semanticwb.model.SWBClass i
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

@@ -28,7 +28,7 @@ public abstract class UserTypeDefBase extends org.semanticwb.model.SWBClass
 
         public static org.semanticwb.model.UserTypeDef createUserTypeDef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.UserTypeDef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.UserTypeDef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeUserTypeDef(String id, org.semanticwb.model.SWBModel model)

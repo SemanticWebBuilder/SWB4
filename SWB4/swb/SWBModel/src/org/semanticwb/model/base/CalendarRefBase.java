@@ -36,7 +36,7 @@ public abstract class CalendarRefBase extends org.semanticwb.model.Reference imp
 
         public static org.semanticwb.model.CalendarRef createCalendarRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.CalendarRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.CalendarRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeCalendarRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class CalendarRefBase extends org.semanticwb.model.Reference imp
 
     public void setCalendar(org.semanticwb.model.Calendar value)
     {
-        getSemanticObject().setObjectProperty(swb_calendar, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_calendar, value.getSemanticObject());
+        }else
+        {
+            removeCalendar();
+        }
     }
 
     public void removeCalendar()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class LanguageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
+public abstract class LanguageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Language=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Language");
@@ -28,7 +28,7 @@ public abstract class LanguageBase extends org.semanticwb.model.SWBClass impleme
 
         public static org.semanticwb.model.Language createLanguage(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Language)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Language)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeLanguage(String id, org.semanticwb.model.SWBModel model)
@@ -83,7 +83,13 @@ public abstract class LanguageBase extends org.semanticwb.model.SWBClass impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -139,7 +145,13 @@ public abstract class LanguageBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

@@ -28,7 +28,7 @@ public abstract class SecurityQuestionBase extends org.semanticwb.model.base.For
 
         public static org.semanticwb.model.SecurityQuestion createSecurityQuestion(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.SecurityQuestion)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.SecurityQuestion)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeSecurityQuestion(String id, org.semanticwb.model.SWBModel model)

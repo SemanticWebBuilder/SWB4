@@ -40,7 +40,7 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
 
         public static org.semanticwb.model.FormView createFormView(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.FormView)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.FormView)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeFormView(String id, org.semanticwb.model.SWBModel model)
@@ -112,9 +112,9 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swbxf_hasCreateProperty);
     }
 
-    public void removeCreateProperty(org.semanticwb.platform.SemanticObject semanticobject)
+    public void removeCreateProperty(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().removeObjectProperty(swbxf_hasCreateProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasCreateProperty,value);
     }
 
     public org.semanticwb.platform.SemanticObject getCreateProperty()
@@ -140,9 +140,9 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swbxf_hasViewProperty);
     }
 
-    public void removeViewProperty(org.semanticwb.platform.SemanticObject semanticobject)
+    public void removeViewProperty(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().removeObjectProperty(swbxf_hasViewProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasViewProperty,value);
     }
 
     public org.semanticwb.platform.SemanticObject getViewProperty()
@@ -194,9 +194,9 @@ public abstract class FormViewBase extends org.semanticwb.model.SWBClass impleme
         getSemanticObject().removeProperty(swbxf_hasEditProperty);
     }
 
-    public void removeEditProperty(org.semanticwb.platform.SemanticObject semanticobject)
+    public void removeEditProperty(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().removeObjectProperty(swbxf_hasEditProperty,semanticobject);
+        getSemanticObject().removeObjectProperty(swbxf_hasEditProperty,value);
     }
 
     public org.semanticwb.platform.SemanticObject getEditProperty()

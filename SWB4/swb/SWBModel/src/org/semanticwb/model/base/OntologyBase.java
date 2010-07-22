@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class OntologyBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable
+public abstract class OntologyBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass swb_OntologyDepable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#OntologyDepable");
     public static final org.semanticwb.platform.SemanticProperty swb_hasOntologyDependenceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasOntologyDependenceInv");
@@ -45,7 +45,7 @@ public abstract class OntologyBase extends org.semanticwb.model.SWBModel impleme
         {
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
             org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
-            return (org.semanticwb.model.Ontology)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Ontology)model.createGenericObject(model.getObjectUri(id,sclass),sclass);
         }
 
         public static void removeOntology(String id)
@@ -128,7 +128,13 @@ public abstract class OntologyBase extends org.semanticwb.model.SWBModel impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -184,7 +190,13 @@ public abstract class OntologyBase extends org.semanticwb.model.SWBModel impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

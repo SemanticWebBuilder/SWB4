@@ -30,7 +30,7 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
 
         public static org.semanticwb.model.SWBModel createSWBModel(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.SWBModel)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.SWBModel)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeSWBModel(String id, org.semanticwb.model.SWBModel model)
@@ -63,7 +63,13 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
 
     public void setParentWebSite(org.semanticwb.model.WebSite value)
     {
-        getSemanticObject().setObjectProperty(swb_parentWebSite, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_parentWebSite, value.getSemanticObject());
+        }else
+        {
+            removeParentWebSite();
+        }
     }
 
     public void removeParentWebSite()

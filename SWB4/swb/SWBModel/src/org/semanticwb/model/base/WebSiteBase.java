@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
@@ -74,7 +74,7 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         {
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
             org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
-            return (org.semanticwb.model.WebSite)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.WebSite)model.createGenericObject(model.getObjectUri(id,sclass),sclass);
         }
 
         public static void removeWebSite(String id)
@@ -227,7 +227,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setLanguage(org.semanticwb.model.Language value)
     {
-        getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        }else
+        {
+            removeLanguage();
+        }
     }
 
     public void removeLanguage()
@@ -309,7 +315,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -365,7 +377,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setUserRepository(org.semanticwb.model.UserRepository value)
     {
-        getSemanticObject().setObjectProperty(swb_userRepository, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_userRepository, value.getSemanticObject());
+        }else
+        {
+            removeUserRepository();
+        }
     }
 
     public void removeUserRepository()
@@ -437,7 +455,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()
@@ -458,7 +482,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setHomePage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swb_homePage, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_homePage, value.getSemanticObject());
+        }else
+        {
+            removeHomePage();
+        }
     }
 
     public void removeHomePage()
@@ -479,7 +509,13 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
 
     public void setDefaultTemplate(org.semanticwb.model.Template value)
     {
-        getSemanticObject().setObjectProperty(swb_defaultTemplate, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_defaultTemplate, value.getSemanticObject());
+        }else
+        {
+            removeDefaultTemplate();
+        }
     }
 
     public void removeDefaultTemplate()

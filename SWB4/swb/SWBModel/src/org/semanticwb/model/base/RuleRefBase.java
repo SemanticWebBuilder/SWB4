@@ -36,7 +36,7 @@ public abstract class RuleRefBase extends org.semanticwb.model.Reference impleme
 
         public static org.semanticwb.model.RuleRef createRuleRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.RuleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.RuleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeRuleRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class RuleRefBase extends org.semanticwb.model.Reference impleme
 
     public void setRule(org.semanticwb.model.Rule value)
     {
-        getSemanticObject().setObjectProperty(swb_rule, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_rule, value.getSemanticObject());
+        }else
+        {
+            removeRule();
+        }
     }
 
     public void removeRule()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.WebPageable
+public abstract class DnsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.WebPageable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_dnsDefault=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dnsDefault");
     public static final org.semanticwb.platform.SemanticProperty swb_dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dns");
@@ -36,7 +36,7 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
 
         public static org.semanticwb.model.Dns createDns(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Dns)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeDns(String id, org.semanticwb.model.SWBModel model)
@@ -103,7 +103,13 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -134,7 +140,13 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
 
     public void setWebPage(org.semanticwb.model.WebPage value)
     {
-        getSemanticObject().setObjectProperty(swb_webPage, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_webPage, value.getSemanticObject());
+        }else
+        {
+            removeWebPage();
+        }
     }
 
     public void removeWebPage()
@@ -155,7 +167,13 @@ public abstract class DnsBase extends org.semanticwb.model.SWBClass implements o
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

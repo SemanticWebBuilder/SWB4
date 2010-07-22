@@ -31,7 +31,7 @@ public abstract class FormViewRefBase extends org.semanticwb.model.Reference imp
 
         public static org.semanticwb.model.FormViewRef createFormViewRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.FormViewRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.FormViewRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeFormViewRef(String id, org.semanticwb.model.SWBModel model)
@@ -64,7 +64,13 @@ public abstract class FormViewRefBase extends org.semanticwb.model.Reference imp
 
     public void setFormView(org.semanticwb.model.FormView value)
     {
-        getSemanticObject().setObjectProperty(swb_formView, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_formView, value.getSemanticObject());
+        }else
+        {
+            removeFormView();
+        }
     }
 
     public void removeFormView()

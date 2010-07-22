@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Inheritable,org.semanticwb.model.Priorityable
+public abstract class TemplateRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable,org.semanticwb.model.Priorityable,org.semanticwb.model.Inheritable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#template");
@@ -36,7 +36,7 @@ public abstract class TemplateRefBase extends org.semanticwb.model.Reference imp
 
         public static org.semanticwb.model.TemplateRef createTemplateRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.TemplateRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.TemplateRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTemplateRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class TemplateRefBase extends org.semanticwb.model.Reference imp
 
     public void setTemplate(org.semanticwb.model.Template value)
     {
-        getSemanticObject().setObjectProperty(swb_template, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_template, value.getSemanticObject());
+        }else
+        {
+            removeTemplate();
+        }
     }
 
     public void removeTemplate()

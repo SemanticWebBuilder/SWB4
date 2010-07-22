@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Iconable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.HerarquicalNodeable,org.semanticwb.model.Sortable
+public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Iconable,org.semanticwb.model.Filterable,org.semanticwb.model.HerarquicalNodeable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swbxf_heTreeController=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#heTreeController");
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
@@ -34,7 +34,7 @@ public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass 
 
         public static org.semanticwb.model.HerarquicalNode createHerarquicalNode(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.HerarquicalNode)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.HerarquicalNode)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeHerarquicalNode(String id, org.semanticwb.model.SWBModel model)
@@ -202,7 +202,13 @@ public abstract class HerarquicalNodeBase extends org.semanticwb.model.SWBClass 
 
     public void setModel(org.semanticwb.model.SWBModel value)
     {
-        getSemanticObject().setObjectProperty(swbxf_heModel, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swbxf_heModel, value.getSemanticObject());
+        }else
+        {
+            removeModel();
+        }
     }
 
     public void removeModel()

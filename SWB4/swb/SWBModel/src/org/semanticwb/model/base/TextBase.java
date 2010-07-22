@@ -29,7 +29,7 @@ public abstract class TextBase extends org.semanticwb.model.base.FormElementBase
 
         public static org.semanticwb.model.Text createText(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Text)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Text)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeText(String id, org.semanticwb.model.SWBModel model)

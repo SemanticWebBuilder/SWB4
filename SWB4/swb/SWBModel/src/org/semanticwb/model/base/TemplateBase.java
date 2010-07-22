@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Expirable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Deviceable
+public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Deviceable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Versionable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
     public static final org.semanticwb.platform.SemanticProperty swb_templateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#templateGroup");
@@ -38,7 +38,7 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
         public static org.semanticwb.model.Template createTemplate(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Template)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTemplate(String id, org.semanticwb.model.SWBModel model)
@@ -249,7 +249,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setGroup(org.semanticwb.model.TemplateGroup value)
     {
-        getSemanticObject().setObjectProperty(swb_templateGroup, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_templateGroup, value.getSemanticObject());
+        }else
+        {
+            removeGroup();
+        }
     }
 
     public void removeGroup()
@@ -270,7 +276,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setLastVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
+        }else
+        {
+            removeLastVersion();
+        }
     }
 
     public void removeLastVersion()
@@ -311,7 +323,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setLanguage(org.semanticwb.model.Language value)
     {
-        getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_language, value.getSemanticObject());
+        }else
+        {
+            removeLanguage();
+        }
     }
 
     public void removeLanguage()
@@ -383,7 +401,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -439,7 +463,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setActualVersion(org.semanticwb.model.VersionInfo value)
     {
-        getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
+        }else
+        {
+            removeActualVersion();
+        }
     }
 
     public void removeActualVersion()
@@ -516,7 +546,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setDevice(org.semanticwb.model.Device value)
     {
-        getSemanticObject().setObjectProperty(swb_device, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_device, value.getSemanticObject());
+        }else
+        {
+            removeDevice();
+        }
     }
 
     public void removeDevice()
@@ -563,7 +599,13 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

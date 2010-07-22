@@ -37,7 +37,7 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
 
         public static org.semanticwb.model.DisplayProperty createDisplayProperty(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.DisplayProperty)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.DisplayProperty)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeDisplayProperty(String id, org.semanticwb.model.SWBModel model)
@@ -167,7 +167,13 @@ public abstract class DisplayPropertyBase extends org.semanticwb.model.SWBClass 
 
     public void setGroup(org.semanticwb.model.PropertyGroup value)
     {
-        getSemanticObject().setObjectProperty(swbxf_propGroup, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swbxf_propGroup, value.getSemanticObject());
+        }else
+        {
+            removeGroup();
+        }
     }
 
     public void removeGroup()

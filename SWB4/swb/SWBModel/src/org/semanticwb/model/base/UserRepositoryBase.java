@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable
+public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_userRepLoginContext=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepLoginContext");
     public static final org.semanticwb.platform.SemanticProperty swb_userRepAuthMethod=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userRepAuthMethod");
@@ -51,7 +51,7 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
         {
             org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
             org.semanticwb.platform.SemanticModel model=mgr.createModel(id, namespace);
-            return (org.semanticwb.model.UserRepository)model.createGenericObject(model.getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.UserRepository)model.createGenericObject(model.getObjectUri(id,sclass),sclass);
         }
 
         public static void removeUserRepository(String id)
@@ -134,7 +134,13 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -306,7 +312,13 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPSTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPSTResource");
@@ -32,7 +32,7 @@ public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass 
 
         public static org.semanticwb.model.ResourceSubType createResourceSubType(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.ResourceSubType)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeResourceSubType(String id, org.semanticwb.model.SWBModel model)
@@ -111,7 +111,13 @@ public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass 
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -193,7 +199,13 @@ public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass 
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()
@@ -214,7 +226,13 @@ public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass 
 
     public void setType(org.semanticwb.model.ResourceType value)
     {
-        getSemanticObject().setObjectProperty(swb_PSTType, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_PSTType, value.getSemanticObject());
+        }else
+        {
+            removeType();
+        }
     }
 
     public void removeType()

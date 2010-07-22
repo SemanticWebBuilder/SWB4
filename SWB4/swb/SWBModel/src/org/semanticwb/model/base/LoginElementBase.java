@@ -28,7 +28,7 @@ public abstract class LoginElementBase extends org.semanticwb.model.Text
 
         public static org.semanticwb.model.LoginElement createLoginElement(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.LoginElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.LoginElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeLoginElement(String id, org.semanticwb.model.SWBModel model)
