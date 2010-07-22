@@ -74,29 +74,25 @@ public final class MemoryClassLoader extends ClassLoader {
     }
     public MemoryClassLoader(ClassLoader parent) {
         super(parent);
-
     }
+    
+
     public void addAll(Map<String, String> map)
     {
         List<Source> list = new ArrayList<Source>();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
-        if(System.getenv("classpath")!=null && !System.getenv("classpath").trim().equals(""))
+        try
         {
-            ArrayList<String> options=new ArrayList<String>();
-            options.add("-cp");
-            options.add(System.getenv("classpath"));
-            JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);
-            task.call();
+            Thread.currentThread().getContextClassLoader().loadClass("org.semanticwb.process.model.ProcessObject");
         }
-        else
+        catch(ClassNotFoundException cnfe)
         {
-            JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
-            task.call();
+            cnfe.printStackTrace();
         }
-
-        
+        JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, null, null, list);
+        task.call();
     }    
 
 
