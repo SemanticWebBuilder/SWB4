@@ -313,7 +313,7 @@ public class Distributor implements InternalServlet
                     if(currResource==null)
                     {
                         log.warn("Error al procesar el URL:"+request.getRequestURL());
-                        response.sendError(404, "No se encontro:" + request.getRequestURI() + "<BR>");
+                        response.sendError(404, "No se encontro:" + request.getRequestURI() + "<br/>");
                         return false;
                     }
                     SWBActionResponseImp resParams = new SWBActionResponseImp(response);
@@ -339,7 +339,7 @@ public class Distributor implements InternalServlet
                 } catch (Throwable e) {
                     log.error(e);
                     log.debug("Distributor: SendError 500");
-                    response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI() + "<BR>" + e);
+                    response.sendError(500, "No es posible procesar el requerimiento:" + request.getRequestURI() + "<br/>" + e);
                     return false;
                 }
             }
