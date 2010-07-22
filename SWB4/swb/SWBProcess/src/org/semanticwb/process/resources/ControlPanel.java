@@ -228,7 +228,6 @@ public class ControlPanel extends GenericAdmResource
                         }
                         if(tProp.isAppliedOnTaskLegend())
                         {
-                            //strLegend = strLegend + tProp.getType() + "." + tProp.getName() + "|";
                             String strTempName = tProp.getType() + "." + tProp.getName();
                             ComparableProperty compy = new ComparableProperty(strTempName, tProp.getURI(), tProp.getOrderOnTask());
                             vLegend.add(iLegend, compy);
@@ -236,7 +235,6 @@ public class ControlPanel extends GenericAdmResource
                         }
                         if(tProp.isAppliedOnTaskColumn())
                         {
-                            //strColumns = strColumns + tProp.getType() + "." + tProp.getName() + "|";
                             String strTempName = tProp.getType() + "." + tProp.getName();
                             ComparableProperty compy = new ComparableProperty(strTempName, tProp.getURI(), tProp.getOrderOnTask());
                             vColumns.add(iColumns, compy);
@@ -256,14 +254,12 @@ public class ControlPanel extends GenericAdmResource
                         }
                         if(pp.isAppliedOnTaskLegend())
                         {
-                            //strLegend = strLegend + pp.getURI() + "|";
                             ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
                             vLegend.add(iLegend, compy);
                             iLegend++;
                         }
                         if(pp.isAppliedOnTaskColumn())
                         {
-                            //strColumns = strColumns + pp.getURI() + "|";
                             ComparableProperty compy = new ComparableProperty(pp.getURI(), pp.getURI(), pp.getOrderOnTask());
                             vColumns.add(iColumns, compy);
                             iColumns++;
@@ -1158,7 +1154,6 @@ public class ControlPanel extends GenericAdmResource
                     //TODO: Checar si esta activa pinst.getStatus() ????
                     Iterator<FlowNodeInstance> itFlowNodeInstances = pinst.listFlowNodeInstances();
                     //Iterator<FlowNodeInstance> itFlowNodeInstances = SWBProcessMgr.getUserTaskInstances(pinst, currentUser).iterator();
-
                     while(itFlowNodeInstances.hasNext())
                     {
                         FlowNodeInstance flobInst = itFlowNodeInstances.next();
@@ -1495,7 +1490,6 @@ public class ControlPanel extends GenericAdmResource
                         }
                         countFixedParameters++;
                     }
-
                     switch(parseType)
                     {
                         case 0: //link
@@ -1709,7 +1703,6 @@ public class ControlPanel extends GenericAdmResource
                         sb.append("<th class=\"orden-no\"><a href=\"#\">" + paramRequest.getLocaleString("lblTaskTitle") + "</a></th>");
                         for(int j=0; j<colNamesArr.length; j++){
                             String tmpName = colNamesArr[j];
-                            if(hash.containsKey(tmpName)){
                                 if(tmpName.contains("TaskDefinition.") || tmpName.contains("TaskInstance."))
                                 {
                                     String[] tmpArr = tmpName.split("\\.");
@@ -1717,7 +1710,6 @@ public class ControlPanel extends GenericAdmResource
                                 } else if(tmpName.contains("http://")) {
                                     tmpName = BPMSProcessInstance.ClassMgr.getPropertyName(tmpName);
                                 }
-                            }
                             sb.append("<th class=\"orden-no\"><a href=\"#\">" + tmpName +  "</a></th>");
                         }
                         sb.append("</tr></thead><tbody>");
@@ -1856,14 +1848,12 @@ public class ControlPanel extends GenericAdmResource
             sbPrint.append("</select><br/><br/>");
             if(bClosedFilter)
             {
-                //sbPrint.append("<label for=\"hideClosedTasks\" >" + paramRequest.getLocaleString("lblClosedFilter") + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\">" + paramRequest.getLocaleString("cpClosedFilter0") + "<br/>" + "<input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + " checked value=\"1\">" + paramRequest.getLocaleString("cpClosedFilter1") + "<br/><br/>");
                 sbPrint.append("<div class=\"radios\"><p class=\"cerradas\">" + paramRequest.getLocaleString("lblClosedFilter") + ":</p></div>");
                 sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\" class=\"radio\">");
                 sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter0") + "</label></div>");
                 sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"1\" checked class=\"radio\">");
                 sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter1") + "</label></div>");
             } else {
-                //sbPrint.append("<label for=\"hideClosedTasks\" >" + paramRequest.getLocaleString("lblClosedFilter") + "</label> <input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + "  checked value=\"0\" >" + paramRequest.getLocaleString("cpClosedFilter0") + "<br/>" + "<input type=\"RADIO\" id=\"hideClosedTasks\"" + "name=\"hideClosedTasks\" " + "  value=\"1\">" + paramRequest.getLocaleString("cpClosedFilter1") + "<br/><br/>");
                 sbPrint.append("<div class=\"radios\"><p class=\"cerradas\">" + paramRequest.getLocaleString("lblClosedFilter") + ":</p></div>");
                 sbPrint.append("<div class=\"radios\"><input type=\"RADIO\" id=\"hideClosedTasks\""  + "name=\"hideClosedTasks\" " + " value=\"0\" checked class=\"radio\">");
                 sbPrint.append("<label for=\"hideClosedTasks\">" + paramRequest.getLocaleString("cpClosedFilter0") + "</label></div>");
@@ -2099,7 +2089,6 @@ public class ControlPanel extends GenericAdmResource
             }
             if(fobi.getCreated()!=null)
             {
-                //Date dtCreated = fobi.getCreated();
                 strDateCreated = String.valueOf(fobi.getCreated());
                 strCreator = fobi.getCreator().getFullName()==null
                     ?""
@@ -2107,7 +2096,6 @@ public class ControlPanel extends GenericAdmResource
             }
             if(fobi.getUpdated()!=null)
             {
-                //Date dtModified = fobi.getUpdated();
                 strDateModified = String.valueOf(fobi.getUpdated());
                 strModifiedBy = fobi.getModifiedBy().getFullName()==null
                     ?""
@@ -2115,7 +2103,6 @@ public class ControlPanel extends GenericAdmResource
             }
             if(fobi.getEnded()!=null)
             {
-                //Date dtEnded = fobi.getEnded();
                 strDateEnded = String.valueOf(fobi.getEnded());
                 strEndedBy = fobi.getEndedby().getFullName()==null
                     ?""
@@ -2928,22 +2915,6 @@ public class ControlPanel extends GenericAdmResource
                     strEndReportDate +
                     "</p>");
             sb.append("<p class=\"der cerradas-si\"></p></div>");
-            /*
-            sb.append("<div class=\"swbform\">");
-            sb.append("<div>" +
-                    paramsRequest.getLocaleString("lblCrReportTitle") + " " +
-                    currentUser.getFullName() + "</div>");
-            sb.append("<div>" +
-                    paramsRequest.getLocaleString("lblCrReportStart") + " " +
-                    strInitialReportDate + " " +
-                    paramsRequest.getLocaleString("lblCrReportEnd") +
-                    strEndReportDate + "</div>");
-            //TODO: Agregar criterios
-            sb.append("<div>" +
-                    paramsRequest.getLocaleString("lblCrReportCriteria") +
-                    "</div>");
-            */
-            
             sb.append("<table><thead><th class=\"orden-no\"><a href=\"#\">" +
                     paramsRequest.getLocaleString("cpHeaderRow0") + "</a></th>" +
                     "<th class=\"orden-no\"><a href=\"#\">" +
@@ -2972,8 +2943,6 @@ public class ControlPanel extends GenericAdmResource
                 sb.append(printReportTask(fobi, paramsRequest));  
             }
             sb.append("</tbody></table>");
-             
-            //sb.append("</div>");
             sb.append("<div id=\"descarga\">");
             sb.append("<ul><li>");
             sb.append(createXmlReport(request, paramsRequest));
@@ -2984,7 +2953,6 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</li></ul>");
             sb.append("");
             sb.append("<form name=\"frmReport\" action=\"" + url.setAction("selectReport") + "\" method=\"POST\">");
-            //sb.append("<input type=\"SUBMIT\" " + "name=\"btnReport\"  value=\"" + paramsRequest.getLocaleString("btnNewReport") + "\"/>");
             sb.append("<input type=\"SUBMIT\" " + "name=\"btnBack2View\" class=\"pleca_boton\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" +
                     " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
             sb.append("</form></div>");
@@ -3061,17 +3029,6 @@ public class ControlPanel extends GenericAdmResource
                     + " style=\"width: 25%;\"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\" />");
             sb.append("<br />");
-            /*
-            sb.append(paramsRequest.getLocaleString("lblReportIniDate")
-                    + "<input id=\"" +INITIAL_DATE_REPORT_CTRL +
-                    "\" name=\"" + INITIAL_DATE_REPORT_CTRL +"\"" +
-                    " dojoType=\"dijit.form.DateTextBox\"" +
-                    " required=\"false\""+
-                    "invalidMessage=\"" +
-                    paramsRequest.getLocaleString("msgErrEventFecha")
-                    + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-             */
             sb.append("<label for=\"" + END_DATE_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportEndDate") + ":</label>");
             sb.append("<input type=\"text\" name=\"" + END_DATE_REPORT_CTRL + "\" id=\"" + END_DATE_REPORT_CTRL +"\" class=\"pleca_txt\" " +
                   "dojoType=\"dijit.form.DateTextBox\"" +
@@ -3081,17 +3038,6 @@ public class ControlPanel extends GenericAdmResource
                     + " style=\"width: 25%;\"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\" />");
             sb.append("<br />");
-            /*
-            sb.append(paramsRequest.getLocaleString("lblReportEndDate")
-                    + "<input id=\"" +END_DATE_REPORT_CTRL +
-                    "\" name=\"" + END_DATE_REPORT_CTRL +"\"" +
-                    " dojoType=\"dijit.form.DateTextBox\"" +
-                    " required=\"false\""+
-                    "invalidMessage=\"" +
-                    paramsRequest.getLocaleString("msgErrEventFecha")
-                    + " style=\"width: 25%; \"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-            */
 	        sb.append("<label for=\"" + PROCESS_REPORT_CTRL +"\" >" + paramsRequest.getLocaleString("lblReportProcess") + ":</label>");
             sb.append(" <select name=\""+PROCESS_REPORT_CTRL+ ""
                 + "\" id=\""+PROCESS_REPORT_CTRL+"\">");
@@ -3140,13 +3086,10 @@ public class ControlPanel extends GenericAdmResource
                         vTaskPriority.get(i)) + "</option>");
             }
             sb.append("</select><br/><br/>");
-
             sb.append("<input type=\"SUBMIT\" class=\"pleca_boton\" name=\"btnEdit\"  value=\"" +
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
             sb.append("<input type=\"RESET\" class=\"pleca_boton\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
-            //sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\"  value=\"" + paramsRequest.getLocaleString("btnBack") + "\"" + " onclick=\"direccionaI('" + url.setAction("goToView") + "');\" />");
-
             sb.append("</form></div></div>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getFilterForm", e);
@@ -3654,44 +3597,19 @@ public class ControlPanel extends GenericAdmResource
                     + " style=\"width: 25%;\"" +
                     " constraints=\"{datePattern:'dd/MM/yyyy'}\"/>");
           sb.append("<br />");
-            /*
-            sb.append(paramsRequest.getLocaleString("lblFilterIniDate")
-                    + "<input id=\"" +INITIAL_DATE_FILTER_CTRL +
-                    "\" name=\"" + INITIAL_DATE_FILTER_CTRL +"\"" +
-                    " dojoType=\"dijit.form.DateTextBox\"" +
-                    " required=\"false\""+
-                    "invalidMessage=\"" +
-                    paramsRequest.getLocaleString("msgErrEventFecha")
-                    + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-            sb.append(paramsRequest.getLocaleString("lblFilterEndDate")
-                    + "<input id=\"" + END_DATE_FILTER_CTRL +
-                    "\" name=\"" + END_DATE_FILTER_CTRL +"\"" +
-                    " dojoType=\"dijit.form.DateTextBox\"" +
-                    " required=\"false\""+
-                    "invalidMessage=\"" +
-                    paramsRequest.getLocaleString("msgErrEventFecha")
-                    + " style=\"width: 25%;\"" +
-                    " constraints=\"{datePattern:'dd/MM/yyyy'}\"/><br/><br/>");
-            */
 	      sb.append("<label for=\"" + PROCESS_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterProcess") + ":</label>");
 	      sb.append("<select name=\"" + PROCESS_FILTER_CTRL + "\" id=\"" + PROCESS_FILTER_CTRL +"\" />");
-          /*
-          sb.append(paramsRequest.getLocaleString("lblFilterProcess")
-                    + " <select name=\""+PROCESS_FILTER_CTRL+ ""
-                + "\" id=\""+PROCESS_FILTER_CTRL+"\">");
-            */
             sb.append("<option ");
             sb.append("value=\"0\">" +
-                    paramsRequest.getLocaleString("cpAllProcesses") +
-                    "</option>");
+            paramsRequest.getLocaleString("cpAllProcesses") +
+            "</option>");
             for(int i=0; i<vSelectedProcessDefinitions.size(); i++){
                 org.semanticwb.process.model.Process selectedProcess =
-                    (org.semanticwb.process.model.Process)
+                (org.semanticwb.process.model.Process)
                 vSelectedProcessDefinitions.get(i);
                 sb.append("<option ");
                 sb.append("value=\"" + selectedProcess.getURI()
-                    + "\">" + selectedProcess.getTitle() +"</option>");
+                + "\">" + selectedProcess.getTitle() +"</option>");
             }
             sb.append("</select><br/>");
 
@@ -3699,7 +3617,6 @@ public class ControlPanel extends GenericAdmResource
                     BPMSProcessInstance.ClassMgr.stringToVector(
                         strControlPanelTaskStatus);
 	        sb.append("<label for=\"" + STATUS_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterStatus") + ":</label>");
-            //sb.append(paramsRequest.getLocaleString("lblFilterStatus")
             sb.append(" <select name=\""+STATUS_FILTER_CTRL+ ""
                     + "\" id=\""+STATUS_FILTER_CTRL+"\">");
                 sb.append("<option ");
@@ -3718,7 +3635,6 @@ public class ControlPanel extends GenericAdmResource
                     BPMSProcessInstance.ClassMgr.stringToVector(
                         strControlPanelTaskPriority);
 	        sb.append("<label for=\"" + PRIORITY_FILTER_CTRL +"\" >" + paramsRequest.getLocaleString("lblFilterPriority") + ":</label>");
-            //sb.append(paramsRequest.getLocaleString("lblFilterPriority")
             sb.append(" <select name=\""+PRIORITY_FILTER_CTRL+ ""
                     + "\" id=\""+PRIORITY_FILTER_CTRL+"\">");
                 sb.append("<option ");
@@ -3736,7 +3652,6 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("btnApplyFilter") + "\"/>");
             sb.append("<input type=\"RESET\" class=\"pleca_boton\" name=\"btnReset\" value=\"" +
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
-            //sb.append("<input type=\"SUBMIT\" name=\"btnBack2View\" value=\"" + paramsRequest.getLocaleString("btnBack") + "\" onclick=\"direccionaF('" + url.setAction("goToView") + "');\" />");
             sb.append("</form>");
             sb.append("</div></div>");
         } catch(Exception e){
@@ -3802,18 +3717,16 @@ public class ControlPanel extends GenericAdmResource
         PrintWriter out = response.getWriter();
         try
         {
-            if(paramsRequest.getAction().equalsIgnoreCase("editCustomization"))
-            {
-                out.print(customizeDisplay(request, response, paramsRequest));
-            } else if(paramsRequest.getAction().equalsIgnoreCase("updateCustomization"))
+            //if(paramsRequest.getAction().equalsIgnoreCase("editCustomization")){
+            //   out.print(customizeDisplay(request, response, paramsRequest));
+            //} else
+            if(paramsRequest.getAction().equalsIgnoreCase("updateCustomization"))
             {
                 out.print(setCustomizedData(request, paramsRequest));
-            } else if(paramsRequest.getAction().equalsIgnoreCase("editFilters"))
-            {
-                out.println(getFilterForm(paramsRequest).toString());
-            } else if(paramsRequest.getAction().equalsIgnoreCase("selectReport"))
-            {
-                out.println(getReportForm(paramsRequest).toString());
+            //} else if(paramsRequest.getAction().equalsIgnoreCase("editFilters")){
+            //  out.println(getFilterForm(paramsRequest).toString());
+            //} else if(paramsRequest.getAction().equalsIgnoreCase("selectReport")) {
+            //   out.println(getReportForm(paramsRequest).toString());
             } else {
                 //pintar tabla de tareas
                 Resource base = paramsRequest.getResourceBase();
@@ -3839,36 +3752,31 @@ public class ControlPanel extends GenericAdmResource
                 out.println("<form id=\"frmEditCustomization\" name=\"frmEditCustomization\" action=\"" +
                         paramsRequest.getRenderUrl().setAction(
                         "editCustomization") + "\" method=\"POST\">");
-                //out.println("<li><input type=\"SUBMIT\" name=\"btnEdit\" " + " value=\"" + paramsRequest.getLocaleString("btnCustomize") + "\"/></li>");
                 out.println("<ul>");
-                //out.println("<li class=\"tab-on\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
-                //out.println("<li class=\"tab-off\"><a href=\"#\" onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
                 out.println("<li id=\"li_filtrado\" class=\"tab-on\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','show','informe','','hide','personaliza','','hide');selectedTab('filtrado');\">" + paramsRequest.getLocaleString("btnFilter") + "</a></li>");
                 out.println("<li id=\"li_informe\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','show','personaliza','','hide');selectedTab('informe');\">" + paramsRequest.getLocaleString("btnReport") + "</a></li>");
                 out.println("<li id=\"li_personaliza\" class=\"tab-off\"><a href=\"#\" onclick=\"MM_showHideLayers('filtrado','','hide','informe','','hide','personaliza','','show');selectedTab('personaliza');\">" + paramsRequest.getLocaleString("btnCustomize") + "</a></li>");
                 out.println("</ul>");
-                //out.println("<input type=\"SUBMIT\" name=\"btnFilter\" " + " value=\"" + paramsRequest.getLocaleString("btnFilter") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("editFilters") + "');\" />");
-                //out.println("<input type=\"SUBMIT\" name=\"btnReport\" " + " value=\"" + paramsRequest.getLocaleString("btnReport") + "\" " + "onclick=\"direcciona('" + paramsRequest.getRenderUrl().setAction("selectReport") + "');\" />");
                 out.println("</form>");
                 out.println("</div>");
-            out.println("<script type=\"text/javascript\">");
-            out.println("dojo.require(\"dojo.parser\");");
-            out.println("dojo.require(\"dijit.Dialog\");");
-            out.println("dojo.require(\"dijit.form.Form\");");
-            out.println("dojo.require(\"dijit.form.Button\");");
-            out.println("dojo.require(\"dijit.form.DateTextBox\");");
-            out.println("dojo.require(\"dijit.form.ValidationTextBox\");");
-            out.println("dojo.require(\"dijit.form.TimeTextBox\");");
-            out.println("dojo.require(\"dijit.form.Textarea\");");
-            out.println("dojo.require(\"dijit.form.ComboBox\");");
-            out.println("dojo.require(\"dojox.validate.regexp\");");
-            out.println("</script>");
+                out.println("<script type=\"text/javascript\">");
+                out.println("dojo.require(\"dojo.parser\");");
+                out.println("dojo.require(\"dijit.Dialog\");");
+                out.println("dojo.require(\"dijit.form.Form\");");
+                out.println("dojo.require(\"dijit.form.Button\");");
+                out.println("dojo.require(\"dijit.form.DateTextBox\");");
+                out.println("dojo.require(\"dijit.form.ValidationTextBox\");");
+                out.println("dojo.require(\"dijit.form.TimeTextBox\");");
+                out.println("dojo.require(\"dijit.form.Textarea\");");
+                out.println("dojo.require(\"dijit.form.ComboBox\");");
+                out.println("dojo.require(\"dojox.validate.regexp\");");
+                out.println("</script>");
                 out.println("<div id=\"plecas-padre\">");
                 out.println(getFilterForm(paramsRequest));
                 out.println(getReportForm(paramsRequest));
-                out.print(customizeDisplay(request, response, paramsRequest));
+                out.println(customizeDisplay(request, response, paramsRequest));
                 out.println("</div>");
-            out.println("</div>");
+                out.println("</div>");
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.doView", e);
@@ -3888,6 +3796,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            intCurrPage int
     * @param            vectorSize int
     * @param            paramRequest SWBParamRequest
+    * @param            request HttpServletRequest
     * @return      		StringBuffer con codigo HTML
     */
     public StringBuffer getPagination(int intRowsPerPage, int intCurrPage,
@@ -3905,9 +3814,7 @@ public class ControlPanel extends GenericAdmResource
             int totalPages = getTotalPages(vectorSize,intRowsPerPage);
             int endRow = getPageLastRow(vectorSize,intRowsPerPage,intCurrPage);
             int iniRow = getPageFirstRow(vectorSize,intRowsPerPage,intCurrPage);
-            //sb.append("<table border=1><tr>");
             if(totalPages>1){
-                //if(totalPages>1 && intCurrPage>1){
                 if(intCurrPage>1){
                     int backPage = intCurrPage - 1;
                     SWBResourceURL sUrlFirstPage = paramRequest.getRenderUrl();
@@ -3941,7 +3848,6 @@ public class ControlPanel extends GenericAdmResource
                         sb.append("\">" + page + "</a>");
                     }
                 }
-                //if(totalPages>1 && intCurrPage<totalPages){
                 if(intCurrPage<totalPages){
                     int nextPage = intCurrPage + 1;
                     SWBResourceURL sUrlNext = paramRequest.getRenderUrl();
@@ -3962,7 +3868,6 @@ public class ControlPanel extends GenericAdmResource
                             "</a>");
                 }                
             }
-            //sb.append("</tr></table>");
         } catch(Exception e){
           //log.error("Error en ControlPanel.getPagination", e);
             System.out.println("Error en ControlPanel.getPagination:"
@@ -4002,7 +3907,7 @@ public class ControlPanel extends GenericAdmResource
     * @param            vectorSize int
     * @param            rowsPerPage int
     * @param            currentPage int
-    * @return      		firstRow int
+    * @return      		endRow int
     */
     public int getPageLastRow(int vectorSize, int rowsPerPage, int currentPage)
     {
@@ -4026,7 +3931,7 @@ public class ControlPanel extends GenericAdmResource
     *
     * @param            vectorSize int
     * @param            rowsPerPage int
-    * @return      		firstRow int
+    * @return      		totalPages int
     */
     public int getTotalPages(int vectorSize, int rowsPerPage)
     {
@@ -4048,6 +3953,13 @@ public class ControlPanel extends GenericAdmResource
     }
 
     //UTILERIAS
+    /**
+    * Obtiene la descripción de un identificador de prioridad.
+    *
+    * @param            paramsRequest SWBParamRequest
+    * @param            priority int identificador de prioridad
+    * @return      		String
+    */
     public String getPriorityDescription(SWBParamRequest paramsRequest,
             int priority)
     {
