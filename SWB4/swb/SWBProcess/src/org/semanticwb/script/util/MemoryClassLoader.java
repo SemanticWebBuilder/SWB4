@@ -85,14 +85,7 @@ public final class MemoryClassLoader extends ClassLoader {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             list.add(new Source(entry.getKey(), Kind.SOURCE, entry.getValue()));
         }
-        try
-        {
-            Thread.currentThread().getContextClassLoader().loadClass("org.semanticwb.process.model.ProcessObject");
-        }
-        catch(ClassNotFoundException cnfe)
-        {
-            cnfe.printStackTrace();
-        }
+        
         URLClassLoader urlClassLoader = (URLClassLoader) this.getParent();
         StringBuilder sb = new StringBuilder();
         List<String> options = new ArrayList<String>();
