@@ -41,6 +41,37 @@ public final class MemoryClassLoader extends ClassLoader {
         }
         this.compiler.getTask(null, this.manager, null, null, null, list).call();
     }*/
+
+    @Override
+    protected synchronized Class loadClass(String name, boolean resolve)
+            throws ClassNotFoundException
+    {
+        // First, check if the class has already been loaded
+        //System.out.println("Enter loadClass:"+name);
+        Class c = findLoadedClass(name);
+        if (c == null)
+        {
+            c=getParentClass(name);
+        }
+        if (resolve)
+        {
+            resolveClass(c);
+        }
+        return c;
+    }
+
+    private synchronized Class getParentClass(String name) throws ClassNotFoundException
+    {
+        Class c=null;
+        if (getParent() != null)
+        {
+            c = getParent().loadClass(name);
+        } else
+        {
+            c = findSystemClass(name);
+        }
+        return c;
+    }
     public MemoryClassLoader(ClassLoader parent) {
         super(parent);
 
