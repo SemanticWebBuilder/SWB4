@@ -116,6 +116,27 @@ public final class MemoryClassLoader extends ClassLoader {
         }
 
     }
+    public String[] getClasses()
+    {
+        ArrayList<String> names=new ArrayList<String>();
+        for(String name : this.manager.map.keySet())
+        {
+            names.add(name);            
+        }
+        return names.toArray(new String[names.size()]);
+    }
+
+    public byte[] getCode(String name)
+    {
+        synchronized (this.manager) {
+            Output mc = this.manager.map.get(name);
+            if (mc != null) {
+                byte[] array = mc.toByteArray();
+                return array;
+            }
+        }
+        return null;
+    }
 
     private static final class MemoryFileManager extends ForwardingJavaFileManager<JavaFileManager> {
         private final Map<String, Output> map = new HashMap<String, Output>();
