@@ -95,7 +95,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 mcls=loadClasses(instance,ProcessObject.class.getClassLoader());
                 loaders.put(instance.getURI(), mcls);
             }
-            i.setClassLoader(mcls);            
+            for(String name : mcls.getClasses())
+            {
+                byte[] codebinary=mcls.getCode(name);
+                if(codebinary!=null)
+                {
+                    i.getClassManager().defineClass(name, codebinary);
+                }
+            }
+            //i.setClassLoader(mcls);
             i.set("instance", instance);            
             i.set("user", user);
             if(instance!=null)
