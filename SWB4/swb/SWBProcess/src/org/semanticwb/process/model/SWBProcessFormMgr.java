@@ -311,5 +311,85 @@ public class SWBProcessFormMgr
     public void setAction(String action) {
         this.m_action = action;
     }
+
+    /**
+     * Render label.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, String mode)
+    {
+        Iterator<SWBFormMgr> it=mgrs.values().iterator();
+        SWBFormMgr mgr=null;
+        while (it.hasNext())
+        {
+            SWBFormMgr amgr = it.next();
+            if(amgr.getProperties().contains(prop))
+            {
+                mgr=amgr;
+                break;
+            }
+        }
+        return mgr.renderLabel(request, prop, mode);
+    }
+
+    /**
+     * Render label.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderLabel(HttpServletRequest request, SemanticProperty prop, SemanticClass cls, String mode)
+    {
+        SWBFormMgr mgr=mgrs.get(cls.getURI());
+        return mgr.renderLabel(request, prop, mode);
+    }
+
+    /**
+     * Render element.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderElement(HttpServletRequest request, SemanticProperty prop, String mode)
+    {
+        Iterator<SWBFormMgr> it=mgrs.values().iterator();
+        SWBFormMgr mgr=null;
+        while (it.hasNext())
+        {
+            SWBFormMgr amgr = it.next();
+            if(amgr.getProperties().contains(prop))
+            {
+                mgr=amgr;
+                break;
+            }
+        }
+        return mgr.renderElement(request, prop, mode);
+    }
+
+    /**
+     * Render element.
+     *
+     * @param request the request
+     * @param prop the prop
+     * @param mode the mode
+     * @return the string
+     */
+    public String renderElement(HttpServletRequest request, SemanticProperty prop, SemanticClass cls, String mode)
+    {
+        SWBFormMgr mgr=mgrs.get(cls.getURI());
+        return mgr.renderElement(request, prop, mode);
+    }
+
+
+
+
     
 }
