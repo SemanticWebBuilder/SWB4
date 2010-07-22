@@ -36,7 +36,7 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
 
         public static org.semanticwb.model.RoleRef createRoleRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.RoleRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeRoleRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
 
     public void setRole(org.semanticwb.model.Role value)
     {
-        getSemanticObject().setObjectProperty(swb_role, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_role, value.getSemanticObject());
+        }else
+        {
+            removeRole();
+        }
     }
 
     public void removeRole()

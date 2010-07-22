@@ -28,7 +28,7 @@ public abstract class ClassElementBase extends org.semanticwb.model.Text
 
         public static org.semanticwb.model.ClassElement createClassElement(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.ClassElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.ClassElement)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeClassElement(String id, org.semanticwb.model.SWBModel model)

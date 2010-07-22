@@ -36,7 +36,7 @@ public abstract class ResourceRefBase extends org.semanticwb.model.Reference imp
 
         public static org.semanticwb.model.ResourceRef createResourceRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.ResourceRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.ResourceRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeResourceRef(String id, org.semanticwb.model.SWBModel model)
@@ -79,7 +79,13 @@ public abstract class ResourceRefBase extends org.semanticwb.model.Reference imp
 
     public void setResource(org.semanticwb.model.Resource value)
     {
-        getSemanticObject().setObjectProperty(swb_resource, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_resource, value.getSemanticObject());
+        }else
+        {
+            removeResource();
+        }
     }
 
     public void removeResource()

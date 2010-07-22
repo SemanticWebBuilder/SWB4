@@ -30,7 +30,7 @@ public abstract class TextAreaBase extends org.semanticwb.model.base.FormElement
 
         public static org.semanticwb.model.TextArea createTextArea(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.TextArea)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.TextArea)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTextArea(String id, org.semanticwb.model.SWBModel model)

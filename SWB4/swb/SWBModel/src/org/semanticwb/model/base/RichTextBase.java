@@ -28,7 +28,7 @@ public abstract class RichTextBase extends org.semanticwb.model.TextArea
 
         public static org.semanticwb.model.RichText createRichText(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.RichText)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.RichText)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeRichText(String id, org.semanticwb.model.SWBModel model)

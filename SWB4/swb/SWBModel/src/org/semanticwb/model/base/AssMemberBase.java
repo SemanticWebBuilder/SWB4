@@ -39,7 +39,7 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
 
         public static org.semanticwb.model.AssMember createAssMember(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.AssMember)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.AssMember)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeAssMember(String id, org.semanticwb.model.SWBModel model)
@@ -96,7 +96,13 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
 
     public void setMember(org.semanticwb.model.Topic value)
     {
-        getSemanticObject().setObjectProperty(swb_assMember, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_assMember, value.getSemanticObject());
+        }else
+        {
+            removeMember();
+        }
     }
 
     public void removeMember()
@@ -117,7 +123,13 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
 
     public void setRole(org.semanticwb.model.Topic value)
     {
-        getSemanticObject().setObjectProperty(swb_assRole, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_assRole, value.getSemanticObject());
+        }else
+        {
+            removeRole();
+        }
     }
 
     public void removeRole()
@@ -138,7 +150,13 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
 
     public void setAssociation(org.semanticwb.model.Association value)
     {
-        getSemanticObject().setObjectProperty(swb_associationInv, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_associationInv, value.getSemanticObject());
+        }else
+        {
+            removeAssociation();
+        }
     }
 
     public void removeAssociation()

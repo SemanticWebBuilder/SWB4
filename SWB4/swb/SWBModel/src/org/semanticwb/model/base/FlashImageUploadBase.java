@@ -34,7 +34,7 @@ public abstract class FlashImageUploadBase extends org.semanticwb.model.FlashFil
 
         public static org.semanticwb.model.FlashImageUpload createFlashImageUpload(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.FlashImageUpload)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.FlashImageUpload)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeFlashImageUpload(String id, org.semanticwb.model.SWBModel model)

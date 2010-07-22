@@ -28,7 +28,7 @@ public abstract class TimeStampBase extends org.semanticwb.model.base.FormElemen
 
         public static org.semanticwb.model.TimeStamp createTimeStamp(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.TimeStamp)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.TimeStamp)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTimeStamp(String id, org.semanticwb.model.SWBModel model)

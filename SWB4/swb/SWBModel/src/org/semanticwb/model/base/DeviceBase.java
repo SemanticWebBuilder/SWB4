@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class DeviceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class DeviceBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
     public static final org.semanticwb.platform.SemanticProperty swb_dvcParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#dvcParent");
@@ -31,7 +31,7 @@ public abstract class DeviceBase extends org.semanticwb.model.SWBClass implement
 
         public static org.semanticwb.model.Device createDevice(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Device)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Device)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeDevice(String id, org.semanticwb.model.SWBModel model)
@@ -110,7 +110,13 @@ public abstract class DeviceBase extends org.semanticwb.model.SWBClass implement
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -156,7 +162,13 @@ public abstract class DeviceBase extends org.semanticwb.model.SWBClass implement
 
     public void setParent(org.semanticwb.model.Device value)
     {
-        getSemanticObject().setObjectProperty(swb_dvcParent, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_dvcParent, value.getSemanticObject());
+        }else
+        {
+            removeParent();
+        }
     }
 
     public void removeParent()
@@ -213,7 +225,13 @@ public abstract class DeviceBase extends org.semanticwb.model.SWBClass implement
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

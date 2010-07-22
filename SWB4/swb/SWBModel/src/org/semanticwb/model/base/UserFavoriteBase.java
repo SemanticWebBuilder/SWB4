@@ -36,7 +36,7 @@ public abstract class UserFavoriteBase extends org.semanticwb.model.SWBClass
 
         public static org.semanticwb.model.UserFavorite createUserFavorite(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.UserFavorite)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.UserFavorite)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeUserFavorite(String id, org.semanticwb.model.SWBModel model)
@@ -71,9 +71,9 @@ public abstract class UserFavoriteBase extends org.semanticwb.model.SWBClass
         getSemanticObject().removeProperty(swb_usrfHasObject);
     }
 
-    public void removeObject(org.semanticwb.platform.SemanticObject semanticobject)
+    public void removeObject(org.semanticwb.platform.SemanticObject value)
     {
-        getSemanticObject().removeObjectProperty(swb_usrfHasObject,semanticobject);
+        getSemanticObject().removeObjectProperty(swb_usrfHasObject,value);
     }
 
     public org.semanticwb.platform.SemanticObject getObject()

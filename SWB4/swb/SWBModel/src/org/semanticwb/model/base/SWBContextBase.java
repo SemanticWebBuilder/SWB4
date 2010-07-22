@@ -9,7 +9,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticClass;
 public class SWBContextBase
 {
-    private static SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
+    private static org.semanticwb.platform.SemanticMgr mgr=org.semanticwb.SWBPlatform.getSemanticMgr();
     public static final SemanticClass swb_Ontology=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Ontology");
 
     public static org.semanticwb.model.Ontology getOntology(String name)

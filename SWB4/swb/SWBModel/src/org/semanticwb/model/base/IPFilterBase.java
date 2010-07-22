@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable
+public abstract class IPFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterNumber");
     public static final org.semanticwb.platform.SemanticProperty swb_ipFilterAction=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#ipFilterAction");
@@ -36,7 +36,7 @@ public abstract class IPFilterBase extends org.semanticwb.model.SWBClass impleme
 
         public static org.semanticwb.model.IPFilter createIPFilter(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.IPFilter)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeIPFilter(String id, org.semanticwb.model.SWBModel model)
@@ -103,7 +103,13 @@ public abstract class IPFilterBase extends org.semanticwb.model.SWBClass impleme
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -189,7 +195,13 @@ public abstract class IPFilterBase extends org.semanticwb.model.SWBClass impleme
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

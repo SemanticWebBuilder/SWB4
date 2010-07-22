@@ -36,7 +36,7 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
 
         public static org.semanticwb.model.UserGroupRef createUserGroupRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.UserGroupRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.UserGroupRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeUserGroupRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
 
     public void setUserGroup(org.semanticwb.model.UserGroup value)
     {
-        getSemanticObject().setObjectProperty(swb_userGroup, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_userGroup, value.getSemanticObject());
+        }else
+        {
+            removeUserGroup();
+        }
     }
 
     public void removeUserGroup()

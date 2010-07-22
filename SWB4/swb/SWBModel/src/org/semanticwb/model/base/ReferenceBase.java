@@ -34,7 +34,7 @@ public abstract class ReferenceBase extends org.semanticwb.model.SWBClass implem
 
         public static org.semanticwb.model.Reference createReference(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Reference)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeReference(String id, org.semanticwb.model.SWBModel model)

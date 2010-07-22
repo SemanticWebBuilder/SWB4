@@ -28,7 +28,7 @@ public abstract class LabelBase extends org.semanticwb.model.base.FormElementBas
 
         public static org.semanticwb.model.Label createLabel(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.Label)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.Label)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeLabel(String id, org.semanticwb.model.SWBModel model)

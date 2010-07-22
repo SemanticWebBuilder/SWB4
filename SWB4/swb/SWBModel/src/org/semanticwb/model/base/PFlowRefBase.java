@@ -36,7 +36,7 @@ public abstract class PFlowRefBase extends org.semanticwb.model.Reference implem
 
         public static org.semanticwb.model.PFlowRef createPFlowRef(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.PFlowRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.PFlowRef)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removePFlowRef(String id, org.semanticwb.model.SWBModel model)
@@ -69,7 +69,13 @@ public abstract class PFlowRefBase extends org.semanticwb.model.Reference implem
 
     public void setPflow(org.semanticwb.model.PFlow value)
     {
-        getSemanticObject().setObjectProperty(swb_pflow, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_pflow, value.getSemanticObject());
+        }else
+        {
+            removePflow();
+        }
     }
 
     public void removePflow()

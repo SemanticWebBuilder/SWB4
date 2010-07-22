@@ -34,7 +34,7 @@ public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass impl
 
         public static org.semanticwb.model.SparqlQuery createSparqlQuery(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.SparqlQuery)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.SparqlQuery)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeSparqlQuery(String id, org.semanticwb.model.SWBModel model)
@@ -89,7 +89,13 @@ public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass impl
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -145,7 +151,13 @@ public abstract class SparqlQueryBase extends org.semanticwb.model.SWBClass impl
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
+public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
     public static final org.semanticwb.platform.SemanticProperty swb_hasGroupedTemplate=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasGroupedTemplate");
@@ -36,7 +36,7 @@ public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass im
 
         public static org.semanticwb.model.TemplateGroup createTemplateGroup(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.TemplateGroup)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeTemplateGroup(String id, org.semanticwb.model.SWBModel model)
@@ -103,7 +103,13 @@ public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass im
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -159,7 +165,13 @@ public abstract class TemplateGroupBase extends org.semanticwb.model.SWBClass im
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()

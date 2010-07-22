@@ -13,7 +13,7 @@ public interface TraceableBase extends org.semanticwb.model.GenericObject
 
     public void setCreated(java.util.Date value);
 
-    public void setModifiedBy(org.semanticwb.model.User user);
+    public void setModifiedBy(org.semanticwb.model.User value);
 
     public void removeModifiedBy();
 
@@ -23,7 +23,7 @@ public interface TraceableBase extends org.semanticwb.model.GenericObject
 
     public void setUpdated(java.util.Date value);
 
-    public void setCreator(org.semanticwb.model.User user);
+    public void setCreator(org.semanticwb.model.User value);
 
     public void removeCreator();
 

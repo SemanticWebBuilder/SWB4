@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticProperty swb_usrCountry=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#usrCountry");
@@ -55,7 +55,7 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
 
         public static org.semanticwb.model.User createUser(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.model.User)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
+            return (org.semanticwb.model.User)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
 
         public static void removeUser(String id, org.semanticwb.model.SWBModel model)
@@ -172,7 +172,13 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
 
     public void setCountry(org.semanticwb.model.Country value)
     {
-        getSemanticObject().setObjectProperty(swb_usrCountry, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_usrCountry, value.getSemanticObject());
+        }else
+        {
+            removeCountry();
+        }
     }
 
     public void removeCountry()
@@ -294,7 +300,13 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
     }
 
     public void removeModifiedBy()
@@ -376,7 +388,13 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
 
     public void setUserFavorite(org.semanticwb.model.UserFavorite value)
     {
-        getSemanticObject().setObjectProperty(swb_usrFavorite, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_usrFavorite, value.getSemanticObject());
+        }else
+        {
+            removeUserFavorite();
+        }
     }
 
     public void removeUserFavorite()
@@ -447,9 +465,9 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
         return values.iterator();
     }
 
-    public void addUserType(String usertype)
+    public void addUserType(String value)
     {
-        getSemanticObject().setProperty(swb_hasUserType, usertype);
+        getSemanticObject().setProperty(swb_hasUserType, value);
     }
 
     public void removeAllUserType()
@@ -457,9 +475,9 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
         getSemanticObject().removeProperty(swb_hasUserType);
     }
 
-    public void removeUserType(String usertype)
+    public void removeUserType(String value)
     {
-        getSemanticObject().removeProperty(swb_hasUserType,usertype);
+        getSemanticObject().removeProperty(swb_hasUserType,value);
     }
 
     public java.util.Date getPasswordChanged()
@@ -525,7 +543,13 @@ public abstract class UserBase extends org.semanticwb.model.SWBClass implements 
 
     public void setCreator(org.semanticwb.model.User value)
     {
-        getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
     }
 
     public void removeCreator()
