@@ -10,7 +10,7 @@
 <%@page import="org.semanticwb.*,org.semanticwb.portal.api.*,org.semanticwb.platform.*,org.semanticwb.model.*,org.semanticwb.model.base.*,com.infotec.topicmaps.bean.*,com.infotec.topicmaps.*,java.util.*,com.infotec.wb.core.db.*,org.semanticwb.repository.Workspace" %>
 <%@page import="com.infotec.wb.core.*, com.infotec.wb.core.db.*,com.infotec.wb.util.*,com.infotec.topicmaps.*,com.infotec.topicmaps.db.*,com.infotec.topicmaps.bean.*"%>
 <%@page import="com.infotec.appfw.util.*,com.infotec.appfw.lib.DBPool.*,com.infotec.wb.lib.*, com.infotec.wb.services.*, com.infotec.wb.services.util.*"%>
-<%@page import="java.io.*, java.net.*, java.util.*, java.sql.*, org.w3c.dom.*"%>
+<%@page import="java.io.*, java.net.*, java.util.Collection, java.util.*, java.sql.*, org.w3c.dom.*"%>
 <%@page import="org.semanticwb.migration.office.*"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
