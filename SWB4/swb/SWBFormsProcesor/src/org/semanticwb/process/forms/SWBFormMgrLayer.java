@@ -10,14 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
+import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.Instance;
+import org.semanticwb.process.model.ProcessObject;
+import org.semanticwb.process.model.SWBProcessFormMgr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -34,6 +39,7 @@ public class SWBFormMgrLayer {
     private User user = null;
     HttpServletRequest request = null;
     ArrayList<SWBProperty> aProperties = null;
+    SWBProcessFormMgr mgr = null;
     SWBParamRequest paramRequest = null;
     private String htmlType = "";
     private static Logger log = SWBUtils.getLogger(SWBFormMgrLayer.class);
@@ -49,6 +55,13 @@ public class SWBFormMgrLayer {
     private void init() {
         aProperties = new ArrayList();
         user = paramRequest.getUser();
+
+        String suri = request.getParameter("suri");
+        FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+
+        mgr = new SWBProcessFormMgr(foi);
+        //mgr.clearProperties();
+
     }
 
     private void createObjs() {
@@ -71,12 +84,12 @@ public class SWBFormMgrLayer {
                     }
 
                     ArrayList<Node> aSWBPropertyNodes = new ArrayList();
-                    Iterator <Node>itSWBPropertyNodes=findPropertyNodes(ndllevel1.item(0), aSWBPropertyNodes).iterator();
+                    Iterator<Node> itSWBPropertyNodes = findPropertyNodes(ndllevel1.item(0), aSWBPropertyNodes).iterator();
                     while (itSWBPropertyNodes.hasNext()) {//Barrido de las propiedades existentes
                         Node swbPropertyNode = itSWBPropertyNodes.next();
-                        SWBProperty property = new SWBProperty(swbPropertyNode, htmlType, request, paramRequest);
+                        SWBProperty property = new SWBProperty(swbPropertyNode, htmlType, request, paramRequest, mgr);
                         aProperties.add(property);
-                    }                    
+                    }
                 }
             }
         } catch (Exception e) {
@@ -90,7 +103,7 @@ public class SWBFormMgrLayer {
             Node unKwonnode = nlist.item(i);
             if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
                 String snodelName = unKwonnode.getNodeName();
-                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label") ||  snodelName.equalsIgnoreCase("Button")) {
+                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label") || snodelName.equalsIgnoreCase("button")) {
                     aSWBPropsNodes.add(unKwonnode);
                 } else {
                     findPropertyNodes(unKwonnode, aSWBPropsNodes);
@@ -111,31 +124,35 @@ public class SWBFormMgrLayer {
         if (sDojo.equalsIgnoreCase("dojo")) {
             sDojo = "dojoType=\"dijit.form.Form\"";
         }
-        int pos=-1;
-        pos=xml.indexOf("<form");
-        if(pos>-1){
-            int pos1=xml.indexOf(">", pos);
-            xml=xml.substring(0,pos)+xml.substring(pos1+1);
+        int pos = -1;
+        pos = xml.indexOf("<form");
+        if (pos > -1) {
+            int pos1 = xml.indexOf(">", pos);
+            xml = xml.substring(0, pos) + xml.substring(pos1 + 1);
         }
-        
-        strb.append("<form name=\"SWBFormMgrLayer\" method=\"post\" action=\"" + actionUrl + "\" id=\"SWBFormMgrLayer\" " + sDojo + " class=\"swbform\">");
+
+        String lang = paramRequest.getUser().getLanguage();
+
+        strb.append("<form name=\"" + mgr.getFormName() + "\" method=\"post\" action=\"" + actionUrl + "\" id=\"" + mgr.getFormName() + "\" " + sDojo + " class=\"swbform\">");
+
         Iterator<SWBProperty> itaProperties = aProperties.iterator();
         while (itaProperties.hasNext()) {
             SWBProperty swbProperty = itaProperties.next();
-                String match=swbProperty.getTag();
-                System.out.println("match:"+match);
-                String replace=swbProperty.getHtml();
-                //Me barro todas las porpiedades del xml, pero voy guardando el indice para seguir barriendo el xml apartir de la ultima propiedad encontrada
-                //index=xml.indexOf(match,y);
-                //xmlTmp+=xml.substring(y, index);
-                //xmlTmp+=replace;
-                //y = index + match.length();
-            }
-            //if(swbClass.getSWBFormMgr().getFormHiddens()!=null){
-            //    strb.append(swbClass.getSWBFormMgr().getFormHiddens());//Agrego los hiddens que me regresa el FormMgr para cada Clase
-            //}
-        if(xmlTmp.trim().length()>0){
-            xmlTmp+=xml.substring(index);
+            String match = swbProperty.getTag();
+            System.out.println("match:" + match);
+            String replace = swbProperty.getHtml();
+            System.out.println("replace by:" + replace);
+            //Me barro todas las porpiedades del xml, pero voy guardando el indice para seguir barriendo el xml apartir de la ultima propiedad encontrada
+            index = xml.indexOf(match, y);
+            xmlTmp += xml.substring(y, index);
+            xmlTmp += replace;
+            y = index + match.length();
+        }
+        if (mgr.getFormHiddens() != null) {
+            strb.append(mgr.getFormHiddens());//Agrego los hiddens que me regresa el FormMgr para cada Clase
+        }
+        if (xmlTmp.trim().length() > 0) {
+            xmlTmp += xml.substring(y);
             xml = xmlTmp;
         }
         strb.append(xml);
@@ -143,61 +160,57 @@ public class SWBFormMgrLayer {
         return strb.toString();
     }
 
-    /*
-    public String getHtml(){ //En estos momentos solo funcionando para una sola clase
-    StringBuilder strb=new StringBuilder();
-    SWBResourceURL actionUrl=paramRequest.getActionUrl();
-    actionUrl.setAction("update");
-    String sDojo=htmlType;
-    if(sDojo.equalsIgnoreCase("dojo")) sDojo="dojoType=\"dijit.form.Form\"";
-    strb.append("<form name=\"SWBFormMgrLayer\" method=\"post\" action=\""+actionUrl+"\" id=\"SWBFormMgrLayer\" "+sDojo+" class=\"swbform\">");
-    Iterator <SWBClass> itaClasses=aClasses.iterator();
-    while(itaClasses.hasNext()){
-    SWBClass swbClass=itaClasses.next();
-    Iterator <SWBFormLayer> itElements=swbClass.getElements().iterator();
-    while(itElements.hasNext()){
-    SWBFormLayer swbFormLayerElement=itElements.next();
-    xml=xml.replaceFirst(swbFormLayerElement.getTag(), swbFormLayerElement.getHtml()); //TODO:Ver si puedo no barrerme todo el archivo por cada una de las propiedades
-    }
-    String hiddens=swbClass.getSWBFormMgr().getFormHiddens();
-    strb.append(hiddens);
-    }
-    Iterator <SWBProperty>itproperties=aProperties.iterator();
-    while(itproperties.hasNext()){
-    SWBProperty swbProperty=itproperties.next();
-    xml=xml.replaceFirst(swbProperty.getTag(), swbProperty.getHtml()); //TODO:Ver si puedo no barrerme todo el archivo por cada una de las propiedades
-    }
-    strb.append(xml);
-    strb.append("</form>");
-    return strb.toString();
-    }*/
-    public static SemanticObject update2DB(HttpServletRequest request, SWBActionResponse response) { //En estos momentos solo funcionando para una sola clase
-        String action = response.getAction();
-        Resource base = response.getResourceBase();
+    public static SemanticObject update2DB(HttpServletRequest request, SWBActionResponse response, FlowNodeInstance foi) { //En estos momentos solo funcionando para una sola clase
         try {
-            if (action != null && action.equals("update")) {
-                SWBFormMgr mgr = null;
-                SemanticObject semObj = null;
-                if (base.getAttribute("objInst") != null && base.getAttribute("objInst").trim().length() > 0) {
-                    SemanticObject semObject = SemanticObject.createSemanticObject(base.getAttribute("objInst"));
-                    mgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
-                } else {
-                    SemanticClass cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(request.getParameter("scls"));
-                    mgr = new SWBFormMgr(cls, base.getSemanticObject(), null);
+            String suri=request.getParameter("suri");
+            if(suri==null) return null;
+            SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
+            mgr.clearProperties();
+
+            Iterator<ProcessObject> it = foi.listHeraquicalProcessObjects().iterator();
+            while (it.hasNext()) {
+                ProcessObject obj = it.next();
+                SemanticClass cls = obj.getSemanticObject().getSemanticClass();
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    if (isViewProperty(response, cls, prop)) {
+                        mgr.addProperty(prop, cls, SWBFormMgr.MODE_VIEW);
+                    } else if (isEditProperty(response, cls, prop)) {
+                        mgr.addProperty(prop, cls, SWBFormMgr.MODE_EDIT);
+                    }
                 }
-                if (mgr != null) {
-                    semObj = mgr.processForm(request);
-                }
-                if (semObj != null) {
-                    return semObj;
-                }
-            } else if (action.equals("remove")) {
-                //TODO
-                System.out.println("Entra a update2DB Delete");
             }
+            mgr.processForm(request);
+            if (request.getParameter("accept") != null) {
+                foi.close(response.getUser(), Instance.ACTION_ACCEPT);
+                response.sendRedirect(foi.getProcessWebPage().getUrl());
+            } else if (request.getParameter("reject") != null) {
+                foi.close(response.getUser(), Instance.ACTION_REJECT);
+                response.sendRedirect(foi.getProcessWebPage().getUrl());
+            }
+            response.setRenderParameter("suri", suri);
         } catch (Exception e) {
             log.error(e);
         }
         return null;
+    }
+
+    public static boolean isViewProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop) {
+        boolean ret = false;
+        String data = paramRequest.getResourceBase().getData(paramRequest.getWebPage());
+        if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|view") > -1) {
+            return ret = true;
+        }
+        return ret;
+    }
+
+    public static boolean isEditProperty(SWBParameters paramRequest, SemanticClass cls, SemanticProperty prop) {
+        boolean ret = false;
+        String data = paramRequest.getResourceBase().getData(paramRequest.getWebPage());
+        if (data != null && data.indexOf(cls.getClassId() + "|" + prop.getPropId() + "|edit") > -1) {
+            return ret = true;
+        }
+        return ret;
     }
 }

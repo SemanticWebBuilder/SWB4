@@ -6,20 +6,12 @@
     <legend>Grupo de Elementos</legend>
     <table>
         <tr>
-            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
-            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponAddress"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#title"/></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#title"/></td>
         </tr>
         <tr>
-            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions"/></td>
-            <td>
-                <property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponConditions" modeview="edit" required="true">
-                    <formelement classuri=""/>
-                </property>
-            </td>
-        </tr>
-        <tr>
-            <td><label uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
-            <td><property uri="http://www.semanticwebbuilder.org/swb4/pymestur#cuponImg"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#description"/></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#description"/></td>
         </tr>
     </table>
     </fieldset>
@@ -28,7 +20,10 @@
         <td colspan="2" align="center">
             <fieldset>
             <legend>Botones</legend>
-            <Button type="saveBtn"/><Button type="cancelBtn"/>
+            <Button type="savebtn"/>
+            <Button isBusyButton="true" name="accept" title="Concluir Tarea" type="submit"/>
+            <Button isBusyButton="true" name="reject" title="Rechazar Tarea" type="submit"/>
+            <Button type="cancelbtn"/>
             </fieldset>
         </td>
     </tr>
