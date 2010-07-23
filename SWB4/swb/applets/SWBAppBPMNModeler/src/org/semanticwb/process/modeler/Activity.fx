@@ -41,6 +41,7 @@ public class Activity extends FlowNode
             ret = true;            
         } else if (link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = false;
+            ModelerUtils.setErrorMessage("Exclusive event-based gateway can onli be linked to events and Receive Task");
         }
         return ret;
     }
