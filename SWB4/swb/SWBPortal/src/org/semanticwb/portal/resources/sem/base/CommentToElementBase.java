@@ -4,8 +4,7 @@ package org.semanticwb.portal.resources.sem.base;
 public abstract class CommentToElementBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_SWBClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBClass");
-    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_grancosa=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#grancosa");
-    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_objid=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#objid");
+    public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_element=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#element");
     public static final org.semanticwb.platform.SemanticProperty swb_res_cmts_commentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#commentToElement");
     public static final org.semanticwb.platform.SemanticClass swb_res_cmts_CommentToElement=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#CommentToElement");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/portal/resources/sems/SWBCommentToElement#CommentToElement");
@@ -63,15 +62,15 @@ public abstract class CommentToElementBase extends org.semanticwb.model.SWBClass
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.CommentToElement> listCommentToElementByGrancosa(org.semanticwb.model.SWBClass value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.CommentToElement> listCommentToElementByElement(org.semanticwb.model.SWBClass value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_res_cmts_grancosa, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_res_cmts_element, value.getSemanticObject(),sclass));
             return it;
         }
 
-        public static java.util.Iterator<org.semanticwb.portal.resources.sem.CommentToElement> listCommentToElementByGrancosa(org.semanticwb.model.SWBClass value)
+        public static java.util.Iterator<org.semanticwb.portal.resources.sem.CommentToElement> listCommentToElementByElement(org.semanticwb.model.SWBClass value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_res_cmts_grancosa,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.portal.resources.sem.CommentToElement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_res_cmts_element,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -134,20 +133,20 @@ public abstract class CommentToElementBase extends org.semanticwb.model.SWBClass
         getSemanticObject().setDateProperty(swb_updated, value);
     }
 
-    public void setGrancosa(org.semanticwb.model.SWBClass value)
+    public void setElement(org.semanticwb.model.SWBClass value)
     {
-        getSemanticObject().setObjectProperty(swb_res_cmts_grancosa, value.getSemanticObject());
+        getSemanticObject().setObjectProperty(swb_res_cmts_element, value.getSemanticObject());
     }
 
-    public void removeGrancosa()
+    public void removeElement()
     {
-        getSemanticObject().removeProperty(swb_res_cmts_grancosa);
+        getSemanticObject().removeProperty(swb_res_cmts_element);
     }
 
-    public org.semanticwb.model.SWBClass getGrancosa()
+    public org.semanticwb.model.SWBClass getElement()
     {
          org.semanticwb.model.SWBClass ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_res_cmts_grancosa);
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_res_cmts_element);
          if(obj!=null)
          {
              ret=(org.semanticwb.model.SWBClass)obj.createGenericInstance();
@@ -174,16 +173,6 @@ public abstract class CommentToElementBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public String getObjid()
-    {
-        return getSemanticObject().getProperty(swb_res_cmts_objid);
-    }
-
-    public void setObjid(String value)
-    {
-        getSemanticObject().setProperty(swb_res_cmts_objid, value);
     }
 
     public String getCommentToElement()
