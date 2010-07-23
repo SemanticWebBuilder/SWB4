@@ -4,6 +4,7 @@
     Author     : juan.fernandez
 --%>
 
+<%@page import="org.semanticwb.resource.office.sem.WordResource"%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.portal.api.*,org.semanticwb.platform.*,org.semanticwb.model.*,org.semanticwb.model.base.*,com.infotec.topicmaps.bean.*,com.infotec.topicmaps.*,java.util.*,com.infotec.wb.core.db.*,org.semanticwb.repository.Workspace" %>
@@ -1497,7 +1498,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat7" value="resource" disabled><label for="cat7">Recursos <%=hmcat.get("resource") != null ? "(" + hmcat.get("resource") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="wpassoc" id="cat10" value="assoc" disabled><label for="cat10">Revisar Asociaciones de Recursos con Secciones (se debe hacer sólo una vez, si y solo si ya se acabaron de migrar todos los recursos)</label></li>
-                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones (comprobar si ya se asociaron los recursos a secciones.)</label></li>
+                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones, prioridad y paginación (comprobar si ya se asociaron los recursos a secciones.)</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#F7BE81;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
@@ -1759,7 +1760,7 @@
                                 String namerestype = nodo.getAttributes().getNamedItem("name").getNodeValue();
                                 String tmrestype = nodo.getAttributes().getNamedItem("topicmap").getNodeValue();
 
-                                //////////////////////////////////////////
+                                ///////////////////////////////////////////////////
                                 // para obtener el tipo de recurso correspondiente
                                 ///////////////////////////////////////////////////
 
@@ -1837,7 +1838,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat7" value="resource" disabled><label for="cat7">Recursos <%=hmcat.get("resource") != null ? "(" + hmcat.get("resource") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="wpassoc" id="cat10" value="assoc" disabled><label for="cat10">Revisar Asociaciones de Recursos con Secciones (se debe hacer sólo una vez, si y solo si ya se acabaron de migrar todos los recursos)</label></li>
-                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones (comprobar si ya se asociaron los recursos a secciones.)</label></li>
+                    <li><input type="checkbox" name="wpassocreview" id="cat15" value="reviewactive" disabled><label for="cat15">Revisar Recursos activos e inactivos asociados a Secciones, prioridad y paginación (comprobar si ya se asociaron los recursos a secciones.)</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Revision y generación de Asociaciones entre secciones&nbsp;&nbsp;</legend>
@@ -1961,6 +1962,54 @@
                                     }
                                 } catch (Exception e) { System.out.println("Error al activar el recurso..."+resource.getId()); }
                             }
+                        }
+                        else if(reviewActUnact && null!=wbresource && MigrateOfficeContents.isOfficeDocument(wbresource,siteid))
+                        {
+
+                            org.semanticwb.model.Resource resource = ws.getResource(idElement);
+
+                            //resource.setPriority(occ.getPriority());
+                            if(resource!=null)
+                            {
+                                //Agregado para verificar paginacion /////////////////////////////////////////
+                                if(resource.getResourceType().getResourceClassName().equals("org.semanticwb.resource.office.sem.WordResource"))
+                                {
+                                    try
+                                    {
+                                        SemanticObject so = resource.getResourceData();
+                                        if(null!=resource.getResourceData())
+                                        {
+                                            String pages = wbresource.getResourceBase().getAttribute("pages",null);
+                                            String position = wbresource.getResourceBase().getAttribute("position",null);
+                                            String txtant = wbresource.getResourceBase().getAttribute("txtant",null);
+                                            String txtsig = wbresource.getResourceBase().getAttribute("txtsig",null);
+                                            String tfont = wbresource.getResourceBase().getAttribute("tfont",null);
+                                            String npages = wbresource.getResourceBase().getAttribute("npages",null);
+                                            String tpred = wbresource.getResourceBase().getAttribute("tpred",null);
+                                            if(pages!=null && pages.equals("1")) so.setBooleanProperty(WordResource.ClassMgr.swboffice_pages, Boolean.TRUE);
+                                            if(position!=null) so.setProperty(WordResource.ClassMgr.swboffice_position, position);
+                                            if(txtant!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtant, txtant);
+                                            if(txtsig!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtsig, txtsig);
+                                            if(tfont!=null) so.setProperty(WordResource.ClassMgr.swboffice_tfont, tfont);
+                                            if(npages!=null) so.setProperty(WordResource.ClassMgr.swboffice_npages, npages);
+                                            if(tpred!=null) so.setProperty(WordResource.ClassMgr.swboffice_tpred, tpred);
+                                        }
+                                        System.out.println("Paginacion de Contenido corregida: "+wbresource.getResourceBase().getId() );
+                                    }
+                                    catch(Exception e){System.out.println("Error al revisar la paginacion del contenido.");}
+                                }
+                                //////////////////////////////////////////////////////////////////////////////
+                            }
+                            try {
+                                if(occ.isActive())
+                                {
+                                    resource.setActive(Boolean.TRUE);
+                                }
+                                else
+                                {
+                                    resource.setActive(Boolean.FALSE);
+                                }
+                            } catch (Exception e) { System.out.println("Error al activar el recurso..."+resource.getId()); }
                         }
                     }
                     catch(Exception execp){System.out.println("Error al obtener el recurso y revisar occurrencias de tipo contenido.");}
