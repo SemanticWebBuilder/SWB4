@@ -31,10 +31,9 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.*;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.base.util.URLEncoder;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBClass;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 
@@ -44,18 +43,7 @@ import org.semanticwb.portal.api.*;
  * HttpServletRequest y muestra el listado de los mismos correspondientes al uri recibido.
  * @author jose.jimenez
  */
-public class SWBCommentToElement
-        extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
-
-
-    /**
-     * Acción definida para agregar un comentario.
-     */
-    private static final String action_ADD = "ADDNEW";
-
-    //private static final int secureCodeLength = 7;
-
-
+public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.base.SWBCommentToElementBase {
     /**
      * Instantiates a new sWB comment to element.
      */
@@ -81,41 +69,40 @@ public class SWBCommentToElement
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void processAction(HttpServletRequest request,
-            SWBActionResponse response) throws SWBResourceException, IOException {
-
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-
-        if (action.equalsIgnoreCase(action_ADD)) {
+        System.out.println("processAction....");
+        if(action.equals(response.Action_ADD)) {
+            System.out.println("adding...");
             String securCodeSent = request.getParameter("cmnt_seccode");
             String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
-            String uri = request.getParameter("uri");
-
-            if (securCodeCreated != null
-                    && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
-
-                GenericObject gen = SWBPlatform.getSemanticMgr().getOntology(
-                        ).getGenericObject(uri);
-
-                if (gen != null) {
-                    CommentToElement comment = CommentToElement.createCommentToElement(
-                            response.getWebPage().getWebSite());
+            if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
+                String uri = request.getParameter("uri");
+                System.out.println("uri="+uri);
+                GenericObject gen = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
+                System.out.println("gen="+gen);
+                if( gen!=null) {
+                    CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(response.getWebPage().getWebSite());
                     comment.setCommentToElement(request.getParameter("cmnt_comment"));
                     comment.setObjid(uri);
                     addComment(comment);
-                }
+                    System.out.println("comentario="+request.getParameter("cmnt_comment"));
 
+
+                    SWBClass swbc = SWBClass.ClassMgr.createSWBClass(uri, response.getWebPage().getWebSite());
+                    comment.setGrancosa(swbc);
+                }
+                response.setRenderParameter("uri", uri);
                 request.getSession(true).removeAttribute("cs");
-            } else {
+            }else {
+                System.out.println("no es seguro");
                 Enumeration e = request.getParameterNames();
                 while (e.hasMoreElements()) {
                     String key = (String) e.nextElement();
                     response.setRenderParameter(key, request.getParameter(key));
                 }
             }
-            response.sendRedirect(response.getWebPage().getUrl()
-                    + "?uri=" + URLEncoder.encode(uri));
-            //response.setRenderParameter("uri", uri);
+//            response.sendRedirect(response.getWebPage().getUrl() + "?uri=" + URLEncoder.encode(uri));
         } else {
             super.processAction(request, response);
         }
@@ -132,24 +119,18 @@ public class SWBCommentToElement
      * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
-
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        System.out.println("\n\ncommentToElement doView...");
         PrintWriter out = response.getWriter();
         StringBuilder ret = new StringBuilder(1000);
         SWBResourceURL rUrl = paramRequest.getActionUrl();
         User user = paramRequest.getUser();
-        rUrl.setAction(action_ADD);
+        rUrl.setAction(paramRequest.Action_ADD);
 
-        String name = request.getParameter("cmnt_name") == null
-                      ? "" : request.getParameter("cmnt_name");
-        String email = request.getParameter("cmnt_email") == null
-                       ? "" : request.getParameter("cmnt_email");
-        String comment = request.getParameter("cmnt_comment") == null
-                         ? "" : request.getParameter("cmnt_comment");
-        String uri = request.getParameter("uri") == null
-                ? "" : request.getParameter("uri");
+        String name = request.getParameter("cmnt_name")==null ? "" : request.getParameter("cmnt_name");
+        String email = request.getParameter("cmnt_email")==null ? "" : request.getParameter("cmnt_email");
+        String comment = request.getParameter("cmnt_comment")==null ? "" : request.getParameter("cmnt_comment");
+        String uri = request.getParameter("uri")==null ? "" : request.getParameter("uri");
         String securCodeSent = request.getParameter("cmnt_seccode");
         String securCodeCreated = (String) request.getSession(true).getAttribute("cs");
 
@@ -203,9 +184,7 @@ public class SWBCommentToElement
             ret.append("    var img = dojo.byId(imgid);\n");
             ret.append("    if(img) {\n");
             ret.append("        var rn = Math.floor(Math.random()*99999);\n");
-            ret.append("        img.src = '"
-                    + SWBPlatform.getContextPath()
-                    + "/swbadmin/jsp/securecode.jsp?nc='+rn;\n");
+            ret.append("        img.src = '" + SWBPlatform.getContextPath() + "/swbadmin/jsp/securecode.jsp?nc='+rn;\n");
             ret.append("    }\n");
             ret.append("}\n");
             ret.append("</script>\n");
@@ -228,45 +207,33 @@ public class SWBCommentToElement
             ret.append("<tr>\n");
             ret.append("<td colspan=\"2\" class=\"creacmnt\">\n");
             ret.append("<h4>" + paramRequest.getLocaleString("add") + "</h4>\n");
-            ret.append("<form name=\"cmnt\" id=\"cmnt\" target=\"\" action=\""
-                    + rUrl + "\" method=\"post\">\n");
-            ret.append("    <input type=\"hidden\" id=\"uri\" name=\"uri\" value=\""
-                    + uri + "\" />\n");
+            ret.append("<form name=\"cmnt\" id=\"cmnt\" target=\"\" action=\"" + rUrl + "\" method=\"post\">\n");
+            ret.append("    <input type=\"hidden\" id=\"uri\" name=\"uri\" value=\"" + uri + "\" />\n");
             ret.append("	<table border=\"0\" width=\"100%\">\n");
             ret.append("      <tr class=\"f\">\n");
             ret.append("        <td width=\"50%\">\n");
             // Fullname
             ret.append("            <p>\n");
-            ret.append("            <label for=\"cmnt_name\">"
-                    + paramRequest.getLocaleString("nameLabel") + ":</label><br/>\n");
+            ret.append("            <label for=\"cmnt_name\">" + paramRequest.getLocaleString("nameLabel") + ":</label><br/>\n");
             if (user.isSigned()) {
-                ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""
-                        + user.getFullName() + "\" size=\"34\" />\n");
+                ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\"" + user.getFullName() + "\" size=\"34\" />\n");
             } else {
-                ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\""
-                        + name + "\" size=\"34\" />\n");
+                ret.append("            <input type=\"text\" id=\"cmnt_name\" name=\"cmnt_name\" value=\"" + name + "\" size=\"34\" />\n");
             }
             ret.append("            </p>\n");
             // Email
             ret.append("            <p>\n");
-            ret.append("            <label for=\"email\">"
-                    + paramRequest.getLocaleString("emailLabel")
-                    + ":</label><br/>\n");
+            ret.append("            <label for=\"email\">" + paramRequest.getLocaleString("emailLabel") + ":</label><br/>\n");
             if (user.isSigned()) {
-                ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""
-                        + user.getEmail() + "\" size=\"34\" />\n");
+                ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\"" + user.getEmail() + "\" size=\"34\" />\n");
             } else {
-                ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\""
-                        + email + "\" size=\"34\" />\n");
+                ret.append("            <input type=\"text\" id=\"cmnt_email\" name=\"cmnt_email\" value=\"" + email + "\" size=\"34\" />\n");
             }
             ret.append("            </p>\n");
             //Comment
             ret.append("            <p>\n");
-            ret.append("            <label for=\"comment\">"
-                    + paramRequest.getLocaleString("comment")
-                    + ":</label><br/>\n");
-            ret.append("            <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >"
-                    + comment + "</textarea>\n");
+            ret.append("            <label for=\"comment\">" + paramRequest.getLocaleString("comment") + ":</label><br/>\n");
+            ret.append("            <textarea id=\"cmnt_comment\" name=\"cmnt_comment\" cols=\"32\" rows=\"3\" >" + comment + "</textarea>\n");
             ret.append("            </p>\n");
             ret.append("        </td>\n");
             ret.append("        <td width=\"50%\">\n");
@@ -275,13 +242,10 @@ public class SWBCommentToElement
             ret.append("            </p>\n");
             ret.append("            <span>\n");
             ret.append("            <div style=\"text-align:right\">\n");
-            ret.append("                <input type=\"button\" value=\""
-                    + paramRequest.getLocaleString("anotherCode")
-                    + "\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
+            ret.append("                <input type=\"button\" value=\"" + paramRequest.getLocaleString("anotherCode") + "\" onClick=\"changeSecureCodeImage('imgseccode');\"/>\n");
             ret.append("            </div>\n");
             ret.append("            <div id=\"cntseccode\" style=\"text-align:center\">\n");
-            ret.append("                <img src=\"" + SWBPlatform.getContextPath()
-                    + "/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />\n");
+            ret.append("                <img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" />\n");
             ret.append("            </div>\n");
             ret.append("            </span>\n");
             ret.append("            <p>\n");
@@ -291,11 +255,8 @@ public class SWBCommentToElement
             ret.append("      </tr>\n");
             ret.append("      <tr>\n");
             ret.append("        <td colspan=\"2\">\n");
-            ret.append("        <p>"
-                    + paramRequest.getLocaleString("msgEditorial") + "</p>\n");
-            ret.append("        <p><input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\""
-                    + paramRequest.getLocaleString("publish")
-                    + "\" onClick=\"doApply();\" /></p>\n");
+            ret.append("        <p>" + paramRequest.getLocaleString("msgEditorial") + "</p>\n");
+            ret.append("        <p><input type=\"button\" id=\"cmnt_send\" name=\"cmnt_send\" value=\"" + paramRequest.getLocaleString("publish") + "\" onClick=\"doApply();\" /></p>\n");
             ret.append("        </td>\n");
             ret.append("      </tr>\n");
             ret.append("    </table>\n");
@@ -311,48 +272,56 @@ public class SWBCommentToElement
         out.close();
     }
 
-    /**
-     * Busca los comentarios asociados al uri recibido para mostrar sus datos.
-     * 
-     * @param paramRequest utilizado para buscar los comentarios y escribir los mensajes localizados.
-     * @param uri Al que están asociados los comentarios a buscar.
-     * @return La cadena con la información de los comentarios correspondientes.
-     * @throws SWBResourceException the sWB resource exception
-     */
-    private String renderListComments(SWBParamRequest paramRequest, String uri)
-            throws SWBResourceException {
-
-        StringBuilder ret = new StringBuilder();
+    /*private String renderListComments(SWBParamRequest paramRequest, final String uri) throws SWBResourceException{
+        StringBuilder script = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
-        int ordinal = 1;
+        //long ordinal = SWBUtils.Collections.sizeOf(listComments());
+        //int ordinal = 1;
+        System.out.println("renderListComments... uri="+uri);
 
-        Iterator<SemanticObject> itComments = paramRequest.getWebPage(
-                ).getSemanticObject().getModel().listSubjects(
-                CommentToElement.swb_res_cmts_objid, uri);
-
-        while (itComments.hasNext()) {
-            SemanticObject so = itComments.next();
-            if (so.instanceOf(CommentToElement.swb_res_cmts_CommentToElement)) {
-                CommentToElement comment = (CommentToElement) so.createGenericInstance();
-                if (comment != null) {
-                    ret.append("<tr>\n");
-                    ret.append("  <td colspan=2 class=\"cmnt\">" + (ordinal++)
-                            + ". <strong>"
-                            + ((comment.getCreator() != null
-                                && comment.getCreator().getFullName() != null
-                                ? false : true)
-                              ? "Desconocido" : comment.getCreator().getFullName())
-                            + " " + paramRequest.getLocaleString("writeAtLabel")
-                            + "</strong> " + sdf.format(comment.getCreated())
-                            + "<br/><div class\"cmnttxt\">"
-                            + comment.getCommentToElement().replaceAll("<",
-                                      "&lt;").replaceAll(">", "&gt;"));
-                    ret.append("</div></td>\n");
-                    ret.append("</tr>\n");
-                }
-            }
+        Iterator<CommentToElement> itComments = listComments();
+        script.append("<div class=\"swb-comentario-sem-lista\">");
+        script.append("<h1>comentarios</h1>");
+        if(itComments.hasNext()) {
+            script.append("<ul>");
         }
-        return ret.toString();
-    }
+        while(itComments.hasNext()) {
+            CommentToElement comment = itComments.next();
+            if( comment.getObjid().equals(uri) )
+                script.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
+        }
+        if(itComments.hasNext()) {
+            script.append("</ul>");
+        }
+        script.append("</div>");
+        return script.toString();
+    }*/
 
+    private String renderListComments(SWBParamRequest paramRequest, final String uri) throws SWBResourceException{
+        StringBuilder script = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
+        //long ordinal = SWBUtils.Collections.sizeOf(listComments());
+        //int ordinal = 1;
+        System.out.println("renderListComments... uri="+uri);
+
+        SWBClass swbc = SWBClass.ClassMgr.createSWBClass(uri, paramRequest.getWebPage().getWebSite());
+        Iterator<CommentToElement> itComments = CommentToElement.ClassMgr.listCommentToElementByGrancosa(swbc, paramRequest.getWebPage().getWebSite());
+
+
+        script.append("<div class=\"swb-comentario-sem-lista\">");
+        script.append("<h1>comentarios</h1>");
+        if(itComments.hasNext()) {
+            script.append("<ul>");
+        }
+        while(itComments.hasNext()) {
+            CommentToElement comment = itComments.next();
+            if( comment.getObjid().equals(uri) )
+                script.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
+        }
+        if(itComments.hasNext()) {
+            script.append("</ul>");
+        }
+        script.append("</div>");
+        return script.toString();
+    }
 }
