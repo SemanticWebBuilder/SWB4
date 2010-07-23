@@ -20,8 +20,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.SWBFormButton;
-import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -32,7 +30,6 @@ import org.semanticwb.portal.admin.admresources.util.XmlBundle;
 import org.semanticwb.portal.api.SWBParameters;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.ProcessObject;
-import org.semanticwb.process.model.SWBProcessFormMgr;
 
 /**
  *
@@ -92,7 +89,6 @@ public class GenericSWBFormsResource extends GenericResource{
         }
 
         String suri=request.getParameter("suri");
-        System.out.println("suri k llega en DoView:"+suri);
 
         out.println("<a href=\""+paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_EDIT).setParameter("suri", suri)+"\">[editar]</a>");
 
@@ -211,7 +207,6 @@ public class GenericSWBFormsResource extends GenericResource{
         while(it.hasNext())
         {
             ProcessObject obj=it.next();
-            System.out.println("inst:"+foi+" obj:"+obj);
             SemanticClass cls=obj.getSemanticObject().getSemanticClass();
             out.println("<h3>"+cls.getDisplayName(lang)+"</h3>");
             Iterator<SemanticProperty> itp=cls.listProperties();

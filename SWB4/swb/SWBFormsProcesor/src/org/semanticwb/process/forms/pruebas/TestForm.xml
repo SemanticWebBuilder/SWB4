@@ -6,12 +6,12 @@
     <legend>Grupo de Elementos</legend>
     <table>
         <tr>
-            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#title"/></td>
-            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#title"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#title" prueba="" /></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#title" prueba1="" /></td>
         </tr>
         <tr>
-            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#description"/></td>
-            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#description"/></td>
+            <td><label uri="http://www.semanticwebbuilder.org/swb4/ontology#description" prueba2="" /></td>
+            <td><property uri="http://www.semanticwebbuilder.org/swb4/ontology#description" prueba3="" /></td>
         </tr>
     </table>
     </fieldset>
@@ -21,8 +21,8 @@
             <fieldset>
             <legend>Botones</legend>
             <Button type="savebtn"/>
-            <Button isBusyButton="true" name="accept" title="Concluir Tarea" type="submit"/>
-            <Button isBusyButton="true" name="reject" title="Rechazar Tarea" type="submit"/>
+            <Button type="submit" name="accept" title="Concluir Tarea" isBusyButton="true" />
+            <Button isBusyButton="true" name="reject" title="Rechazar Tarea" type="submit" />
             <Button type="cancelbtn"/>
             </fieldset>
         </td>

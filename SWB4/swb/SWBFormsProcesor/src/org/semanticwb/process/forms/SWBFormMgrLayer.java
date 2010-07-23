@@ -24,9 +24,11 @@ import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessObject;
 import org.semanticwb.process.model.SWBProcessFormMgr;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
+import java.io.ByteArrayInputStream;
 
 /**
  *
@@ -35,13 +37,11 @@ import org.w3c.dom.NodeList;
 public class SWBFormMgrLayer {
 
     private String xml = null;
-    private Document dom = null;
-    private User user = null;
     HttpServletRequest request = null;
-    ArrayList<SWBProperty> aProperties = null;
+    ArrayList<SWBPropertyTag> aProperties = null;
     SWBProcessFormMgr mgr = null;
     SWBParamRequest paramRequest = null;
-    private String htmlType = "";
+    private String htmlType = "dojo";
     private static Logger log = SWBUtils.getLogger(SWBFormMgrLayer.class);
 
     public SWBFormMgrLayer(String xml, SWBParamRequest paramRequest, HttpServletRequest request) {
@@ -54,8 +54,7 @@ public class SWBFormMgrLayer {
 
     private void init() {
         aProperties = new ArrayList();
-        user = paramRequest.getUser();
-
+        
         String suri = request.getParameter("suri");
         FlowNodeInstance foi = (FlowNodeInstance) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
 
@@ -65,52 +64,34 @@ public class SWBFormMgrLayer {
     }
 
     private void createObjs() {
-        try {
-            dom = SWBUtils.XML.xmlToDom(xml);
-            NodeList ndllevel1 = dom.getChildNodes();
-            if (ndllevel1.getLength() > 0) { //en el tag swbForm pueden venir algunos atributos para la forma, ej. si se utilizara Dojo como framework
-                if (ndllevel1.item(0).getNodeName().equalsIgnoreCase("Form")) {
-                    NamedNodeMap nnodemap = ndllevel1.item(0).getAttributes();
-                    if (nnodemap.getLength() > 0) {
-                        for (int i = 0; i < nnodemap.getLength(); i++) { //Preparado para si se requiere agregar más parametros al tag swbForm
-                            String attrName = nnodemap.item(i).getNodeName();
-                            String attrValue = nnodemap.item(i).getNodeValue();
-                            if (attrValue != null && !attrValue.equals("")) {
-                                if (attrName.equalsIgnoreCase("htmlType")) {
-                                    htmlType = attrValue;
-                                }
-                            }
-                        }
-                    }
-
-                    ArrayList<Node> aSWBPropertyNodes = new ArrayList();
-                    Iterator<Node> itSWBPropertyNodes = findPropertyNodes(ndllevel1.item(0), aSWBPropertyNodes).iterator();
-                    while (itSWBPropertyNodes.hasNext()) {//Barrido de las propiedades existentes
-                        Node swbPropertyNode = itSWBPropertyNodes.next();
-                        SWBProperty property = new SWBProperty(swbPropertyNode, htmlType, request, paramRequest, mgr);
-                        aProperties.add(property);
+            HtmlTag tag = new HtmlTag();
+            int pos = -1;
+            int pos1 = -1;
+            StringBuffer ret = new StringBuffer();
+            try
+            {
+                HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(xml.getBytes()));
+                while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+                {
+                    int ttype = tok.getTokenType();
+                    if (ttype == HtmlStreamTokenizer.TT_TAG)
+                    {
+                        tok.parseTag(tok.getStringValue(), tag);
+                        if (tok.getRawString().toLowerCase().startsWith("<!--[if"))continue;
+                        String tagName=tag.getTagString();
+                        if(tagName.toLowerCase().equals("form")){
+                            if(tag.getParam("htmlType")!=null) htmlType=tag.getParam("htmlType");
+                        }else if(tagName.toLowerCase().equals("label") || tagName.toLowerCase().equals("property") || tagName.toLowerCase().equals("button"))
+                        {
+                            SWBPropertyTag property = new SWBPropertyTag(request, paramRequest, mgr, tok, htmlType);
+                            aProperties.add(property);
+                       }
                     }
                 }
+            }catch (Exception e)
+            {
+                log.error(e);
             }
-        } catch (Exception e) {
-            log.error(e);
-        }
-    }
-
-    private ArrayList findPropertyNodes(Node swbClassNode, ArrayList aSWBPropsNodes) {
-        NodeList nlist = swbClassNode.getChildNodes();
-        for (int i = 0; i <= nlist.getLength(); i++) {
-            Node unKwonnode = nlist.item(i);
-            if (unKwonnode != null && !unKwonnode.getNodeName().startsWith("#text")) {
-                String snodelName = unKwonnode.getNodeName();
-                if (snodelName.equalsIgnoreCase("property") || snodelName.equalsIgnoreCase("label") || snodelName.equalsIgnoreCase("button")) {
-                    aSWBPropsNodes.add(unKwonnode);
-                } else {
-                    findPropertyNodes(unKwonnode, aSWBPropsNodes);
-                }
-            }
-        }
-        return aSWBPropsNodes;
     }
 
     public String getHtml() { //En estos momentos solo funcionando para una sola clase
@@ -121,7 +102,7 @@ public class SWBFormMgrLayer {
         SWBResourceURL actionUrl = paramRequest.getActionUrl();
         actionUrl.setAction("update");
         String sDojo = htmlType;
-        if (sDojo.equalsIgnoreCase("dojo")) {
+        if (sDojo!=null && sDojo.equalsIgnoreCase("dojo")) {
             sDojo = "dojoType=\"dijit.form.Form\"";
         }
         int pos = -1;
@@ -135,9 +116,9 @@ public class SWBFormMgrLayer {
 
         strb.append("<form name=\"" + mgr.getFormName() + "\" method=\"post\" action=\"" + actionUrl + "\" id=\"" + mgr.getFormName() + "\" " + sDojo + " class=\"swbform\">");
 
-        Iterator<SWBProperty> itaProperties = aProperties.iterator();
+        Iterator<SWBPropertyTag> itaProperties = aProperties.iterator();
         while (itaProperties.hasNext()) {
-            SWBProperty swbProperty = itaProperties.next();
+            SWBPropertyTag swbProperty = itaProperties.next();
             String match = swbProperty.getTag();
             System.out.println("match:" + match);
             String replace = swbProperty.getHtml();
