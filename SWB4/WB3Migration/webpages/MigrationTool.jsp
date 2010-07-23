@@ -1987,11 +1987,11 @@
                                             String npages = wbresource.getResourceBase().getAttribute("npages",null);
                                             String tpred = wbresource.getResourceBase().getAttribute("tpred",null);
                                             if(pages!=null && pages.equals("1")) so.setBooleanProperty(WordResource.ClassMgr.swboffice_pages, Boolean.TRUE);
-                                            if(position!=null) so.setProperty(WordResource.ClassMgr.swboffice_position, position);
+                                            if(position!=null) so.setIntProperty(WordResource.ClassMgr.swboffice_position, Integer.parseInt(position));
                                             if(txtant!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtant, txtant);
                                             if(txtsig!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtsig, txtsig);
                                             if(tfont!=null) so.setProperty(WordResource.ClassMgr.swboffice_tfont, tfont);
-                                            if(npages!=null) so.setProperty(WordResource.ClassMgr.swboffice_npages, npages);
+                                            if(npages!=null) so.setIntProperty(WordResource.ClassMgr.swboffice_npages, Integer.parseInt(npages));
                                             if(tpred!=null) so.setProperty(WordResource.ClassMgr.swboffice_tpred, tpred);
                                         }
                                         System.out.println("Paginacion de Contenido corregida: "+wbresource.getResourceBase().getId() );
