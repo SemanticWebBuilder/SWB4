@@ -273,7 +273,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 String value = element.getFirstChild().getNodeValue();
                 if (value != null)
                 {
-                    values.add(value);
+                    //Agregado Jorge
+                    if(name.equals("pages") && value.equals("1")) values.add("true");
+                    else values.add(value);
                 }
             }
         }
