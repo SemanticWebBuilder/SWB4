@@ -79,18 +79,16 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
             if( securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
                 String uri = request.getParameter("uri");
                 System.out.println("uri="+uri);
-                GenericObject gen = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
-                System.out.println("gen="+gen);
-                if( gen!=null) {
+//                GenericObject gen = SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uri);
+//                System.out.println("gen="+gen);
+                SWBClass element = SWBClass.ClassMgr.createSWBClass(uri, response.getWebPage().getWebSite());
+                if( element!=null) {
                     CommentToElement comment = CommentToElement.ClassMgr.createCommentToElement(response.getWebPage().getWebSite());
                     comment.setCommentToElement(request.getParameter("cmnt_comment"));
-                    comment.setObjid(uri);
+//                    comment.setObjid(uri);
+                    comment.setElement(element);
                     addComment(comment);
                     System.out.println("comentario="+request.getParameter("cmnt_comment"));
-
-
-                    SWBClass swbc = SWBClass.ClassMgr.createSWBClass(uri, response.getWebPage().getWebSite());
-                    comment.setGrancosa(swbc);
                 }
                 response.setRenderParameter("uri", uri);
                 request.getSession(true).removeAttribute("cs");
@@ -304,22 +302,21 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         //int ordinal = 1;
         System.out.println("renderListComments... uri="+uri);
 
-        SWBClass swbc = SWBClass.ClassMgr.createSWBClass(uri, paramRequest.getWebPage().getWebSite());
-        Iterator<CommentToElement> itComments = CommentToElement.ClassMgr.listCommentToElementByGrancosa(swbc, paramRequest.getWebPage().getWebSite());
-
+        SWBClass element = SWBClass.ClassMgr.createSWBClass(uri, paramRequest.getWebPage().getWebSite());
+        Iterator<CommentToElement> itComments = CommentToElement.ClassMgr.listCommentToElementByElement(element, paramRequest.getWebPage().getWebSite());
 
         script.append("<div class=\"swb-comentario-sem-lista\">");
         script.append("<h1>comentarios</h1>");
         if(itComments.hasNext()) {
-            script.append("<ul>");
+            script.append("<ol>");
         }
         while(itComments.hasNext()) {
             CommentToElement comment = itComments.next();
-            if( comment.getObjid().equals(uri) )
-                script.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
+//            if( comment.getObjid().equals(uri) )
+            script.append("<li><span>"+(comment.getCreator()==null?"An&oacute;nimo":comment.getCreator().getFullName())+"</span> "+sdf.format(comment.getCreated())+"<p>"+comment.getCommentToElement()+"</p></li>");
         }
         if(itComments.hasNext()) {
-            script.append("</ul>");
+            script.append("</ol>");
         }
         script.append("</div>");
         return script.toString();
