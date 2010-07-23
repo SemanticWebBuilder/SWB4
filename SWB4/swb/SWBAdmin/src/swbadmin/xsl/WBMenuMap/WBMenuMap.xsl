@@ -4,11 +4,15 @@
 
     <xsl:template match="/menu">
         <div class="swb-menu-map">
-            <ul>
+            <xsl:if test="position()=1">
+                <xsl:text  disable-output-escaping="yes">&lt;ul></xsl:text>
+            </xsl:if>
                 <xsl:for-each select="node">
                     <xsl:call-template name="node" />
                 </xsl:for-each>
-            </ul>
+            <xsl:if test="position()=last()">
+                <xsl:text  disable-output-escaping="yes">&lt;/ul></xsl:text>
+            </xsl:if>
         </div>
     </xsl:template>
 
@@ -36,9 +40,13 @@
                 </xsl:text>
             </xsl:if>
         <xsl:for-each select="node">
-            <ul>
+            <xsl:if test="position()=1">
+                <xsl:text  disable-output-escaping="yes">&lt;ul></xsl:text>
+            </xsl:if>
                 <xsl:call-template name="node" />
-            </ul>
+            <xsl:if test="position()=last()">
+                <xsl:text  disable-output-escaping="yes">&lt;/ul></xsl:text>
+            </xsl:if>
         </xsl:for-each>
         </li>
     </xsl:template>
