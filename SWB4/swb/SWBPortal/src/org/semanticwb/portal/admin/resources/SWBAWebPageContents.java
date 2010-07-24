@@ -108,6 +108,7 @@ public class SWBAWebPageContents extends GenericResource {
         User user = paramRequest.getUser();
         String id = request.getParameter("suri");
         String idp = request.getParameter("sprop");
+        String page = request.getParameter("page");
         String idptype = request.getParameter("sproptype");
 
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
@@ -285,10 +286,24 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticProperty semprop = null;
             SemanticProperty sem_p = ont.getSemanticProperty(idp);
             SemanticObject so = obj.getObjectProperty(sem_p);
-            Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
+            Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(obj.listObjectProperties(prop),false);
+            int ps=20;
+            int l=setso.size();
+            int p=0;
+            if(page!=null)p=Integer.parseInt(page);
+            int x=0;
+            Iterator<SemanticObject> itso=setso.iterator();
             while (itso.hasNext()) {
-                hasAsoc = true;
                 SemanticObject sobj = itso.next();
+                if(x<p*ps)
+                {
+                    x++;
+                    continue;
+                }
+                if(x==(p*ps+ps) || x==l)break;
+                x++;
+
+                hasAsoc = true;
                 SemanticClass clsobj = sobj.getSemanticClass();
                 log.debug("Clase:" + clsobj.getName());
 
@@ -326,7 +341,7 @@ public class SWBAWebPageContents extends GenericResource {
 
                 // fin validación de botones en relacion a flujos
 
-                String stitle = getDisplaySemObj(sobj, user.getLanguage());
+                String stitle = SWBUtils.TEXT.cropText(getDisplaySemObj(sobj, user.getLanguage()),50);
                 out.println("<tr>");
 
                 out.println("<td>");
@@ -334,6 +349,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("suri", id);
                 urlr.setParameter("sprop", idp);
                 urlr.setParameter("sval", sobj.getURI());
+                urlr.setParameter("page", ""+p);
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
                 out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
@@ -342,6 +358,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("suri", id);
                 urlpre.setParameter("sprop", idp);
                 urlpre.setParameter("act", "");
+                urlpre.setParameter("page", ""+p);
                 urlpre.setParameter("sval", sobj.getURI());
                 if (idptype != null) {
                     urlpre.setParameter("sproptype", idptype);
@@ -362,6 +379,7 @@ public class SWBAWebPageContents extends GenericResource {
                     url2flow.setParameter("sprop", idp);
                     url2flow.setMode("doPflowMsg");
                     url2flow.setParameter("sval", sobj.getURI());
+                    url2flow.setParameter("page", ""+p);
                     url2flow.setParameter("pfid", pfid);
                     if (idptype != null) {
                         url2flow.setParameter("sproptype", idptype);
@@ -379,7 +397,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlchoose.setParameter("sprop", idp);
                 urlchoose.setParameter("sobj", sobj.getURI());
                 urlchoose.setParameter("act", "edit");
-                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "');return false;\">" + stitle + "</a>");
+                out.println("<a href=\"#\"  onclick=\"addNewTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(sobj.getDisplayName()),25) + "');return false;\">" + stitle + "</a>");
                 out.println("</td>");
                 if (hmprop.get(Resource.swb_resourceType) != null) {
                     semprop = (SemanticProperty) hmprop.get(Resource.swb_resourceType);
@@ -442,6 +460,30 @@ public class SWBAWebPageContents extends GenericResource {
             out.println("</tbody>");
             out.println("</table>");
             out.println("</fieldset>");
+
+            if(p>0 || x<l) //Requiere paginacion
+            {
+                out.println("<fieldset>");
+                out.println("<center>");
+                int pages=(int)(l+ps/2)/ps;
+                for(int z=0;z<pages;z++)
+                {
+                    SWBResourceURL urlNew = paramRequest.getRenderUrl();
+                    urlNew.setParameter("suri", id);
+                    urlNew.setParameter("sprop", idp);
+                    urlNew.setParameter("sproptype", idptype);
+                    urlNew.setParameter("page", ""+z);
+                    if(z!=p)
+                    {
+                        out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">"+(z+1)+"</a> ");
+                    }else
+                    {
+                        out.println((z+1)+" ");
+                    }
+                }
+                out.println("</center>");
+                out.println("</fieldset>");
+            }
             out.println("<fieldset>");
             SWBResourceURL urlNew = paramRequest.getRenderUrl();
             urlNew.setParameter("suri", id);
