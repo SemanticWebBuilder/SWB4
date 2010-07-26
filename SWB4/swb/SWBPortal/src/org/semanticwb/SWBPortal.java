@@ -108,11 +108,23 @@ public class SWBPortal
     
     /** Stores the work directory's web path value <p>Almacena el valor de la ruta web del directorio de trabajo</p>. */
     private static String webWorkPath = "";
+
+    public static String WORKPATH_RELATIVE="relative";
+    public static String WORKPATH_ABSOLUTE="absolute";
+    public static String WORKPATH_REMOTE="remote";
+
     /**
-     * Stores the work directory's physical path.
-     * <p>Almacena la ruta f&iacute;sica del directorio de trabajo.</p>
+     * Stores the work directory's path.
+     * <p>Almacena la ruta del directorio de trabajo.</p>
      */
     private static String workPath = "";
+
+    /**
+     * Store the work path type
+     * Almcaena el tipo de ruta de trabajo
+     */
+    private static String workPathType = WORKPATH_RELATIVE;
+
     /**
      * Holds a reference to the {@code ServletContext} used by this web application.
      * <p>Mantiene una referencia hacia el objeto {@code ServletContext} utilizado
@@ -361,14 +373,17 @@ public class SWBPortal
             if (workPath.startsWith("file:"))
             {
                 workPath = (new File(workPath.substring(5))).toString();
+                workPathType=WORKPATH_ABSOLUTE;
             }
             else if (workPath.startsWith("http://"))
             {
                 workPath = (URLEncoder.encode(workPath));
+                workPathType=WORKPATH_REMOTE;
             }
             else
             {
                 workPath = SWBUtils.getApplicationPath() + workPath;
+                workPathType=WORKPATH_RELATIVE;
             }
         }
         catch (Exception e)
@@ -921,6 +936,11 @@ public class SWBPortal
     public static String getWorkPath()
     {
         return workPath;
+    }
+
+    public static String getWorkPathType()
+    {
+        return workPathType;
     }
 
     /**

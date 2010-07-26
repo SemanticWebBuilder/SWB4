@@ -53,6 +53,7 @@ public class MultipleFileUploader implements InternalServlet
 
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
+        //System.out.println("********************** MulpleFileUploades.doProcess**********************");
         String uri = request.getRequestURI();
         String cntx = request.getContextPath();
         String path = uri.substring(cntx.length());
@@ -156,7 +157,7 @@ public class MultipleFileUploader implements InternalServlet
             {
                 UploaderFileCacheUtils.put(cad, new java.util.LinkedList<UploadedFile>());
             }
-            response.getWriter().print(getPage(request.getServletPath(),cad));
+            response.getWriter().print(getPage(SWBPortal.getContextPath()+request.getServletPath(),cad));
 
         } else
         {
@@ -190,6 +191,8 @@ public class MultipleFileUploader implements InternalServlet
 
     private String getPage(String ruta, String cad)
     {
+        //System.out.println("********************** MulpleFileUploades.getPage**********************");
+
         UploadFileRequest requested = UploaderFileCacheUtils.getRequest(cad);
         StringBuilder buffer = new StringBuilder();
         if (null!=requested){
@@ -197,10 +200,10 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("<html lang=\"en\">\n");
         buffer.append("    <head>\n");
         buffer.append("        <title>Flash HTML</title>\n");
-        buffer.append("        <link href=\"/swbadmin/js/dojo/dijit/themes/dijit.css\" rel=\"stylesheet\" />\n");
-        buffer.append("        <link href=\"/swbadmin/js/dojo/dijit/themes/tundra/form/Button.css\" rel=\"stylesheet\" />\n");
-        buffer.append("        <link href=\"/swbadmin/js/dojo/dijit/themes/tundra/ProgressBar.css\" rel=\"stylesheet\" />\n");
-        buffer.append("        <link href=\"/swbadmin/js/dojo/dojox/form/resources/FileUploader.css\" rel=\"stylesheet\" />\n");
+        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/dijit.css\" rel=\"stylesheet\" />\n");
+        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/form/Button.css\" rel=\"stylesheet\" />\n");
+        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/tundra/ProgressBar.css\" rel=\"stylesheet\" />\n");
+        buffer.append("        <link href=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dojox/form/resources/FileUploader.css\" rel=\"stylesheet\" />\n");
         buffer.append("        <script>\n");
         buffer.append("            var f;\n");
         buffer.append("            djConfig = {\n");
@@ -209,7 +212,7 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("                parseOnLoad: true\n");
         buffer.append("            }\n");
         buffer.append("        </script>\n");
-        buffer.append("        <script src=\"/swbadmin/js/dojo/dojo/dojo.js\"></script>\n");
+        buffer.append("        <script src=\""+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dojo/dojo.js\"></script>\n");
         buffer.append("        <script>\n");
         buffer.append("            dojo.require(\"dojox.form.FileUploader\");\n");
         buffer.append("            dojo.require(\"dijit.form.Button\");\n");
@@ -322,7 +325,7 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("            }\n");
         buffer.append("            .uploadBtn{\n");
         buffer.append("                border:1px solid #333333;\n");
-        buffer.append("                background:url(/swbadmin/js/dojo/dijit/themes/soria/images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;\n");
+        buffer.append("                background:url("+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/soria/images/buttonEnabled.png) #d0d0d0 repeat-x scroll 0px top;\n");
         buffer.append("                font-size:14px;\n");
         buffer.append("                font-family:Arial;\n");
         buffer.append("                width:201px;\n");
@@ -332,14 +335,14 @@ public class MultipleFileUploader implements InternalServlet
         buffer.append("                text-align:center;\n");
         buffer.append("            }\n");
         buffer.append("            .uploadHover{\n");
-        buffer.append("                background-image:url(/swbadmin/js/dojo/dijit/themes/soria/images/buttonHover.png);\n");
+        buffer.append("                background-image:url("+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/soria/images/buttonHover.png);\n");
         buffer.append("                cursor:pointer;\n");
         buffer.append("                font-weight:bold;\n");
         buffer.append("                font-style:italic;\n");
         buffer.append("                font-family:serif;\n");
         buffer.append("            }\n");
         buffer.append("            .uploadPress{\n");
-        buffer.append("                background-image:url(/swbadmin/js/dojo/dijit/themes/soria/images/buttonActive.png);\n");
+        buffer.append("                background-image:url("+SWBPortal.getContextPath()+"/swbadmin/js/dojo/dijit/themes/soria/images/buttonActive.png);\n");
         buffer.append("            }\n");
         buffer.append("            .uploadDisabled{\n");
         buffer.append("                background-image:none;\n");
