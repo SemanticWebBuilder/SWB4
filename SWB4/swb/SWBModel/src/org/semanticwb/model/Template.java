@@ -53,11 +53,11 @@ private HashMap objects = new HashMap();
     //<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     //<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
     /** The DEFAU l_ html. */
-public static String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
+public static final String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\"text/html\"  response=\"{response}\" />\n" +
                            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" +
                            "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
                            "<head>\n" +
-                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">\n" +
+                            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\"/>\n" +
                             "<title>\n" +
                             "   <TOPIC METHOD=\"getDisplayName\" LANGUAGE=\"{user@getLanguage}\"/>\n" +
                             "</title>\n" +
@@ -75,7 +75,13 @@ public static String DEFAUL_HTML="<template method=\"setHeaders\" Content-Type=\
                             //"    @import \""+ctx+"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";\n" +
                             //"    @import \""+ctx+"/swbadmin/css/swb_portal.css\";\n" +
                             //"</style>\n" +
-                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\" djConfig=\"parseOnLoad: true, isDebug: false\"></script>\n" +
+                            "<script type=\"text/javascript\">\n" +
+                            "    var djConfig = {\n" +
+                            "        parseOnLoad: true,\n" +
+                            "        isDebug: false\n" +
+                            "    };\n" +
+                            "</script>\n" +
+                            "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/dojo/dojo/dojo.js\"></script>\n" +
                             //"<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb_.js\"></script>\n" +
                             "<script type=\"text/javascript\" src=\"{webpath}/swbadmin/js/swb.js\"></script>\n" +
                             "<!--\n" +
