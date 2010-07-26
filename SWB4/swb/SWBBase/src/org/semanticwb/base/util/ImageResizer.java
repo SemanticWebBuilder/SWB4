@@ -206,7 +206,7 @@ public class ImageResizer
     public static void resizeCrop(File origFile, int maxWidth, int maxHeight, File destfile, String type) throws IOException
     {
         BufferedImage bi = ImageIO.read(origFile);
-        System.out.println("ResizeCrop");
+        //System.out.println("ResizeCrop");
         int calcHeight = -1;
         float ch = bi.getHeight() / (float) maxHeight;
         int calcWidth = -1;
