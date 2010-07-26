@@ -116,7 +116,8 @@ public class CommentSwf extends Comment {
             Document  dom = SWBUtils.XML.getNewDocument();
             
             if ("com_step3".equals(action)) {
-                dom = getDomEmail(request, response, reqParams); // Envia correo
+                //TODO:reparar
+                //dom = getDomEmail(request, response, reqParams); // Envia correo
             } else {
                 // Nueva ventana con formulario
                 User user = reqParams.getUser();

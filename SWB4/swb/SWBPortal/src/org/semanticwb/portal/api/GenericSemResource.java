@@ -113,7 +113,8 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         PrintWriter out=response.getWriter();
-        out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\">");
+
+        //out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\"  loadingMessage=\"<center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>\">");
         SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         mgr.setSubmitByAjax(true);
         mgr.addButton(SWBFormButton.newSaveButton());
@@ -130,7 +131,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
             mgr.setAction(paramRequest.getRenderUrl().setAction("update").toString());
             out.print(mgr.renderForm(request));
         }
-        out.println("</div>");
+        //out.println("</div>");
     }
 
     /* (non-Javadoc)

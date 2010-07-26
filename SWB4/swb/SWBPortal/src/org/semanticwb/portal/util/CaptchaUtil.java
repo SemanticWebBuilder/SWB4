@@ -35,7 +35,7 @@ public class CaptchaUtil
 
     public static void writeCaptcha(String cadena, OutputStream out) throws IOException
     {
-        Font font = new Font("SansSerif", Font.BOLD, 26); //|Font.ITALIC
+        Font font = new Font("SansSerif", Font.BOLD, 30); //|Font.ITALIC
 
 
         BufferedImage buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -66,11 +66,11 @@ public class CaptchaUtil
 
         g.setStroke(new BasicStroke(0.75f));
 
-        for (int i = _gen.nextInt(10); i <= width; i += _gen.nextInt(5)+15)
+        for (int i = _gen.nextInt(10); i <= width; i += _gen.nextInt(5)+25)
         {
             g.drawLine(i, 0, i, height);
         }
-        for (int i = _gen.nextInt(5); i <= height; i += _gen.nextInt(5)+5)
+        for (int i = _gen.nextInt(5); i <= height; i += _gen.nextInt(5)+15)
         {
             g.drawLine(0, i, width - 1, i);
         }
@@ -84,7 +84,7 @@ public class CaptchaUtil
     static private void gimp(BufferedImage bi)
     {
         Graphics2D g = bi.createGraphics();
-        shearX(g, bi.getWidth(), bi.getHeight());
+        //shearX(g, bi.getWidth(), bi.getHeight());
         shearY(g, bi.getWidth(), bi.getHeight());
         g.dispose();
     }
