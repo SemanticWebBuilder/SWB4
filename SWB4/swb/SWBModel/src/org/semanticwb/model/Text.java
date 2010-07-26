@@ -117,6 +117,8 @@ public class Text extends TextBase {
             value = "";
         }
 
+        value=value.replace("\"", "&quot;");
+
         // value=SWBUtils.TEXT.encodeExtendedCharacters(value);
 //      System.out.println("value:"+value);
 //      for(int x=0;x<value.length();x++)
