@@ -93,8 +93,7 @@ public final class MemoryClassLoader extends ClassLoader {
 
         for (URL url : urlClassLoader.getURLs())
             sb.append(url.getFile()).append(File.pathSeparator);
-
-        System.out.println("cp= "+sb.toString());
+        
         options.add(sb.toString());
 
         JavaCompiler.CompilationTask task=this.compiler.getTask(null, this.manager, null, options, null, list);

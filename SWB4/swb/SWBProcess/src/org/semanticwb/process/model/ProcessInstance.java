@@ -31,7 +31,7 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
                 if(flownode.getClass().equals(StartEvent.class))
                 {
                     StartEvent init=(StartEvent)flownode;
-                    start(user, init);
+                    startEvent(user, init);
                 }
             }
         }
@@ -42,6 +42,12 @@ public class ProcessInstance extends org.semanticwb.process.model.base.ProcessIn
      * @param user
      */
     public void start(User user, StartEvent event)
+    {
+        super.start(user);
+        startEvent(user, event);
+    }
+
+    private void startEvent(User user, StartEvent event)
     {
         FlowNodeInstance eventins=event.createInstance(this);
         eventins.start(user);
