@@ -37,15 +37,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         log.debug("Para el objeto "+object.getURI()+" de la instancia de proceso "+ instance.getURI() +" se econtró la clase "+className);
         try
         {
-            log.debug("Cargando clase "+className+" ...");
+            System.out.println("Cargando clase "+className+" ...");
             Class clazz=mcls.loadClass(className);
-            log.debug("Obteniendo constructor...");
+            System.out.println("Obteniendo constructor...");
             Constructor c=clazz.getConstructor(SemanticObject.class);
-            log.debug("Instanciando objeto...");
+            System.out.println("Instanciando objeto...");
             Object instanceObject=c.newInstance(object);
-            log.debug("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
+            System.out.println("Agregando variable "+varname+"="+instanceObject+" de tipo "+instanceObject.getClass());
             i.set(varname, instanceObject);
-            log.debug("Variable "+ varname +" agregada");
+            System.out.println("Variable "+ varname +" agregada");
         }
         catch(ClassNotFoundException cnfe)
         {
@@ -62,15 +62,15 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
         for(ProcessObject po : processObjects)
         {
             String code=addSemanticClass(po.getSemanticObject().getSemanticClass());
-            System.out.println("Agregando clase "+po.getSemanticObject().getSemanticClass().getUpperClassName());
-            System.out.println(code);
+            log.debug("Agregando clase "+po.getSemanticObject().getSemanticClass().getUpperClassName());
+            log.debug(code);
             classes.put(po.getSemanticObject().getSemanticClass().getUpperClassName(), code);
         }
         if(!classes.isEmpty())
         {
-            System.out.println("Compilando classes...");
+            log.debug("Compilando classes...");
             mcls.addAll(classes);
-            System.out.println("Classes compiladas");
+            log.debug("Classes compiladas");
         }
         return mcls;
     }
@@ -95,15 +95,8 @@ public class ScriptTask extends org.semanticwb.process.model.base.ScriptTaskBase
                 mcls=loadClasses(instance,ProcessObject.class.getClassLoader());
                 loaders.put(instance.getURI(), mcls);
             }
-            for(String name : mcls.getClasses())
-            {
-                byte[] codebinary=mcls.getCode(name);
-                if(codebinary!=null)
-                {
-                    i.getClassManager().defineClass(name, codebinary);
-                }
-            }
-            //i.setClassLoader(mcls);
+            
+            i.setClassLoader(mcls);
             i.set("instance", instance);            
             i.set("user", user);
             if(instance!=null)
