@@ -984,11 +984,19 @@ public class SWBUtils {
         public static String scape4Script(String txt)
         {
             String aux = txt;
+            //aux = aux.replace("'", "\\'");
+            //aux = aux.replace("\"", "\\\"");
             aux = aux.replace("'", "\\'");
-            aux = aux.replace("\"", "\\\"");
+            aux = aux.replace("\"", "&quot;");
+
             return aux;
         }
 
+        public static String cropText(String txt, int size)
+        {
+            if(txt!=null && txt.length()>size)txt=txt.substring(0,size)+"...";
+            return txt;
+        }
 
         /**
          * Gets the value for a {@code key} in the specified {@code Bundle} with
