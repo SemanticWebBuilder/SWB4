@@ -49,6 +49,7 @@
             ret.append("      <tr>");
             ret.append("        <td><label>"+lng.getDisplayTitle(lang)+":</label></td>");
             String sval=sobj.getProperty(sprop,"",lng.getId());
+            sval=sval.replace("\"", "&quot;");
             //print(sval);
             String update="getSyncHtml('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/propLocaleEdit.jsp?";
             update+="suri="+sobj.getEncodedURI();
