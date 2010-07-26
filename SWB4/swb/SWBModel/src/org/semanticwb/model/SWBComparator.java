@@ -316,24 +316,38 @@ public static Iterator sortSermanticObjects(Iterator it) {
         if (ascendente) {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
-                    Traceable ob1 = (Traceable) (o1);
-                    Traceable ob2 = (Traceable) (o2);
-                    int       ret = ob1.getCreated().after(ob2.getCreated())
-                                    ? 1
-                                    : -1;
+                    Date d1;
+                    Date d2;
+                    if(o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject)o1).getDateProperty(Traceable.swb_created);
+                        d2 = ((SemanticObject)o2).getDateProperty(Traceable.swb_created);
+                    }else
+                    {
+                        d1 = ((Traceable)o1).getCreated();
+                        d2 = ((Traceable)o2).getCreated();
+                    }
 
+                    int ret = d1.after(d2)? 1 : -1;
                     return ret;
                 }
             });
         } else {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
-                    Traceable ob1 = (Traceable) (o1);
-                    Traceable ob2 = (Traceable) (o2);
-                    int       ret = ob1.getCreated().after(ob2.getCreated())
-                                    ? -1
-                                    : 1;
+                    Date d1;
+                    Date d2;
+                    if(o1 instanceof SemanticObject)
+                    {
+                        d1 = ((SemanticObject)o1).getDateProperty(Traceable.swb_created);
+                        d2 = ((SemanticObject)o2).getDateProperty(Traceable.swb_created);
+                    }else
+                    {
+                        d1 = ((Traceable)o1).getCreated();
+                        d2 = ((Traceable)o2).getCreated();
+                    }
 
+                    int ret = d1.after(d2)? -1 : 1;
                     return ret;
                 }
             });

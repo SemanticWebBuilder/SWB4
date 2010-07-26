@@ -277,7 +277,9 @@ public class GenericFormElement extends FormElementBase {
                     value = "";
                 }
 
-                value=value.replace("\"", "&cuote;");
+                //System.out.print(value);
+                value=value.replace("\"", "&quot;");
+                //System.out.println(" "+value);
 
                 if (mode.equals("edit") || mode.equals("create")) {
                     ret.append("<input _id=\"" + name + "\" name=\"" + name + "\" value=\"" + value + "\"");

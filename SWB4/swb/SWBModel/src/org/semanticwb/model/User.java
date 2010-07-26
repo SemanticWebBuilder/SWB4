@@ -24,6 +24,7 @@
 package org.semanticwb.model;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.platform.SemanticVocabulary;
+import org.semanticwb.util.Encryptor;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -81,6 +83,10 @@ public class User extends UserBase implements Principal
     @Override
     public void setPassword(String password)
     {
+//        String keyString = "05fe858d86df4b909a8c87cb8d9ad577";
+//        byte key[] = new BigInteger(keyString, 16).toByteArray();
+//        Encryptor t = new Encryptor(key);
+//        setProperty("encpwd",t.encode(password));
         //System.out.println("setPassword:"+password);
         String tmpPasswd = null;
         try
