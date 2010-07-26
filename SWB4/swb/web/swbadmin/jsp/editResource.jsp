@@ -15,10 +15,18 @@
     if(obj1 instanceof Resource)
         {
     Resource obj=(Resource)obj1;
+    boolean sem=SWBPortal.getResourceMgr().getResource(obj) instanceof GenericSemResource;
     //System.out.println("suri:"+obj.getSemanticObject().getEncodedURI());
+    if(sem)
+    {
+    String url=SWBPlatform.getContextPath()+"/swb/SWBAdmin/bh_Information/_vtp/"+obj.getWebSiteId()+"/"+obj.getWebSite().getHomePage().getId()+"/_rid/"+obj.getId()+"/_mod/admin/_wst/maximized";
+%><div dojoType="dijit.layout.ContentPane" href="<%=url%>" style="border:0px; width:100%; height:100%"></div>
+<%
+    }else
+    {
     String url=SWBPlatform.getContextPath()+"/swb/SWBAdmin/bh_AdminPorltet/_vtp/"+obj.getWebSiteId()+"/"+obj.getWebSite().getHomePage().getId()+"/_rid/"+obj.getId()+"/_mod/admin/_wst/maximized";
 %><iframe dojoType_="dijit.layout.ContentPane" src="<%=url%>" style="border:0px; width:100%; height:100%" frameborder="0" scrolling="yes"></iframe>
-
 <%
+    }
 }
 %>
