@@ -28,7 +28,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.WebPage;
 
-// TODO: Auto-generated Javadoc
 /**
  * Parser for {@link Searchable} web pages.
  * <p>
@@ -63,6 +62,21 @@ public class WebPageParser extends GenericParser {
             }
         }
         return ret;
+    }
+
+    /**
+     * Gets the date of the last change done to the {@link Searchable} object.
+     * <p>
+     * Obtiene la fecha de la última modificación hecha al objeto
+     * {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object.
+     * @return  Last {@link Searchable} object's update date.
+     *          Fecha de última actualización del objeto {@link Searchable}.
+     */
+    @Override
+    public String getIndexLastUpdated(Searchable gen) {
+        return ((WebPage)gen).getUpdated().toString();
     }
 
     //************ Métodos que no afectan la información del índice ************
