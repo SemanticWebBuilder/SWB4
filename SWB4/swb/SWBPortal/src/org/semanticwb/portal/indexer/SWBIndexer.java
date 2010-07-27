@@ -90,6 +90,12 @@ public abstract class SWBIndexer
     public static final String ATT_SUMMARY="summary";
     /**Field name for the URL of a {@link Searchable} object.*/
     public static final String ATT_URL="url";
+    /**Field name for reverse ordering of {@link Searchable} objects.*/
+    public static final String ATT_INV="inv:";
+    /**Order field for the last updated date of {@link Searchable} objects.*/
+    public static final String ATT_UPDATED="updated";
+    /**Order field for the score of {@link Searchable} objects.*/
+    public static final String ATT_SCORE="score";
 
     /** The props. */
     private Properties props = null;
@@ -174,6 +180,15 @@ public abstract class SWBIndexer
      * @return the search results
      */
     public abstract SearchResults search(SearchQuery query, User user);
+
+    /**
+     * Search.
+     *
+     * @param query the query
+     * @param user the user
+     * @return the search results
+     */
+    public abstract SearchResults search(SearchQuery query, User user, String []sortFields);
     
     /**
      * Removes the {@link Searchable} object with the specified URI from the
