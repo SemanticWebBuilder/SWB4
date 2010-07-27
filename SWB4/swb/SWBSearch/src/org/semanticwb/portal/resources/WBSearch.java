@@ -57,7 +57,8 @@ import org.semanticwb.portal.indexer.searcher.SearchTerm;
 /**
  *
  * @author Javier Solis Gonzalez,
- * @modified by Jorge A. Jim�nez
+ * @modified by Jorge A. Jiménez
+ * @modified by Hasdai Pacheco {haxdai@gmail.com}
  */
 public class WBSearch extends GenericAdmResource
 {
@@ -75,7 +76,7 @@ public class WBSearch extends GenericAdmResource
     
     
     /**
-     * Asigna la informaci�n de la base de datos al recurso.
+     * Asigna la información de la base de datos al recurso.
      *
      * @param     base  La información del recurso en memoria.
      */
@@ -119,15 +120,15 @@ public class WBSearch extends GenericAdmResource
      * @throws AFException
      * @throws IOException
      */
-    public org.w3c.dom.Document getDom(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, IOException
+    public org.w3c.dom.Document getDom(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         //System.out.println("getDom");
         try {
             Document doc = SWBUtils.XML.getNewDocument();
-            WebSite tm = reqParams.getWebPage().getWebSite();
-            User user=reqParams.getUser();
+            WebSite tm = paramRequest.getWebPage().getWebSite();
+            User user=paramRequest.getUser();
             
-            String lang=reqParams.getUser().getLanguage();
+            String lang=paramRequest.getUser().getLanguage();
 
             HashMap args = new HashMap();
             args.put("separator", " | ");
@@ -137,14 +138,11 @@ public class WBSearch extends GenericAdmResource
             Element search = doc.createElement("SEARCH");
             doc.appendChild(search);
             search.setAttribute("path", path);
-            
-            
+
             int ipage=0;
-            //int ipindex=0;
             String q = request.getParameter("q");
+            String sort = request.getParameter("sort");
             if(request.getParameter("wbSpage")!=null) ipage=Integer.parseInt(request.getParameter("wbSpage"));
-            //if(request.getParameter("wbSIpage")!=null) ipindex=Integer.parseInt(request.getParameter("wbSIpage"));
-            //ArrayList aPages=new ArrayList();
             
             int max=0;
             int i = 0;        //contador del segmento
@@ -153,10 +151,10 @@ public class WBSearch extends GenericAdmResource
                 search.setAttribute("words", q);
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 search.setAttribute("work", SWBPortal.getWebWorkPath());
-                search.setAttribute("url", reqParams.getWebPage().getUrl());
+                search.setAttribute("url", paramRequest.getWebPage().getUrl());
 
                 
-                String smap=reqParams.getResourceBase().getAttribute("amaps","0");
+                String smap=paramRequest.getResourceBase().getAttribute("amaps","0");
                 //System.out.println("amaps:"+reqParams.getResourceBase().getAttribute("amaps","0"));
                 SearchQuery query=new SearchQuery();
                 SearchQuery tquery=new SearchQuery(SearchQuery.OPER_AND);
@@ -170,14 +168,14 @@ public class WBSearch extends GenericAdmResource
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_MODEL, tm.getId(), SearchTerm.OPER_AND));
                 }
 
-                String stpini=reqParams.getResourceBase().getAttribute("tpini",null);
+                String stpini=paramRequest.getResourceBase().getAttribute("tpini",null);
                 if(stpini==null)stpini=request.getParameter("cat");
                 if(stpini!=null)
                 {
                     query.addTerm(new SearchTerm(SWBIndexer.ATT_CATEGORY, stpini, SearchTerm.OPER_AND));
                 }
 
-                String cls=reqParams.getResourceBase().getAttribute("cls",null);
+                String cls=paramRequest.getResourceBase().getAttribute("cls",null);
                 if(cls==null)stpini=request.getParameter("cls");
                 if(cls!=null)
                 {
@@ -185,12 +183,29 @@ public class WBSearch extends GenericAdmResource
                 }
 
 
-                SWBIndexer indexer=SWBPortal.getIndexMgr().getModelIndexer(reqParams.getWebPage().getWebSite());
+                SWBIndexer indexer=SWBPortal.getIndexMgr().getModelIndexer(paramRequest.getWebPage().getWebSite());
                 //System.out.println("indexer:"+indexer);
 
                 if(indexer!=null)
                 {
-                    SearchResults results=indexer.search(query, user);
+                    String params = null;
+                    if (sort != null) {
+                        search.setAttribute("sort", sort);
+                        params="&sort=" + sort;
+                    }
+                    
+                    if(params != null) {
+                        search.setAttribute("params", params);
+                    }
+
+                    SearchResults results = null;
+                    if(sort == null) {
+                        results = indexer.search(query, user);
+                    } else {
+                        String[] sortList = {SWBIndexer.ATT_INV + SWBIndexer.ATT_UPDATED};
+                        results = indexer.search(query, user, sortList);
+                    }
+                    
                     max=results.size();
                     ipageLength=results.getPageLength();
                     search.setAttribute("size", ""+max);
@@ -363,5 +378,4 @@ public class WBSearch extends GenericAdmResource
             parent.appendChild(elem);
         }
     }
-    
 }
