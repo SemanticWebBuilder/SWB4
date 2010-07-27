@@ -73,6 +73,21 @@ public class UserParser extends GenericParser {
        return map;
     }
 
+    /**
+     * Gets the date of the last change done to the {@link Searchable} object.
+     * <p>
+     * Obtiene la fecha de la última modificación hecha al objeto
+     * {@link Searchable}.
+     *
+     * @param   gen the {@link Searchable} object.
+     * @return  Last {@link Searchable} object's update date.
+     *          Fecha de última actualización del objeto {@link Searchable}.
+     */
+    @Override
+    public String getIndexLastUpdated(Searchable gen) {
+        return ((User)gen).getUpdated().toString();
+    }
+
     //************ Métodos que no afectan la información del índice ************
 
     /**
