@@ -37,7 +37,6 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.indexer.IndexTerm;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
-// TODO: Auto-generated Javadoc
 /**
  * Generic parser for {@link Searchable} objects. A parser extracts all the
  * needed information from a {@link Searchable} object for indexing purposes.
@@ -108,6 +107,7 @@ public class GenericParser
         map.put(SWBIndexer.ATT_TITLE, new IndexTerm(SWBIndexer.ATT_TITLE, getIndexTitle(gen), false, IndexTerm.INDEXED_ANALYZED));
         map.put(SWBIndexer.ATT_DESCRIPTION, new IndexTerm(SWBIndexer.ATT_DESCRIPTION, getIndexDescription(gen), false, IndexTerm.INDEXED_ANALYZED));
         map.put(SWBIndexer.ATT_TAGS, new IndexTerm(SWBIndexer.ATT_TAGS, getIndexTags(gen), false, IndexTerm.INDEXED_ANALYZED));
+        map.put(SWBIndexer.ATT_UPDATED, new IndexTerm(SWBIndexer.ATT_UPDATED, getIndexLastUpdated(gen), true, IndexTerm.INDEXED_NO_ANALYZED));
         return map;
     }
 
@@ -297,6 +297,23 @@ public class GenericParser
      */
     public String getIndexCategory(Searchable gen) {
         return _getIndexCategory(gen);
+    }
+
+    /**
+     * Gets the date of the last change done to the {@link Searchable} object.
+     * This method MUST be overriden in specific parsers to accurately get the
+     * updated date.
+     * <p>
+     * Obtiene la fecha de la última modificación hecha al objeto
+     * {@link Searchable}. Este método DEBE sobreescribirse en los parsers
+     * genéricos para obtener de manera correcta la fecha de actualización.
+     *
+     * @param   gen the {@link Searchable} object.
+     * @return  Last {@link Searchable} object's update date.
+     *          Fecha de última actualización del objeto {@link Searchable}.
+     */
+    public String getIndexLastUpdated(Searchable gen) {
+        return "";
     }
 
     //************ Métodos que no afectan la información del índice ************
