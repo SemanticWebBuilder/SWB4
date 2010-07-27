@@ -11,6 +11,18 @@
             <p>
                 Resultados: <xsl:value-of select="SEARCH/@off" /> - <xsl:value-of select="SEARCH/@seg" /> de <xsl:value-of select="SEARCH/@size" />
             </p>
+            <p>
+                <xsl:if test="SEARCH/@sort">
+                    <font size="2" face="verdana">
+                        <a href="?q={/SEARCH/@wordsEnc}">Ordenar por puntuaci<xsl:text disable-output-escaping="yes">&amp;oacute;</xsl:text>n</a>
+                    </font>
+                </xsl:if>
+                <xsl:if test="not(SEARCH/@sort)">
+                    <font size="2" face="verdana">
+                        <a href="?q={/SEARCH/@wordsEnc}&amp;sort=date">Ordenar por fecha</a>
+                    </font>
+                </xsl:if>
+            </p>
             <p></p>
             <xsl:if test="SEARCH/@size">
                 <xsl:for-each select="SEARCH/Object">
