@@ -16,7 +16,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
@@ -24,59 +26,22 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
-public class Documents extends org.semanticwb.portal.resources.sem.documents.base.DocumentsBase 
-{
+public class Documents extends org.semanticwb.portal.resources.sem.documents.base.DocumentsBase {
+    private static Logger log = SWBUtils.getLogger(Documents.class);
 
-    public Documents()
-    {
+    public Documents() {
     }
 
-    public Documents(org.semanticwb.platform.SemanticObject base)
-    {
+    public Documents(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        String action = response.getAction();
-        System.out.println("processAction....");
-        if(action.equalsIgnoreCase(response.Action_ADD)) {
-            System.out.println("action=ADD");
-            try {
-                add(request, response);
-            }catch(Exception e) {
-                System.out.println("\nError.....\n"+e);
-            }
-//            String securCodeSent = request.getParameter("cmnt_seccode");
-//            String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
-//            if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
-//                WebSite model = response.getWebPage().getWebSite();
-//                Comment comment = Comment.createComment(model);
-//                comment.setComment(request.getParameter("cmnt_comment"));
-//                addComment(comment);
-//                request.getSession(true).removeAttribute("cs");
-//            }else {
-//                Enumeration e = request.getParameterNames();
-//                while(e.hasMoreElements()){
-//                    String key = (String)e.nextElement();
-//                    response.setRenderParameter(key, request.getParameter(key));
-//                }
-//            }
-        }else {
-            super.processAction(request, response);
-        }
-    }
-
-    @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out=response.getWriter();
-        out.println("\n\n******************************\nHello Documents...");
-        
+        PrintWriter out = response.getWriter();
         out.println(renderListDocuments(paramRequest));
 
         SWBResourceURL addURL = paramRequest.getActionUrl().setAction(paramRequest.Action_ADD);
-
-
         
         out.println("<script type=\"text/javascript\">");
         out.println("<!--");
@@ -101,9 +66,15 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         out.println("  }");
         out.println("  document.frmadddoc.submit();");
         out.println("}");
+
+        out.println("function validateRemoveDoctoElement(url) {");
+        out.println("  if(confirm('¿Eliminar el documento?')) {");
+        out.println("    window.location.href=url;");
+        out.println("  }");
+        out.println("}");
         out.println("-->");
         out.println("</script>");
-        out.println("<div class=\"columnaIzquierda\">");
+        out.println("<div class=\"\">");
         out.println("  <div class=\"adminTools\">");
         out.println("    <a class=\"adminTool\" onclick=\"validaForma()\" href=\"#\">Guardar</a>");
         out.println("    <a class=\"adminTool\" href=\"<%=paramRequest.getRenderUrl()%>\">Cancelar</a>");
@@ -153,47 +124,63 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     }
 
     private String renderListDocuments(SWBParamRequest paramRequest) throws SWBResourceException {
-        StringBuilder script = new StringBuilder();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");
+        StringBuilder html = new StringBuilder();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
         //long ordinal = SWBUtils.Collections.sizeOf(listComments());
         //int ordinal = 1;
-        System.out.println("renderListDocuments....");
+        SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
 
-        Iterator<Document> itDocuments = SWBComparator.sortByCreated(listDocuments(),false);
-        script.append("<div class=\"swb-comentario-sem-lista\">");
-        script.append("<h2>documentos</h2>");
-        if(itDocuments.hasNext()) {
-            System.out.println("listando documentos...");
-            script.append("<ol>");
-        }
+        System.out.println("renderListDocuments....");
         
-        User user = paramRequest.getUser();
-        UserGroup ug = user.getUserGroup();
-        System.out.println("ug="+ug);
-        while(itDocuments.hasNext()) {
-            Document document = itDocuments.next();
-            System.out.println("document.getCreator()="+document.getCreator());
-            if(document.getCreator()==null)
-                continue;
-            System.out.println("document.getCreator().getUserGroup()="+document.getCreator().getUserGroup());
-            if( !document.getCreator().getUserGroup().equals(ug) && document.isHidden() )
-                continue;
-            System.out.println("creator="+document.getCreator()+", title="+document.getTitle()+", desc="+document.getDescription());
-            script.append("<li>");
-            script.append("<p>"+document.getDescription()+"</p>");
-            script.append("<p><a href=\""+SWBPortal.getWorkPath()+document.getWorkPath()+"/"+document.getFilename()+"\">"+document.getFilename()+"</a></p>");
-            script.append("<p>"+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
-            script.append("<p><a href=\"wp61?uri="+document.getEncodedURI()+"\">Comentar</a>&nbsp;<a href=\"#\">Eliminar</a></p>");
-            script.append("</li>");
-        }
+        html.append("<div class=\"swb-comentario-sem-lista\">");
+        Iterator<Document> itDocuments = SWBComparator.sortByCreated(listDocuments(),false);
         if(itDocuments.hasNext()) {
-            script.append("</ol>");
-            System.out.println("fin de listado.");
-        }
-        script.append("</div>");
-        return script.toString();
+            html.append("<h2>documentos</h2>");
+            html.append("<ol>");
+            User user = paramRequest.getUser();
+            UserGroup ug = user.getUserGroup();
+            System.out.println("ug="+ug);
+            while(itDocuments.hasNext()) {
+                Document document = itDocuments.next();
+                if(document.getCreator()==null)
+                    continue;
+                if( !document.getCreator().getUserGroup().equals(ug) && document.isHidden() )
+                    continue;
+                html.append("<li>");
+                html.append("<p>"+document.getTitle()+"</p>");
+                html.append("<p>"+document.getDescription()+"</p>");
+                html.append("<p><a href=\""+SWBPortal.getWorkPath()+document.getWorkPath()+"/"+document.getFilename()+"\">"+document.getFilename()+"</a></p>");
+                if( document.getCreator().equals(user) ) {
+                    html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
+                }else
+                    html.append("<p>Autor: "+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
+                html.append("<p><a href=\"wp61?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
+                html.append("</li>");
+            }
+            html.append("</ol>");
+        }else
+            html.append("<!-- no hay documentos -->");
+        html.append("</div>");
+        return html.toString();
     }
 
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        System.out.println("processAction....");
+        if(action.equalsIgnoreCase(response.Action_ADD)) {
+            try {
+                add(request, response);
+            }catch(Exception e) {
+                System.out.println("\nError.....\n"+e);
+            }
+        }else if(action.equalsIgnoreCase(response.Action_REMOVE)) {
+            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+            Document document = (Document)semObject.createGenericInstance();
+            removeDocument(document);
+        }
+    }
+    
     protected void add(HttpServletRequest request, SWBActionResponse response) throws Exception {
         WebPage page = response.getWebPage();
 //        Member mem = Member.getMember(response.getUser(), page);
@@ -249,10 +236,11 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     if(!file.exists()) {
                         file.mkdirs();
                     }
-                    long serial = (new Date()).getTime();
+                    //long serial = (new Date()).getTime();
                     String filename = null;
                     try {
-                        filename = serial + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                        //filename = serial + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
+                        filename = currentFile.getName().replaceAll(" ", "_");
                         System.out.println("filename="+filename);
                         file = new File(path +"/"+ filename);
                         currentFile.write(file);
@@ -270,12 +258,6 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
             doc.setDescription(params.get("description"));
             doc.setHidden(Boolean.parseBoolean(params.get("scope")));
             addDocument(doc);
-//            doc.setTags(params.get("tags"));
-//            doc.setVisibility(Integer.parseInt(params.get("scope")));
-//            if(page instanceof MicroSiteWebPageUtil) {
-//                ((MicroSiteWebPageUtil)page).sendNotification(doc);
-//            }
-//            doc.setDocumentWebPage(page);
             System.out.println("se agrego documento");
         }
     }
