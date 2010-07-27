@@ -49,6 +49,8 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.store.FSDirectory;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
@@ -67,6 +69,7 @@ import org.semanticwb.portal.integration.lucene.analyzer.LocaleAnalyzer;
 /**
  *
  * @author Javier Solis Gonzalez
+ * @modified by Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SWBLuceneIndexer extends SWBIndexer
 {
@@ -355,31 +358,61 @@ public class SWBLuceneIndexer extends SWBIndexer
     }
 
     @Override
-    public SearchResults search(SearchQuery query, User user) 
-    {
-        //System.out.println("search");
+    public SearchResults search(SearchQuery query, User user, String[] sortFields) {
         SearchResults ret = new SearchResults(user);
-        try
-        {
-            try
-            {
+        Sort sort = null;
+
+        if (sortFields != null) {
+            //Build Sort attributes list
+            SortField sortfs[] = new SortField[sortFields.length];
+            for (int i = 0; i < sortFields.length; i++) {
+                String field = sortFields[i];
+                if (field.equals(ATT_SCORE)) {
+                    sortfs[i]=SortField.FIELD_SCORE;
+                } else {
+                    //Reverse sort?
+                    if (field.startsWith(ATT_INV)) {
+                        sortfs[i] = new SortField(field.substring(ATT_INV.length()), true);
+                    } else {
+                        sortfs[i] = new SortField(field);
+                    }
+                }
+            }
+            sort = new Sort(sortfs);
+        }
+
+        try {
+            try {
+                Hits hits = null;
                 //Para que no haya problemas al cerrar el reader de abajo
-                if(searcher==null)
-                {
+                if(searcher==null) {
                     searcher = new IndexSearcher(FSDirectory.getDirectory((indexPath)));
                 }
-                Hits hits = searcher.search(getQuery(query)); //y el filtro?
+                
+                if (sort == null) {
+                    hits = searcher.search(getQuery(query)); //y el filtro?
+                } else {
+                    hits = searcher.search(getQuery(query), sort); //y el filtro?
+                }
+
                 for (int i = 0; i < hits.length(); i++) {
                     Document doc = hits.doc(i);
                     //System.out.println("doc:"+doc);
                     ret.add(new SearchDocument(doc.get(ATT_URI), doc.get(ATT_SUMMARY), hits.score(i))); //Es correcto este score?
                 }
-            }catch(Exception e){log.error(e);}
-        }catch(Exception e)
-        {
+            } catch(Exception e) {
+                log.error(e);
+            }
+        } catch(Exception e) {
             log.error(e);
         }
         return ret;
+    }
+
+    @Override
+    public SearchResults search(SearchQuery query, User user) 
+    {
+        return search(query, user, null);
     }
 
     @Override
