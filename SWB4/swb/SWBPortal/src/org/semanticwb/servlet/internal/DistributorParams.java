@@ -1064,6 +1064,11 @@ public class DistributorParams
             }
         }
         return req;
-    }    
+    }
+
+    public String getModelId()
+    {
+        return smodel;
+    }
     
 }

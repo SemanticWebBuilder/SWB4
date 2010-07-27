@@ -1588,6 +1588,7 @@ public class SWBPortal
                 while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
                 {
                     int ttype = tok.getTokenType();
+                    //System.out.println("tok:"+tok.getTokenType()+" "+tok.getRawString()+" -->" +tok.getStringValue());
                     //if (ttype==HtmlStreamTokenizer.TT_COMMENT) continue;
                     if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
                     {
@@ -1783,6 +1784,9 @@ public class SWBPortal
                         }
                     }
                     else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                    {
+                        ret.append(tok.getRawString());
+                    }else
                     {
                         ret.append(tok.getRawString());
                     }
