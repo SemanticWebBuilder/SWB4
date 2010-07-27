@@ -340,6 +340,7 @@ public class SWBVirtualHostFilter implements Filter
 
             InternalServlet googleMap = new GoogleSiteMap();
             intServlets.put("sitemap.txt", googleMap);
+            intServlets.put("sitemap.xml", googleMap);
             googleMap.init(filterConfig.getServletContext());
 
             InternalServlet fileUploader = new MultipleFileUploader();
@@ -409,27 +410,32 @@ public class SWBVirtualHostFilter implements Filter
     public void processError(int err, String errMsg, HttpServletResponse response, DistributorParams dparams)
             throws ServletException, IOException
     {
-        WebPage page=dparams.getWebPage();
-        String modelid=null;
-        if(page!=null)modelid=page.getWebSiteId();
+        String modelid=dparams.getModelId();
         log.debug("SendError " + err + ": " + errMsg);
         String path = "/config/" + err + ".html";
         String msg = null;
         try
         {
+            //System.out.println("modelid:"+modelid);
             if(modelid!=null)
             {
-                msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/models/"+modelid + path);
+                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + "/models/"+modelid + path);
+                if(msg!=null)
+                {
+                    msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/models/"+modelid+"/config/images/");
+                }
             }
             if(msg==null)
             {
-                msg = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/work/" + path);
+                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + path);
+                if(msg!=null)
+                {
+                    msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
+                }
             }
+
+            if(msg==null)msg="";
             //System.out.println("msg:"+msg);
-            if(msg!=null)
-            {
-                msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");
-            }else msg="";
         }
         catch (Exception e)
         {
