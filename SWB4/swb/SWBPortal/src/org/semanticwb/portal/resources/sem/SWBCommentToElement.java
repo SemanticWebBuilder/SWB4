@@ -86,8 +86,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     addComment(comment);
                     System.out.println("comentario="+request.getParameter("cmnt_comment"));
                 }
-                response.setRenderParameter("uri", uri);
-                request.getSession(true).removeAttribute("cs");
+                response.setRenderParameter("uri", uri);                
             }else {
                 System.out.println("no es seguro");
                 Enumeration e = request.getParameterNames();
@@ -96,6 +95,7 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
                     response.setRenderParameter(key, request.getParameter(key));
                 }
             }
+            request.getSession(true).removeAttribute("cs");
         } else {
             super.processAction(request, response);
         }
