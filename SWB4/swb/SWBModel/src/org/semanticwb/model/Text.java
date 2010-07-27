@@ -161,11 +161,13 @@ public class Text extends TextBase {
             ret.append(ext);
             ret.append("/>");
 
-            if (!mode.equals("create") && prop.isLocaleable()) {
-                ret.append(" <a href=\"#\" onClick=\"javascript:showDialog('" + SWBPlatform.getContextPath()
-                           + "/swbadmin/jsp/propLocaleEdit.jsp?suri=" + obj.getEncodedURI() + "&prop="
-                           + prop.getEncodedURI() + "','Idiomas de la Propiedad " + prop.getDisplayName(lang)
-                           + "');\">locale</a>");
+            if (DOJO) {
+                if (!mode.equals("create") && prop.isLocaleable()) {
+                    ret.append(" <a href=\"#\" onClick=\"javascript:showDialog('" + SWBPlatform.getContextPath()
+                               + "/swbadmin/jsp/propLocaleEdit.jsp?suri=" + obj.getEncodedURI() + "&prop="
+                               + prop.getEncodedURI() + "','Idiomas de la Propiedad " + prop.getDisplayName(lang)
+                               + "');\">locale</a>");
+                }
             }
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
