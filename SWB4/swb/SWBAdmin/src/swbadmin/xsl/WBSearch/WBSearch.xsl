@@ -10,6 +10,18 @@
                             Resultados: <xsl:value-of select="SEARCH/@off" /> - <xsl:value-of select="SEARCH/@seg" /> de <xsl:value-of select="SEARCH/@size" />
                             <br/>
 			</font>
+                        <p>
+                            <xsl:if test="SEARCH/@sort">
+                                <font size="2" face="verdana">
+                                    <a href="?q={/SEARCH/@wordsEnc}">Ordenar por puntuaci<xsl:text disable-output-escaping="yes">&amp;oacute;</xsl:text>n</a>
+                                </font>
+                            </xsl:if>
+                            <xsl:if test="not(SEARCH/@sort)">
+                                <font size="2" face="verdana">
+                                    <a href="?q={/SEARCH/@wordsEnc}&amp;sort=date">Ordenar por fecha</a>
+                                </font>
+                            </xsl:if>
+                        </p>
                         <xsl:if test="SEARCH/Object">
                             <hr color="#16458D" width="100%" size="1" /><br/>
 			</xsl:if>
