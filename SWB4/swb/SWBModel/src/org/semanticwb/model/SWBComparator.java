@@ -385,13 +385,18 @@ public static Iterator sortSermanticObjects(Iterator it) {
         if (ascendente) {
             set = new TreeSet(new Comparator() {
                 public int compare(Object o1, Object o2) {
-                    Traceable ob1 = (Traceable) (o1);
-                    Traceable ob2 = (Traceable) (o2);
-                    int       ret = ob1.getUpdated().after(ob2.getUpdated())
-                                    ? 1
-                                    : -1;
+                    if(o1 instanceof Traceable && o2 instanceof Traceable)
+                    {
+                        Traceable ob1 = (Traceable) (o1);
+                        Traceable ob2 = (Traceable) (o2);
+                        int       ret = ob1.getUpdated().after(ob2.getUpdated())
+                                        ? 1
+                                        : -1;
 
-                    return ret;
+                        return ret;
+                    }
+                    return 0;
+
                 }
             });
         } else {
