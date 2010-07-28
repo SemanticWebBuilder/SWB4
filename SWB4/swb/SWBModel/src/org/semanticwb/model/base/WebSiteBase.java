@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
@@ -25,6 +25,7 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public static final org.semanticwb.platform.SemanticClass swb_Device=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Device");
     public static final org.semanticwb.platform.SemanticClass swb_AdminFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AdminFilter");
     public static final org.semanticwb.platform.SemanticClass swb_IPFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#IPFilter");
+    public static final org.semanticwb.platform.SemanticClass swb_Collection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Collection");
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticClass swb_Country=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Country");
     public static final org.semanticwb.platform.SemanticClass swb_PFlow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlow");
@@ -983,6 +984,36 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public boolean hasIPFilter(String id)
     {
         return org.semanticwb.model.IPFilter.ClassMgr.hasIPFilter(id, this);
+    }
+
+    public org.semanticwb.model.Collection getCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.getCollection(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Collection> listCollections()
+    {
+        return org.semanticwb.model.Collection.ClassMgr.listCollections(this);
+    }
+
+    public org.semanticwb.model.Collection createCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(id,this);
+    }
+
+    public org.semanticwb.model.Collection createCollection()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Collection);
+        return org.semanticwb.model.Collection.ClassMgr.createCollection(String.valueOf(id),this);
+    } 
+
+    public void removeCollection(String id)
+    {
+        org.semanticwb.model.Collection.ClassMgr.removeCollection(id, this);
+    }
+    public boolean hasCollection(String id)
+    {
+        return org.semanticwb.model.Collection.ClassMgr.hasCollection(id, this);
     }
 
     public org.semanticwb.model.PFlowRef getPFlowRef(String id)
