@@ -1105,10 +1105,12 @@ public class ControlPanel extends GenericAdmResource
 
                 if(flobInst instanceof SubProcessInstance)
                 {
-                    Vector aux = getTasks(paramRequest, (SubProcessInstance)flobInst);
+                    SubProcessInstance processInstance = (SubProcessInstance)flobInst;
+                    //Vector aux = getTasks(paramRequest, (SubProcessInstance)flobInst);
+                    Vector aux = getTasks(paramRequest, processInstance);
                     vTaskLinks.addAll(aux);
                     intFobInstances = intFobInstances + aux.size();
-                } else if(flobInstType instanceof Task)
+                } else if(flobInstType instanceof UserTask)
                 {
                     if(currentUser.haveAccess(flobInstType)){
                         vTaskLinks.add(intFobInstances,flobInst);
@@ -1160,10 +1162,12 @@ public class ControlPanel extends GenericAdmResource
                         FlowNode flobInstType = (FlowNode)flobInst.getFlowNodeType();
                         if(flobInst instanceof SubProcessInstance)
                         {
-                            Vector aux = getTasks(paramRequest,(SubProcessInstance)flobInst);
+                            SubProcessInstance processInstance = (SubProcessInstance)flobInst;
+                            //Vector aux = getTasks(paramRequest,(SubProcessInstance)flobInst);
+                            Vector aux = getTasks(paramRequest,processInstance);
                             vTaskLinks.addAll(aux);
                             intFobInstances = intFobInstances + aux.size();
-                        } else if(flobInstType instanceof Task)
+                        } else if(flobInstType instanceof UserTask)
                         {
                             if(currentUser.haveAccess(flobInstType)){
                                 vTaskLinks.add(intFobInstances,flobInst);
@@ -3889,9 +3893,8 @@ public class ControlPanel extends GenericAdmResource
         int firstRow = 0;
         try
         {
-            if(currentPage>0)
-            {
-                firstRow = (currentPage - 1) * rowsPerPage;
+            if(vectorSize>0 && currentPage>0){
+                    firstRow = (currentPage - 1) * rowsPerPage;
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.getPageFirstRow", e);
@@ -3914,10 +3917,12 @@ public class ControlPanel extends GenericAdmResource
         int endRow = 0;
         try
         {
-            int totalPages = getTotalPages(vectorSize,rowsPerPage);
-            endRow = totalPages==currentPage
-                ?vectorSize
-                :rowsPerPage * currentPage;
+            if(vectorSize>0){
+                int totalPages = getTotalPages(vectorSize,rowsPerPage);
+                endRow = totalPages==currentPage
+                    ?vectorSize
+                    :rowsPerPage * currentPage;
+            }
         } catch(Exception e){
           //log.error("Error en ControlPanel.getPageLastRow", e);
             System.out.println("Error en ControlPanel.getPageLastRow:"
@@ -3938,11 +3943,13 @@ public class ControlPanel extends GenericAdmResource
         int totalPages = 0;
         try
         {
-            int modulus = vectorSize % rowsPerPage;
-            totalPages = vectorSize / rowsPerPage;
-            if(modulus>0)
-            {
-                totalPages++;
+            if(vectorSize >0 ){
+                int modulus = vectorSize % rowsPerPage;
+                totalPages = vectorSize / rowsPerPage;
+                if(modulus>0)
+                {
+                    totalPages++;
+                }                
             }
         } catch(Exception e){
           //log.error("Error en ControlPanel.getTotalPages", e);
