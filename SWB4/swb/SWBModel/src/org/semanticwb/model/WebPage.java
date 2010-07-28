@@ -788,11 +788,14 @@ public class WebPage extends WebPageBase
         while (it.hasNext())
         {
             Resource recRes=it.next();
-            Date ts = recRes.getUpdated();
-            if (auxt == null || auxt.before(ts))
+            if(recRes.isActive() && !recRes.isDeleted())
             {
-                auxt = ts;
-                ret=recRes;
+                Date ts = recRes.getUpdated();
+                if (auxt == null || auxt.before(ts))
+                {
+                    auxt = ts;
+                    ret=recRes;
+                }
             }
         }        
         return ret;
