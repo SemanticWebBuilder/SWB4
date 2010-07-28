@@ -760,11 +760,11 @@ public class WebPage extends WebPageBase
         {
            if(resource.getModifiedBy()!=null && resource.getModifiedBy().getName()!=null && !resource.getModifiedBy().getName().trim().equals(""))
            {
-                return resource.getModifiedBy().getName();
+                return resource.getModifiedBy().getFullName();
            }
            else if(resource.getCreator()!=null && resource.getCreator().getName()!=null)
            {
-               return resource.getCreator().getName();
+               return resource.getCreator().getFullName();
            }
         }
         return ret;
