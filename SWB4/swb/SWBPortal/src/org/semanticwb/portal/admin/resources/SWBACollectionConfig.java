@@ -41,7 +41,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
 public class SWBACollectionConfig extends GenericAdmResource {
 
     private Logger log = SWBUtils.getLogger(SWBACollectionConfig.class);
-    Resource base = null;
     private String MODE_FORM = "FORM";
 
     /**
@@ -77,7 +76,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
-        base = getResourceBase();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -123,12 +121,26 @@ public class SWBACollectionConfig extends GenericAdmResource {
         out.println("</script>");
 
         Collection col = null;
-        if (action.equals("")) {
+        if (action.equals("config")) {
             if (gobj instanceof Collection) {
                 col = (Collection) gobj;
 
                 if (col.getCollectionClass() != null) {
                     SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
+                    
+                    HashMap<String, String> hmcol = new HashMap();
+                    HashMap<String, String> hmbus = new HashMap();
+
+                    Iterator<String> its = col.listListPropertieses();
+                    while (its.hasNext()) {
+                        String spropname = its.next();
+                        hmcol.put(spropname, spropname);
+                    }
+                    its = col.listSearchPropertieses();
+                    while (its.hasNext()) {
+                        String spropname = its.next();
+                        hmbus.put(spropname, spropname);
+                    }
 
 
                     SWBResourceURL urlconf = paramsRequest.getActionUrl();
@@ -166,7 +178,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         SemanticProperty semProp = itsemprop.next();
                         if (!semProp.getDisplayName(user.getLanguage()).endsWith("Ref") && !semProp.getDisplayName(user.getLanguage()).startsWith("has")) {
                             out.println("<li>");
-                            out.println("<input id=\"" + semProp.getURI() + "_semprop\" type=\"checkbox\" name=\"semprop\" value=\"" + semProp.getName() + "\" " + (base.getAttribute("semprop_" + semProp.getName(), null) != null ? "checked" : "") + ">");
+                            out.println("<input id=\"" + semProp.getURI() + "_semprop\" type=\"checkbox\" name=\"semprop\" value=\"" + semProp.getName() + "\" " + (hmcol.get(semProp.getName())!= null ? "checked" : "") + ">");
                             out.println("<label for=\"" + semProp.getURI() + "_semprop\">" + semProp.getDisplayName(user.getLanguage()) + "</label>");
                             out.println("</li>");
                         }
@@ -182,7 +194,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         SemanticProperty semProp = itsemprop.next();
                         if (!semProp.getDisplayName(user.getLanguage()).endsWith("Ref") && !semProp.getDisplayName(user.getLanguage()).startsWith("has")) {
                             out.println("<li>");
-                            out.println("<input id=\"" + semProp.getURI() + "_sempropSearch\" type=\"checkbox\" name=\"sempropSearch\" value=\"" + semProp.getName() + "\" " + (base.getAttribute("sempropSearch_" + semProp.getName(), null) != null ? "checked" : "") + ">");
+                            out.println("<input id=\"" + semProp.getURI() + "_sempropSearch\" type=\"checkbox\" name=\"sempropSearch\" value=\"" + semProp.getName() + "\" " + (hmbus.get(semProp.getName()) != null ? "checked" : "") + ">");
                             out.println("<label for=\"" + semProp.getURI() + "_sempropSearch\">" + semProp.getDisplayName(user.getLanguage()) + "</label>");
                             out.println("</li>");
                         }
@@ -222,7 +234,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 }
             }
 
-        } else if ("stpBusqueda".equals(action)) {
+        } else if ("stpBusqueda".equals(action) || "".equals(action)) {
 
             String busqueda = request.getParameter("search");
             if (null == busqueda) {
@@ -231,139 +243,195 @@ public class SWBACollectionConfig extends GenericAdmResource {
             busqueda = busqueda.trim();
             HashMap<String, SemanticProperty> hmcol = new HashMap();
             HashMap<String, SemanticProperty> hmbus = new HashMap();
+            HashMap<String, String> hmConfcol = new HashMap();
+            HashMap<String, String> hmConfbus = new HashMap();
             HashMap<String, SemanticObject> hmfiltro = new HashMap();
             if (gobj instanceof Collection) {
                 col = (Collection) gobj;
-                WebSite ws = SWBContext.getWebSite(gobj.getSemanticObject().getModel().getModelObject().getURI());
-                SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
+                //WebSite ws = SWBContext.getWebSite(gobj.getSemanticObject().getModel().getModelObject().getURI());
+                if (col.getCollectionClass() == null) {
 
-                Iterator<SemanticProperty> itsemprop = sccol.listProperties();
-                while (itsemprop.hasNext()) {
-                    SemanticProperty semProp = itsemprop.next();
-                    if (!semProp.getDisplayName(user.getLanguage()).endsWith("Ref") && !semProp.getDisplayName(user.getLanguage()).startsWith("has")) {
-                        if (base.getAttribute("semprop_" + semProp.getName(), null) != null) {
-                            hmcol.put(semProp.getName(), semProp);
-                        }
-                        if (base.getAttribute("sempropSearch_" + semProp.getName(), null) != null) {
-                            hmbus.put(semProp.getName(), semProp);
-                        }
+                    out.println("<div class=\"swbform\">");
+                    out.println("<fieldset>");
+                    out.println("<legend>" + paramsRequest.getLocaleString("erroMsgConfig") + " \"" + col.getDisplayTitle(user.getLanguage()) + "\" </legend>");
+                    out.println("<ul style=\"list-style:none;\">");
+                    out.println("<li>");
+                    out.println(paramsRequest.getLocaleString("msgMissingConfigClass"));
+                    out.println("</li>");
+                    out.println("<li>");
+                    out.println(paramsRequest.getLocaleString("msgConfigInstructions"));
+                    out.println("</li>");
+                    out.println("</ul>");
+                    out.println("</fieldset>");
+                    SWBResourceURL urlreload = paramsRequest.getRenderUrl();
+                    urlreload.setParameter("act", "");
+                    urlreload.setParameter("suri", id);
+                    out.println("<fieldset>");
+                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlreload + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnReload") + "</button>"); //
+                    out.println("</fieldset>");
+                    out.println("</div>");
+                } else {
+                    SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
+
+                    Iterator<String> its = col.listListPropertieses();
+                    while (its.hasNext()) {
+                        String spropname = its.next();
+                        //System.out.println("spropname: "+spropname);
+                        hmConfcol.put(spropname, spropname);
                     }
-                }
+                    its = col.listSearchPropertieses();
+                    while (its.hasNext()) {
+                        String spropname = its.next();
+                        //System.out.println("spropnameSearch: "+spropname);
+                        hmConfbus.put(spropname, spropname);
+                    }
 
-                //Armado de tabla
-                out.println("<div class=\"swbform\">");
-                out.println("<fieldset>");
-                SWBResourceURL urls = paramsRequest.getRenderUrl();
-                urls.setParameter("act", "stpBusqueda");
-                urls.setParameter("act2", "ssearch");
-                out.println("<form id=\"" + id + "/fsearch\" name=\"" + id + "/fsearch\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearch');return false;\">");
-                out.println("<ul style=\"list-style:none;\">");
-                out.println("<li>");
-                out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
-                out.println("<label for=\"" + id + "_search\">" + paramsRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_search\" value=\"" + busqueda + "\">");
-                out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramsRequest.getLocaleString("btnSearch") + "</button>"); //
-                out.println("</li>");
-                out.println("</ul>");
-                out.println("</form>");
-                out.println("</fieldset>");
-                out.println("<fieldset>");
-                out.println("<table width=\"100%\">");
-                out.println("<thead>");
-                out.println("<tr>");
-                out.println("<th>");
-                out.println("&nbsp;");
-                out.println("</th>");
-
-                Iterator<String> itcol = hmcol.keySet().iterator();
-                while (itcol.hasNext()) {
-                    String scol = itcol.next();
-                    out.println("<th>");
-                    out.println(scol);
-                    out.println("</th>");
-                }
-                out.println("</tr>");
-                out.println("</thead>");
-                out.println("<tbody>");
-                SemanticObject semO = null;
-                Iterator<SemanticObject> itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                if (!busqueda.equals("")) {
-                    while (itso.hasNext()) {
-                        semO = itso.next();
-                        itcol = hmcol.keySet().iterator();
-                        String occ = "";
-                        while (itcol.hasNext()) {
-                            String sprop = itcol.next();
-                            if (hmbus.get(sprop) != null) {
-                                occ = occ + reviewSemProp(hmbus.get(sprop), semO, paramsRequest);
+                    Iterator<SemanticProperty> itsemprop = sccol.listProperties();
+                    while (itsemprop.hasNext()) {
+                        SemanticProperty semProp = itsemprop.next();
+                        if (!semProp.getDisplayName(user.getLanguage()).endsWith("Ref") && !semProp.getDisplayName(user.getLanguage()).startsWith("has")) {
+                            if (hmConfcol.get(semProp.getName()) != null) {
+                                hmcol.put(semProp.getName(), semProp);
+                            }
+                            if (hmConfbus.get(semProp.getName()) != null) {
+                                hmbus.put(semProp.getName(), semProp);
                             }
                         }
-                        occ = occ.toLowerCase();
-                        if (occ.indexOf(busqueda.toLowerCase()) > -1) {
-                            hmfiltro.put(semO.getURI(), semO);
-                        }
                     }
-                }
 
-                //Llenado de la tabla
+                    if (hmcol.size() > 0) {
 
-                if (!busqueda.equals("")) {
-                    itso = hmfiltro.values().iterator();
-                } else {
-                    itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                }
-                while (itso.hasNext()) {
-                    semO = itso.next();
-                    out.println("<tr>");
-                    out.println("<td>");
+                        //Armado de tabla
+                        out.println("<div class=\"swbform\">");
+                        out.println("<fieldset>");
+                        SWBResourceURL urls = paramsRequest.getRenderUrl();
+                        urls.setParameter("act", "stpBusqueda");
+                        urls.setParameter("act2", "ssearch");
+                        out.println("<form id=\"" + id + "/fsearch\" name=\"" + id + "/fsearch\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearch');return false;\">");
+                        out.println("<ul style=\"list-style:none;\">");
+                        out.println("<li>");
+                        out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+                        out.println("<label for=\"" + id + "_search\">" + paramsRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_search\" value=\"" + busqueda + "\">");
+                        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramsRequest.getLocaleString("btnSearch") + "</button>"); //
+                        out.println("</li>");
+                        out.println("</ul>");
+                        out.println("</form>");
+                        out.println("</fieldset>");
+                        out.println("<fieldset>");
+                        out.println("<table width=\"100%\">");
+                        out.println("<thead>");
+                        out.println("<tr>");
+                        out.println("<th>");
+                        out.println("&nbsp;");
+                        out.println("</th>");
 
-                    SWBResourceURL urlr = paramsRequest.getActionUrl();
-                    urlr.setParameter("suri", id);
-                    urlr.setParameter("sval", semO.getURI());
-                    urlr.setParameter("ract", action);
-                    //urlr.setParameter("page", ""+p);
-                    urlr.setAction("remove");
-                    out.println("<a href=\"#\" title=\"" + paramsRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(semO.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
-                    out.println("<a href=\"#\"  title=\"" + paramsRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + semO.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(semO.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("documentAdmin") + "\"></a>");
-                    out.println("</td>");
-                    itcol = hmcol.keySet().iterator();
-                    while (itcol.hasNext()) {
-                        String scol = itcol.next();
-                        if (hmcol.get(scol) != null) {
+                        Iterator<String> itcol = hmcol.keySet().iterator();
+                        while (itcol.hasNext()) {
+                            String scol = itcol.next();
+                            out.println("<th>");
+                            out.println(scol);
+                            out.println("</th>");
+                        }
+                        out.println("</tr>");
+                        out.println("</thead>");
+                        out.println("<tbody>");
+                        SemanticObject semO = null;
+                        Iterator<SemanticObject> itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+                        if (!busqueda.equals("")) {
+                            while (itso.hasNext()) {
+                                semO = itso.next();
+                                itcol = hmcol.keySet().iterator();
+                                String occ = "";
+                                while (itcol.hasNext()) {
+                                    String sprop = itcol.next();
+                                    if (hmbus.get(sprop) != null) {
+                                        occ = occ + reviewSemProp(hmbus.get(sprop), semO, paramsRequest);
+                                    }
+                                }
+                                occ = occ.toLowerCase();
+                                if (occ.indexOf(busqueda.toLowerCase()) > -1) {
+                                    hmfiltro.put(semO.getURI(), semO);
+                                }
+                            }
+                        }
+
+                        //Llenado de la tabla
+
+                        if (!busqueda.equals("")) {
+                            itso = hmfiltro.values().iterator();
+                        } else {
+                            itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+                        }
+                        while (itso.hasNext()) {
+                            semO = itso.next();
+                            out.println("<tr>");
                             out.println("<td>");
-                            out.println(reviewSemProp(hmcol.get(scol), semO, paramsRequest));
+
+                            SWBResourceURL urlr = paramsRequest.getActionUrl();
+                            urlr.setParameter("suri", id);
+                            urlr.setParameter("sval", semO.getURI());
+                            urlr.setParameter("ract", action);
+                            //urlr.setParameter("page", ""+p);
+                            urlr.setAction("remove");
+                            out.println("<a href=\"#\" title=\"" + paramsRequest.getLocaleString("remove") + "\" onclick=\"if(confirm('" + paramsRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(semO.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
+                            out.println("<a href=\"#\"  title=\"" + paramsRequest.getLocaleString("documentAdmin") + "\" onclick=\"selectTab('" + semO.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(semO.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("documentAdmin") + "\"></a>");
                             out.println("</td>");
+                            itcol = hmcol.keySet().iterator();
+                            while (itcol.hasNext()) {
+                                String scol = itcol.next();
+                                if (hmcol.get(scol) != null) {
+                                    out.println("<td>");
+                                    out.println(reviewSemProp(hmcol.get(scol), semO, paramsRequest));
+                                    out.println("</td>");
+                                }
+                            }
+                            out.println("</tr>");
+
                         }
+                        out.println("</tbody>");
+
+                        //boton para agregar instancia
+                        out.println("</table>");
+                        out.println("</fieldset>");
+                        SWBResourceURL url = paramsRequest.getRenderUrl();
+                        url.setParameter("act", "stpBusqueda");
+                        url.setParameter("suri", id);
+                        url.setParameter("clsuri", sccol.getURI());
+                        url.setMode(MODE_FORM);
+                        SWBResourceURL urlback = paramsRequest.getRenderUrl();
+                        urlback.setParameter("act", "config");
+                        urlback.setParameter("suri", id);
+                        out.println("<fieldset>");
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("Add_Instance") + "</button>"); //
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlback + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnConfig") + "</button>"); //
+                        out.println("</fieldset>");
+                        out.println("</div>");
+                    } else {
+                        out.println("<div class=\"swbform\">");
+                        out.println("<fieldset>");
+                        out.println("<legend>" + paramsRequest.getLocaleString("errorMsgConfig") + " \"" + col.getDisplayTitle(user.getLanguage()) + "\" </legend>");
+                        out.println("<ul style=\"list-style:none;\">");
+                        out.println("<li>");
+                        out.println(paramsRequest.getLocaleString("msgMissingConfigProperties"));
+                        out.println("</li>");
+                        out.println("</ul>");
+                        out.println("</fieldset>");
+                        SWBResourceURL urlreload = paramsRequest.getRenderUrl();
+                        urlreload.setParameter("act", "config");
+                        urlreload.setParameter("suri", id);
+                        out.println("<fieldset>");
+                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlreload + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnReload") + "</button>"); //
+                        out.println("</fieldset>");
+                        out.println("</div>");
+
                     }
-                    out.println("</tr>");
-
                 }
-                out.println("</tbody>");
-
-                //boton para agregar instancia
-                out.println("</table>");
-                out.println("</fieldset>");
-                SWBResourceURL url = paramsRequest.getRenderUrl();
-                url.setParameter("act", "stpBusqueda");
-                url.setParameter("suri", id);
-                url.setParameter("clsuri", sccol.getURI());
-                url.setMode(MODE_FORM);
-                SWBResourceURL urlback = paramsRequest.getRenderUrl();
-                urlback.setParameter("act", "");
-                urlback.setParameter("suri", id);
-                out.println("<fieldset>");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("Add_Instance") + "</button>"); //
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlback + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnBack") + "</button>"); //
-                out.println("</fieldset>");
-                out.println("</div>");
             }
-
-
         }
     }
 
     public void doForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        base = getResourceBase();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -470,42 +538,32 @@ public class SWBACollectionConfig extends GenericAdmResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject obj = ont.getGenericObject(id);
 
-        base = getResourceBase();
         if ("updconfig".equals(action)) {
             if (obj instanceof Collection) {
                 Collection col = (Collection) obj;
-                SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
+                
                 //quitar anteriores
-                int num = 0;
-                Iterator<SemanticProperty> itsemprop = sccol.listProperties();
-                while (itsemprop.hasNext()) {
-                    num++;
-                    SemanticProperty semProp = itsemprop.next();
-                    base.removeAttribute("semprop_" + semProp.getName());
-                    base.removeAttribute("sempropSearch_" + semProp.getName());
-                }
+                col.removeAllListProperties();
+                col.removeAllSearchProperties();
 
+
+                //agregando propiedades de despliegue
                 String[] semprop = request.getParameterValues("semprop");
                 if (semprop != null) {
                     for (int i = 0; i < semprop.length; i++) {
-                        base.setAttribute("semprop_" + semprop[i], semprop[i]);
+                        //System.out.println("prop("+i+"): "+semprop[i]);
+                        col.addListProperties(semprop[i]);
                     }
                 }
 
+                //agregando propiedades de búsqueda
                 String[] sempropSerch = request.getParameterValues("sempropSearch");
                 if (sempropSerch != null) {
                     for (int i = 0; i < sempropSerch.length; i++) {
-                        base.setAttribute("sempropSearch_" + sempropSerch[i], sempropSerch[i]);
+                        //System.out.println("propSearch("+i+"): "+sempropSerch[i]);
+                        col.addSearchProperties(sempropSerch[i]);
                     }
                 }
-
-                //agregar nuevas del despliegue y de la busqueda
-                try {
-                    base.updateAttributesToDB();
-                } catch (Exception e) {
-                    log.error("Error al actualizar la configuracion del recurso.", e);
-                }
-
             }
 
         } else if ("new".equals(action)) {
@@ -520,9 +578,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
             SemanticObject so = ont.getSemanticObject(id);
             SemanticClass sclass = ont.getSemanticObject(clsuri).transformToSemanticClass();
             log.debug("ProcessAction(new): sobj: " + id);
-
-            SemanticObject wpage = null;
-            wpage = ont.getSemanticObject(id);
 
             SWBFormMgr fmgr = new SWBFormMgr(sclass, so.getModel().getModelObject(), SWBFormMgr.MODE_CREATE);
             try {
