@@ -754,13 +754,17 @@ public class WebPage extends WebPageBase
     public String getContentsAuthor()
     {
         String ret = "";
-        Iterator<Resource> it = listResources();
-        while (it.hasNext())
+        Resource resource=getLastContent();
+        if(resource!=null)
         {
-            Resource recRes=it.next();
-            if(recRes!=null){
-                return recRes.getCreator().getName();
-            }
+           if(resource.getModifiedBy()!=null && resource.getModifiedBy().getName()!=null && !resource.getModifiedBy().getName().trim().equals(""))
+           {
+                return resource.getModifiedBy().getName();
+           }
+           else if(resource.getCreator()!=null && resource.getCreator().getName()!=null)
+           {
+               return resource.getCreator().getName();
+           }
         }
         return ret;
     }
@@ -775,6 +779,23 @@ public class WebPage extends WebPageBase
         return getContentsLastUpdate(null,null);
     }
 
+
+    public Resource getLastContent(){
+        Resource ret = null;
+        Date auxt = null;
+        Iterator<Resource> it = listResources();
+        while (it.hasNext())
+        {
+            Resource recRes=it.next();
+            Date ts = recRes.getUpdated();
+            if (auxt == null || auxt.before(ts))
+            {
+                auxt = ts;
+                ret=recRes;
+            }
+        }        
+        return ret;
+    }
     /**
      * Gets the contents last update.
      * 
@@ -783,35 +804,20 @@ public class WebPage extends WebPageBase
      * @return the contents last update
      */
     public String getContentsLastUpdate(String lang, String format){
-        String ret = "";
-        java.sql.Timestamp auxt = null;
-        Iterator<Resource> it = listResources();
-        while (it.hasNext())
+        String ret = "";        
+        Resource resource=getLastContent();
+        if(resource!=null)
         {
-            Resource recRes=it.next();
-            java.sql.Timestamp ts = (java.sql.Timestamp)recRes.getUpdated();
-                if (auxt == null || auxt.before(ts))
-                {
-                    auxt = ts;
-                }
-        }
-        if (auxt != null)
-        {
-            if(lang==null)
-            {
-                lang = "es";
-            }
-
             if (getWebSite().getLanguage() != null)
             {
                 lang = getWebSite().getLanguage().getId();
             }
             if(format==null)
             {
-                ret = SWBUtils.TEXT.getStrDate(new Date(auxt.getTime()), lang);
+                ret = SWBUtils.TEXT.getStrDate(resource.getUpdated(), lang);
             }else
             {
-                ret = SWBUtils.TEXT.getStrDate(new Date(auxt.getTime()), lang, format);
+                ret = SWBUtils.TEXT.getStrDate(resource.getUpdated(), lang, format);
             }
         }
         return ret;
