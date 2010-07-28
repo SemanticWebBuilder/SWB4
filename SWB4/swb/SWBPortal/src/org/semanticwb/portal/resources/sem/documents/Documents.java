@@ -1,7 +1,9 @@
 package org.semanticwb.portal.resources.sem.documents;
 
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -9,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -28,6 +31,8 @@ import org.semanticwb.portal.api.*;
 
 public class Documents extends org.semanticwb.portal.resources.sem.documents.base.DocumentsBase {
     private static Logger log = SWBUtils.getLogger(Documents.class);
+
+    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
 
     public Documents() {
     }
@@ -72,6 +77,11 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         out.println("    window.location.href=url;");
         out.println("  }");
         out.println("}");
+
+        out.println("function displayDocto(url, title, size) {");
+        out.println("  window.open(url, title, size);    ");
+        out.println("}");
+
         out.println("-->");
         out.println("</script>");
         out.println("<div class=\"\">");
@@ -129,7 +139,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         //long ordinal = SWBUtils.Collections.sizeOf(listComments());
         //int ordinal = 1;
         SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
-
+        SWBResourceURL dplyURL = paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).setCallMethod(paramRequest.Call_DIRECT);
         System.out.println("renderListDocuments....");
         
         html.append("<div class=\"swb-comentario-sem-lista\">");
@@ -149,7 +159,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                 html.append("<li>");
                 html.append("<p>"+document.getTitle()+"</p>");
                 html.append("<p>"+document.getDescription()+"</p>");
-                html.append("<p><a href=\""+SWBPortal.getWorkPath()+document.getWorkPath()+"/"+document.getFilename()+"\">"+document.getFilename()+"</a></p>");
+                html.append("<p><a onclick=\"displayDocto('"+dplyURL.setParameter("uri", document.getURI())+"', '"+document.getFilename()+"', 'width=640, height=480, scrollbars, resizable, alwaysRaised, menubar')\" href=\"#\" title=\"ver documento\">"+document.getFilename()+"</a></p>");
                 if( document.getCreator().equals(user) ) {
                     html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
                 }else
@@ -261,6 +271,71 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
             System.out.println("se agrego documento");
         }
     }
+
+    @Override
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        String uri = request.getParameter("uri");
+
+        Document docto = (Document)SemanticObject.createSemanticObject(uri).createGenericInstance();
+        String filename = docto.getFilename();
+        System.out.println("doHelp.... filename="+filename);
+        if(filename.indexOf(".html")>-1)
+            response.setContentType("text/html; charset=ISO-8859-1");
+        else if(filename.indexOf(".xml")>-1)
+            response.setContentType("text/xml; charset=ISO-8859-1");
+        else if(filename.indexOf(".wml")>-1)
+            response.setContentType("text/vnd.wap.wml; charset=ISO-8859-1");
+        else if(filename.indexOf(".pdf")>-1)
+            response.setContentType("application/pdf; charset=ISO-8859-1");
+        else if(filename.indexOf(".doc")>-1)
+            response.setContentType("application/msword; charset=ISO-8859-1");
+        else if(filename.indexOf(".rtf")>-1)
+            response.setContentType("; charset=ISO-8859-1");
+        else if(filename.indexOf("application/rtf")>-1)
+            response.setContentType("; charset=ISO-8859-1");
+        else if(filename.indexOf(".zip")>-1)
+            response.setContentType("application/zip; charset=ISO-8859-1");
+        else if(filename.indexOf(".xls")>-1)
+            response.setContentType("application/vnd.ms-excel; charset=ISO-8859-1");
+        else if(filename.indexOf(".jpg")>-1)
+            response.setContentType("image/jpeg; charset=ISO-8859-1");
+        else if(filename.indexOf(".png")>-1)
+            response.setContentType("image/png; charset=ISO-8859-1");
+        else if(filename.indexOf(".gif")>-1)
+            response.setContentType("image/gif; charset=ISO-8859-1");
+        else if(filename.indexOf(".mp3")>-1)
+            response.setContentType("audio/mpeg; charset=ISO-8859-1");
+        else
+            response.setContentType("application/octet-stream; charset=UTF-8");
+
+//        response.setHeader("Content-Disposition", "attachment;filename=" + docto.getFilename());
+
+
+        // Get content type by filename.
+        File file = new File(SWBPortal.getWorkPath()+docto.getWorkPath()+"/"+docto.getFilename());
+        String contentType = request.getSession().getServletContext().getMimeType(file.getName());
+//        response.reset();
+        response.setBufferSize(DEFAULT_BUFFER_SIZE);
+//        response.setContentType(contentType);
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+
+
+        ServletOutputStream sout = response.getOutputStream();
+        if(docto != null) {
+            //ServletOutputStream sout = response.getOutputStream();
+            String path = SWBPortal.getWorkPath()+docto.getWorkPath()+"/"+docto.getFilename();
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
+            byte[] data = new byte[DEFAULT_BUFFER_SIZE];
+            while ( in.read(data) != -1) {
+                sout.write(data);
+            }
+            in.close();
+        }
+        sout.flush();
+        sout.close();
+    }
+
 
     protected void edit(HttpServletRequest request, SWBActionResponse response) throws Exception {
         WebPage page = response.getWebPage();
