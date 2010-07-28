@@ -781,7 +781,7 @@ public class WebPage extends WebPageBase
     }
 
 
-    public Resource getLastContent(){
+    private Resource getLastContent(){
         Resource ret = null;
         Date auxt = null;
         Iterator<Resource> it = listResources();
