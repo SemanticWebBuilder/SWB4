@@ -43,7 +43,7 @@ public class WebPage extends WebPageBase
 {
     
     /** The log. */
-    private static Logger log=SWBUtils.getLogger(WebPage.class);
+    private final static Logger log=SWBUtils.getLogger(WebPage.class);
 
     /** The siteid. */
     private String siteid=null;
@@ -62,7 +62,8 @@ public class WebPage extends WebPageBase
     
     /** The viewed. */
     private boolean viewed = false;
-
+    
+    
     static
     {
         time = 600000L;
@@ -213,7 +214,7 @@ public class WebPage extends WebPageBase
     public String getPath(HashMap args)
     {
         //AFUtils.log("entra a nuevo topic getPath george...",true);
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         String separator = (String) args.get("separator");
         String cssclass = (String) args.get("cssclass");
         String tpacssclass = (String) args.get("tpacssclass");
@@ -287,15 +288,15 @@ public class WebPage extends WebPageBase
 
         if (tpacssclass!=null && tpacssclass.length() > 0)
         {
-            ret.append("<span " + tpacssclass + ">");
+            ret.append("<span ").append(tpacssclass).append(">");
         }
         else if (cssclass != null && cssclass.length() > 0)
         {
-            ret.append("<span " + cssclass + ">");
+            ret.append("<span ").append(cssclass).append(">");
         }
         if (selectcolor != null && selectcolor.length() > 0)
         {
-            ret.append("<font " + selectcolor + ">");
+            ret.append("<font ").append(selectcolor).append(">");
         }
         ret.append(this.getDisplayName(language));
         if (selectcolor != null && selectcolor.length() > 0)
