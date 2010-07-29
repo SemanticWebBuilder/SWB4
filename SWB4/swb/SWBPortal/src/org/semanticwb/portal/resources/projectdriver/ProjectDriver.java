@@ -73,7 +73,7 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
             Activity act=(Activity)obj.createGenericInstance();
             int currHour=0,planHour=0;
             float currPerc=0;
-            String critical="",actType="",status="",status_ini="",status_act="";//responsible="",
+            String critical="",actType="",status="",status_ini="",status_act="";
             String vals[]=new String[0], valsParts[]=new String[0];
             try
             {
@@ -81,12 +81,10 @@ public class ProjectDriver extends org.semanticwb.portal.resources.projectdriver
                     status_ini=request.getParameter("status_ini");
                 if(request.getParameter("status")!=null)
                     status_act=request.getParameter("status");
-                if((status_act.equals("develop")&&act.getStartDate()==null)||(status_act.equals("develop")&&status_ini.equals("paused"))||status_act.equals("develop")){
+                if((status_act.equals("develop")&&act.getStartDate()==null)||(status_act.equals("develop")&&status_ini.equals("paused"))||status_act.equals("develop"))
                     act.setStartDate(new Timestamp(new Date().getTime()));
-                }
-                if(status_act.equals("ended")||status_act.equals("canceled")){
+                if(status_act.equals("ended")||status_act.equals("canceled"))
                     act.setEndDate(new Timestamp(new Date().getTime()));
-                }
                 if(request.getParameter("currentHour")!=null&&!request.getParameter("currentHour").equals("")){
                     currHour = Integer.parseInt(request.getParameter("currentHour"));
                     act.setCurrentHour(currHour);
