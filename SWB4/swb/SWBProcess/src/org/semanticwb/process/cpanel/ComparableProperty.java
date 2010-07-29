@@ -8,6 +8,8 @@ package org.semanticwb.process.cpanel;
 import java.util.*;
 import org.semanticwb.process.model.*;
 import org.semanticwb.model.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 /**
  *
  * @author haydee.vertti
@@ -16,6 +18,7 @@ public class ComparableProperty {
     private String name;
     private String URI;
     private int orderOnTask;
+    private static Logger log = SWBUtils.getLogger(ComparableProperty.class);
 
     public ComparableProperty(){
     }
@@ -88,7 +91,7 @@ public class ComparableProperty {
             } catch(Exception e){
                 System.out.println("Error en ComparableProperty.sortComparableProperty:" +
                         e.getMessage());
-                //log.error("Error en ComparableProperty.sortComparableProperty", e);
+                log.error("Error en ComparableProperty.sortComparableProperty", e);
             }
         }
 

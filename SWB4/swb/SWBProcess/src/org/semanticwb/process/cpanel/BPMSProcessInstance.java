@@ -13,6 +13,8 @@ import org.semanticwb.process.model.*;
 import org.semanticwb.model.*;
 //import org.semanticwb.*;
 import org.semanticwb.platform.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -23,6 +25,7 @@ public class BPMSProcessInstance {
     public static class ClassMgr
     {
         public final static int STATUS_ALERT = 999;
+        private static Logger log = SWBUtils.getLogger(BPMSProcessInstance.class);
 
         /**
          * Genera un Vector con todos objetos de tipo ProcessSite encontrados en
@@ -46,7 +49,7 @@ public class BPMSProcessInstance {
                     index++;
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getAllProcessSites", e);
+              log.error("Error en BPMSProcessInstance.getAllProcessSites", e);
                 System.out.println("Error en BPMSProcessInstance.getAllProcessSites:"
                         + e.getMessage());
             }
@@ -102,7 +105,7 @@ public class BPMSProcessInstance {
                }
 
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getAllProcessDefinitions", e);
+              log.error("Error en BPMSProcessInstance.getAllProcessDefinitions", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.getAllProcessDefinitions:" +
                         e.getMessage());
@@ -250,7 +253,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.printArtifact", e);
+              log.error("Error en BPMSProcessInstance.printArtifact", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.printArtifact:" +
                         e.getMessage());
@@ -299,7 +302,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.printArtifactCls", e);
+              log.error("Error en BPMSProcessInstance.printArtifactCls", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.printArtifactCls:" +
                         e.getMessage());
@@ -328,7 +331,7 @@ public class BPMSProcessInstance {
                     vProperties.add(index, sProp);
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getArtifactProperties", e);
+              log.error("Error en BPMSProcessInstance.getArtifactProperties", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.getArtifactProperties:" +
                         e.getMessage());
@@ -388,7 +391,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getProcessArtifacts(criteria)", e);
+              log.error("Error en BPMSProcessInstance.getProcessArtifacts(criteria)", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.getProcessArtifacts(criteria):" +
                         e.getMessage());
@@ -427,7 +430,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getProcessArtifacts", e);
+              log.error("Error en BPMSProcessInstance.getProcessArtifacts", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.getProcessArtifacts:" +
                         e.getMessage());
@@ -469,7 +472,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getProcessArtifactsProperties", e);
+              log.error("Error en BPMSProcessInstance.getProcessArtifactsProperties", e);
                 System.out.println(
                     "Error en BPMSProcessInstance.getProcessArtifactsProperties:"
                     + e.getMessage());
@@ -499,7 +502,7 @@ public class BPMSProcessInstance {
                     index++;
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.getProcessInstanceArtifacts", e);
+              log.error("Error en BPMSProcessInstance.getProcessInstanceArtifacts", e);
                 System.out.println(
                         "Error en BPMSProcessInstance.getProcessInstanceArtifacts:"
                         + e.getMessage());
@@ -515,7 +518,7 @@ public class BPMSProcessInstance {
                         SemanticObject.createSemanticObject(URI).transformToSemanticProperty();
                 strPropName = semprop.getDisplayName();
             } catch(Exception e){
-              //log.error("Error en ControlPanel.getPropertyName", e);
+              log.error("Error en ControlPanel.getPropertyName", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.getPropertyName:"
                         + e.getMessage());
@@ -567,12 +570,12 @@ public class BPMSProcessInstance {
                     strValue="";
                 }
             } catch(com.hp.hpl.jena.rdf.model.ResourceRequiredException rre){
-              //log.error("Error en ControlPanel.getPropertyValue2String", rre);
+              log.error("Error en ControlPanel.getPropertyValue2String", rre);
                 System.out.println("Error RRE en " +
                         "BPMSProcessInstance.getPropertyValue2String:"
                         + rre.getMessage());
             } catch(Exception e){
-              //log.error("Error en ControlPanel.getPropertyValue2String", e);
+              log.error("Error en ControlPanel.getPropertyValue2String", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.getPropertyValue2String:"
                         + e.getMessage());
@@ -607,7 +610,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstancesByAlert", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstancesByAlert", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.listProcessInstancesByAlert:" +
                         e.getMessage());
@@ -644,7 +647,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstancesByStatus", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstancesByStatus", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.listProcessInstancesByStatus:" +
                         e.getMessage());
@@ -681,7 +684,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstancesByUser", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstancesByUser", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.listProcessInstancesByUser:" +
                         e.getMessage());
@@ -722,7 +725,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstancesByProcess", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstancesByProcess", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.listProcessInstancesByProcess:" +
                         e.getMessage());
@@ -784,7 +787,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstances", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstances", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.listProcessInstances:" +
                         e.getMessage());
@@ -827,7 +830,7 @@ public class BPMSProcessInstance {
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.listProcessInstances", e);
+              log.error("Error en BPMSProcessInstance.listProcessInstances", e);
                 System.out.println("Error en BPMSProcessInstance.listProcessInstances:"
                         + e.getMessage());
             }
@@ -857,7 +860,7 @@ public class BPMSProcessInstance {
                     vDefinitions = new Vector(Arrays.asList(arrSplit));
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSProcessInstance.stringToVector", e);
+              log.error("Error en BPMSProcessInstance.stringToVector", e);
                 System.out.println("Error en BPMSProcessInstance.stringToVector:" +
                         e.getMessage());
             }
@@ -880,7 +883,7 @@ public class BPMSProcessInstance {
             } catch(Exception e){
                 System.out.println("Error en BPMSProcessInstance.sortPropertiesByName:" +
                         e.getMessage());
-                //log.error("Error en BPMSProcessInstance.sortByTitle", e);
+                log.error("Error en BPMSProcessInstance.sortByTitle", e);
             }
         }
 

@@ -8,6 +8,8 @@ package org.semanticwb.process.cpanel;
 import java.util.*;
 import org.semanticwb.process.model.*;
 import org.semanticwb.model.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -20,6 +22,7 @@ public class TaskLink {
     private FlowNodeInstance fobi;
     private Hashtable artifactValues;
     private int tlPriority;
+    private static Logger log = SWBUtils.getLogger(TaskLink.class);
 
         public TaskLink(FlowNodeInstance fobi, String tlHref,
                 String tlLegend, Hashtable artifactValues)
@@ -97,6 +100,7 @@ public class TaskLink {
         {
             //TODO: Que pasa si es un subproceso???
             String strProcessTitle = "";
+            try {
             ProcessInstance fpinst = this.fobi.getProcessInstance();
             if(null!=fpinst){
                 org.semanticwb.process.model.Process fproc = (org.semanticwb.process.model.Process)fpinst.getProcessType();
@@ -109,6 +113,11 @@ public class TaskLink {
                 ?""
                 :this.getFlowNodeType().getParent().getTitle();
              */
+            }catch(Exception e){
+                log.error("Error en TaskLink.getFlowNodeParentProcess", e);
+                System.out.println("Error en TaskLink.getFlowNodeParentProcess:" +
+                    e.getMessage());
+            }
             return strProcessTitle;
         }
 
@@ -124,7 +133,7 @@ public class TaskLink {
                     intPriority = pinst.getPriority();
                 }
             }catch(Exception e){
-                //log.error("Error en TaskLink.getFlowNodePriority", e);
+                log.error("Error en TaskLink.getFlowNodePriority", e);
                 System.out.println("Error en TaskLink.getFlowNodePriority:" +
                     e.getMessage());
             }

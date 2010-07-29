@@ -13,6 +13,8 @@ import org.semanticwb.portal.api.*;
 import org.semanticwb.process.model.*;
 import org.semanticwb.model.*;
 //import org.semanticwb.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -28,6 +30,7 @@ public class BPMSTask
         public final static int SORT_BY_PROCESS = 2;
         public final static int SORT_BY_PRIORITY = 3;
         public final static int MAX_SORT = 4;
+        private static Logger log = SWBUtils.getLogger(BPMSTask.class);
 
         /**
         * Recibe una fecha en formato YYYY-MM-DD (del control Dojo) y lo convierte
@@ -45,7 +48,7 @@ public class BPMSTask
                 String[] strArray = strDate.split("-");
                 strReturn = strArray[2] + "/" + strArray[1] + "/" + strArray[0];
             } catch(Exception e){
-              //log.error("Error en BPMSTask.changeDateFormat", e);
+              log.error("Error en BPMSTask.changeDateFormat", e);
                 System.out.println("Error en BPMSTask.changeDateFormat:"
                         + e.getMessage());
             }
@@ -71,7 +74,7 @@ public class BPMSTask
                 Date d1 = sdf.parse(strDate);
                 cal.setTime(d1);
             } catch(Exception e){
-              //log.error("Error en BPMSTask.dateStringToCalendar", e);
+              log.error("Error en BPMSTask.dateStringToCalendar", e);
                 System.out.println("Error en BPMSTask.dateStringToCalendar:" +
                         e.getMessage());
             }
@@ -145,7 +148,7 @@ public class BPMSTask
             catch(Exception e){
                 System.out.println("Error en BPMSTask.filterByDate:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.filterByDate", e);
+                log.error("Error en BPMSTask.filterByDate", e);
             }
             return vFilteredTasks;
         }
@@ -200,7 +203,7 @@ public class BPMSTask
             }catch(Exception e){
                 System.out.println("Error en BPMSTask.filterByProcess:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.filterByProcess", e);
+                log.error("Error en BPMSTask.filterByProcess", e);
             }
             return vFilteredTasks;
         }
@@ -247,7 +250,7 @@ public class BPMSTask
             }catch(Exception e){
                 System.out.println("Error en BPMSTask.filterByStatus:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.filterByStatus", e);
+                log.error("Error en BPMSTask.filterByStatus", e);
             }
             return vFilteredTasks;
         }
@@ -291,7 +294,7 @@ public class BPMSTask
             }catch(Exception e){
                 System.out.println("Error en BPMSTask.filterByStatus:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.filterByStatus", e);
+                log.error("Error en BPMSTask.filterByStatus", e);
             }
             return vFilteredTasks;
         }
@@ -336,7 +339,7 @@ public class BPMSTask
             }catch(Exception e){
                 System.out.println("Error en BPMSTask.filterByTitle:" +
                         e.getMessage());
-                //log.error("Error en ConBPMSProcessInstancerolPanel.filterByTitle", e);
+                log.error("Error en ConBPMSProcessInstancerolPanel.filterByTitle", e);
             }
             return vFilteredTasks;
         }
@@ -368,7 +371,7 @@ public class BPMSTask
                     intTasks++;
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSTask.flowNodeInstanceToTaskLink", e);
+              log.error("Error en BPMSTask.flowNodeInstanceToTaskLink", e);
                 System.out.println("Error en " +
                         "BPMSProcessInstance.flowNodeInstanceToTaskLink:" +
                         e.getMessage());
@@ -439,7 +442,7 @@ public class BPMSTask
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSTask.getAllUserTasks", e);
+              log.error("Error en BPMSTask.getAllUserTasks", e);
                 System.out.println("Error en BPMSTask.getAllUserTasks1:"
                         + e.getMessage());
             }
@@ -480,7 +483,7 @@ public class BPMSTask
                     }
                 }
             } catch(Exception e){
-              //log.error("Error en BPMSTask.getAllUserTasks", e);
+              log.error("Error en BPMSTask.getAllUserTasks", e);
                 System.out.println("Error en BPMSTask.getAllUserTasks2:"
                         + e.getMessage());
             }
@@ -510,7 +513,7 @@ public class BPMSTask
             catch(Exception e){
                 System.out.println("Error en BPMSTask.sortByDate:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.sortByDate", e);
+                log.error("Error en BPMSTask.sortByDate", e);
             }
         }
 
@@ -537,7 +540,7 @@ public class BPMSTask
             catch(Exception e){
                 System.out.println("Error en BPMSTask.sortByProcess:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.sortByProcess", e);
+                log.error("Error en BPMSTask.sortByProcess", e);
             }
         }
 
@@ -550,7 +553,7 @@ public class BPMSTask
             catch(Exception e){
                 System.out.println("Error en BPMSTask.sortByPriority:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.sortByPriority", e);
+                log.error("Error en BPMSTask.sortByPriority", e);
             }
         }
 
@@ -577,7 +580,7 @@ public class BPMSTask
             } catch(Exception e){
                 System.out.println("Error en BPMSTask.sortByTitle:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.sortByTitle", e);
+                log.error("Error en BPMSTask.sortByTitle", e);
             }
         }
 
@@ -616,7 +619,7 @@ public class BPMSTask
             catch(Exception e){
                 System.out.println("Error en BPMSTask.sortTasks:" +
                         e.getMessage());
-                //log.error("Error en BPMSTask.sortTasks", e);
+                log.error("Error en BPMSTask.sortTasks", e);
             }
         }
 
