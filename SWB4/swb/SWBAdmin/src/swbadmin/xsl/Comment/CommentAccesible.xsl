@@ -73,7 +73,7 @@
                         <xsl:for-each select="ftextarea">
                             <p>
                                 <label><xsl:value-of select="@tag" /></label>
-                                <textarea name="{@inname}" wrap="virtual" cols="30" rows="5">
+                                <textarea name="{@inname}" cols="30" rows="5">
                                     <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
                                 </textarea>
                             </p>
