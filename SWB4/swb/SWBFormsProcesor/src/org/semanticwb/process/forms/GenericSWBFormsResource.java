@@ -5,6 +5,11 @@
 
 package org.semanticwb.process.forms;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
@@ -14,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.Templates;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
@@ -115,7 +121,7 @@ public class GenericSWBFormsResource extends GenericResource{
         Resource base=getResourceBase();
 
          String suri=request.getParameter("suri");
-        if(suri==null)
+        if (suri == null && !action.equalsIgnoreCase("saveXMLFile"))
         {
             return;
         }
@@ -167,6 +173,29 @@ public class GenericSWBFormsResource extends GenericResource{
                     response.setAction(response.Action_EDIT);
                     response.setRenderParameter("msg", saveOK);
             }
+        } else if (action != null && action.equalsIgnoreCase("saveXMLFile")) {
+            String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+            File xmlFile = new File(basepath);
+            if (xmlFile.exists()) {
+                try {
+                    String value = null;
+                    if (request.getParameter("hiddencode") != null &&
+                            !request.getParameter("hiddencode").equalsIgnoreCase("")) {
+                        value = request.getParameter("hiddencode");
+                    } else {
+                        value = request.getParameter("resource" + base.getId());
+                    }
+                    xmlFile = new File(basepath + "code.xml");
+                    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(xmlFile)));
+                    out.print(value);
+                    out.flush();
+                    response.setRenderParameter("result", this.saveOK);
+                } catch (Exception e) {
+                    response.setRenderParameter("result", this.saveError);
+                    log.error("Error saving file: " + xmlFile.getAbsolutePath(), e);
+                }
+            }
+            response.setMode(SWBActionResponse.Mode_ADMIN);
         }
         response.setRenderParameter("suri", suri);
     }
@@ -240,6 +269,79 @@ public class GenericSWBFormsResource extends GenericResource{
         String data=paramRequest.getResourceBase().getData(paramRequest.getWebPage());
         if(data!=null && data.indexOf(cls.getClassId()+"|"+prop.getPropId())>-1)return ret=true;
         return ret;
+    }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        StringBuilder ret = new StringBuilder(400);
+        StringBuilder value = new StringBuilder(200);
+        Resource base = getResourceBase();
+        String basepath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
+        File xmlFile = new File(basepath);
+        PrintWriter out = response.getWriter();
+        SWBResourceURL url = paramRequest.getActionUrl().setAction("saveXMLFile");
+
+        //Extracción del contenido del archivo para mostrarlo en el editor
+        if (xmlFile.exists()) {
+            xmlFile = new File(basepath + "code.xml");
+            if (xmlFile.exists()) {
+                BufferedReader in = new BufferedReader(new FileReader(xmlFile));
+                String lineRead = in.readLine();
+                while(lineRead != null) {
+                    value.append(lineRead + "\n");
+                    lineRead = in.readLine();
+                }
+            }
+        } else {
+            try {
+                xmlFile.mkdirs();
+            } catch (Exception e) {
+                log.error("Unable to create directory " + xmlFile.getAbsolutePath(), e);
+            }
+        }
+
+        //Despliegue del editor
+        ret.append("<script type=\"text/javascript\" src=\"");
+        ret.append(SWBPlatform.getContextPath());
+        ret.append("/swbadmin/js/editarea/edit_area/edit_area_full.js\"></script>\n");
+        ret.append("<script type=\"text/javascript\" charset=\"UTF-8\">\n");
+        ret.append("editAreaLoader.init({\n");
+        ret.append("    id : \"resource");
+        ret.append(base.getId());
+        ret.append("\"\n    ,language: \"");
+        ret.append(paramRequest.getUser().getLanguage().toLowerCase());
+        ret.append("\"\n    ,syntax: \"xml\"\n");
+        ret.append("    ,start_highlight: true\n");
+        ret.append("    ,toolbar: \"save, |, search, go_to_line,");
+        ret.append(" |, undo, redo, |, select_font,|, change_smooth_selection,");
+        ret.append(" highlight, reset_highlight, |, help\"\n");
+        ret.append("    ,is_multi_files: false\n");
+        ret.append("    ,save_callback: \"my_save\"\n");
+        ret.append("    ,allow_toggle: false\n");
+        ret.append("});\n");
+        ret.append("\n");
+        ret.append("  function my_save(id, content){\n");
+        ret.append("    var elemento = document.getElementById(\"hiddencode\");\n");
+        ret.append("    elemento.value = content;\n");
+        ret.append("    document.xmledition.submit();\n");
+        ret.append("  }\n");
+        ret.append("</script>\n");
+        ret.append("<form name=\"xmledition\" action=\"");
+        ret.append(url.toString());
+        ret.append("\" method=\"post\">\n");
+        ret.append("<textarea id=\"resource");
+        ret.append(base.getId());
+        ret.append("\" name=\"resource");
+        ret.append(base.getId());
+        ret.append("\" rows=\"25");
+        ret.append("\" cols=\"95\">");
+        ret.append(value);
+        ret.append("</textarea>\n");
+        ret.append("<input type=\"hidden\" id=\"hiddencode\" name=\"hiddencode\" value=\"\"/>\n");
+        //ret.append("<input type=\"button\" id=\"btnSend\" onclick=\"\" value=\"Guardar\"\n>");
+        out.println(ret);
     }
 
 }
