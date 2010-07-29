@@ -131,6 +131,26 @@ public class SWBAWebPageContents extends GenericResource {
         SemanticObject obj = ont.getSemanticObject(id);
         SemanticClass cls = obj.getSemanticClass();
 
+        boolean isCollection = false;
+        GenericObject go = obj.getGenericInstance();
+        ResourceCollection rescol = null;
+        ResourceCollectionCategory rescolcat = null;
+        String resTypeURI = null;
+        if(go instanceof ResourceCollection || go instanceof ResourceCollectionCategory)
+        {
+            isCollection = true;
+            if(go instanceof ResourceCollection)
+            {
+                rescol = (ResourceCollection)go;
+                resTypeURI = rescol.getResourceCollectionType().getSemanticObject().getURI();
+            }
+            else if(go instanceof ResourceCollectionCategory)
+            {
+                rescolcat = (ResourceCollectionCategory)go;
+                resTypeURI = rescolcat.getResourceCollection().getResourceCollectionType().getSemanticObject().getURI();
+            }
+        }
+
         StringBuffer inheritHeader = new StringBuffer();
 
         out.println("<script type=\"text/javascript\">");
@@ -489,7 +509,13 @@ public class SWBAWebPageContents extends GenericResource {
             urlNew.setParameter("suri", id);
             urlNew.setParameter("sprop", idp);
             urlNew.setParameter("sproptype", idptype);
-            urlNew.setParameter("act", "choose");
+            if(isCollection){
+                urlNew.setParameter("act", "edit");
+
+                urlNew.setParameter("sobj", resTypeURI);
+            }
+            else urlNew.setParameter("act", "choose");
+
             out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlNew + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btn_addnew") + "</button>");
             if (hasAsoc) {
                 if (hasActive) {
