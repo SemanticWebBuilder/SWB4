@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Cursor;
 import org.semanticwb.process.modeler.ModelerUtils;
+import javafx.util.StringLocalizer;
 
 /**
  * @author javier.solis
@@ -17,10 +18,12 @@ import org.semanticwb.process.modeler.ModelerUtils;
 
 var maxx : Number = bind scene.width; //on replace{ modeler.organizeMap();};
 var maxy : Number = bind scene.height; //on replace{ modeler.organizeMap();};
+var localizer: StringLocalizer = StringLocalizer {}
 
 //public-read var inBrowser = "true".equals(FX.getArgument("isApplet") as String);
 
 //println("dir:{__DIR__}");
+ModelerUtils.setLocalizer(localizer);
 
 var modeler:Modeler = Modeler
 {
@@ -117,7 +120,7 @@ var scene : Scene = Scene {
 }
 
 var stage : Stage = Stage {
-    title: "BPMN Modeler"
+    title: ModelerUtils.getLocalizedString("appTitle");
     resizable: true
     scene: scene
     //style: StageStyle.TRANSPARENT    //StageStyle.UNDECORATED
