@@ -73,7 +73,7 @@
                         <xsl:for-each select="ftextarea">
                             <p>
                                 <label><xsl:value-of select="@tag" /></label>
-                                <textarea name="{@inname}" wrap="virtual">
+                                <textarea name="{@inname}" wrap="virtual" cols="30" rows="5">
                                     <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
                                 </textarea>
                             </p>
@@ -89,7 +89,7 @@
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="@img ='0'">
-                                    <input type="submit" name="btnEnviar" onclick="return jsValida(this.form)" value="{@tag}"/>
+                                    <input type="submit" name="btnEnviar" id="btnEnviar" onclick="return jsValida(this.form)" value="{@tag}"/>
                                 </xsl:if>
                             </xsl:for-each>
 
@@ -104,7 +104,7 @@
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="@img ='0'">                                    
-                                    <input type="reset" name="btnLimpiar" value="{@tag}"/>
+                                    <input type="reset" name="btnLimpiar" id="btnLimpiar" value="{@tag}"/>
                                 </xsl:if>
                             </xsl:for-each>
                         </p>
