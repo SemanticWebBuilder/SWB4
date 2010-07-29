@@ -229,6 +229,7 @@ public class WBSearch extends GenericAdmResource
                         addElem(doc, eobj, "objSummary", summary);
                         addElem(doc, eobj, "objUrl", parser.getUrl(srch));
                         addElem(doc, eobj, "objScore", (int)(obj.getScore()*100) + "%");
+                        addElem(doc, eobj, "objUpdated", parser.getUpdated(srch));
                         addElem(doc, eobj, "navPath", parser.getPath(srch,lang));
                         if(parser.getImage(srch) != null && !parser.getImage(srch).equals("")) {
                             addElem(doc, eobj, "objImg", parser.getImage(srch));
