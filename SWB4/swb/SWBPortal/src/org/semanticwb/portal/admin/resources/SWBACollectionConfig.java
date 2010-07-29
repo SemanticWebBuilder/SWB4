@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -19,6 +20,7 @@ import org.semanticwb.model.Collection;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
@@ -83,6 +85,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
         PrintWriter out = response.getWriter();
         User user = paramsRequest.getUser();
         String id = request.getParameter("suri");
+        String page = request.getParameter("page");
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(id);
@@ -362,8 +365,31 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         } else {
                             itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
                         }
+
+                        //PAGINACION
+                        Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso,false);
+                        int ps=20;
+                        int l=setso.size();
+                        int p=0;
+                        if(page!=null)p=Integer.parseInt(page);
+                        int x=0;
+                        itso=setso.iterator();
+                        /////////////////////////////////
+
                         while (itso.hasNext()) {
+
                             semO = itso.next();
+
+                            //PAGINACION ////////////////////
+                            if(x<p*ps)
+                            {
+                                x++;
+                                continue;
+                            }
+                            if(x==(p*ps+ps) || x==l)break;
+                            x++;
+                            /////////////////////////////////
+
                             out.println("<tr>");
                             out.println("<td>");
 
@@ -393,6 +419,34 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         //boton para agregar instancia
                         out.println("</table>");
                         out.println("</fieldset>");
+
+                        if(p>0 || x<l) //Requiere paginacion
+                        {
+                            out.println("<fieldset>");
+                            out.println("<center>");
+                            int pages=(int)(l+ps/2)/ps;
+                            for(int z=0;z<pages;z++)
+                            {
+                                SWBResourceURL urlNew = paramsRequest.getRenderUrl();
+                                urlNew.setParameter("suri", id);
+                                urlNew.setParameter("page", ""+z);
+                                urlNew.setParameter("act", "stpBusqueda");
+                                urlNew.setParameter("search",busqueda);
+                                urlNew.setParameter("clsuri", sccol.getURI());
+                                
+                                if(z!=p)
+                                {
+                                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">"+(z+1)+"</a> ");
+                                }else
+                                {
+                                    out.println((z+1)+" ");
+                                }
+                            }
+                            out.println("</center>");
+                            out.println("</fieldset>");
+                        }
+
+
                         SWBResourceURL url = paramsRequest.getRenderUrl();
                         url.setParameter("act", "stpBusqueda");
                         url.setParameter("suri", id);
