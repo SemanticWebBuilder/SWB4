@@ -12,12 +12,14 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import java.awt.image.BufferedImage;
 import javafx.scene.input.MouseEvent;
+import javafx.util.StringLocalizer;
 
 /**
  * @author javier.solis
  */
 
 public var clickedNode: Node;
+var localizer: StringLocalizer;
 
 var toolTip=ToolTip
 {
@@ -31,6 +33,15 @@ public function setErrorMessage(message:String)
     errorMessage=message;
     startToolTip(message, 0, getToolTip().scene.height-20);
     //startToolTip(message, getToolTip().scene.width/2, getToolTip().scene.height/2);
+}
+
+public function getLocalizedString(key: String): String {
+    localizer.key = key;
+    return localizer.localizedString;
+}
+
+public function setLocalizer (loc: StringLocalizer) : Void {
+    localizer = loc;
 }
 
 public var splash=Splash{ };
