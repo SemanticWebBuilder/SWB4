@@ -26,6 +26,7 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -187,13 +188,36 @@ public class SWBAWebPageContents extends GenericResource {
             }
             SemanticProperty sptemp = null;
 
+            String busqueda = request.getParameter("search");
+            if (null == busqueda) {
+                busqueda = "";
+            }
+
             int numcols = 0;
             out.println("<div class=\"swbform\">");
+            out.println("<fieldset>");
+            SWBResourceURL urls = paramRequest.getRenderUrl();
+            urls.setParameter("act", "");
+            urls.setParameter("suri", id);
+            urls.setParameter("sprop", idp);
+
+            out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
+            out.println("<ul style=\"list-style:none;\">");
+            out.println("<li>");
+            out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+            out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + busqueda + "\">");
+            out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
+            out.println("</li>");
+            out.println("</ul>");
+            out.println("</form>");
+            out.println("</fieldset>");
             out.println("<fieldset>");
             out.println("<table width=\"98%\" >");
             out.println("<thead>");
             inheritHeader.append("<fieldset>");
-            inheritHeader.append("<legend>" + paramRequest.getLocaleString("legend_Inherited") + "</legend>");
+            inheritHeader.append("<legend>");
+            inheritHeader.append(paramRequest.getLocaleString("legend_Inherited"));
+            inheritHeader.append("</legend>");
             inheritHeader.append("<table width=\"98%\">");
             inheritHeader.append("<thead>");
             inheritHeader.append("<tr>");
@@ -306,13 +330,43 @@ public class SWBAWebPageContents extends GenericResource {
             SemanticProperty semprop = null;
             SemanticProperty sem_p = ont.getSemanticProperty(idp);
             SemanticObject so = obj.getObjectProperty(sem_p);
-            Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(obj.listObjectProperties(prop),false);
+
+
+            busqueda = busqueda.trim();
+            HashMap<String, String> hmbus = new HashMap();
+            HashMap<String, SemanticObject> hmfiltro = new HashMap();
+            SemanticObject semO = null;
+            Iterator<SemanticProperty> itcol = null;
+            Iterator<SemanticObject> itso = obj.listObjectProperties(prop);
+            if (!busqueda.equals("")) {
+                while (itso.hasNext()) {
+                    semO = itso.next();
+                    itcol = hmprop.keySet().iterator();
+                    String occ = "";
+                    while (itcol.hasNext()) {
+                        SemanticProperty sprop = itcol.next();
+                        occ = occ + reviewSemProp(sprop, semO, paramRequest);
+                    }
+                    occ = occ.toLowerCase();
+                    if (occ.indexOf(busqueda.toLowerCase()) > -1) {
+                        hmfiltro.put(semO.getURI(), semO);
+                    }
+                }
+            }
+
+            if(hmfiltro.isEmpty())
+                itso = obj.listObjectProperties(prop);
+            else
+                itso = hmfiltro.values().iterator();
+
+            Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso,false);
+            itso=null;
             int ps=20;
             int l=setso.size();
             int p=0;
             if(page!=null)p=Integer.parseInt(page);
             int x=0;
-            Iterator<SemanticObject> itso=setso.iterator();
+            itso=setso.iterator();
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
                 if(x<p*ps)
@@ -370,6 +424,7 @@ public class SWBAWebPageContents extends GenericResource {
                 urlr.setParameter("sprop", idp);
                 urlr.setParameter("sval", sobj.getURI());
                 urlr.setParameter("page", ""+p);
+                urlr.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
                 urlr.setParameter(prop.getName(), prop.getURI());
                 urlr.setAction("remove");
                 out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("remove")+"\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + SWBUtils.TEXT.scape4Script(sobj.getDisplayName(user.getLanguage())) + "?')){ submitUrl('" + urlr + "',this); } else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("remove")+"\"></a>");
@@ -379,7 +434,8 @@ public class SWBAWebPageContents extends GenericResource {
                 urlpre.setParameter("sprop", idp);
                 urlpre.setParameter("act", "");
                 urlpre.setParameter("page", ""+p);
-                urlpre.setParameter("sval", sobj.getURI());
+                urlr.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                urlr.setParameter("sval", sobj.getURI());
                 if (idptype != null) {
                     urlpre.setParameter("sproptype", idptype);
                 }
@@ -401,6 +457,7 @@ public class SWBAWebPageContents extends GenericResource {
                     url2flow.setParameter("sval", sobj.getURI());
                     url2flow.setParameter("page", ""+p);
                     url2flow.setParameter("pfid", pfid);
+                    url2flow.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
                     if (idptype != null) {
                         url2flow.setParameter("sproptype", idptype);
                     }
@@ -446,6 +503,7 @@ public class SWBAWebPageContents extends GenericResource {
                     urlu.setParameter("sprop", idp);
                     urlu.setParameter("sval", sobj.getURI());
                     urlu.setParameter("act", "update");
+                    urlu.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
 
                     out.println("<div dojoType=\"dijit.form.NumberSpinner\" id=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" jsId=\"" + id + "/" + base.getId() + "/" + sobj.getId() + "/NS\" intermediateChanges=\"true\" smallDelta=\"1\" constraints=\"{min:0,max:999,places:0}\" style=\"width:50px\"  name=\"" + semprop.getName() + "\" maxlength=\"3\"  value=\"" + getValueSemProp(sobj, semprop) + "\" >");
                     out.println("<script type=\"dojo/connect\" event=\"onBlur\">");
@@ -1194,6 +1252,8 @@ public class SWBAWebPageContents extends GenericResource {
         if (sprop != null) {
             response.setRenderParameter("sprop", sprop);
         }
+        if(request.getParameter("search")!=null && request.getParameter("search").trim().length()>0)
+            response.setRenderParameter("search",request.getParameter("search"));
     }
 
     /**
@@ -1475,4 +1535,48 @@ public class SWBAWebPageContents extends GenericResource {
             super.processRequest(request, response, paramRequest);
         }
     }
+
+
+    public String reviewSemProp(SemanticProperty prop, SemanticObject obj, SWBParamRequest paramsRequest) {
+        String ret = null;
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss", new Locale(paramsRequest.getUser().getLanguage()));
+            if (prop.isDataTypeProperty()) {
+                if (prop.isBoolean()) {
+                    boolean bvalue = obj.getBooleanProperty(prop);
+                    if (bvalue) {
+                        ret = paramsRequest.getLocaleString("booleanYes");
+                    } else {
+                        ret = paramsRequest.getLocaleString("booleanNo");
+                    }
+
+                }
+                if (prop.isInt() || prop.isDouble() || prop.isLong()) {
+                    ret = Long.toString(obj.getLongProperty(prop));
+                }
+                if (prop.isString()) {
+                    ret = obj.getProperty(prop);
+                }
+                if (prop.isFloat()) {
+                    ret = Float.toString(obj.getFloatProperty(prop));
+                }
+                if (prop.isDate() || prop.isDateTime()) {
+                    ret = sdf.format(obj.getDateTimeProperty(prop));
+                }
+            } else if (prop.isObjectProperty()) {
+                SemanticObject so = obj.getObjectProperty(prop);
+                if (null != so) {
+                    ret = so.getDisplayName(paramsRequest.getUser().getLanguage());
+                }
+            }
+            if (null == ret || (ret != null && ret.trim().equals("null"))) {
+                ret = "";
+            }
+
+        } catch (Exception e) {
+        }
+        return ret;
+    }
+
 }
