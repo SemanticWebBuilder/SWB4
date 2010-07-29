@@ -78,15 +78,32 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println("dojo.require(\"dijit.form.DateTextBox\");");
         out.println("dojo.require(\"dijit.form.TimeTextBox\");");
 
-out.println("dojo.addOnLoad(function() {");
-out.println("   var t = new Date();");
-out.println("   var t1 = new dijit.form.TimeTextBox({name:'time', value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0),");
-out.println("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
-out.println("   }, 'etime');");
-out.println("});");
+        out.println("dojo.addOnLoad(function() {");
+        out.println("   var t = new Date();");
+        out.println("   var t1 = new dijit.form.TimeTextBox({name:'time', value:new Date(t.getFullYear(), t.getMonth(), t.getDate(), 8, 0),");
+        out.println("                constraints:{timePattern:'HH:mm', clickableIncrement:'T00:15:00', visibleIncrement:'T00:15:00', visibleRange:'T02:00:00'}");
+        out.println("   }, 'etime');");
+        out.println("});");
 
-        out.println("function validaAddEvent(frm) {");
-        out.println("  frm.submit();");
+        out.println("function validaEvent(frm) {");
+        out.println("  var msg = new Array();");
+        out.println("  if( isEmpty(frm.title.value) )");
+        out.println("      msg.push('El título del evento es requerido');");
+        out.println("  if( isEmpty(frm.description.value) )");
+        out.println("      msg.push('La descripción del evento es requerida');");
+        out.println("  if( isEmpty(frm.place.value) )");
+        out.println("      msg.push('El lugar del evento es requerido');");
+        out.println("  if( isEmpty(frm.edate.value) )");
+        out.println("      msg.push('La fecha del evento es requerida');");
+        out.println("  if( isEmpty(frm.etime.value) )");
+        out.println("      msg.push('La hora del evento es requerida');");
+        out.println("  if( !isDigit(frm.duration.value,1,3) )");
+        out.println("      msg.push('La duración del evento es requerida');");
+        out.println("  if(msg.length>0) {");
+        out.println("      alert(msg.join('\\n'));");
+        out.println("      return false;");
+        out.println("  }else");
+        out.println("      return true;");
         out.println("}");
         
         out.println("function validateRemoveEventElement(url) {");
@@ -98,47 +115,53 @@ out.println("});");
         out.println("</script>");
 
         out.println("<div class=\"\">");
-        out.println("  <div class=\"adminTools\">");
-        out.println("    <a class=\"adminTool\" onclick=\"validaAddEvent(document.frmAddEvent)\" href=\"#\">Guardar</a>");
-        out.println("    <a class=\"adminTool\" href=\"<%=paramRequest.getRenderUrl()%>\">Cancelar</a>");
+        out.println(" <div class=\"adminTools\">");
+        out.println("  <a class=\"adminTool\" onclick=\"if(validaEvent(document.frmEvent)) document.frmEvent.submit();\" href=\"#\">Guardar</a>");
+        out.println("  <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl()+"\">Cancelar</a>");
+        out.println(" </div>");
+        out.println(" <form name=\"frmEvent\" id=\"frmEvent\" method=\"post\" action=\""+addURL+"\">");
+        out.println("  <div>");
+        out.println("  <fieldset>");
+        out.println("   <legend>Agregar evento</legend>");
+        out.println("  <div>");
+        out.println("   <p>");
+        out.println("    <label for=\"title\">Título:</label><br />");
+        out.println("    <input type=\"text\" name=\"title\" id=\"title\" maxlength=\"30\"/>");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrTitle")==null?"":request.getParameter("msgErrTitle"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <label for=\"desc\">Descripción:</label><br />");
+        out.println("    <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\"></textarea>");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDesc")==null?"":request.getParameter("msgErrDesc"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <label for=\"place\">Lugar:</label><br />");
+        out.println("    <input type=\"text\" id=\"place\" name=\"place\" maxlength=\"60\" />");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrPlace")==null?"":request.getParameter("msgErrPlace"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <label for=\"edate\">Fecha:</label><br />");
+        out.println("    <input type=\"text\" name=\"edate\" id=\"edate\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" />");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDate")==null?"":request.getParameter("msgErrDate"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <label for=\"etime\">Hora:</label><br />");
+        out.println("    <input type=\"text\" name=\"etime\" id=\"etime\" size=\"6\" style=\"width:40px;\" />");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDate")==null?"":request.getParameter("msgErrDate"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <label for=\"duration\">Duración (en minutos):</label><br />");
+        out.println("    <input type=\"text\" id=\"duration\" name=\"duration\" maxlength=\"3\" />");
+        out.println("    <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDuration")==null?"":request.getParameter("msgErrDuration"))+"</span>");
+        out.println("   </p>");
+        out.println("   <p>");
+        out.println("    <input type=\"submit\" value=\"Aceptar\" onclick=\"return validaEvent(this.form)\" />");
+        out.println("    <input type=\"reset\" value=\"Restablecer\" />");
+        out.println("   </p>");
         out.println("  </div>");
-        out.println("  <form name=\"frmAddEvent\" id=\"frmAddEvent\" method=\"post\" action=\""+addURL+"\">");
-        out.println("    <div>");
-        out.println("      <fieldset>");
-        out.println("        <legend>Agregar evento</legend>");
-        out.println("        <div>");
-        out.println("          <p>");
-        out.println("            <label for=\"title\">Título:</label><br />");
-        out.println("            <input type=\"text\" name=\"title\" id=\"title\" maxlength=\"30\"/>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"desc\">Descripción:</label><br />");
-        out.println("            <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\"></textarea>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"place\">Lugar:</label><br />");
-        out.println("            <input type=\"text\" id=\"place\" name=\"place\" maxlength=\"60\" />");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"edate\">Fecha:</label><br />");
-        out.println("            <input type=\"text\" name=\"edate\" id=\"edate\" dojoType=\"dijit.form.DateTextBox\" required=\"false\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" />");
-        out.println("          </p>");
-        out.println("<p>");
-        out.println("<label for=\"etime\">Hora:</label><br />");
-        out.println("<input type=\"text\" name=\"etime\" id=\"etime\" size=\"6\" style=\"width:40px;\" />");
-        out.println("</p>");
-        out.println("          <p>");
-        out.println("            <label for=\"duration\">Duración (en minutos):</label><br />");
-        out.println("            <input type=\"text\" id=\"duration\" name=\"duration\" maxlength=\"3\" />");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <input type=\"submit\" value=\"Aceptar\" />");
-        out.println("            <input type=\"reset\" value=\"Limpiar\" />");
-        out.println("          </p>");
-        out.println("        </div>");
-        out.println("      </fieldset>");
-        out.println("    </div>");
-        out.println("  </form>");
+        out.println("  </fieldset>");
+        out.println("  </div>");
+        out.println(" </form>");
         out.println("</div>");
     
 //        WebSite site = paramRequest.getWebPage().getWebSite();
@@ -257,11 +280,6 @@ out.println("});");
         sdf = new SimpleDateFormat("yyyy-MM-dd");
         String citation = sdf.format(date);
 
-        System.out.println("\n\n********************************\ndoEdit Events.....");
-        System.out.println("hour="+hour);
-        System.out.println("minute="+minute);
-        System.out.println("cita="+citation);
-
         SWBResourceURL editURL = paramRequest.getActionUrl().setAction(paramRequest.Action_EDIT).setParameter("uri", event.getURI());
         out.println("<script type=\"text/javascript\">");
         out.println("<!--");
@@ -276,53 +294,76 @@ out.println("});");
         out.println("});");
 
         out.println("function validaEvent(frm) {");
-        out.println("  frm.submit();");
+        out.println("  var msg = new Array();");
+        out.println("  if( isEmpty(frm.title.value) )");
+        out.println("      msg.push('El título del evento es requerido');");
+        out.println("  if( isEmpty(frm.description.value) )");
+        out.println("      msg.push('La descripción del evento es requerida');");
+        out.println("  if( isEmpty(frm.place.value) )");
+        out.println("      msg.push('El lugar del evento es requerido');");
+        out.println("  if( isEmpty(frm.edate.value) )");
+        out.println("      msg.push('La fecha del evento es requerida');");
+        out.println("  if( isEmpty(frm.etime.value) )");
+        out.println("      msg.push('La hora del evento es requerida');");
+        out.println("  if( !isDigit(frm.duration.value,1,3) )");
+        out.println("      msg.push('La duración del evento es requerida');");
+        out.println("  if(msg.length>0) {");
+        out.println("      alert(msg.join('\\n'));");
+        out.println("      return false;");
+        out.println("  }else");
+        out.println("      return true;");
         out.println("}");
         out.println("-->");
         out.println("</script>");
 
-        out.println("<div class=\"\">");
-        out.println("  <div class=\"adminTools\">");
-        out.println("    <a class=\"adminTool\" onclick=\"validaEvent(document.frmEditEvent)\" href=\"#\">Guardar</a>");
-        out.println("    <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">Cancelar</a>");
+        out.println("<div class=\"swb-events\">");
+        out.println(" <div class=\"adminTools\">");
+        out.println("  <a class=\"adminTool\" onclick=\"if(validaEvent(document.frmEvent)) document.frmEvent.submit();\" href=\"#\">Guardar</a>");
+        out.println("  <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">Cancelar</a>");
+        out.println(" </div>");
+        out.println(" <form name=\"frmEvent\" id=\"frmEvent\" method=\"post\" action=\""+editURL+"\">");
+        out.println("  <div>");
+        out.println("  <fieldset>");
+        out.println("   <legend>Agregar evento</legend>");
+        out.println("   <div>");
+        out.println("    <p>");
+        out.println("     <label for=\"title\">Título:</label><br />");
+        out.println("     <input type=\"text\" name=\"title\" id=\"title\" maxlength=\"30\" value=\""+event.getTitle()+"\"/>");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrTitle")==null?"":request.getParameter("msgErrTitle"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"description\">Descripción:</label><br />");
+        out.println("     <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\">"+event.getDescription()+"</textarea>");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDesc")==null?"":request.getParameter("msgErrDesc"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"place\">Lugar:</label><br />");
+        out.println("     <input type=\"text\" id=\"place\" name=\"place\" maxlength=\"60\" value=\""+event.getPlace()+"\"/>");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrPlace")==null?"":request.getParameter("msgErrPlace"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"edate\">Fecha:</label><br />");
+        out.println("     <input type=\"text\" name=\"edate\" id=\"edate\" value=\""+citation+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" />");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDate")==null?"":request.getParameter("msgErrDate"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"etime\">Hora:</label><br />");
+        out.println("     <input type=\"text\" name=\"etime\" id=\"etime\" style=\"width:110px;\" />");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDate")==null?"":request.getParameter("msgErrDate"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"duration\">Duración (en minutos):</label><br />");
+        out.println("     <input type=\"text\" id=\"duration\" name=\"duration\" maxlength=\"3\" value=\""+event.getDuration()+"\"/>");
+        out.println("     <span class=\"swb-events-warn\">"+(request.getParameter("msgErrDuration")==null?"":request.getParameter("msgErrDuration"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <input type=\"submit\" value=\"Aceptar\" onclick=\"return validaEvent(this.form)\" />");
+        out.println("     <input type=\"reset\" value=\"Restablecer\" />");
+        out.println("    </p>");
+        out.println("   </div>");
+        out.println("  </fieldset>");
         out.println("  </div>");
-        out.println("  <form name=\"frmEditEvent\" id=\"frmEditEvent\" method=\"post\" action=\""+editURL+"\">");
-        out.println("    <div>");
-        out.println("      <fieldset>");
-        out.println("        <legend>Agregar evento</legend>");
-        out.println("        <div>");
-        out.println("          <p>");
-        out.println("            <label for=\"title\">Título:</label><br />");
-        out.println("            <input type=\"text\" name=\"title\" id=\"title\" maxlength=\"30\" value=\""+event.getTitle()+"\"/>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"description\">Descripción:</label><br />");
-        out.println("            <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\">"+event.getDescription()+"</textarea>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"place\">Lugar:</label><br />");
-        out.println("            <input type=\"text\" id=\"place\" name=\"place\" maxlength=\"60\" value=\""+event.getPlace()+"\"/>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"edate\">Fecha:</label><br />");
-        out.println("            <input type=\"text\" name=\"edate\" id=\"edate\" value=\""+citation+"\" dojoType=\"dijit.form.DateTextBox\" required=\"true\" constraints=\"{datePattern:'dd/MM/yyyy'}\" maxlength=\"10\" style=\"width:110px;\" />");
-        out.println("          </p>");
-        out.println("<p>");
-        out.println("<label for=\"etime\">Hora:</label><br />");
-        out.println("<input type=\"text\" name=\"etime\" id=\"etime\" style=\"width:110px;\" />");
-        out.println("</p>");
-        out.println("          <p>");
-        out.println("            <label for=\"duration\">Duración (en minutos):</label><br />");
-        out.println("            <input type=\"text\" id=\"duration\" name=\"duration\" maxlength=\"3\" value=\""+event.getDuration()+"\"/>");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <input type=\"submit\" value=\"Aceptar\" />");
-        out.println("            <input type=\"reset\" value=\"Limpiar\" />");
-        out.println("          </p>");
-        out.println("        </div>");
-        out.println("      </fieldset>");
-        out.println("    </div>");
-        out.println("  </form>");
+        out.println(" </form>");
         out.println("</div>");
     }
     
@@ -330,34 +371,33 @@ out.println("});");
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         Resource base = this.getResourceBase();
         String action = response.getAction();
-        System.out.println("+++processAction....");
 
-        System.out.println("total de parametros="+request.getParameterMap().size());
-        Enumeration<String> en = request.getParameterNames();
-        while(en.hasMoreElements()) {
-            String p=en.nextElement();
-            System.out.println(p+"="+request.getParameter(p));
-        }
+        if( action.equals(response.Action_ADD)||action.equals(response.Action_EDIT) ) {
+            Event event = null;
+            if( action.equals(response.Action_ADD) )
+                event = Event.ClassMgr.createEvent(getResourceBase().getWebSite());
+            else {
+                SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
+                event = (Event)semObject.createGenericInstance();
+            }
 
-        if(action.equalsIgnoreCase(response.Action_ADD)) {
-            Event event = Event.ClassMgr.createEvent(getResourceBase().getWebSite());
             try {
-                String title;
-                if( (title=request.getParameter("title").trim()).equals("") ) {
-                    response.setRenderParameter("msgErrTitle", "El título es requerido.");
-                    log.error("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    return;
+                String title = request.getParameter("title").trim();
+                if( title.equals("") ) {
+                    throw new Exception("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                 }
                 event.setTitle(title);
-            }catch(Exception e) {}
+            }catch(Exception e) {
+                response.setRenderParameter("msgErrTitle", "El título es requerido.");
+                log.error("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                return;
+            }
 
             try {
                 String desc;
                 if( (desc=request.getParameter("description").trim()).equals("") ) {
                     response.setRenderParameter("msgErrDesc", "La descripción es requerida.");
                     log.error("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
                     return;
                 }
                 event.setDescription(desc);
@@ -368,7 +408,6 @@ out.println("});");
                 if( (place=request.getParameter("place")).equals("") ) {
                     response.setRenderParameter("msgErrPlace", "El lugar del evento es requerido.");
                     log.error("El lugar del evento es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("El lugar del evento es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                     return;
                 }
                 event.setPlace(place);
@@ -378,13 +417,11 @@ out.println("});");
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String date = request.getParameter("edate");
                 String time = request.getParameter("time").replaceFirst("T", " ");
-                System.out.println("cita="+date+time);
                 Date d = sdf.parse(date+time);
                 event.setDate(d.getTime());
             }catch(Exception pe) {
                 response.setRenderParameter("msgErrDate", "La fecha del evento es requerida.");
-                log.error("La cita del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), pe);
-                System.out.println("La cita del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId());
+                log.error("La fecha y hora del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), pe);
                 return;
             }
             
@@ -394,81 +431,22 @@ out.println("});");
             }catch(NumberFormatException e) {
                 response.setRenderParameter("msgErrDuration", "La duración del evento es requerida. Puede ser un tiempo aproximado.");
                 log.error("La duración del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), e);
-                System.out.println("La duración del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId());
                 return;
             }
-            addEvent(event);
+            if( action.equals(response.Action_ADD) )
+                addEvent(event);
+            else
+                response.setMode(response.Mode_VIEW);
         }else if(action.equalsIgnoreCase(Action_ENROLL)) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             Event event = (Event)semObject.createGenericInstance();
             event.addAssistant(response.getUser());
-        }else if(action.equalsIgnoreCase(response.Action_EDIT)) {
-            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
-            Event event = (Event)semObject.createGenericInstance();
-            try {
-                String title;
-                if( (title=request.getParameter("title").trim()).equals("") ) {
-                    response.setRenderParameter("msgErrTitle", "El título es requerido.");
-                    log.error("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    return;
-                }
-                event.setTitle(title);
-            }catch(Exception e) {}
-
-            try {
-                String desc;
-                if( (desc=request.getParameter("description").trim()).equals("") ) {
-                    response.setRenderParameter("msgErrDesc", "La descripción es requerida.");
-                    log.error("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
-                    return;
-                }
-                event.setDescription(desc);
-            }catch(Exception e) {}
-
-            try {
-                String place;
-                if( (place=request.getParameter("place")).equals("") ) {
-                    response.setRenderParameter("msgErrPlace", "El lugar del evento es requerido.");
-                    log.error("El lugar del evento es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    System.out.println("El lugar del evento es requerido. Resource "+base.getTitle()+" with id "+base.getId());
-                    return;
-                }
-                event.setPlace(place);
-            }catch(Exception e) {}
-
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                String date = request.getParameter("edate");
-                String time = request.getParameter("time").replaceFirst("T", " ");
-                Date d = sdf.parse(date+time);
-                event.setDate(d.getTime());
-            }catch(Exception pe) {
-                response.setRenderParameter("msgErrDate", "La fecha del evento es requerida.");
-                log.error("La fecha del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), pe);
-                System.out.println("La fecha del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId());
-                return;
-            }
-
-            try {
-                int duration = Integer.parseInt(request.getParameter("duration"));
-                event.setDuration(duration);
-            }catch(NumberFormatException e) {
-                response.setRenderParameter("msgErrDuration", "La duración del evento es requerida. Puede ser un tiempo aproximado.");
-                log.error("La duración del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), e);
-                System.out.println("La duración del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId());
-                return;
-            }
-            response.setMode(response.Mode_VIEW);
         }else if(action.equalsIgnoreCase(response.Action_REMOVE)) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             Event event = (Event)semObject.createGenericInstance();
             removeEvent(event);
         }
-
-
-
+        
 //        String action=response.getAction();
 //        if(action.equals(response.Action_EDIT)){
 //            SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("EventUri"));

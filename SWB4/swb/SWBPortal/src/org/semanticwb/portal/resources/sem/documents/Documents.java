@@ -22,6 +22,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
@@ -62,6 +63,22 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         
         out.println("<script type=\"text/javascript\">");
         out.println("<!--");
+
+        out.println("function validaForma(frm) {");
+        out.println("  var msg = new Array();");
+        out.println("  if( isEmpty(frm.docto.value) )");
+        out.println("      msg.push('El archivo es requerido');");
+        out.println("  if( isEmpty(frm.title.value) )");
+        out.println("      msg.push('El título del documento es requerido');");
+        out.println("  if( isEmpty(frm.description.value) )");
+        out.println("      msg.push('La descripción es requerida');");
+        out.println("  if(msg.length>0) {");
+        out.println("      alert(msg.join('\\n'));");
+        out.println("      return false;");
+        out.println("  }else");
+        out.println("      return true;");
+        out.println("}");
+
         out.println("function validaForma() {");
         out.println("  var docto = document.frmadddoc.title.value;");
         out.println("  if(!docto) {");
@@ -93,42 +110,49 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         out.println("function displayDocto(url, title, size) {");
         out.println("  window.open(url, title, size);    ");
         out.println("}");
-
         out.println("-->");
         out.println("</script>");
+        
         out.println("<div class=\"\">");
-        out.println("  <div class=\"adminTools\">");
-        out.println("    <a class=\"adminTool\" onclick=\"validaForma()\" href=\"#\">Guardar</a>");
-        out.println("    <a class=\"adminTool\" href=\"<%=paramRequest.getRenderUrl()%>\">Cancelar</a>");
+        out.println(" <div class=\"adminTools\">");
+        out.println("  <a class=\"adminTool\" onclick=\"validaForma()\" href=\"#\">Guardar</a>");
+        out.println("  <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl()+"\">Cancelar</a>");
+        out.println(" </div>");
+        out.println(" <form name=\"frmadddoc\" id=\"frmadddoc\" enctype=\"multipart/form-data\" method=\"post\" action=\""+addURL+"\">");
+        out.println("  <div>");
+        out.println("  <fieldset>");
+        out.println("   <legend>Agregar documento</legend>");
+        out.println("   <div>");
+        out.println("    <p>");
+        out.println("     <label for=\"docto\">Documento:&nbsp;</label><br />");
+        out.println("     <input id=\"docto\" type=\"file\" name=\"docto\" size=\"45\" />");
+        out.println("     <span class=\"swb-doctos-warn\">"+(request.getParameter("msgErrFilename")==null?"":request.getParameter("msgErrFilename"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"title\">Título:&nbsp;</label><br />");
+        out.println("     <input id=\"title\" type=\"text\" name=\"title\" maxlength=\"50\" size=\"45\" />");
+        out.println("     <span class=\"swb-doctos-warn\">"+(request.getParameter("msgErrTitle")==null?"":request.getParameter("msgErrTitle"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <label for=\"description\">Descripción</label><br />");
+        out.println("     <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\"></textarea>");
+        out.println("     <span class=\"swb-doctos-warn\">"+(request.getParameter("msgErrDesc")==null?"":request.getParameter("msgErrDesc"))+"</span>");
+        out.println("    </p>");
+        out.println("    <p>");
+        out.println("     <input type=\"submit\" value=\"Aceptar\" onclick=\"return validaForma(this.form)\" />");
+        out.println("     <input type=\"reset\" value=\"Restablecer\" />");
+        out.println("    </p>");
+        out.println("   </div>");
+        out.println("  </fieldset>");
+        out.println("  <fieldset>");
+        out.println("   <legend>¿Quién puede ver este documento?</legend>");
+        out.println("   <div>");
+        out.println("    <p><label for=\"scope0\"><input type=\"radio\" name=\"scope\" id=\"scope0\" value=\"false\" />&nbsp;Cualquiera</label></p>");
+        out.println("    <p><label for=\"scope1\"><input type=\"radio\" name=\"scope\" id=\"scope1\" value=\"true\" checked=\"checked\" />&nbsp;Sólo miembros del comité</label></p>");
+        out.println("   </div>");
+        out.println("  </fieldset>        ");
         out.println("  </div>");
-        out.println("  <form name=\"frmadddoc\" id=\"frmadddoc\" enctype=\"multipart/form-data\" method=\"post\" action=\""+addURL+"\">");
-        out.println("    <div>");
-        out.println("      <fieldset>");
-        out.println("        <legend>Agregar documento</legend>");
-        out.println("        <div>");
-        out.println("          <p>");
-        out.println("            <label for=\"docto\">Documento:&nbsp;</label><br />");
-        out.println("            <input id=\"docto\" type=\"file\" name=\"docto\" size=\"45\" />");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"title\">Título:&nbsp;</label><br />");
-        out.println("            <input id=\"title\" type=\"text\" name=\"title\" maxlength=\"50\" size=\"45\" />");
-        out.println("          </p>");
-        out.println("          <p>");
-        out.println("            <label for=\"description\">Descripción</label><br />");
-        out.println("            <textarea id=\"description\" cols=\"45\" rows=\"3\" name=\"description\"></textarea>");
-        out.println("          </p>");
-        out.println("        </div>");
-        out.println("      </fieldset>");
-        out.println("      <fieldset>");
-        out.println("        <legend>¿Quién puede ver este documento?</legend>");
-        out.println("        <div>");
-        out.println("          <p><label for=\"scope0\"><input type=\"radio\" name=\"scope\" id=\"scope0\" value=\"false\" />&nbsp;Cualquiera</label></p>");
-        out.println("          <p><label for=\"scope1\"><input type=\"radio\" name=\"scope\" id=\"scope1\" value=\"true\" checked=\"checked\" />&nbsp;Sólo miembros del comité</label></p>");
-        out.println("        </div>");
-        out.println("      </fieldset>        ");
-        out.println("    </div>");
-        out.println("  </form>");
+        out.println(" </form>");
         out.println("</div>");
         out.flush();
         out.close();
@@ -181,8 +205,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         if(action.equalsIgnoreCase(response.Action_ADD)) {
             try {
                 add(request, response);
-            }catch(Exception e) {
-                System.out.println("\nError.....\n"+e);
+            }catch(Exception e) {                
             }
         }else if(action.equalsIgnoreCase(response.Action_REMOVE)) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -192,11 +215,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     }
     
     protected void add(HttpServletRequest request, SWBActionResponse response) throws Exception {
-        WebPage page = response.getWebPage();
-//        Member mem = Member.getMember(response.getUser(), page);
-//        if(!mem.canAdd()) return;
-
-        System.out.println("*********** add");
+        Resource base = getResourceBase();
 
         Document doc = null;
         HashMap<String, String> params = new HashMap<String,String>();
@@ -246,29 +265,56 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     if(!file.exists()) {
                         file.mkdirs();
                     }
-                    //long serial = (new Date()).getTime();
-                    String filename = null;
                     try {
-                        //filename = serial + currentFile.getName().substring(currentFile.getName().lastIndexOf("."));
-                        filename = currentFile.getName().replaceAll(" ", "_");
-                        System.out.println("filename="+filename);
+                        String filename = currentFile.getName().replaceAll(" ", "_").trim();
+                        System.out.println("..filename="+filename);
+                        if( filename.equals("") ) 
+                            throw new IOException("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                         file = new File(path +"/"+ filename);
                         currentFile.write(file);
-                        //params.put("filename", doc.getWorkPath()+"/"+filename);
                         params.put("filename", filename);
-                    }catch(StringIndexOutOfBoundsException iobe) {
-                        System.out.println("error en 100. "+iobe);
+                    }catch(IOException ioe) {
+                        System.out.println("error en 100. "+ioe);
+                        response.setRenderParameter("msgErrFilename", "El archivo es requerido.");
+                        log.error("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                        throw new Exception("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                     }
                 }
             }
         }
         if(doc!=null) {
-            doc.setFilename(params.get("filename"));
-            doc.setTitle(params.get("title"));
-            doc.setDescription(params.get("description"));
+            try {
+                String filename = params.get("filename").trim();
+                if( filename.equals("") ) 
+                    throw new Exception("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                doc.setFilename(filename);
+            }catch(Exception e) {
+                response.setRenderParameter("msgErrFilename", "El archivo es requerido.");
+                log.error("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                throw new Exception("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+            }
+            try {
+                String title = params.get("title").trim();
+                if( title.equals("") )
+                    throw new Exception("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                doc.setTitle(title);
+            }catch(Exception e) {
+                response.setRenderParameter("msgErrTitle", "El título es requerido.");
+                log.error("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+                throw new Exception("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
+            }
+            try {
+                String desc = params.get("description").trim();
+                if( desc.equals("") )
+                    throw new Exception("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
+                doc.setDescription(desc);
+            }catch(Exception e) {
+                response.setRenderParameter("msgErrDesc", "La descripción es requerida.");
+                log.error("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
+                throw new Exception("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
+            }
             doc.setHidden(Boolean.parseBoolean(params.get("scope")));
             addDocument(doc);
-            System.out.println("se agrego documento");
         }
     }
 
