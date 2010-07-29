@@ -22,6 +22,7 @@
  **/
 package org.semanticwb.portal.indexer.parser;
 
+import java.text.SimpleDateFormat;
 import java.util.Map;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -114,5 +115,20 @@ public class UserParser extends GenericParser {
      */
     public String getEmail (User user) {
         return user.getEmail();
+    }
+
+    /**
+     * Gets the last update date of the {@link Searchable} object in format
+     * yyy-MM-dd HH:mm:ss.
+     * <p>
+     * Obtiene la fecha de la última actualización del objeto {@link Searchable}
+     * en el formato yyy-MM-dd HH:mm:ss.
+     * @param gen the {@link Searchable} object.
+     * @return last update date of the {@link Searchable} object.
+     */
+    @Override
+    public String getUpdated(Searchable gen) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return f.format(((User)gen).getUpdated());
     }
 }
