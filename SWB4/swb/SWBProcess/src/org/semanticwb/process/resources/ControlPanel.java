@@ -132,7 +132,7 @@ public class ControlPanel extends GenericAdmResource
                 index++;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTaskProperties", e);
+          log.error("Error en ControlPanel.getTaskProperties", e);
             System.out.println("Error en ControlPanel.getTaskProperties:" +
                     e.getMessage());
 		}
@@ -172,7 +172,7 @@ public class ControlPanel extends GenericAdmResource
             }
             taskAttributes = hMap;
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getResourceTaskAttributesMap", e);
+          log.error("Error en ControlPanel.getResourceTaskAttributesMap", e);
             System.out.println("Error en ControlPanel.getResourceTaskAttributesMap:" +
                     e.getMessage());
 		}
@@ -289,7 +289,7 @@ public class ControlPanel extends GenericAdmResource
             base.setAttribute("intColumnCount", String.valueOf(columnCount));
             base.updateAttributesToDB();
         } catch(Exception e){
-          //log.error("Error en ControlPanel.setTaskAttributesMap", e);
+          log.error("Error en ControlPanel.setTaskAttributesMap", e);
             System.out.println("Error en ControlPanel.setTaskAttributesMap:" +
                     e.getMessage());
 		}
@@ -325,7 +325,7 @@ public class ControlPanel extends GenericAdmResource
             }
             base.updateAttributesToDB();
         } catch(Exception e){
-          //log.error("Error en ControlPanel.setResourceTaskAttributesMap", e);
+          log.error("Error en ControlPanel.setResourceTaskAttributesMap", e);
             System.out.println("Error en ControlPanel.setResourceTaskAttributesMap:" +
                     e.getMessage());
 		}
@@ -395,7 +395,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getSelectedTaskProperties", e);
+          log.error("Error en ControlPanel.getSelectedTaskProperties", e);
             System.out.println("Error en ControlPanel.getSelectedTaskProperties:" +
                     e.getMessage());
 		}
@@ -444,7 +444,7 @@ public class ControlPanel extends GenericAdmResource
                     break;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.filterTasks", e);
+          log.error("Error en ControlPanel.filterTasks", e);
             System.out.println("Error en ControlPanel.filterTasks:" +
                     e.getMessage());
 		}
@@ -543,7 +543,7 @@ public class ControlPanel extends GenericAdmResource
             base.updateAttributesToDB();
 
         } catch(Exception e){
-          //log.error("Error en ControlPanel.applyFilters", e);
+          log.error("Error en ControlPanel.applyFilters", e);
             System.out.println("Error en ControlPanel.applyFilters:" +
                     e.getMessage());
 		}
@@ -617,7 +617,7 @@ public class ControlPanel extends GenericAdmResource
             }
             sb.append("</ul>" );
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getUsedFilters", e);
+          log.error("Error en ControlPanel.getUsedFilters", e);
             System.out.println("Error en ControlPanel.getUsedFilters:"
                     + e.getMessage());
 		}
@@ -667,7 +667,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getSelectedProcessDefinitions", e);
+          log.error("Error en ControlPanel.getSelectedProcessDefinitions", e);
             System.out.println(
                     "Error en ControlPanel.getSelectedProcessDefinitions:" +
                     e.getMessage());
@@ -743,7 +743,7 @@ public class ControlPanel extends GenericAdmResource
                     "admin").toString()).append("';\n").append(
                     "</script>\n").toString());
         } catch(Exception e){
-          //log.error("Error en ControlPanel.updateArtifactPropertiesValues", e);
+          log.error("Error en ControlPanel.updateArtifactPropertiesValues", e);
             System.out.println("Error en ControlPanel.updateArtifactPropertiesValues:" +
                     e.getMessage());
 		}
@@ -846,7 +846,7 @@ public class ControlPanel extends GenericAdmResource
             }
             base.updateAttributesToDB();
         } catch(Exception e){
-          //log.error("Error en ControlPanel.updateProcessFormValues", e);
+          log.error("Error en ControlPanel.updateProcessFormValues", e);
             System.out.println("Error en ControlPanel.updateProcessFormValues:" +
                     e.getMessage());
 		}
@@ -875,7 +875,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.findProcessProperty", e);
+          log.error("Error en ControlPanel.findProcessProperty", e);
             System.out.println("Error en ControlPanel." +
                     "findProcessProperty:" + e.getMessage());
 		}
@@ -962,7 +962,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getSelectedProcessProperties", e);
+          log.error("Error en ControlPanel.getSelectedProcessProperties", e);
             System.out.println("Error en ControlPanel." +
                     "getSelectedProcessProperties:" + e.getMessage());
 		}
@@ -1007,7 +1007,7 @@ public class ControlPanel extends GenericAdmResource
                 itArtifacts = selectedProcess.listProcessClasses();
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.listArtifacts", e);
+          log.error("Error en ControlPanel.listArtifacts", e);
             System.out.println("Error en ControlPanel." +
                     "listArtifacts:" + e.getMessage());
 		}
@@ -1047,7 +1047,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getProcessArtifactDefinitionProperties", e);
+          log.error("Error en ControlPanel.getProcessArtifactDefinitionProperties", e);
             System.out.println("Error en ControlPanel." +
                     "getProcessArtifactDefinitionProperties:" + e.getMessage());
 		}
@@ -1072,7 +1072,7 @@ public class ControlPanel extends GenericAdmResource
             //strDisplayName = semprop.getDisplayName();
             strValue = parseFlowNodeInstanceProperties(fobi, propertyURI);
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getArtifactProperty", e);
+          log.error("Error en ControlPanel.getArtifactProperty", e);
             System.out.println("Error en ControlPanel." +
                     "getArtifactProperty:" + e.getMessage());
 		}
@@ -1119,7 +1119,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTasks", e);
+          log.error("Error en ControlPanel.getTasks", e);
             System.out.println("Error en ControlPanel.getTasks:" +
                     e.getMessage());
 		}
@@ -1178,7 +1178,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTasks", e);
+          log.error("Error en ControlPanel.getTasks", e);
             System.out.println("Error en ControlPanel.getTasks:" +
                     e.getMessage());
 		}
@@ -1211,7 +1211,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTasks", e);
+          log.error("Error en ControlPanel.getTasks", e);
             System.out.println("Error en ControlPanel.findTaskProperty:" +
                     e.getMessage());
 		}
@@ -1258,7 +1258,7 @@ public class ControlPanel extends GenericAdmResource
                 index++;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.arrayToTaskProperties", e);
+          log.error("Error en ControlPanel.arrayToTaskProperties", e);
             System.out.println("Error en ControlPanel.arrayToTaskProperties:" +
                     e.getMessage());
 		}
@@ -1308,7 +1308,7 @@ public class ControlPanel extends GenericAdmResource
                 strResult = strPropertyUri;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.parseProperties", e);
+          log.error("Error en ControlPanel.parseProperties", e);
             System.out.println("Error en ControlPanel." +
                     "parseProperties:" + e.getMessage());
 		}
@@ -1339,7 +1339,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTaskPropertyName", e);
+          log.error("Error en ControlPanel.getTaskPropertyName", e);
             System.out.println("Error en ControlPanel.getTaskPropertyName:" +
                     e.getMessage());
 		}
@@ -1376,7 +1376,7 @@ public class ControlPanel extends GenericAdmResource
                 strValue = usrTask.getDescription()==null ?"" :usrTask.getDescription();
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTaskDefinitionProperty", e);
+          log.error("Error en ControlPanel.getTaskDefinitionProperty", e);
             System.out.println("Error en ControlPanel." +
                     "getTaskDefinitionProperty:" + e.getMessage());
 		}
@@ -1439,7 +1439,7 @@ public class ControlPanel extends GenericAdmResource
                 strValue = flobInst.getProperty(strProperty);
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTaskInstanceProperty", e);
+          log.error("Error en ControlPanel.getTaskInstanceProperty", e);
             System.out.println("Error en ControlPanel.getTaskInstanceProperty:"
                     + e.getMessage());
 		}
@@ -1511,7 +1511,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.parseTaskAttributes", e);
+          log.error("Error en ControlPanel.parseTaskAttributes", e);
             System.out.println("Error en ControlPanel.parseTaskAttributes:" +
                     e.getMessage());
 		}
@@ -1564,7 +1564,7 @@ public class ControlPanel extends GenericAdmResource
 
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.parseTaskAttributes", e);
+          log.error("Error en ControlPanel.parseTaskAttributes", e);
             System.out.println("Error en ControlPanel.parseTaskAttributes:" +
                     e.getMessage());
 		}
@@ -1617,7 +1617,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.setTaskLinks", e);
+          log.error("Error en ControlPanel.setTaskLinks", e);
             System.out.println("Error en ControlPanel.setTaskLinks:" +
                     e.getMessage());
 		}
@@ -1735,7 +1735,7 @@ public class ControlPanel extends GenericAdmResource
                 sb.append("</tbody></table>");
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.printTaskLinks", e);
+          log.error("Error en ControlPanel.printTaskLinks", e);
             System.out.println("Error en ControlPanel.printTaskLinks:" +
                     e.getMessage());
 		}
@@ -1770,7 +1770,7 @@ public class ControlPanel extends GenericAdmResource
                 intCriteria = Integer.parseInt(strSortingCtrl);
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getSortCriteria", e);
+          log.error("Error en ControlPanel.getSortCriteria", e);
             System.out.println("Error en ControlPanel.getSortCriteria:" +
                     e.getMessage());
 		}
@@ -1802,7 +1802,7 @@ public class ControlPanel extends GenericAdmResource
                 isActive = true;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.isClosedStatusFilterActive", e);
+          log.error("Error en ControlPanel.isClosedStatusFilterActive", e);
             System.out.println("Error en ControlPanel." +
                     "isClosedStatusFilterActive:" + e.getMessage());
 		}
@@ -1876,7 +1876,7 @@ public class ControlPanel extends GenericAdmResource
             sbPrint.append("</form>");
             sbPrint.append("</div></div>");
         } catch(Exception e){
-            //log.error("Error en ControlPanel.customizeDisplay", e);
+            log.error("Error en ControlPanel.customizeDisplay", e);
             System.out.println("Error en ControlPanel.customizeDisplay:" +
             e.getMessage());
         }
@@ -1942,7 +1942,7 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getRenderUrl().setAction(
                     "admin").toString()).append("';").append(
                     "\n</script>").toString());
-          //log.error("Error en ControlPanel.setCustomizedData", e);
+          log.error("Error en ControlPanel.setCustomizedData", e);
             System.out.println("Error en ControlPanel.setCustomizedData:"
                     + e.getMessage());
 		}
@@ -1972,7 +1972,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getCustomizedData", e);
+          log.error("Error en ControlPanel.getCustomizedData", e);
             System.out.println("Error en ControlPanel.getCustomizedData:"
                     + e.getMessage());
 		}
@@ -2037,7 +2037,7 @@ public class ControlPanel extends GenericAdmResource
             vAllTasks = BPMSTask.ClassMgr.flowNodeInstanceToTaskLink(vAllTasks, paramsRequest);
             BPMSTask.ClassMgr.sortTasks(vAllTasks, BPMSTask.ClassMgr.SORT_BY_DATE);
         } catch(Exception e){
-          //log.error("Error en ControlPanel.filterReport", e);
+          log.error("Error en ControlPanel.filterReport", e);
             System.out.println("Error en ControlPanel.filterReport:"
                     + e.getMessage());
 		}
@@ -2127,12 +2127,104 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</tr>");
 
         } catch(Exception e){
-          //log.error("Error en ControlPanel.printReportTask", e);
+          log.error("Error en ControlPanel.printReportTask", e);
             System.out.println("Error en ControlPanel.printReportTask:"
                     + e.getMessage());
 		}
         return sb;
     }
+
+    /**
+    * Genera un objeto de tipo Document con la estructura del reporte XML
+    * de tareas del usuario
+    *
+    * @param            vTasks Vector de objetos TaskLink
+    * @param            paramsRequest SWBParamRequest
+    * @return      		Document
+    */
+    public org.w3c.dom.Document createAlternativeReportDocument(Vector vTasks, SWBParamRequest paramsRequest)
+    {
+        org.w3c.dom.Document doc = null;
+        try
+        {
+            DocumentBuilderFactory dbfac =
+                SWBUtils.XML.getDocumentBuilderFactory().newInstance();
+            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+            doc = docBuilder.newDocument();
+            org.w3c.dom.Element root = doc.createElement("Report");
+            doc.appendChild(root);
+            org.w3c.dom.Element title = doc.createElement("title");
+            title.setAttribute("titleName", "Control Panel Activity Report");
+            root.appendChild(title);
+            for(int i=0; i<vTasks.size(); i++)
+            {
+                TaskLink tlink = (TaskLink) vTasks.get(i);
+                org.w3c.dom.Element task = doc.createElement("task");
+                String strTaskId =
+                    tlink.getFlowNodeInstanceId()==null
+                    ?""
+                    :tlink.getFlowNodeInstanceId();
+                task.setAttribute("id",strTaskId);
+                String strTaskTitle =
+                    tlink.getFlowNodeTitle()==null
+                    ?""
+                    :tlink.getFlowNodeTitle();
+                task.setAttribute("title",strTaskTitle);
+                String strProcessName =
+                    tlink.getFlowNodeParentProcess()==null
+                    ?""
+                    :tlink.getFlowNodeParentProcess();
+                task.setAttribute("parentProcess",strProcessName);
+                String strTaskCreated =
+                    String.valueOf(tlink.getFlowNodeInstanceCreated())==null
+                    ?""
+                    :String.valueOf(tlink.getFlowNodeInstanceCreated());
+                task.setAttribute("created",strTaskCreated);
+                String strTaskCreatedBy =
+                    tlink.getFlowNodeInstanceCreatedByName()==null
+                    ?""
+                    :tlink.getFlowNodeInstanceCreatedByName();
+                task.setAttribute("createdBy",strTaskCreatedBy);
+                int intTaskStatus = tlink.getFlowNodeInstanceStatus();
+                String strTaskStatus = getStatusDescription(paramsRequest,intTaskStatus);
+                task.setAttribute("status",String.valueOf(intTaskStatus));
+                String strTaskUpdated =
+                    tlink.getFlowNodeInstanceModified()==null
+                    ?""
+                    :String.valueOf(tlink.getFlowNodeInstanceModified());
+                task.setAttribute("updated",strTaskUpdated);
+                String strTaskUpdatedBy =
+                    tlink.getFlowNodeInstanceModifiedByName()==null
+                    ?""
+                    :tlink.getFlowNodeInstanceModifiedByName();
+                task.setAttribute("updatedBy",strTaskUpdatedBy);
+                String strTaskEnded = "";
+                String strTaskEndedBy = "";
+                if(tlink.getFlowNodeInstanceEnded()!=null)
+                {
+                    strTaskEnded =  String.valueOf(tlink.getFlowNodeInstanceEnded());
+                    strTaskEndedBy =
+                        tlink.getFlowNodeInstanceEndedByName()==null
+                        ?""
+                        :tlink.getFlowNodeInstanceEndedByName();
+                }
+                task.setAttribute("ended",strTaskEnded);
+                task.setAttribute("endedBy",strTaskEndedBy);
+                int intTaskPriority = tlink.getPriority();
+                String strTaskPriority = String.valueOf(intTaskPriority);
+                task.setAttribute("priority",String.valueOf(intTaskPriority));
+
+                root.appendChild(task);
+            }
+            
+        } catch (Exception e) {
+            log.error("Error en ControlPanel.createAlternativeReportDocument", e);
+            System.out.println("error en ControlPanel.createAlternativeReportDocument: " +
+                    e.getMessage());
+        }
+        return doc;
+    }
+
 
     /**
     * Genera un objeto de tipo Document con la estructura del reporte XML
@@ -2274,7 +2366,7 @@ public class ControlPanel extends GenericAdmResource
             pageFooter.setAttribute("pageFooterName", "pageFooterValue");
             root.appendChild(pageFooter);
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createReport", e);
+            log.error("Error en ControlPanel.createReport", e);
             System.out.println("error en ControlPanel.createReport: " +
                     e.getMessage());
         }
@@ -2304,7 +2396,7 @@ public class ControlPanel extends GenericAdmResource
             FileInputStream fis = new FileInputStream(filenameXml);
             InputStreamReader isr = new InputStreamReader(fis);
             LineNumberReader lnr = new LineNumberReader(isr);
-            org.w3c.dom.Document doc = createReportDocument(vAllTasks, paramsRequest);
+            org.w3c.dom.Document doc = createAlternativeReportDocument(vAllTasks, paramsRequest);
             TransformerFactory transFac =
                     SWBUtils.XML.getTransformerFactory().newInstance();
             Transformer trans = transFac.newTransformer();
@@ -2321,7 +2413,7 @@ public class ControlPanel extends GenericAdmResource
             String xmlString = sw.toString();
             //System.out.println("Prueba:\n\n" + xmlString);
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createXmlReport", e);
+            log.error("Error en ControlPanel.createXmlReport", e);
             System.out.println("error en ControlPanel.createXmlReport: " +
                     e.getMessage());
         }
@@ -2430,7 +2522,7 @@ public class ControlPanel extends GenericAdmResource
                 table.addCell(infoCell);
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createPdfTable", e);
+            log.error("Error en ControlPanel.createPdfTable", e);
             System.out.println("error en ControlPanel.createPdfTable: " +
                     e.getMessage());
         }
@@ -2483,7 +2575,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createPdfTableHeader", e);
+            log.error("Error en ControlPanel.createPdfTableHeader", e);
             System.out.println("error en ControlPanel.createPdfTableHeader: " +
                     e.getMessage());
         }
@@ -2586,15 +2678,15 @@ public class ControlPanel extends GenericAdmResource
             document.add(table);
             document.close();
         } catch (DocumentException de) {
-            //log.error("Error en ControlPanel.createPdfReport", e);
+            log.error("Error en ControlPanel.createPdfReport", de);
           System.err.println("error en ControlPanel.createPdfReport: " +
                   de.getMessage());
         } catch (IOException ioe) {
-            //log.error("Error en ControlPanel.createPdfReport", e);
+            log.error("Error en ControlPanel.createPdfReport", ioe);
           System.err.println("error en ControlPanel.createPdfReport: " +
                   ioe.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createPdfReport", e);
+            log.error("Error en ControlPanel.createPdfReport", e);
             System.out.println("error en ControlPanel.createPdfReport: " +
                     e.getMessage());
         }
@@ -2696,11 +2788,11 @@ public class ControlPanel extends GenericAdmResource
                 table.addCell(infoCell);
             }
         } catch (com.lowagie.text.BadElementException be) {
-            //log.error("Error en ControlPanel.createRtfTable", e);
+            log.error("Error en ControlPanel.createRtfTable", be);
             System.out.println("error en ControlPanel.createRtfTable: " +
                     be.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createRtfTable", e);
+            log.error("Error en ControlPanel.createRtfTable", e);
             System.out.println("error en ControlPanel.createRtfTable: " +
                     e.getMessage());
         }
@@ -2754,11 +2846,11 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch (com.lowagie.text.BadElementException be) {
-            //log.error("Error en ControlPanel.createRtfTableHeader", e);
+            log.error("Error en ControlPanel.createRtfTableHeader", be);
             System.out.println("error en ControlPanel.createRtfTableHeader: " +
                     be.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createRtfTableHeader", e);
+            log.error("Error en ControlPanel.createRtfTableHeader", e);
             System.out.println("error en ControlPanel.createRtfTableHeader: " +
                     e.getMessage());
         }
@@ -2866,11 +2958,11 @@ public class ControlPanel extends GenericAdmResource
             document.add(table);
             document.close();
         } catch (IOException ioe) {
-            //log.error("Error en ControlPanel.createRtfReport", e);
+            log.error("Error en ControlPanel.createRtfReport", ioe);
             System.err.println("error en ControlPanel.createRtfReport: " +
                     ioe.getMessage());
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.createRtfReport", e);
+            log.error("Error en ControlPanel.createRtfReport", e);
             System.out.println("error en ControlPanel.createRtfReport: " +
                     e.getMessage());
         }
@@ -2961,7 +3053,7 @@ public class ControlPanel extends GenericAdmResource
                     " onclick=\"direcciona('" + url.setAction("goToView") + "');\" />");
             sb.append("</form></div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.displayReport", e);
+          log.error("Error en ControlPanel.displayReport", e);
             System.out.println("Error en ControlPanel.displayReport:"
                     + e.getMessage());
 		}
@@ -2986,7 +3078,7 @@ public class ControlPanel extends GenericAdmResource
             BPMSTask.ClassMgr.sortTasks(vAllTasks,BPMSTask.ClassMgr.SORT_BY_DATE);
             sb.append(displayReport(vAllTasks, request, paramsRequest));
         } catch(Exception e){
-          //log.error("Error en ControlPanel.buildReport", e);
+          log.error("Error en ControlPanel.buildReport", e);
             System.out.println("Error en ControlPanel.buildReport:"
                     + e.getMessage());
 		}
@@ -3096,7 +3188,7 @@ public class ControlPanel extends GenericAdmResource
                     paramsRequest.getLocaleString("btnCancel") + "\"/>");
             sb.append("</form></div></div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getFilterForm", e);
+          log.error("Error en ControlPanel.getFilterForm", e);
             System.out.println("Error en ControlPanel.getReportForm:"
                     + e.getMessage());
 		}
@@ -3299,7 +3391,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("\n</form>");
             sb.append("\n</div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getArtifactPropertiesForm", e);
+          log.error("Error en ControlPanel.getArtifactPropertiesForm", e);
             System.out.println("Error en ControlPanel.getArtifactPropertiesForm:" +
                     e.getMessage());
 		}
@@ -3358,7 +3450,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("\n   }");
             sb.append("\n</script>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getValidatingScript", e);
+          log.error("Error en ControlPanel.getValidatingScript", e);
             System.out.println("Error en ControlPanel.getValidatingScript:" +
                     e.getMessage());
 		}
@@ -3536,7 +3628,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</form>");
             sb.append("</div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getProcessForm", e);
+          log.error("Error en ControlPanel.getProcessForm", e);
             System.out.println("Error en ControlPanel.getProcessForm:" +
                     e.getMessage());
 		}
@@ -3659,7 +3751,7 @@ public class ControlPanel extends GenericAdmResource
             sb.append("</form>");
             sb.append("</div></div>");
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getFilterForm", e);
+          log.error("Error en ControlPanel.getFilterForm", e);
             System.out.println("Error en ControlPanel.getFilterForm:"
                     + e.getMessage());
 		}
@@ -3700,7 +3792,7 @@ public class ControlPanel extends GenericAdmResource
                 out.print(getProcessForm(paramRequest));
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.doAdmin", e);
+          log.error("Error en ControlPanel.doAdmin", e);
             System.out.println("Error en ControlPanel.doAdmin:" +
                     e.getMessage());
 		}
@@ -3783,7 +3875,7 @@ public class ControlPanel extends GenericAdmResource
                 out.println("</div>");
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.doView", e);
+          log.error("Error en ControlPanel.doView", e);
             System.out.println("Error en ControlPanel.doView:" +
                     e.getMessage());
 		}
@@ -3873,7 +3965,7 @@ public class ControlPanel extends GenericAdmResource
                 }                
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getPagination", e);
+          log.error("Error en ControlPanel.getPagination", e);
             System.out.println("Error en ControlPanel.getPagination:"
                     + e.getMessage());
 		}
@@ -3897,7 +3989,7 @@ public class ControlPanel extends GenericAdmResource
                     firstRow = (currentPage - 1) * rowsPerPage;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getPageFirstRow", e);
+          log.error("Error en ControlPanel.getPageFirstRow", e);
             System.out.println("Error en ControlPanel.getPageFirstRow:"
                     + e.getMessage());
 		}
@@ -3924,7 +4016,7 @@ public class ControlPanel extends GenericAdmResource
                     :rowsPerPage * currentPage;
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getPageLastRow", e);
+          log.error("Error en ControlPanel.getPageLastRow", e);
             System.out.println("Error en ControlPanel.getPageLastRow:"
                     + e.getMessage());
 		}
@@ -3952,7 +4044,7 @@ public class ControlPanel extends GenericAdmResource
                 }                
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.getTotalPages", e);
+          log.error("Error en ControlPanel.getTotalPages", e);
             System.out.println("Error en ControlPanel.getTotalPages:"
                     + e.getMessage());
 		}
@@ -4000,7 +4092,7 @@ public class ControlPanel extends GenericAdmResource
                     break;
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.getPriorityDescription", e);
+            log.error("Error en ControlPanel.getPriorityDescription", e);
             System.out.println("error en ControlPanel.getPriorityDescription: " +
                     e.getMessage());
         }
@@ -4049,7 +4141,7 @@ public class ControlPanel extends GenericAdmResource
                     break;
             }
         } catch (Exception e) {
-            //log.error("Error en ControlPanel.getStatusDescription", e);
+            log.error("Error en ControlPanel.getStatusDescription", e);
             System.out.println("error en ControlPanel.getStatusDescription: " +
                     e.getMessage());
         }
@@ -4078,7 +4170,7 @@ public class ControlPanel extends GenericAdmResource
                 }
             }
         } catch(Exception e){
-          //log.error("Error en ControlPanel.checkboxesToString", e);
+          log.error("Error en ControlPanel.checkboxesToString", e);
             System.out.println("Error en ControlPanel.checkboxesToString:" +
                     e.getMessage());
 		}
