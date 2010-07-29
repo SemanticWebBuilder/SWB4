@@ -8,6 +8,8 @@ package org.semanticwb.process.cpanel;
 import java.util.*;
 import org.semanticwb.process.model.*;
 import org.semanticwb.model.*;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 
 /**
  *
@@ -22,6 +24,7 @@ public class ProcessProperty
     private boolean displayOnTask;
     private boolean [] applyOnTask;
     private int orderOnTask;
+    private static Logger log = SWBUtils.getLogger(ProcessProperty.class);
 
         public ProcessProperty(){
         }
@@ -179,7 +182,7 @@ public class ProcessProperty
             } catch(Exception e){
                 System.out.println("Error en ProcessProperty.sortProcessProperty:" +
                         e.getMessage());
-                //log.error("Error en ProcessControlPanel.sortProcessProperty", e);
+                log.error("Error en ProcessProperty.sortProcessProperty", e);
             }
         }
 
