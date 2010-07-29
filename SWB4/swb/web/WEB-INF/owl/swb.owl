@@ -390,6 +390,34 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
+  <owl:Class rdf:ID="ResourceCollectionCategory">
+    <rdfs:label xml:lang="en">Category</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Categoria</rdfs:label>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Resourceable">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Interfaz que define propiedades para los elementos que pueden contener recursos</rdfs:comment>
+        <rdfs:label xml:lang="en">Resource-able</rdfs:label>
+        <rdfs:label xml:lang="es">Recursable</rdfs:label>
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+    <rdf:type rdf:resource="#Class"/>
+    <swb:displayObject>
+      <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_ResourceCollection">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplateGroup</swb:iconClass>
+      </swbxf:DisplayObject>
+    </swb:displayObject>
+    <rdfs:subClassOf rdf:resource="#Traceable"/>
+  </owl:Class>
   <owl:Class rdf:ID="UserGroupable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
@@ -397,6 +425,12 @@
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Validable">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SWBInterface"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="XMLConfable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
@@ -421,12 +455,6 @@
     </swb:displayObject>
     <rdfs:label xml:lang="en">Role</rdfs:label>
     <rdfs:label xml:lang="es">Rol</rdfs:label>
-  </owl:Class>
-  <owl:Class rdf:ID="XMLConfable">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SWBInterface"/>
-    </rdfs:subClassOf>
-    <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="PFlowRefable">
     <rdfs:subClassOf>
@@ -618,17 +646,9 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Resourceable"/>
     <rdfs:subClassOf>
-      <swb:Interface rdf:ID="Resourceable">
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Interfaz que define propiedades para los elementos que pueden contener recursos</rdfs:comment>
-        <rdfs:label xml:lang="en">Resource-able</rdfs:label>
-        <rdfs:label xml:lang="es">Recursable</rdfs:label>
-        <rdfs:subClassOf>
-          <owl:Class rdf:about="#SWBInterface"/>
-        </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
+      <owl:Class rdf:ID="Localeable"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.</rdfs:comment>
@@ -744,7 +764,7 @@
     </rdfs:subClassOf>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
-  <owl:Class rdf:ID="Localeable">
+  <owl:Class rdf:about="#Localeable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
@@ -1075,6 +1095,41 @@
       </swb:Class>
     </rdfs:domain>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceCollectionType">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_resourceCollectionType">
+        <swbxf:formElement>
+          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel">
+            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_nullSuport>
+            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:so_globalScope>
+          </swbxf:SelectOne>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >105</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Resource Type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
+    <rdfs:range rdf:resource="#ResourceType"/>
+    <rdfs:domain>
+      <swb:Class rdf:ID="ResourceCollection">
+        <rdfs:subClassOf rdf:resource="#Traceable"/>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_ResourceCollection"/>
+        <rdfs:subClassOf rdf:resource="#Resourceable"/>
+        <rdfs:subClassOf rdf:resource="#SWBClass"/>
+        <rdfs:label xml:lang="es">Colección de Componentes</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
+        <rdfs:label xml:lang="en">Components Collection</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="roleParent">
     <rdfs:label xml:lang="en">Parent Role</rdfs:label>
     <rdfs:label xml:lang="es">Rol padre</rdfs:label>
@@ -1366,14 +1421,7 @@
       <swbxf:DisplayProperty rdf:ID="dp_templateGroup">
         <rdfs:label xml:lang="en">Group</rdfs:label>
         <rdfs:label xml:lang="es">Grupo</rdfs:label>
-        <swbxf:formElement>
-          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel">
-            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:so_nullSuport>
-            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:so_globalScope>
-          </swbxf:SelectOne>
-        </swbxf:formElement>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
       </swbxf:DisplayProperty>
@@ -1617,6 +1665,17 @@
         <swb:hasClass rdf:resource="#Collection"/>
         <swb:hasClass rdf:resource="#Rule"/>
         <swb:hasHerarquicalNode>
+          <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_ResourceCollections">
+            <swb:title xml:lang="es">Colección de Recursos</swb:title>
+            <swb:title xml:lang="en">Rresource Collections</swb:title>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >68</swb:index>
+            <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >swbIconTemplateGroup</swb:iconClass>
+            <swbxf:heClass rdf:resource="#ResourceCollection"/>
+          </swbxf:HerarquicalNode>
+        </swb:hasHerarquicalNode>
+        <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars">
             <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >swbIconCalendars</swb:iconClass>
@@ -1837,6 +1896,13 @@
     </owl:inverseOf>
     <rdfs:domain rdf:resource="#Resource"/>
     <rdfs:range rdf:resource="#ResourceType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="resourceCollection">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasResourceCollectionCategoryInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#ResourceCollection"/>
+    <rdfs:domain rdf:resource="#ResourceCollectionCategory"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="resourceSubType">
     <rdfs:label xml:lang="en">Subtype</rdfs:label>
@@ -2217,6 +2283,16 @@
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasObject</swb:propertyCodeName>
     <rdfs:domain rdf:resource="#UserFavorite"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasResourceCollectionCategoryInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:cloneDependency>
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasCategory</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#propGroup">
     <rdfs:label xml:lang="en">Group</rdfs:label>
