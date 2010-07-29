@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
 {
     public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
     public static final org.semanticwb.platform.SemanticProperty swb_hasSubModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasSubModel");
@@ -376,6 +376,16 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
         getSemanticObject().setDateProperty(swb_updated, value);
     }
 
+    public boolean isIndexable()
+    {
+        return getSemanticObject().getBooleanProperty(swb_indexable);
+    }
+
+    public void setIndexable(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_indexable, value);
+    }
+
     public void setUserRepository(org.semanticwb.model.UserRepository value)
     {
         if(value!=null)
@@ -442,16 +452,6 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
              ret=(org.semanticwb.model.Ontology)obj.createGenericInstance();
          }
          return ret;
-    }
-
-    public boolean isIndexable()
-    {
-        return getSemanticObject().getBooleanProperty(swb_indexable);
-    }
-
-    public void setIndexable(boolean value)
-    {
-        getSemanticObject().setBooleanProperty(swb_indexable, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
