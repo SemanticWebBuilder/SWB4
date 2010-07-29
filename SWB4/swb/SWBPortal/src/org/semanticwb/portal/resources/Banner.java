@@ -91,44 +91,45 @@ public class Banner extends GenericAdmResource
                 }
 
                 if( img.endsWith(".swf") ) {
-                    out.println("<object ");
-                    out.println(" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" ");
-                    out.println(" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab\"");
+                    out.print("<object ");
+                    out.print(" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" ");
+                    out.print(" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab\"");
                     if( width!=null )
-                        out.println(" width=\""+width+"\"");
+                        out.print(" width=\""+width+"\"");
                     if( height!=null )
-                        out.println(" height=\""+height+"\"");
-                    out.print(">");
+                        out.print(" height=\""+height+"\"");
+                    out.println(">");
                     out.println("<param name=\"movie\" value=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\" />");
                     out.println("<param name=\"flashvars\" value=\"liga="+wburl+"\" />\n");
                     out.println("<param name=\"quality\" value=\"high\"/> <param name=\"wmode\" value=\"transparent\"/> <param name=\"play\" value=\"true\"/> <param name=\"loop\" value=\"true\"/>");
 
-                    out.println("<embed pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" quality=\"high\" wmode=\"transparent\" play=\"true\" loop=\"true\" ");
-                    out.println(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
-                    out.println(" flashvars=\"liga="+wburl+"\"");
+                    out.print("<embed pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" quality=\"high\" wmode=\"transparent\" play=\"true\" loop=\"true\" ");
+                    out.print(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
+                    out.print(" flashvars=\"liga="+wburl+"\"");
                     if( width!=null )
-                        out.println(" width=\""+width+"\"");
+                        out.print(" width=\""+width+"\"");
                     if( height!=null )
-                        out.println(" height=\""+height+"\"");
+                        out.print(" height=\""+height+"\"");
+                    out.println(">");
                     out.println("</embed></object>");
                 }else {
                     String action = base.getAttribute("axn");
 
-                    out.println("<a class=\"swb-banner\"");
-                    out.println(" href=\""+wburl+"\"");
+                    out.print("<a class=\"swb-banner\"");
+                    out.print(" href=\""+wburl+"\"");
                     if( action!=null )
-                        out.println(" onclick=\""+action+"\"");
+                        out.print(" onclick=\""+action+"\"");
                     out.println(" title=\""+base.getAttribute("title","")+"\">");
 
-                    out.println("<img src=\"");
-                    out.println(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
-                    out.println(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getAttribute("title",""))+"\"");
+                    out.print("<img src=\"");
+                    out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
+                    out.print(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getAttribute("title",""))+"\"");
                     if( width!=null )
-                        out.println(" width=\""+width+"\"");
+                        out.print(" width=\""+width+"\"");
                     if( height!=null )
-                        out.println(" height=\""+height+"\"");
+                        out.print(" height=\""+height+"\"");
                     if( longdesc!=null )
-                        out.println(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
+                        out.print(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                     out.println("/>");
                     out.println("</a>");
                 }
