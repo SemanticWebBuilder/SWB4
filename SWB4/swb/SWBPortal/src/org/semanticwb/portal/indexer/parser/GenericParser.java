@@ -444,4 +444,15 @@ public class GenericParser
     public String getTypeDisplayLabel(Searchable gen) {
         return "Genérico";
     }
+
+    /**
+     * Gets the last update date of the {@link Searchable} object.
+     * <p>
+     * Obtiene la fecha de la última actualización del objeto {@link Searchable}
+     * @param gen the {@link Searchable} object.
+     * @return last update date of the {@link Searchable} object.
+     */
+    public String getUpdated(Searchable gen) {
+        return "";
+    }
 }
