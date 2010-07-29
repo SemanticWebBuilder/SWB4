@@ -53,7 +53,7 @@
                     <h2>
                         <xsl:value-of select="msgComments" disable-output-escaping="yes" />
                     </h2>
-                    <form name="frmSendEmail" method="post" action="{@accion}">
+                    <form id="frmSendEmail" method="post" action="{@accion}">
                         <table>
                             <xsl:for-each select="fselect">
                                 <tr>
@@ -77,7 +77,7 @@
                                 <tr>
                                     <td><label><xsl:value-of select="@tag" /></label></td>
                                     <td>
-                                        <textarea name="{@inname}" wrap="virtual">
+                                        <textarea name="{@inname}" cols="30" rows="5">
                                             <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
                                         </textarea>
                                     </td>
