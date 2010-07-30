@@ -12,7 +12,7 @@
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+    String pathPhoto = null;//SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
    
     User user=paramRequest.getUser();
     // muestra el recurso
@@ -35,10 +35,19 @@
             (<%=country%>)
         <%
     }
+
     %>
     </h2>
-    <img border="0" alt="Imagen noticia" width="100" height="100" src="<%=pathPhoto%>" />
+    <%
+        if(pathPhoto!=null)
+        {
+            %>
+             <img border="0" alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
         <br>
+            <%
+        }
+    %>
+   
     <%
     if(content.getOriginalTitle()!=null)
     {
