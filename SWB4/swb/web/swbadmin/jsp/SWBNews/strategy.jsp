@@ -92,7 +92,7 @@
                     <a href="<%=url%>">
                         <img border="0" alt="Imagen noticia" src="<%=pathPhoto%>" />
                     </a><br>
-                    <a href="<%=url%>"><%=title%></a><br>
+                    <a href="<%=url%>"><%=title%> <%=date%></a><br>
                     <p><i><%=description%></i></p>
 
             </div>
