@@ -60,7 +60,7 @@
                     String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/noevent.jpg";
                     String url="#";
                     i++;
-                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
+                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
                     url=urldetail.toString();
                     String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
                     if(title!=null && title.trim().equals(""))
