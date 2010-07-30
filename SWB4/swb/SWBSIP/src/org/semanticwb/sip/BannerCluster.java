@@ -49,7 +49,7 @@ public class BannerCluster extends GenericAdmResource
         out.println("    }");
         out.println("-->");
         out.println("</script>");
-
+        out.println("<h2 class=\"tituloBloque\">"+base.getDisplayTitle(lang)+" <span class=\"span_tituloBloque\">"+base.getDisplayDescription(lang)+"</span></h2>");
         out.println("<div class=\"swb-banner-cluster\">");
         //out.println("<div class=\"banner-cluster-hldr\" style=\"width:"+w+"px; height:"+h+"px;\">");
 
