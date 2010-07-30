@@ -79,6 +79,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <rdfs:domain rdf:resource="#VideoContent"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="homeShow">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Show in Home Page {en}</rdfs:label>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Mostrar en página de Inicio{es}</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_homeShow">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#VideoContent"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="code">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_code">
