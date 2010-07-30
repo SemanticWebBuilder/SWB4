@@ -28,9 +28,6 @@
         <p class="swb-contact-inst">
         <xsl:for-each select="instruction">
             <xsl:apply-templates/>
-            <xsl:if test="not(position()=last())">
-                <br />
-            </xsl:if>
         </xsl:for-each>
         </p>
     </xsl:template>
