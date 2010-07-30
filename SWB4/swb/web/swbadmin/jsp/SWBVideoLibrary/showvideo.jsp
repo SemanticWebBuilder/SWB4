@@ -13,3 +13,7 @@
 <%@page import="org.semanticwb.model.WebPage"%>
 <%@page import="org.semanticwb.model.User"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+<%
+    VideoContent content=(VideoContent)request.getAttribute("content");
+
+%>
