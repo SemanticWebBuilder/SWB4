@@ -16,8 +16,8 @@
     </fieldset>
 
     <fieldset legend="Aparência">
-        <input type="text" id="width"  name="width" label="Largura da imagem (pixeles):" maxlength="6" regExp="\d{1,4}" invalidMessage="Largura inválido" promptMessage="Largura da imagem, pixels considerados" />
-        <input type="text" id="height" name="height" label="Altura da imagem (pixeles):" maxlength="6" regExp="\d{1,4}" invalidMessage="Altura inválido" promptMessage="Altura da imagem, pixels considerados" />
+        <input type="text" id="width"  name="width" label="Largura da imagem (pixeles):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura da imagem. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Altura da imagem (pixeles):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura da imagem. Ejemplos: 90%, 350px, 854" />
     </fieldset>
 
     <fieldset legend="Avançado">

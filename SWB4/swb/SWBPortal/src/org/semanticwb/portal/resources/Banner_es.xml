@@ -16,8 +16,8 @@
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho de la imagen (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen, considerada en pixeles" />
-        <input type="text" id="height" name="height" label="Altura de la imagen (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen, considerada en pixeles" />
+        <input type="text" id="width"  name="width" label="Ancho de la imagen (pixeles):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Altura de la imagen (pixeles):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 90%, 350px, 854" />
     </fieldset>
 
     <fieldset legend="Opciones avanzadas">
