@@ -51,7 +51,7 @@
             while(resourceTypes.hasNext())
             {
                 ResourceType resourceType=resourceTypes.next();
-                if(resourceType.getResourceClassName().equals("org.semanticwb.portal.resources.sem.newslite.SWBNewsLite"))
+                if(resourceType.getResourceClassName().equals(SWBNews.class.getCanonicalName()))
                 {
                     Iterator<Resource> resources=Resource.ClassMgr.listResourceByResourceType(resourceType,site);
                     while(resources.hasNext())
