@@ -57,7 +57,7 @@
             {
                 if(content.isHomeShow())
                 {
-                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/noevent.jpg";
+                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
                     String url="#";
                     i++;
                     urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
@@ -86,11 +86,12 @@
                     if(content.getImage()!=null)
                     {
                         image=content.getImage();
+                        pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
                     }
                     %>
                     <div class="nota">
                     <a href="<%=url%>">
-                        <img border="0" alt="Imagen noticia" src="<%=pathPhoto%>" />
+                        <img border="0" alt="Imagen noticia" width="92" height="60" src="<%=pathPhoto%>" />
                     </a><br>
                     <a href="<%=url%>"><%=title%> <%=date%></a><br>
                     <p><i><%=description%></i></p>
