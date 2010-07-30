@@ -16,8 +16,8 @@
     </fieldset>
 
     <fieldset legend="Look and Feel">
-        <input type="text" id="width"  name="width" label="Image Widht (pixels):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid " promptMessage ="Image width. Examples: 90%, 350px, 854" />
-        <input type="text" id="height" name="height" label="Image Height (pixels):" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Image height. Examples: 90%, 350px, 854" />
+        <input type="text" id="width"  name="width" label="Image Widht:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Width invalid " promptMessage ="Image width. Examples: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Image Height:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválida" promptMessage="Image height. Examples: 90%, 350px, 854" />
     </fieldset>
 
     <fieldset legend="Advanced">
