@@ -267,7 +267,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
 
         List<SWBNewContent> news=getNews(uri,paramRequest.getUser());
-        
         if (uri != null && paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
         {            
             // busca el objeto
