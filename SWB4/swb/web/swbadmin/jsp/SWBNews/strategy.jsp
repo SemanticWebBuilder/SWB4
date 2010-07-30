@@ -30,6 +30,7 @@
             Resource resource=resources.next();
             if(resource.getResourceData()!=null)
             {
+
                GenericObject obj=resource.getResourceData().createGenericInstance();
                if(obj instanceof SWBNews)
                {
@@ -50,17 +51,13 @@
         int limit = 3;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
         if(urldetail!=null)
-        {
-            %>
-            <div id="noticias1">
-            <h2>Noticias <a href="<%=urlrss%>" id="rss" >rss feed</a></h2>
-              <ul class="noticias">
-            <%
+        {            
             int i=0;
             for(SWBNewContent content : contents)
             {
                 if(content.isHomeShow())
                 {
+                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/noevent.jpg";
                     String url="#";
                     i++;
                     urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
@@ -69,6 +66,11 @@
                     if(title!=null && title.trim().equals(""))
                     {
                         title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                    }
+                    String description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription(usrlanguage));
+                    if(title!=null && title.trim().equals(""))
+                    {
+                        description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription());
                     }
                     String date="";
                     if(content.getPublishDate()!=null)
@@ -86,9 +88,14 @@
                         image=content.getImage();
                     }
                     %>
-                    <li><a href="<%=url%>"><%=title%> <%=country%> image:<%=image%>
-                    <span class="fecha"><%=date%></span>
-                    </a></li>
+                    <div class="nota">
+                    <a href="<%=url%>">
+                        <img border="0" alt="Imagen noticia" src="<%=pathPhoto%>" />
+                    </a><br>
+                    <a href="<%=url%>"><%=title%></a><br>
+                    <p><i><%=description%></i></p>
+
+            </div>
                     <%
 
                     if(i>=limit)
@@ -99,11 +106,7 @@
             }
             String urlnoticias=noticias.getUrl();
             %>
-             </ul>
-              <a href="<%=urlnoticias%>" class="verMas" >más noticias</a>
-
-              <p>&nbsp;</p>
-            </div>
+            
             <%
         }
     }
