@@ -280,13 +280,12 @@ public class Poll extends GenericResource {
         response.setDateHeader ("Expires", 0); //prevents caching at the proxy server
 
          try {
-            String jspFile=paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
+            //String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
+             String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccesible.jsp");
 
             request.setAttribute("paramRequest", paramRequest);
             Document dom = getDom(request, response, paramRequest);
-            System.out.println("\n\ndom=\n"+SWBUtils.XML.domToXml(dom));
             String html = SWBUtils.XML.transformDom(tpl, dom);
-            System.out.println("\n\ndoView.... html=\n"+html);
             boolean isPopup = Boolean.valueOf(base.getAttribute("display", "true")).booleanValue();
             if( !isPopup )
                 html += "<div id=\""+PREF+base.getId()+"\" class=\"swb-encuesta-res\"></div>";
@@ -295,7 +294,7 @@ public class Poll extends GenericResource {
             RequestDispatcher rd = request.getRequestDispatcher(jspFile);
             rd.include(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -315,7 +314,6 @@ public class Poll extends GenericResource {
         }catch(TransformerException te) {
             log.error("Error in a resource Poll while transforms the document. ", te);
         }
-        System.out.println("\n\ndoAccesible.... html=\n"+html);
         response.getWriter().println(html.toString());
     }
 
@@ -427,7 +425,7 @@ public class Poll extends GenericResource {
                     out.println("    var numcom = getCookie(forma.NombreCookie.value); ");
                     out.println("    if(numcom == \"SI\") { ");
                     if("true".equals(base.getAttribute("oncevote", "true").trim()) && !"0".equals(base.getAttribute("vmode", "0").trim())) {
-                        out.println("    alert('"+ paramRequest.getLocaleString("lblDoView_msgVote") +"'); ");
+                        out.println("    alert('"+ paramRequest.getLocaleString("msgDoView_msgVote") +"'); ");
                     }
                     out.println("     } ");
                     out.println("    grabaEncuesta(forma); ");
@@ -478,7 +476,7 @@ public class Poll extends GenericResource {
                         out.println("  getHtml('"+url.toString()+"&radiobutton='+optValue,'"+poll+base.getId()+"'); expande();");
                     }
                     out.println("    }else { ");
-                    out.println("       alert('"+ paramRequest.getLocaleString("lblDoView_msgAnswer") +"'); ");
+                    out.println("       alert('"+ paramRequest.getLocaleString("msgDoView_msgAnswer") +"'); ");
                     out.println("    } ");
                     out.println("} ");
 
@@ -852,7 +850,6 @@ public class Poll extends GenericResource {
                         if (value!=null)
                         {
                             String file = admResUtils.getFileName(base, value);
-                            System.out.println("\n\n*******************************\n imgencuesta="+file);
                             if (file != null && !file.trim().equals(""))
                             {
                                 if (!admResUtils.isFileType(file, "jpg|jpeg|gif|png")){
@@ -1589,7 +1586,7 @@ public class Poll extends GenericResource {
         script.append("function buscaCookie(cocacola, rgName, isCLIValidable, url) {");
         script.append("  var numcom = getCookie(cocacola);");
         script.append("  if(numcom=='SI' && isCLIValidable) {");
-        script.append("    alert('"+paramRequest.getLocaleString("lblDoView_msgVote")+"');");
+        script.append("    alert('"+paramRequest.getLocaleString("msgDoView_msgVote")+"');");
         script.append("    return;");
         script.append("  }");
         script.append("  grabaEncuesta(rgName, url);");
@@ -1613,7 +1610,7 @@ public class Poll extends GenericResource {
         else
             script.append("   getHtml(url+'&radiobutton='+optValue,'"+PREF+base.getId()+"'); expande();");
         script.append("   }else {");
-        script.append("      alert('"+paramRequest.getLocaleString("lblDoView_msgAnswer")+"');");
+        script.append("      alert('"+paramRequest.getLocaleString("msgDoView_msgAnswer")+"');");
         script.append("   }");
         script.append("}");
 
