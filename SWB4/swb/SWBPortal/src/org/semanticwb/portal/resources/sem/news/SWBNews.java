@@ -227,6 +227,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         RequestDispatcher dis = request.getRequestDispatcher(path);
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_CONTENT);
+        url.setMode(url.Mode_VIEW);
         try
         {
             request.setAttribute("paramRequest", paramRequest);
