@@ -66,8 +66,8 @@ public class BannerCluster extends GenericAdmResource
                         while( itRes.hasNext() ) {
                             Resource r = itRes.next();
                             if( r.isActive()&&user.haveAccess(r) ) {
-                                String title = r.getDisplayTitle(lang);
-                                String desc = r.getDisplayDescription(lang);
+                                String title = r.getDisplayTitle(lang)==null?"":r.getDisplayTitle(lang);
+                                String desc = r.getDisplayDescription(lang)==null?"":r.getDisplayDescription(lang); 
                                 String url = r.getAttribute("url");
                                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
                                 String alt = r.getAttribute("alt", title);
