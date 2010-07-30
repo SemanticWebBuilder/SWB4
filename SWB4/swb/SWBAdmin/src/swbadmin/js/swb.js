@@ -1439,14 +1439,6 @@ function replaceChars4Id(value, lowercase)
       }
     }
 
-    function isValidEmail(email) {
-        var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
-        if (!filter.test(email)) {
-            return false;
-        }
-        return true;
-    }
-
     function setCookie(name,val,life) {
         document.cookie = name;
         var expDate = new Date();
@@ -1478,3 +1470,103 @@ function replaceChars4Id(value, lowercase)
             endstr = document.cookie.length;
         return unescape(document.cookie.substring(offset, endstr));
     }
+
+
+    /*
+     * Funciones de validación de formularios
+     */
+    String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g,"");
+    }
+    String.prototype.ltrim = function() {
+       return this.replace(/^\s+/g,"");
+    }
+    String.prototype.rtrim = function() {
+       return this.replace(/\s+$/g,"");
+    }
+
+    function isValidEmail(email) {
+    /************************************************
+    DESCRIPTION: Validates that una cadena contenga un email válido.
+
+    PARAMETERS: email - Cadena a ser evaluada.
+
+    RETURNS: true if es válida, de lo contrario false.
+    *************************************************/
+        var filter = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!filter.test(email)) {
+            return false;
+        }
+        return true;
+    }
+
+    function isEmpty(strValue) {
+    /************************************************
+    DESCRIPTION: Valida que una cadena sea vacía.
+
+    PARAMETERS: strValue - Cadena a ser evaluada.
+
+    RETURNS: true si es vacía, de lo contrario false.
+    *************************************************/
+        var strTemp = new String(strValue);
+        strTemp = strTemp.trim();
+        if(strTemp.length > 0){
+            return false;
+        }
+        return true;
+    }
+
+    function  isNumeric(strValue) {
+    /*****************************************************************
+    DESCRIPTION: Valida que una cadena contenga un valor numérico.
+
+    PARAMETERS: strValue - Cadena a ser evaluada.
+
+    RETURNS: true si es un valor numérico válido, de lo contrario false.
+    ******************************************************************/
+        var objRegExp  =  /(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/;
+        return objRegExp.test(strValue);
+    }
+
+    function isDigit( strValue, n, m ) {
+    /*****************************************************************
+    DESCRIPTION: Valida que una cadena contenga un valor numérico de enteros sin signo.
+
+    PARAMETERS: strValue - Cadena a ser evaluada.
+                n  - Longitud mínima del valor entero. Opcional.
+                m  - Longitud máxima del valor entero. Opcional.
+
+    RETURNS: true si cumple con las condiciones, de lo contrario false.
+    ******************************************************************/
+        var strRe = '^\\d+\\d*$';
+        if( arguments.length==2 )
+            strRe = '^\\d{'+n+'}$';
+        else if( arguments.length>2 )
+            strRe = '^\\d{'+n+','+m+'}$';
+
+        var re = new RegExp(strRe, "g");
+        return re.test(strValue);
+    }
+
+    function isInteger( strValue, n, m ) {
+    /*****************************************************************
+    DESCRIPTION: Valida que una cadena contenga un valor numérico de enteros.
+                 Puede incluir signo.
+
+    PARAMETERS: strValue - Cadena a ser evaluada.
+                n  - Longitud mínima del valor entero. Opcional.
+                m  - Longitud máxima del valor entero. Opcional.
+
+    RETURNS: true si cumple con las condiciones, de lo contrario false.
+    ******************************************************************/
+        var strRe = '^\\d+\\d*$';
+        if( arguments.length==2 )
+            strRe = '^\\d{'+n+'}$';
+        else if( arguments.length>2 )
+            strRe = '^\\d{'+n+','+m+'}$';
+
+        var re = new RegExp(strRe, "g");
+        return re.test(strValue);
+    }
+
+
