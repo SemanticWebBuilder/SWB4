@@ -61,8 +61,9 @@
     SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
     ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(content.getResourceBase());
     ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setVirtualResource(content.getResourceBase());
+    ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setMode(paramRequest.Mode_VIEW);
     content.render(request, res, paramRequest);
     %>
-        aaa<%=res.toString()%>
+        <%=res.toString()%>
     <%
 %>
