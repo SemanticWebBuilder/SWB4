@@ -12,13 +12,19 @@
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%
-    
+    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+   
     User user=paramRequest.getUser();
     // muestra el recurso
     SWBNewContent content=(SWBNewContent)request.getAttribute("content");    
     
     String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(user.getLanguage()));
-
+    String image="";
+    if(content.getImage()!=null)
+    {
+        image=content.getImage();
+        pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/image_"+image;
+    }
     %>
     <h2 class="sectionTitle"><%=title%>
     <%
@@ -31,6 +37,8 @@
     }
     %>
     </h2>
+    <img border="0" alt="Imagen noticia" width="100" height="100" src="<%=pathPhoto%>" />
+        <br>
     <%
     if(content.getOriginalTitle()!=null)
     {
@@ -57,6 +65,7 @@
     }
     if(content.getAuthor()!=null)out.println(SWBUtils.TEXT.encodeExtendedCharacters(content.getAuthor())+"<br/>");
     if(content.getPublishDate()!=null)out.println(SWBUtils.TEXT.getStrDate(content.getPublishDate(),"es","dd/mm/yyyy")+"<br/>");
+    
 
     SWBHttpServletResponseWrapper res = new SWBHttpServletResponseWrapper(response);
     ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(content.getResourceBase());
@@ -65,6 +74,7 @@
     ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setCallMethod(paramRequest.Call_CONTENT);
     content.doView(request, res, paramRequest);
     %>
+        
         <%=res.toString()%>
     <%
 %>
