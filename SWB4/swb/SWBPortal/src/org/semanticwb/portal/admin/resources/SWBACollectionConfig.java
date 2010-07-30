@@ -311,13 +311,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         urls.setParameter("act", "stpBusqueda");
                         urls.setParameter("act2", "ssearch");
                         out.println("<form id=\"" + id + "/fsearch\" name=\"" + id + "/fsearch\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearch');return false;\">");
-                        out.println("<ul style=\"list-style:none;\">");
-                        out.println("<li>");
+                        out.println("<div align=\"right\">");
                         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
                         out.println("<label for=\"" + id + "_search\">" + paramsRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_search\" value=\"" + busqueda + "\">");
                         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramsRequest.getLocaleString("btnSearch") + "</button>"); //
-                        out.println("</li>");
-                        out.println("</ul>");
+                        out.println("</div>");
                         out.println("</form>");
                         out.println("</fieldset>");
                         out.println("<fieldset>");
