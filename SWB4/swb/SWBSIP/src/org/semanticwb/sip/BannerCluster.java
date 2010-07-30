@@ -87,7 +87,11 @@ public class BannerCluster extends GenericAdmResource
                 break;
             }
         }
-        out.println("<div class=\"banner-cluster-hldr\" style=\"width:"+((w*i)+(i*10))+"px; height:"+h+"px;\">");
+        System.out.println("i="+i);
+        int wi = (w*i)+(i*13);
+        System.out.println("width="+wi);
+        out.println("<div class=\"banner-cluster-hldr\" style=\"width:"+wi+"px; height:"+h+"px;\">");
+        
         out.println(b.toString());
         out.println("</div>\n");
         out.println("</div>\n");
