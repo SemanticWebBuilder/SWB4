@@ -4,6 +4,7 @@ package org.semanticwb.portal.resources.sem.videolibrary;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -203,7 +204,50 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     {
         String path = "/swbadmin/jsp/SWBVideoLibrary/content.jsp";
 
+        String uri = request.getParameter("uri");
+        if (uri != null)
+        {
+            uri = uri.trim();
+            if (uri.equals(""))
+            {
+                uri = null;
+            }
+        }
+        if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+        {
+            path = "/swbadmin/jsp/SWBVideoLibrary/strategy.jsp";
+            uri = null;
+        }
         List<VideoContent> list = getVideos(null,paramRequest.getUser());
+        if (uri != null && paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
+        {
+            // busca el objeto
+            for (VideoContent content : list)
+            {
+                if (content.getResourceBase().getURI().equals(uri))
+                {
+                    if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
+                    {
+                        path = "/swbadmin/jsp/SWBVideoLibrary/shownew.jsp";
+                        RequestDispatcher dis = request.getRequestDispatcher(path);
+                        try
+                        {
+                            request.setAttribute("paramRequest", paramRequest);
+                            request.setAttribute("content", content);
+                            dis.include(request, response);
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        SortVideos sort = new SortVideos();
+        Collections.sort(list, sort);
+        
         RequestDispatcher dis = request.getRequestDispatcher(path);
         try
         {
@@ -218,4 +262,17 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         return;
     }
 
+}
+
+class SortVideos implements java.util.Comparator<VideoContent>
+{
+
+    public int compare(VideoContent o1, VideoContent o2)
+    {
+        if(o1.getPublishDate()!=null && o2.getPublishDate()!=null)
+        {
+            return o2.getPublishDate().compareTo(o1.getPublishDate());
+        }
+        return 0;
+    }
 }
