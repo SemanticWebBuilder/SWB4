@@ -202,13 +202,11 @@ public class SWBAWebPageContents extends GenericResource {
             urls.setParameter("sprop", idp);
 
             out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
-            out.println("<ul style=\"list-style:none;\">");
-            out.println("<li>");
+            out.println("<div align=\"right\">");
             out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
             out.println("<label for=\"" + id + "_searchwp\">" + paramRequest.getLocaleString("searchInProperties") + ": </label><input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + busqueda + "\">");
             out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
-            out.println("</li>");
-            out.println("</ul>");
+            out.println("</div>");
             out.println("</form>");
             out.println("</fieldset>");
             out.println("<fieldset>");
