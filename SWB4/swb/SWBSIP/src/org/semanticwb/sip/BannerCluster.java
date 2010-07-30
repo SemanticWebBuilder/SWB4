@@ -23,17 +23,24 @@ public class BannerCluster extends GenericAdmResource
 
         StringBuilder b = new StringBuilder();;
         int i = 0;
+
+        String width = base.getAttribute("width");
         int w;
         try {
-            w = Integer.parseInt(base.getAttribute("width", "143"));
-        }catch(NumberFormatException nfe) {
+            w = Integer.parseInt( width.replaceAll("\\D", "") );
+            //w = Integer.parseInt(base.getAttribute("width", "143"));
+        }catch(Exception e) {
             w = 143;
+            width = Integer.toString(w);
         }
+        String height = base.getAttribute("height");
         int h;
         try {
-            h = Integer.parseInt(base.getAttribute("height", "208 "));
-        }catch(NumberFormatException nfe) {
+            h = Integer.parseInt( height.replaceAll("\\D", "") );
+            //h = Integer.parseInt(base.getAttribute("height", "208 "));
+        }catch(Exception e) {
             h = 208;
+            height = Integer.toString(h);
         }
 
         out.println("<script type=\"text/javascript\">");
@@ -51,8 +58,6 @@ public class BannerCluster extends GenericAdmResource
         out.println("</script>");
         out.println("<h2 class=\"tituloBloque\">"+base.getDisplayTitle(lang)+" <span class=\"span_tituloBloque\">"+base.getDisplayDescription(lang)+"</span></h2>");
         out.println("<div class=\"swb-banner-cluster\">");
-        //out.println("<div class=\"banner-cluster-hldr\" style=\"width:"+w+"px; height:"+h+"px;\">");
-
         String cluster = base.getAttribute("cluster", "carrusel");
         Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
         while( itResourceTypes.hasNext() ) {
@@ -72,7 +77,7 @@ public class BannerCluster extends GenericAdmResource
                                 String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
                                 String alt = r.getAttribute("alt", title);
                                 b.append("<div class=\"swb-banner-cluster-ci\" onclick=\"window.location.href='"+url+"'\" >");
-                                b.append("  <div class=\"swb-cluster-img\"><img src=\""+img+"\" alt=\""+alt+"\" width=\""+w+"\" height=\""+h+"\" /></div>");
+                                b.append("  <div class=\"swb-cluster-img\"><img src=\""+img+"\" alt=\""+alt+"\" width=\""+width+"\" height=\""+height+"\" /></div>");
                                 b.append("  <div class=\"swb-cluster-despliega\" id=\"r"+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
                                 b.append("    <p class=\"swb-cluster-titulo\">"+title+"</p>");
                                 b.append("    <p>&nbsp;</p>");
@@ -87,11 +92,8 @@ public class BannerCluster extends GenericAdmResource
                 break;
             }
         }
-        System.out.println("i="+i);
         int wi = (w*i)+(i*13);
-        System.out.println("width="+wi);
         out.println("<div class=\"banner-cluster-hldr\" style=\"width:"+wi+"px; height:"+h+"px;\">");
-        
         out.println(b.toString());
         out.println("</div>\n");
         out.println("</div>\n");
