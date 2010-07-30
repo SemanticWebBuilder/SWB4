@@ -31,7 +31,7 @@
         for(SWBNewContent content : contents)
         {            
             SWBResourceURL url=paramRequest.getRenderUrl();
-            url.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
+            url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             url.setMode(paramRequest.Mode_VIEW);
             url.setCallMethod(paramRequest.Call_CONTENT);
             String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
