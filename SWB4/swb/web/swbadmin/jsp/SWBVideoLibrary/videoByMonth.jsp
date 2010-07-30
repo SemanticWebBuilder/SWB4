@@ -15,8 +15,7 @@
 
 <%
     String usrlanguage = paramRequest.getUser().getLanguage();
-    Locale locale=new Locale(usrlanguage);
-    Calendar calendar = Calendar.getInstance(locale);
+    Locale locale=new Locale(usrlanguage);    
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
     List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
