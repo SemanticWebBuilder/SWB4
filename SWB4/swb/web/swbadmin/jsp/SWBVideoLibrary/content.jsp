@@ -34,6 +34,11 @@
         }
         return getMonth;
     }
+
+    private static String mensaje = "Videos de ";
+    private static String mesage = "Videos of ";
+    private static String ultmsg = "Videos del mes";
+    private static String lastmsg = "Previous videos";
 %>
 
 <%
@@ -45,4 +50,76 @@
 
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
     int limit = 15;
+
+    List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
+    if(contents!=null && contents.size()>0)
+    {
+        %>
+        <ul class="listaLinks">
+        <%
+
+        // muestra las 15 primeras noticias
+        int i=0;
+        for(VideoContent content : contents)
+        {
+            i++;
+            SWBResourceURL url=paramRequest.getRenderUrl();
+            url.setMode(paramRequest.Mode_VIEW);
+            url.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
+            String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+            if(title!=null && title.trim().equals(""))
+            {
+                title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+            }
+            String date="";
+            if(content.getPublishDate()!=null)
+            {
+                date=sdf.format(content.getPublishDate());
+            }
+            
+            %>
+            <li><A href="<%=url%>" ><b><%=title%></b></A></li><br><%=date%>
+            <%
+            if(i>=limit)
+            {
+                break;
+            }
+        }
+
+
+
+        String[] years=SWBVideoLibrary.getYears(contents);
+        for(String year : years)
+        {
+            int iyear=Integer.parseInt(year);
+            // muestra liga para noticias por mes
+            for(int month=0;month<12;month++)
+            {
+                if(SWBVideoLibrary.hasVideo(contents, month,iyear))
+                {
+
+                    String titleMonth=" "+getMonth(month,paramRequest.getUser())+" "+iyear;
+                    SWBResourceURL url=paramRequest.getRenderUrl();
+                    url.setMode("month");
+                    url.setParameter("month", String.valueOf(month));
+                    if(currentMonth==month)
+                    {
+                        %>
+                        <li class="listaLinksMes"><a href="<%=url%>"><%=ultmsg%></a></li><br>
+                        <%
+                    }
+                    else
+                    {
+                        %>
+                        <li class="listaLinksMes"><a href="<%=url%>"><%=mensaje%><%=titleMonth%></a></li><br>
+                        <%
+                    }
+
+                }
+            }
+        }
+        %>
+             </ul>
+        <%
+    }
 %>
