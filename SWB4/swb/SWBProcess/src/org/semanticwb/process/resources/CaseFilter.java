@@ -49,15 +49,13 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
-/*import org.semanticwb.process.bpms.CaseCountSys;
-import org.semanticwb.process.bpms.BPMSProcessInstance;
-import org.semanticwb.process.bpms.CaseProcessInstance;*/
 import org.semanticwb.process.kpi.CaseCountSys;
 import org.semanticwb.process.kpi.KProcessInstance;
 import org.semanticwb.process.kpi.CaseProcessInstance;
 
 import org.semanticwb.process.utils.Ajax;
 import org.semanticwb.process.utils.Restriction;
+import org.semanticwb.process.utils.TimeInterval;
 import org.semanticwb.process.utils.DateInterval;
 import org.semanticwb.process.utils.JasperTemplate;
 
@@ -187,6 +185,9 @@ public class CaseFilter extends GenericResource {
          out.println("          params += '&closeda=' + dojo.byId('closeda').value;");
          out.println("          params += '&closedto=' + dojo.byId('closedto').value;");
          out.println("          params += '&permission_value=' + dojo.byId('permission_value').value;");
+         out.println("          params += '&response_oper=' + dojo.byId('response_oper').value;");
+         out.println("          params += '&response_time=' + dojo.byId('response_time').value;");
+         out.println("          params += '&response_unit=' + dojo.byId('response_unit').value;");
          out.println("      if(dojo.byId('status')) {");
          out.println("          params += '&status=' + dojo.byId('status').value;");
          out.println("      }");
@@ -301,6 +302,30 @@ public class CaseFilter extends GenericResource {
          out.print("                      &nbsp;<input type=\"text\" name=\"closedto\" onblur=\"if(!this.value){this.focus();}\" id=\"closedto\" dojoType=\"dijit.form.DateTextBox\" size=\"11\" style=\"width:110px;\" hasDownArrow=\"true\">\n");
          out.print("                  </td>\n");
          out.print("              </tr>\n");
+         out.print("             <tr>\n");
+         out.print("                  <td>" + paramRequest.getLocaleString("RESPONSE_TIME") + ":</td>\n");
+         out.print("                  <td>\n");
+         out.print("                     <select id=\"response_oper\" name=\"response_oper\">\n");
+         out.print("                         <option value=\"\">&nbsp;</option>\n");
+         out.print("                         <option value=\"" + Restriction.EQUALS + "\">=</option>\n");
+         out.print("                         <option value=\"" + Restriction.GREATER_THAT + "\">></option>\n");
+         out.print("                         <option value=\"" + Restriction.SMALLER_THAT + "\"><</option>\n");
+         out.print("                         <option value=\"" + Restriction.GREATER_EQUAL + "\">>=</option>\n");
+         out.print("                         <option value=\"" + Restriction.SMALLER_EQUAL + "\"><=</option>\n");
+         out.print("                     </select>\n");
+         out.print("                     &nbsp;<input id=\"response_time\" name=\"response_time\" type=\"text\" style=\"width:60px;\"/>\n");
+         out.print("                     &nbsp;<select id=\"response_unit\" name=\"response_unit\">\n");
+         out.print("                         <option value=\"\">&nbsp;</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.MILISECOND + "\">" + paramRequest.getLocaleString("MILISECOND") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.SECOND + "\">" + paramRequest.getLocaleString("SECOND") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.MINUTE + "\">" + paramRequest.getLocaleString("MINUTE") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.HOUR + "\">" + paramRequest.getLocaleString("HOUR") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.DAY + "\">" + paramRequest.getLocaleString("DAY") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.MONTH + "\">" + paramRequest.getLocaleString("MONTH") + "</option>\n");
+         out.print("                         <option value=\"" + TimeInterval.YEAR + "\">" + paramRequest.getLocaleString("YEAR") + "</option>\n");
+         out.print("                     </select>\n");
+         out.print("                  </td>");
+         out.print("             </tr>\n");
          out.print("          </table>\n");
          out.print("      </fieldset>\n");
          out.print("      <fieldset>\n");
@@ -318,6 +343,7 @@ public class CaseFilter extends GenericResource {
          out.print("              </tr>\n");
          out.print("          </table>\n");
          out.print("      </fieldset>\n");
+         
          out.print("      <fieldset>\n");
          out.print("        <table border=\"0\" width=\"70%\">\n");
          out.print("            <tr>\n");
@@ -326,7 +352,7 @@ public class CaseFilter extends GenericResource {
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramRequest.getLocaleString("spread_sheet") + "</button>&nbsp;\n");
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;\n");
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;\n");
-         out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramRequest.getLocaleString("apply")+"</button>\n");
+         out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramRequest.getLocaleString("apply") + "</button>\n");
          out.print("                </td>\n");
          out.print("            </tr>\n");
          out.print("        </table>\n");
@@ -352,10 +378,6 @@ public class CaseFilter extends GenericResource {
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
-            /*java.util.Vector processdefs = BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(site);
-            java.util.Enumeration eprocess = processdefs.elements();
-            while (eprocess.hasMoreElements()) {
-                Process process = (Process)eprocess.nextElement();*/
             Iterator<Process> itprocess = site.listProcesses();
             while (itprocess.hasNext()) {
                 Process process = itprocess.next();
@@ -415,10 +437,10 @@ public class CaseFilter extends GenericResource {
         }
         if (!"".equals(request.getParameter("starteda")))
             ccs.addRestriction(new Restriction(String.valueOf(Instance.STATUS_INIT),new DateInterval(request.getParameter("starteda"),request.getParameter("startedto")),null));
-            //ccs.addRestriction(new Restriction(String.valueOf(Activity.STATUS_INIT),new DateInterval(request.getParameter("starteda"),request.getParameter("startedto")),null));
         if (!"".equals(request.getParameter("closeda")))
             ccs.addRestriction(new Restriction(String.valueOf(Instance.STATUS_CLOSED),new DateInterval(request.getParameter("closeda"),request.getParameter("closedto")),null));
-            //ccs.addRestriction(new Restriction(String.valueOf(Activity.STATUS_CLOSED),new DateInterval(request.getParameter("closeda"),request.getParameter("closedto")),null));
+        if (!"".equals(request.getParameter("response_oper")) && !"".equals(request.getParameter("response_time")) && !"".equals(request.getParameter("response_unit")))
+            ccs.addRestriction(new Restriction(String.valueOf(CaseCountSys.RESPONSE),new TimeInterval(Integer.parseInt(request.getParameter("response_unit")),Integer.parseInt(request.getParameter("response_oper")),Integer.parseInt(request.getParameter("response_time"))),null));
         addRestrictionsToObjects(request, ccs);
         return ccs.listProcessInstance().iterator();
     }
