@@ -177,6 +177,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     }
     public void doShowVideosByMonth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite()+"/SWBVideoLibrary/";
         if(request.getParameter("month")!=null)
         {
             int month=-1;
@@ -186,8 +187,8 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 if(month>=0 && month<=12)
                 {
                     List<VideoContent> list = getVideos(null,paramRequest.getUser());                    
-                    List<VideoContent> listMonth=getVideoByMonth(list).get(month);
-                    String path = "/swbadmin/jsp/SWBVideoLibrary/videoByMonth.jsp";
+                    List<VideoContent> listMonth=getVideoByMonth(list).get(month);                    
+                    String path = basePath+"videoByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
                     {
@@ -212,7 +213,8 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path = "/swbadmin/jsp/SWBVideoLibrary/content.jsp";
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite()+"/"+ this.getClass().getName() +"/";
+        String path = basePath+"content.jsp";
 
         String uri = request.getParameter("uri");
         if (uri != null)
@@ -225,7 +227,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         }
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
         {
-            path = "/swbadmin/jsp/SWBVideoLibrary/strategy.jsp";
+            path = basePath+"strategy.jsp";
             uri = null;
         }
         List<VideoContent> list = getVideos(null,paramRequest.getUser());        
@@ -238,7 +240,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 {
                     if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
                     {
-                        path = "/swbadmin/jsp/SWBVideoLibrary/showvideo.jsp";
+                        path = basePath+ "showvideo.jsp";
                         RequestDispatcher dis = request.getRequestDispatcher(path);
                         try
                         {
