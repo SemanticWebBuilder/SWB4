@@ -36,20 +36,79 @@
     {
         duration=SWBUtils.TEXT.encodeExtendedCharacters(String.valueOf(content.getDuration()));
     }
-    String code=content.getCode();
-    code=SWBUtils.TEXT.decodeExtendedCharacters(code);
-    
-
+    String code=content.getCode();    
+    SWBResourceURL urlall=paramRequest.getRenderUrl();
+    urlall.setMode(urlall.Mode_VIEW);
+    urlall.setCallMethod(urlall.Call_CONTENT);
+    String source=content.getSource();
 %>
-<%=code%><br>
-<%=title%><br>
-<%
-    if(duration!=null && !duration.equals(""))
-    {
-        %>
-            <%=duration%> segundos<br>
+<div class="columnaIzquierda">
+    <br/>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=code%>');
+            -->
+        </script>
+
+    <br/>
+
+</div>
+<div class="columnaCentro">
+    <h2 class="blogTitle">
+    <script type="text/javascript">
+            <!--
+            document.write('Gobierno Federal Presidencia México Felipe Calderón');
+            -->
+        </script></h2><br/>
+    <p>
+    <script type="text/javascript">
+            <!--
+            document.write('<%=title%>');
+            -->
+        </script></p>
         <%
-    }
-%>
+            if(date!=null && !date.equals(""))
+            {
+                %>
+                <p>Creado el: <%=date%></p>
+                <%
+            }
+        %>
+        <%
+            if(source!=null)
+            {
+                if(content.getVideoWebPage()==null)
+                {
+                    %>
+                    <p>Fuente: <%=source%></p>
+                    <%
+                }
+                else
+                {
+                    %>
+                    <p>Fuente: <a href="<%=content.getVideoWebPage()%>"><%=source%></a></p>
+                    <%
+                }
+            }
+        %>
+    
+    <%
+        if(content.getTags()!=null)
+        {
+            String tags=SWBUtils.TEXT.encodeExtendedCharacters(content.getTags());
+            %>
+            <p>Etiquetas: <script type="text/javascript">
+            <!--
+            document.write('<%=tags%>');
+            -->
+        </script></p>
+            <%
+        }
 
-<%=date%><br>
+    %>
+         
+    <p><a href="<%=urlall%>">[Ver todos los videos]</a></p>
+
+
+</div>
+
