@@ -175,6 +175,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
             super.processRequest(request, response, paramRequest);
         }
     }
+    
     public void doShowVideosByMonth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
