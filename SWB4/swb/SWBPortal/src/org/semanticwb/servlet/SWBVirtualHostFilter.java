@@ -51,6 +51,8 @@ import org.semanticwb.servlet.internal.InternalServlet;
 import org.semanticwb.servlet.internal.Login;
 import org.semanticwb.servlet.internal.Monitor;
 import org.semanticwb.servlet.internal.MultipleFileUploader;
+import org.semanticwb.servlet.internal.P3PFile;
+import org.semanticwb.servlet.internal.RobotFile;
 import org.semanticwb.servlet.internal.Upload;
 import org.semanticwb.servlet.internal.UploadFormElement;
 
@@ -335,8 +337,6 @@ public class SWBVirtualHostFilter implements Filter
             intServlets.put("wbadmin", admin);
             intServlets.put("swbadmin", admin);
             admin.init(filterConfig.getServletContext());
-            log.event("SemanticWebBuilder started...");
-            log.event("************************************");
 
             InternalServlet googleMap = new GoogleSiteMap();
             intServlets.put("sitemap.txt", googleMap);
@@ -346,6 +346,18 @@ public class SWBVirtualHostFilter implements Filter
             InternalServlet fileUploader = new MultipleFileUploader();
             intServlets.put("multiuploader", fileUploader);
             fileUploader.init(filterConfig.getServletContext());
+
+            InternalServlet robot = new RobotFile();
+            intServlets.put("robots.txt", robot);
+            robot.init(filterConfig.getServletContext());
+
+            InternalServlet p3p = new P3PFile();
+            intServlets.put("w3c", p3p);
+            p3p.init(filterConfig.getServletContext());
+
+            log.event("SemanticWebBuilder started...");
+            log.event("************************************");
+
         }catch(Exception e)
         {
             log.error("Error initializing SemanticWebBuilder...",e);
@@ -412,14 +424,15 @@ public class SWBVirtualHostFilter implements Filter
     {
         String modelid=dparams.getModelId();
         log.debug("SendError " + err + ": " + errMsg);
-        String path = "/config/" + err + ".html";
+        String path = "/config/" + err;
         String msg = null;
         try
         {
-            //System.out.println("modelid:"+modelid);
+            System.out.println("modelid:"+modelid);
             if(modelid!=null)
             {
-                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + "/models/"+modelid + path);
+                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + "/models/"+modelid + path + "_"+dparams.getUser().getLanguage()+".html");
+                if(msg==null)msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + "/models/"+modelid + path + ".html");
                 if(msg!=null)
                 {
                     msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/models/"+modelid+"/config/images/");
@@ -427,7 +440,8 @@ public class SWBVirtualHostFilter implements Filter
             }
             if(msg==null)
             {
-                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + path);
+                msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + path + "_" + dparams.getUser().getLanguage() + ".html");
+                if(msg==null)msg = SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath() + path + ".html");
                 if(msg!=null)
                 {
                     msg = SWBPortal.UTIL.parseHTML(msg, SWBPortal.getWebWorkPath() + "/config/images/");

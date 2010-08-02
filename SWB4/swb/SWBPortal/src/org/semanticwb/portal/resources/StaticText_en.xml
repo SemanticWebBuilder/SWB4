@@ -4,7 +4,7 @@
 	<form name="frmAdmin" action="true" method="POST" enctype="multipart/form-data">
 		<admdbconnmgr defconn="true"/>
             <fieldset legend="Datos">
-                <textarea name="text" label="* Text:" rows="5" cols="38" jsrequired="true"/>
+                <textarea name="text" label="* Text:" rows="20" cols="80" jsrequired="true"/>
             </fieldset>
             <fieldset>
                 <statictext name="b">

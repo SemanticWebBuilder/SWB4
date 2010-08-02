@@ -494,6 +494,45 @@ public class DistributorParams
         }
         return user;        
     }
+
+    private WebPage getDefaultWebpage(HttpServletRequest request)
+    {
+        Dns dns=Dns.getDns(request.getServerName());
+        //System.out.println("dns:"+dns);
+        if (dns == null && !Dns.containsDns(request.getServerName()))
+        {
+            dns=SWBContext.getGlobalWebSite().getDefaultDns();
+            Dns.cacheDns(request.getServerName(), dns);
+        }
+        //System.out.println("dns:"+dns);
+        //encomtrar sitio
+        WebPage wp=null;
+        if (dns != null)
+        {
+            wp=dns.getWebPage();
+            if(wp==null)
+            {
+                wp=dns.getWebSite().getHomePage();
+            }
+        }else
+        {
+            Iterator<WebSite> it=SWBContext.listWebSites();
+            while(it.hasNext())
+            {
+                WebSite site=it.next();
+                if(!site.equals(SWBContext.getAdminWebSite())
+                   && !site.equals(SWBContext.getGlobalWebSite()))
+                {
+                    wp=site.getHomePage();
+                }
+            }
+            if(wp==null)
+            {
+                wp=SWBContext.getAdminWebSite().getHomePage();
+            }
+        }
+        return wp;
+    }
     
     /**
      * _get web page.
@@ -518,44 +557,14 @@ public class DistributorParams
                 {
                     webpage=tm.getHomePage();
                 }
+            }else{
+                WebPage wp=getDefaultWebpage(request);
+                smodel = wp.getWebSite().getId();
             }
             //System.out.println("tm:"+tm);
         }else
         {
-            Dns dns=Dns.getDns(request.getServerName());
-
-            //System.out.println("dns:"+dns);
-            if (dns == null && !Dns.containsDns(request.getServerName()))
-            {
-                dns=SWBContext.getGlobalWebSite().getDefaultDns();
-                Dns.cacheDns(request.getServerName(), dns);
-            }
-
-            //System.out.println("dns:"+dns);
-            if (dns != null)
-            {
-                webpage=dns.getWebPage();
-                if(webpage==null)
-                {
-                    webpage=dns.getWebSite().getHomePage();
-                }
-            }else
-            {
-                Iterator<WebSite> it=SWBContext.listWebSites();
-                while(it.hasNext())
-                {
-                    WebSite site=it.next();
-                    if(!site.equals(SWBContext.getAdminWebSite())
-                       && !site.equals(SWBContext.getGlobalWebSite()))
-                    {
-                        webpage=site.getHomePage();
-                    }
-                }
-                if(webpage==null)
-                {
-                    webpage=SWBContext.getAdminWebSite().getHomePage();
-                }
-            }
+            webpage=getDefaultWebpage(request);
             smodel = webpage.getWebSite().getId();
             swebpage = webpage.getId();
         }
