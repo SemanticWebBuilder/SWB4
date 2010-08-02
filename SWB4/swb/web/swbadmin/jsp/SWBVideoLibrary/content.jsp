@@ -76,9 +76,9 @@
             {
                 date=sdf.format(content.getPublishDate());
             }
-            
+            String preview=content.getPreview();
             %>
-            <li><A href="<%=url%>" ><b><%=title%></b></A></li><br><%=date%>
+            <li><img alt="preview" src="<%=preview%>"><A href="<%=url%>" ><b><%=title%></b></A></li><br><%=date%>
             <%
             if(i>=limit)
             {
