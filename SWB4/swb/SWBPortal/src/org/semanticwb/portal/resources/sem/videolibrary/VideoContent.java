@@ -21,17 +21,18 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
     }
     public String getPreview()
     {
+        String code=SWBUtils.TEXT.decodeExtendedCharacters(this.getCode());
         String ret = null;
         //******************  is YouTube  ***********************************
         String pre = "http://www.youtube.com/v/";
         String post = "\">";
-        int s = this.getCode().indexOf(pre);
+        int s = code.indexOf(pre);
         if (s >= 0)
         {
-            int f = this.getCode().indexOf(post, s);
+            int f = code.indexOf(post, s);
             if (f > s)
             {
-                ret = this.getCode().substring(s + pre.length(), f);
+                ret = code.substring(s + pre.length(), f);
                 int a = ret.indexOf('&');
                 if (a > 0)
                 {
