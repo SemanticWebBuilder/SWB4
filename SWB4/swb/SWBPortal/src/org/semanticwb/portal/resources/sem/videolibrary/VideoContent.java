@@ -19,7 +19,32 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
     {
         super(base);
     }
-
+    public String getPreview()
+    {
+        String ret = null;
+        //******************  is YouTube  ***********************************
+        String pre = "http://www.youtube.com/v/";
+        String post = "\">";
+        int s = this.getCode().indexOf(pre);
+        if (s >= 0)
+        {
+            int f = this.getCode().indexOf(post, s);
+            if (f > s)
+            {
+                ret = this.getCode().substring(s + pre.length(), f);
+                int a = ret.indexOf('&');
+                if (a > 0)
+                {
+                    ret = ret.substring(0, a);
+                }
+            }
+        }
+        if (ret != null)
+        {
+            ret = "http://i.ytimg.com/vi/" + ret + "/default.jpg";
+        }
+        return ret;
+    }
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
