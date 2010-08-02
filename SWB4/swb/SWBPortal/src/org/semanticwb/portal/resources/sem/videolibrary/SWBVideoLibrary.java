@@ -18,7 +18,6 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceCollectionCategory;
 import org.semanticwb.model.User;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.resources.sem.news.SWBNewContent;
 
 public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videolibrary.base.SWBVideoLibraryBase 
 {
