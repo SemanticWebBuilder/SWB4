@@ -39,6 +39,7 @@ import java.util.StringTokenizer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Enumeration;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +58,6 @@ import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 
@@ -136,6 +136,38 @@ public class Comment extends GenericResource {
                 tpl = SWBUtils.XML.loadTemplateXSLT( SWBPortal.getAdminFileStream("/swbadmin/xsl/" + name + "/" + name + ".xsl"));
             } catch (Exception e) {
                 log.error("Error while loading default resource template: " + base.getId(), e);
+            }
+        }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
+        String securCodeSent = request.getParameter("cmnt_seccode");
+        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
+        if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
+            try {
+                processEmails(request, response);
+                try {
+                    feedCommentLog(request, response);
+                }catch (IOException ioe) {
+                    log.error("Error in resource Comment, while trying to log the action. ", ioe);
+                }
+                response.setMode(response.Mode_HELP);
+            }catch(TransformerException te) {
+                log.error("Error in resource Comment, while trying to send the email. ", te);
+                response.setRenderParameter(_FAIL, te.getMessage());
+            }catch(SWBResourceException re) {
+                log.error("Error in resource Comment, while trying to send the email. ", re);
+                response.setRenderParameter(_FAIL, re.getMessage());
+            }catch(Exception e) {
+                log.error("Error in resource Comment, while trying to send the email. ", e);
+                response.setRenderParameter(_FAIL, e.getMessage());
+            }
+        }else {
+            Enumeration e = request.getParameterNames();
+            while(e.hasMoreElements()){
+                String key = (String)e.nextElement();
+                response.setRenderParameter(key, request.getParameter(key));
             }
         }
     }
@@ -323,10 +355,7 @@ public class Comment extends GenericResource {
         } catch (SWBResourceException swbre) {
             throw swbre;
         } catch (org.semanticwb.SWBException e) {
-            log.error("Error while generating the comments form in resource "
-                    + base.getResourceType().getResourceClassName()
-                    + " with identifier " + base.getId() + " - "
-                    + base.getTitle(), e);
+            log.error("Error while generating the comments form in resource "+base.getResourceType().getResourceClassName()+" with identifier " + base.getId()+" - "+base.getTitle(), e);
         }
         return null;
     }
@@ -347,7 +376,6 @@ public class Comment extends GenericResource {
      * son nulos. <p>if sender's name, e-mail account and message is null.</p>
      */
     public Document getDomEmail(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
-        Logger log = SWBUtils.getLogger(Comment.class);
         Resource base = getResourceBase();
 
         try {
@@ -583,14 +611,13 @@ public class Comment extends GenericResource {
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         try {
-            org.w3c.dom.Document dom = getDom(request, response, paramsRequest);
-
-            if (dom != null) {
+            Document dom = getDom(request, response, paramsRequest);
+//            if (dom != null) {
                 response.getWriter().println(SWBUtils.XML.domToXml(dom));
-            }
-        } catch (IOException e) {
+//            }
+        }catch(Exception e) {
+            System.out.println("Error... "+e);
             log.error(e);
-            throw e;
         }
     }
 
@@ -620,7 +647,7 @@ public class Comment extends GenericResource {
 
         if( paramRequest.getCallMethod()==paramRequest.Call_STRATEGY ) {
             String surl = paramRequest.getWebPage().getUrl();
-            SWBResourceURLImp url = null;
+            //SWBResourceURLImp url = null;
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
                 Resourceable re = res.next();
@@ -656,10 +683,18 @@ public class Comment extends GenericResource {
                 out.println("-->");
                 out.println("</script>");
             }else {
+                boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
                 Document dom = getDom(request, response, paramRequest);
+                System.out.println("\n\nxml comment\n"+SWBUtils.XML.domToXml(dom));
                 String html;
                 try {
-                     html = SWBUtils.XML.transformDom(tpl, dom);
+                    html = SWBUtils.XML.transformDom(tpl, dom);
+                    if(hasCaptcha) {
+                        String captcha = (getCaptchaScript(paramRequest));
+                        html = html.replaceFirst("captcha", captcha);
+                        html = html + getScript(paramRequest);
+                    }else
+                        html = html.replaceFirst("captcha", "");
                 }catch(TransformerException te) {
                     html = te.getMessage();
                     log.error(te.getMessage());
@@ -685,28 +720,6 @@ public class Comment extends GenericResource {
         out.println("</p></div>");
         out.flush();
         out.close();
-    }
-
-    @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
-        try {
-            processEmails(request, response);
-            try {
-                feedCommentLog(request, response);
-            }catch (IOException ioe) {
-                log.error("Error in resource Comment, while trying to log the action. ", ioe);
-            }
-            response.setMode(response.Mode_HELP);
-        }catch(TransformerException te) {
-            log.error("Error in resource Comment, while trying to send the email. ", te);
-            response.setRenderParameter(_FAIL, te.getMessage());
-        }catch(SWBResourceException re) {
-            log.error("Error in resource Comment, while trying to send the email. ", re);
-            response.setRenderParameter(_FAIL, re.getMessage());
-        }catch(Exception e) {
-            log.error("Error in resource Comment, while trying to send the email. ", e);
-            response.setRenderParameter(_FAIL, e.getMessage());
-        }
     }
 
     private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws TransformerException, SWBResourceException, Exception {
@@ -1090,6 +1103,7 @@ public class Comment extends GenericResource {
                     + base.getId() + "-" + base.getTitle(), e);
         }
     }
+
     /**
      * Elimina del dom recibido todos los elementos correspondientes al nodeType
      * y name especificados. <p>Removes from <code>dom</code> all the elements whose
@@ -1157,8 +1171,8 @@ public class Comment extends GenericResource {
                         + base.getAttribute("template").trim() + "</a></p>");
             } else {
                 ret.append("<p>" + paramsRequest.getLocaleString("msgByDefault")
-                        + " <a href=\"" + path + name + ".xslt\">" + name
-                        + ".xslt</a></p>");
+                        + " <a href=\"" + path + name + ".xsl\">" + name
+                        + ".xsl</a></p>");
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
@@ -1356,6 +1370,20 @@ public class Comment extends GenericResource {
             ret.append("</td> \n");
             ret.append("</tr> \n");
 
+
+
+            ret.append("<tr> \n");
+            ret.append("<td align=\"right\">Incluir captcha</td> \n");
+            ret.append("<td>");
+            ret.append("<input type=\"checkbox\" name=\"captcha\" value=\"true\"");
+            if( Boolean.parseBoolean(base.getAttribute("captcha")) ) {
+                ret.append(" checked=\"checked\"");
+            }
+            ret.append("/></td> \n");
+            ret.append("</tr> \n");
+
+
+
             ret.append("</table> \n");
             ret.append("</fieldset><br />");
             ret.append("<fieldset>");
@@ -1518,7 +1546,7 @@ public class Comment extends GenericResource {
             ret.append("\n<br>* " + paramsRequest.getLocaleString("msgRequiredData"));
             ret.append("</form> \n");
             ret.append("</div> \n");
-            ret.append(getScript(request, paramsRequest));
+            ret.append(getScript(paramsRequest));
         } catch (Exception e) {
             log.error(e);
         }
@@ -1610,136 +1638,157 @@ public class Comment extends GenericResource {
      * @return  contiene el c&oacute;digo de JavaScript a ejecutar
      *
      */
-    private String getScript(HttpServletRequest request, SWBParamRequest paramsRequest) {
-
+    private String getScript(SWBParamRequest paramsRequest) {
         StringBuilder ret = new StringBuilder();
-        WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+//        WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
 
-        try {
-            ret.append("\n<script type=\"text/javascript\">");
-            ret.append("\n<!--");
-            ret.append("\nfunction jsValida(pForm, count, area, responsable, email) {");
+//        try {
+            ret.append("<script type=\"text/javascript\"> \n");
+            ret.append("<!-- \n");
 
-            ret.append("\n   trim(pForm.comentario);");
-            ret.append("\n   trim(pForm.area);");
-            ret.append("\n   trim(pForm.responsable);");
-            ret.append("\n   trim(pForm.email);");
-            ret.append("\n   if (count < 1) {");
+        ret.append("function changeSecureCodeImage(imgid) { \n");
+        ret.append("    var img = dojo.byId(imgid); \n");
+        ret.append("    if(img) { \n");
+        ret.append("        var rn = Math.floor(Math.random()*99999); \n");
+        ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn; \n");
+        ret.append("    } \n");
+        ret.append("} \n");
 
-            ret.append("\n      if (pForm.comentario.value=='') {");
-            ret.append("\n      ");
-            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
-            ret.append("\n         pForm.comentario.focus();");
-            ret.append("\n         return false;");
-            ret.append("\n      }");
-            ret.append("\n      if (pForm.area.value=='') {");
-            
-            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
-            ret.append("\n         pForm.area.focus();");
-            ret.append("\n         return false;");
-            ret.append("\n      }");
-            ret.append("\n      if (pForm.responsable.value=='') {");
-            
-            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
-            ret.append("\n         pForm.responsable.focus();");
-            ret.append("\n         return false;");
-            ret.append("\n      }");
-            ret.append("\n      if (pForm.email.value=='') {");
-            
-            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
-            ret.append("\n         pForm.email.focus();");
-            ret.append("\n         return false;");
-            ret.append("\n      }");
-            ret.append("\n   } else { ");
-            
-            ret.append("\n      if (pForm.comentario.value!='') {");
-            ret.append("\n          if (pForm.area.value=='') pForm.area.value=area;");
-            ret.append("\n          if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
-            ret.append("\n          if (pForm.email.value=='') pForm.email.value=email;");
-            ret.append("\n      }");
-            ret.append("\n   }");
-            ret.append("\n   if (!isFileType(pForm.template, 'xsl|xslt')) return false;");
-            ret.append("\n   if (!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
-            ret.append("\n   if (!isFileType(pForm.imgenviar, 'bmp|jpg|jpeg|gif')) return false;");
-            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'bmp|jpg|jpeg|gif')) return false;");
-            ret.append("\n   if (!isNumber(pForm.width)) return false;");
-            ret.append("\n   if (!isNumber(pForm.height)) return false;");
-            ret.append("\n   if (!isNumber(pForm.top)) return false;");
-            ret.append("\n   if (!isNumber(pForm.left)) return false;");
-            ret.append("\n   replaceChars(pForm.headermsg);");
-            ret.append("\n   replaceChars(pForm.footermsg);");
-            ret.append("\n   if (pForm.actype.value=='add' && pForm.comentario.value!='') {");
-            
-            ret.append("\n      trim(pForm.comentarios);");
-            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
-            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
-            ret.append("\n   }");
-            ret.append("\n   return true;");
-            ret.append("\n}");
-
-            ret.append("\nfunction jsLoad(pForm, comentario, area, responsable, email) {");
-            ret.append("\n   pForm.btnType.value='" + paramsRequest.getLocaleString("msgUpdate") + "';");
-            ret.append("\n   pForm.comentario.value=comentario;");
-            ret.append("\n   pForm.area.value=area;");
-            ret.append("\n   pForm.responsable.value=responsable;");
-            ret.append("\n   pForm.email.value=email;");
-            ret.append("\n}");
-
-            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");            
-            ret.append("\n   trim(pForm.comentario);");
-            ret.append("\n   if (pForm.comentario.value=='') {");            
-            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
-            ret.append("\n       pForm.comentario.focus();");
-            ret.append("\n       return false;");
-            ret.append("\n   }");
-            ret.append("\n   trim(pForm.area);");
-            ret.append("\n   trim(pForm.responsable);");
-            ret.append("\n   trim(pForm.email);");
-            ret.append("\n   if (pForm.area.value=='') pForm.area.value=area;");
-            ret.append("\n   if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
-            ret.append("\n   if (pForm.email.value=='') pForm.email.value=email;");
-            ret.append("\n   trim(pForm.area);");
-            ret.append("\n   if (pForm.area.value=='') {");
-            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
-            ret.append("\n       pForm.area.focus();");
-            ret.append("\n       return false;");
-            ret.append("\n   }");
-            ret.append("\n   trim(pForm.responsable);");
-            ret.append("\n   if (pForm.responsable.value=='') {");
-            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
-            ret.append("\n       pForm.responsable.focus();");
-            ret.append("\n       return false;");
-            ret.append("\n   }");
-            ret.append("\n   trim(pForm.email);");
-            ret.append("\n   if (pForm.email.value=='') {");
-            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
-            ret.append("\n       pForm.email.focus();");
-            ret.append("\n       return false;");
-            ret.append("\n   }");
-            ret.append("\n   else if (!isEmail(pForm.email)) return false;");
-            ret.append("\n   if (pForm.actype.value=='add') {");
-            ret.append("\n      trim(pForm.comentarios);");
-            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
-            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
-            ret.append("\n   }");
-            ret.append("\n   return true;");
-            ret.append("\n}");
-            ret.append(admResUtils.loadIsEmail());
-            ret.append(admResUtils.loadAddOption());
-            ret.append(admResUtils.loadEditOption());
-            ret.append(admResUtils.loadUpdateOption());
-            ret.append(admResUtils.loadDeleteOption());
-            ret.append(admResUtils.loadDuplicateOption());
-            ret.append(admResUtils.loadIsFileType());
-            ret.append(admResUtils.loadReplaceChars());
-            ret.append(admResUtils.loadIsNumber());
-            ret.append(admResUtils.loadTrim());
-            ret.append("\n-->");
-            ret.append("\n</script>");
-        } catch (Exception e) {
-            log.error(e);
-        }
+//            ret.append("\nfunction jsValida(pForm, count, area, responsable, email) {");
+//
+//            ret.append("\n   trim(pForm.comentario);");
+//            ret.append("\n   trim(pForm.area);");
+//            ret.append("\n   trim(pForm.responsable);");
+//            ret.append("\n   trim(pForm.email);");
+//            ret.append("\n   if (count < 1) {");
+//
+//            ret.append("\n      if (pForm.comentario.value=='') {");
+//            ret.append("\n      ");
+//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
+//            ret.append("\n         pForm.comentario.focus();");
+//            ret.append("\n         return false;");
+//            ret.append("\n      }");
+//            ret.append("\n      if (pForm.area.value=='') {");
+//
+//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
+//            ret.append("\n         pForm.area.focus();");
+//            ret.append("\n         return false;");
+//            ret.append("\n      }");
+//            ret.append("\n      if (pForm.responsable.value=='') {");
+//
+//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
+//            ret.append("\n         pForm.responsable.focus();");
+//            ret.append("\n         return false;");
+//            ret.append("\n      }");
+//            ret.append("\n      if (pForm.email.value=='') {");
+//
+//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+//            ret.append("\n         pForm.email.focus();");
+//            ret.append("\n         return false;");
+//            ret.append("\n      }");
+//            ret.append("\n   } else { ");
+//
+//            ret.append("\n      if (pForm.comentario.value!='') {");
+//            ret.append("\n          if (pForm.area.value=='') pForm.area.value=area;");
+//            ret.append("\n          if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
+//            ret.append("\n          if (pForm.email.value=='') pForm.email.value=email;");
+//            ret.append("\n      }");
+//            ret.append("\n   }");
+//            ret.append("\n   if (!isFileType(pForm.template, 'xsl|xslt')) return false;");
+//            ret.append("\n   if (!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
+//            ret.append("\n   if (!isFileType(pForm.imgenviar, 'bmp|jpg|jpeg|gif')) return false;");
+//            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'bmp|jpg|jpeg|gif')) return false;");
+//            ret.append("\n   if (!isNumber(pForm.width)) return false;");
+//            ret.append("\n   if (!isNumber(pForm.height)) return false;");
+//            ret.append("\n   if (!isNumber(pForm.top)) return false;");
+//            ret.append("\n   if (!isNumber(pForm.left)) return false;");
+//            ret.append("\n   replaceChars(pForm.headermsg);");
+//            ret.append("\n   replaceChars(pForm.footermsg);");
+//            ret.append("\n   if (pForm.actype.value=='add' && pForm.comentario.value!='') {");
+//
+//            ret.append("\n      trim(pForm.comentarios);");
+//            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
+//            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
+//            ret.append("\n   }");
+//            ret.append("\n   return true;");
+//            ret.append("\n}");
+//
+//            ret.append("\nfunction jsLoad(pForm, comentario, area, responsable, email) {");
+//            ret.append("\n   pForm.btnType.value='" + paramsRequest.getLocaleString("msgUpdate") + "';");
+//            ret.append("\n   pForm.comentario.value=comentario;");
+//            ret.append("\n   pForm.area.value=area;");
+//            ret.append("\n   pForm.responsable.value=responsable;");
+//            ret.append("\n   pForm.email.value=email;");
+//            ret.append("\n}");
+//
+//            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");
+//            ret.append("\n   trim(pForm.comentario);");
+//            ret.append("\n   if (pForm.comentario.value=='') {");
+//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
+//            ret.append("\n       pForm.comentario.focus();");
+//            ret.append("\n       return false;");
+//            ret.append("\n   }");
+//            ret.append("\n   trim(pForm.area);");
+//            ret.append("\n   trim(pForm.responsable);");
+//            ret.append("\n   trim(pForm.email);");
+//            ret.append("\n   if (pForm.area.value=='') pForm.area.value=area;");
+//            ret.append("\n   if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
+//            ret.append("\n   if (pForm.email.value=='') pForm.email.value=email;");
+//            ret.append("\n   trim(pForm.area);");
+//            ret.append("\n   if (pForm.area.value=='') {");
+//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
+//            ret.append("\n       pForm.area.focus();");
+//            ret.append("\n       return false;");
+//            ret.append("\n   }");
+//            ret.append("\n   trim(pForm.responsable);");
+//            ret.append("\n   if (pForm.responsable.value=='') {");
+//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
+//            ret.append("\n       pForm.responsable.focus();");
+//            ret.append("\n       return false;");
+//            ret.append("\n   }");
+//            ret.append("\n   trim(pForm.email);");
+//            ret.append("\n   if (pForm.email.value=='') {");
+//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+//            ret.append("\n       pForm.email.focus();");
+//            ret.append("\n       return false;");
+//            ret.append("\n   }");
+//            ret.append("\n   else if (!isEmail(pForm.email)) return false;");
+//            ret.append("\n   if (pForm.actype.value=='add') {");
+//            ret.append("\n      trim(pForm.comentarios);");
+//            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
+//            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
+//            ret.append("\n   }");
+//            ret.append("\n   return true;");
+//            ret.append("\n}");
+//            ret.append(admResUtils.loadIsEmail());
+//            ret.append(admResUtils.loadAddOption());
+//            ret.append(admResUtils.loadEditOption());
+//            ret.append(admResUtils.loadUpdateOption());
+//            ret.append(admResUtils.loadDeleteOption());
+//            ret.append(admResUtils.loadDuplicateOption());
+//            ret.append(admResUtils.loadIsFileType());
+//            ret.append(admResUtils.loadReplaceChars());
+//            ret.append(admResUtils.loadIsNumber());
+//            ret.append(admResUtils.loadTrim());
+            ret.append("--> \n");
+            ret.append("</script> \n");
+//        } catch (Exception e) {
+//            log.error(e);
+//        }
         return ret.toString();
+    }
+
+    private String getCaptchaScript(SWBParamRequest paramRequest) throws SWBResourceException {
+        StringBuilder html = new StringBuilder();
+        html.append("<div class=\"swb-coment-imagen\"> \n");
+        html.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" id=\"imgseccode\" width=\"155\" height=\"65\" /><br/> \n");
+        html.append("  <a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a> \n");
+        html.append("</div> \n");
+        html.append("<div class=\"swb-coment-captcha\"> \n");
+        html.append("  <label for=\"cmnt_seccode\">El texto de la imagen es:</label> \n");
+        html.append("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" /> \n");
+        html.append("</div> \n");
+        return html.toString();
     }
 
     /**
