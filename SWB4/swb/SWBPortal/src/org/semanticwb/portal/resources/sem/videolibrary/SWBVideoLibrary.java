@@ -193,7 +193,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                     try
                     {
                         request.setAttribute("paramRequest", paramRequest);
-                        request.setAttribute("news", list);
+                        request.setAttribute("list", list);
                         dis.include(request, response);
                     }
                     catch (Exception e)
@@ -229,10 +229,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
             path = "/swbadmin/jsp/SWBVideoLibrary/strategy.jsp";
             uri = null;
         }
-        List<VideoContent> list = getVideos(null,paramRequest.getUser());
-        System.out.println("Videos : "+list.size());
-        System.out.println("uri : "+uri);
-        System.out.println("path : "+path);
+        List<VideoContent> list = getVideos(null,paramRequest.getUser());        
         if (uri != null && paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
         {
             // busca el objeto
