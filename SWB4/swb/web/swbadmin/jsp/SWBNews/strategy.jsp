@@ -48,11 +48,12 @@
         }
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-        int limit = 3;
+        int limit = 5;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
         if(urldetail!=null)
         {            
             int i=0;
+            boolean first=true;
             for(SWBNewContent content : contents)
             {
                 if(content.isHomeShow())
@@ -88,17 +89,24 @@
                         image=content.getImage();
                         pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
                     }
+
+                    if(first)
+                    {
+                        first=false;
                     %>
-                    <div class="nota">
-                    <a href="<%=url%>">
-                        <img border="0" alt="Imagen noticia" width="92" height="60" src="<%=pathPhoto%>" />
-                    </a><br>
-                    <a href="<%=url%>"><%=title%> <%=date%></a><br>
-                    <p><i><%=description%></i></p>
-
-            </div>
+        <div class="mainNews">
+          <p><a href="<%=url%>"><%=title%></a></p>
+          <!--<p><%=date%></p>-->
+          <img src="<%=pathPhoto%>" alt="<%=title%>" />
+          <div class="clear">&nbsp;</div>
+        </div>
+          <ul class="underline">
                     <%
-
+                    }else{
+%>
+            <li><a href="<%=url%>"><%=title%></a></li>
+                    <%
+                    }
                     if(i>=limit)
                     {
                         break;
@@ -107,7 +115,7 @@
             }
             String urlnoticias=noticias.getUrl();
             %>
-            
+          </ul>
             <%
         }
     }
