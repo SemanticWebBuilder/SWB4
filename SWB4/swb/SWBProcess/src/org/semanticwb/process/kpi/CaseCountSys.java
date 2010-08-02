@@ -33,6 +33,7 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.utils.Restriction;
 import org.semanticwb.process.utils.DateInterval;
+import org.semanticwb.process.utils.TimeInterval;
 import org.semanticwb.process.model.ProcessInstance;
 
 /**
@@ -51,6 +52,7 @@ public class CaseCountSys {
     public final static String STATUS="status";
     public final static String PROCESS="process";
     public final static String ARTIFACT="artifact";
+    public final static String RESPONSE="response";
 
     public CaseCountSys() {
         instances = new ArrayList();
@@ -128,6 +130,17 @@ public class CaseCountSys {
                         onInterval.add(pinst);
                 }
             }
+        }
+        return onInterval;
+    }
+
+    private ArrayList listProcessInstanceByResponseTime(ArrayList instances, TimeInterval iTime) {
+        ArrayList onInterval = new ArrayList();
+        Iterator<ProcessInstance> itpinst = instances.iterator();
+        while(itpinst.hasNext()) {
+                ProcessInstance pinst = itpinst.next();
+                if (TimeInterval.match(iTime.getUnit(), iTime.getOperator(), iTime.getTime(), CaseResponseTime.getResponseTimeInstance(pinst)))
+                    onInterval.add(pinst);
         }
         return onInterval;
     }
@@ -217,6 +230,8 @@ public class CaseCountSys {
                     this.instances = listProcessInstanceByCreatedDate(this.instances, (DateInterval)restriction.getCriteria());
                 else if (String.valueOf(Instance.STATUS_CLOSED).equalsIgnoreCase(restriction.getProperty()))
                     this.instances = listProcessInstanceByEndedDate(this.instances, (DateInterval)restriction.getCriteria());
+                else if (RESPONSE.equalsIgnoreCase(restriction.getProperty()))
+                    this.instances = listProcessInstanceByResponseTime(this.instances, (TimeInterval)restriction.getCriteria());
                 else if (ARTIFACT.equalsIgnoreCase(restriction.getProperty()))
                     this.instances = listProcessInstanceByArtifact(this.instances, (ArrayList<Restriction>)restriction.getCriteria());
                 else if (ROLE.equalsIgnoreCase(restriction.getProperty()))

@@ -77,4 +77,13 @@ public class CaseResponseTime {
         }
         return maximum;
     }
+
+    public static long getResponseTimeInstance(ProcessInstance pinst) {
+        long processtime = 0;
+        if (null != pinst.getEnded())
+            processtime = pinst.getEnded().getTime() - pinst.getCreated().getTime();
+        else if (null != pinst.getUpdated())
+            processtime = pinst.getUpdated().getTime() - pinst.getCreated().getTime();
+        return processtime;
+    }
 }
