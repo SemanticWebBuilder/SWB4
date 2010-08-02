@@ -25,6 +25,13 @@
     {
         title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
     }
+
+    String originaltitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+    if(originaltitle==null || originaltitle.trim().equals(""))
+    {
+        originaltitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+    }
+
     String date="";
     if(content.getPublishDate()!=null)
     {
@@ -66,6 +73,20 @@
             document.write('<%=title%>');
             -->
         </script></p>
+
+        <%
+        if(originaltitle!=null && !originaltitle.equals(""))
+        {
+            %>
+            <p>Título original: <script type="text/javascript">
+            <!--
+            document.write('<%=originaltitle%>');
+            -->
+        </script></p>
+            <%
+        }
+
+    %>
         <%
             if(date!=null && !date.equals(""))
             {
