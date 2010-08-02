@@ -55,7 +55,7 @@
     if(contents!=null && contents.size()>0)
     {
         %>
-        <ul class="listaLinks">
+        
         <%
 
         // muestra los 15 primeros videos
@@ -77,8 +77,58 @@
                 date=sdf.format(content.getPublishDate());
             }
             String preview=content.getPreview();
+            String source=content.getSource();
             %>
-            <li><img alt="preview" src="<%=preview%>"><A href="<%=url%>" ><b><%=title%></b></A></li><br><%=date%>
+            <div class="bloqueVideos">
+        <img src="<%=preview%>" alt="Gobierno Federal Presidencia México Felipe Calderón"/>
+        <div class="listadoVideos">
+            <h2>
+                <script type="text/javascript">
+                    <!--
+                    document.write('Gobierno Federal Presidencia México Felipe Calderón');
+                    -->
+                </script></h2>
+            <p>&nbsp;<br/>
+                <%
+                    if(source!=null)
+                    {
+                        if(content.getVideoWebPage()==null)
+                        {
+                            %>
+                            Fuente: <%=source%><br/>
+                            <%
+                        }
+                        else
+                        {
+                            %>
+                            Fuente: <a href="<%=content.getVideoWebPage()%>"><%=source%></a><br/>
+                            <%
+                        }
+                    }
+                %>
+
+                <%
+                    if(date!=null && !date.trim().equals(""))
+                    {
+                        String ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                        %>
+                        <%=date%> - <%=ago%>
+                        <%
+                    }
+                %>
+
+            </p>
+            <p>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=title%>');
+                    -->
+                </script>
+                    | <a href="<%=url%>">Ver M&aacute;s</a>
+
+            </p>           
+        </div>
+    </div>
             <%
             if(i>=limit)
             {
@@ -118,8 +168,8 @@
                 }
             }
         }
-        %>
-             </ul>
-        <%
+        
     }
 %>
+
+
