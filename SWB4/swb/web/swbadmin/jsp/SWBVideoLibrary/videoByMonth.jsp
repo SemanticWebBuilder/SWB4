@@ -14,42 +14,80 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    String usrlanguage = paramRequest.getUser().getLanguage();
-    Locale locale=new Locale(usrlanguage);    
+    String usrlanguage = paramRequest.getUser().getLanguage();    
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
     List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
     if(contents!=null && contents.size()>0)
-    {
-        %>
-        <ul class="listaLinks">
-        <%
-
-
-
+    {        
         for(VideoContent content : contents)
         {
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             url.setMode(paramRequest.Mode_VIEW);
             url.setCallMethod(paramRequest.Call_CONTENT);
-            String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+            String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));             
             if(title!=null && title.trim().equals(""))
             {
                 title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
             }
-            /*String country="";
-            if(content.getCountry()!=null)
-            {
-                country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
-            }*/
+           
             String date=sdf.format(content.getPublishDate());
+            String preview=content.getPreview();
+            String source=content.getSource();
             %>
-            <li><A href="<%=url%>" ><b><%=title%> </b></A></li><br><%=date%>
+            <div class="bloqueVideos">
+                <img src="<%=preview%>" alt="Gobierno Federal Presidencia México Felipe Calderón"/>
+                <div class="listadoVideos">
+                    <h2>
+                    <script type="text/javascript">
+                        <!--
+                        document.write('Gobierno Federal Presidencia México Felipe Calderón');
+                        -->
+                    </script></h2>
+                    <p>&nbsp;<br/>
+                <%
+                    if(source!=null)
+                    {
+                        if(content.getVideoWebPage()==null)
+                        {
+                            %>
+                            Fuente: <%=source%><br/>
+                            <%
+                        }
+                        else
+                        {
+                            %>
+                            Fuente: <a href="<%=content.getVideoWebPage()%>"><%=source%></a><br/>
+                            <%
+                        }
+                    }
+                %>
+
+                <%
+                    if(date!=null && !date.trim().equals(""))
+                    {
+                        String ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                        %>
+                        <%=date%> - <%=ago%>
+                        <%
+                    }
+                %>
+
+            </p>
+            <p>
+                <script type="text/javascript">
+                    <!--
+                    document.write('<%=title%>');
+                    -->
+                </script>
+                    | <a href="<%=url%>">Ver M&aacute;s</a>
+
+            </p>
+        </div>
+            </div>
             <%
         }
-        %>
-             </ul>
-        <%
+        
     }
 %>
