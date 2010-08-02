@@ -37,7 +37,7 @@
             }
         }
         String usrlanguage = paramRequest.getUser().getLanguage();
-        DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
+        //DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
         int limit = 5;
         ArrayList<VideoContent> contentsToShow=new ArrayList<VideoContent>();
         List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
