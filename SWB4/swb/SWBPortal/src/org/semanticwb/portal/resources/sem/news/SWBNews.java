@@ -187,7 +187,8 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         return news;
     }
     public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
+    {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite()+"/"+ this.getClass().getName() +"/";
         if(request.getParameter("month")!=null)
         {
             int month=-1;
@@ -198,7 +199,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                 {
                     List<SWBNewContent> news = getNews(null,paramRequest.getUser());
                     news=getNewsByMonth(news).get(month);
-                    String path = "/swbadmin/jsp/SWBNews/newsByMonth.jsp";
+                    String path = basePath+"newsByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
                     {
@@ -222,8 +223,9 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     }
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite()+"/"+ this.getClass().getName() +"/";
         List<SWBNewContent> news=getNews(null,paramRequest.getUser());
-        String path = "/swbadmin/jsp/SWBNews/rss.jsp";
+        String path = basePath+"rss.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_CONTENT);
@@ -246,7 +248,8 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String path = "/swbadmin/jsp/SWBNews/content.jsp";
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite()+"/"+ this.getClass().getName() +"/";
+        String path = basePath+"content.jsp";
         if (this.getResourceBase().getProperty("mode") != null && "rss".equals(this.getResourceBase().getProperty("mode")))
         {
             doRss(request, response, paramRequest);
@@ -263,7 +266,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
         if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
         {
-            path = "/swbadmin/jsp/SWBNews/strategy.jsp";
+            path = basePath+"strategy.jsp";
             uri = null;
         }
 
@@ -277,7 +280,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                 {
                     if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
                     {
-                        path = "/swbadmin/jsp/SWBNews/shownew.jsp";
+                        path = basePath+"shownew.jsp";
                         RequestDispatcher dis = request.getRequestDispatcher(path);
                         try
                         {
