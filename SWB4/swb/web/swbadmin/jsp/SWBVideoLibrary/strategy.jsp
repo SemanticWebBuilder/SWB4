@@ -38,7 +38,7 @@
         }
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-        int limit = 3;
+        int limit = 1;
         List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
         if(urldetail!=null)
         {
@@ -66,16 +66,11 @@
                     if(content.getPublishDate()!=null)
                     {
                         date=sdf.format(content.getPublishDate());
-                    }                    
+                    }
+                    String code=content.getCode();
+                    code=SWBUtils.TEXT.decodeExtendedCharacters(code);
                     %>
-                    <div class="nota">
-                    <a href="<%=url%>">
-                        <img border="0" alt="Imagen video" width="92" height="60" src="<%=pathPhoto%>" />
-                    </a><br>
-                    <a href="<%=url%>"><%=title%> <%=date%></a><br>
-                    <p><i><%=description%></i></p>
-
-            </div>
+                    <%=code%>
                     <%
 
                     if(i>=limit)
