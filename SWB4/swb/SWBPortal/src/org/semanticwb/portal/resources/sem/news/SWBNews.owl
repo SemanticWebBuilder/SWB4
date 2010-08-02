@@ -74,7 +74,24 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_image">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fe_FlashImageUpload"/>
+        <swbxf:formElement>
+          <swb:FlashImageUpload rdf:ID="FlashImageUpload_1">
+            <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >92</swbxf:imgThumbnailWidth>
+            <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >60</swbxf:imgThumbnailHeight>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgThumbnail>
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >368</swbxf:imgMaxWidth>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >230</swbxf:imgMaxHeight>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgCrop>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >1000000</swbxf:fileMaxSize>
+          </swb:FlashImageUpload>
+        </swbxf:formElement>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >80</swb:index>
       </swbxf:DisplayProperty>

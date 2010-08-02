@@ -54,14 +54,22 @@ public class GoogleSiteMap implements InternalServlet {
         PrintWriter out = new PrintWriter(os, true);
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         out.println("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
-        Iterator<WebSite> maps = SWBContext.listWebSites();;
-        while (maps.hasNext())
+
+        String modelid=dparams.getModelId();
+
+        //Iterator<WebSite> maps = SWBContext.listWebSites();;
+        //while (maps.hasNext())
         {
-            WebSite map = maps.next();
-            if (SWBContext.WEBSITE_GLOBAL.equals(map.getId()))
+            //WebSite map = maps.next();
+            WebSite map = SWBContext.getWebSite(modelid);
+            if(map.getLanguage()!=null)
             {
-                continue;
+                lang=map.getLanguage().getId();
             }
+//            if (SWBContext.WEBSITE_GLOBAL.equals(map.getId()))
+//            {
+//                continue;
+//            }
 
             Iterator<Dns> ht =  map.listDnses();
             String hn = host;
