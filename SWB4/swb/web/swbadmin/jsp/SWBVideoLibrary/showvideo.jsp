@@ -36,9 +36,12 @@
     {
         duration=SWBUtils.TEXT.encodeExtendedCharacters(String.valueOf(content.getDuration()));
     }
+    String code=content.getCode();
+    code=SWBUtils.TEXT.decodeExtendedCharacters(code);
+    
 
 %>
-<%=content.getCode()%><br>
+<%=code%><br>
 <%=title%><br>
 <%
     if(duration!=null && !duration.equals(""))
