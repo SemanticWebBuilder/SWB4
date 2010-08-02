@@ -177,7 +177,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     }
     public void doShowVideosByMonth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getName() +"/";
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
         if(request.getParameter("month")!=null)
         {
             int month=-1;
@@ -213,7 +213,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getName() +"/";
+        String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
         String path = basePath+"content.jsp";
 
         String uri = request.getParameter("uri");
