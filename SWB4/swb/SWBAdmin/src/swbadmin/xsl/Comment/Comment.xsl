@@ -84,6 +84,9 @@
                                 </tr>
                             </xsl:for-each>
                         </table>
+                        
+                        <xsl:call-template name="captcha" />
+
                         <p>
                             <xsl:for-each select="fsubmit">
                                 <xsl:if test="@img ='1'">
@@ -151,5 +154,11 @@
                 </script>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="captcha">
+        <div>
+            captcha
+        </div>
     </xsl:template>
 </xsl:stylesheet>
