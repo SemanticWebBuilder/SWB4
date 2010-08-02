@@ -48,6 +48,8 @@ public class ProcessCase extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        response.getWriter().print("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
             Iterator<Process> it = site.listProcesses();
@@ -64,5 +66,7 @@ public class ProcessCase extends GenericResource {
                 response.getWriter().println("</ul>");
             }
         }
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().print("</div>\n");
     }
 }

@@ -46,6 +46,8 @@ public class ResponseCase extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         CaseResponseTime crt = new CaseResponseTime();
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        response.getWriter().print("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
             Iterator <org.semanticwb.process.model.ProcessWebPage>itProcessWebPages = ProcessWebPage.ClassMgr.listProcessWebPages(site);
@@ -57,5 +59,7 @@ public class ResponseCase extends GenericResource {
                 response.getWriter().println("<li>Tiempo máximo de ejecución de todas las instancias del proceso " + process.getTitle() + ": " + crt.getMaximumProcessInstance(process) + " milisegundos</li></ul>");
             }
         }
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().print("</div>\n");
     }
 }
