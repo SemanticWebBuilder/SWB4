@@ -185,17 +185,14 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 month=Integer.parseInt(request.getParameter("month"));
                 if(month>=0 && month<=12)
                 {
-                    List<VideoContent> list = getVideos(null,paramRequest.getUser());
-                    synchronized(list)
-                    {
-                        list=getVideoByMonth(list).get(month);
-                    }
+                    List<VideoContent> list = getVideos(null,paramRequest.getUser());                    
+                    List<VideoContent> listMonth=getVideoByMonth(list).get(month);
                     String path = "/swbadmin/jsp/SWBVideoLibrary/videoByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
                     {
                         request.setAttribute("paramRequest", paramRequest);
-                        request.setAttribute("list", list);
+                        request.setAttribute("list", listMonth);
                         dis.include(request, response);
                     }
                     catch (Exception e)
