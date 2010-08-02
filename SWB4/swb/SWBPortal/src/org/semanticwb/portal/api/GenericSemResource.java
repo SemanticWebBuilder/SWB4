@@ -117,6 +117,7 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         //out.println("<div id=\""+getSemanticObject().getURI()+"/admform\" dojoType=\"dijit.layout.ContentPane\"  loadingMessage=\"<center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>\">");
         SWBFormMgr mgr=new SWBFormMgr(getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         mgr.setSubmitByAjax(true);
+        mgr.setFilterHTMLTags(false);
         mgr.addButton(SWBFormButton.newSaveButton());
         mgr.setType(SWBFormMgr.TYPE_DOJO);
         if("update".equals(paramRequest.getAction()))
