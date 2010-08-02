@@ -42,7 +42,8 @@ public class ResponseTimeStages {
             ProcessInstance pinst = it.next();
             processtime += getTimeStage(pinst,origin,destiny);
         }
-        return processtime/closedinstances;
+        if (closedinstances == 0) return processtime;
+        else return processtime/closedinstances;
     }
 
     public static long getMinimumTimeStages(Process process, String origin, String destiny) {
