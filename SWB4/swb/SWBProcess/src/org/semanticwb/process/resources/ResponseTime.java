@@ -26,6 +26,8 @@ public class ResponseTime extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        response.getWriter().print("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         while (isites.hasNext()) {
             ProcessSite site = (ProcessSite)isites.next();
             Iterator <org.semanticwb.process.model.ProcessWebPage>itProcessWebPages = ProcessWebPage.ClassMgr.listProcessWebPages(site);
@@ -44,5 +46,7 @@ public class ResponseTime extends GenericResource {
                 }
             }
         }
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().print("</div>\n");
     }
 }

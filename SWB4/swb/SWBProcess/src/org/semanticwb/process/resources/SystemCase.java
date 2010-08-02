@@ -22,11 +22,15 @@ public class SystemCase extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         CaseCountSys sys = new CaseCountSys();
-        response.getWriter().println("<ul><li>Número total de instancias de procesos: " + sys.totalProcessInstance()+"</li>");
+        response.getWriter().print("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
+        response.getWriter().println("      <ul><li>Número total de instancias de procesos: " + sys.totalProcessInstance()+"</li>");
         sys.addRestriction(new Restriction(CaseCountSys.STATUS,String.valueOf(Instance.STATUS_PROCESSING),null));
-        response.getWriter().println("<li>Número total de instancias de procesos en ejecución: " + sys.totalProcessInstance()+"</li>");
+        response.getWriter().println("      <li>Número total de instancias de procesos en ejecución: " + sys.totalProcessInstance()+"</li>");
         sys.clear();
         sys.addRestriction(new Restriction(CaseCountSys.USER,"admin",null));
-        response.getWriter().println("<li>Número total de instancias de procesos del usuario admin: " + sys.totalProcessInstance()+"</li></ul>");
+        response.getWriter().println("     <li>Número total de instancias de procesos del usuario admin: " + sys.totalProcessInstance()+"</li></ul>");
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().print("</div>\n");
     }
 }
