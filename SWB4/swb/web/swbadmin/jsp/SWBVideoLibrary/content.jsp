@@ -55,7 +55,7 @@
     if(contents!=null && contents.size()>0)
     {
         %>
-        
+        <div class="columnaIzquierda">
         <%
 
         // muestra los 15 primeros videos
@@ -168,7 +168,11 @@
 
                 }
             }
-        }        
+        }
+         %>
+         </div>
+         <div class="columnaCentro"></div>
+         <%
         
     }
 %>
