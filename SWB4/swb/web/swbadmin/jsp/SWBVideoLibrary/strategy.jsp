@@ -21,7 +21,7 @@
 <%
     WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
     if(wp!=null)
-    {
+    {        
         SWBResourceURL urldetail=null;        
         GenericIterator<Resource> resources=wp.listResources();
         while(resources.hasNext())
@@ -38,7 +38,8 @@
         }
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-        int limit = 1;
+        int limit = 5;
+        ArrayList<VideoContent> contentsToShow=new ArrayList<VideoContent>();
         List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
         if(urldetail!=null)
         {
@@ -47,43 +48,68 @@
             {
                 if(content.isHomeShow())
                 {
-                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBVideoLibrary/sinfoto.png";
-                    String url="#";
-                    i++;
-                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    url=urldetail.toString();
-                    String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
-                    if(title!=null && title.trim().equals(""))
-                    {
-                        title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
-                    }
-                    String description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription(usrlanguage));
-                    if(title!=null && title.trim().equals(""))
-                    {
-                        description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription());
-                    }
-                    String date="";
-                    if(content.getPublishDate()!=null)
-                    {
-                        date=sdf.format(content.getPublishDate());
-                    }
-                    String code=content.getCode();
-                    code=SWBUtils.TEXT.decodeExtendedCharacters(code);
-                    %>
-                    <%=code%>
-                    <%
-
+                    contentsToShow.add(content);
                     if(i>=limit)
                     {
                         break;
                     }
                 }
-            }            
-            %>
+            }
+            i=1;
+            contents=contentsToShow;
 
-            <%
+            if(contentsToShow.size()>0)
+            {
+                String code=contentsToShow.get(0).getCode();
+                //code=SWBUtils.TEXT.decodeExtendedCharacters(code);
+                %>
+                        <%=code%>
+                <%
+                contentsToShow.remove(0);
+            }
+            if(contentsToShow.size()>0)
+            {
+
+                %>
+                <div id="listadoVideos">
+                <ul>
+                <%
+                for(VideoContent content : contentsToShow)
+                {
+                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBVideoLibrary/sinfoto.png";
+                        String url="#";
+                        i++;
+                        urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+                        url=urldetail.toString();
+                        String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                        if(title!=null && title.trim().equals(""))
+                        {
+                            title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                        }
+                        title=SWBUtils.TEXT.cropText(title, 65);
+                        %>
+                        <li><a rel="destino" href="<%=urldetail%>"><%=title%></a></li>
+                        <%
+
+                }
+                %>
+                </ul>
+                <p class="listaVideos"><a href="<%=wp.getUrl()%>">sección completa de videos</a></p>
+                </div>
+                <%
+            }            
         }
     }
 
 %>
+
+
+
+
+
+
+
+
+
+
 
