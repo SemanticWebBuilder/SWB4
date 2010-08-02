@@ -89,8 +89,8 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
     private List<VideoContent> getVideos(String uri,User user)
     {
         List<VideoContent> list = new ArrayList<VideoContent>();
-        GenericIterator<Resource> resources = null;
-        if (this.getCollection() != null && this.getCollection().getResourceCollectionType().getResourceClassName().equals(SWBNewContent.class.getCanonicalName()))
+        GenericIterator<Resource> resources = null;        
+        if (this.getCollection() != null && this.getCollection().getResourceCollectionType().getResourceClassName().equals(VideoContent.class.getCanonicalName()))
         {
             if (this.getCategory() == null)
             {
@@ -108,7 +108,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                         isCategoryOfCallection = true;
                         break;
                     }
-                }
+                }                
                 if (isCategoryOfCallection)
                 {
                     resources = this.getCategory().listResources();
@@ -164,8 +164,19 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         }
         return list;
     }
-
-    public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        if (paramRequest.getMode().equals("month"))
+        {
+            doShowVideosByMonth(request, response, paramRequest);
+        }
+        else
+        {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+    public void doShowVideosByMonth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         if(request.getParameter("month")!=null)
         {
@@ -177,7 +188,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 {
                     List<VideoContent> list = getVideos(null,paramRequest.getUser());
                     list=getVideoByMonth(list).get(month);
-                    String path = "/swbadmin/jsp/SWBNews/newsByMonth.jsp";
+                    String path = "/swbadmin/jsp/SWBVideoLibrary/videoByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
                     {
@@ -219,6 +230,9 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
             uri = null;
         }
         List<VideoContent> list = getVideos(null,paramRequest.getUser());
+        System.out.println("Videos : "+list.size());
+        System.out.println("uri : "+uri);
+        System.out.println("path : "+path);
         if (uri != null && paramRequest.getCallMethod() == paramRequest.Call_CONTENT)
         {
             // busca el objeto
@@ -228,7 +242,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 {
                     if (content.getResourceBase().isValid() && paramRequest.getUser().haveAccess(content.getResourceBase()))
                     {
-                        path = "/swbadmin/jsp/SWBVideoLibrary/shownew.jsp";
+                        path = "/swbadmin/jsp/SWBVideoLibrary/showvideo.jsp";
                         RequestDispatcher dis = request.getRequestDispatcher(path);
                         try
                         {
