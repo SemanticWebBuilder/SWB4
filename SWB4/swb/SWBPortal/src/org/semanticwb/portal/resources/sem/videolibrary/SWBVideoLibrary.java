@@ -44,7 +44,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         }
         return false;
     }
-    public static Map<Integer, List<VideoContent>> getVideoByMonth(List<VideoContent> contents)
+    public Map<Integer, List<VideoContent>> getVideoByMonth(List<VideoContent> contents)
     {
         Calendar calendar = Calendar.getInstance();
         TreeMap<Integer, List<VideoContent>> getVideoByMonth = new TreeMap<Integer, List<VideoContent>>();
