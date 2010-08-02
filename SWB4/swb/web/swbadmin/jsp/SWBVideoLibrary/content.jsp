@@ -80,15 +80,15 @@
             String source=content.getSource();
             %>
             <div class="bloqueVideos">
-        <img src="<%=preview%>" alt="Gobierno Federal Presidencia México Felipe Calderón"/>
-        <div class="listadoVideos">
-            <h2>
-                <script type="text/javascript">
-                    <!--
-                    document.write('Gobierno Federal Presidencia México Felipe Calderón');
-                    -->
-                </script></h2>
-            <p>&nbsp;<br/>
+                <img src="<%=preview%>" alt="Gobierno Federal Presidencia México Felipe Calderón"/>
+                <div class="listadoVideos">
+                    <h2>
+                    <script type="text/javascript">
+                        <!--
+                        document.write('Gobierno Federal Presidencia México Felipe Calderón');
+                        -->
+                    </script></h2>
+                    <p>&nbsp;<br/>
                 <%
                     if(source!=null)
                     {
@@ -128,7 +128,8 @@
 
             </p>           
         </div>
-    </div>
+            </div>
+    
             <%
             if(i>=limit)
             {
@@ -155,19 +156,19 @@
                     if(currentMonth==month)
                     {
                         %>
-                        <li class="listaLinksMes"><a href="<%=url%>"><%=ultmsg%></a></li><br>
+                        <p><a href="<%=url%>"><%=ultmsg%></a></p>
                         <%
                     }
                     else
                     {
                         %>
-                        <li class="listaLinksMes"><a href="<%=url%>"><%=mensaje%><%=titleMonth%></a></li><br>
+                        <p><a href="<%=url%>"><%=mensaje%><%=titleMonth%></a></p>
                         <%
                     }
 
                 }
             }
-        }
+        }        
         
     }
 %>
