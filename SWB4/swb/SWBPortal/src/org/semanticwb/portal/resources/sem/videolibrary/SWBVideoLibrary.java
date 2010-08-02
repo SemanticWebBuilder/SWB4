@@ -186,7 +186,10 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 if(month>=0 && month<=12)
                 {
                     List<VideoContent> list = getVideos(null,paramRequest.getUser());
-                    list=getVideoByMonth(list).get(month);
+                    synchronized(list)
+                    {
+                        list=getVideoByMonth(list).get(month);
+                    }
                     String path = "/swbadmin/jsp/SWBVideoLibrary/videoByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
