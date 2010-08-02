@@ -19,6 +19,7 @@
     String idPage="Videos";
 %>
 <%
+    SWBVideoLibrary library=(SWBVideoLibrary)request.getAttribute("library");
     WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
     if(wp!=null)
     {        
@@ -57,11 +58,23 @@
             }
             i=1;
             contents=contentsToShow;
-
+            String titleSection=library.getResourceBase().getTitle(usrlanguage);
+            if(titleSection==null || titleSection.trim().equals(""))
+            {
+                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getTitle(usrlanguage));
+            }
+            String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
+            if(descriptionSection==null || descriptionSection.trim().equals(""))
+            {
+                descriptionSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDescription(usrlanguage));
+            }
+            %>
+                  <div class="bloqueVideos">
+                  <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
+            <%
             if(contentsToShow.size()>0)
             {
-                String code=contentsToShow.get(0).getCode();
-                //code=SWBUtils.TEXT.decodeExtendedCharacters(code);
+                String code=contentsToShow.get(0).getCode();                
                 %>
                         <%=code%>
                 <%
@@ -75,14 +88,11 @@
                 <ul>
                 <%
                 for(VideoContent content : contentsToShow)
-                {
-                        String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBVideoLibrary/sinfoto.png";
-                        String url="#";
+                {                        
                         i++;
-                        urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                        url=urldetail.toString();
+                        urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());                        
                         String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
-                        if(title!=null && title.trim().equals(""))
+                        if(title==null || title.trim().equals(""))
                         {
                             title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
                         }
@@ -97,7 +107,10 @@
                 <p class="listaVideos"><a href="<%=wp.getUrl()%>">sección completa de videos</a></p>
                 </div>
                 <%
-            }            
+            }
+            %>
+                  </div>
+            <%
         }
     }
 
