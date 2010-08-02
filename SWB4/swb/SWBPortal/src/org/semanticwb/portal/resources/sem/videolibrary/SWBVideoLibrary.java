@@ -264,6 +264,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("list", list);
+            request.setAttribute("library", this);
             dis.include(request, response);
         }
         catch (Exception e)
