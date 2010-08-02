@@ -19,31 +19,21 @@
     String idPage="Videos";
 %>
 <%
-    WebPage noticias= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
-    if(noticias!=null)
+    WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
+    if(wp!=null)
     {
-        SWBResourceURL urldetail=null;
-        SWBResourceURL urlrss=null;
-        GenericIterator<Resource> resources=noticias.listResources();
+        SWBResourceURL urldetail=null;        
+        GenericIterator<Resource> resources=wp.listResources();
         while(resources.hasNext())
         {
             Resource resource=resources.next();
             if(resource.getResourceData()!=null)
             {
-
-               GenericObject obj=resource.getResourceData().createGenericInstance();
-               if(obj instanceof SWBVideoLibrary)
-               {
-                   SWBVideoLibrary semResource=(SWBVideoLibrary)obj;
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(resource);
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setVirtualResource(resource);
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setTopic(noticias);
-                    urldetail=paramRequest.getRenderUrl();
-                    urlrss=paramRequest.getRenderUrl();
-                    urlrss.setMode("rss");
-                    urlrss.setCallMethod(urlrss.Call_DIRECT);
-                    urldetail.setMode(paramRequest.Mode_VIEW);
-               }
+               ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(resource);
+               ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setVirtualResource(resource);
+               ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setTopic(wp);
+               urldetail=paramRequest.getRenderUrl();
+               urldetail.setMode(paramRequest.Mode_VIEW);
             }
         }
         String usrlanguage = paramRequest.getUser().getLanguage();
@@ -76,22 +66,11 @@
                     if(content.getPublishDate()!=null)
                     {
                         date=sdf.format(content.getPublishDate());
-                    }
-                    /*String country="";
-                    if(content.getCountry()!=null)
-                    {
-                        country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
-                    }
-                    String image="";
-                    if(content.getImage()!=null)
-                    {
-                        image=content.getImage();
-                        pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
-                    }*/
+                    }                    
                     %>
                     <div class="nota">
                     <a href="<%=url%>">
-                        <img border="0" alt="Imagen noticia" width="92" height="60" src="<%=pathPhoto%>" />
+                        <img border="0" alt="Imagen video" width="92" height="60" src="<%=pathPhoto%>" />
                     </a><br>
                     <a href="<%=url%>"><%=title%> <%=date%></a><br>
                     <p><i><%=description%></i></p>

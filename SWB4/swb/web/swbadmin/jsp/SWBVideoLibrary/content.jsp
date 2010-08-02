@@ -58,14 +58,14 @@
         <ul class="listaLinks">
         <%
 
-        // muestra las 15 primeras noticias
+        // muestra los 15 primeros videos
         int i=0;
         for(VideoContent content : contents)
         {
             i++;
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setMode(paramRequest.Mode_VIEW);
-            url.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
+            url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
             if(title!=null && title.trim().equals(""))
             {
