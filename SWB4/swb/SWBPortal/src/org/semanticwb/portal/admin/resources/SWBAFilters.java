@@ -1548,7 +1548,7 @@ public class SWBAFilters extends SWBATree {
         }
 
         //child
-        Iterator it = tp.listChilds(user.getLanguage(), true, false, false, false); //getSortChild(false);
+        Iterator it = tp.listChilds(user.getLanguage(), true, false, false, null); //getSortChild(false);
         while (it.hasNext()) {
             WebPage tp2 = (WebPage) it.next();
             Element child = addNode("node", tp2.getId(), tp2.getDisplayName(user.getLanguage()), topic);
@@ -1570,7 +1570,7 @@ public class SWBAFilters extends SWBATree {
                 }
 
                 //have child
-                Iterator it2 = tp2.listChilds(user.getLanguage(), true, false, false, false); //getSortChild(false);
+                Iterator it2 = tp2.listChilds(user.getLanguage(), true, false, false, null); //getSortChild(false);
                 if (it2.hasNext()) {
                     WebPage tp3 = (WebPage) it2.next();
                     Element child2 = addNode("node", tp3.getId(), tp3.getDisplayName(user.getLanguage()), child);

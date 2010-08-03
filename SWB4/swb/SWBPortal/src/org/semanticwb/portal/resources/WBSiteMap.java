@@ -220,14 +220,14 @@ public class WBSiteMap extends GenericAdmResource
             json.append("id:'"+home.getId()+"',");
             json.append("purl:'"+home.getUrl()+"',");
             json.append("type:'home'");
-            if(home.listChilds(lang, true, false, false, false).hasNext()) {
+            if(home.listChilds(lang, true, false, false, true).hasNext()) {
                 json.append(",children:[");
                 json.append(addReferences(home, lang));
                 json.append("]");
             }
             json.append("}");
 
-            if(home.listChilds(lang, true, false, false, false).hasNext()) {
+            if(home.listChilds(lang, true, false, false, true).hasNext()) {
                 json.append(",");
                 json.append(addChilds(home, lang));
             }
@@ -251,7 +251,7 @@ public class WBSiteMap extends GenericAdmResource
     private String addReferences(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
-        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, false);
+        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, true);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
             json.append("{_reference:'"+wp.getDisplayTitle(lang)+"'}");
@@ -272,14 +272,14 @@ public class WBSiteMap extends GenericAdmResource
     private String addChilds(WebPage node, String lang) {
         StringBuilder json = new StringBuilder();
 
-        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, false);
+        Iterator<WebPage> itwps = node.listChilds(lang, true, false, false, true);
         while(itwps.hasNext()) {
             WebPage wp = itwps.next();
             json.append("{");
             json.append("name:'"+wp.getDisplayTitle(lang)+"',");
             json.append("id:'"+wp.getId()+"',");
             json.append("purl:'"+wp.getUrl()+"'");
-            if(wp.listChilds(lang, true, false, false, false).hasNext()) {
+            if(wp.listChilds(lang, true, false, false, true).hasNext()) {
                 json.append(",type:'chanel'");
                 json.append(",children:[");
                 json.append(addReferences(wp, lang));
@@ -287,7 +287,7 @@ public class WBSiteMap extends GenericAdmResource
             }
             json.append("}");
 
-            if(wp.listChilds(lang, true, false, false, false).hasNext()) {
+            if(wp.listChilds(lang, true, false, false, true).hasNext()) {
                 json.append(",");
                 json.append(addChilds(wp, lang));
             }
@@ -620,7 +620,7 @@ public class WBSiteMap extends GenericAdmResource
             Element branch = dom.createElement("branch");
             node.appendChild(branch);
 
-            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, false);
+            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, true);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
                 //if(webpage.getId()!=null && webpage instanceof WebPage ) {
@@ -633,7 +633,7 @@ public class WBSiteMap extends GenericAdmResource
 
                     Element child = dom.createElement("node");
                     branch.appendChild(child);
-                    if(webpage.listChilds(user.getLanguage(), true, false, false, false).hasNext()) {
+                    if(webpage.listChilds(user.getLanguage(), true, false, false, true).hasNext()) {
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
@@ -708,7 +708,7 @@ public class WBSiteMap extends GenericAdmResource
             Element branch = dom.createElement("branch");
             node.appendChild(branch);
 
-            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, false);
+            Iterator<WebPage> childs=pageroot.listChilds(user.getLanguage(), true, false, false, true);
             while(childs.hasNext()) {
                 WebPage webpage = childs.next();
                 //if(webpage.getId()!=null) {
@@ -717,7 +717,7 @@ public class WBSiteMap extends GenericAdmResource
 
                     Element child = dom.createElement("node");
                     branch.appendChild(child);
-                    if(webpage.listChilds(user.getLanguage(), true, false, false, false).hasNext()) {
+                    if(webpage.listChilds(user.getLanguage(), true, false, false, true).hasNext()) {
                         if(tpid!=null && tpid.getId().equalsIgnoreCase(webpage.getId())) {
                             if(opened) {
                                 params.append("&"+webpage.getId()+"=0");
