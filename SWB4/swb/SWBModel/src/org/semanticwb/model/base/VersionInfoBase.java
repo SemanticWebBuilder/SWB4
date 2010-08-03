@@ -11,6 +11,7 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
     public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
+    public static final org.semanticwb.platform.SemanticProperty swb_versionAuthorized=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionAuthorized");
     public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
 
@@ -277,6 +278,16 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     public void setVersionFile(String value)
     {
         getSemanticObject().setProperty(swb_versionFile, value);
+    }
+
+    public boolean isVersionAuthorized()
+    {
+        return getSemanticObject().getBooleanProperty(swb_versionAuthorized);
+    }
+
+    public void setVersionAuthorized(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_versionAuthorized, value);
     }
 
     public void setCreator(org.semanticwb.model.User value)
