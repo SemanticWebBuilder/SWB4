@@ -88,6 +88,12 @@
             </div>
             <%
         }
+        SWBResourceURL urlall=paramRequest.getRenderUrl();
+        urlall.setMode(urlall.Mode_VIEW);
+        urlall.setCallMethod(urlall.Call_CONTENT);
+        %>
+        <p><a href="<%=urlall%>">[Ver todos los videos]</a></p>
+        <%
         
     }
 %>
