@@ -74,7 +74,8 @@
             <%
             if(contentsToShow.size()>0)
             {
-                String code=contentsToShow.get(0).getCode();                
+                String code=contentsToShow.get(0).getCode();
+                code=code.replace("/", "\\/");
                 %>
                         <script type="text/javascript">
                         <!--
