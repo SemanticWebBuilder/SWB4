@@ -233,7 +233,7 @@ public class CaseFilter extends GenericResource {
          out.print("  <fieldset>\n");
          out.print(paramRequest.getLocaleString("title"));
          out.print("  </fieldset>\n");
-         out.print("  <form id=\"case\" name=\"case\" action=" + paramRequest.getActionUrl().toString() + " method=\"post\">\n");
+         out.print("  <form id=\"case\" name=\"case\" action=\"" + paramRequest.getRenderUrl().toString() + "\" method=\"post\">\n");
          out.print("      <fieldset>\n");
          out.print("          <legend>" + paramRequest.getLocaleString("filter") + "</legend>\n");
          out.print("          <table border=\"0\" width=\"70%\" align=\"center\">\n");
