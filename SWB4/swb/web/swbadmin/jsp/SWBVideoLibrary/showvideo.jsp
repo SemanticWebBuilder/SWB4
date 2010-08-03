@@ -48,6 +48,7 @@
     urlall.setMode(urlall.Mode_VIEW);
     urlall.setCallMethod(urlall.Call_CONTENT);
     String source=content.getSource();
+    
     code=code.replace("/", "\\/");
 %>
 <div class="columnaIzquierda">
