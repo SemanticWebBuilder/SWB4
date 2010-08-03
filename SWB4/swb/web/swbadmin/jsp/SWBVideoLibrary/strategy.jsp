@@ -76,7 +76,11 @@
             {
                 String code=contentsToShow.get(0).getCode();                
                 %>
-                        <%=code%>
+                        <script type="text/javascript">
+                        <!--
+                        document.write('<%=code%>');
+                        -->
+                    </script>
                 <%
                 contentsToShow.remove(0);
             }
