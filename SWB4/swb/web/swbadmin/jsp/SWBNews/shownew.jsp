@@ -42,8 +42,8 @@
         if(pathPhoto!=null)
         {
             %>
-             <img border="0" alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
-        <br>
+             <img alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
+        <br/>
             <%
         }
     %>
@@ -53,7 +53,7 @@
     {
         String originalTitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
         %>
-            <%=originalTitle%><br>
+            <%=originalTitle%><br/>
         <%
     }
     if(content.getSource()!=null)
