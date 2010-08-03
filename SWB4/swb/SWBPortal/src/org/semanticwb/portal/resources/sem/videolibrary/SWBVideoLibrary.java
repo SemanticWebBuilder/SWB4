@@ -58,7 +58,7 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
                 if(contentsMonth==null)
                 {
                     contentsMonth=new ArrayList<VideoContent>();
-                    getVideoByMonth.put(newmonth, contents);
+                    getVideoByMonth.put(newmonth, contentsMonth);
                 }
                 contentsMonth.add(content);
             }
