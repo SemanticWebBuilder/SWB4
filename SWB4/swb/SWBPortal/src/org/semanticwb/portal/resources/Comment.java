@@ -936,6 +936,7 @@ public class Comment extends GenericResource {
                 setAttribute(base, fup, "lastname", "1");
                 setAttribute(base, fup, "middlename", "1");
                 setAttribute(base, fup, "styleClass");
+                setAttribute(base, fup, "captcha");
                 setAttribute(base, fup, "menubar", "yes");
                 setAttribute(base, fup, "toolbar", "yes");
                 setAttribute(base, fup, "status", "yes");
