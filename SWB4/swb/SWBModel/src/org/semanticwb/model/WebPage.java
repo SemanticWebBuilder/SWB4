@@ -635,7 +635,7 @@ public class WebPage extends WebPageBase
             {
                 continue;
             }
-            if (onSchedule!=null && tp.isOnSchedule() == onSchedule)
+            if (onSchedule!=null && tp.isOnSchedule() != onSchedule)
             {
                 continue;
             }
@@ -659,7 +659,7 @@ public class WebPage extends WebPageBase
                 {
                     continue;
                 }
-                if (onSchedule!=null && tp.isOnSchedule() == onSchedule)
+                if (onSchedule!=null && tp.isOnSchedule() != onSchedule)
                 {
                     continue;
                 }
@@ -812,7 +812,7 @@ public class WebPage extends WebPageBase
         Resource resource=getLastContent();
         if(resource!=null)
         {
-            if (getWebSite().getLanguage() != null)
+            if (lang==null && getWebSite().getLanguage() != null)
             {
                 lang = getWebSite().getLanguage().getId();
             }
@@ -838,6 +838,39 @@ public class WebPage extends WebPageBase
         String lang = (String) args.get("language");
         String format = (String) args.get("format");
         return getContentsLastUpdate(lang, format);
+    }
+
+    /**
+     * Gets the contents meta.
+     *
+     * @param args the args
+     * @return the contents last update
+     */
+    public String getContentMeta(HashMap args)
+    {
+        Resource resource=getLastContent();
+        String lang = (String) args.get("language");
+        String author=null;
+        String description=null;
+        String keywords = null;
+
+        if(resource!=null && resource.getCreator()!=null)author=resource.getCreator().getFullName();
+        author=(String) args.get("author");
+        if(author==null)author=(String) args.get("author");
+
+        if(resource!=null)description=resource.getDisplayDescription(lang);
+        if(description==null)description=getDisplayDescription(lang);
+        if(description==null)description=(String) args.get("description");
+
+        if(resource!=null)keywords=resource.getTags();
+        if(keywords==null)keywords=getTags();
+        if(keywords==null)keywords=(String) args.get("keywords");
+
+        StringBuffer ret=new StringBuffer();
+        if(author!=null)ret.append("<meta name=\"Author\" content=\""+author+"\"/>\n");
+        if(description!=null)ret.append("<meta name=\"description\" content=\""+description+"\"/>\n");
+        if(keywords!=null)ret.append("<meta name=\"keywords\" content=\""+keywords+"\"/>\n");
+        return ret.toString();
     }
 
 }
