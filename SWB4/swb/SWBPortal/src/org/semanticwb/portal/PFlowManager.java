@@ -45,6 +45,7 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.w3c.dom.Document;
@@ -519,6 +520,11 @@ public class PFlowManager
                                         {
                                             notification.autorize(resource);
                                         }
+                                        if(resource instanceof Versionable)
+                                        {
+                                            Versionable v=(Versionable)resource;
+                                            v.getLastVersion().setVersionAuthorized(true);
+                                        }
                                     }
                                     else if (serviceName.equals("noauthorize"))
                                     {
@@ -526,6 +532,11 @@ public class PFlowManager
                                         if (notification != null)
                                         {
                                             notification.noAutorize(resource);
+                                        }
+                                        if(resource instanceof Versionable)
+                                        {
+                                            Versionable v=(Versionable)resource;
+                                            v.getLastVersion().setVersionAuthorized(false);
                                         }
                                     }
                                     else if (serviceName.equals("publish"))
