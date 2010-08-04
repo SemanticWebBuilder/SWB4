@@ -104,7 +104,9 @@
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setMode("month");
                     url.setParameter("month", String.valueOf(month));
-                    if(currentMonth==month)
+                    url.setParameter("year", year);
+                    String currentyear=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                    if(currentMonth==month && currentyear.equals(year))
                     {
                         %>
                         <li class="listaLinksMes"><a href="<%=url%>"><%=ultmsg%></a></li><br>
