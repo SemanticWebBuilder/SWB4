@@ -44,21 +44,24 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         }
         return false;
     }
-    private Map<Integer, List<VideoContent>> getVideoByMonth(List<VideoContent> contents)
+    private Map<String, List<VideoContent>> getVideoByMonth(List<VideoContent> contents)
     {
         Calendar calendar = Calendar.getInstance();
-        TreeMap<Integer, List<VideoContent>> getVideoByMonth = new TreeMap<Integer, List<VideoContent>>();
+        TreeMap<String, List<VideoContent>> getVideoByMonth = new TreeMap<String, List<VideoContent>>();
         for (VideoContent content : contents)
         {
             if(content.getPublishDate()!=null)
             {
                 calendar.setTime(content.getPublishDate());
                 int newmonth = calendar.get(Calendar.MONTH);
-                List<VideoContent> contentsMonth=getVideoByMonth.get(newmonth);
+                int year = calendar.get(Calendar.YEAR);
+                String key=newmonth+"_"+year;
+
+                List<VideoContent> contentsMonth=getVideoByMonth.get(key);
                 if(contentsMonth==null)
                 {
                     contentsMonth=new ArrayList<VideoContent>();
-                    getVideoByMonth.put(newmonth, contentsMonth);
+                    getVideoByMonth.put(key, contentsMonth);
                 }
                 contentsMonth.add(content);
             }
@@ -181,14 +184,20 @@ public class SWBVideoLibrary extends org.semanticwb.portal.resources.sem.videoli
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
         if(request.getParameter("month")!=null)
         {
+            int year=Calendar.getInstance().get(Calendar.YEAR);
+            if(request.getParameter("year")!=null)
+            {
+                year=Integer.parseInt(request.getParameter("year"));
+            }
             int month=-1;
             try
             {
                 month=Integer.parseInt(request.getParameter("month"));
+                String key=month+"_"+year;
                 if(month>=0 && month<=12)
                 {
                     List<VideoContent> list = getVideos(null,paramRequest.getUser());                    
-                    List<VideoContent> listMonth=getVideoByMonth(list).get(month);                    
+                    List<VideoContent> listMonth=getVideoByMonth(list).get(key);
                     String path = basePath+"videoByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
