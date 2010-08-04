@@ -79,8 +79,10 @@
             {
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
+            String urlcontent=url.toString().replace("&", "&amp;");
+            
             %>
-            <li><A href="<%=url%>" ><b><%=title%> <%=country%></b></A></li><br><%=date%>
+            <li><a href="<%=urlcontent%>" ><b><%=title%> <%=country%> <%=date%></b></a></li>
             <%
             if(inew>=limit)
             {
@@ -106,16 +108,17 @@
                     url.setParameter("month", String.valueOf(month));
                     url.setParameter("year", year);
                     String currentyear=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                    String urlcontent=url.toString().replace("&", "&amp;");
                     if(currentMonth==month && currentyear.equals(year))
                     {
                         %>
-                        <li class="listaLinksMes"><a href="<%=url%>"><%=ultmsg%></a></li><br>
+                        <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=ultmsg%></a></li>
                         <%
                     }
                     else
                     {
                         %>
-                        <li class="listaLinksMes"><a href="<%=url%>"><%=mensaje%><%=titleMonth%></a></li><br>
+                        <li class="listaLinksMes"><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></li>
                         <%
                     }
 
