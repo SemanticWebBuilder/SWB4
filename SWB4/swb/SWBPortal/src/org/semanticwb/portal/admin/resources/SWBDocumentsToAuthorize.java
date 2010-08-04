@@ -39,6 +39,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.PFlowManager;
@@ -47,6 +48,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -242,8 +244,13 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     //urlpre.setResourceBase(resource);
                     //urlpre.set
                     SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
-
-                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT)+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+                    SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
+                    if(resource.getResourceData().createGenericInstance() instanceof Versionable)
+                    {
+                        Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
+                        urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
+                    }
+                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+urlpreview+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
 
                     out.println("</td>");
                     out.println("<td width='30%'>");
