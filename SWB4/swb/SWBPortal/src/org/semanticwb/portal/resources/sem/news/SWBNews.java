@@ -33,21 +33,23 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         super(base);
     }
-    public static Map<Integer, List<SWBNewContent>> getNewsByMonth(List<SWBNewContent> contents)
+    public static Map<String, List<SWBNewContent>> getNewsByMonth(List<SWBNewContent> contents)
     {
         Calendar calendar = Calendar.getInstance();
-        TreeMap<Integer, List<SWBNewContent>> getNewsByMonth = new TreeMap<Integer, List<SWBNewContent>>();
+        TreeMap<String, List<SWBNewContent>> getNewsByMonth = new TreeMap<String, List<SWBNewContent>>();
         for (SWBNewContent content : contents)
         {
             if(content.getPublishDate()!=null)
             {
                 calendar.setTime(content.getPublishDate());
                 int newmonth = calendar.get(Calendar.MONTH);
-                List<SWBNewContent> contentsMonth=getNewsByMonth.get(newmonth);
+                int year = calendar.get(Calendar.YEAR);
+                String key=newmonth+"_"+year;
+                List<SWBNewContent> contentsMonth=getNewsByMonth.get(key);
                 if(contentsMonth==null)
                 {
                     contentsMonth=new ArrayList<SWBNewContent>();
-                    getNewsByMonth.put(newmonth, contents);
+                    getNewsByMonth.put(key, contents);
                 }
                 contentsMonth.add(content);
             }
@@ -189,16 +191,19 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        if(request.getParameter("month")!=null)
+        if(request.getParameter("month")!=null && request.getParameter("year")!=null)
         {
             int month=-1;
+            int year=-1;
             try
             {
                 month=Integer.parseInt(request.getParameter("month"));
+                year=Integer.parseInt(request.getParameter("year"));
+                String key=month+"_"+year;
                 if(month>=0 && month<=12)
                 {
                     List<SWBNewContent> news = getNews(null,paramRequest.getUser());
-                    news=getNewsByMonth(news).get(month);
+                    news=getNewsByMonth(news).get(key);
                     String path = basePath+"newsByMonth.jsp";
                     RequestDispatcher dis = request.getRequestDispatcher(path);
                     try
