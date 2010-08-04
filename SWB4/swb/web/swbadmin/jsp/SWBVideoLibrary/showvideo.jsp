@@ -127,6 +127,7 @@
         </script></p>
             <%
         }
+    
         String viewAll="[Ver todos los videos]";
         if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
         {
@@ -134,7 +135,7 @@
         }
     %>
         
-    <p><a href="<%=urlall%>"></a></p>
+    <p><a href="<%=urlall%>"><%=viewAll%></a></p>
 
 
 </div>
