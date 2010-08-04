@@ -108,8 +108,10 @@
                 }
                 else
                 {
+                    String urlsource=content.getVideoWebPage();
+                    urlsource=urlsource.replace("&", "&amp;");
                     %>
-                    <p>Fuente: <a href="<%=content.getVideoWebPage()%>"><%=source%></a></p>
+                    <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
                     <%
                 }
             }
