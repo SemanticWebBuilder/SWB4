@@ -1200,7 +1200,13 @@ public class SWBUtils {
          */
         public static String getStrDay(int day, String lang)
         {
-            return getLocaleString("locale_date", "day_" + day, new Locale(lang));
+            if(lang!=null)
+            {
+                return getLocaleString("locale_date", "day_" + day, new Locale(lang));
+            }else
+            {
+                return getLocaleString("locale_date", "day_" + day);
+            }
         }
 
         /**
@@ -1217,7 +1223,13 @@ public class SWBUtils {
          */
         public static String getStrMonth(int month, String lang)
         {
-            return getLocaleString("locale_date", "month_" + month, new Locale(lang));
+            if(lang!=null)
+            {
+                return getLocaleString("locale_date", "month_" + month, new Locale(lang));
+            }else
+            {
+                return getLocaleString("locale_date", "month_" + month);
+            }
         }
 
         /**
@@ -1249,6 +1261,7 @@ public class SWBUtils {
          */
         public static String getStrDate(Date date, String lang, String format)
         {
+            //System.out.println(date+" "+lang+" "+format);
             String ret = "";
             if (format != null)
             {
