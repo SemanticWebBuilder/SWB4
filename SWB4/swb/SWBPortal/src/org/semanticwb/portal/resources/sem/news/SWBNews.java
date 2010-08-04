@@ -81,10 +81,8 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         {
             if(content.getPublishDate()!=null)
             {
-                calendar.setTime(content.getPublishDate());
-                int newmonth = calendar.get(Calendar.MONTH);
-                int new_year=calendar.get(Calendar.YEAR);
-                if (month == newmonth && year==new_year)
+                calendar.setTime(content.getPublishDate());                
+                if (month == calendar.get(Calendar.MONTH) && year==calendar.get(Calendar.YEAR))
                 {
                     return true;
                 }
