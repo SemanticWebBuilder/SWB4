@@ -107,9 +107,14 @@
                         <%
 
                 }
+                String viewAll="Sección completa de videos";
+                if(paramRequest.getUser().getLanguage()!=null && paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+                {
+                    viewAll="View all videos";
+                }
                 %>
                 </ul>
-                <p class="listaVideos"><a href="<%=wp.getUrl()%>">sección completa de videos</a></p>
+                <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
                 </div>
                 <%
             }
