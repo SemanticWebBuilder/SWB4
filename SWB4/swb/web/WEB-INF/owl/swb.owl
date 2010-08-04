@@ -1105,6 +1105,7 @@
         <rdfs:label xml:lang="es">Colección de Componentes</rdfs:label>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#PFlowRefable"/>
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
         <rdfs:label xml:lang="en">Components Collection</rdfs:label>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
