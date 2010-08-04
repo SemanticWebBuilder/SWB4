@@ -22,6 +22,39 @@
     {        
         for(VideoContent content : contents)
         {
+            if(content.getPublishDate()!=null)
+            {
+                int month=-1;
+                if(request.getParameter("month")!=null)
+                {
+                    try
+                    {
+                        month=Integer.parseInt(request.getParameter("month"));
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                Calendar cal=Calendar.getInstance();
+                cal.setTime(content.getPublishDate());
+                int year=Calendar.getInstance().get(Calendar.YEAR);
+                if(request.getParameter("year")!=null)
+                {
+                    try
+                    {
+                        year=Integer.parseInt(request.getParameter("year"));
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                if(!(month==cal.get(Calendar.MONTH) && year==cal.get(Calendar.YEAR)))
+                {
+                    continue;
+                }
+            }
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             url.setMode(paramRequest.Mode_VIEW);
