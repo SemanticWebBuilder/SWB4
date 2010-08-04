@@ -107,14 +107,17 @@
                     {
                         if(content.getVideoWebPage()==null)
                         {
+                            
                             %>
                             <p>Fuente: <%=source%></p>
                             <%
                         }
                         else
                         {
+                            String urlsource=content.getVideoWebPage();
+                            String urlsource=urlsource.replace("&", "&amp;");
                             %>
-                            <p>Fuente: <a href="<%=content.getVideoWebPage()%>"><%=source%></a></p>
+                            <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
                             <%
                         }
                     }
@@ -148,16 +151,17 @@
                     url.setParameter("month", String.valueOf(month));
                     url.setParameter("year", year);
                     String currentyear=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                    String urlcontent=url.toString().replace("&", "&amp;");
                     if(currentMonth==month && currentyear.equals(year))
                     {
                         %>
-                        <p><a href="<%=url%>"><%=ultmsg%></a></p>
+                        <p><a href="<%=urlcontent%>"><%=ultmsg%></a></p>
                         <%
                     }
                     else
                     {
                         %>
-                        <p><a href="<%=url%>"><%=mensaje%><%=titleMonth%></a></p>
+                        <p><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></p>
                         <%
                     }
 
