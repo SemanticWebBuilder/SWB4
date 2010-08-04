@@ -81,11 +81,22 @@
 
             }
             %>
-            <li><A href="<%=url%>" ><b><%=title%> <%=country%></b></A></li><br><%=date%>
+            <li><a href="<%=url%>" ><b><%=title%> <%=country%> <%=date%></b></a></li>
             <% 
         }
         %>
              </ul>
+        <%
+        SWBResourceURL urlall=paramRequest.getRenderUrl();
+        urlall.setMode(urlall.Mode_VIEW);
+        urlall.setCallMethod(urlall.Call_CONTENT);
+        String viewAll="[Ver todas las noticias]";
+        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
+        {
+            viewAll="[View all news]";
+        }
+        %>
+        <p><a href="<%=urlall%>"><%=viewAll%></a></p>
         <%
     }
 %>
