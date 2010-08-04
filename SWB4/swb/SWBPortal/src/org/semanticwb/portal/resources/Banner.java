@@ -86,13 +86,13 @@ public class Banner extends GenericAdmResource {
                 try {
                     Integer.parseInt( width.replaceAll("\\D", "") );
                 }catch(Exception e) {
-                    width = "100%";
+                    width = null;
                 }
                 String height = paramRequest.getArgument("height", base.getAttribute("height"));
                 try {
                     Integer.parseInt( height.replaceAll("\\D", "") );
                 }catch(Exception e) {
-                    width = "100%";
+                    height = null;
                 }
 
                 if( url.toLowerCase().startsWith("mailto:") ) {
@@ -103,8 +103,10 @@ public class Banner extends GenericAdmResource {
                     out.print("<object ");
                     out.print(" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" ");
                     out.print(" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab\"");
-                    out.print(" width=\""+width+"\"");
-                    out.print(" height=\""+height+"\"");
+                    if(width!=null)
+                        out.print(" width=\""+width+"\"");
+                    if(height!=null)
+                        out.print(" height=\""+height+"\"");
                     out.println(">");
                     out.println("<param name=\"movie\" value=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\" />");
                     out.println("<param name=\"flashvars\" value=\"liga="+wburl+"\" />\n");
@@ -113,8 +115,10 @@ public class Banner extends GenericAdmResource {
                     out.print("<embed pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" quality=\"high\" wmode=\"transparent\" play=\"true\" loop=\"true\" ");
                     out.print(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
                     out.print(" flashvars=\"liga="+wburl+"\"");
-                    out.print(" width=\""+width+"\"");
-                    out.print(" height=\""+height+"\"");
+                    if(width!=null)
+                        out.print(" width=\""+width+"\"");
+                    if(height!=null)
+                        out.print(" height=\""+height+"\"");
                     out.println(">");
                     out.println("</embed></object>");
                 }else {
@@ -129,8 +133,10 @@ public class Banner extends GenericAdmResource {
                     out.print("<img src=\"");
                     out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                     out.print(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getAttribute("title",""))+"\"");
-                    out.print(" width=\""+width+"\"");
-                    out.print(" height=\""+height+"\"");
+                    if(width!=null)
+                        out.print(" width=\""+width+"\"");
+                    if(height!=null)
+                        out.print(" height=\""+height+"\"");
                     if( longdesc!=null )
                         out.print(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                     out.println("/>");
