@@ -520,9 +520,9 @@ public class PFlowManager
                                         {
                                             notification.autorize(resource);
                                         }
-                                        if(resource instanceof Versionable)
+                                        if(resource.getResourceData().instanceOf(Versionable.swb_Versionable))
                                         {
-                                            Versionable v=(Versionable)resource;
+                                            Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
                                             v.getLastVersion().setVersionAuthorized(true);
                                             v.setActualVersion(v.getLastVersion());
                                         }
@@ -534,9 +534,9 @@ public class PFlowManager
                                         {
                                             notification.noAutorize(resource);
                                         }
-                                        if(resource instanceof Versionable)
+                                        if(resource.getResourceData().instanceOf(Versionable.swb_Versionable))
                                         {
-                                            Versionable v=(Versionable)resource;
+                                            Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
                                             v.getLastVersion().setVersionAuthorized(false);
                                         }
                                     }
