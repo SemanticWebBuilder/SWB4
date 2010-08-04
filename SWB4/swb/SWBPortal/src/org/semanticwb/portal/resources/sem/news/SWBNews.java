@@ -191,14 +191,17 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
-        if(request.getParameter("month")!=null && request.getParameter("year")!=null)
+        if(request.getParameter("month")!=null )
         {
             int month=-1;
-            int year=-1;
+            int year=Calendar.getInstance().get(Calendar.YEAR);
+            if(request.getParameter("year")!=null)
+            {
+                year=Integer.parseInt(request.getParameter("year"));
+            }
             try
             {
-                month=Integer.parseInt(request.getParameter("month"));
-                year=Integer.parseInt(request.getParameter("year"));
+                month=Integer.parseInt(request.getParameter("month"));                
                 String key=month+"_"+year;
                 if(month>=0 && month<=12)
                 {
