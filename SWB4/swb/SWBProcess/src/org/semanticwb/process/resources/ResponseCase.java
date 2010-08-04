@@ -27,14 +27,27 @@ import java.util.Iterator;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.SWBProcessMgr;
 import org.semanticwb.process.model.ProcessWebPage;
 
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.process.kpi.CaseResponseTime;
 import org.semanticwb.portal.api.SWBResourceException;
+
+import java.io.File;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.xy.*;
+import org.jfree.chart.plot.*;
+
 
 /**
  *
@@ -42,9 +55,11 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class ResponseCase extends GenericResource {
 
+    private static Logger log = SWBUtils.getLogger(ResponseCase.class);
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        CaseResponseTime crt = new CaseResponseTime();
+        /*CaseResponseTime crt = new CaseResponseTime();
         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         response.getWriter().print("<div class=\"swbform\">\n");
         response.getWriter().print("  <fieldset>\n");
@@ -60,6 +75,36 @@ public class ResponseCase extends GenericResource {
             }
         }
         response.getWriter().print("  </fieldset>\n");
-        response.getWriter().print("</div>\n");
+        response.getWriter().print("</div>\n");*/
+        doGraph(request, response, paramRequest);
+    }
+
+    public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        CaseResponseTime crt = new CaseResponseTime();
+        Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        String pathFile = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/images";
+        File filex = new File(pathFile);
+        if (!filex.exists())
+            filex.mkdirs();
+        while (isites.hasNext()) {
+            ProcessSite site = (ProcessSite)isites.next();
+            Iterator<Process> it = site.listProcesses();
+            while (it.hasNext()) {
+                Process process = it.next();
+                XYSeries series = new XYSeries("Response Time");
+                series.add(1, crt.getMinimumProcessInstance(process)/1000);
+                series.add(2, crt.getAverageProcessInstances(process)/100);
+                series.add(3, crt.getMaximumProcessInstance(process)/10);
+                XYSeriesCollection dataset = new XYSeriesCollection();
+                dataset.addSeries(series);
+                JFreeChart chart = ChartFactory.createXYAreaChart(process.getTitle(), "Segundos", "Tiempos", dataset, PlotOrientation.VERTICAL, true, true, false);
+                try {
+                    ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_response.jpg"), chart, 600, 400);
+                    response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_response.jpg); height: 400px; width: 600px; border: 0px solid black;\"> </div>");
+                }catch (Exception e) {
+                    log.error(e);
+                }
+            }
+        }
     }
 }
