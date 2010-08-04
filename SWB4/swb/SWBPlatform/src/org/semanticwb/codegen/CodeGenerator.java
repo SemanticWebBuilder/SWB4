@@ -1916,7 +1916,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void add" + objectName + "(" + type + " value)" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().addLiteralProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", new SEMANTIC_LITERAL_FULL_NAME(value));" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().addLiteralProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ", new "+SEMANTIC_LITERAL_FULL_NAME+"(value));" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void removeAll" + objectName + "()" + ENTER);
