@@ -501,7 +501,35 @@ public class WebPage extends WebPageBase
     {
         String language = (String) args.get("language");
         String id = (String) args.get("id");
-        if(id!=null)
+        String pathLevel = (String) args.get("pathlevel");
+        if(pathLevel!=null)
+        {
+            int level=0;
+            try
+            {
+                level=Integer.parseInt(pathLevel);
+            }catch(Exception e)
+            {
+                return getDisplayName(language);
+            }
+            ArrayList<WebPage> arr=new ArrayList();
+            WebPage page=getParent();
+            while(page!=null)
+            {
+                arr.add(page);
+                if(page.equals(page.getWebSite().getHomePage()))break;
+                page=page.getParent();
+            }
+            int i=arr.size()-1-level;
+            if(i>=0)
+            {
+                return arr.get(i).getDisplayName(language);
+            }else
+            {
+                return getDisplayName(language);
+            }
+
+        }else if(id!=null)
         {
             WebPage page=getWebSite().getWebPage(id);
             return page.getDisplayName(language);
