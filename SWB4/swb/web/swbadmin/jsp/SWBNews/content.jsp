@@ -95,11 +95,11 @@
         {
             int iyear=Integer.parseInt(year);
             // muestra liga para noticias por mes
-            for(int month=0;month<12;month++)
+            
+            for(int month=11;month>=0;month--)
             {
                 if(SWBNews.hasNews(contents, month,iyear))
-                {                    
-
+                {                       
                     String titleMonth=" "+getMonth(month,paramRequest.getUser())+" "+iyear;
                     SWBResourceURL url=paramRequest.getRenderUrl();
                     url.setMode("month");
