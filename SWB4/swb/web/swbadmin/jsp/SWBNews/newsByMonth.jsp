@@ -44,7 +44,11 @@
             {
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
-            String date=sdf.format(content.getPublishDate());
+            String date="";
+            if(content.getPublishDate()!=null)
+            {
+                date=sdf.format(content.getPublishDate());
+            }
             %>
             <li><A href="<%=url%>" ><b><%=title%> <%=country%></b></A></li><br><%=date%>
             <%            
