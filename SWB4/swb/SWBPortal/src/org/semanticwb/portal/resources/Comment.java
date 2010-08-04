@@ -1782,12 +1782,12 @@ public class Comment extends GenericResource {
     private String getCaptchaScript(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
         html.append("<div class=\"swb-coment-imagen\"> \n");
-        html.append("  <img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" alt=\"\" id=\"imgseccode\" width=\"155\" height=\"65\" /> \n");
-        html.append("  <a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a> \n");
+        html.append("  <p><img src=\""+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp\" alt=\"\" id=\"imgseccode\" width=\"155\" height=\"65\" /></p> \n");
+        html.append("  <p><a href=\"#\" onclick=\"changeSecureCodeImage('imgseccode');\">"+paramRequest.getLocaleString("lblDoViewAnotherCode")+"</a></p> \n");
         html.append("</div> \n");
         html.append("<div class=\"swb-coment-captcha\"> \n");
-        html.append("  <label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("lblDoViewImageIs")+":</label> \n");
-        html.append("  <input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" /> \n");
+        html.append("  <p><label for=\"cmnt_seccode\">"+paramRequest.getLocaleString("lblDoViewImageIs")+":</label></p> \n");
+        html.append("  <p><input type=\"text\" id=\"cmnt_seccode\" name=\"cmnt_seccode\" /></p> \n");
         html.append("</div> \n");
         return html.toString();
     }
