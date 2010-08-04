@@ -3,6 +3,8 @@
     - Se agrego funcionalidad de Colecciones de Recursos (Jei)
     - Se agrego funcionalidad de Colecciones de Objetos  (Jei)
     - Se agrego soporte a descripciones en multiples idiomas (Jei)
+    - Se agrego búsqueda en la administración contenidos por sección (Juan)
+    - Se agrego paginación en la administración de contenidos por sección (Juan)
   4.0.1.5  (En desarrollo)
     - Soporte a SQLServer 2008 (Jei)
     - Nuevo Blog con persitencia semantica (Victor L)
