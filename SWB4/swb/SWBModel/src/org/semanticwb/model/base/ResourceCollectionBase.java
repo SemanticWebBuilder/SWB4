@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.PFlowRefable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollectionCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory");
     public static final org.semanticwb.platform.SemanticProperty swb_hasResourceCollectionCategoryInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasResourceCollectionCategoryInv");
@@ -96,6 +96,18 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
         public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByResourceCollectionType(org.semanticwb.model.ResourceType value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_resourceCollectionType,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByPFlowRef(org.semanticwb.model.PFlowRef value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByPFlowRef(org.semanticwb.model.PFlowRef value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPFlowRef,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -279,6 +291,52 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
          if(obj!=null)
          {
              ret=(org.semanticwb.model.ResourceType)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listPFlowRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(getSemanticObject().listObjectProperties(swb_hasPFlowRef));
+    }
+
+    public boolean hasPFlowRef(org.semanticwb.model.PFlowRef value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasPFlowRef,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listInheritPFlowRefs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(getSemanticObject().listInheritProperties(swb_hasPFlowRef));
+    }
+
+    public void addPFlowRef(org.semanticwb.model.PFlowRef value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasPFlowRef, value.getSemanticObject());
+    }
+
+    public void removeAllPFlowRef()
+    {
+        getSemanticObject().removeProperty(swb_hasPFlowRef);
+    }
+
+    public void removePFlowRef(org.semanticwb.model.PFlowRef value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasPFlowRef,value.getSemanticObject());
+    }
+
+    public org.semanticwb.model.PFlowRef getPFlowRef()
+    {
+         org.semanticwb.model.PFlowRef ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPFlowRef);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.PFlowRef)obj.createGenericInstance();
          }
          return ret;
     }

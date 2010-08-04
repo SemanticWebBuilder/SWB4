@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable
+public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty swb_collectionClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionClass");
@@ -184,7 +184,7 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
 
     public void addListProperties(String value)
     {
-        getSemanticObject().addLiteralProperty(swb_hasCollectionListProperties, new SEMANTIC_LITERAL_FULL_NAME(value));
+        getSemanticObject().addLiteralProperty(swb_hasCollectionListProperties, new org.semanticwb.platform.SemanticLiteral(value));
     }
 
     public void removeAllListProperties()
@@ -211,7 +211,7 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
 
     public void addSearchProperties(String value)
     {
-        getSemanticObject().addLiteralProperty(swb_hasCollectionSearchProperties, new SEMANTIC_LITERAL_FULL_NAME(value));
+        getSemanticObject().addLiteralProperty(swb_hasCollectionSearchProperties, new org.semanticwb.platform.SemanticLiteral(value));
     }
 
     public void removeAllSearchProperties()
