@@ -30,7 +30,6 @@ package org.semanticwb.portal.admin.resources;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -47,10 +46,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
-import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.api.SWBResourceURLImp;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -247,7 +243,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     //urlpre.set
                     SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
 
-                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+paramreq.getRenderUrl().setCallMethod(paramreq.Call_DIRECT)+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT)+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
 
                     out.println("</td>");
                     out.println("<td width='30%'>");
