@@ -1,3 +1,7 @@
+  4.0.1.6
+    - Soporte a paginas de Error multilenguaje
+    - Se agrego funcionalidad de Colecciones de Recursos
+    - Se agrego funcionalidad de Colecciones de Objetos
   4.0.1.5  (En desarrollo)
     - Soporte a SQLServer 2008 (Jei)
     - Nuevo Blog con persitencia semantica (Victor L)
