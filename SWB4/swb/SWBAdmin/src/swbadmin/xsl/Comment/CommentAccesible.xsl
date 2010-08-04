@@ -50,9 +50,6 @@
             </xsl:when>
             <xsl:otherwise>
                 <div class="swb-comment">
-                    <h2>
-                        <xsl:value-of select="msgComments" disable-output-escaping="yes" />
-                    </h2>
                     <form name="frmSendEmail" method="post" action="{@accion}">                        
                         <xsl:for-each select="fselect">
                             <p>
