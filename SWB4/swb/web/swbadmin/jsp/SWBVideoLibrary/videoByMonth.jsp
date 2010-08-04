@@ -91,8 +91,13 @@
         SWBResourceURL urlall=paramRequest.getRenderUrl();
         urlall.setMode(urlall.Mode_VIEW);
         urlall.setCallMethod(urlall.Call_CONTENT);
+        String viewAll="[Ver todos los videos]";
+        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
+        {
+            viewAll="[View all videos]";
+        }
         %>
-        <p><a href="<%=urlall%>">[Ver todos los videos]</a></p>
+        <p><a href="<%=urlall%>"><%=viewAll%></a></p>
         <%
         
     }
