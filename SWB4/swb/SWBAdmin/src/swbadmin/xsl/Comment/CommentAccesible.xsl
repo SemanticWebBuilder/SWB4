@@ -152,7 +152,7 @@
     </xsl:template>
 
     <xsl:template name="captcha">
-        <div>
+        <div class="swbCaptcha">
             captcha
         </div>
     </xsl:template>
