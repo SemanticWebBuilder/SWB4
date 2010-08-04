@@ -524,6 +524,7 @@ public class PFlowManager
                                         {
                                             Versionable v=(Versionable)resource;
                                             v.getLastVersion().setVersionAuthorized(true);
+                                            v.setActualVersion(v.getLastVersion());
                                         }
                                     }
                                     else if (serviceName.equals("noauthorize"))
