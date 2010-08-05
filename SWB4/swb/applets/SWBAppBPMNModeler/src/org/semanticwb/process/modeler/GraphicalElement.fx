@@ -17,8 +17,6 @@ import javafx.scene.Group;
 import javafx.scene.CacheHint;
 import org.semanticwb.process.modeler.ModelerUtils;
 import org.semanticwb.process.modeler.ConnectionObject;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Tooltip;
 import javafx.util.Sequences;
 
 
@@ -351,7 +349,11 @@ public class GraphicalElement extends CustomNode
         //println(name);
 //        tooltip.activate();
         over=true;
-        ModelerUtils.startToolTip("{toolTipText}", x-w/2-modeler.getXScroll(), y+h/2-modeler.getYScroll()+3);
+        if (title == null or title.trim() == "") {
+            ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+        } else {
+            ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+        }
         mouseEntered(e);
     }
 
