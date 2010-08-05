@@ -58,10 +58,10 @@
             }
             i=1;
             contents=contentsToShow;
-            String titleSection=library.getResourceBase().getTitle(usrlanguage);
+            String titleSection=library.getResourceBase().getDisplayTitle(usrlanguage);
             if(titleSection==null || titleSection.trim().equals(""))
             {
-                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getTitle(usrlanguage));
+                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDisplayTitle(usrlanguage));
             }
             String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
             if(descriptionSection==null || descriptionSection.trim().equals(""))
