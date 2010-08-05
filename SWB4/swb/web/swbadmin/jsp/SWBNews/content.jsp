@@ -76,6 +76,11 @@
             {
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
+            String originalTitle="";
+            if(content.getOriginalTitle()!=null)
+            {
+                originalTitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+            }
             String urlcontent=url.toString().replace("&", "&amp;");
             String ago="";
             String source=content.getSource();
@@ -111,6 +116,14 @@
                     }
                 %>
             </h3>
+                <%
+                    if(originalTitle!=null && !originalTitle.trim().equals(""))
+                        {
+                        %>
+                        <p><%=originalTitle%></p>
+                        <%
+                        }
+                %>
             <p class="fechaVideo">
                 <%
                     if(date!=null && !date.trim().equals(""))
