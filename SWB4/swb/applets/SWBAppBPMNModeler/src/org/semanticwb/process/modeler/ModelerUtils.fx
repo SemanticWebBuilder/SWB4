@@ -18,9 +18,6 @@ import javafx.util.StringLocalizer;
 
 public var clickedNode: Node;
 public var version = "0.1.0.0";
-public def ACTION_OPEN = 1;
-public def ACTION_SAVE = 2;
-public def ACTION_EXPORT = 3;
 public var splash = Splash{};
 var resize = ResizeNode{};
 var errorMessage: String;
@@ -87,7 +84,6 @@ public function showToolTip(type: String, text: String, x: Number, y: Number) {
     toolTip.show();
 }
 
-
 public function stopToolTip()
 {
     toolTip.hide();
@@ -145,4 +141,3 @@ public function renderToImage(node:Node, minx:Integer, miny:Integer, width:Integ
 public class ModelerUtils {
 
 }
-
