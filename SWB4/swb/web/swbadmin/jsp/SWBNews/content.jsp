@@ -72,9 +72,9 @@
                 date=sdf.format(content.getPublishDate());
             }
             String country="";
-            if(content.getCountry()!=null && content.getCountry().getTitle(usrlanguage)!=null && !content.getCountry().getTitle(usrlanguage).equals(""))
+            if(content.getCountry()!=null && content.getCountry().getDisplayTitle(usrlanguage)!=null && !content.getCountry().getDisplayTitle(usrlanguage).equals(""))
             {
-                country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
+                country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getDisplayTitle(usrlanguage))+")";
             }
             String originalTitle="";
             if(content.getOriginalTitle()!=null)
