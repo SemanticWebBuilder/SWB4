@@ -610,6 +610,9 @@ public class Comment extends GenericResource {
      */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/xml; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         try {
             Document dom = getDom(request, response, paramsRequest);
 //            if (dom != null) {
@@ -708,7 +711,7 @@ public class Comment extends GenericResource {
     
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=utf-8");
+        response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
 
@@ -771,6 +774,9 @@ public class Comment extends GenericResource {
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws IOException, SWBResourceException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
 
         StringBuilder ret = new StringBuilder();
         Resource base = getResourceBase();
@@ -1152,7 +1158,7 @@ public class Comment extends GenericResource {
         try {
             SWBResourceURL url = paramsRequest.getRenderUrl().setAction("update");
             ret.append("<div class=\"swbform\">");
-            ret.append("<form id=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\"");
+            ret.append("<form name=\"frmResource\" method=\"post\" enctype=\"multipart/form-data\" action=\"");
             ret.append(url.toString());
             ret.append("\"> \n");
             ret.append("<fieldset>");
@@ -1187,7 +1193,7 @@ public class Comment extends GenericResource {
                 ret.append("<p>"
                         + admResUtils.displayImage(base,
                         base.getAttribute("img").trim(), "img")
-                        + "<input type=checkbox name=noimg value=1>"
+                        + "<input type=\"checkbox\" name=\"noimg\" value=\"1\"/>"
                         + paramsRequest.getLocaleString("msgCutImage") + " <i>"
                         + base.getAttribute("img").trim() + "</i></p>");
             }
@@ -1197,49 +1203,49 @@ public class Comment extends GenericResource {
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgAlt") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=alt ");
+            ret.append("<input type=\"text\" name=\"alt\" ");
             if (!"".equals(base.getAttribute("alt", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("alt").trim().replaceAll("\"","&#34;")
                         + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgButton") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=btntexto ");
+            ret.append("<input type=\"text\" name=\"btntexto\" ");
             if (!"".equals(base.getAttribute("btntexto", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("btntexto").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgLink") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=lnktexto ");
+            ret.append("<input type=\"text\" name=\"lnktexto\" ");
             if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("lnktexto").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgStyle") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=blnstyle ");
+            ret.append("<input type=\"text\" name=\"blnstyle\" ");
             if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("blnstyle").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1249,7 +1255,7 @@ public class Comment extends GenericResource {
             if ("1".equals(base.getAttribute("firstname", "0"))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1259,7 +1265,7 @@ public class Comment extends GenericResource {
             if ("1".equals(base.getAttribute("lastname", "0"))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1269,7 +1275,7 @@ public class Comment extends GenericResource {
             if ("1".equals(base.getAttribute("middlename", "0"))) {
                 ret.append(" checked");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1280,7 +1286,7 @@ public class Comment extends GenericResource {
             if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                 ret.append("<p>" + admResUtils.displayImage(base,
                         base.getAttribute("imgenviar").trim(), "imgenviar")
-                        + "<input type=checkbox name=noimgenviar value=1>"
+                        + "<input type=\"checkbox\" name=\"noimgenviar\" value=\"1\"/>"
                         + paramsRequest.getLocaleString("msgCutImage") + " <i>"
                         + base.getAttribute("imgenviar").trim() + "</i></p>");
             }
@@ -1290,25 +1296,25 @@ public class Comment extends GenericResource {
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSubmitAlt") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=altenviar ");
+            ret.append("<input type=\"text\" name=\"altenviar\" ");
             if (!"".equals(base.getAttribute("altenviar", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("altenviar").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSubmitButton") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=btnenviar ");
+            ret.append("<input type=\"text\" name=\"btnenviar\" ");
             if (!"".equals(base.getAttribute("btnenviar", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("btnenviar").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1319,7 +1325,7 @@ public class Comment extends GenericResource {
             if (!"".equals(base.getAttribute("imglimpiar", "").trim())) {
                 ret.append("<p>" + admResUtils.displayImage(base,
                         base.getAttribute("imglimpiar").trim(), "imglimpiar")
-                        + "<input type=checkbox name=noimglimpiar value=1>"
+                        + "<input type=\"checkbox\" name=\"noimglimpiar\" value=\"1\"/>"
                         + paramsRequest.getLocaleString("msgCutImage")
                         + " <i>" + base.getAttribute("imglimpiar").trim()
                         + "</i></p>");
@@ -1330,25 +1336,25 @@ public class Comment extends GenericResource {
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgResetAlt") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=altlimpiar ");
+            ret.append("<input type=\"text\" name=\"altlimpiar\" ");
             if (!"".equals(base.getAttribute("altlimpiar", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("altlimpiar").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgResetButton") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text name=btnlimpiar ");
+            ret.append("<input type=\"text\" name=\"btnlimpiar\" ");
             if (!"".equals(base.getAttribute("btnlimpiar", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("btnlimpiar").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
 
             ret.append("<tr> \n");
@@ -1357,9 +1363,9 @@ public class Comment extends GenericResource {
             ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"generatelog\" value=\"1\"");
             if ("1".equals(base.getAttribute("generatelog", "0"))) {
-                ret.append(" checked");
+                ret.append(" checked=\"checked\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
 
             ret.append("<tr> \n");
@@ -1367,7 +1373,7 @@ public class Comment extends GenericResource {
                     + paramsRequest.getLocaleString("msgStyleClass") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"styleClass\" value=\""
-                    + base.getAttribute("styleClass", "") + "\">");
+                    + base.getAttribute("styleClass", "") + "\"/>");
             ret.append("</td> \n");
             ret.append("</tr> \n");
 
@@ -1405,13 +1411,13 @@ public class Comment extends GenericResource {
             ret.append("<td align=\"right\">"
                     + paramsRequest.getLocaleString("msgSubjectTag") + "</td> \n");
             ret.append("<td>");
-            ret.append("<input type=text size=50 name=subject ");
+            ret.append("<input type=\"text\" size=\"50\" name=\"subject\" ");
             if (!"".equals(base.getAttribute("subject", "").trim())) {
                 ret.append(" value=\""
                         + base.getAttribute("subject").trim().replaceAll("\"",
                         "&#34;") + "\"");
             }
-            ret.append("></td> \n");
+            ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td align=\"right\">"
@@ -1506,23 +1512,23 @@ public class Comment extends GenericResource {
             }
             ret.append("<tr> \n");
             ret.append("<td></td>");
-            ret.append("<td><input type=text name=comentario></td> \n");
-            ret.append("<td><input type=text name=area></td> \n");
-            ret.append("<td><input type=text name=responsable></td> \n");
-            ret.append("<td><input type=text name=email></td> \n");
+            ret.append("<td><input type=\"text\" name=\"comentario\"/></td> \n");
+            ret.append("<td><input type=\"text\" name=\"area\"/></td> \n");
+            ret.append("<td><input type=\"text\" name=\"responsable\"/></td> \n");
+            ret.append("<td><input type=\"text\" name=\"email\"/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
             ret.append("<td></td>");
             ret.append("<td colspan=\"4\">");
-            ret.append("<input type=button name=btnType value=\""
+            ret.append("<input type=\"button\" name=\"btnType\" value=\""
                     + paramsRequest.getLocaleString("msgAdd")
                     + "\" onClick=\"if(jsValidaType(this.form, '" + area
                     + "', '" + responsable + "', '" + email
-                    + "')) document.frmResource.submit(); else return false;\" class=boton> \n");
-            ret.append("<input type=hidden name=type value=0> \n");
-            ret.append("<input type=hidden name=actype value=add> \n");
-            ret.append("<input type=hidden name=comentarios value=\""
-                    + comentarios + "\"> \n");
+                    + "')) document.frmResource.submit(); else return false;\" class=\"boton\"/> \n");
+            ret.append("<input type=\"hidden\" name=\"type\" value=\"0\"/> \n");
+            ret.append("<input type=\"hidden\" name=\"actype\" value=\"add\"/> \n");
+            ret.append("<input type=\"hidden\" name=\"comentarios\" value=\""
+                    + comentarios + "\"/> \n");
             ret.append("</td></tr> \n");
             ret.append("</table> \n");
             ret.append("</td> \n");
@@ -1533,13 +1539,8 @@ public class Comment extends GenericResource {
             ret.append("<table> \n");
             ret.append("<tr> \n");
             ret.append("\n<td>");
-            ret.append("\n<input type=submit name=btnSave value="
-                    + paramsRequest.getLocaleString("btnSubmit")
-                    + " onClick=\"if(jsValida(this.form, " + i + ", '" + area
-                    + "', '" + responsable + "', '" + email
-                    + "')) return true; else return false;\">&nbsp;");
-            ret.append("<input type=reset name=btnReset value="
-                    + paramsRequest.getLocaleString("btnReset") + ">");
+            ret.append("\n<input type=\"submit\" name=\"btnSave\" value=\"" + paramsRequest.getLocaleString("btnSubmit") + "\" onClick=\"if(jsValida(this.form, " + i + ", '" + area + "', '" + responsable + "', '" + email + "')) return true; else return false;\"/>&nbsp;");
+            ret.append("<input type=\"reset\" name=\"btnReset\" value=\"" + paramsRequest.getLocaleString("btnReset") + "\"/>");
             ret.append("\n</td>");
             ret.append("\n</tr>");
             ret.append("\n</table>");
@@ -1641,141 +1642,143 @@ public class Comment extends GenericResource {
      */
     private String getScript(SWBParamRequest paramsRequest) {
         StringBuilder ret = new StringBuilder();
-//        WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+        WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
 
-//        try {
+        try {
             ret.append("<script type=\"text/javascript\"> \n");
             ret.append("<!-- \n");
 
-        ret.append("function changeSecureCodeImage(imgid) { \n");
-        ret.append("    var img = dojo.byId(imgid); \n");
-        ret.append("    if(img) { \n");
-        ret.append("        var rn = Math.floor(Math.random()*99999); \n");
-        ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn; \n");
-        ret.append("    } \n");
-        ret.append("} \n");
+            ret.append("function changeSecureCodeImage(imgid) { \n");
+            ret.append("    var img = dojo.byId(imgid); \n");
+            ret.append("    if(img) { \n");
+            ret.append("        var rn = Math.floor(Math.random()*99999); \n");
+            ret.append("        img.src = '"+SWBPlatform.getContextPath()+"/swbadmin/jsp/securecode.jsp?nc='+rn; \n");
+            ret.append("    } \n");
+            ret.append("} \n");
 
-//            ret.append("\nfunction jsValida(pForm, count, area, responsable, email) {");
-//
-//            ret.append("\n   trim(pForm.comentario);");
-//            ret.append("\n   trim(pForm.area);");
-//            ret.append("\n   trim(pForm.responsable);");
-//            ret.append("\n   trim(pForm.email);");
-//            ret.append("\n   if (count < 1) {");
-//
-//            ret.append("\n      if (pForm.comentario.value=='') {");
-//            ret.append("\n      ");
-//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
-//            ret.append("\n         pForm.comentario.focus();");
-//            ret.append("\n         return false;");
-//            ret.append("\n      }");
-//            ret.append("\n      if (pForm.area.value=='') {");
-//
-//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
-//            ret.append("\n         pForm.area.focus();");
-//            ret.append("\n         return false;");
-//            ret.append("\n      }");
-//            ret.append("\n      if (pForm.responsable.value=='') {");
-//
-//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
-//            ret.append("\n         pForm.responsable.focus();");
-//            ret.append("\n         return false;");
-//            ret.append("\n      }");
-//            ret.append("\n      if (pForm.email.value=='') {");
-//
-//            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
-//            ret.append("\n         pForm.email.focus();");
-//            ret.append("\n         return false;");
-//            ret.append("\n      }");
-//            ret.append("\n   } else { ");
-//
-//            ret.append("\n      if (pForm.comentario.value!='') {");
-//            ret.append("\n          if (pForm.area.value=='') pForm.area.value=area;");
-//            ret.append("\n          if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
-//            ret.append("\n          if (pForm.email.value=='') pForm.email.value=email;");
-//            ret.append("\n      }");
-//            ret.append("\n   }");
-//            ret.append("\n   if (!isFileType(pForm.template, 'xsl|xslt')) return false;");
-//            ret.append("\n   if (!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
-//            ret.append("\n   if (!isFileType(pForm.imgenviar, 'bmp|jpg|jpeg|gif')) return false;");
-//            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'bmp|jpg|jpeg|gif')) return false;");
-//            ret.append("\n   if (!isNumber(pForm.width)) return false;");
-//            ret.append("\n   if (!isNumber(pForm.height)) return false;");
-//            ret.append("\n   if (!isNumber(pForm.top)) return false;");
-//            ret.append("\n   if (!isNumber(pForm.left)) return false;");
-//            ret.append("\n   replaceChars(pForm.headermsg);");
-//            ret.append("\n   replaceChars(pForm.footermsg);");
-//            ret.append("\n   if (pForm.actype.value=='add' && pForm.comentario.value!='') {");
-//
-//            ret.append("\n      trim(pForm.comentarios);");
-//            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
-//            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
-//            ret.append("\n   }");
-//            ret.append("\n   return true;");
-//            ret.append("\n}");
-//
-//            ret.append("\nfunction jsLoad(pForm, comentario, area, responsable, email) {");
-//            ret.append("\n   pForm.btnType.value='" + paramsRequest.getLocaleString("msgUpdate") + "';");
-//            ret.append("\n   pForm.comentario.value=comentario;");
-//            ret.append("\n   pForm.area.value=area;");
-//            ret.append("\n   pForm.responsable.value=responsable;");
-//            ret.append("\n   pForm.email.value=email;");
-//            ret.append("\n}");
-//
-//            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");
-//            ret.append("\n   trim(pForm.comentario);");
-//            ret.append("\n   if (pForm.comentario.value=='') {");
-//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
-//            ret.append("\n       pForm.comentario.focus();");
-//            ret.append("\n       return false;");
-//            ret.append("\n   }");
-//            ret.append("\n   trim(pForm.area);");
-//            ret.append("\n   trim(pForm.responsable);");
-//            ret.append("\n   trim(pForm.email);");
-//            ret.append("\n   if (pForm.area.value=='') pForm.area.value=area;");
-//            ret.append("\n   if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
-//            ret.append("\n   if (pForm.email.value=='') pForm.email.value=email;");
-//            ret.append("\n   trim(pForm.area);");
-//            ret.append("\n   if (pForm.area.value=='') {");
-//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
-//            ret.append("\n       pForm.area.focus();");
-//            ret.append("\n       return false;");
-//            ret.append("\n   }");
-//            ret.append("\n   trim(pForm.responsable);");
-//            ret.append("\n   if (pForm.responsable.value=='') {");
-//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
-//            ret.append("\n       pForm.responsable.focus();");
-//            ret.append("\n       return false;");
-//            ret.append("\n   }");
-//            ret.append("\n   trim(pForm.email);");
-//            ret.append("\n   if (pForm.email.value=='') {");
-//            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
-//            ret.append("\n       pForm.email.focus();");
-//            ret.append("\n       return false;");
-//            ret.append("\n   }");
-//            ret.append("\n   else if (!isEmail(pForm.email)) return false;");
-//            ret.append("\n   if (pForm.actype.value=='add') {");
-//            ret.append("\n      trim(pForm.comentarios);");
-//            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
-//            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
-//            ret.append("\n   }");
-//            ret.append("\n   return true;");
-//            ret.append("\n}");
-//            ret.append(admResUtils.loadIsEmail());
-//            ret.append(admResUtils.loadAddOption());
-//            ret.append(admResUtils.loadEditOption());
-//            ret.append(admResUtils.loadUpdateOption());
-//            ret.append(admResUtils.loadDeleteOption());
-//            ret.append(admResUtils.loadDuplicateOption());
-//            ret.append(admResUtils.loadIsFileType());
-//            ret.append(admResUtils.loadReplaceChars());
-//            ret.append(admResUtils.loadIsNumber());
-//            ret.append(admResUtils.loadTrim());
-            ret.append("--> \n");
+            ret.append("\nfunction jsValida(pForm, count, area, responsable, email) {");
+
+            ret.append("\n   trim(pForm.comentario);");
+            ret.append("\n   trim(pForm.area);");
+            ret.append("\n   trim(pForm.responsable);");
+            ret.append("\n   trim(pForm.email);");
+            ret.append("\n   if (count < 1) {");
+
+            ret.append("\n      if (pForm.comentario.value=='') {");
+            ret.append("\n      ");
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
+            ret.append("\n         pForm.comentario.focus();");
+            ret.append("\n         return false;");
+            ret.append("\n      }");
+            ret.append("\n      if (pForm.area.value=='') {");
+
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
+            ret.append("\n         pForm.area.focus();");
+            ret.append("\n         return false;");
+            ret.append("\n      }");
+            ret.append("\n      if (pForm.responsable.value=='') {");
+
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
+            ret.append("\n         pForm.responsable.focus();");
+            ret.append("\n         return false;");
+            ret.append("\n      }");
+            ret.append("\n      if (pForm.email.value=='') {");
+
+            ret.append("\n         alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+            ret.append("\n         pForm.email.focus();");
+            ret.append("\n         return false;");
+            ret.append("\n      }");
+            ret.append("\n   } else { ");
+
+            ret.append("\n      if (pForm.comentario.value!='') {");
+            ret.append("\n          if (pForm.area.value=='') pForm.area.value=area;");
+            ret.append("\n          if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
+            ret.append("\n          if (pForm.email.value=='') pForm.email.value=email;");
+            ret.append("\n      }");
+            ret.append("\n   }");
+            ret.append("\n   if (!isFileType(pForm.template, 'xsl|xslt')) return false;");
+            ret.append("\n   if (!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
+            ret.append("\n   if (!isFileType(pForm.imgenviar, 'bmp|jpg|jpeg|gif')) return false;");
+            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'bmp|jpg|jpeg|gif')) return false;");
+            ret.append("\n   if (!isNumber(pForm.width)) return false;");
+            ret.append("\n   if (!isNumber(pForm.height)) return false;");
+            ret.append("\n   if (!isNumber(pForm.top)) return false;");
+            ret.append("\n   if (!isNumber(pForm.left)) return false;");
+            ret.append("\n   replaceChars(pForm.headermsg);");
+            ret.append("\n   replaceChars(pForm.footermsg);");
+            ret.append("\n   if (pForm.actype.value=='add' && pForm.comentario.value!='') {");
+
+            ret.append("\n      trim(pForm.comentarios);");
+            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
+            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
+            ret.append("\n   }");
+            ret.append("\n   return true;");
+            ret.append("\n}");
+
+            ret.append("\nfunction jsLoad(pForm, comentario, area, responsable, email) {");
+            ret.append("\n   pForm.btnType.value='" + paramsRequest.getLocaleString("msgUpdate") + "';");
+            ret.append("\n   pForm.comentario.value=comentario;");
+            ret.append("\n   pForm.area.value=area;");
+            ret.append("\n   pForm.responsable.value=responsable;");
+            ret.append("\n   pForm.email.value=email;");
+            ret.append("\n}");
+
+            ret.append("\nfunction jsValidaType(pForm, area, responsable, email) {");
+            ret.append("\n   trim(pForm.comentario);");
+            ret.append("\n   if (pForm.comentario.value=='') {");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgCommentRequired") + "');");
+            ret.append("\n       pForm.comentario.focus();");
+            ret.append("\n       return false;");
+            ret.append("\n   }");
+            ret.append("\n   trim(pForm.area);");
+            ret.append("\n   trim(pForm.responsable);");
+            ret.append("\n   trim(pForm.email);");
+            ret.append("\n   if (pForm.area.value=='') pForm.area.value=area;");
+            ret.append("\n   if (pForm.responsable.value=='') pForm.responsable.value=responsable;");
+            ret.append("\n   if (pForm.email.value=='') pForm.email.value=email;");
+            ret.append("\n   trim(pForm.area);");
+            ret.append("\n   if (pForm.area.value=='') {");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgAreaRequired") + "');");
+            ret.append("\n       pForm.area.focus();");
+            ret.append("\n       return false;");
+            ret.append("\n   }");
+            ret.append("\n   trim(pForm.responsable);");
+            ret.append("\n   if (pForm.responsable.value=='') {");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgManagerRequired") + "');");
+            ret.append("\n       pForm.responsable.focus();");
+            ret.append("\n       return false;");
+            ret.append("\n   }");
+            ret.append("\n   trim(pForm.email);");
+            ret.append("\n   if (pForm.email.value=='') {");
+            ret.append("\n       alert('" + paramsRequest.getLocaleString("msgEmailRequired") + "');");
+            ret.append("\n       pForm.email.focus();");
+            ret.append("\n       return false;");
+            ret.append("\n   }");
+            ret.append("\n   else if (!isEmail(pForm.email)) return false;");
+            ret.append("\n   if (pForm.actype.value=='add') {");
+            ret.append("\n      trim(pForm.comentarios);");
+            ret.append("\n      if (pForm.comentarios.value!='') pForm.comentarios.value+='|'");
+            ret.append("\n      pForm.comentarios.value+=pForm.comentario.value+';'+pForm.area.value+';'+pForm.responsable.value+';'+pForm.email.value;");
+            ret.append("\n   }");
+            ret.append("\n   return true;");
+            ret.append("\n}");
+            ret.append(admResUtils.loadIsEmail());
+            ret.append(admResUtils.loadAddOption());
+            ret.append(admResUtils.loadEditOption());
+            ret.append(admResUtils.loadUpdateOption());
+            ret.append(admResUtils.loadDeleteOption());
+            ret.append(admResUtils.loadDuplicateOption());
+            ret.append(admResUtils.loadIsFileType());
+            ret.append(admResUtils.loadReplaceChars());
+            ret.append(admResUtils.loadIsNumber());
+            ret.append(admResUtils.loadTrim());
+//            ret.append("--> \n");
+//            ret.append("</script> \n");
+        }catch(SWBResourceException e) {
+        }finally {
+            ret.append("\n--> \n");
             ret.append("</script> \n");
-//        } catch (Exception e) {
-//            log.error(e);
-//        }
+        }
         return ret.toString();
     }
 
