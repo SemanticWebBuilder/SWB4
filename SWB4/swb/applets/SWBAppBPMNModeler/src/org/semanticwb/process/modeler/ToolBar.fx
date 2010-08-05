@@ -419,7 +419,6 @@ public class ToolBar extends CustomNode
 
         if(isApplet)loadProcess();
 
-
         var file=SubMenu
         {
             modeler: modeler
@@ -1917,7 +1916,7 @@ public class ToolBar extends CustomNode
 
 class FileFilter extends javax.swing.filechooser.FileFilter {
     override public function getDescription() : String {
-        return "SWP Process File";
+        return ModelerUtils.getLocalizedString("swpFileFilter");
     }
 
     override public function accept(f: java.io.File) : Boolean {
@@ -1927,7 +1926,7 @@ class FileFilter extends javax.swing.filechooser.FileFilter {
 
 class ImageFileFilter extends javax.swing.filechooser.FileFilter {
     override public function getDescription() : String {
-        return "PNG Image";
+        return ModelerUtils.getLocalizedString("exportFileFilter");
     }
 
     override public function accept(f: java.io.File) : Boolean {
