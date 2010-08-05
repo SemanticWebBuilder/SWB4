@@ -52,10 +52,7 @@
     List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
     if(contents!=null && contents.size()>0)
     {
-        %>
-        <ul class="listaLinks">
-        <%
-        
+                
         // muestra las 15 primeras noticias
         int inew=0;
         for(SWBNewContent content : contents)
@@ -63,7 +60,7 @@
             inew++;
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setMode(paramRequest.Mode_VIEW);
-            url.setParameter("uri",content.getResourceBase().getSemanticObject().getEncodedURI());
+            url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
             if(title!=null && title.trim().equals(""))
             {
@@ -80,16 +77,79 @@
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
             String urlcontent=url.toString().replace("&", "&amp;");
-            
+            String ago="";
+            String source=content.getSource();
+            if(date!=null && !date.trim().equals(""))
+            {
+                ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+            }
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+            String image="";
+            if(content.getImage()!=null)
+            {
+                image=content.getImage();
+                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+            }
             %>
-            <li><a href="<%=urlcontent%>" ><b><%=title%> <%=country%> <%=date%></b></a></li>
+            <div class="entradaVideos">
+        <div class="thumbVideo">
+            <%
+                if(pathPhoto!=null)
+                {
+                    %>
+                    <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
+                    <%
+                }
+            %>
+
+        </div>
+        <div class="infoVideo">
+            <h3><%=title%></h3>
+            <p class="fechaVideo">
+                <%
+                    if(date!=null && !date.trim().equals(""))
+                    {
+                        %>
+                        <%=date%> - <%=ago%>
+                        <%
+                    }
+                %>
+
+            </p>
+            <%
+                    if(source!=null)
+                    {
+                        if(content.getSourceURL()==null)
+                        {
+
+                            %>
+                            <p>Fuente: <%=source%></p>
+                            <%
+                        }
+                        else
+                        {
+                            String urlsource=content.getSourceURL();
+                            urlsource=urlsource.replace("&", "&amp;");
+                            %>
+                            <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
+                            <%
+                        }
+                    }
+                %>
+            <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
+        </div>
+        <div class="clear">&nbsp;</div>
+        </div>
             <%
             if(inew>=limit)
             {
                 break;
             }
         }
-        
+
+        %>
+        <ul>
+        <%
 
 
         String[] years=SWBNews.getYears(contents);
