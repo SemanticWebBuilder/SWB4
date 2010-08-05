@@ -1,34 +1,31 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.semanticwb.portal.admin.resources;
 
-import com.hp.hpl.jena.sparql.syntax.Template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -42,6 +39,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.PFlow;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
@@ -49,6 +47,7 @@ import org.semanticwb.model.Versionable;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -68,13 +67,10 @@ public class SWBAResourceVersion extends GenericResource {
 
     /** The log. */
     private Logger log = SWBUtils.getLogger(SWBAResourceVersion.class);
-    
     /** The webpath. */
     String webpath = SWBPlatform.getContextPath();
-    
     /** The base. */
     Resource base;
-    
     /** The ont. */
     SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
 
@@ -91,6 +87,10 @@ public class SWBAResourceVersion extends GenericResource {
         PrintWriter out = response.getWriter();
         String id = request.getParameter("suri");
 
+        PFlowManager pfmgr = SWBPortal.getPFlowManager();
+
+        boolean isInFlow = false, needAut = false;
+
         //System.out.println("URI:"+id);
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             //System.out.println("doView(dialog):"+id);
@@ -98,7 +98,9 @@ public class SWBAResourceVersion extends GenericResource {
             out.println(" hideDialog(); ");
             GenericObject obj = ont.getGenericObject(id);
             SWBResource swres = (SWBResource) obj;
-            if(swres!=null)out.println(" reloadTab('" + swres.getResourceBase().getURI() + "');");
+            if (swres != null) {
+                out.println(" reloadTab('" + swres.getResourceBase().getURI() + "');");
+            }
             out.println("</script>");
             //out.println();
             return;
@@ -119,14 +121,20 @@ public class SWBAResourceVersion extends GenericResource {
 //            System.out.println("Work Path:"+SWBPlatform.getWorkPath()+"/models/"+tmpl.getWebSiteId()+"/Template/");
 //            System.out.println("template work path: "+tmpl.getWorkPath());
 
+            int vanum=1,vlnum=1;
 
             log.debug("doView(), suri: " + id);
             VersionInfo via = null;
             VersionInfo vio = null;
+            VersionInfo vil = null;
+            boolean subject2flow = false;
             boolean versionExists = false;
             if (obj instanceof Versionable) {
                 vio = (VersionInfo) findFirstVersion(obj);
                 via = ((Versionable) obj).getActualVersion();
+                vil = ((Versionable) obj).getLastVersion();
+                vanum = via.getVersionNumber();
+                vlnum = vil.getVersionNumber();
 
                 if (action == null || action.equals("")) {
 
@@ -150,7 +158,19 @@ public class SWBAResourceVersion extends GenericResource {
                     out.println("<tbody>");
                     if (null != vio) {
                         versionExists = true;
+                        Resource res = null;
+                        if (swres.getResourceBase() != null) {
+                            res = swres.getResourceBase();
+                            isInFlow = pfmgr.isInFlow(res);
+                            needAut = pfmgr.needAnAuthorization(res);
+                        }
+
+                        PFlow[] arrpf = pfmgr.getFlowsToSendContent(res);
+
+                        if(arrpf.length>0) subject2flow = true;
+
                         while (vio != null) {
+
 
                             out.println("<tr>");
                             out.println("<td align=\"center\">");
@@ -158,13 +178,57 @@ public class SWBAResourceVersion extends GenericResource {
                             out.println("</td>");
                             out.println("<td>");
 
+                            //System.out.println("La version ("+vio.getVersionNumber()+") autorizada: "+vio.isVersionAuthorized());
+                            //System.out.println("IsInFlow( "+isInFlow+" ), need Auth ( "+needAut+" )");
+                            // Revisión flujo
+
                             SWBResourceURL urle = paramRequest.getRenderUrl();
                             urle.setParameter("suri", id);
                             urle.setParameter("sobj", vio.getURI());
                             urle.setParameter("vnum", Integer.toString(vio.getVersionNumber()));
                             urle.setParameter("act", "edit_temp");
                             urle.setMode(SWBResourceURL.Mode_EDIT);
-                            out.println("<a href=\""+urle+"\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\"></a>");
+                            
+                            if (subject2flow){ 
+                                if(isInFlow ) //|| needAut
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version por autorizar, no editable.\" title=\"version por autorizar, no editable.\">");
+                                }
+                                else if(res.getPflowInstance()==null&&!isInFlow&&needAut&&!vio.isVersionAuthorized() && vlnum==vio.getVersionNumber() && vio.getVersionNumber()==vanum && vio.getVersionNumber()==1 && vlnum==vanum) // Version inicial
+                                {
+                                    out.println("<a href=\"" + urle + "\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\" title=\"editar version\"></a>");
+                                }
+                                else if(!vio.isVersionAuthorized() && vlnum>vio.getVersionNumber() && vio.getVersionNumber()!=vanum)
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version no autorizada, no editable.\" title=\"version no autorizada, no editable.\">");
+                                }
+                                else if(vio.isVersionAuthorized() || (vlnum>vio.getVersionNumber() && vio.getVersionNumber()!=vanum))
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version autorizada, no editable.\" title=\"version autorizada, no editable.\">");
+                                }
+                                else if(vio.isVersionAuthorized() && ((vlnum>vio.getVersionNumber() && vio.getVersionNumber()==vanum)||(vlnum==vio.getVersionNumber()&&vio.getVersionNumber()==vanum)))
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version actual autorizada, no editable.\" title=\"version actual autorizada, no editable.\">");
+                                }
+                                else if(!vio.isVersionAuthorized() && vlnum>=vio.getVersionNumber() && vio.getVersionNumber()==vanum)
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version actual no autorizada, no editable.\" title=\"version actual no autorizada, no editable.\">");
+                                }
+                                else if(!vio.isVersionAuthorized() && vlnum==vio.getVersionNumber() && vio.getVersionNumber()!=vanum)
+                                {
+                                    out.println("<a href=\"" + urle + "\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\" title=\"editar version\"></a>");
+                                }
+                                else if(vio.getVersionNumber()>vanum || vio.getVersionNumber()<vlnum || needAut )
+                                {
+                                    out.println("<a href=\"" + urle + "\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\" title=\"editar version\"></a>");
+                                }
+                                else
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"version no autorizada, no editable.\" title=\"version no autorizada, no editable.\"></a>");
+                                }
+                            } else {
+                                out.println("<a href=\"" + urle + "\" onclick=\"submitUrl('" + urle + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"editar version\" title=\"editar version\"></a>");
+                            }
 
                             SWBResourceURL urlnv = paramRequest.getRenderUrl();
                             urlnv.setParameter("suri", id);
@@ -174,14 +238,35 @@ public class SWBAResourceVersion extends GenericResource {
                             urlnv.setMode(SWBResourceURL.Mode_EDIT);
                             out.println("<a href=\"#\" onclick=\"showDialog('" + urlnv + "','Nueva versión de Recurso'); hideDialog(); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/nueva_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgNewVersion") + "\"></a>");
 
-                            if (!vio.equals(via)) {
+                            if (subject2flow){
+                                if (vio.isVersionAuthorized()&&vio.getVersionNumber()!=vanum)
+                                {
+                                    SWBResourceURL urlsa = paramRequest.getActionUrl();
+                                    urlsa.setParameter("suri", id);
+                                    urlsa.setParameter("sval", vio.getURI());
+                                    urlsa.setAction("setactual");
+                                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("logTplSetActual") + "\" title=\"" + paramRequest.getLocaleString("logTplSetActual") + "\"></a>");
+                                }
+                                else if (!vio.isVersionAuthorized())
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\"" + "Version no autorizada, no se puede cambiar." + "\" title=\"" + "Version no autorizada, no se puede cambiar." + "\"></a>");
+                                }
+                                else if(vio.getVersionNumber()==vanum)
+                                {
+                                    out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgActualVersion") + "\" title=\"" + paramRequest.getLocaleString("msgActualVersion") + "\">");
+                                }
+                            }
+                            else if(vanum==vio.getVersionNumber())
+                            {
+                                out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgActualVersion") + "\">");
+                            }
+                            else
+                            {
                                 SWBResourceURL urlsa = paramRequest.getActionUrl();
                                 urlsa.setParameter("suri", id);
                                 urlsa.setParameter("sval", vio.getURI());
                                 urlsa.setAction("setactual");
                                 out.println("<a href=\"#\" onclick=\"submitUrl('" + urlsa + "',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/cambio_version.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("logTplSetActual") + "\"></a>");
-                            } else {
-                                out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/activa.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msgActualVersion") + "\">");
                             }
 
                             // Llamado al doView del recurso.
@@ -250,44 +335,42 @@ public class SWBAResourceVersion extends GenericResource {
             while (ver.getPreviousVersion() != null) { //
                 ver = ver.getPreviousVersion();
             }
-        }
-        else
-            {
-                //create Initial Version
+        } else {
+            //create Initial Version
 
-                GenericObject go = obj;
-                int vnum=1;
-                SWBResource swres = (SWBResource) go;
-                VersionInfo vi = swres.getResourceBase().getWebSite().createVersionInfo();
-                vi.setVersionFile("index.html");
-                vi.setVersionNumber(vnum);
-                vi.setVersionComment("Versión Inicial");
+            GenericObject go = obj;
+            int vnum = 1;
+            SWBResource swres = (SWBResource) go;
+            VersionInfo vi = swres.getResourceBase().getWebSite().createVersionInfo();
+            vi.setVersionFile("index.html");
+            vi.setVersionNumber(vnum);
+            vi.setVersionComment("Versión Inicial");
 
-                Versionable vswres = (Versionable) go;
-                vswres.setActualVersion(vi);
-                vswres.setLastVersion(vi);
+            Versionable vswres = (Versionable) go;
+            vswres.setActualVersion(vi);
+            vswres.setLastVersion(vi);
 
 
-                String rutaFS_target_path = SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
-                File f = new File(rutaFS_target_path);
-                if (!f.exists()) {
-                    f.mkdirs();
-                }
-
-                File ftmpl = new File(SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
-                Writer output = null;
-                try {
-                    output = new BufferedWriter(new FileWriter(ftmpl));
-                    output.write(" ");
-                } catch(Exception e){}
-                finally {
-                    try{
-                        output.close();
-                    }
-                    catch(Exception ex){}
-                }
-                ver = vi;
+            String rutaFS_target_path = SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
+            File f = new File(rutaFS_target_path);
+            if (!f.exists()) {
+                f.mkdirs();
             }
+
+            File ftmpl = new File(SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/index.html");
+            Writer output = null;
+            try {
+                output = new BufferedWriter(new FileWriter(ftmpl));
+                output.write(" ");
+            } catch (Exception e) {
+            } finally {
+                try {
+                    output.close();
+                } catch (Exception ex) {
+                }
+            }
+            ver = vi;
+        }
 
         return ver;
     }
@@ -442,6 +525,7 @@ public class SWBAResourceVersion extends GenericResource {
                 }
                 gov.getSemanticObject().setObjectProperty(Versionable.swb_lastVersion, nvinf);
 
+
                 SWBResource tmpl = (SWBResource) go;
                 if (request.getParameter("vnum") != null) {
                     // copiar archivos
@@ -465,7 +549,6 @@ public class SWBAResourceVersion extends GenericResource {
                     vswres.setActualVersion(vi);
                     vswres.setLastVersion(vi);
 
-
                     String rutaFS_target_path = SWBPortal.getWorkPath() + swres.getResourceBase().getWorkPath() + "/" + vnum + "/";
                     File f = new File(rutaFS_target_path);
                     if (!f.exists()) {
@@ -481,18 +564,20 @@ public class SWBAResourceVersion extends GenericResource {
                     }
                 }
 
+                tmpl.getResourceBase().removePflowInstance();
+
                 //SWBPortal.getResourceMgr().reloadTemplate(tmpl);
 
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("act", "");
                 response.setMode(response.Mode_VIEW);
+
             }
-        }
-//        else if ("update".equals(act)) {
-//            id = request.getParameter("psuri");
-//            response.setRenderParameter(act, "");
-//            response.setMode(response.Mode_VIEW);
-//        }
+        } //        else if ("update".equals(act)) {
+        //            id = request.getParameter("psuri");
+        //            response.setRenderParameter(act, "");
+        //            response.setMode(response.Mode_VIEW);
+        //        }
         else if ("setactual".equals(act)) {
             String idval = request.getParameter("sval");
             SemanticObject sobase = ont.getSemanticObject(id);
@@ -578,7 +663,7 @@ public class SWBAResourceVersion extends GenericResource {
                     vio.removeNextVersion();
                     vio.removePreviousVersion();
                     vio.remove();
-                //sobase.getSemanticObject().remove();
+                    //sobase.getSemanticObject().remove();
                 }
             }
 
@@ -651,15 +736,15 @@ public class SWBAResourceVersion extends GenericResource {
                     //System.out.println("Remove OK actual");
                 }
             }
-                va.setVersionNumber(1);
+            va.setVersionNumber(1);
 
-                versiones.setActualVersion(va);
-                versiones.setLastVersion(va);
+            versiones.setActualVersion(va);
+            versiones.setLastVersion(va);
 
-                response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("act", "");
-                response.setMode(response.Mode_VIEW);
-                id=sobase.getURI();           
+            response.setRenderParameter("dialog", "close");
+            response.setRenderParameter("act", "");
+            response.setMode(response.Mode_VIEW);
+            id = sobase.getURI();
         }
         response.setRenderParameter("suri", id);
     }
