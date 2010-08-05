@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 
 /**
  * @author victor.lorenzana
+ * @modified by Hasdai Pacheco {haxdai@gmail.com}
  */
 
 public def TOOLTIP_ERROR = "error";
