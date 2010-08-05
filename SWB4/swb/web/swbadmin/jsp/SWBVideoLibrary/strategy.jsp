@@ -72,8 +72,7 @@
                 }
             }
             i=1;
-            contents=contentsToShow;
-            
+            contents=contentsToShow;            
             if(contentsToShow.size()>0)
             {
                 String code="";
