@@ -19,7 +19,22 @@
     String idPage="Videos";
 %>
 <%
+    String usrlanguage = paramRequest.getUser().getLanguage();
     SWBVideoLibrary library=(SWBVideoLibrary)request.getAttribute("library");
+    String titleSection=library.getResourceBase().getDisplayTitle(usrlanguage);
+            if(titleSection==null || titleSection.trim().equals(""))
+            {
+                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDisplayTitle(usrlanguage));
+            }
+            String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
+            if(descriptionSection==null || descriptionSection.trim().equals(""))
+            {
+                descriptionSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDescription(usrlanguage));
+            }
+            %>
+                  <div class="bloqueVideos">
+                  <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
+            <%
     WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
     if(wp!=null)
     {        
@@ -37,7 +52,7 @@
                urldetail.setMode(paramRequest.Mode_VIEW);
             }
         }
-        String usrlanguage = paramRequest.getUser().getLanguage();
+        
         //DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
         int limit = 5;
         ArrayList<VideoContent> contentsToShow=new ArrayList<VideoContent>();
@@ -58,23 +73,14 @@
             }
             i=1;
             contents=contentsToShow;
-            String titleSection=library.getResourceBase().getDisplayTitle(usrlanguage);
-            if(titleSection==null || titleSection.trim().equals(""))
-            {
-                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDisplayTitle(usrlanguage));
-            }
-            String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
-            if(descriptionSection==null || descriptionSection.trim().equals(""))
-            {
-                descriptionSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDescription(usrlanguage));
-            }
-            %>
-                  <div class="bloqueVideos">
-                  <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
-            <%
+            
             if(contentsToShow.size()>0)
             {
-                String code=contentsToShow.get(0).getCode();
+                String code="";
+                if(contentsToShow.get(0).getCode()!=null)
+                {
+                    code=contentsToShow.get(0).getCode();
+                }
                 code=code.replace("/", "\\/");
                 %>
                         <script type="text/javascript">
@@ -96,10 +102,10 @@
                 {                        
                         i++;
                         urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());                        
-                        String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                        String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                         if(title==null || title.trim().equals(""))
                         {
-                            title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                            title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
                         }
                         title=SWBUtils.TEXT.cropText(title, 65);
                         %>
@@ -107,24 +113,25 @@
                         <%
 
                 }
-                String viewAll="Sección completa de videos";
-                if(paramRequest.getUser().getLanguage()!=null && paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
-                {
-                    viewAll="View all videos";
-                }
                 %>
-                </ul>
-                <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
-                </div>
+                </ul>                
                 <%
             }
+            String viewAll="Sección completa de videos";
+            if(paramRequest.getUser().getLanguage()!=null && paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+            {
+                viewAll="View all videos";
+            }                
             %>
-                  </div>
+                <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
+                </div>
+                 
             <%
         }
     }
 
 %>
+ </div>
 
 
 
