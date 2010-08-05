@@ -22,19 +22,19 @@
     String usrlanguage = paramRequest.getUser().getLanguage();
     SWBVideoLibrary library=(SWBVideoLibrary)request.getAttribute("library");
     String titleSection=library.getResourceBase().getDisplayTitle(usrlanguage);
-            if(titleSection==null || titleSection.trim().equals(""))
-            {
-                titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDisplayTitle(usrlanguage));
-            }
-            String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
-            if(descriptionSection==null || descriptionSection.trim().equals(""))
-            {
-                descriptionSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDescription(usrlanguage));
-            }
-            %>
-                  <div class="bloqueVideos">
-                  <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
-            <%
+    if(titleSection==null || titleSection.trim().equals(""))
+    {
+        titleSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDisplayTitle(usrlanguage));
+    }
+    String descriptionSection=library.getResourceBase().getDescription(usrlanguage);
+    if(descriptionSection==null || descriptionSection.trim().equals(""))
+    {
+        descriptionSection=SWBUtils.TEXT.encodeExtendedCharacters(library.getResourceBase().getDescription());
+    }
+    %>
+          <div class="bloqueVideos">
+          <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
+    <%
     WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
     if(wp!=null)
     {        
