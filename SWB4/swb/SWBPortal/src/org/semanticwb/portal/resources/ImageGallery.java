@@ -125,10 +125,10 @@ public class ImageGallery extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*response.setContentType("text/html;charset=iso-8859-1");
-        response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
-        response.setHeader("Pragma","no-cache"); //HTTP 1.0
-        response.setDateHeader ("Expires", 0); //prevents caching at the proxy server*/
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
         PrintWriter out = response.getWriter();
 
         Resource base = getResourceBase();
@@ -166,16 +166,19 @@ public class ImageGallery extends GenericResource {
         StringBuilder out = new StringBuilder();
 
         if(base.getAttribute("css")!=null) {
-            out.append("<script type=\"text/javascript\">");
-            out.append("    setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');");
-            out.append("</script>");
+            out.append("<script type=\"text/javascript\">\n");
+            out.append("<!--\n");
+            out.append("  setStyleSheetByInstance('"+base.getAttribute("css")+"','"+base.getId()+"');\n");
+            out.append("-->\n");
+            out.append("</script>\n");
         }
         
-        out.append("\n<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>");
-        out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>");
+        out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-imagegallery.js\"></script>\n");
+        out.append("<script type=\"text/javascript\" src=\""+SWBPlatform.getContextPath()+"/swbadmin/js/jquery/jquery-1.3.js\"></script>\n");
 
-        out.append("<script type=\"text/javascript\"> ");
-        out.append("    simpleGallery_navpanel={ ");
+        out.append("<script type=\"text/javascript\">\n");
+        out.append("<!--\n");
+        out.append("    simpleGallery_navpanel={\n");
         //customize nav panel container
         out.append("        panel: {height:'45px', opacity:0.5, paddingTop:'5px', fontStyle:'bold 9px Verdana'}, ");
         //nav panel images (in that order)
@@ -214,8 +217,9 @@ public class ImageGallery extends GenericResource {
         //i: integer reflecting current image within collection being shown (0=1st image, 1=2nd etc)
         out.append("        onslide:function(curslide, i){} ");
         out.append("        } ");
-        out.append("    ); ");
-        out.append("</script> ");
+        out.append("    );\n");
+        out.append("-->\n");
+        out.append("</script>\n");
 
         //out.append("<div class=\"swb-galeria\"> ");
         //out.append("<div style=\""+ titlestyle +"\">"+ title +"</div> ");
@@ -290,7 +294,9 @@ public class ImageGallery extends GenericResource {
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html;charset=iso-8859-1");
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
         Resource base=getResourceBase();
