@@ -76,7 +76,7 @@
             {
                 date=sdf.format(content.getPublishDate());
             }
-            String preview=content.getPreview();
+            String preview=content.getPreview();            
             String source=content.getSource();
             String ago="";
             if(date!=null && !date.trim().equals(""))
@@ -86,9 +86,17 @@
             %>
 
             <div class="entradaVideos">
-        <div class="thumbVideo">
-          <img alt="<%=title%>" src="<%=preview%>" />
-        </div>
+                <%
+                    if(preview!=null)
+                    {
+                        %>
+                        <div class="thumbVideo">
+                            <img alt="<%=title%>" width="120" height="120" src="<%=preview%>" />
+                        </div>
+                        <%
+                    }
+                %>
+        
         <div class="infoVideo">
             <h3><%=title%></h3>
             <p class="fechaVideo">
