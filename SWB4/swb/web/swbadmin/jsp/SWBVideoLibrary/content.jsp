@@ -40,7 +40,6 @@
     private static String ultmsg = "Videos del mes";
     private static String lastmsg = "Previous videos";
 %>
-
 <%
     String usrlanguage = paramRequest.getUser().getLanguage();
     Locale locale=new Locale(usrlanguage);
@@ -54,10 +53,7 @@
     List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
     if(contents!=null && contents.size()>0)
     {
-        %>
-        
-        <%
-
+       
         // muestra los 15 primeros videos
         int i=0;
         for(VideoContent content : contents)
@@ -144,43 +140,51 @@
 
 
         String[] years=SWBVideoLibrary.getYears(contents);
-        for(String year : years)
+        if(years!=null)
         {
-            int iyear=Integer.parseInt(year);
-            // muestra liga para noticias por mes
-            for(int month=11;month>=0;month--)
+            for(String year : years)
             {
-                if(SWBVideoLibrary.hasVideo(contents, month,iyear))
+                int iyear=Integer.parseInt(year);
+                // muestra liga para noticias por mes
+                for(int month=11;month>=0;month--)
                 {
-
-                    String titleMonth=" "+getMonth(month,paramRequest.getUser())+" "+iyear;
-                    SWBResourceURL url=paramRequest.getRenderUrl();
-                    url.setMode("month");
-                    url.setParameter("month", String.valueOf(month));
-                    url.setParameter("year", year);
-                    String currentyear=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-                    String urlcontent=url.toString().replace("&", "&amp;");
-                    if(currentMonth==month && currentyear.equals(year))
+                    if(SWBVideoLibrary.hasVideo(contents, month,iyear))
                     {
-                        %>
-                        <p><a href="<%=urlcontent%>"><%=ultmsg%></a></p>
-                        <%
-                    }
-                    else
-                    {
-                        %>
-                        <p><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></p>
-                        <%
-                    }
 
+                        String titleMonth=" "+getMonth(month,paramRequest.getUser())+" "+iyear;
+                        SWBResourceURL url=paramRequest.getRenderUrl();
+                        url.setMode("month");
+                        url.setParameter("month", String.valueOf(month));
+                        url.setParameter("year", year);
+                        String currentyear=String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+                        String urlcontent=url.toString().replace("&", "&amp;");
+                        if(currentMonth==month && currentyear.equals(year))
+                        {
+                            %>
+                            <p><a href="<%=urlcontent%>"><%=ultmsg%></a></p>
+                            <%
+                        }
+                        else
+                        {
+                            %>
+                            <p><a href="<%=urlcontent%>"><%=mensaje%><%=titleMonth%></a></p>
+                            <%
+                        }
+
+                    }
                 }
             }
-        }
-         %>
-         
-         <%
+         }       
         
     }
+    else
+        {
+        %>
+        <div class="entradaVideos">
+        <p>No hay videos disponibles</p>
+        </div>
+        <%
+        }
 %>
 
 
