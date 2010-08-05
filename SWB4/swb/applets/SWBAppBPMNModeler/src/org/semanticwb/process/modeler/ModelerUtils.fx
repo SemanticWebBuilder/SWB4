@@ -8,8 +8,6 @@ package org.semanticwb.process.modeler;
 
 import javafx.reflect.*;
 import javafx.scene.*;
-import javafx.animation.Timeline;
-import javafx.animation.KeyFrame;
 import java.awt.image.BufferedImage;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringLocalizer;
@@ -19,6 +17,13 @@ import javafx.util.StringLocalizer;
  */
 
 public var clickedNode: Node;
+public var version = "0.1.0.0";
+public def ACTION_OPEN = 1;
+public def ACTION_SAVE = 2;
+public def ACTION_EXPORT = 3;
+public var splash = Splash{};
+var resize = ResizeNode{};
+var errorMessage: String;
 var localizer: StringLocalizer;
 
 var toolTip=ToolTip
@@ -26,12 +31,10 @@ var toolTip=ToolTip
     visible:false
 }
 
-var errorMessage:String;
-
 public function setErrorMessage(message:String)
 {
     errorMessage=message;
-    startToolTip(message, 0, getToolTip().scene.height-20);
+    showToolTip(ToolTip.TOOLTIP_ERROR, message, 0, getToolTip().scene.height-20);
     //startToolTip(message, getToolTip().scene.width/2, getToolTip().scene.height/2);
 }
 
@@ -43,8 +46,6 @@ public function getLocalizedString(key: String): String {
 public function setLocalizer (loc: StringLocalizer) : Void {
     localizer = loc;
 }
-
-public var splash=Splash{ };
 
 // Primer menu flotante
 public var popup=MenuPopup{
@@ -63,27 +64,6 @@ public var popup=MenuPopup{
     ]
 };
 
-
-var resize=ResizeNode{};
-
-public var version="0.1.0.0";
-
-// Tooltips are displayed after a delay.
-var toolTipTimeline= Timeline
-{
-    repeatCount: Timeline.INDEFINITE
-    keyFrames :
-        KeyFrame {
-            time : 1000ms
-            action: function()
-            {
-            // The tooltip needs to be displayed on top of
-            // any other component.
-                toolTip.visible = true;
-            }
-        }
-};
-
 public function getToolTip():ToolTip
 {
     return toolTip;
@@ -94,22 +74,23 @@ public function getResizeNode():ResizeNode
     return resize;
 }
 
-public function startToolTip(text:String,x:Number,y:Number)
+public function startToolTip(text: String, x: Number, y: Number)
 {
+    showToolTip(ToolTip.TOOLTIP_NORMAL, text, x, y);
+}
+
+public function showToolTip(type: String, text: String, x: Number, y: Number) {
+    toolTip.setType(type);
     toolTip.text=text;
     toolTip.x=x;
     toolTip.y=y;
-    toolTipTimeline.play();
+    toolTip.show();
 }
+
 
 public function stopToolTip()
 {
-    if(toolTipTimeline.running)
-    {
-        toolTipTimeline.stop();
-    }
-    toolTip.visible=false;
-    toolTip.layout();
+    toolTip.hide();
 }
 
 public function setResizeNode(node:Node)
