@@ -391,7 +391,12 @@ public class SWBAWebPageContents extends GenericResource {
                 res = (Resource) sobj.createGenericInstance();
 
                 isInFlow = pfmgr.isInFlow(res);
+
+                //System.out.println("Recurso esta en flujo: "+isInFlow);
+
                 needAuthorization = pfmgr.needAnAuthorization(res);
+                
+                //System.out.println("Necesita autorización: "+needAuthorization);
 
                 if (!isInFlow && !needAuthorization) {
                     activeButton = true;
