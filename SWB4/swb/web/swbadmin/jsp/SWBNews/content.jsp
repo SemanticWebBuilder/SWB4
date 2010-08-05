@@ -72,7 +72,7 @@
                 date=sdf.format(content.getPublishDate());
             }
             String country="";
-            if(content.getCountry()!=null)
+            if(content.getCountry()!=null && content.getCountry().getTitle(usrlanguage)!=null && !content.getCountry().getTitle(usrlanguage).equals(""))
             {
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
@@ -104,7 +104,13 @@
 
         </div>
         <div class="infoVideo">
-            <h3><%=title%></h3>
+            <h3><%=title%><%
+                    if(country!=null && !country.equals(""))
+                    {
+                                   %>&nbsp;<%=country%><%
+                    }
+                %>
+            </h3>
             <p class="fechaVideo">
                 <%
                     if(date!=null && !date.trim().equals(""))
