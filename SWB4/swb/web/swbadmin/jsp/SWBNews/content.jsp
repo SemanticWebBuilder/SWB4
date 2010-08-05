@@ -50,9 +50,10 @@
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
     int limit = 15;
     List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
+   
     if(contents!=null && contents.size()>0)
     {
-                
+               
         // muestra las 15 primeras noticias
         int inew=0;
         for(SWBNewContent content : contents)
