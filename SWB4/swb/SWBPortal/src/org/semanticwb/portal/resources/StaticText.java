@@ -35,13 +35,10 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.Template;
 import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.api.GenericAdmResource;
-import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-import org.semanticwb.portal.api.SWBResourceURL;
 
 
 // TODO: Auto-generated Javadoc
