@@ -99,3 +99,4 @@
 "msgError4" = "Event cannot have associated Data Objects"
 "msgError5" = "Artifact cannot be linked to Artifact"
 "msgError6" = "Cancelation Boundary event can only be attached to Transaction"
+"msgError7" = "Compensation Boundary Event can only be linked with Directional Association"
