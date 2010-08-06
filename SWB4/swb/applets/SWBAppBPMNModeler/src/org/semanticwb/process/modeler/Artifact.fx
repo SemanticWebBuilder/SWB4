@@ -17,10 +17,9 @@ import javafx.scene.shape.Polyline;
  * @author javier.solis
  */
 
-public-read var TYPE_MULTIPLE="multiple";
-public-read var TYPE_INPUT="input";
-public-read var TYPE_OUTPUT="output";
-
+public def TYPE_MULTIPLE="multiple";
+public def TYPE_INPUT="input";
+public def TYPE_OUTPUT="output";
 
 public class Artifact extends GraphicalElement
 {
@@ -153,7 +152,7 @@ public class Artifact extends GraphicalElement
         var ret = super.canStartLink(link);
         if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifact must be linked using AssociationFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError3"));
         }
         return ret;
     }
@@ -163,15 +162,15 @@ public class Artifact extends GraphicalElement
 
         if (link.ini instanceof Event) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifact cannot be linked to Event");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError4"));
         }
 
         if (not(link instanceof AssociationFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifact must be linked using AssociationFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError3"));
         } else if (link.ini instanceof Artifact) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifacts cannot be linked to artifacts");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError5"));
         }
         return ret;
     }
