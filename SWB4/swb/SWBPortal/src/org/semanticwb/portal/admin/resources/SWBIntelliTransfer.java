@@ -527,7 +527,8 @@ public class SWBIntelliTransfer extends GenericResource {
                         //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
                         //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
                         if(objUri.indexOf("#swb_ResourceType:")>-1 || objUri.indexOf("#swb_Language:")>-1 ||
-                             objUri.indexOf("#swb_Device:")>-1){ //Es de tipo ResourceType
+                             objUri.indexOf("#swb_Device:")>-1 || objUri.indexOf("#swb_Country:")>-1 ||
+                             objUri.indexOf("#swb_TemplateGroup:")>-1 || objUri.indexOf("#WebPage:home")>-1){ //Es de tipo ResourceType
                             if(SemanticObject.createSemanticObject(sobjNew)!=null) {
                                 bResourceTypeExist=true;  //Existe x lo tanto no se creara
                             }
