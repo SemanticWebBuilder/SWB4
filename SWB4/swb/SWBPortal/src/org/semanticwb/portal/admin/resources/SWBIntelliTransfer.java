@@ -175,7 +175,7 @@ public class SWBIntelliTransfer extends GenericResource {
                         continue;
                     }else if (contToken == 2 && token.endsWith("#type>")) { //Predicado que se require, ahora solo hay que ver cual es el objeto
                         givemeObject = true;
-                    } else if (givemeObject && contToken == 3) {
+                    } else if (givemeObject && contToken == 3 && token.indexOf("#WebSite>")==-1) {
                         int pos = token.indexOf("#");
                         if (pos > -1) {
                             int pos1 = token.indexOf(">", pos + 1);
