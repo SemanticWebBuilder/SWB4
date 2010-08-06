@@ -26,7 +26,7 @@ public class CompensationIntermediateCatchEvent extends IntermediateCatchEvent
         if (getGraphParent() instanceof Activity) {
             if (not(link instanceof DirectionalAssociation)) {
                 ret = false;
-                ModelerUtils.setErrorMessage("Compensation Boundary Event can have only one outgoing DirectionalAssociation");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError7"));
             }
         }
         return ret;
