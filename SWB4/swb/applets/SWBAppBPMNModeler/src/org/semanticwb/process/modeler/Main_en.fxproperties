@@ -94,3 +94,4 @@
 "condition" = "Condition"
 "message" = "Message"
 "msgError1" = "Activity cannot have Sequence Flows coming from Event-based Gateway"
+"msgError2" = "Text Annotation must be linked by using non-directional Association"
