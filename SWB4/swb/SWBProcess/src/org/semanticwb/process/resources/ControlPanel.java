@@ -3296,6 +3296,208 @@ public class ControlPanel extends GenericAdmResource
             sb.append("<form name=\"frmAdmin\" action=\"" +
                     paramRequest.getRenderUrl().setAction("updateProperties") +
                     "\" method=\"POST\" onsubmit=\"return validateFormProps()\" >");
+            sb.append("\n<table>");
+            //sb.append("\n<ul class=\"cpPropsMenu\">");
+            sb.append("\n<tr><th colspan=\"4\">" +
+                    paramRequest.getLocaleString("lblPropertiesTable") +
+                    ":</th></tr>");
+            sb.append("\n<tr><th>" + paramRequest.getLocaleString("thPropTable1")
+                    + "</th><th>" + paramRequest.getLocaleString("thPropTable2")
+                    + "</th><th>" + paramRequest.getLocaleString("thPropTable3")
+                    + "</th><th>" + paramRequest.getLocaleString("thPropTable4")
+                    + "</th></tr>");
+            for(int i=0; i<vAllProcessDefinitions.size(); i++)
+            {
+                org.semanticwb.process.model.Process process =
+                        (org.semanticwb.process.model.Process) vAllProcessDefinitions.get(i);
+                if(vDefinitions.contains(process.getURI()))
+                {
+                    sb.append("\n<tr id=\"" + process.getId() + "\"><td colspan=\"4\">" +  process.getTitle() + "<td></tr>");
+                    Vector vProps =
+                            getProcessArtifactDefinitionProperties(process);
+                    ProcessProperty.sortProcessProperty(vProps);
+                    Vector vSelectedProps =
+                            getSelectedProcessProperties(paramRequest,"cpSelectedProperties");
+                    sb.append("\n<tr id=\"props" + process.getId() + "\">");
+                    for(int j=0; j<vProps.size(); j++)
+                    {
+                        ProcessProperty property = (ProcessProperty)vProps.get(j);
+                        if(containsProcessProperty(vSelectedProps, property.getURI()))
+                        {
+                            ProcessProperty tempProp =
+                                    findProcessProperty(vSelectedProps, property.getURI());
+                            strChecked ="checked";
+                            strOrder = String.valueOf(tempProp.getOrderOnTask());
+                            if(tempProp.isAppliedOnTaskLegend()){
+                                strRadio2Checked = "checked";
+                            }
+                            if(tempProp.isAppliedOnTaskColumn()){
+                                strRadio3Checked = "checked";
+                            }
+                            if(tempProp.isAppliedOnTaskLink()){
+                                strRadio1Checked = "checked";
+                            }
+                        } else {
+                            strChecked ="";
+                            strOrder = "0";
+                            strRadio1Checked = "";
+                            strRadio2Checked = "";
+                            strRadio3Checked = "";
+                        }
+                        sb.append("\n<td>");
+                        sb.append("<input type=\"CHECKBOX\" " +
+                                "id=\"cpIncludeProperty\" " +
+                                " name=\"cpIncludeProperty\" " + strChecked +
+                                " value=\"" + property.getURI() + "\">" +
+                                property.getProperty().getDisplayName());
+                        sb.append("\n</td>");
+                        sb.append("\n<td>");
+                        sb.append(property.getArtifactName());
+                        sb.append("\n</td>");
+                        sb.append("\n<td>");
+                        sb.append("<input type=\"CHECKBOX\" " +
+                                "id=\"cpApplyOn" + property.getURI() + "\"" +
+                                " name=\"cpApplyOn" + property.getURI() + "\" " +
+                                strRadio1Checked + " value=\"0\" >" +
+                                paramRequest.getLocaleString("cpUse0") + "<br/>");
+                        sb.append("<input type=\"CHECKBOX\" " +
+                                "id=\"cpApplyOn" + property.getURI() + "\"" +
+                                " name=\"cpApplyOn" + property.getURI() + "\" " +
+                                strRadio2Checked + " value=\"1\" >" +
+                                paramRequest.getLocaleString("cpUse1") + "<br/>");
+                        sb.append("<input type=\"CHECKBOX\" " +
+                                "id=\"cpApplyOn" + property.getURI() + "\"" +
+                                " name=\"cpApplyOn" + property.getURI() + "\" " +
+                                strRadio3Checked + " value=\"2\" >" +
+                                paramRequest.getLocaleString("cpUse2"));
+                        sb.append("\n</td>");
+                        sb.append("\n<td>");
+                        sb.append("<input type=\"TEXT\" name=\"cpPropertyOrder" +
+                                property.getURI() + "\" size=\"4\" maxlength=\"4\" " +
+                                " label=\"\" onKeyUp=\"validateNumeric(this)\"" +
+                                " value=\"" + strOrder +"\"/>");
+                        sb.append("\n</td></tr>");
+                    }
+                    //sb.append("\n</tr>");
+                    //sb.append("\n</li>");
+                }
+            }
+            sb.append("\n</table>");
+            sb.append("<input type=\"SUBMIT\" " +
+                    "name=\"btnSave\"  value=\"" +
+                    paramRequest.getLocaleString("btnSave") + "\"/>");
+            sb.append("<input type=\"RESET\" " +
+                    " name=\"btnReset\" value=\"" +
+                    paramRequest.getLocaleString("btnCancel") + "\"/>");
+            sb.append("\n</form>");
+            sb.append("\n</div>");
+        } catch(Exception e){
+          log.error("Error en ControlPanel.getArtifactPropertiesForm", e);
+            System.out.println("Error en ControlPanel.getArtifactPropertiesForm:" +
+                    e.getMessage());
+		}
+        return sb;
+    }
+
+    /**
+    * Genera el codigo HTML para seleccionar propiedades de los artefactos.
+    *
+    public StringBuffer getArtifactPropertiesForm(SWBParamRequest paramRequest)
+    {
+        StringBuffer sb = new StringBuffer();
+        String strOrder = "";
+        String strChecked = "";
+        String strRadio1Checked = "";
+        String strRadio2Checked = "";
+        String strRadio3Checked = "";
+        try
+        {
+            de los procesos seleccionados previamente, mostrar las props de todos sus artefactos
+            Resource base = paramRequest.getResourceBase();
+            String strCPProcessDefinitions = base.getAttribute("cpProcessDefinitions")==null
+                    ?""
+                    :base.getAttribute("cpProcessDefinitions");
+            Vector vDefinitions =
+                BPMSProcessInstance.ClassMgr.stringToVector(strCPProcessDefinitions);
+            Vector vAllProcessDefinitions =
+                    BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(
+                        paramRequest);
+     */
+    /*
+            sb.append("\n<script type=\"text/javascript\">");
+            sb.append("\n   function getCheckedBoxesNumber(checkboxObj){");
+            sb.append("\n      var selected_checkboxes = 0;");
+            sb.append("\n      for (var i=0; i < checkboxObj.length; i++){");
+            sb.append("\n        if (checkboxObj[i].checked) {");
+            sb.append("\n          selected_checkboxes++;");
+            sb.append("\n        }");
+            sb.append("\n      }");
+            sb.append("\n      return selected_checkboxes;");
+            sb.append("\n   }");
+            sb.append("\n   function isNumeric(value) {");
+            sb.append("\n      var bOk = false;");
+            sb.append("\n      if (value != null) {");
+            sb.append("\n         var regExp = /^\\d+$/;");
+            sb.append("\n         bOk  = regExp.test(value.toString());");
+            sb.append("\n      }");
+            sb.append("\n      return bOk;");
+            sb.append("\n   }");
+            sb.append("\n   function validateNumeric(elem) {");
+            sb.append("\n      var bOk = true;");
+            sb.append("\n      if (!isNumeric(elem.value)) {");
+            sb.append("\n         alert('" +
+                    paramRequest.getLocaleString("jsMsg1") + "');");
+            sb.append("\n         elem.value='';");
+            sb.append("\n         bOk = false;");
+            sb.append("\n      }");
+            sb.append("\n      return bOk;");
+            sb.append("\n   }");
+            sb.append("\n   function getCheckedBoxesApplyOn(checkboxObj){");
+            sb.append("\n      var bOk = true;");
+            sb.append("\n      for (var i=0; i < checkboxObj.length; i++){");
+            sb.append("\n        if (checkboxObj[i].checked) {");
+            sb.append("\n          var chkValue = 'cpApplyOn' + checkboxObj[i].value;");
+            sb.append("\n          //alert('chkValue:' + chkValue);");
+            sb.append("\n          var applyOnValue = document.forms['frmAdmin'].elements[chkValue];");
+            sb.append("\n          //alert('applyOnValue:' + applyOnValue.value);");
+            sb.append("\n          var countApplyOn = getCheckedBoxesNumber(applyOnValue);");
+            sb.append("\n          //alert('countApplyOn:' + countApplyOn);");
+            sb.append("\n          if(countApplyOn<1){");
+            sb.append("\n             bOk = false;");
+            sb.append("\n             break;");
+            sb.append("\n          }");
+            sb.append("\n        }");
+            sb.append("\n      }");
+            sb.append("\n      return bOk;");
+            sb.append("\n   }");
+            sb.append("\n   function validateFormProps(){");
+            sb.append("\n      var selected_properties = 0;");
+            sb.append("\n      var vMsg = '';");
+            sb.append("\n      var bOk = false;");
+            sb.append("\n      selected_properties = getCheckedBoxesNumber(document.forms['frmAdmin'].elements['cpIncludeProperty']);");
+            sb.append("\n      //alert('selected_properties:' + selected_properties);");
+            sb.append("\n      if(selected_properties<1){");
+            sb.append("\n         vMsg =  vMsg + '" +
+                    paramRequest.getLocaleString("jsMsg6") + "';");
+            sb.append("\n      }");
+            sb.append("\n      if(getCheckedBoxesApplyOn(document.forms['frmAdmin'].elements['cpIncludeProperty'])==false){");
+            sb.append("\n         vMsg =  vMsg + '" +
+                    paramRequest.getLocaleString("jsMsg7") +"';");
+            sb.append("\n      }");
+            sb.append("\n      //alert('vMsg.length:' + vMsg.length);");
+            sb.append("\n      if(vMsg.length>1){");
+            sb.append("\n         alert(vMsg);");
+            sb.append("\n      } else {");
+            sb.append("\n         bOk = true;");
+            sb.append("\n      }");
+            sb.append("\n      return bOk;");
+            sb.append("\n   }");
+            sb.append("\n</script>");
+
+            sb.append("<div class=\"swbform\">");
+            sb.append("<form name=\"frmAdmin\" action=\"" +
+                    paramRequest.getRenderUrl().setAction("updateProperties") +
+                    "\" method=\"POST\" onsubmit=\"return validateFormProps()\" >");
             sb.append("\n<ul class=\"cpPropsMenu\">");
             sb.append("\n<li>" +
                     paramRequest.getLocaleString("lblPropertiesTable") +
@@ -3397,6 +3599,8 @@ public class ControlPanel extends GenericAdmResource
 		}
         return sb;
     }
+    */
+
 
     /**
     * Imprime el codigo Javascript para las validaciones del formato de admon
@@ -3465,6 +3669,184 @@ public class ControlPanel extends GenericAdmResource
     * @return      		StringBuffer con codigo HTML
     * @see
     */
+    public StringBuffer getProcessForm(SWBParamRequest paramRequest)
+    {
+        StringBuffer sb = new StringBuffer();
+        String strChecked = "";
+        try
+        {
+            Resource base = paramRequest.getResourceBase();
+            String strCPTitle = base.getAttribute("title")==null
+                    ?""
+                    :base.getAttribute("title");
+            String strCPProcessDefinitions =
+                base.getAttribute("cpProcessDefinitions")==null
+                    ?""
+                    :base.getAttribute("cpProcessDefinitions");
+            String strCPRowsPerPage =
+                    base.getAttribute("cpRowsPerPage")==null
+                    ?String.valueOf(intDefaultRowsPerPage)
+                    :base.getAttribute("cpRowsPerPage");
+            String strTaskParams =
+                    base.getAttribute("cpTaskParams")==null
+                    ?""
+                    :base.getAttribute("cpTaskParams");
+            String strSelTaskProps =
+                    base.getAttribute("taskProperties")==null
+                    ?""
+                    :base.getAttribute("taskProperties");
+            Vector vDefinitions =
+                    BPMSProcessInstance.ClassMgr.stringToVector(strCPProcessDefinitions);
+            Vector vTaskProps = getTaskProperties(paramRequest);
+            Vector vSelectedTaskProps = arrayToTaskProperties(strSelTaskProps);
+            sb.append(getValidatingScript(paramRequest));
+            sb.append("\n<div class=\"swbform\">");
+            sb.append("\n<form name=\"frmAdmin\" action=\"" +
+                    paramRequest.getRenderUrl().setAction("selectArtProps") +
+                    "\" method=\"POST\" onsubmit=\"return validateForm()\">");
+            sb.append("<br/><br/>\n<div>* " +
+                    paramRequest.getLocaleString("lblTitle") +
+                    "<br/> \n<input type=\"TEXT\" name=\"title\"" +
+                    " size=\"50\" maxlength=\"50\" " +
+                    " label=\"" + paramRequest.getLocaleString("lblTitle")
+                    + "\" value=\"" + strCPTitle +
+                    "\"/><br/><br/></div>");
+            sb.append("\n<div>*" +
+                    paramRequest.getLocaleString("lblTasksPerPageNumber") +
+                    " \n<input type=\"TEXT\" id=\"cpRowsPerPage\" " +
+                    " name=\"cpRowsPerPage\" size=\"5\" maxlength=\"4\" " +
+                    " label=\"" +
+                    paramRequest.getLocaleString("lblTasksPerPageNumber") +
+                    "\" onKeyUp=\"validateNumeric(this)\" value=\"" +
+                    strCPRowsPerPage + "\"/><br/><br/></div>");
+            sb.append("\n<div>" + paramRequest.getLocaleString("lblTaskParams")
+                    + "<br/>");
+            sb.append("\n<textarea id=\"cpTaskParams\"" +
+                    " name=\"cpTaskParams\" rows=\"5\" cols=\"50\">" +
+                    strTaskParams + "</textarea><br/>");
+            sb.append("</div><br/>");
+            Vector vProcessDefinitions =
+                    BPMSProcessInstance.ClassMgr.getAllProcessDefinitions(paramRequest);
+            sb.append("\n<div id=\"taskProps\">* " +
+                    paramRequest.getLocaleString("lblProcessDefinitions")
+                    + "<br/><br/><br/>");
+            //sb.append("\n<table class=\"cpMainMenu\">");
+            sb.append("\n<table >");
+            sb.append("\n<tr><th colspan=\"4\">" + paramRequest.getLocaleString("lblTaskProperties") + "</td></tr>");
+            sb.append("\n<tr>");
+            sb.append("\n<th>" + paramRequest.getLocaleString("lblSelectProperties") + "</th>");
+            sb.append("\n<th>" + paramRequest.getLocaleString("lblPropertyType") + "</th>\n<th>" +
+                    paramRequest.getLocaleString("lblPropertyApplyOn") + "</th>");
+            sb.append("\n<th>" + paramRequest.getLocaleString("lblPropertyOrder") + "</th>");
+            sb.append("\n</tr>");
+            sb.append("\n<tr>");
+            for(int i=0; i<vProcessDefinitions.size(); i++)
+            {
+                org.semanticwb.process.model.Process process =
+                        (org.semanticwb.process.model.Process) vProcessDefinitions.get(i);
+                if(vDefinitions.contains(process.getURI()))
+                {
+                    strChecked = "checked";
+                } else {
+                    strChecked = "";
+                }
+                sb.append("\n<td  colspan=\"4\">");
+                sb.append("\n<input type=\"CHECKBOX\" " +
+                        "id=\"cpProcessDefinitions\" " +
+                        "name=\"cpProcessDefinitions\" " +
+                        strChecked + " value=\"" + process.getURI()
+                        + "\" >" + process.getTitle() + "</td></tr>");
+                //sb.append("\n<tr id=\"" + process.getURI() + "\">");
+                String strRadio1Checked = "";
+                String strRadio2Checked = "";
+                String strRadio3Checked = "";
+                String strOrder = "";
+                for(int j=0; j<vTaskProps.size();j++)
+                {
+                    String[] strTemp = (String[])vTaskProps.get(j);
+                    String strTempPropName = process.getURI() + "|" + strTemp[0] + "|" + strTemp[2] + "|";
+                    TaskProperty tProp = findTaskProperty(vSelectedTaskProps, process.getURI(), strTemp[0], strTemp[2]);
+                    if(tProp.getURI()!=null && !tProp.getURI().equalsIgnoreCase(""))
+                    {
+                        strChecked = "checked";
+                        if(tProp.isAppliedOnTaskLink())
+                        {
+                            strRadio1Checked = "checked";
+                        }
+                        if(tProp.isAppliedOnTaskLegend())
+                        {
+                            strRadio2Checked = "checked";
+                        }
+                        if(tProp.isAppliedOnTaskColumn())
+                        {
+                            strRadio3Checked = "checked";
+                        }
+                        strOrder = String.valueOf(tProp.getOrderOnTask());
+                    } else {
+                        strChecked="";
+                        strRadio1Checked = "";
+                        strRadio2Checked = "";
+                        strRadio3Checked = "";
+                        strOrder = "0";
+                    }
+                    sb.append("\n<tr><td>");
+                    sb.append("\n<input type=\"CHECKBOX\" " +
+                            "id=\"cpIncludeTaskProperty\"" +
+                            " name=\"cpIncludeTaskProperty\"" +
+                            strChecked + " value=\"" + strTempPropName + "\" >");
+                    sb.append(strTemp[0] + "</td><td> " + strTemp[1] + "</td>");
+                    sb.append("<td><input type=\"CHECKBOX\" " +
+                            "id=\"cpTaskPropApplyOn|" + strTempPropName +  "\"" +
+                            " name=\"cpTaskPropApplyOn|" + strTempPropName + "\" " +
+                            strRadio1Checked + " value=\"0\" >" +
+                            paramRequest.getLocaleString("cpUse0") + "<br/>");
+                    sb.append("<input type=\"CHECKBOX\" " +
+                            "id=\"cpTaskPropApplyOn|"  + strTempPropName + "\"" +
+                            " name=\"cpTaskPropApplyOn|" + strTempPropName + "\"" +
+                            strRadio2Checked + " value=\"1\" >" +
+                            paramRequest.getLocaleString("cpUse1") + "<br/>");
+                    sb.append("<input type=\"CHECKBOX\" " +
+                            "id=\"cpTaskPropApplyOn|" + strTempPropName + "\"" +
+                            " name=\"cpTaskPropApplyOn|" + strTempPropName + "\" " +
+                            strRadio3Checked + " value=\"2\" >" +
+                            paramRequest.getLocaleString("cpUse2") + "</td>");
+                    sb.append("<td><input type=\"TEXT\" " +
+                            "id=\"cpTaskPropOrder|" + strTempPropName + "\""
+                            + " name=\"cpTaskPropOrder|" + strTempPropName + "\""
+                            + " size=\"4\" maxlength=\"4\" " +
+                            " label=\"\" onKeyUp=\"validateNumeric(this)\"" +
+                            " value=\"" + strOrder +"\"/></td>");
+                }
+                sb.append("\n</tr>");
+                //sb.append("</td>");
+            }
+            sb.append("\n</tr>");
+            sb.append("\n</td>");
+            sb.append("\n</tr></table>");
+            sb.append("\n</div>");
+            sb.append("<input type=\"SUBMIT\" " +
+                    "name=\"btnSave\"  value=\"" +
+                    paramRequest.getLocaleString("btnSave") + "\"/>");
+            sb.append("<input type=\"RESET\" " +
+                    " name=\"btnReset\" value=\"" +
+                    paramRequest.getLocaleString("btnCancel") + "\"/>");
+            sb.append("</form>");
+            sb.append("</div>");
+        } catch(Exception e){
+          log.error("Error en ControlPanel.getProcessForm", e);
+            System.out.println("Error en ControlPanel.getProcessForm:" +
+                    e.getMessage());
+		}
+        return sb;
+    }
+
+/*
+    * Genera el codigo HTML para seleccionar los procesos a desplegar en la
+    * bandeja.
+    *
+    * @param            paramRequest SWBParamRequest
+    * @return      		StringBuffer con codigo HTML
+    * @see
     public StringBuffer getProcessForm(SWBParamRequest paramRequest)
     {
         StringBuffer sb = new StringBuffer();
@@ -3634,6 +4016,8 @@ public class ControlPanel extends GenericAdmResource
 		}
         return sb;
     }
+ */
+
 
     /**
     * Despliega un formato para seleccionar los filtros que deben aplicarse a
