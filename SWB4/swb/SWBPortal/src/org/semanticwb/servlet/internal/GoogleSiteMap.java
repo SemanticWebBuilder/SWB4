@@ -78,7 +78,7 @@ public class GoogleSiteMap implements InternalServlet {
                 String tmp = dns.getDns();
                 if (!"localhost".equals(tmp)){
                     if (req.getServerPort()!=80) tmp += ":"+req.getServerPort();
-                    hn = "http://"+tmp;
+                    if (!tmp.startsWith("http:")) hn = "http://"+tmp;
                 }
             }
             WebPage topicH = map.getHomePage();
@@ -87,7 +87,7 @@ public class GoogleSiteMap implements InternalServlet {
             if (!"".equals(topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")))
                     out.print("<lastmod>"+topicH.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
             out.println("<priority>0.8</priority></url>");
-            Iterator<WebPage> chanels =topicH.listChilds(lang, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+            Iterator<WebPage> chanels =topicH.listVisibleChilds(lang);
             while (chanels.hasNext())
             {
                 WebPage chanel = chanels.next();
@@ -96,7 +96,7 @@ public class GoogleSiteMap implements InternalServlet {
             if (!"".equals(chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")))
                     out.print("<lastmod>"+chanel.getContentsLastUpdate(lang, "yyyy-mm-dd")+"</lastmod>");
             out.println("<priority>0.5</priority></url>");
-                Iterator sections = chanel.listChilds(lang, Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+                Iterator sections = chanel.listVisibleChilds(lang);
                 while (sections.hasNext())
                 {
                     WebPage section = (WebPage) sections.next();
