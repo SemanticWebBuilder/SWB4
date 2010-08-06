@@ -59,15 +59,17 @@ public class Lane extends GraphicalElement
         return Group
         {
             content: [
-                shape,Line
-                {
-                    startX: bind x-w/2+20
-                    startY: bind y-h/2+1
-                    endX: bind x-w/2+20
-                    endY: bind y+h/2-1
-                    style: Styles.style_pool_line
-                    stroke: bind shape.stroke
-                },text
+                shape,
+//                Line
+//                {
+//                    startX: bind x-w/2+20
+//                    startY: bind y-h/2+1
+//                    endX: bind x-w/2+20
+//                    endY: bind y+h/2-1
+//                    style: Styles.style_pool_line
+//                    stroke: bind shape.stroke
+//                },
+                text
             ]
             scaleX: bind s;
             scaleY: bind s;
