@@ -33,6 +33,9 @@ public class VideoPublisher extends GenericAdmResource {
         String automatic = base.getAttribute("automatic");
         String controls = base.getAttribute("controls");
         String loop = base.getAttribute("loop");
+        System.out.println("automatic="+automatic);
+        System.out.println("controls="+controls);
+        System.out.println("loop="+loop);
 
         if(filename.indexOf(".flv")>-1) {
             clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
@@ -54,7 +57,7 @@ public class VideoPublisher extends GenericAdmResource {
             out.println("  <param name=\"allowScriptAccess\" value=\"sameDomain\"/>");
             out.println("  <param name=\"movie\" value=\""+filename+"\"/>");
             out.println("  <param name=\"quality\" value=\"high\"/>");
-            out.println("  <param name=\"bgcolor\" value=\"#ffffff\"/>");
+            //out.println("  <param name=\"bgcolor\" value=\"#ffffff\"/>");
             out.println("  <embed src=\""+filename+"\" quality=\"high\" bgcolor=\"#ffffff\" width=\""+width+"\" height=\""+height+"\" name=\""+base.getAttribute("video")+"\" align=\""+align+"\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed>");
             out.println("</object>");
 
