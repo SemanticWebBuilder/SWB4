@@ -36,7 +36,7 @@
           <h2 class="tituloBloque"><%=titleSection%><span class="span_tituloBloque"> <%=descriptionSection%></span></h2>
     <%
     WebPage wp= paramRequest.getWebPage().getWebSite().getWebPage(idPage);
-    if(wp!=null)
+    if(wp!=null && wp.isActive())
     {        
         SWBResourceURL urldetail=null;        
         GenericIterator<Resource> resources=wp.listResources();
