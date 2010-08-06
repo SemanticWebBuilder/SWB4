@@ -98,3 +98,4 @@
 "msgError3" = "Un Artefacto debe conectarse usando Asociaciones"
 "msgError4" = "Un evento no puede tener Objetos de Datos asociados"
 "msgError5" = "Dos artefactos no pueden conectarse entre sí"
+"msgError6" = "Un Evento Intermedio de Cancelación sólo puede adherirse a Transacciones"
