@@ -93,3 +93,4 @@
 "version" = "Versión"
 "condition" = "Condición"
 "message" = "Mensaje"
+"msgError1" = "Una actividad no puede tener flujos de secuencia provenientes de una compuerta basada en eventos"
