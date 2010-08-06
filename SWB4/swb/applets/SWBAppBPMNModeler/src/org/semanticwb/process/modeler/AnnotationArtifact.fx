@@ -86,7 +86,10 @@ public class AnnotationArtifact extends Artifact
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
 
-        if (link instanceof DirectionalAssociation) {
+        if (link.ini instanceof Artifact) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError5"));
+        } else if (link instanceof DirectionalAssociation) {
             ret = false;
             ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError2"));
         }
