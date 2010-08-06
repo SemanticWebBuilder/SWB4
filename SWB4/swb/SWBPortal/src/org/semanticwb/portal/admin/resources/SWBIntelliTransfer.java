@@ -526,7 +526,8 @@ public class SWBIntelliTransfer extends GenericResource {
                         //Revisar si es de tipo ResourceType, si es así revisar si no existe ya en la instancia a importar
                         //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
                         //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
-                        if(objUri.indexOf("#swb_ResourceType:")>-1){ //Es de tipo ResourceType
+                        if(objUri.indexOf("#swb_ResourceType:")>-1 || objUri.indexOf("#swb_Language:")>-1 ||
+                             objUri.indexOf("#swb_Device:")>-1){ //Es de tipo ResourceType
                             if(SemanticObject.createSemanticObject(sobjNew)!=null) {
                                 bResourceTypeExist=true;  //Existe x lo tanto no se creara
                             }
