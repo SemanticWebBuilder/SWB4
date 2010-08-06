@@ -94,29 +94,32 @@
                     {
                         first=false;
                     %>
-        <div class="mainNews">
-          <p><a href="<%=url%>"><%=title%></a></p>
-          <!--<p><%=date%></p>-->
-          <img src="<%=pathPhoto%>" alt="<%=title%>" />
-          <div class="clear">&nbsp;</div>
-        </div>
-          <ul class="underline">
+                        <div class="mainNews">
+                          <p><a href="<%=url%>"><%=title%></a></p>
+                          <!--<p><%=date%></p>-->
+                          <img src="<%=pathPhoto%>" alt="<%=title%>" />
+                          <div class="clear">&nbsp;</div>
+                        </div>
+                        <ul class="underline">
                     <%
-                    }else{
-%>
-            <li><a href="<%=url%>"><%=title%></a></li>
-                    <%
+                    }
+                    else
+                    {
+                        %>
+                            <li><a href="<%=url%>"><%=title%></a></li>
+                        <%
                     }
                     if(i>=limit)
                     {
                         break;
                     }
                 }
+                 %>
+                  </ul>
+                 <%
             }
-            String urlnoticias=noticias.getUrl();
-            %>
-          </ul>
-            <%
+            //String urlnoticias=noticias.getUrl();
+           
         }
     }
 
