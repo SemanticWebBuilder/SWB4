@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    <admdbconnmgr defconn="true"/>
+    <fieldset legend="Configuración de contenido">
+        <input type="file" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+
+        <statictext name="automatic">Start automatically:</statictext>
+        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
+        <input type="radio" id="" name="" label="No" value="false" />
+
+        <statictext name="controls">Show controls:</statictext>
+        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
+        <input type="radio" id="" name="" label="No" value="false" />
+
+        <statictext name="loop">Loop playback:</statictext>
+        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
+        <input type="radio" id="" name="" label="No" value="false" />
+    </fieldset>
+
+    <fieldset legend="Aspecto">
+        <input type="text" id="width"  name="width" label="Width:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 340" />
+        <input type="text" id="height" name="height" label="Height:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+
+        <select name="align" label="Alignment">
+            <option value="left"></option>
+            <option value="right"></option>
+            <option value="center"></option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+    </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        <![CDATA[
+        dojo.require("dijit.form.Button");
+        dojo.require("dijit.form.ValidationTextBox");
+
+        dojo.addOnLoad(
+            function() {
+                if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {
+                    dojo.byId('local0').checked=true;
+                }
+                if(!dojo.byId('local1').checked) {
+                    dojo.byId('code').disabled=true;
+                }
+            }
+        );
+
+        function jsValida(frm) {
+            if(dojo.byId('local0').checked && !dojo.byId('img').value && !dojo.byId('wbNoFile_img')) {
+                alert('Especifique una imagen para el banner');
+                document.getElementById('img').focus();
+                return false;
+            }else if(dojo.byId('local1').checked) {
+                if(dojo.byId('code').value==null || dojo.byId('code').value=='')
+                {
+                    alert('Defina la codificación para incluir la publicidad externa.');
+                    dojo.byId('code').focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+        ]]>
+    </script>
+</admresource>
