@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import org.semanticwb.process.modeler.CompensationIntermediateCatchEvent;
 
 /**
  * @author javier.solis
@@ -52,7 +53,7 @@ public class FlowNode extends GraphicalElement
         }
 
         if (link instanceof AssociationFlow) {
-            if (not(link.ini instanceof Artifact)) {
+            if (not(link.ini instanceof Artifact) and not(link.ini instanceof CompensationIntermediateCatchEvent and link.ini.getGraphParent() instanceof Activity)) {
                 ret = false;
                 ModelerUtils.setErrorMessage("Association cannot link FlowNodes");
             }
