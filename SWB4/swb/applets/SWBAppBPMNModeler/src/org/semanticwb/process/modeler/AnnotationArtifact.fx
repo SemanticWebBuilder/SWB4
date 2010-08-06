@@ -60,7 +60,8 @@ public class AnnotationArtifact extends Artifact
                     y:bind y-h/2
                     width:bind w
                     height:bind h
-                    style:Styles.style_artifact
+                    //style:Styles.style_artifact
+                    fill:null
                 }
                 ,shape,text
             ]
@@ -77,7 +78,7 @@ public class AnnotationArtifact extends Artifact
 
         if (link instanceof DirectionalAssociation) {
             ret = false;
-            ModelerUtils.setErrorMessage("AnnotationArtifact must be linked using non-directional association");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError2"));
         }        
         return ret;
     }
@@ -87,7 +88,7 @@ public class AnnotationArtifact extends Artifact
 
         if (link instanceof DirectionalAssociation) {
             ret = false;
-            ModelerUtils.setErrorMessage("AnnotationArtifact must be linked using non-directional association");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError2"));
         }
         return ret;
     }
