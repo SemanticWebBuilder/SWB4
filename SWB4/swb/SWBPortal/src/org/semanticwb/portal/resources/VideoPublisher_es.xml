@@ -4,19 +4,23 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
-        <input type="file" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="radio" id="local0" name="local" label="Video local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
+        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
         <statictext name="auto">Iniciar automáticamente:</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
         <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
-
         <statictext name="cntrls">Mostrar controles:</statictext>
         <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
         <input type="radio" id="controls1" name="controls" label="No" value="false" />
-
         <statictext name="lp">Reproducción continua:</statictext>
         <input type="radio" id="loop0" name="loop" label="Si" value="true" checked="true" />
         <input type="radio" id="loop1" name="loop" label="No" value="false" />
+
+        <statictext name="m"> </statictext>
+
+        <input type="radio" id="local1" name="local" label="YouTube" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
+        <textarea id="code" name="code" label="Código youTube:" rows="5" cols="50" promptMessage="Código youTube" />
     </fieldset>
 
     <fieldset legend="Aspecto">
@@ -31,22 +35,33 @@
     </fieldset>
 
     <fieldset>
-        <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+        <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
         <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
     </fieldset>
     </form>
 
     <script type="text/javascript">
         <![CDATA[
+        dojo.addOnLoad(
+            function() {
+                if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {
+                    dojo.byId('local0').checked=true;
+                }
+                if(!dojo.byId('local1').checked) {
+                    dojo.byId('code').disabled=true;
+                }
+            }
+        );
+
         function jsValida(frm) {
-            if(dojo.byId('local0').checked && !dojo.byId('img').value && !dojo.byId('wbNoFile_img')) {
-                alert('Especifique una imagen para el banner');
-                document.getElementById('img').focus();
+            if(dojo.byId('local0').checked && !dojo.byId('video').value && !dojo.byId('wbNoFile_video')) {
+                alert('Especifique un archivo de video');
+                dojo.byId('video').focus();
                 return false;
             }else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
-                    alert('Defina la codificación para incluir la publicidad externa.');
+                    alert('Defina la codificación para incluir el video de youtube.');
                     dojo.byId('code').focus();
                     return false;
                 }

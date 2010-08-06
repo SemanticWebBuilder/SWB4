@@ -4,23 +4,27 @@
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
     <fieldset legend="Configuración de contenido">
-        <input type="file" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <input type="radio" id="local0" name="local" label="Video local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
-        <statictext name="automatic">Iniciar automáticamente:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
+        <statictext name="auto">Iniciar automáticamente:</statictext>
+        <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
+        <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
+        <statictext name="cntrls">Mostrar controles:</statictext>
+        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
+        <input type="radio" id="controls1" name="controls" label="No" value="false" />
+        <statictext name="lp">Reproducción continua:</statictext>
+        <input type="radio" id="loop0" name="loop" label="Si" value="true" checked="true" />
+        <input type="radio" id="loop1" name="loop" label="No" value="false" />
 
-        <statictext name="controls">Mostrar controles:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <statictext name="m"> </statictext>
 
-        <statictext name="loop">Rebobinar:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <input type="radio" id="local1" name="local" label="YouTube" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
+        <textarea id="code" name="code" label="Código youTube:" rows="5" cols="50" promptMessage="Código youTube" />
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 340" />
+        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
         <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
 
         <select name="align" label="Alinear">
@@ -50,14 +54,14 @@
         );
 
         function jsValida(frm) {
-            if(dojo.byId('local0').checked && !dojo.byId('img').value && !dojo.byId('wbNoFile_img')) {
-                alert('Especifique una imagen para el banner');
-                document.getElementById('img').focus();
+            if(dojo.byId('local0').checked && !dojo.byId('video').value && !dojo.byId('wbNoFile_video')) {
+                alert('Especifique un archivo de video');
+                dojo.byId('video').focus();
                 return false;
             }else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
-                    alert('Defina la codificación para incluir la publicidad externa.');
+                    alert('Defina la codificación para incluir el video de youtube.');
                     dojo.byId('code').focus();
                     return false;
                 }
