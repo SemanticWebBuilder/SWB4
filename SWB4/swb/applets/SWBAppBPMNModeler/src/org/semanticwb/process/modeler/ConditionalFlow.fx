@@ -20,7 +20,7 @@ public class ConditionalFlow extends SequenceFlow
 {
     public override function create(): Node
     {
-        title="Condition";
+        title= ModelerUtils.getLocalizedString("condition");
         arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
         super.create();
