@@ -1,26 +1,26 @@
-/**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
+/**
+* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+*
+* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+* del SemanticWebBuilder 4.0.
+*
+* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+* de la misma.
+*
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+* dirección electrónica:
 *  http://www.semanticwebbuilder.org
-**/ 
- 
+**/
+
 
 
 /*
@@ -61,10 +61,10 @@ import org.semanticwb.portal.api.SWBResourceException;
  * @version 1.0
  */
 
-public class Banner extends GenericAdmResource {    
+public class Banner extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Banner.class);
-    
+
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
      */
@@ -79,8 +79,7 @@ public class Banner extends GenericAdmResource {
             if( local.equals("0")||code==null ) {
                 String img = base.getAttribute("img");
                 String longdesc = base.getAttribute("longdesc");
-                String wburl = paramRequest.getActionUrl().toString();
-                String url = base.getAttribute("url","");
+                String url = base.getAttribute("url");
 
                 String width = paramRequest.getArgument("width", base.getAttribute("width"));
                 try {
@@ -95,9 +94,11 @@ public class Banner extends GenericAdmResource {
                     height = null;
                 }
 
-                if( url.toLowerCase().startsWith("mailto:") ) {
+                String wburl = null;
+                if( url!=null && url.toLowerCase().startsWith("mailto:") )
                     wburl = url.replaceAll("\"", "&#34;");
-                }
+                else if(url!=null)
+                    wburl = paramRequest.getActionUrl().toString();
 
                 if( img.endsWith(".swf") ) {
                     out.print("<object ");
@@ -109,12 +110,14 @@ public class Banner extends GenericAdmResource {
                         out.print(" height=\""+height+"\"");
                     out.println(">");
                     out.println("<param name=\"movie\" value=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\" />");
-                    out.println("<param name=\"flashvars\" value=\"liga="+wburl+"\" />\n");
+                    if(wburl!=null)
+                        out.println("<param name=\"flashvars\" value=\"liga="+wburl+"\" />\n");
                     out.println("<param name=\"quality\" value=\"high\"/> <param name=\"wmode\" value=\"transparent\"/> <param name=\"play\" value=\"true\"/> <param name=\"loop\" value=\"true\"/>");
 
                     out.print("<embed pluginspage=\"http://get.adobe.com/flashplayer/\" type=\"application/x-shockwave-flash\" quality=\"high\" wmode=\"transparent\" play=\"true\" loop=\"true\" ");
                     out.print(" src=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+img+"\"");
-                    out.print(" flashvars=\"liga="+wburl+"\"");
+                    if(wburl!=null)
+                        out.print(" flashvars=\"liga="+wburl+"\"");
                     if(width!=null)
                         out.print(" width=\""+width+"\"");
                     if(height!=null)
@@ -123,12 +126,15 @@ public class Banner extends GenericAdmResource {
                     out.println("</embed></object>");
                 }else {
                     String action = base.getAttribute("axn");
-
                     out.print("<a class=\"swb-banner\"");
-                    out.print(" href=\""+wburl+"\"");
+                    if( wburl!=null )
+                        out.print(" href=\""+wburl+"\"");
+                    else
+                        out.print(" href=\"#\"");
                     if( action!=null )
                         out.print(" onclick=\""+action+"\"");
-                    out.println(" title=\""+base.getAttribute("title","")+"\">");
+                    if( wburl!=null || action!=null )
+                        out.println(" title=\""+base.getAttribute("title","")+"\">");
 
                     out.print("<img src=\"");
                     out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
@@ -171,7 +177,7 @@ public class Banner extends GenericAdmResource {
 
     /**
      * Replace tags.
-     * 
+     *
      * @param str the str
      * @param request the request
      * @param user the user
@@ -222,10 +228,10 @@ public class Banner extends GenericAdmResource {
         str=SWBUtils.TEXT.replaceAll(str, "{websiteid}", webpage.getWebSiteId());
         return str;
     }
-    
+
     /**
      * Metodo para hacer operaciones.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @throws SWBResourceException the sWB resource exception
