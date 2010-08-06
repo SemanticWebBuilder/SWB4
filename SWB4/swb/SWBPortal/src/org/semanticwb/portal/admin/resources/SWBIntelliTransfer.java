@@ -509,6 +509,9 @@ public class SWBIntelliTransfer extends GenericResource {
 
                             //Revisa si existe el sobjId
                             String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
+                            sobjNew=givemeUri2Create(sobjNew);
+                            linkedHashMap.put(objUri, sobjNew);
+                            /*
                             SemanticObject semObj=SemanticObject.createSemanticObject(sobjNew);
                             if(semObj!=null){ //Ya existe el semObject con ese uri en el sitio, buscar uno que se pueda crear
                                 //System.out.println("Se generara nuevo uri de:"+sobjNew);
@@ -516,7 +519,7 @@ public class SWBIntelliTransfer extends GenericResource {
                                 //System.out.println("uri2create:"+uri2create);
                             }else{ //No existe, entonces lo agrega al hash ya que sera creado con el id original
                                 linkedHashMap.put(objUri, sobjNew);
-                            }
+                            }*/
                         }else{ //Agrega la linea a el arraylist
                             ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
                             alist.add(line);
@@ -644,21 +647,49 @@ public class SWBIntelliTransfer extends GenericResource {
             //System.out.println("uriPart1J:"+uriPart1);
             String uriPart2=sobj.substring(pos+1);
             //System.out.println("uriPart1:"+uriPart1+",uriPart2:"+uriPart2);
-            return createSemObj(uriPart1, uriPart2, 1);
+            return createSemObj(uriPart1, uriPart2);
         }
         return null;
     }
 
-    private String createSemObj(String uriPart1, String uriPart2, int cont){
-        String uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
-        int tmpCont=cont+1;
-        //System.out.println("uriPart1J:"+uriaCrear+",tmpCont:"+tmpCont);
-        SemanticObject semObj=SemanticObject.createSemanticObject(uriaCrear);
-        if(semObj!=null){ //Ya existe, seguir iterando para encontrar un uri que no exista y pueda crear el semanticObject
-            uriaCrear=createSemObj(uriPart1, uriPart2, tmpCont);
+    private String createSemObj(String uriPart1, String uriPart2){
+        String uriaCrear=null;
+        try{
+            Integer.parseInt(uriPart2);
+            uriaCrear=getNumericSemObjUri(uriPart1, uriPart2, 1);
+        }catch(NumberFormatException e){
+            uriaCrear=getStringSemObjUri(uriPart1, uriPart2, 0);
         }
         return uriaCrear;
     }
+
+
+    private String getNumericSemObjUri(String uriPart1, String uriPart2, int cont){
+        //System.out.println("Entra a getNumericSemObjUri:"+uriPart1+uriPart2);
+        int tmpCont=cont+1;
+        String uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
+        SemanticObject semObj=SemanticObject.createSemanticObject(uriaCrear);
+        if(semObj!=null){ //Ya existe, seguir iterando para encontrar un uri que no exista y pueda crear el semanticObject
+            uriaCrear=getNumericSemObjUri(uriPart1, uriPart2, tmpCont);
+        }
+        return uriaCrear;
+    }
+
+
+    private String getStringSemObjUri(String uriPart1, String uriPart2, int cont){
+        //System.out.println("Entra a getStringSemObjUri:"+uriPart1+uriPart2);
+        String uriaCrear=null;
+        if(cont<1) uriaCrear=uriPart1+":"+uriPart2 ;
+        else uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
+        int tmpCont=cont+1;
+
+        SemanticObject semObj=SemanticObject.createSemanticObject(uriaCrear);
+        if(semObj!=null){ //Ya existe, seguir iterando para encontrar un uri que no exista y pueda crear el semanticObject
+            uriaCrear=getStringSemObjUri(uriPart1, uriPart2, tmpCont);
+        }
+        return uriaCrear;
+    }
+
 
 
     /**
