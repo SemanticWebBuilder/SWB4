@@ -23,7 +23,7 @@
  
 package org.semanticwb.portal.admin.resources;
 
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -150,7 +150,7 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
         SemanticClass cls = obj.getSemanticClass();
         String title = cls.getName();
 
-        StringBuffer inheritHeader = new StringBuffer();
+        StringBuilder inheritHeader = new StringBuilder();
 
         out.println("<script type=\"text/javascript\">");
         //String s_soid = request.getParameter("so");
@@ -208,7 +208,9 @@ public class SWBASOPropRefEditor extends GenericAdmResource {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             inheritHeader.append("<fieldset>");
-            inheritHeader.append("<legend>" + paramRequest.getLocaleString("legend_Inherited") + "</legend>");
+            inheritHeader.append("<legend>");
+            inheritHeader.append(paramRequest.getLocaleString("legend_Inherited"));
+            inheritHeader.append("</legend>");
             out.println("<table width=\"98%\">");
             inheritHeader.append("<table width=\"98%\">");
             out.println("<thead>");
