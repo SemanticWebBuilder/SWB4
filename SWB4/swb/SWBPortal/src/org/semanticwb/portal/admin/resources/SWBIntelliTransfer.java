@@ -102,10 +102,10 @@ public class SWBIntelliTransfer extends GenericResource {
         PrintWriter out = response.getWriter();
         out.println("<div class=\"swbform\">");
         out.println("<fieldset>");
-        out.println("<legend> Que elementos desea exportar?</legend>");
-        out.println("<form action=\"" + urlAction.setAction("saveAdvanceMode") + "\" method=\"post\">");
+        out.println("<legend>"+ paramRequest.getLocaleString("elements2export")+"</legend>");
+        out.println("<form name=\"selectItems\" action=\"" + urlAction.setAction("saveAdvanceMode") + "\" method=\"post\">");
         out.println("<p align=\"center\">");
-        out.println("<table width=\"70%\">");
+        out.println("<table width=\"60%\" align=\"left\">");
         if (lListObjts != null && lListObjts.size()>0) {
             Iterator itlhmObjts=lListObjts.iterator();
             while (itlhmObjts.hasNext()) {
@@ -122,17 +122,36 @@ public class SWBIntelliTransfer extends GenericResource {
             }
         }
         out.println("</fieldset>");
-        out.println("</table>");
         out.println("</p>");
+        out.println("<tr><td colspan=\"2\" align=\"center\">");
         out.println("<fieldset><span align=\"center\">");
         out.println("<table>");
-        out.println("<tr><td colspan=\"2\" align=\"center\">");
-        out.println("<input type=\"submit\" name=\"send\" value=\"Enviar\"/>    <input type=\"button\" onclick=\"history.go(-1);\" value=\"Regresar\"/>");
+        out.println("<tr><td>");
+        out.println("<input type=\"submit\" name=\"send\" value=\""+paramRequest.getLocaleString("send")+"\"/>");
+        out.println("    <input type=\"button\" name=\"CheckAll\" value=\""+paramRequest.getLocaleString("checkAll")+"\" onClick=\"checkAll(document.selectItems.swbObjs)\">");
+        out.println("    <input type=\"button\" name=\"UnCheckAll\" value=\""+paramRequest.getLocaleString("uncheckAll")+"\" onClick=\"uncheckAll(document.selectItems.swbObjs)\">");
+        out.println("    <input type=\"button\" onclick=\"history.go(-1);\" value=\""+paramRequest.getLocaleString("return")+"\"/>");
         out.println("</td></tr>");
         out.println("</table>");
         out.println("</fieldset>");
+        out.println("</td></tr>");
+        out.println("</table>");
         out.println("</form>");
         out.println("</div>");
+
+        out.println("<script language=\"javascript\">");
+        out.println("function checkAll(field)");
+        out.println("{");
+        out.println("    for (i = 0; i < field.length; i++)     ");
+        out.println("    field[i].checked = true ;    ");
+        out.println("}");
+        out.println("function uncheckAll(field)");
+        out.println("{");
+        out.println("for (i = 0; i < field.length; i++)");
+        out.println("        field[i].checked = false ;");
+        out.println("}");
+        out.println("</script>");
+
     }
 
     private LinkedList parseFile(File file) {
@@ -344,7 +363,7 @@ public class SWBIntelliTransfer extends GenericResource {
                     out.println("<fieldset>");
                     out.println("<legend> Sitio en el que se desea importar datos</legend>");
                     out.println("<table>");
-                    out.append("<tr><td>");
+                    out.append("<tr><td>"+paramRequest.getLocaleString("chooseasite")+":&nbsp;&nbsp;");
                     out.append("<select name=\"wsid\">");
                     while(itWebSites.hasNext())
                     {
