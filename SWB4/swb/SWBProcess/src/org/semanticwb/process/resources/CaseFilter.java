@@ -1,23 +1,23 @@
 /**
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integraciÃ³n,
+ * colaboraciÃ³n y conocimiento, que gracias al uso de tecnologÃ­a semÃ¡ntica puede generar contextos de
+ * informaciÃ³n alrededor de algÃºn tema de interÃ©s o bien integrar informaciÃ³n y aplicaciones de diferentes
+ * fuentes, donde a la informaciÃ³n se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creaciÃ³n original del Fondo de InformaciÃ³n y DocumentaciÃ³n
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trÃ¡mite.
  *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * INFOTEC pone a su disposiciÃ³n la herramienta SemanticWebBuilder a travÃ©s de su licenciamiento abierto al pÃºblico (â€˜open sourceâ€™),
+ * en virtud del cual, usted podrÃ¡ usarlo en las mismas condiciones con que INFOTEC lo ha diseÃ±ado y puesto a su disposiciÃ³n;
+ * aprender de Ã©l; distribuirlo a terceros; acceder a su cÃ³digo fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los tÃ©rminos y condiciones de la LICENCIA ABIERTA AL PÃšBLICO que otorga INFOTEC para la utilizaciÃ³n
  * del SemanticWebBuilder 4.0.
  *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * INFOTEC no otorga garantÃ­a sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implÃ­cita ni explÃ­cita,
+ * siendo usted completamente responsable de la utilizaciÃ³n que le dÃ© y asumiendo la totalidad de los riesgos que puedan derivar
  * de la misma.
  *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposiciÃ³n la siguiente
+ * direcciÃ³n electrÃ³nica:
  *  http://www.semanticwebbuilder.org
  **/
 package org.semanticwb.process.resources;
@@ -30,12 +30,6 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-/*import org.semanticwb.process.Process;
-import org.semanticwb.process.Activity;
-import org.semanticwb.process.ProcessSite;
-import org.semanticwb.process.ProcessObject;
-import org.semanticwb.process.ProcessInstance;
-import org.semanticwb.process.FlowObjectInstance;*/
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.Instance;
 import org.semanticwb.process.model.ProcessSite;
@@ -86,7 +80,7 @@ import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceabl
 
 /**
  *
- * @author Sergio Téllez
+ * @author Sergio TÃ©llez
  */
 public class CaseFilter extends GenericResource {
 
@@ -154,14 +148,14 @@ public class CaseFilter extends GenericResource {
          out.println("  var layout= null;");
          out.println("  var gridMaster = null;");
          out.println("  dojo.addOnLoad(function() {");
-         out.println("      var formatLink = function(result) {");
+         /*out.println("      var formatLink = function(result) {");
          out.println("          return typeof result != 'object' ? dojo.string.substitute(");
 		 out.println("              '<a target=_blank href=' + result + '>' + result.substring(result.length-2, result.length) + '</a>',");
 		 out.println("              result");
          out.println("          ) : result;");
-         out.println("      }");
-         out.println("      layout= [");
-         out.println("          { field:\"instance\", formatter: formatLink, width:\"100px\", name:\"" + paramRequest.getLocaleString("instance") + "\" },");
+         out.println("      }");*/
+         out.println("      layout= ["); //formatter: formatLink,
+         out.println("          { field:\"instance\", width:\"100px\", name:\"" + paramRequest.getLocaleString("instance") + "\" },");
          out.println("          { field:\"process\", width:\"100px\", name:\"" + paramRequest.getLocaleString("process") + "\" },");
          out.println("          { field:\"user\", width:\"100px\", name:\"" + paramRequest.getLocaleString("USER") + "\" },");
          out.println("          { field:\"started\", width:\"100px\", name:\"" + paramRequest.getLocaleString("started") + "\" },");
@@ -173,10 +167,23 @@ public class CaseFilter extends GenericResource {
          out.println("          structure: layout,");
          out.println("          rowSelector: \"10px\",");
          out.println("          rowsPerPage: \"15\"");
+
+         out.println(",query:{ status: '*' } ");
+         out.println(",onRowDblClick: fillTracking ");
+
          out.println("      }, \"gridMaster\");");
          out.println("      gridMaster.startup();");
          out.println("  });");
-         
+
+         out.println("function fillTracking(evt) {\n");
+         out.println("      doTracking('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar',evt.grid.store.getValue(evt.grid.getItem(evt.rowIndex),'instance')); \n");
+         out.println("}\n");
+
+         out.println("function doTracking(size, key) { \n");
+         out.println("   var params = '?&instance='+key;\n");
+         out.println("   window.open(\""+url.setMode("tracking")+"\"+params,\"detailWindow\", size);\n");
+         out.println("}\n");
+
          out.println("  function addProps(){");
          out.println("      var params = 'process='+dojo.byId('process').value;");
          //out.println("          params += '&permission=0';");
@@ -207,6 +214,7 @@ public class CaseFilter extends GenericResource {
          out.println("  function doApply(){");
          out.println("      var grid = dijit.byId('gridMaster');");
          out.println("      var params = addProps();");
+         //out.println("      window.open('" + url.setMode("html") + "?'+params,\'graphWindow\',size);");
          out.println("          fillGrid(grid, '"+url.setMode("view")+"', 'fillgridmtr', params);");
          out.println("  }");
          out.println("  function doXml(size) { ");
@@ -343,7 +351,7 @@ public class CaseFilter extends GenericResource {
          out.print("              </tr>\n");
          out.print("          </table>\n");
          out.print("      </fieldset>\n");
-         
+
          out.print("      <fieldset>\n");
          out.print("        <table border=\"0\" width=\"70%\">\n");
          out.print("            <tr>\n");
@@ -352,7 +360,7 @@ public class CaseFilter extends GenericResource {
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doExcel('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramRequest.getLocaleString("spread_sheet") + "</button>&nbsp;\n");
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doPdf('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">PDF</button>&nbsp;\n");
          out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doRtf('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">RTF</button>&nbsp;\n");
-         out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doApply()\">" + paramRequest.getLocaleString("apply") + "</button>\n");
+         out.print("                    <button dojoType=\"dijit.form.Button\" onClick=\"doApply('width=600, height=550, scrollbars, resizable, alwaysRaised, menubar')\">" + paramRequest.getLocaleString("apply") + "</button>\n");
          out.print("                </td>\n");
          out.print("            </tr>\n");
          out.print("        </table>\n");
@@ -400,7 +408,7 @@ public class CaseFilter extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     private void doFilterCases(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/json;charset=iso-8859-1");
+        response.setContentType("text/json; charset=iso-8859-1");
         JSONObject jobj = new JSONObject();
         JSONArray jarr = new JSONArray();
         try {
@@ -412,9 +420,8 @@ public class CaseFilter extends GenericResource {
             while (itpi.hasNext()) {
                 JSONObject obj = new JSONObject();
                 ProcessInstance pinst = itpi.next();
-                obj.put("instance", getURLInstance(pinst.getURI(),paramsRequest.getRenderUrl()));
+                obj.put("instance", pinst.getId());
                 obj.put("process", pinst.getProcessType().getTitle());
-                //obj.put("user", pinst.getModifiedBy().getFullName());
                 obj.put("user", Ajax.getModifiedBy(pinst));
                 obj.put("started", pinst.getCreated());
                 obj.put("closed", pinst.getEnded());
@@ -422,7 +429,10 @@ public class CaseFilter extends GenericResource {
                 jarr.put(obj);
             }
         }catch (JSONException jsone) { jsone.printStackTrace(); }
-        response.getOutputStream().println(jobj.toString());
+        PrintWriter out = response.getWriter();
+        out.print(jobj.toString());
+        out.flush();
+        out.close();
     }
 
     private Iterator applyRestrictions(HttpServletRequest request) {
@@ -597,21 +607,6 @@ public class CaseFilter extends GenericResource {
         return ids;
     }
 
-    /*private void getObjectsFromInstanceIds(ProcessInstance pinst, ArrayList pobjs) {
-        Iterator<ProcessObject> objit = pinst.getAllProcessObjects().iterator();
-        while(objit.hasNext()) {
-            ProcessObject obj =  objit.next();
-            if (!pobjs.contains(obj))
-                pobjs.add(obj);
-        }
-        Iterator<FlowObjectInstance> foit = pinst.listFlowObjectInstances();
-        while(foit.hasNext()) {
-            FlowObjectInstance flobin = foit.next();
-            if (flobin instanceof ProcessInstance)
-                getObjectsFromInstanceIds((ProcessInstance)flobin, pobjs);
-        }
-    }*/
-
     private void getObjectsFromInstanceIds(ProcessInstance pinst, ArrayList pobjs) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
@@ -654,7 +649,7 @@ public class CaseFilter extends GenericResource {
     public void doCaseTracking(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         ArrayList pobjs = new ArrayList();
         PrintWriter out = response.getWriter();
-        String idpinst = Ajax.notNull(request.getParameter("instance"));
+        String idpinst = getURLInstance(request.getParameter("instance"));
         SemanticObject semObject = SemanticObject.createSemanticObject(idpinst);
         ProcessInstance pinst = (ProcessInstance)semObject.createGenericInstance();
         out.println("<h3>Propiedades</h3>");
@@ -867,7 +862,7 @@ public class CaseFilter extends GenericResource {
     public void doFilterCasesPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         try {
-            JRDataSourceable datasource = new JRCaseDetail(applyRestrictions(request));
+            JRDataSourceable datasource = new JRCaseDetail(applyRestrictions(request), paramsRequest.getRenderUrl());
             JasperTemplate jasperTemplate = JasperTemplate.FILTER_CASES;
             HashMap<String,String> params = new HashMap();
             params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
@@ -892,7 +887,7 @@ public class CaseFilter extends GenericResource {
         response.setContentType("application/rtf");
         response.setHeader("Content-Disposition", "inline; filename=\"scr.rtf\"");
         try {
-            JRDataSourceable datasource = new JRCaseDetail(applyRestrictions(request));
+            JRDataSourceable datasource = new JRCaseDetail(applyRestrictions(request), paramsRequest.getRenderUrl());
             JasperTemplate jasperTemplate = JasperTemplate.FILTER_CASES;
             HashMap<String,String> params = new HashMap();
             params.put("swb", SWBUtils.getApplicationPath()+"/swbadmin/images/swb-logo-hor.jpg");
@@ -916,11 +911,11 @@ public class CaseFilter extends GenericResource {
         }
     }
 
-    private String getURLInstance(String id, SWBResourceURL url) {
-        url.setCallMethod(url.Call_DIRECT);
-        url.setMode("tracking");
-        url.setParameter("instance", id);
-        return url.toString();
+    private String getURLInstance(String id) {
+        if (null != id)
+            return "http://www.process.swb#swp_ProcessInstance:" + id;
+        else
+            return "";
     }
 
     private String getLabelObject(ProcessObject obj, SWBParamRequest paramRequest) {
