@@ -26,7 +26,7 @@ public class CancelationIntermediateCatchEvent extends IntermediateCatchEvent
         if(parent instanceof Pool or parent instanceof Lane or parent instanceof TransactionSubProcess) {
             ret = true;
         } else {
-            ModelerUtils.setErrorMessage("Cancelation event can only be attached to transactions");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError6"));
         }
         return ret;
     }
