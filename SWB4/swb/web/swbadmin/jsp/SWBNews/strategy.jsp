@@ -50,6 +50,7 @@
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
         int limit = 5;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
+        ArrayList<SWBNewContent> contentstoshow= new ArrayList<SWBNewContent>();
         if(urldetail!=null)
         {            
             int i=0;
@@ -58,68 +59,72 @@
             {
                 if(content.isHomeShow())
                 {
-                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-                    String url="#";
                     i++;
-                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    url=urldetail.toString();
+                    contentstoshow.add(content);                    
+                    if(i>=limit)
+                    {
+                        break;
+                    }
+                }                
+            }
+            if(contentstoshow.size()>0)
+            {
+                SWBNewContent content=contentstoshow.get(0);
+                String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
+                if(title!=null && title.trim().equals(""))
+                {
+                    title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+                }
+                String date="";
+                if(content.getPublishDate()!=null)
+                {
+                    date=sdf.format(content.getPublishDate());
+                }
+
+                String url="#";
+                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                String image="";
+                if(content.getImage()!=null)
+                {
+                    image=content.getImage();
+                    pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+                }
+                %>
+                    <div class="mainNews">
+                      <p><a href="<%=url%>"><%=title%></a></p>
+                      <img src="<%=pathPhoto%>" alt="<%=title%>" />
+                      <div class="clear">&nbsp;</div>
+                    </div>
+                <%
+                contentstoshow.remove(0);
+            }
+            if(contentstoshow.size()>0)
+            {
+                %>
+                <ul class="underline">
+                <%
+                for(SWBNewContent content : contentstoshow)
+                {
                     String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
                     if(title!=null && title.trim().equals(""))
                     {
                         title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
                     }
-                    String description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription(usrlanguage));
-                    if(title!=null && title.trim().equals(""))
-                    {
-                        description=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDescription());
-                    }
-                    String date="";
-                    if(content.getPublishDate()!=null)
-                    {
-                        date=sdf.format(content.getPublishDate());
-                    }
-                    String country="";
-                    if(content.getCountry()!=null)
-                    {
-                        country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
-                    }
-                    String image="";
-                    if(content.getImage()!=null)
-                    {
-                        image=content.getImage();
-                        pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
-                    }
-
-                    if(first)
-                    {
-                        first=false;
+                    String url="#";
+                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+                    url=urldetail.toString();
                     %>
-                        <div class="mainNews">
-                          <p><a href="<%=url%>"><%=title%></a></p>
-                          <!--<p><%=date%></p>-->
-                          <img src="<%=pathPhoto%>" alt="<%=title%>" />
-                          <div class="clear">&nbsp;</div>
-                        </div>
-                        <ul class="underline">
-                    <%
-                    }
-                    else
-                    {
-                        %>
                             <li><a href="<%=url%>"><%=title%></a></li>
-                        <%
-                    }
-                    if(i>=limit)
-                    {
-                        break;
-                    }
+                    <%
                 }
-                 %>
-                  </ul>
-                 <%
+                %>
+                        </ul>
+                <%
             }
-            //String urlnoticias=noticias.getUrl();
-           
+            String urlNews=noticias.getUrl();
+            %>
+            <p><a href="<%=urlNews%>">Noticias</a></p>
+            <%
         }
     }
 
