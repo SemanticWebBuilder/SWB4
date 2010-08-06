@@ -44,9 +44,7 @@ import java.io.File;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.data.xy.*;
-import org.jfree.chart.plot.*;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 /**
@@ -91,18 +89,18 @@ public class ResponseCase extends GenericResource {
             Iterator<Process> it = site.listProcesses();
             while (it.hasNext()) {
                 Process process = it.next();
-                XYSeries series = new XYSeries("Response Time");
-                series.add(1, crt.getMinimumProcessInstance(process)/1000);
-                series.add(2, crt.getAverageProcessInstances(process)/100);
-                series.add(3, crt.getMaximumProcessInstance(process)/10);
-                XYSeriesCollection dataset = new XYSeriesCollection();
-                dataset.addSeries(series);
-                JFreeChart chart = ChartFactory.createXYAreaChart(process.getTitle(), "Segundos", "Tiempos", dataset, PlotOrientation.VERTICAL, true, true, false);
-                try {
-                    ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_response.jpg"), chart, 600, 400);
-                    response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_response.jpg); height: 400px; width: 600px; border: 0px solid black;\"> </div>");
-                }catch (Exception e) {
-                    log.error(e);
+                if (crt.getMaximumProcessInstance(process) > 0) {
+                    DefaultPieDataset dataCase = new DefaultPieDataset();
+                    dataCase.setValue(paramRequest.getLocaleString("minimum"), new Integer((int)crt.getMinimumProcessInstance(process)/1000));
+                    dataCase.setValue(paramRequest.getLocaleString("average"), new Integer((int)crt.getAverageProcessInstances(process)/1000));
+                    dataCase.setValue(paramRequest.getLocaleString("maximum"), new Integer((int)crt.getMaximumProcessInstance(process)/1000));
+                    JFreeChart chart = ChartFactory.createPieChart(process.getTitle(), dataCase, true, true, false);
+                    try {
+                        ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_response.jpg"), chart, 500, 300);
+                        response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_response.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+                    }catch (Exception e) {
+                        log.error(e);
+                    }
                 }
             }
         }

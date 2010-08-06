@@ -75,6 +75,8 @@ public class SystemCase extends GenericResource {
         processing = sys.totalProcessInstance();
         dataCase.setValue(paramRequest.getLocaleString("STATUS_PROCESSING"), new Integer(processing));
         sys.clear();
+
+        
         sys.addRestriction(new Restriction(CaseCountSys.STATUS,String.valueOf(Instance.STATUS_CLOSED),null));
         closed = sys.totalProcessInstance();
         dataCase.setValue(paramRequest.getLocaleString("STATUS_CLOSED"), new Integer(closed));
