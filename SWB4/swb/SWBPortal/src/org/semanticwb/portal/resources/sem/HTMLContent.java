@@ -484,7 +484,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             //Renombrar el nuevo archivo
             try {
                 //Se cambian las rutas a los archivos asociados.
-                if (strAttaches != null && strAttaches.length() > 0) {
+                if (strAttaches != null && strAttaches.length() > 0 &&
+                        localRelativePath != null) {
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", true,
                             localRelativePath,
