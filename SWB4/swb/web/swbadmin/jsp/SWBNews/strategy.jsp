@@ -20,7 +20,7 @@
 %>
 <%
     WebPage noticias= paramRequest.getWebPage().getWebSite().getWebPage(idNoticias);
-    if(noticias!=null)
+    if(noticias!=null && noticias.isActive())
     {
         SWBResourceURL urldetail=null;        
         SWBResourceURL urlrss=null;
