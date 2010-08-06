@@ -494,6 +494,7 @@ public class SWBIntelliTransfer extends GenericResource {
                     continue;
                 }
                 int contToken = 0;
+                boolean bResourceTypeExist=false;
                 StringTokenizer strTokens = new StringTokenizer(line, " ", false);
                 while (strTokens.hasMoreElements()) {
                     String token = strTokens.nextToken();
@@ -502,29 +503,32 @@ public class SWBIntelliTransfer extends GenericResource {
                         continue;
                     }else if (contToken == 1) {
                         objUri=token.substring(1, token.length()-1);
-                        if(!linkHmapObjs.containsKey(objUri)){
-                            ArrayList newArray=new ArrayList();
-                            newArray.add(line);
-                            linkHmapObjs.put(objUri, newArray);
+                        String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
+                        //Revisar si es de tipo ResourceType, si es así revisar si no existe ya en la instancia a importar
+                        //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
+                        //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
+                        if(objUri.indexOf("#swb_ResourceType:")>-1){ //Es de tipo ResourceType
+                            if(SemanticObject.createSemanticObject(sobjNew)!=null) {
+                                bResourceTypeExist=true;  //Existe x lo tanto no se creara
+                            }
+                        }
+                        if(!bResourceTypeExist)
+                        {
+                            if(!linkHmapObjs.containsKey(objUri)){
+                                ArrayList newArray=new ArrayList();
+                                newArray.add(line);
+                                linkHmapObjs.put(objUri, newArray);
 
-                            //Revisa si existe el sobjId
-                            String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
-                            sobjNew=givemeUri2Create(sobjNew);
-                            linkedHashMap.put(objUri, sobjNew);
-                            /*
-                            SemanticObject semObj=SemanticObject.createSemanticObject(sobjNew);
-                            if(semObj!=null){ //Ya existe el semObject con ese uri en el sitio, buscar uno que se pueda crear
-                                //System.out.println("Se generara nuevo uri de:"+sobjNew);
-                                linkedHashMap.put(objUri, givemeUri2Create(sobjNew));
-                                //System.out.println("uri2create:"+uri2create);
-                            }else{ //No existe, entonces lo agrega al hash ya que sera creado con el id original
-                                linkedHashMap.put(objUri, sobjNew);
-                            }*/
-                        }else{ //Agrega la linea a el arraylist
-                            ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
-                            alist.add(line);
-                            linkHmapObjs.remove(objUri);
-                            linkHmapObjs.put(objUri, alist);
+                                //Revisa si existe el sobjId
+                                //String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
+                                sobjNew=givemeUri2Create(sobjNew);
+                                linkedHashMap.put(objUri, sobjNew);                               
+                            }else{ //Agrega la linea a el arraylist
+                                ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
+                                alist.add(line);
+                                linkHmapObjs.remove(objUri);
+                                linkHmapObjs.put(objUri, alist);
+                            }
                         }
                     }
                 }
