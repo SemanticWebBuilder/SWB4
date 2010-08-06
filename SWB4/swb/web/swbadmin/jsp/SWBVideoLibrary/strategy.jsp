@@ -71,8 +71,18 @@
                     }
                 }
             }
+            boolean hasVideos=false;
+            if(contentsToShow.size()>0)
+            {
+                hasVideos=true;
+            }
             i=1;
-            contents=contentsToShow;            
+            contents=contentsToShow;
+            String viewAll="Sección completa de videos";
+            if(paramRequest.getUser().getLanguage()!=null && paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+            {
+                viewAll="View all videos";
+            } 
             if(contentsToShow.size()>0)
             {
                 String code="";
@@ -113,19 +123,20 @@
 
                 }
                 %>
-                </ul>                
+                </ul>
+                 <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
+                </div>
                 <%
             }
-            String viewAll="Sección completa de videos";
-            if(paramRequest.getUser().getLanguage()!=null && paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+            else if(hasVideos)
             {
-                viewAll="View all videos";
-            }                
-            %>
-                <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
+                
+                %>
+                <div id="listadoVideos">
+                    <p class="listaVideos"><a href="<%=wp.getUrl()%>"><%=viewAll%></a></p>
                 </div>
-                 
-            <%
+                <%
+            }                           
         }
     }
 
