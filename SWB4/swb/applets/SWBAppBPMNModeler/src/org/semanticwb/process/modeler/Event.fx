@@ -131,9 +131,9 @@ public class Event extends FlowNode
         }else if(type.equals(CATCH_RULE))
         {
             message.image=Styles.ICO_EVENT_W_CONDITINAL;
-            ix=8;
-            iy=9;
-            is=1;
+            ix = 9.5;
+            iy = 9.5;
+            is = 1;
         }else if(type.equals(CATCH_SIGNAL))
         {
             message.image=Styles.ICO_EVENT_W_SIGNAL;
