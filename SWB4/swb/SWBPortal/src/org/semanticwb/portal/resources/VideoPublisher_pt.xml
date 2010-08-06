@@ -38,9 +38,6 @@
 
     <script type="text/javascript">
         <![CDATA[
-        dojo.require("dijit.form.Button");
-        dojo.require("dijit.form.ValidationTextBox");
-
         dojo.addOnLoad(
             function() {
                 if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {

@@ -6,21 +6,21 @@
     <fieldset legend="Configuración de contenido">
         <input type="file" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
 
-        <statictext name="automatic">Iniciar automáticamente:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <statictext name="auto">Iniciar automáticamente:</statictext>
+        <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
+        <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
 
-        <statictext name="controls">Mostrar controles:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <statictext name="cntrls">Mostrar controles:</statictext>
+        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
+        <input type="radio" id="controls1" name="controls" label="No" value="false" />
 
-        <statictext name="loop">Reproducción continua:</statictext>
-        <input type="radio" id="" name="" label="Si" value="true" checked="true" />
-        <input type="radio" id="" name="" label="No" value="false" />
+        <statictext name="lp">Reproducción continua:</statictext>
+        <input type="radio" id="loop0" name="loop" label="Si" value="true" checked="true" />
+        <input type="radio" id="loop1" name="loop" label="No" value="false" />
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 340" />
+        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
         <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
 
         <select name="align" label="Alinear">
@@ -38,20 +38,6 @@
 
     <script type="text/javascript">
         <![CDATA[
-        dojo.require("dijit.form.Button");
-        dojo.require("dijit.form.ValidationTextBox");
-
-        dojo.addOnLoad(
-            function() {
-                if(!dojo.byId('local0').checked && !dojo.byId('local1').checked) {
-                    dojo.byId('local0').checked=true;
-                }
-                if(!dojo.byId('local1').checked) {
-                    dojo.byId('code').disabled=true;
-                }
-            }
-        );
-
         function jsValida(frm) {
             if(dojo.byId('local0').checked && !dojo.byId('img').value && !dojo.byId('wbNoFile_img')) {
                 alert('Especifique una imagen para el banner');
