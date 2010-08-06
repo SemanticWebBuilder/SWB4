@@ -24,9 +24,10 @@
 package org.semanticwb.process.utils;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.portal.api.SWBResourceURL;
 
 import org.semanticwb.portal.admin.resources.reports.jrresources.JRDataSourceable;
 import org.semanticwb.portal.admin.resources.reports.beans.IncompleteFilterException;
@@ -42,6 +43,7 @@ import org.semanticwb.process.model.ProcessInstance;
  */
 public class JRCaseDetail implements JRDataSourceable {
 
+    SWBResourceURL url = null;
     Iterator<ProcessInstance> itpinst = null;
 
     /**
@@ -49,7 +51,8 @@ public class JRCaseDetail implements JRDataSourceable {
      *
      * @param filterReportBean the filter report bean
      */
-    public JRCaseDetail(Iterator<ProcessInstance> itpinst){
+    public JRCaseDetail(Iterator<ProcessInstance> itpinst, SWBResourceURL url) {
+        this.url = url;
         this.itpinst = itpinst;
     }
 
