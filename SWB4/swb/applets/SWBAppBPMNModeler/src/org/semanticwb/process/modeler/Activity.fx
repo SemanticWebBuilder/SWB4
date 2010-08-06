@@ -7,30 +7,22 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import org.semanticwb.process.modeler.Artifact;
-import org.semanticwb.process.modeler.EventBasedGateway;
 
 /**
  * @author javier.solis
  */
+
+public def TYPE_ADHOC="adhoc";
+public def TYPE_LOOP="loop";
+public def TYPE_COMPENSATION="compensation";
+public def TYPE_MULTIPLE="multiple";
+public def TYPE_TRANSACTION="transaction";
 
 public class Activity extends FlowNode
 {
     public override function create(): Node
     {
         var ret=super.create();
-        return ret;
-    }
-
-    override public function canStartLink(link:ConnectionObject) : Boolean
-    {
-        var ret = super.canStartLink(link);
-        if (link instanceof SequenceFlow) {
-            if (getContainer() != null and getContainer() instanceof AdhocSubProcess) {
-                ret = false;
-                ModelerUtils.setErrorMessage("SequenceFlow is not allowed in AdHoc Subprocess");
-            }
-        }
         return ret;
     }
 
@@ -41,7 +33,7 @@ public class Activity extends FlowNode
             ret = true;            
         } else if (link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage("Exclusive event-based gateway can onli be linked to events and Receive Task");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError1"));
         }
         return ret;
     }
