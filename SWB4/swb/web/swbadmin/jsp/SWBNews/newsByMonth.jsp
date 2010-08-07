@@ -22,29 +22,44 @@
     List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
     if(contents!=null && contents.size()>0)
     {
-        %>
-        <ul class="listaLinks">
-        <%
-
-        
         
         for(SWBNewContent content : contents)
-        {            
+        {
+            
             SWBResourceURL url=paramRequest.getRenderUrl();
             url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
             url.setMode(paramRequest.Mode_VIEW);
             url.setCallMethod(paramRequest.Call_CONTENT);
+            String urlcontent=url.toString().replace("&", "&amp;");
             String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
             if(title!=null && title.trim().equals(""))
             {
                 title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
+            }
+            String ago="";
+            String source=content.getSource();
+            String date="";
+            if(date!=null && !date.trim().equals(""))
+            {
+                ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
             }
             String country="";
             if(content.getCountry()!=null)
             {
                 country="("+SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage))+")";
             }
-            String date="";
+            String originalTitle="";
+            if(content.getOriginalTitle()!=null)
+            {
+                originalTitle=SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+            }
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+            String image="";
+            if(content.getImage()!=null)
+            {
+                image=content.getImage();
+                pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+            }            
             if(content.getPublishDate()!=null)
             {
                 int month=-1;
@@ -77,16 +92,77 @@
                 {
                     continue;
                 }
-                date=sdf.format(content.getPublishDate());    
+                date=sdf.format(content.getPublishDate());
+                
 
             }
             %>
-            <li><a href="<%=url%>" ><b><%=title%> <%=country%> <%=date%></b></a></li>
+            <div class="entradaVideos">
+        <div class="thumbVideo">
+            <%
+                if(pathPhoto!=null)
+                {
+                    %>
+                    <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
+                    <%
+                }
+            %>
+
+        </div>
+        <div class="infoVideo">
+            <h3><%=title%><%
+                    if(country!=null && !country.equals(""))
+                    {
+                                   %>&nbsp;<%=country%><%
+                    }
+                %>
+            </h3>
+                <%
+                    if(originalTitle!=null && !originalTitle.trim().equals(""))
+                        {
+                        %>
+                        <p><%=originalTitle%></p>
+                        <%
+                        }
+                %>
+            <p class="fechaVideo">
+                <%
+                    if(date!=null && !date.trim().equals(""))
+                    {
+                        %>
+                        <%=date%> - <%=ago%>
+                        <%
+                    }
+                %>
+
+            </p>
+            <%
+                    if(source!=null)
+                    {
+                        if(content.getSourceURL()==null)
+                        {
+
+                            %>
+                            <p>Fuente: <%=source%></p>
+                            <%
+                        }
+                        else
+                        {
+                            String urlsource=content.getSourceURL();
+                            urlsource=urlsource.replace("&", "&amp;");
+                            %>
+                            <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
+                            <%
+                        }
+                    }
+                %>
+            <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
+        </div>
+        <div class="clear">&nbsp;</div>
+        </div>
             <% 
         }
-        %>
-             </ul>
-        <%
+        
         SWBResourceURL urlall=paramRequest.getRenderUrl();
         urlall.setMode(urlall.Mode_VIEW);
         urlall.setCallMethod(urlall.Call_CONTENT);
