@@ -36,6 +36,7 @@
             {
                 title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
             }
+            String titleImage=title.replace('"', '\'');
             String ago="";
             String source=content.getSource();
             String date="";
@@ -103,7 +104,7 @@
                 if(pathPhoto!=null)
                 {
                     %>
-                    <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
+                    <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
                     <%
                 }
             %>

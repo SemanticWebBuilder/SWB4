@@ -88,10 +88,12 @@
                     image=content.getImage();
                     pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
                 }
+                String titleImage=title.replace('"', '\'');
+                
                 %>
                     <div class="mainNews">
                       <p><a href="<%=url%>"><%=title%></a></p>
-                      <img src="<%=pathPhoto%>" alt="<%=title%>" />
+                      <img src="<%=pathPhoto%>" alt="<%=titleImage%>" />
                       <div class="clear">&nbsp;</div>
                     </div>
                 <%
