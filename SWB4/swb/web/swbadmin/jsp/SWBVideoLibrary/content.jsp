@@ -67,6 +67,7 @@
             {
                 title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
             }
+            String titleImage=title.replace('"', '\'');
             String date="";
             if(content.getPublishDate()!=null)
             {
@@ -87,7 +88,7 @@
                     {
                         %>
                         <div class="thumbVideo">
-                            <img alt="<%=title%>" width="120" height="120" src="<%=preview%>" />
+                            <img alt="<%=titleImage%>" width="120" height="120" src="<%=preview%>" />
                         </div>
                         <%
                     }
