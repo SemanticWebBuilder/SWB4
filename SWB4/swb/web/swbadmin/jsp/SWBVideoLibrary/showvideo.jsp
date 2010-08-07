@@ -47,13 +47,18 @@
         }
     }
     catch(Exception e){}
-    String code=content.getCode();    
+    String code="";
+    if(content.getCode()!=null)
+    {
+        code=content.getCode();
+        code=code.replace("/", "\\/");
+    }
     SWBResourceURL urlall=paramRequest.getRenderUrl();
     urlall.setMode(urlall.Mode_VIEW);
     urlall.setCallMethod(urlall.Call_CONTENT);
     String source=content.getSource();
     
-    code=code.replace("/", "\\/");
+    
 %>
 <div class="columnaIzquierda">
     <br/>
