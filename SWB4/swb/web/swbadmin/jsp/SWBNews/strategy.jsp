@@ -53,8 +53,7 @@
         ArrayList<SWBNewContent> contentstoshow= new ArrayList<SWBNewContent>();
         if(urldetail!=null)
         {            
-            int i=0;
-            boolean first=true;
+            int i=0;            
             for(SWBNewContent content : contents)
             {
                 if(content.isHomeShow())
@@ -122,8 +121,13 @@
                 <%
             }
             String urlNews=noticias.getUrl();
+            String titleviewoldNews="Ver noticias anteriores";
+            if(usrlanguage!=null && !usrlanguage.equals("es"))
+            {
+                titleviewoldNews="View old news";
+            }
             %>
-            <p><a href="<%=urlNews%>">Noticias</a></p>
+                <p class="vermas"><a href="<%=urlNews%>"><%=titleviewoldNews%></a></p>
             <%
         }
     }
