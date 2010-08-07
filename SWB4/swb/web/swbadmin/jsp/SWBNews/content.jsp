@@ -96,6 +96,7 @@
                 image=content.getImage();
                 pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
             }
+            String titleImage=title.replace('"', '\'');
             %>
             <div class="entradaVideos">
         <div class="thumbVideo">
@@ -103,7 +104,7 @@
                 if(pathPhoto!=null)
                 {
                     %>
-                    <img width="120" height="120" alt="<%=title%>" src="<%=pathPhoto%>" />
+                    <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
                     <%
                 }
             %>
