@@ -38,11 +38,15 @@
         date=sdf.format(content.getPublishDate());
     }
     String duration="";
-    duration=SWBUtils.TEXT.encodeExtendedCharacters(String.valueOf(content.getDuration()));
-    if(duration!=null && duration.trim().equals(""))
+    try
     {
         duration=SWBUtils.TEXT.encodeExtendedCharacters(String.valueOf(content.getDuration()));
+        if(duration!=null && duration.trim().equals(""))
+        {
+            duration=SWBUtils.TEXT.encodeExtendedCharacters(String.valueOf(content.getDuration()));
+        }
     }
+    catch(Exception e){}
     String code=content.getCode();    
     SWBResourceURL urlall=paramRequest.getRenderUrl();
     urlall.setMode(urlall.Mode_VIEW);
