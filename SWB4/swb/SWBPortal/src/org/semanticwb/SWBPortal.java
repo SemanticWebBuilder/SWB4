@@ -24,12 +24,10 @@ package org.semanticwb;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -54,6 +53,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.css.parser.Attribute;
+import org.semanticwb.css.parser.CSSParser;
+import org.semanticwb.css.parser.Selector;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.portal.PFlowManager;
@@ -2202,6 +2204,50 @@ public class SWBPortal
                 log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBUtils_IOHTML"), e);
             }
             return ret.toString();
+        }
+        public static String[] findAttachesFromCss(String cssbody)
+        {
+            HashSet<String> findAttachesFromCss=new HashSet<String>();
+            try
+            {
+                CSSParser p=new CSSParser(cssbody);
+                for (Selector selector : p.getSelectors())
+                {
+                    for (Attribute att : selector.getAttributes())
+                    {
+                        if (att.getName().equals("background-image") || att.getName().equals("background"))
+                        {
+                            for (String value : att.getValues())
+                            {
+                                if (value.startsWith("url("))
+                                {
+                                    value = value.substring(4);
+                                    int pos = value.indexOf(")");
+                                    if (pos != -1)
+                                    {
+                                        value = value.substring(0, pos).trim();
+
+                                        if (value.indexOf(".") != -1 && !value.startsWith("http://") && !value.toLowerCase().startsWith("wbrelpath://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../"))
+                                        {
+                                            if(value.startsWith("\"") && value.endsWith("\""))
+                                            {
+                                                value=value.substring(1,value.length()-1);
+                                            }
+                                            findAttachesFromCss.add(value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Throwable e)
+            {
+                log.error(e);
+            }
+            
+            return findAttachesFromCss.toArray(new String[findAttachesFromCss.size()]);
         }
 
         /**
