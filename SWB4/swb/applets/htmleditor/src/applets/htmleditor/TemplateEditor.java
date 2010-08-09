@@ -504,13 +504,13 @@ Action:caret-previous-word
                         {
                             FileInputStream cssin=new FileInputStream(attach);
                             String cssbody=readInputStream(cssin);                            
-                            String retcss=sendHTML(cssbody,attach.getName(),false,true);
-                            System.out.println("retcss "+retcss);
-                            retcss=retcss.replace("|", ";");
-                            //String filescss=retcss.substring(0,retcss.indexOf('|'));
-                            System.out.println("filescss "+retcss);
-                            String ptcss=attach.getAbsolutePath().replace('\\','/');
-                            System.out.println("ptcss "+ptcss);
+                            String retcss=sendHTML(cssbody,attach.getName(),false,true);                            
+                            retcss=retcss.replace("|", ";");                                                        
+                            String ptcss=attach.getParentFile().getAbsolutePath().replace('\\','/');
+                            if(!ptcss.endsWith("/"))
+                            {
+                                ptcss+="/";
+                            }                            
                             dd.addFiles(retcss,ptcss);
                         }
                     }
