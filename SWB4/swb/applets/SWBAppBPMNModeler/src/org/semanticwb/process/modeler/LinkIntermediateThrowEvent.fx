@@ -22,6 +22,7 @@ public class LinkIntermediateThrowEvent extends IntermediateThrowEvent
 
     public override function canStartLink(link:ConnectionObject) {
         //Un evento intermedio de enlace tipo throw no puede tener flujos de salida
+        ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError26"));
         return false;
     }
 
@@ -29,9 +30,9 @@ public class LinkIntermediateThrowEvent extends IntermediateThrowEvent
         //El evento intermedio de enlace tipo throw no puede tener más de un flujo de
         //secuencia de entrada y no puede tener flujos de mensaje de entrada
         var ret = super.canEndLink(link);
-        //println("canEndLink:{ret}");
         if (link instanceof MessageFlow) {
             ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError24"));
         }
 
         return ret;
