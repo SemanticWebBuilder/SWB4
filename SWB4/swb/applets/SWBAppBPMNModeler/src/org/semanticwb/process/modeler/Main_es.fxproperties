@@ -104,3 +104,5 @@
 "msgError9" = "Un Evento Final no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError10" = "Un Evento Intermedio de Error no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError11" = "Un Evento no puede tener Artefactos asociados"
+"msgError12" = "Una Compuerta Basada en Eventos no puede conectarse usando Flujos de Secuencia por Defecto"
+"msgError13" = "Una Compuerta Basada en Eventos no puede conectarse usando Flujos de Secuencia Condicionales"
