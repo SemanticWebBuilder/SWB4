@@ -106,3 +106,6 @@
 "msgError11" = "Un Evento no puede tener Artefactos asociados"
 "msgError12" = "Una Compuerta Basada en Eventos no puede conectarse usando Flujos de Secuencia por Defecto"
 "msgError13" = "Una Compuerta Basada en Eventos no puede conectarse usando Flujos de Secuencia Condicionales"
+"msgError14" = "Un Flujo de Secuencia no puede cruzar los límites del Pool"
+"msgError15" = "Una Asociación no puede conectar dos Nodos de Flujo"
+"msgError16" = "Un Flujo de Mensage debe cruzar los límites del Pool"
