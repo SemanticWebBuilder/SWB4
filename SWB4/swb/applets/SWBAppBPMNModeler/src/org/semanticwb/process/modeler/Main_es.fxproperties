@@ -100,7 +100,7 @@
 "msgError5" = "Dos Artefactos no pueden conectarse entre sí"
 "msgError6" = "Un Evento Intermedio de Cancelación sólo puede adherirse a Transacciones"
 "msgError7" = "Este Evento Intermedio de Compensación sólo puede conectarse usando Asociaciones"
-"msgError8" = "Un Evento Final sólo puede tener Flujos de Secuencia a su entrada"
+"msgError8" = "Un Evento Final sólo puede tener Flujos de Secuencia entrantes"
 "msgError9" = "Un Evento Final no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError10" = "Un Evento Intermedio de Error no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError11" = "Un Evento no puede tener Artefactos asociados"
@@ -120,3 +120,4 @@
 "msgError25" = "Un Evento de Enlace no puede adherirse a una Actividad"
 "msgError26" = "Un Evento de Enlace Disparador no puede tener Flujos de Secuencia salientes"
 "msgError27" = "Un Evento de Enlace Receptor no puede tener Flujos de Secuencia entrantes"
+"msgError28" = "Un Evento Final de Mensaje sólo puede tener Flujos de Mensaje Salientes"
