@@ -40,7 +40,7 @@ public class CSSParser
         int pos = data.indexOf('{');
         while (pos != -1)
         {
-            String selectorrow = data.substring(0, pos).trim();            
+            String selectorrow = data.substring(0, pos).trim();
             HashSet<Attribute> atts = new HashSet<Attribute>();
             data = data.substring(pos + 1);
             int pos2 = data.indexOf('}');
@@ -55,8 +55,8 @@ public class CSSParser
                     StringTokenizer st2 = new StringTokenizer(attribute, ":");
                     if (st2.countTokens() == 2)
                     {
-                        String name = st2.nextToken();
-                        String value = st2.nextToken();
+                        String name = st2.nextToken().trim();
+                        String value = st2.nextToken().trim();
                         Attribute att = new Attribute(name, value);
                         atts.add(att);
                     }
@@ -119,10 +119,12 @@ public class CSSParser
             int pos2 = data.indexOf("*/");
             if (pos2 != -1)
             {
+                //System.out.println(data.substring(0, pos2));
                 data = data.substring(pos2 + 2);
             }
             pos = data.indexOf("/*");
         }
+        cssclean.append(data);
         return cssclean.toString().trim();
     }
 
@@ -142,7 +144,8 @@ public class CSSParser
 
     public static void main(String[] args)
     {
-        String path = "C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\estilos.css";
+        //String path = "C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\estilos.css";
+        String path = "C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\SEGOB XHTML Strict\\images\\estilos.css";
         File file = new File(path);
         StringBuilder css = new StringBuilder();
         try
@@ -161,7 +164,7 @@ public class CSSParser
             {
                 for (Attribute att : selector.getAttributes())
                 {
-                    if (att.getName().equals("background-image") || att.getName().equals("background"))
+                    if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
                     {
                         for (String value : att.getValues())
                         {
