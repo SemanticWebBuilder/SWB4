@@ -23,20 +23,15 @@ public class MessageStartEvent extends StartEvent
 
     override public function canEndLink(link:ConnectionObject) : Boolean
     {
-        var ret=false;
-        if(link instanceof MessageFlow)
-        {
-            var c=sizeof getInputConnectionObjects();
-            if(c==0)
-            {
-                ret=true;
-            }else
-            {
-                ModelerUtils.setErrorMessage("Can't link more than one MessageFlow to MessageStrartEvent");
+        var ret = super.canEndLink(link);
+
+        if(link instanceof MessageFlow) {
+            var c = sizeof getInputConnectionObjects();
+            if(c == 0) {
+                ret = true;
+            } else {
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError36"));
             }
-        }else
-        {
-            ModelerUtils.setErrorMessage("Can't link SequenceFlow to MessageStrartEvent");
         }
         return ret;
     }
