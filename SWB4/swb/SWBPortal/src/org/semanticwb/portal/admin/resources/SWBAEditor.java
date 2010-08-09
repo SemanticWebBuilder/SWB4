@@ -795,9 +795,21 @@ public class SWBAEditor extends GenericResource
                         out.println("ok");
                     }else if(doc.equals("FINDATTACHES"))
                     {
-                        out.print(SWBPortal.UTIL.FindAttaches(ret));
-                        out.print("|");
-                        out.print(SWBPortal.UTIL.parseHTML(ret,"images/"));
+                        if(request.getHeader("CSSTYPE")!=null && request.getHeader("CSSTYPE").equals("TRUE"))
+                        {
+                            // find css attaches
+                            for(String file : SWBPortal.UTIL.findAttachesFromCss(ret))
+                            {
+                                out.print(file);
+                                out.print("|");
+                            }
+                        }
+                        else
+                        {
+                            out.print(SWBPortal.UTIL.FindAttaches(ret));
+                            out.print("|");
+                            out.print(SWBPortal.UTIL.parseHTML(ret,"images/"));
+                        }
                         //System.out.print("TODO:SWBAeditor - FINDATTACHES");
                     }
                 }                
