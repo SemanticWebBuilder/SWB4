@@ -125,3 +125,6 @@
 "msgError30" = "Un Evento Intermedio de Message Receptor no puede tener Flujos de Mensage salientes"
 "msgError31" = "Un Evento Intermedio de Message Disparador no puede tener Flujos de Mensaje entrantes"
 "msgError32" = "Un Evento Intermedio de Message Disparador sólo puede tener un Flujo de Mensage saliente"
+"msgError33" = "Un Evento Inicial no puede tener Flujos de Secuencia entrantes"
+"msgError34" = "Un Evento Inicial no puede tener Flujos de Mensaje entrantes"
+"msgError35" = "Un Evento Inicial no puede tener Flujos de Mensaje salientes"
