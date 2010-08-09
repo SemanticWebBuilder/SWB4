@@ -100,3 +100,5 @@
 "msgError5" = "Dos Artefactos no pueden conectarse entre sí"
 "msgError6" = "Un Evento Intermedio de Cancelación sólo puede adherirse a Transacciones"
 "msgError7" = "Este Evento Intermedio de Compensación sólo puede conectarse usando Asociaciones"
+"msgError8" = "Un Evento Final sólo puede tener Flujos de Secuencia a su entrada"
+"msgError9" = "Un Evento Final no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
