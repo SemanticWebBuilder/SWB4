@@ -6,7 +6,7 @@
     <fieldset legend="Configuración básica">
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
-        <input type="text" id="url" name="url" label="Dirección web:" regExp_="(http|https):\/\/.+" invalidMessage="URL inválida" promptMessage="Dirección web del patrocinador" />
+        <input type="text" id="url" name="url" label="Dirección web:" promptMessage="Dirección web" />
         <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Acción en javascript, considerada en el evento onclick" />
         
         <input type="FILE" name="img" label="** Imagen (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
