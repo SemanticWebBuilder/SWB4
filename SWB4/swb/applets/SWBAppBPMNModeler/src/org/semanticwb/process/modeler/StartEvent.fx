@@ -32,30 +32,25 @@ public class StartEvent extends CatchEvent
     {
         var ret = super.canEndLink(link);
 
-        if (not (link instanceof AssociationFlow)) {
+        if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("StartEvent cannot have incoming flows");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError33"));
         }
 
-        if (link instanceof DirectionalAssociation) {
+        if (link instanceof MessageFlow) {
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError34"));
             ret = false;
-            ModelerUtils.setErrorMessage("StartEvent cannot be linked using DirectionalAssociation");
         }
-        
-        if (link instanceof AssociationFlow and not (link.ini instanceof AnnotationArtifact)) {
-            ret = false;
-            ModelerUtils.setErrorMessage("StartEvent can only be linked to AnnotationArtifact");
-        }
-
         return ret;
     }
 
     override public function canStartLink(link:ConnectionObject) : Boolean
     {
         var ret = super.canStartLink(link);
+        
         if(link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("StartEvent cannot have outgoing MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError35"));
         }
         return ret;
     }
