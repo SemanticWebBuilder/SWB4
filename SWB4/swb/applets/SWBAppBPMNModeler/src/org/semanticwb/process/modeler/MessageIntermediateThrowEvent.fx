@@ -32,7 +32,7 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
 
         if (link instanceof MessageFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage("MessageIntermediateThrowEvent can have only one outgoing MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError32"));
         }
         return ret;
     }
@@ -42,7 +42,7 @@ public class MessageIntermediateThrowEvent extends IntermediateThrowEvent
 
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("MessageIntermediateThrowEvent cannot have incoming MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError31"));
         }
         return ret;
     }
