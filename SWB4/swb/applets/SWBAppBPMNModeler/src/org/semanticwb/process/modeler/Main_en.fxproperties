@@ -100,3 +100,5 @@
 "msgError5" = "Artifact cannot be linked to Artifact"
 "msgError6" = "Cancelation Boundary event can only be attached to Transaction"
 "msgError7" = "Compensation Boundary Event can only be linked with Directional Association"
+"msgError8" = "End Event can only have incoming Sequence Flow"
+"msgError9" = "Event-based Gateway cannot be linked to End Event"
