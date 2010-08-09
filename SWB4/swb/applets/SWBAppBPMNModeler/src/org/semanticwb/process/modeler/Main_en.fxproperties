@@ -112,3 +112,6 @@
 "msgError17" = "Gateway cannot have outgoing Message Flow"
 "msgError18" = "Converging Gateway must have only one outgoing Sequence Flow"
 "msgError19" = "Diverging Gateway must have only one incoming Sequence Flow"
+"msgError20" = "Boundary Events cannot have incoming Sequence Flow"
+"msgError21" = "IntermediateCatchEvent can have only one incoming Sequence Flow"
+"msgError22" = "IntermediateCatchEvent can have only one outgoing SequenceFlow"
