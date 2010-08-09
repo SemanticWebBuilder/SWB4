@@ -121,3 +121,5 @@
 "msgError26" = "Un Evento de Enlace Disparador no puede tener Flujos de Secuencia salientes"
 "msgError27" = "Un Evento de Enlace Receptor no puede tener Flujos de Secuencia entrantes"
 "msgError28" = "Un Evento Final de Mensaje sólo puede tener Flujos de Mensaje Salientes"
+"msgError29" = "Un Evento Intermedio de Message Receptor sólo puede tener un Flujo de Mensaje entrante"
+"msgError30" = "Un Evento Intermedio de Message Receptor no puede tener Flujos de Mensage salientes"
