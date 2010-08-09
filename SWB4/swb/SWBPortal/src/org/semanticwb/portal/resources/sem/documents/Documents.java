@@ -159,6 +159,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     }
 
     private String renderListDocuments(SWBParamRequest paramRequest) throws SWBResourceException {
+        System.out.println("lista de documentos");
         StringBuilder html = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
         //long ordinal = SWBUtils.Collections.sizeOf(listComments());
@@ -188,7 +189,11 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
                 }else
                     html.append("<p>Autor: "+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
-                html.append("<p><a href=\"wp61?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
+                html.append("<p><a href=\""+paramRequest.getWebPage().getWebSite().getWebPage("wp61").getRealUrl()+"?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
+                System.out.println("paramRequest.getWebPage().getRealUrl()="+paramRequest.getWebPage().getRealUrl());
+                System.out.println("paramRequest.getWebPage().getWebPageURL()="+paramRequest.getWebPage().getWebPageURL());
+                System.out.println("paramRequest.getWebPage().getWebSite().getWebPage(\"wp61\").getRealUrl()="+paramRequest.getWebPage().getWebSite().getWebPage("wp61").getRealUrl());
+
                 html.append("</li>");
             }
             html.append("</ol>");
@@ -215,6 +220,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     }
     
     protected void add(HttpServletRequest request, SWBActionResponse response) throws Exception {
+        System.out.println("add");
         Resource base = getResourceBase();
 
         Document doc = null;
@@ -283,12 +289,14 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
             }
         }
         if(doc!=null) {
+            System.out.println("asignar valores");
             try {
                 String filename = params.get("filename").trim();
                 if( filename.equals("") ) 
                     throw new Exception("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                 doc.setFilename(filename);
             }catch(Exception e) {
+                System.out.println("1 "+e);
                 response.setRenderParameter("msgErrFilename", "El archivo es requerido.");
                 log.error("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                 throw new Exception("El archivo es requerido. Resource "+base.getTitle()+" with id "+base.getId());
@@ -299,6 +307,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     throw new Exception("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                 doc.setTitle(title);
             }catch(Exception e) {
+                System.out.println("2 "+e);
                 response.setRenderParameter("msgErrTitle", "El título es requerido.");
                 log.error("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
                 throw new Exception("El título es requerido. Resource "+base.getTitle()+" with id "+base.getId());
@@ -309,6 +318,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     throw new Exception("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
                 doc.setDescription(desc);
             }catch(Exception e) {
+                System.out.println("3 "+e);
                 response.setRenderParameter("msgErrDesc", "La descripción es requerida.");
                 log.error("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
                 throw new Exception("La descripción es requerida. Resource "+base.getTitle()+" with id "+base.getId());
@@ -480,4 +490,11 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
 //        }
     }
 
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        out.println("hola mundo");
+        out.flush();
+        out.close();
+    }
 }
