@@ -123,3 +123,5 @@
 "msgError28" = "Message End Event can have only outgoing Message Flow"
 "msgError29" = "Message Intermediate Catch Event can have only one incoming Message Flow"
 "msgError30" = "Message Intermediate Catch Event cannot have outgoing Message Flow"
+"msgError31" = "Message Intermediate Throw Event cannot have incoming Message Flow"
+"msgError32" = "Message Intermediate Throw Event can have only one outgoing Message Flow"
