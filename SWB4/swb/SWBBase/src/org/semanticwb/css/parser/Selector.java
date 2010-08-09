@@ -5,6 +5,7 @@
 
 package org.semanticwb.css.parser;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -14,10 +15,11 @@ import java.util.Set;
 public class Selector {
 
     private String name;
-    private Set<Attribute> atts;
+    private Set<Attribute> atts=new HashSet<Attribute>();
     Selector(String name,Set<Attribute> atts)
     {
         this.name=name;
+        this.atts=atts;
     }
     public Attribute[] getAttributes()
     {
