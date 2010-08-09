@@ -106,3 +106,6 @@
 "msgError11" = "Event cannot have associated Artifact"
 "msgError12" = "Event-based Gateway cannot be linked using Default Flow"
 "msgError13" = "Event-based Gateway cannot be linked using Conditional Flow"
+"msgError14" = "Sequence Flow cannot cross Pool boundaries"
+"msgError15" = "Association Flow cannot link Flow Nodes"
+"msgError16" = "Message Flow must cross Pool boundaries"
