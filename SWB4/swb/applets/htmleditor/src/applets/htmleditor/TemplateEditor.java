@@ -34,14 +34,10 @@ package applets.htmleditor;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
-import javax.swing.undo.*;
-import javax.swing.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 
 /**
  *
@@ -497,6 +493,29 @@ Action:caret-previous-word
                 String html=ret.substring(ret.indexOf('|')+1);
                 String files=ret.substring(0,ret.indexOf('|'));
                 dd.addHTMLFile(filename,html);
+                StringTokenizer st=new StringTokenizer(files,";");
+                while(st.hasMoreTokens())
+                {
+                    String sfile=st.nextToken();
+                    try
+                    {
+                        File attach = new File(pt+sfile);                        
+                        if(attach.getName().endsWith(".css") && attach.exists())
+                        {
+                            FileInputStream cssin=new FileInputStream(attach);
+                            String cssbody=readInputStream(cssin);                            
+                            String retcss=sendHTML(cssbody,attach.getName(),false,true);
+                            System.out.println("retcss "+retcss);
+                            retcss=retcss.replace("|", ";");
+                            //String filescss=retcss.substring(0,retcss.indexOf('|'));
+                            System.out.println("filescss "+retcss);
+                            String ptcss=attach.getAbsolutePath().replace('\\','/');
+                            System.out.println("ptcss "+ptcss);
+                            dd.addFiles(retcss,ptcss);
+                        }
+                    }
+                    catch(Exception e){System.out.println(e);}
+                 }
                 dd.addFiles(files,pt);
                 dd.setGateway(gateway);
                 dd.setUpload(upurl);
@@ -2138,13 +2157,17 @@ Action:caret-previous-word
     
     private String sendHTML(String html, String name, boolean replace, boolean findattaches)
     {
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         try
         {
             URLConnection urlconn=upurl.openConnection();
             urlconn.setUseCaches(false);
             if(jsess!=null)urlconn.setRequestProperty("Cookie", "JSESSIONID="+jsess);
             urlconn.setRequestProperty("PATHFILEWB",name);
+            if(name.endsWith(".css"))
+            {
+                urlconn.setRequestProperty("CSSTYPE","TRUE");
+            }
             if(replace)
             {
                 urlconn.setRequestProperty("DOCUMENT","REPLACE");
