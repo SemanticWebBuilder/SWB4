@@ -71,13 +71,13 @@ public class Gateway extends FlowNode
         
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Gateway cannot have outgoing MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError17"));
         }
 
         if (link instanceof SequenceFlow) {
             if (ci > 1 and co != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage("Converging Gateway must have only one outgoing SequenceFlow");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError18"));
             }
         }
         return ret;
@@ -102,13 +102,13 @@ public class Gateway extends FlowNode
         
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Gateway cannot have incoming MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError17"));
         }
 
         if (link instanceof SequenceFlow) {
             if (co > 1 and ci != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage("Diverging Gateway must have only one incoming SequenceFlow");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError19"));
             }
         }
         return ret;
