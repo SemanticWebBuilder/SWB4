@@ -28,7 +28,7 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
         var ret = super.canStartLink(link);
         if (link instanceof MessageFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("LinkEvent cannot have outgoing MessageFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError24"));
         }
         return ret;
     }
@@ -38,7 +38,7 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (parent instanceof Activity) {
             ret = false;
-            ModelerUtils.setErrorMessage("LinkEvent cannot be attached to activities");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError25"));
         }
         return ret;
     }
