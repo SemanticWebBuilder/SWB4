@@ -120,3 +120,4 @@
 "msgError25" = "Link Event cannot be attached to Activity"
 "msgError26" = "Link Intermediate Throw Event cannot have outgoing Sequence Flow"
 "msgError27" = "Link Intermediate Catch Event cannot have incoming Sequence Flow"
+"msgError28" = "Message End Event can have only outgoing Message Flow"
