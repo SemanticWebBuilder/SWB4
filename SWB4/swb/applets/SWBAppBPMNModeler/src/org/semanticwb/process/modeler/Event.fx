@@ -241,7 +241,7 @@ public class Event extends FlowNode
 
         if (link instanceof AssociationFlow and link.ini instanceof Artifact) {
             ret = false;
-            ModelerUtils.setErrorMessage("Artifact cannot be linked to Event");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError11"));
         }
         return ret;
     }
