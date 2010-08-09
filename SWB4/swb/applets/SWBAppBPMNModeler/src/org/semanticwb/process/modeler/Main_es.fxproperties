@@ -115,3 +115,4 @@
 "msgError20" = "Un Evento Adherido no puede tener Flujos de Secuencia entrantes"
 "msgError21" = "Un Evento Intermedio sólo puede tener un Flujo de Secuencia entrante"
 "msgError22" = "Un Evento Intermedio sólo puede tener un Flujo de Secuencia saliente"
+"msgError23" = "Un Evento Intermedio Disparador no puede adherirse a una Actividad"
