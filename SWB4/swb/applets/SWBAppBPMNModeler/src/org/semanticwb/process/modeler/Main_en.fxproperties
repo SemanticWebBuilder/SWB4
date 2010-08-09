@@ -114,5 +114,7 @@
 "msgError19" = "Diverging Gateway must have only one incoming Sequence Flow"
 "msgError20" = "Boundary Events cannot have incoming Sequence Flow"
 "msgError21" = "Intermediate Catch-Event can have only one incoming Sequence Flow"
-"msgError22" = "Intermediate Catch-Event can have only one outgoing SequenceFlow"
+"msgError22" = "Intermediate Catch-Event can have only one outgoing Sequence Flow"
 "msgError23" = "Intermediate Throw-Event cannot be attached to Activity"
+"msgError24" = "Link Event cannot have outgoing Message Flow"
+"msgError25" = "Link Event cannot be attached to Activity"
