@@ -116,3 +116,5 @@
 "msgError21" = "Un Evento Intermedio sólo puede tener un Flujo de Secuencia entrante"
 "msgError22" = "Un Evento Intermedio sólo puede tener un Flujo de Secuencia saliente"
 "msgError23" = "Un Evento Intermedio Disparador no puede adherirse a una Actividad"
+"msgError24" = "Un Evento de Enlace no puede conectarse usando Flujos de Mensaje"
+"msgError25" = "Un Evento de Enlace no puede adherirse a una Actividad"
