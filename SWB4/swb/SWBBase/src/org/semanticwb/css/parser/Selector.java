@@ -25,5 +25,16 @@ public class Selector {
     {
         return atts.toArray(new Attribute[atts.size()]);
     }
+    public String getName()
+    {
+        return name;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
+    }
+
     
 }
