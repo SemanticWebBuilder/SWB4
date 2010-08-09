@@ -101,10 +101,10 @@ public class IntermediateCatchEvent extends CatchEvent
         if (link instanceof SequenceFlow) {
             if (this.getGraphParent() instanceof Activity) {
                 ret = false;
-                ModelerUtils.setErrorMessage("BoundaryEvent cannot have incoming SequenceFlow");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError20"));
             } else if (c != 0) {
                 ret = false;
-                ModelerUtils.setErrorMessage("IntermediateCatchEvent can have only one incoming SequenceFlow");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError21"));
             }
         }
         return ret;
@@ -122,7 +122,7 @@ public class IntermediateCatchEvent extends CatchEvent
         
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage("IntermediateCatchEvent can have only one outgoing SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError22"));
         }
         return ret;
     }
