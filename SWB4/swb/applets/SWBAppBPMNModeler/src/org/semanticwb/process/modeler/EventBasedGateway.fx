@@ -17,10 +17,10 @@ public class EventBasedGateway extends Gateway
 
         if (link instanceof DefaultFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Event-based Gateway must not have outgoing DefaultFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError12"));
         } else if (link instanceof ConditionalFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Event-based Gateway must not have outgoing ConditionalFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError13"));
         }
         return ret;
     }
