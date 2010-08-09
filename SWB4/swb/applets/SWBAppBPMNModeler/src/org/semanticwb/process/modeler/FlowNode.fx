@@ -48,21 +48,21 @@ public class FlowNode extends GraphicalElement
         if (link instanceof SequenceFlow) {
             if (not(link.ini.getPool() == getPool())) {
                 ret = false;
-                ModelerUtils.setErrorMessage("SequenceFlow cannot cross pool boundary");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError14"));
             }
         }
 
         if (link instanceof AssociationFlow) {
             if (not(link.ini instanceof Artifact) and not(link.ini instanceof CompensationIntermediateCatchEvent and link.ini.getGraphParent() instanceof Activity)) {
                 ret = false;
-                ModelerUtils.setErrorMessage("Association cannot link FlowNodes");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError15"));
             }
         }
 
         if (link instanceof MessageFlow) {
             if (link.ini.getPool() == getPool()) {
                 ret = false;
-                ModelerUtils.setErrorMessage("MessageFlow must cross pool boundary");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError16"));
             }
         }
         return ret;
