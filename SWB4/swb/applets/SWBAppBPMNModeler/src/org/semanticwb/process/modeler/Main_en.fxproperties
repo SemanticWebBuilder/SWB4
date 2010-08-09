@@ -121,3 +121,5 @@
 "msgError26" = "Link Intermediate Throw Event cannot have outgoing Sequence Flow"
 "msgError27" = "Link Intermediate Catch Event cannot have incoming Sequence Flow"
 "msgError28" = "Message End Event can have only outgoing Message Flow"
+"msgError29" = "Message Intermediate Catch Event can have only one incoming Message Flow"
+"msgError30" = "Message Intermediate Catch Event cannot have outgoing Message Flow"
