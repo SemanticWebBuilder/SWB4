@@ -26,10 +26,14 @@ package org.semanticwb.portal.resources.sem.events;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Locale;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -50,11 +54,12 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     private static Logger log = SWBUtils.getLogger(Events.class);
 
     private static final String Action_ENROLL = "enroll";
+
+//    private LinkedHashSet<Date> setDates;
     /**
      * Instantiates a new events.
      */
-    public Events()
-    {
+    public Events() {
     }
 
     /**
@@ -65,13 +70,30 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     public Events(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
         
+//        setDates = new LinkedHashSet();
+//        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//
+//        Iterator<Event> itEvents = SWBComparator.sortByCreated(listEvents());
+//        while(itEvents.hasNext()) {
+//            Event event = itEvents.next();
+//            Date date = new Date(event.getDate());
+//            try {
+//                setDates.add( sdf.parse(sdf.format(date)) );
+//            }catch(ParseException pe) {
+//            }
+//        }
+    }
+
+    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        System.out.println("\n\n********************************\ndoView Events.....");
-        out.println(renderListEvents(paramRequest));
-
+        
         SWBResourceURL addURL = paramRequest.getActionUrl().setAction(paramRequest.Action_ADD);
         out.println("<script type=\"text/javascript\">");
         out.println("<!--");
@@ -111,14 +133,52 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println("    window.location.href=url;");
         out.println("  }");
         out.println("}");
+
+        out.println("function forward(cbmth) {");
+        out.println("  if( (cbmth.selectedIndex+1)==cbmth.options.length )");
+        out.println("    cbmth.selectedIndex = 0;");
+        out.println("  else");
+        out.println("    cbmth.selectedIndex = cbmth.selectedIndex+1;");
+        out.println("  return true;");
+        out.println("}");
+
+        out.println("function rewind(cbmth) {");
+        out.println("  if( (cbmth.selectedIndex-1)<0 )");
+        out.println("    cbmth.selectedIndex = cbmth.options.length-1;");
+        out.println("  else");
+        out.println("    cbmth.selectedIndex = cbmth.selectedIndex-1;");
+        out.println("  return true;");
+        out.println("}");
+
+
         out.println("-->");
         out.println("</script>");
 
-        out.println("<div class=\"\">");
-        out.println(" <div class=\"adminTools\">");
-        out.println("  <a class=\"adminTool\" onclick=\"if(validaEvent(document.frmEvent)) document.frmEvent.submit();\" href=\"#\">Guardar</a>");
-        out.println("  <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl()+"\">Cancelar</a>");
-        out.println(" </div>");
+        out.println("<div class=\"swb-events\">");
+        out.println(renderCalendarEvents(request, paramRequest));
+
+        if( request.getParameter("db")!=null && request.getParameter("da")!=null ) {
+            Date dateBefore = new Date(Long.parseLong(request.getParameter("db")));
+            Date dateAfter = new Date(Long.parseLong(request.getParameter("da")));
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(dateBefore);
+
+            SWBResourceURL url = paramRequest.getRenderUrl();
+            url.setParameter("month", Integer.toString(cal.get(GregorianCalendar.MONTH)));
+            url.setParameter("year", Integer.toString(cal.get(GregorianCalendar.YEAR)));
+
+            out.println("<div class=\"swb-events-list\">");
+            out.println("<p><a href=\""+url+"\">Cerrar lista</a></p>");
+            out.println(renderListEvents(paramRequest, dateBefore, dateAfter));
+            out.println("<p><a href=\""+url+"\">Cerrar lista</a></p>");
+            out.println("</div>");
+        }
+
+        out.println("<div class=\"swb-events-add\">");
+//        out.println(" <div class=\"adminTools\">");
+//        out.println("  <a class=\"adminTool\" onclick=\"if(validaEvent(document.frmEvent)) document.frmEvent.submit();\" href=\"#\">Guardar</a>");
+//        out.println("  <a class=\"adminTool\" href=\""+paramRequest.getRenderUrl()+"\">Cancelar</a>");
+//        out.println(" </div>");
         out.println(" <form name=\"frmEvent\" id=\"frmEvent\" method=\"post\" action=\""+addURL+"\">");
         out.println("  <div>");
         out.println("  <fieldset>");
@@ -163,6 +223,8 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println("  </div>");
         out.println(" </form>");
         out.println("</div>");
+
+        out.println("</div>");
     
 //        WebSite site = paramRequest.getWebPage().getWebSite();
 //        User user = paramRequest.getUser();
@@ -190,12 +252,122 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 //        event.getSemanticObject().getSemanticClass().getURI();
     }
 
-    private String renderCalendarEvents(SWBParamRequest paramRequest) throws SWBResourceException {
+    private String renderCalendarEvents(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
+        Resource base = getResourceBase();
         StringBuilder html = new StringBuilder();
 
-//        Iterator<Event> it = Event.ClassMgr.(paramRequest.getWebPage().getWebSite());
-//        Event event = it.next();
-//        event.getCreated()
+        User user = paramRequest.getUser();
+        UserGroup ug = user.getUserGroup();
+        Locale locale = new Locale(user.getLanguage());
+
+        LinkedHashSet<Date> setDates = new LinkedHashSet();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Iterator<Event> itEvents = SWBComparator.sortByCreated(listEvents());
+        while(itEvents.hasNext()) {
+            Event event = itEvents.next();
+            if( !event.getCreator().getUserGroup().equals(ug) )
+                continue;
+            Date date = new Date(event.getDate());
+            try {
+                setDates.add( sdf.parse(sdf.format(date)) );
+            }catch(ParseException pe) {
+                log.error("La fecha del evento no se pudo parsear. Resource "+base.getTitle()+" with id "+base.getId());
+            }
+        }
+
+
+        GregorianCalendar today = new GregorianCalendar(locale);
+
+        int cmonth, cyear;
+        try {
+            cmonth= Integer.parseInt(request.getParameter("month"));
+        }catch(Exception e) {
+            cmonth = today.get(GregorianCalendar.MONTH) ;
+        }
+        try {
+            cyear = Integer.parseInt(request.getParameter("year"));
+        }catch(Exception e) {
+            cyear = today.get(GregorianCalendar.YEAR) ;
+        }
+
+        GregorianCalendar ci = new GregorianCalendar(cyear, cmonth, 1, 0,0);
+        int daysInMonth = ci.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+        GregorianCalendar cf = new GregorianCalendar(cyear, cmonth, daysInMonth, 23,59);
+        //SimpleDateFormat sdf = new SimpleDateFormat("MMMM");
+        sdf = new SimpleDateFormat("MMMM");
+
+        SWBResourceURL url = paramRequest.getRenderUrl();
+
+        int dayCounter = 1;
+        int loopCounter = 1;
+        int First_Day = ci.get(GregorianCalendar.DAY_OF_WEEK);
+        html.append("<div class=\"swb-events-cal\"> \n");
+        html.append("<form method=\"post\" action=\""+url+"\"> \n");
+        html.append(" <table> \n");
+        html.append(" <tr> \n");
+        html.append("  <td><input type=\"submit\" value=\"<--\" onclick=\"return rewind(dojo.byId('month'))\" /></td> \n");
+        html.append("  <td>&nbsp;</td> \n");
+        html.append("  <td> \n");
+        html.append("   <select name=\"month\" id=\"month\" onchange=\"this.form.submit()\"> \n");
+        {
+            GregorianCalendar aux = new GregorianCalendar(2010,0,1);            
+            for(int i=0; i<12; i++) {
+                html.append("<option value=\"").append(i).append("\" ");
+                if( aux.get(GregorianCalendar.MONTH)==ci.get(GregorianCalendar.MONTH) )
+                    html.append("selected=\"selected\" ");
+                html.append(">");
+                html.append(sdf.format(aux.getTime()));
+                html.append("</option> \n");
+                aux.add(GregorianCalendar.MONTH, 1);
+            }
+        }
+        html.append("   </select> \n");
+        html.append("  </td> \n");
+        html.append("  <td><input type=\"text\" name=\"year\" value=\"").append(ci.get(GregorianCalendar.YEAR)).append("\" size=\"4\" maxlength=\"4\" onkeyup=\"if(isDigit(this.value,4,4))this.form.submit()\" /></td> \n");
+        html.append("  <td>&nbsp;</td> \n");
+        html.append("  <td><input type=\"submit\" value=\"-->\" onclick=\"return forward(dojo.byId('month'))\" /></td> \n");
+        html.append(" </tr> \n");
+        html.append(" </table> \n");
+        html.append(" </form> \n");
+        
+        html.append("<table> \n");
+        html.append("<tr><td class=\"dow we\">Dom</td><td class=\"dow\">Lun</td><td class=\"dow\">Mar</td><td class=\"dow\">Mié</td><td class=\"dow\">Jue</td><td class=\"dow\">Vie</td><td class=\"dow we\">Sáb</td></tr>");
+        
+        url.setParameter("db", Long.toString(ci.getTimeInMillis()));
+        url.setParameter("da", Long.toString(cf.getTimeInMillis()));
+        url.setParameter("month", Integer.toString(ci.get(GregorianCalendar.MONTH)));
+        url.setParameter("year", Integer.toString(ci.get(GregorianCalendar.YEAR)));
+        sdf = new SimpleDateFormat("dd");
+        for(int i=1; i<=6; i++) {
+            html.append("  <tr> \n");
+            for(int j=1; j<8; j++) {
+                html.append("<td ");
+                if( loopCounter>=First_Day && dayCounter<=daysInMonth ) {
+                    if( ci.equals(today) )
+                        html.append("class=\"today\"> \n");
+                    else
+                        html.append("class=\"date\"> \n");
+                    if(setDates.contains(ci.getTime())) {
+                        html.append("<a href=\""+url+"\" title=\"Eventos del mes\">");
+                    }
+                    html.append(sdf.format(ci.getTime()));
+                    if(setDates.contains(ci.getTime())) {
+                        html.append("</a> \n");
+                    }
+                    ci.add(GregorianCalendar.DAY_OF_MONTH, 1);
+                    dayCounter++;
+                }else {
+                    html.append("class=\"none\">&nbsp;");
+                }
+                loopCounter++;
+                html.append("</td> \n");
+            }
+            html.append("  </tr> \n");
+        }
+        html.append(" </table> \n");
+//        html.append(" </form> \n");
+        html.append("</div> \n");
 
         return html.toString();
     }
@@ -226,8 +398,8 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
                 html.append("<li>");
                 html.append("<p>"+event.getTitle()+"</p>");
                 html.append("<p>"+event.getDescription()+"</p>");
-                html.append("<p>Ubicación: "+event.getPlace()+"</p>");
-                html.append("<p>Cita: "+sdf.format(new Date(event.getDate()))+"</p>");
+                html.append("<p>Lugar: "+event.getPlace()+"</p>");
+                html.append("<p>Día: "+sdf.format(new Date(event.getDate()))+"</p>");
                 html.append("<p>Duración: "+event.getDuration()+" mins.</p>");
 
                 Iterator<User> itAssistants = event.listAssistants();
@@ -248,6 +420,76 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 
                 url.setParameter("uri",event.getURI());
 
+                if( !hasEnroll )
+                    html.append("<p><a href=\""+url.setAction(Action_ENROLL)+"\">Asistir al evento</a></p>");
+
+                if( event.getCreator().equals(user) ) {
+                    html.append("<p><a href=\""+editURL.setParameter("uri", event.getURI())+"\">Editar</a>&nbsp;");
+                    html.append("<a onclick=\"validateRemoveEventElement('"+url.setAction(paramRequest.Action_REMOVE)+"')\" href=\"#\">Eliminar</a></p>");
+                }else
+                    html.append("<p>Autor: "+(event.getCreator()==null?"Anónimo":event.getCreator().getFullName())+". "+sdf.format(event.getCreated())+"</p>");
+                html.append("<hr/>");
+                html.append("</li>");
+            }
+            html.append("</ol>");
+        }else
+            html.append("<!-- no hay eventos -->");
+        html.append("</div>");
+        return html.toString();
+    }
+
+    private String renderListEvents(SWBParamRequest paramRequest, final Date dateBefore, final Date dateAfter) throws SWBResourceException {
+        StringBuilder html = new StringBuilder();
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
+
+        SWBResourceURL editURL = paramRequest.getRenderUrl().setMode(paramRequest.Mode_EDIT);
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setParameter("db", Long.toString(dateBefore.getTime()));
+        System.out.println("renderListEvents....");
+
+        html.append("<div class=\"swb-events-lista\">");
+
+        Iterator<Event> itEvents = SWBComparator.sortByCreated(listEvents(),false);
+        if(itEvents.hasNext()) {
+            html.append("<h2>eventos</h2>");
+            html.append("<ol>");
+            User user = paramRequest.getUser();
+            UserGroup ug = user.getUserGroup();
+            while(itEvents.hasNext()) {
+                Event event = itEvents.next();
+                if(event.getCreator()==null)
+                    continue;
+                if( !event.getCreator().getUserGroup().equals(ug) )
+                    continue;
+
+                Date d = new Date(event.getDate());
+                if( d.before(dateBefore) || d.after(dateAfter) )
+                    continue;
+
+                html.append("<li>");
+                html.append("<p>"+event.getTitle()+"</p>");
+                html.append("<p>"+event.getDescription()+"</p>");
+                html.append("<p>Lugar: "+event.getPlace()+"</p>");
+                html.append("<p>Día: "+sdf.format(new Date(event.getDate()))+"</p>");
+                html.append("<p>Duración: "+event.getDuration()+" mins.</p>");
+
+                Iterator<User> itAssistants = event.listAssistants();
+                boolean hasEnroll = false;
+                if( itAssistants.hasNext() ) {
+                    html.append("<p>Asistentes:</p>");
+                    html.append("<ol>");
+                    while( itAssistants.hasNext() ) {
+                        User usr = itAssistants.next();
+                        html.append("<li>");
+                        html.append(usr.getFullName());
+                        html.append("</li>");
+                        if( usr.equals(user) )
+                            hasEnroll = true;
+                    }
+                    html.append("</ol>");
+                }
+
+                url.setParameter("uri",event.getURI());
                 if( !hasEnroll )
                     html.append("<p><a href=\""+url.setAction(Action_ENROLL)+"\">Asistir al evento</a></p>");
 
@@ -369,16 +611,31 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        User user = response.getUser();
+        if( !user.isSigned() ) {
+            response.setMode(response.Mode_HELP);
+            return;
+        }
+        
         Resource base = this.getResourceBase();
         String action = response.getAction();
 
         if( action.equals(response.Action_ADD)||action.equals(response.Action_EDIT) ) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            Date ed = null;
+
             Event event = null;
             if( action.equals(response.Action_ADD) )
                 event = Event.ClassMgr.createEvent(getResourceBase().getWebSite());
             else {
                 SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
                 event = (Event)semObject.createGenericInstance();
+//                try {
+//                    ed = sdf.parse( sdf.format(new Date(event.getDate())) );
+//                }catch(ParseException e) {
+//                    log.error("La fecha original no se puedo parsear. Resource "+base.getTitle()+" with id "+base.getId());
+//                    return;
+//                }
             }
 
             try {
@@ -412,16 +669,21 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
                 }
                 event.setPlace(place);
             }catch(Exception e) {}
-
+            
+            Date newd;
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String date = request.getParameter("edate");
                 String time = request.getParameter("time").replaceFirst("T", " ");
                 Date d = sdf.parse(date+time);
                 event.setDate(d.getTime());
+                
+                newd = sdf.parse(date+" 00:00");
+                System.out.println("nueva fecha="+newd);
             }catch(Exception pe) {
                 response.setRenderParameter("msgErrDate", "La fecha del evento es requerida.");
                 log.error("La fecha y hora del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), pe);
+                System.out.println("Error.... "+pe);
                 return;
             }
             
@@ -433,18 +695,45 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
                 log.error("La duración del evento es requerida. Resource "+base.getTitle()+" with id "+base.getId(), e);
                 return;
             }
-            if( action.equals(response.Action_ADD) )
+            if( action.equals(response.Action_ADD) ) {
                 addEvent(event);
-            else
+//                addEventToSet(newd);
+            }else {
                 response.setMode(response.Mode_VIEW);
+//                if(removeEventToSet(ed))
+//                    addEventToSet(newd);
+            }
+            GregorianCalendar c = new GregorianCalendar(new Locale(user.getLanguage()));
+            c.setTime(newd);
+            response.setRenderParameter("month", Integer.toString(c.get(GregorianCalendar.MONTH)));
+            response.setRenderParameter("year", Integer.toString(c.get(GregorianCalendar.YEAR)));
         }else if(action.equalsIgnoreCase(Action_ENROLL)) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             Event event = (Event)semObject.createGenericInstance();
             event.addAssistant(response.getUser());
+
+            GregorianCalendar ci = new GregorianCalendar(new Locale(user.getLanguage()));
+            ci.setTime(new Date(Long.parseLong(request.getParameter("db"))));
+            int daysInMonth = ci.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+            GregorianCalendar cf = new GregorianCalendar(ci.get(GregorianCalendar.YEAR), ci.get(GregorianCalendar.MONTH), daysInMonth, 23,59);
+            response.setRenderParameter("db", Long.toString(ci.getTimeInMillis()));
+            response.setRenderParameter("da", Long.toString(cf.getTimeInMillis()));
+            response.setRenderParameter("month", Integer.toString(ci.get(GregorianCalendar.MONTH)));
+            response.setRenderParameter("year", Integer.toString(ci.get(GregorianCalendar.YEAR)));
         }else if(action.equalsIgnoreCase(response.Action_REMOVE)) {
             SemanticObject semObject = SemanticObject.createSemanticObject(request.getParameter("uri"));
             Event event = (Event)semObject.createGenericInstance();
             removeEvent(event);
+
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            Date ed = null;
+//            try {
+//                ed = sdf.parse( sdf.format(new Date(event.getDate())) );
+//                removeEventToSet(ed);
+//            }catch(ParseException e) {
+//                log.error("La fecha original no se puedo parsear. Resource "+base.getTitle()+" with id "+base.getId());
+//                return;
+//            }
         }
         
 //        String action=response.getAction();
@@ -476,5 +765,23 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 //        }
 //        response.setMode(response.Mode_VIEW);
     }
+
+    @Override
+    public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        PrintWriter out = response.getWriter();
+        out.println("El usuario no tiene privilegios para realizar esta tarea.");
+    }
+
+//    private boolean addEventToSet(Date date) {
+//        return setDates.add(date);
+//    }
+
+//    private boolean removeEventToSet(Date date) {
+//        return setDates.remove(date);
+//    }
 
 }
