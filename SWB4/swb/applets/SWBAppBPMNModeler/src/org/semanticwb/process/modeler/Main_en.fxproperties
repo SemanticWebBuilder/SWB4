@@ -125,3 +125,6 @@
 "msgError30" = "Message Intermediate Catch Event cannot have outgoing Message Flow"
 "msgError31" = "Message Intermediate Throw Event cannot have incoming Message Flow"
 "msgError32" = "Message Intermediate Throw Event can have only one outgoing Message Flow"
+"msgError33" = "Start Event cannot have incoming Sequence Flow"
+"msgError34" = "Start Event cannot have incoming Message Flow"
+"msgError35" = "Start Event cannot have outgoing Message Flow"
