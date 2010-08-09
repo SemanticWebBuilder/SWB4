@@ -104,3 +104,5 @@
 "msgError9" = "Event-based Gateway cannot be linked to End Event"
 "msgError10" = "Error Intermediate Event cannot be linked to Event-based Gateway"
 "msgError11" = "Event cannot have associated Artifact"
+"msgError12" = "Event-based Gateway cannot be linked using Default Flow"
+"msgError13" = "Event-based Gateway cannot be linked using Conditional Flow"
