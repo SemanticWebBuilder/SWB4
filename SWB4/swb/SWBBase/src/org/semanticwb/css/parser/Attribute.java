@@ -5,24 +5,32 @@
 
 package org.semanticwb.css.parser;
 
+import java.util.HashSet;
+import java.util.StringTokenizer;
+
 /**
  *
  * @author victor.lorenzana
  */
 public class Attribute {
     private String name;
-    private String value;
+    private HashSet<String> values=new HashSet<String>();
     public Attribute(String name,String value)
     {
         this.name=name;
-        this.value=value;
+        StringTokenizer st=new StringTokenizer(value," ");
+        while(st.hasMoreTokens())
+        {
+            String nvalue=st.nextToken().trim();            
+            values.add(nvalue);
+        }
     }
     public String getName()
     {
         return name;
     }
-    public String getValue()
+    public String[] getValues()
     {
-        return value;
+        return values.toArray(new String[values.size()]);
     }
 }
