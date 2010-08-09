@@ -2215,7 +2215,7 @@ public class SWBPortal
                 {
                     for (Attribute att : selector.getAttributes())
                     {
-                        if (att.getName().equals("background-image") || att.getName().equals("background"))
+                        if (att.getName().equals("background-image") || att.getName().equals("background") || att.getName().equals("list-style"))
                         {
                             for (String value : att.getValues())
                             {
@@ -2230,6 +2230,10 @@ public class SWBPortal
                                         if (value.indexOf(".") != -1 && !value.startsWith("http://") && !value.toLowerCase().startsWith("wbrelpath://") && !value.startsWith("https://") && !value.startsWith("mailto:") && !value.startsWith("javascript:") && !value.startsWith("ftp:") && !value.startsWith("rtsp:") && !value.startsWith("telnet:") && !value.startsWith("#") && !value.startsWith("/") && !value.startsWith("../"))
                                         {
                                             if(value.startsWith("\"") && value.endsWith("\""))
+                                            {
+                                                value=value.substring(1,value.length()-1);
+                                            }
+                                            if(value.startsWith("'") && value.endsWith("'"))
                                             {
                                                 value=value.substring(1,value.length()-1);
                                             }
