@@ -102,3 +102,4 @@
 "msgError7" = "Compensation Boundary Event can only be linked with Directional Association"
 "msgError8" = "End Event can only have incoming Sequence Flow"
 "msgError9" = "Event-based Gateway cannot be linked to End Event"
+"msgError10" = "Error Intermediate Event cannot be linked to Event-based Gateway"
