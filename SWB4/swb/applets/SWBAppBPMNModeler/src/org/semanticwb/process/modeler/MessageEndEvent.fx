@@ -26,7 +26,7 @@ public class MessageEndEvent extends EndEvent
         if (link instanceof MessageFlow) {
             ret = true;
         } else {
-            ModelerUtils.setErrorMessage("MessageEndEvent can only have outgoing Message flows");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError28"));
         }
         return ret;
     }
