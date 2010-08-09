@@ -109,3 +109,6 @@
 "msgError14" = "Sequence Flow cannot cross Pool boundaries"
 "msgError15" = "Association Flow cannot link Flow Nodes"
 "msgError16" = "Message Flow must cross Pool boundaries"
+"msgError17" = "Gateway cannot have outgoing Message Flow"
+"msgError18" = "Converging Gateway must have only one outgoing Sequence Flow"
+"msgError19" = "Diverging Gateway must have only one incoming Sequence Flow"
