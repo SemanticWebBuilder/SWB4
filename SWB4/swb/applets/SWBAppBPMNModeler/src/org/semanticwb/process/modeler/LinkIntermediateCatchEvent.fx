@@ -21,6 +21,7 @@ public class LinkIntermediateCatchEvent extends IntermediateCatchEvent
     }
 
     public override function canEndLink(link:ConnectionObject) {
+        ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError27"));
         return false;
     }
 
