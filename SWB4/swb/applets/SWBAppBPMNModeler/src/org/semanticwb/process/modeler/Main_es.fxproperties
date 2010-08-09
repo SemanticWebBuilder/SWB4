@@ -118,3 +118,5 @@
 "msgError23" = "Un Evento Intermedio Disparador no puede adherirse a una Actividad"
 "msgError24" = "Un Evento de Enlace no puede conectarse usando Flujos de Mensaje"
 "msgError25" = "Un Evento de Enlace no puede adherirse a una Actividad"
+"msgError26" = "Un Evento de Enlace Disparador no puede tener Flujos de Secuencia salientes"
+"msgError27" = "Un Evento de Enlace Receptor no puede tener Flujos de Secuencia entrantes"
