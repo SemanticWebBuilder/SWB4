@@ -109,3 +109,6 @@
 "msgError14" = "Un Flujo de Secuencia no puede cruzar los límites del Pool"
 "msgError15" = "Una Asociación no puede conectar dos Nodos de Flujo"
 "msgError16" = "Un Flujo de Mensage debe cruzar los límites del Pool"
+"msgError17" = "Una Compuerta no puede conectarse usando Flujos de Mensaje"
+"msgError18" = "Una Compuerta convergente sólo puede tener un Flujo de Secuencia como salida"
+"msgError19" = "Una Compuerta divergente sólo puede tener un Flujo de Secuencia como entrada"
