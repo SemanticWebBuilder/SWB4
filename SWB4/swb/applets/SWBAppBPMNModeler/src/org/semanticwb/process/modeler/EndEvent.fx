@@ -40,10 +40,10 @@ public class EndEvent extends ThrowEvent
         var ret = true;
         if (not(link instanceof SequenceFlow)) {
             ret = false;
-            ModelerUtils.setErrorMessage("EndEvent must have only incoming SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError8"));
         } else if (link instanceof SequenceFlow and link.ini instanceof ExclusiveIntermediateEventGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage("Event-based Gateway cannot be linked to EndEvent");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError9"));
         }
         return ret;
     }
