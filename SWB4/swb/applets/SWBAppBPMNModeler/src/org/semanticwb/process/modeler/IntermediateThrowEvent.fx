@@ -85,7 +85,7 @@ public class IntermediateThrowEvent extends ThrowEvent
         if(not(parent instanceof Pool or parent instanceof Lane))
         {
             ret = false;
-            ModelerUtils.setErrorMessage("IntermediateThrowEvent is not attachable to Activities");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError23"));
         }
         return ret;
     }
@@ -102,7 +102,7 @@ public class IntermediateThrowEvent extends ThrowEvent
      
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage("IntermediateThrowEvent can have only one incoming SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError21"));
         }
         return ret;
     }
@@ -119,7 +119,7 @@ public class IntermediateThrowEvent extends ThrowEvent
 
         if (link instanceof SequenceFlow and c != 0) {
             ret = false;
-            ModelerUtils.setErrorMessage("IntermediateThrowEvent can have only one outgoing SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError22"));
         }
         return ret;
     }
