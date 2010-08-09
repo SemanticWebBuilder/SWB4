@@ -128,3 +128,4 @@
 "msgError33" = "Start Event cannot have incoming Sequence Flow"
 "msgError34" = "Start Event cannot have incoming Message Flow"
 "msgError35" = "Start Event cannot have outgoing Message Flow"
+"msgError36" = "Message Start Event can have only one incoming Message Flow"
