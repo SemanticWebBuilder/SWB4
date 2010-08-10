@@ -32,10 +32,27 @@
                 inew++;
                 Element item = doc.createElement("item");
                 channel.appendChild(item);
-                addAtribute(item, "title", element.getResourceBase().getTitle());
+                String title=element.getResourceBase().getTitle(paramRequest.getUser().getLanguage());
+                if(title==null || title.trim().equals(""))
+                {
+                    title=element.getResourceBase().getTitle();
+
+                }
+                if(title!=null)
+                {
+                    title=title.replace('"', '\'');
+                }                
+                addAtribute(item, "title", title);
                 addAtribute(item, "link", url+"?uri="+element.getResourceBase().getEncodedURI());
                 addAtribute(item, "description", element.getResourceBase().getDescription());
-                addAtribute(item, "pubDate", element.getPublishDate().toGMTString());
+                if(element.getPublishDate()!=null)
+                {
+                    addAtribute(item, "pubDate", element.getPublishDate().toGMTString());
+                }
+                else
+                {
+                    addAtribute(item, "pubDate", new Date().toGMTString());
+                }
                 //addAtribute(item, "guid", "cd_digital" + element.getURL() + "#rid" + element.getId());
                 if(inew>=limit)
                 {
