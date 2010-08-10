@@ -233,9 +233,10 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         List<SWBNewContent> news=getNews(null,paramRequest.getUser());
         String path = basePath+"rss.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
-        SWBResourceURL url=paramRequest.getRenderUrl();
+        /*SWBResourceURL url=paramRequest.getRenderUrl();
         url.setCallMethod(url.Call_CONTENT);
-        url.setMode(url.Mode_VIEW);
+        url.setMode(url.Mode_VIEW);*/
+        String url=paramRequest.getWebPage().getUrl();
         try
         {
             request.setAttribute("paramRequest", paramRequest);
