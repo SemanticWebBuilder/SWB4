@@ -9,179 +9,183 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
   xml:base="http://www.semanticwebbuilder.org/swb4/swbnews">
   <owl:Ontology rdf:about="">
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology"/>
   </owl:Ontology>
+  <owl:Class rdf:ID="SWBNews">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SWBNewContent">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:ID="category">
-    <rdfs:label xml:lang="en">Category</rdfs:label>
-    <rdfs:label xml:lang="es">Categoria</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBNews"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_category">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory"/>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="SWBNews">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
+    <rdfs:label xml:lang="es">Categoria</rdfs:label>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="country">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Country"/>
+    <rdfs:label xml:lang="en">Country</rdfs:label>
+    <rdfs:label xml:lang="es">Pais</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_country">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >50</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Pais</rdfs:label>
-    <rdfs:label xml:lang="en">Country</rdfs:label>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Country"/>
-    <rdfs:domain>
-      <swb:SemanticResource rdf:ID="SWBNewContent">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:SemanticResource>
-    </rdfs:domain>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="collection">
-    <rdfs:label xml:lang="en">Colletion to show</rdfs:label>
-    <rdfs:label xml:lang="es">Colección a mostrar</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBNews"/>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_collection">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection"/>
-    <rdfs:domain rdf:resource="#SWBNews"/>
+    <rdfs:label xml:lang="es">Colección a mostrar</rdfs:label>
+    <rdfs:label xml:lang="en">Colletion to show</rdfs:label>
   </owl:ObjectProperty>
   <owl:DatatypeProperty rdf:ID="image">
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Image{en}</rdfs:label>
-    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Imagen{es}</rdfs:label>
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_image">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >80</swb:index>
         <swbxf:formElement>
           <swb:FlashImageUpload rdf:ID="FlashImageUpload_1">
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >1000000</swbxf:fileMaxSize>
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:imgCrop>
-            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >230</swbxf:imgMaxHeight>
-            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >368</swbxf:imgMaxWidth>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:imgThumbnail>
-            <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >60</swbxf:imgThumbnailHeight>
             <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >92</swbxf:imgThumbnailWidth>
+            <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >60</swbxf:imgThumbnailHeight>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgThumbnail>
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >368</swbxf:imgMaxWidth>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >230</swbxf:imgMaxHeight>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgCrop>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >1000000</swbxf:fileMaxSize>
           </swb:FlashImageUpload>
         </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >80</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Imagen{es}</rdfs:label>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Image{en}</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="source">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Fuente</rdfs:label>
+    <rdfs:label xml:lang="en">Source</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_source">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >20</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Source</rdfs:label>
-    <rdfs:label xml:lang="es">Fuente</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="originalTitle">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Original Title</rdfs:label>
+    <rdfs:label xml:lang="es">Título Original</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_originalTitle">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >10</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Título Original</rdfs:label>
-    <rdfs:label xml:lang="en">Original Title</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mobile">
+    <rdfs:label xml:lang="en">Show for mibile</rdfs:label>
+    <rdfs:label xml:lang="es">Mostrar para mobiles</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain rdf:resource="#SWBNews"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="homeShow">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Mostrar en Home</rdfs:label>
+    <rdfs:label xml:lang="en">Show Home</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_homeShow">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >60</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Show Home</rdfs:label>
-    <rdfs:label xml:lang="es">Mostrar en Home</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="sourceURL">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Source URL</rdfs:label>
+    <rdfs:label xml:lang="es">URL de la Fuente</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_sourceURL">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >25</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">URL de la Fuente</rdfs:label>
-    <rdfs:label xml:lang="en">Source URL</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="sendTwitter">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:label xml:lang="es">Enviar a Twitter</rdfs:label>
+    <rdfs:label xml:lang="en">Send to Twitter</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_sendTwitter">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >70</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Send to Twitter</rdfs:label>
-    <rdfs:label xml:lang="es">Enviar a Twitter</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="publishDate">
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:label xml:lang="es">Fecha de Publicación</rdfs:label>
+    <rdfs:label xml:lang="en">Publish Date</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_publishDate">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >40</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Publish Date</rdfs:label>
-    <rdfs:label xml:lang="es">Fecha de Publicación</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="author">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#SWBNewContent"/>
+    <rdfs:label xml:lang="en">Author</rdfs:label>
+    <rdfs:label xml:lang="es">Autor</rdfs:label>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_author">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >30</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Autor</rdfs:label>
-    <rdfs:label xml:lang="en">Author</rdfs:label>
-    <rdfs:domain rdf:resource="#SWBNewContent"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
   <swb:CodePackage rdf:ID="pkg">
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.portal.resources.sem.news</swb:package>
     <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >swbnews</swb:prefix>
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.portal.resources.sem.news</swb:package>
   </swb:CodePackage>
   <swbxf:DisplayProperty rdf:ID="dp_nummax">
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
