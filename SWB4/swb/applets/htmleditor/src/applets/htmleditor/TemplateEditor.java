@@ -555,24 +555,67 @@ Action:caret-previous-word
             return false;
         }
     }
-    private String loadFile(File file)
+    private boolean isUTF8(File file)
     {
-
-        StringBuilder sb=new StringBuilder();
+        int c3=-61;
+        byte[] buffer=new byte[8192];
+        FileInputStream fin=null;
         try
         {
-            Charset defaultcharset= Charset.defaultCharset();
-            FileReader reader=new FileReader(file);
-            Charset charsetFile=Charset.forName(reader.getEncoding());
-            System.out.println("reader.getEncoding(): "+reader.getEncoding());
-            System.out.println("defaultcharset: "+defaultcharset.name());
+                fin=new FileInputStream(file);
+                int read=fin.read(buffer);
+                while(read!=-1)
+                {
+                    for(int i=0;i<read;i++)
+                    {
+                        if(buffer[i]==c3)
+                        {
+                            return true;
+                        }
+                    }
+                    read=fin.read(buffer);
+                }
+
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if(fin!=null)
+            {
+                try
+                {
+                    fin.close();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+    private String loadFile(File file)
+    {
+        boolean isUTF8=isUTF8(file);
+        StringBuilder sb=new StringBuilder();
+        try
+        {            
+            FileReader reader=new FileReader(file);            
             BufferedReader br=new BufferedReader(reader);
             String line=br.readLine();
             while(line!=null)
             {
-               sb.append(line);
-               sb.append("\r\n");
-               line=br.readLine();
+                if(isUTF8)
+                {
+                    line=new String(line.getBytes(reader.getEncoding()),"utf-8");
+                }
+                System.out.println(line);
+                sb.append(line);
+                sb.append("\r\n");
+                line=br.readLine();
             }
             br.close();
         }
