@@ -31,6 +31,8 @@
 
 package applets.htmleditor;
 
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
@@ -38,6 +40,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.awt.*;
+import java.nio.charset.Charset;
 
 /**
  *
@@ -482,8 +485,8 @@ Action:caret-previous-word
             try
             {
                 //System.out.println("Save File"+file.getPath());
-                FileInputStream fin=new FileInputStream(file);
-                String str=readInputStream(fin);
+                //FileInputStream fin=new FileInputStream(file);
+                String str=loadFile(file);
                 filename=file.getName();
                 String ret=sendHTML(str,filename,false,true);
                 String pt=file.getAbsolutePath().replace('\\','/');
@@ -501,9 +504,8 @@ Action:caret-previous-word
                     {
                         File attach = new File(pt+sfile);                        
                         if(attach.getName().endsWith(".css") && attach.exists())
-                        {
-                            FileInputStream cssin=new FileInputStream(attach);
-                            String cssbody=readInputStream(cssin);                            
+                        {                            
+                            String cssbody=loadFile(attach);
                             String retcss=sendHTML(cssbody,attach.getName(),false,true);
                             if(retcss!=null && !retcss.trim().equals(""))
                             {
@@ -553,7 +555,33 @@ Action:caret-previous-word
             return false;
         }
     }
-    
+    private String loadFile(File file)
+    {
+
+        StringBuilder sb=new StringBuilder();
+        try
+        {
+            Charset defaultcharset= Charset.defaultCharset();
+            FileReader reader=new FileReader(file);
+            Charset charsetFile=Charset.forName(reader.getEncoding());
+            System.out.println("reader.getEncoding(): "+reader.getEncoding());
+            System.out.println("defaultcharset: "+defaultcharset.name());
+            BufferedReader br=new BufferedReader(reader);
+            String line=br.readLine();
+            while(line!=null)
+            {
+               sb.append(line);
+               sb.append("\r\n");
+               line=br.readLine();
+            }
+            br.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
     public void insertLink()
     {
         String selText = htmlEditor.getSelectedText();
@@ -2068,14 +2096,18 @@ Action:caret-previous-word
     public String readInputStream(InputStream in)
     {
         if (in == null) return null;
-        StringBuffer ret = new StringBuffer();
+        StringBuilder ret = new StringBuilder();
         try
         {
             byte[] bfile = new byte[8192];
             int x;
             while ((x = in.read(bfile, 0, 8192)) > -1)
             {
-                ret.append(new String(bfile, 0, x));
+                String data=new String(bfile, 0, x);
+                System.out.println(data);
+                ret.append(data);
+                data=new String(bfile, 0, x,"utf-8");
+                System.out.println(data);
             }
         } catch (Exception e)
         {
