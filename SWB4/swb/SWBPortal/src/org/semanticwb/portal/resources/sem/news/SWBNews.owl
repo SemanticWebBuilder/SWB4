@@ -115,6 +115,12 @@
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="mobile">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mobile">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >90</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:label xml:lang="en">Show for mibile</rdfs:label>
     <rdfs:label xml:lang="es">Mostrar para mobiles</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
