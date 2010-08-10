@@ -27,7 +27,7 @@ public class CodeGeneratorSWBNews {
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
         SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swb.owl");
-        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../web/WEB-INF/owl/swbnews.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology(base+"../../../SWBPortal/src/org/semanticwb/portal/resources/sem/news/SWBNews.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
         SWBPlatform.getSemanticMgr().getOntology().rebind();
