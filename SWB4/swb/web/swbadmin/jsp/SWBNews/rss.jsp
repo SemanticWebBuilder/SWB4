@@ -14,7 +14,8 @@
         {
             SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
             List<SWBNewContent> news=(List<SWBNewContent>)request.getAttribute("news");
-            SWBResourceURL url=(SWBResourceURL) request.getAttribute("url");
+            //SWBResourceURL url=(SWBResourceURL) request.getAttribute("url");
+            String url=(String) request.getAttribute("url");
             response.setContentType("application/rss+xml");
             Document doc = org.semanticwb.SWBUtils.XML.getNewDocument();
             Element rss = doc.createElement("rss");
