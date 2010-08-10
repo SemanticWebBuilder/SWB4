@@ -85,6 +85,23 @@ public class ToolTip extends CustomNode {
         ]
     }
 
+    def lightGrad = LinearGradient {
+        startX: 0.0
+        startY: 0.0
+        endX: 0.0
+        endY:1.0
+        stops: [
+            Stop {
+                offset: 0.0
+                color: Color.color(Color.WHITE.red, Color.WHITE.green, Color.WHITE.blue, .2)
+            }
+            Stop {
+                offset: 1.0
+                color: Color.color(Color.WHITE.red, Color.WHITE.green, Color.WHITE.blue, .8)
+            }
+        ]
+    }
+
 
     function initializeCustomNode(): Void
     {
@@ -102,13 +119,22 @@ public class ToolTip extends CustomNode {
                     //fill: bind if (error) egrad else grad
                     stroke: Color.GRAY
                 },
+                Rectangle {
+                        x: bind r.x + 2
+                        y: bind r.y + r.height - (r.height / 4) - 2
+                        arcWidth: 2
+                        arcHeight: 2
+                        width: bind r.width - 4
+                        height: bind r.height / 4
+                        fill: lightGrad
+                },
                 p = Polygon {
                     points: bind [r.x + 10, r.y+2, r.x + 15, r.y - 8, r.x+20, r.y+2]
                     id: "triangle"
                     //style:Styles.style_tooltip
                     fill: Color.LIGHTGOLDENRODYELLOW
                     visible: bind (not error)
-                },
+                },                
                 Polyline {
                     points: bind [r.x + 10, r.y, r.x + 16, r.y - 7, r.x+20, r.y]
                     id: "triangleBorder"
