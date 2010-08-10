@@ -14,6 +14,9 @@ import javafx.scene.text.Font;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import org.semanticwb.process.modeler.ModelerUtils;
+import javafx.animation.Interpolator;
+import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -24,14 +27,31 @@ public class Splash extends CustomNode
     public var x:Number;
     public var y:Number;
     public var text:String;
+    
     var _root: Group;
+    var glowColor = Color.TRANSPARENT;
+    override var opacity = 0.0;
 
-    var ai=Image{url: "{__DIR__}images/splash.jpg"};
+    def ai=Image{url: "{__DIR__}images/splash.jpg"};
+    def timeLine: Timeline = Timeline {
+        keyFrames: [
+            at (0s) {
+                glowColor => Color.TRANSPARENT;
+                opacity => 0.0;
+            },
+            at (800ms) {
+                glowColor => Color.color(0.5, 0.5, 0.5, 0.5);
+                opacity => 1.0 tween Interpolator.EASEBOTH;
+            }
+        ]
+    }
+
     protected var img=ImageView
     {
-        x: bind x-ai.width/2;
-        y: bind y-ai.height/2;
-        image:ai;
+        x: bind x-ai.width/2
+        y: bind y-ai.height/2
+        image:ai
+        smooth: false
     };
 
     var f=bind focused on replace
@@ -48,7 +68,7 @@ public class Splash extends CustomNode
                 Text {
                     x:bind x+110
                     y:bind y+35
-                    content:bind "Version: {ModelerUtils.version}"
+                    content:bind "{ModelerUtils.getLocalizedString("version")}: {ModelerUtils.version}"
                     font: Font {size:12 name:"Verdana"}
                 }
             ]
@@ -67,6 +87,7 @@ public class Splash extends CustomNode
         this.x=x;
         this.y=y;
         visible=true;
+        timeLine.playFromStart();
         requestFocus();
     }
 
