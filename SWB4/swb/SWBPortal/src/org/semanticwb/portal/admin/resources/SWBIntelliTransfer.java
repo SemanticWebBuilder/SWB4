@@ -470,7 +470,6 @@ public class SWBIntelliTransfer extends GenericResource {
         }
     }
 
-
     private void installAdvZip(WebSite wsite, File zipFile)
     {
         String modelspath = SWBPortal.getWorkPath() + "/models/";
@@ -503,9 +502,10 @@ public class SWBIntelliTransfer extends GenericResource {
             //y como valor se pone un ArrayList con todas las lineas que correspondan a ese uri
             LinkedHashMap linkHmapObjs=new LinkedHashMap();
             LinkedHashMap linkedHashMap=new LinkedHashMap(); //En este se pondran los antiguos Uris de Objetos
-            String objUri=null;
+            //String objUri=null;
             File fileModel = new File(modelspath + wsite.getId()+"_i_tmp" + "/" + oldIDModel + ".nt");
             BufferedReader reader = new BufferedReader(new FileReader(fileModel));
+
             String line = "";
             while (line != null) {
                 line = reader.readLine();
@@ -514,100 +514,159 @@ public class SWBIntelliTransfer extends GenericResource {
                 }
                 int contToken = 0;
                 boolean bResourceTypeExist=false;
+                boolean bisWebPageHome=false;
+                String sobjNew=null;
+                String objUri=null;
                 StringTokenizer strTokens = new StringTokenizer(line, " ", false);
                 while (strTokens.hasMoreElements()) {
                     String token = strTokens.nextToken();
                     contToken++;
-                    if (token == null ||contToken == 4) {
+                    if (token == null || contToken == 2 ||contToken == 4) {
                         continue;
-                    }else if (contToken == 1) {
-                        objUri=token.substring(1, token.length()-1);
-                        String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
-                        //Revisar si es de tipo ResourceType, si es así revisar si no existe ya en la instancia a importar
-                        //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
-                        //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
-                        if(objUri.indexOf("#swb_ResourceType:")>-1 || objUri.indexOf("#swb_Language:")>-1 ||
-                             objUri.indexOf("#swb_Device:")>-1 || objUri.indexOf("#swb_Country:")>-1 ||
-                             objUri.indexOf("#swb_TemplateGroup:")>-1 || objUri.indexOf("#WebPage:home")>-1){ //Es de tipo ResourceType
-                            if(SemanticObject.createSemanticObject(sobjNew)!=null) {
-                                bResourceTypeExist=true;  //Existe x lo tanto no se creara
+                    }else {
+                        if (contToken == 1) {
+                            objUri=token.substring(1, token.length()-1);
+                            sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
+                            //Revisar si es de tipo ResourceType, si es así revisar si no existe ya en la instancia a importar
+                            //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
+                            //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
+                            if(objUri.indexOf("#swb_ResourceType:")>-1 || objUri.indexOf("#swb_Language:")>-1 ||
+                                 objUri.indexOf("#swb_Device:")>-1 || objUri.indexOf("#swb_Country:")>-1 ||
+                                 objUri.indexOf("#swb_TemplateGroup:")>-1){ //Es de tipo ResourceType
+                                if(SemanticObject.createSemanticObject(sobjNew)!=null) {
+                                    bResourceTypeExist=true;  //Existe x lo tanto no se creara
+                                }
+                            }else if(objUri.indexOf("#WebPage:home")>-1){
+                                bisWebPageHome=true;
                             }
-                        }
-                        if(!bResourceTypeExist)
-                        {
-                            if(!linkHmapObjs.containsKey(objUri)){
-                                ArrayList newArray=new ArrayList();
-                                newArray.add(line);
-                                linkHmapObjs.put(objUri, newArray);
+                        }else if(contToken == 3) {
+                            if(bisWebPageHome)
+                            {
+                                int pos=token.indexOf("<");
+                                if(pos>-1){
+                                    int pos1=token.indexOf(">", pos);
+                                    if(pos1>-1){
+                                        String sobjUriToken3=token.substring(pos+1, pos1);
+                                        //System.out.println("sobjUriToken3:"+sobjUriToken3);
+                                        if(linkedHashMap.containsKey(sobjUriToken3)){
+                                            //System.out.println("sobjUriToken3 Identificado:"+sobjUriToken3);
+                                            bResourceTypeExist=false;
+                                            bisWebPageHome=false;
+                                        }else{
+                                            //System.out.println("sobjNew que revisa si existe:"+sobjNew);
+                                            if(SemanticObject.createSemanticObject(sobjNew)!=null) {
+                                                //System.out.println("sobjNew que Existe y no creara:"+sobjNew);
+                                                bResourceTypeExist=true;  //Existe x lo tanto no se creara
+                                            }else{
+                                                bResourceTypeExist=false;
+                                                bisWebPageHome=false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if(!bResourceTypeExist)
+                            {
+                                if(!bisWebPageHome)
+                                {
+                                    if(!linkHmapObjs.containsKey(objUri)){
+                                        //System.out.println("objUri:"+objUri+",sobjNew:"+sobjNew);
+                                        ArrayList newArray=new ArrayList();
+                                        newArray.add(line);
+                                        linkHmapObjs.put(objUri, newArray);
 
-                                //Revisa si existe el sobjId
-                                //String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
-                                sobjNew=givemeUri2Create(sobjNew);
-                                linkedHashMap.put(objUri, sobjNew);                               
-                            }else{ //Agrega la linea a el arraylist
-                                ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
-                                alist.add(line);
-                                linkHmapObjs.remove(objUri);
-                                linkHmapObjs.put(objUri, alist);
+                                        //Revisa si existe el sobjId
+                                        //String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
+                                        if(objUri.indexOf("#WebPage:home")==-1){
+                                            //System.out.println("objUri a Hadh:"+objUri+", sobjNew:"+givemeUri2Create(sobjNew));
+                                            linkedHashMap.put(objUri, givemeUri2Create(sobjNew));
+                                        }
+                                    }else{ //Agrega la linea a el arraylist
+                                        ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
+                                        alist.add(line);
+                                        linkHmapObjs.remove(objUri);
+                                        linkHmapObjs.put(objUri, alist);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
+
             reader.close();
+
+
+            /*
+            Iterator<String> ItTmp=linkedHashMap.keySet().iterator();
+            while(ItTmp.hasNext()){
+                String hashKey=ItTmp.next();
+                System.out.println("hashKey:"+hashKey+", hashValue:"+linkedHashMap.get(hashKey));
+            }*/
+
+
+
+
             //Barrer Hash para para crear cada objeto y crear todas sus propiedades en un archivo
             File fileModified=new File(modelspath + wsite.getId()+"_i_tmp" + "/"+wsite.getId()+"_tmp.nt");
             FileOutputStream out = new FileOutputStream(fileModified);
             Iterator<String> itObjs=linkHmapObjs.keySet().iterator();
             while(itObjs.hasNext()){
                 String sobjOld=itObjs.next();
+                String uri2create=(String)linkedHashMap.get(sobjOld);
+                //System.err.println("sobjOld:"+sobjOld+", valueJ:"+(String)linkedHashMap.get(sobjOld));
                 Iterator<String> itLines=((ArrayList)linkHmapObjs.get(sobjOld)).iterator();
                 while(itLines.hasNext()){
                     String strLine=itLines.next();
                     //System.out.println("Valor de Arreglo:"+strLine);
-                    String uri2create=(String)linkedHashMap.get(sobjOld);
-                    if(uri2create!=null){
-                        //System.out.println("uri2create:"+uri2create+",sobjOld:"+sobjOld);
-                        String stmp=strLine.replaceAll(sobjOld, uri2create)+"\n";
-                        //Revisar si hay algun uri en el tercer token que coincida con alguno de los cambiados y que estan en el
-                        //has, de ser así tambien reemplazarlo
-                        int contToken=0;
-                        //System.out.println("stmp:"+stmp);
-                        StringTokenizer strTokens = new StringTokenizer(stmp, " ", false);
-                        while (strTokens.hasMoreElements()) {
-                            String token = strTokens.nextToken();
-                            contToken++;
-                            if (token == null || token.trim().length()==0 || contToken!=3) {
-                                continue;
-                            }else if (contToken == 3) {
-                                int pos=token.indexOf("<");
-                                if(pos>-1)
-                                {
-                                    int pos1=token.indexOf(">", pos);
-                                    if(pos1>-1){
-                                        String tmpToken=token.substring(pos+1, pos1);
+                    //System.out.println("uri2create:"+uri2create+",sobjOld:"+sobjOld);
+
+                    //Revisar si hay algun uri en el tercer token que coincida con alguno de los cambiados y que estan en el
+                    //has, de ser así tambien reemplazarlo
+                    int contToken=0;
+                    //System.out.println("stmp:"+stmp);
+                    StringTokenizer strTokens = new StringTokenizer(strLine, " ", false);
+                    while (strTokens.hasMoreElements()) {
+                        String token = strTokens.nextToken();
+                        contToken++;
+                        if (token == null || token.trim().length()==0 || contToken!=3) {
+                            continue;
+                        }else if (contToken == 3) {
+                            int pos=token.indexOf("<");
+                            if(pos>-1)
+                            {
+                                int pos1=token.indexOf(">", pos);
+                                if(pos1>-1){
+                                    String tmpToken=token.substring(pos+1, pos1);
+                                    if(linkedHashMap.containsKey(tmpToken)){
                                         //System.out.println("tmpTokenJorge:"+tmpToken);
-                                        if(linkedHashMap.containsKey(tmpToken)){
-                                            String newObjUri=(String)linkedHashMap.get(tmpToken);
-                                            //System.out.println("El HashContine el token:");
-                                            //System.out.println("Reemplaza:"+tmpToken+",por:"+newObjUri);
-                                            stmp=stmp.replaceAll(tmpToken, newObjUri);
-                                        }
+                                        String newObjUri=(String)linkedHashMap.get(tmpToken);
+                                        //System.out.println("El HashContine el token:");
+                                        //System.out.println("Reemplaza:"+tmpToken+",por:"+newObjUri);
+                                        strLine=strLine.replaceAll(tmpToken, newObjUri);
                                     }
                                 }
                             }
                         }
-                        stmp=stmp.replaceAll(oldNamespace, wsite.getNameSpace());
-                        out.write(stmp.getBytes());
-                    }else {
-                        String stmp=strLine.replaceAll(oldNamespace, wsite.getNameSpace())+"\n";
-                        out.write(stmp.getBytes());
                     }
+                    if(uri2create!=null){
+                        strLine=strLine.replaceAll(sobjOld, uri2create);
+                    }
+                    strLine=strLine.replaceAll(oldNamespace, wsite.getNameSpace())+"\n";
+                    //por le nuevo, ya que se ha detectado que si no se hace no funcionan
+                    //Reemplazar en Xml de los ResourceFilter, pero puede haber más cosas que se tuvieran que validar
+                    if(sobjOld.indexOf("#swb_ResourceFilter:")>-1){
+                      if(strLine.indexOf("<topicmap id=\\\""+oldIDModel+"\\\">")>-1){
+                            strLine=SWBUtils.TEXT.replaceAll(strLine,"<topicmap id=\\\""+oldIDModel+"\\\">", "<topicmap id=\\\""+wsite.getId()+"\\\">");
+                      }
+                    }
+                    //Al final de todo escribe en el archivo que se cargara al modelo del sitio
+                    out.write(strLine.getBytes());
                 }
             }
             out.flush();
             out.close();
-            
+
             //Meter el archivo modificado al modelo del sitio especificado
             Model m = SWBPlatform.getSemanticMgr().loadRDFFileModel(fileModified.getAbsolutePath());
             wsite.getSemanticObject().getModel().getRDFModel().add(m);
@@ -616,7 +675,7 @@ public class SWBIntelliTransfer extends GenericResource {
             //fileModified.delete();
 
             //Barro el Hashmap que contiene la relación de entre el uri nuevo y el anterior para pasar los archivos
-            //de filesystem            
+            //de filesystem
             Iterator<String> itRelationSemObjs=linkedHashMap.keySet().iterator();
             while(itRelationSemObjs.hasNext()){
                 String sOldSObj=itRelationSemObjs.next();
@@ -641,22 +700,11 @@ public class SWBIntelliTransfer extends GenericResource {
                             }
                         }
                     }
-                    /*
-                    //System.out.println("Si creo el objeto..."+"sNewSObj:"+sNewSObj+", sOldSObj:"+sOldSObj);
-                    Iterator<SemanticProperty> itSemProps=semObj.listProperties();
-                    while(itSemProps.hasNext()){
-                        SemanticProperty semProp=itSemProps.next();
-                        if (semProp.isDataTypeProperty()) {
-                            System.out.println("semProp:"+semProp+", value:"+semObj.getProperty(semProp));
-                        }else{
-                            System.out.println("Propiedad de tipo Objeto:"+semProp);
-                        }
-                    }*/
                 }else{ //No debería irse por este else
                     log.debug("No creo el objeto..."+"sNewSObj:"+sNewSObj+", sOldSObj:"+sOldSObj);
                 }
             }
-            SWBUtils.IO.removeDirectory(extractTo.getAbsolutePath());
+            //SWBUtils.IO.removeDirectory(extractTo.getAbsolutePath());
         } catch (Exception e) {
             log.error(e);
         }
