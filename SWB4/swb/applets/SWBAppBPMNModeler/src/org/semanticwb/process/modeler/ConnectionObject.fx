@@ -24,10 +24,10 @@ import javafx.scene.input.KeyEvent;
  * @author javier.solis
  */
 
-public-read var ARROW_TYPE_SEQUENCE="sequence";
-public-read var ARROW_TYPE_MESSAGE="mesage";
-public-read var ARROW_TYPE_ASSOCIATION="association";
-public-read var ARROW_TYPE_NONE="none";
+public def ARROW_TYPE_SEQUENCE="sequence";
+public def ARROW_TYPE_MESSAGE="mesage";
+public def ARROW_TYPE_ASSOCIATION="association";
+public def ARROW_TYPE_NONE="none";
 
 public class ConnectionObject  extends CustomNode
 {
@@ -51,7 +51,7 @@ public class ConnectionObject  extends CustomNode
     protected var o : Number = Styles.opacity;                   //opacity
     protected var strokeDash : Float[];
 
-    protected var notGroup : Boolean;                 //No agrega los elementos path y arrow al grupo
+    protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
 
     var focusState = bind focused on replace
     {
@@ -62,12 +62,14 @@ public class ConnectionObject  extends CustomNode
         }
     }
 
+	var pini: Point;
+	var pend: Point;
     public override function create(): Node
     {
         cursor=Cursor.HAND;
 
-        var pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
-        var pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
+        pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
+        pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
         var pinter1=Point{ x: bind getInter1ConnectionX(ini,end,pini,pend) y: bind getInter1ConnectionY(ini,end,pini,pend) };
         var pinter2=Point{ x: bind getInter2ConnectionX(ini,end,pini,pend) y: bind getInter2ConnectionY(ini,end,pini,pend) };
         points=[pini,pinter1,pinter2,pend];
@@ -82,44 +84,7 @@ public class ConnectionObject  extends CustomNode
             fill: true
         }
 
-        if(not(arrowType.equals(ARROW_TYPE_NONE)))
-        {
-            var close:ClosePath;
-            if(arrowType.equals(ARROW_TYPE_MESSAGE))
-            {
-                close=ClosePath{};
-            }
-            arrow=Path {
-                elements: [
-                    MoveTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
-                    },
-                    LineTo{
-                        x:bind pend.x
-                        y:bind pend.y
-                    },
-                    LineTo{
-                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
-                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
-                    },
-                    close
-                ]
-                stroke: Color.web(Styles.color);
-            };
-            if(arrowType.equals(ARROW_TYPE_MESSAGE))
-            {
-                arrow.fill=Color.WHITE;
-                arrow.strokeWidth=1;
-            }else if(arrowType.equals(ARROW_TYPE_SEQUENCE))
-            {
-                arrow.fill=Color.web(Styles.color);
-                arrow.strokeWidth=1;
-            }else
-            {
-                arrow.strokeWidth=2;
-            }
-        }
+        setType(arrowType);
         
         if(cubicCurve)
         {
@@ -182,6 +147,50 @@ public class ConnectionObject  extends CustomNode
             ret=Group{};
         }
         return ret;
+    }
+    
+    function setType(type: String): Void {
+        if (type.equals(ARROW_TYPE_SEQUENCE) or type.equals(ARROW_TYPE_ASSOCIATION)) {
+            arrow = Path {
+                elements: [
+                    MoveTo{
+                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
+                    },
+                    LineTo{
+                        x:bind pend.x
+                        y:bind pend.y
+                    },
+                    LineTo{
+                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
+                    },
+                ]
+                stroke:Color.web(Styles.color);
+                strokeWidth:1;
+            };
+        } else if (type.equals(ARROW_TYPE_MESSAGE)) {
+            arrow = Path {
+                elements: [
+                    MoveTo{
+                        x:bind pend.x+8.0*Math.cos(getArrow(-45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(-45.0))
+                    },
+                    LineTo{
+                        x:bind pend.x
+                        y:bind pend.y
+                    },
+                    LineTo{
+                        x:bind pend.x+8.0*Math.cos(getArrow(45.0))
+                        y:bind pend.y-8.0*Math.sin(getArrow(45.0))
+                    },
+                    ClosePath{}
+                ]
+                fill:Color.WHITE;
+                strokeWidth:1;
+                //stroke: Color.web(Styles.color);
+            };
+        }
     }
 
     public function remove()
