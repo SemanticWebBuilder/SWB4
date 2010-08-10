@@ -27,7 +27,6 @@ import javafx.scene.input.KeyEvent;
 public def ARROW_TYPE_SEQUENCE="sequence";
 public def ARROW_TYPE_MESSAGE="mesage";
 public def ARROW_TYPE_ASSOCIATION="association";
-public def ARROW_TYPE_NONE="none";
 
 public class ConnectionObject  extends CustomNode
 {
