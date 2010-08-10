@@ -65,10 +65,10 @@ public class SWBAFTP extends GenericResource{
 
     private static final SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /** The log. */
-    private Logger log = SWBUtils.getLogger(SWBAFTP.class);
+    private static Logger log = SWBUtils.getLogger(SWBAFTP.class);
 
 
-    private static String[] prohibitedPaths={"/work",
+    public static final String[] prohibitedPaths={"/work",
         "/swbadmin","/work/models","/work/logs","/work/logs/*",
         "/WEB-INF","/work/config","/work/sitetemplates","/META-INF",
         "/WEB-INF/owl","/WEB-INF/classes","/WEB-INF/lib","/WEB-INF/dtds","/WEB-INF/license",
@@ -109,7 +109,7 @@ public class SWBAFTP extends GenericResource{
         
     }
 
-    private void log(String msg,String ip)
+    public static void log(String msg,String ip)
     {
         SimpleDateFormat dfFile=new SimpleDateFormat("yyyy-MM");
         String logPath = SWBPortal.getWorkPath() + "/logs/wb_SWBAFTP."+ dfFile.format(new Date(System.currentTimeMillis()))  +".log";
@@ -303,7 +303,7 @@ public class SWBAFTP extends GenericResource{
      * @param parent the parent
      * @return the element
      */
-    private Element addNode(String node, String id, String name, Element parent)
+    private static Element addNode(String node, String id, String name, Element parent)
     {
         Element ret=addElement(node,null,parent);
         if(id!=null)ret.setAttribute("id",id);
@@ -319,7 +319,7 @@ public class SWBAFTP extends GenericResource{
      * @param parent the parent
      * @return the element
      */
-    private Element addElement(String name, String value, Element parent)
+    private static Element addElement(String name, String value, Element parent)
     {
         Document doc = parent.getOwnerDocument();
         Element ele = doc.createElement(name);
@@ -418,7 +418,7 @@ public class SWBAFTP extends GenericResource{
      * @return true, if successful
      * @return
      */    
-    public boolean hasSubdirectories(File fdir)
+    public static boolean hasSubdirectories(File fdir)
     {
         File[] dirs=fdir.listFiles();
         for(int i=0;i<dirs.length;i++)
@@ -439,7 +439,7 @@ public class SWBAFTP extends GenericResource{
      * @param fdir the fdir
      * @return the directories
      */    
-    public void getDirectories(Element edir,File fdir,User user)
+    public static void getDirectories(Element edir,File fdir,User user)
     {
         File[] dirs=fdir.listFiles();
         Arrays.sort(dirs, new FileComprator());
@@ -455,7 +455,7 @@ public class SWBAFTP extends GenericResource{
         }
     }
 
-    public void hasPermissionFile(Element edir,Document src,User user)
+    public static void hasPermissionFile(Element edir,Document src,User user)
     {       
         String path=SWBUtils.getApplicationPath();
         if(src.getElementsByTagName("path").getLength()>0)
@@ -477,7 +477,7 @@ public class SWBAFTP extends GenericResource{
      * @param src the src
      * @return the directories
      */    
-    public void getDirectories(Element res,Document src,User user)
+    public static void getDirectories(Element res,Document src,User user)
     {
         String path=SWBUtils.getApplicationPath();
         if(src.getElementsByTagName("path").getLength()>0)
@@ -502,7 +502,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void createDir(Element res,Document src,User user,String ip)
+    public static void createDir(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0)
         {
@@ -544,7 +544,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void rename(Element res,Document src,User user,String ip)
+    public static void rename(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0 && src.getElementsByTagName("newpath").getLength()>0)
         {
@@ -598,7 +598,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void exists(Element res,Document src)
+    public static void exists(Element res,Document src)
     {
         if(src.getElementsByTagName("path").getLength()>0)
         {
@@ -627,7 +627,7 @@ public class SWBAFTP extends GenericResource{
      * @return true, if is protected
      * @return
      */    
-    public boolean isProtected(File f)
+    public static boolean isProtected(File f)
     {
         try
         {
@@ -666,7 +666,7 @@ public class SWBAFTP extends GenericResource{
      * @param res the res
      * @param src the src
      */    
-    public void delete(Element res,Document src,User user,String ip)
+    public static void delete(Element res,Document src,User user,String ip)
     {
         if(src.getElementsByTagName("path").getLength()>0)
         {
@@ -708,7 +708,7 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("delete", "false", res);
     }
-    public boolean hasPermission(User user, File directory)
+    public static boolean hasPermission(User user, File directory)
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
@@ -757,7 +757,7 @@ public class SWBAFTP extends GenericResource{
         return permision;
     }
 
-    public boolean showDirectory(User user, File directory)
+    public static boolean showDirectory(User user, File directory)
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         boolean permision=false;
@@ -812,7 +812,7 @@ public class SWBAFTP extends GenericResource{
      * @param src the src
      * @return the files
      */    
-    public void getFiles(Element res,Document src,User user)
+    public static void getFiles(Element res,Document src,User user)
     {     
         String path=SWBUtils.getApplicationPath();
         if(src.getElementsByTagName("path").getLength()>0)
