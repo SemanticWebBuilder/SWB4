@@ -70,7 +70,7 @@ public class BannerCluster extends GenericAdmResource
                         Iterator<Resource> itRes = ResourceBase.ClassMgr.listResourceByResourceSubType(st, paramRequest.getWebPage().getWebSite());
                         while( itRes.hasNext() ) {
                             Resource r = itRes.next();
-                            if( r.isActive()&&user.haveAccess(r) ) {
+                            if( r.isActive() && r.isValid() && user.haveAccess(r) ) {
                                 String title = r.getDisplayTitle(lang)==null?"":r.getDisplayTitle(lang);
                                 String desc = r.getDisplayDescription(lang)==null?"":r.getDisplayDescription(lang); 
                                 String url = r.getAttribute("url");
