@@ -219,7 +219,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         out.println("<ul>");
         for(int i=1; i<=5; i++) {
             if(isVoted) {
-                out.println("<li><a href=\"#\" title=\""+paramRequest.getLocaleString("rate")+"="+Math.round(Math.floor(rank))+"\">");
+                out.println("<li>");
                 out.println("<a href=\"#\" title=\""+paramRequest.getLocaleString("rate")+"="+Math.round(Math.floor(rank))+"\">");
                 out.println("<img src=\""+SWBPlatform.getContextPath()+getStar(i,rank*10)+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
                 out.println("</a></li>");
