@@ -1,34 +1,30 @@
 /**  
-* SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
-* colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
-* información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
-* fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y 
-* procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación 
-* para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
-* 
-* INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’), 
-* en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición; 
-* aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software, 
-* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
-* del SemanticWebBuilder 4.0. 
-* 
-* INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita, 
-* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
-* de la misma. 
-* 
-* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente 
-* dirección electrónica: 
-*  http://www.semanticwebbuilder.org
-**/ 
- 
-
-
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 /*
  * WBTree.java
  *
  * Created on 30 de junio de 2004, 06:55 PM
  */
-
 package org.semanticwb.portal.admin.resources;
 
 import java.io.*;
@@ -41,12 +37,15 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.URLEncoder;
+import org.semanticwb.model.AdminFilter;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.ResourceSubType;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -63,61 +62,59 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class SWBAEditor extends GenericResource
 {
-    
+
     /** The log. */
-    private static Logger log=SWBUtils.getLogger(SWBAEditor.class);
+    private static Logger log = SWBUtils.getLogger(SWBAEditor.class);
 
     /**
      * The Class ResCatComp.
      */
     class ResCatComp implements Comparator
     {
-        
+
         /* (non-Javadoc)
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
         public int compare(Object o1, Object o2)
         {
-            if(o1 instanceof ResourceType && o2 instanceof ResourceType)
+            if (o1 instanceof ResourceType && o2 instanceof ResourceType)
             {
-                ResourceType r1=(ResourceType)o1;
-                ResourceType r2=(ResourceType)o2;
+                ResourceType r1 = (ResourceType) o1;
+                ResourceType r2 = (ResourceType) o2;
                 return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
             }
             return 0;
         }
-        
     }
-    
+
     /**
      * The Class SubResCatComp.
      */
     class SubResCatComp implements Comparator
     {
-        
+
         /* (non-Javadoc)
          * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
          */
         public int compare(Object o1, Object o2)
         {
-            if(o1 instanceof ResourceSubType && o2 instanceof ResourceSubType)
+            if (o1 instanceof ResourceSubType && o2 instanceof ResourceSubType)
             {
-                ResourceSubType r1=(ResourceSubType)o1;
-                ResourceSubType r2=(ResourceSubType)o2;
+                ResourceSubType r1 = (ResourceSubType) o1;
+                ResourceSubType r2 = (ResourceSubType) o2;
                 return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
             }
             return 0;
         }
-        
     }
-    
+
     /**
      * Creates a new instance of WBTree.
      */
     public SWBAEditor()
     {
     }
-    
+
     /**
      * Process request.
      * 
@@ -126,71 +123,75 @@ public class SWBAEditor extends GenericResource
      * @param paramsRequest the params request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
-     */    
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
 //        System.out.println("Mode:"+paramsRequest.getMode());
-        if(paramsRequest.getMode().equals("gateway"))
+        if (paramsRequest.getMode().equals("gateway"))
         {
-            doGateway(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("upload"))
+            doGateway(request, response, paramsRequest);
+        }
+        else if (paramsRequest.getMode().equals("upload"))
         {
-            doUpload(request,response,paramsRequest);
-        }else if(paramsRequest.getMode().equals("download"))
+            doUpload(request, response, paramsRequest);
+        }
+        else if (paramsRequest.getMode().equals("download"))
         {
-            doDownload(request,response,paramsRequest);
-        }else super.processRequest(request,response,paramsRequest);
+            doDownload(request, response, paramsRequest);
+        }
+        else
+            super.processRequest(request, response, paramsRequest);
     }
-    
+
     /**
      * Sort iterator.
      * 
      * @param it the it
      * @return the iterator
      * @return
-     */    
+     */
     public Iterator sortIterator(Iterator it)
     {
         return SWBComparator.sortSermanticObjects(it);
-    }    
-    
+    }
+
     /**
      * Gets the resource type cat.
      * 
      * @param res the res
      * @param tm the tm
      * @return the resource type cat
-     */    
-    public void getResourceTypeCat(Element res,String tm)
+     */
+    public void getResourceTypeCat(Element res, String tm)
     {
-        
-        WebSite map=SWBContext.getWebSite(tm);
-        WebSite tmInit=map;
-        //TODO:listar globales
-        Iterator elements=sortIterator(map.listResourceTypes());
-        while(elements.hasNext())
-        {            
-            ResourceType obj=(ResourceType)elements.next();
-            //System.out.println("obj:"+obj.getDisplayName());
-            if(obj.getResourceMode()==2 || obj.getResourceMode()==3)
-            {
-                Element erole=addNode("resourceType",obj.getId(), obj.getTitle(), res);
-                erole.setAttribute("topicmap",map.getId());
-                erole.setAttribute("topicmapname",map.getTitle());
-                //TODO:listar globales
-                Iterator itsub=sortIterator(obj.listSubTypes());
 
-                while(itsub.hasNext())
+        WebSite map = SWBContext.getWebSite(tm);
+        WebSite tmInit = map;
+        //TODO:listar globales
+        Iterator elements = sortIterator(map.listResourceTypes());
+        while (elements.hasNext())
+        {
+            ResourceType obj = (ResourceType) elements.next();
+            //System.out.println("obj:"+obj.getDisplayName());
+            if (obj.getResourceMode() == 2 || obj.getResourceMode() == 3)
+            {
+                Element erole = addNode("resourceType", obj.getId(), obj.getTitle(), res);
+                erole.setAttribute("topicmap", map.getId());
+                erole.setAttribute("topicmapname", map.getTitle());
+                //TODO:listar globales
+                Iterator itsub = sortIterator(obj.listSubTypes());
+
+                while (itsub.hasNext())
                 {
-                    ResourceSubType sub=(ResourceSubType)itsub.next();
-                    Element esubType=addNode("subResourceType",""+sub.getId(), sub.getTitle(), erole);            
-                    esubType.setAttribute("topicmap",sub.getWebSite().getId());
+                    ResourceSubType sub = (ResourceSubType) itsub.next();
+                    Element esubType = addNode("subResourceType", "" + sub.getId(), sub.getTitle(), erole);
+                    esubType.setAttribute("topicmap", sub.getWebSite().getId());
                 }
             }
-        }   
+        }
     }
-    
+
     /**
      * Gets the service.
      * 
@@ -205,26 +206,33 @@ public class SWBAEditor extends GenericResource
     private Document getService(SWBParamRequest paramsRequest, String cmd, Document src, User user, HttpServletRequest request, HttpServletResponse response)
     {
         //System.out.println("Service mi entrada:"+cmd);
-        
-        String type=request.getHeader("TYPE");
-        String tm=request.getHeader("TM");
-        String id=request.getHeader("ID");
-        String sver=request.getHeader("VER");        
-        int ver=0;        
-        if(sver==null)sver=request.getParameter("version");  
-        
-        String webpath=null;
-        String workpath=null;
-        String filename=null;
-        if("Template".equalsIgnoreCase(type))
+
+
+
+
+        String type = request.getHeader("TYPE");
+        String tm = request.getHeader("TM");
+        String id = request.getHeader("ID");
+        String sver = request.getHeader("VER");
+        int ver = 0;
+        if (sver == null)
+            sver = request.getParameter("version");
+
+        String webpath = null;
+        String workpath = null;
+        String filename = null;
+        if ("Template".equalsIgnoreCase(type))
         {
-            Template template=SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
-            webpath=SWBPortal.getWebWorkPath()+template.getWorkPath();
-            workpath=template.getWorkPath();
-            if(sver==null)ver=template.getLastVersion().getVersionNumber();
-            else ver=Integer.parseInt(sver);     
-            filename=template.getFileName(ver);
-        }else if("LocalContent".equalsIgnoreCase(type))
+            Template template = SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
+            webpath = SWBPortal.getWebWorkPath() + template.getWorkPath();
+            workpath = template.getWorkPath();
+            if (sver == null)
+                ver = template.getLastVersion().getVersionNumber();
+            else
+                ver = Integer.parseInt(sver);
+            filename = template.getFileName(ver);
+        }
+        else if ("LocalContent".equalsIgnoreCase(type))
         {
             //TODO
             /*
@@ -234,42 +242,110 @@ public class SWBAEditor extends GenericResource
             if(sver==null)ver=res.getLastversion();
             else ver=Integer.parseInt(sver);     
             filename=res.getAttribute("url"+ver);
-            */
+             */
         }
 
         if (cmd.equals("init"))
         {
             return init(user, src, ver);
-        } 
+        }
+        else if (cmd.equals("getDirectories"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.getDirectories(res, src, user);
+            return dom;
+        }
+        else if (cmd.equals("getFiles"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.getFiles(res, src, user);
+            return dom;
+        }
+        else if (cmd.equals("delete"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.delete(res, src, user, request.getRemoteAddr());
+            return dom;
+        }
+        else if (cmd.equals("createDir"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.createDir(res, src, user, request.getRemoteAddr());
+            return dom;
+        }
+        else if (cmd.equals("rename"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.rename(res, src, user, request.getRemoteAddr());
+            return dom;
+        }
+        else if (cmd.equals("exists"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.exists(res, src);
+            return dom;
+        }
+        else if (cmd.equals("hasPermissionFile"))
+        {
+            Document dom = null;
+            dom = SWBUtils.XML.getNewDocument();
+            Element res = dom.createElement("res");
+            dom.appendChild(res);
+            SWBAFTP.hasPermissionFile(res, src, user);
+            return dom;
+
+        }
         else if (cmd.equals("getResourceTypeCat"))
-        {            
+        {
             try
             {
-                Document doc=SWBUtils.XML.getNewDocument();
-                Element res=doc.createElement("res");
+                Document doc = SWBUtils.XML.getNewDocument();
+                Element res = doc.createElement("res");
                 doc.appendChild(res);
-                if(src.getElementsByTagName("tm").getLength()>0)
+                if (src.getElementsByTagName("tm").getLength() > 0)
                 {
-                    getResourceTypeCat(res,src.getElementsByTagName("tm").item(0).getFirstChild().getNodeValue());
+                    getResourceTypeCat(res, src.getElementsByTagName("tm").item(0).getFirstChild().getNodeValue());
                     return doc;
-                } 
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 e.printStackTrace(System.out);
                 log.error(e);
             }
             return null;
-        }        
+        }
         else if (cmd.equals("initFiles"))
         {
             return initFiles(paramsRequest, user, src, workpath, webpath, filename, ver);
-        } else
+        }
+        else
         {
             return getDocument(paramsRequest, user, src, cmd, workpath, webpath, filename, ver);
         }
     }
+ 
+
     
+
     /**
      * Inits the.
      * 
@@ -278,43 +354,44 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the document
      * @return
-     */    
+     */
     public Document init(User user, Document src, int ver)
     {
         Document dom = null;
         try
         {
-            WebSite tma=SWBContext.getAdminWebSite();
+            WebSite tma = SWBContext.getAdminWebSite();
 
             dom = SWBUtils.XML.getNewDocument();
             Element res = dom.createElement("res");
             dom.appendChild(res);
             //config
-            Element config=addNode("config","config","Config",res);
-            
-            Element icons=addNode("icons","icons","Icons",config);
-            Element icon=addNode("icon","titulo","Titulo",icons);
-            icon.setAttribute("path","images/ico_titulo.gif");
-            icon=addNode("icon","idioma","Idioma",icons);
-            icon.setAttribute("path","images/ico_idioma.gif");
-            icon.setAttribute("text","ES");
-            
-            Element events=addNode("events","events","Events",config);
-            Element unload=addNode("unload","unload","unload",events);
-            unload.setAttribute("action","showurl="+tma.getWebPage("WBAd_infoi_TopicTitles").getUrl()+"?act=treeReload&status=true");
-            unload.setAttribute("target","status");
-            
-            
+            Element config = addNode("config", "config", "Config", res);
+
+            Element icons = addNode("icons", "icons", "Icons", config);
+            Element icon = addNode("icon", "titulo", "Titulo", icons);
+            icon.setAttribute("path", "images/ico_titulo.gif");
+            icon = addNode("icon", "idioma", "Idioma", icons);
+            icon.setAttribute("path", "images/ico_idioma.gif");
+            icon.setAttribute("text", "ES");
+
+            Element events = addNode("events", "events", "Events", config);
+            Element unload = addNode("unload", "unload", "unload", events);
+            unload.setAttribute("action", "showurl=" + tma.getWebPage("WBAd_infoi_TopicTitles").getUrl() + "?act=treeReload&status=true");
+            unload.setAttribute("target", "status");
+
+
             //addNames(res,topic);
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error(e);
             return getError(3);
         }
         return dom;
     }
-    
+
     /**
      * Inits the files.
      * 
@@ -327,39 +404,40 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the document
      * @return
-     */    
+     */
     public Document initFiles(SWBParamRequest paramsRequest, User user, Document src, String workpath, String webpath, String filename, int ver)
     {
         Document dom = null;
         try
         {
-            WebSite tma=SWBContext.getAdminWebSite();
+            WebSite tma = SWBContext.getAdminWebSite();
 
             dom = SWBUtils.XML.getNewDocument();
             Element res = dom.createElement("res");
             dom.appendChild(res);
             //config
-            Element config=addNode("config","config","Config",res);
-            config.setAttribute("docPath",webpath+"/"+ver+"/");
-            
-            Element icons=addNode("icons","icons","Icons",config);
-            Element icon=addNode("icon","folderO","Folder Open",icons);
-            icon.setAttribute("path","images/f_abierto.gif");
-            icon=addNode("icon","folderC","Folder Closed",icons);
-            icon.setAttribute("path","images/f_general.gif");
-            icon=addNode("icon","file","File",icons);
-            icon.setAttribute("path","images/i_documento.gif");
-            
+            Element config = addNode("config", "config", "Config", res);
+            config.setAttribute("docPath", webpath + "/" + ver + "/");
+
+            Element icons = addNode("icons", "icons", "Icons", config);
+            Element icon = addNode("icon", "folderO", "Folder Open", icons);
+            icon.setAttribute("path", "images/f_abierto.gif");
+            icon = addNode("icon", "folderC", "Folder Closed", icons);
+            icon.setAttribute("path", "images/f_general.gif");
+            icon = addNode("icon", "file", "File", icons);
+            icon.setAttribute("path", "images/i_documento.gif");
+
             getFiles(paramsRequest, res, workpath, webpath, filename, ver);
-            
-        } catch (Exception e)
+
+        }
+        catch (Exception e)
         {
             log.error(e);
             return getError(3);
         }
         return dom;
-    }    
-    
+    }
+
     /**
      * Gets the files.
      * 
@@ -371,55 +449,56 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the files
      * @throws SWBResourceException the sWB resource exception
-     */    
+     */
     public void getFiles(SWBParamRequest paramsRequest, Element res, String workpath, String webpath, String filename, int ver) throws SWBResourceException
     {
-        WebSite tma=SWBContext.getAdminWebSite();
-        Element menu=null;
-        Element option=null;
-        Element events=null;
-        Element event=null;
-        
+        WebSite tma = SWBContext.getAdminWebSite();
+        Element menu = null;
+        Element option = null;
+        Element events = null;
+        Element event = null;
+
         //tree nodes
-        Element root=addNode("node","","Files",res);
-        root.setAttribute("reload","getFiles");
+        Element root = addNode("node", "", "Files", res);
+        root.setAttribute("reload", "getFiles");
         //root.setAttribute("icon_open","folderO");
         //root.setAttribute("icon_close","folderC");
         root.setAttribute("type", "DIR");
-      
-        menu=addNode("menu","menu","Menu",root);
-        
-        option=addNode("option","add",paramsRequest.getLocaleString("addFile"),menu);
-        option.setAttribute("action","addFile");
-        option.setAttribute("shortCut","INSERT");
+
+        menu = addNode("menu", "menu", "Menu", root);
+
+        option = addNode("option", "add", paramsRequest.getLocaleString("addFile"), menu);
+        option.setAttribute("action", "addFile");
+        option.setAttribute("shortCut", "INSERT");
         //option.setAttribute("target","work");
-        addNode("separator","-","-",menu);
+        addNode("separator", "-", "-", menu);
 
-        option=addNode("option","refresh",paramsRequest.getLocaleString("refresh"),menu);
-        option.setAttribute("shortCut","F5");
-        option.setAttribute("action","reload");
+        option = addNode("option", "refresh", paramsRequest.getLocaleString("refresh"), menu);
+        option.setAttribute("shortCut", "F5");
+        option.setAttribute("action", "reload");
 
-        
-        File dir=new File(workpath+"/"+ver+"/");
-        if(!dir.exists())dir.mkdirs();
-        File files[]=dir.listFiles();
-        for(int x=0;x<files.length;x++)
+
+        File dir = new File(workpath + "/" + ver + "/");
+        if (!dir.exists())
+            dir.mkdirs();
+        File files[] = dir.listFiles();
+        for (int x = 0; x < files.length; x++)
         {
-            File file=files[x];
-            if(file.isDirectory())
+            File file = files[x];
+            if (file.isDirectory())
             {
                 getDir(paramsRequest, root, file, workpath, webpath, ver);
             }
-            else if(file.isFile())
+            else if (file.isFile())
             {
-                if(!file.getName().equals(filename))
+                if (!file.getName().equals(filename))
                 {
                     getFile(paramsRequest, root, file, workpath, webpath, ver);
                 }
             }
         }
     }
-        
+
     /**
      * Gets the file.
      * 
@@ -431,51 +510,51 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the file
      * @throws SWBResourceException the sWB resource exception
-     */    
+     */
     public void getFile(SWBParamRequest paramsRequest, Element root, File file, String workpath, String webpath, int ver) throws SWBResourceException
     {
-        WebSite tma=SWBContext.getAdminWebSite();
-        Element menu=null;
-        Element option=null;
-        
-        File docDir=new File(workpath+"/"+ver+"/");
-        String id=file.getPath().substring(docDir.getPath().length()+1);
-        id=id.replace('\\','/');
-        String path=webpath+"/"+ver+"/"+id;
+        WebSite tma = SWBContext.getAdminWebSite();
+        Element menu = null;
+        Element option = null;
+
+        File docDir = new File(workpath + "/" + ver + "/");
+        String id = file.getPath().substring(docDir.getPath().length() + 1);
+        id = id.replace('\\', '/');
+        String path = webpath + "/" + ver + "/" + id;
         //System.out.println("id:"+id);
         //System.out.println("path:"+path);
-        Element ele=addNode("node",id,file.getName(),root);
-        ele.setAttribute("path",path);
+        Element ele = addNode("node", id, file.getName(), root);
+        ele.setAttribute("path", path);
         //ele.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("target","work");
-        ele.setAttribute("reload","getFile."+id);
+        ele.setAttribute("reload", "getFile." + id);
         //ele.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("vtarget","info");
         ele.setAttribute("type", "FILE");
-        ele.setAttribute("size", ""+file.length());
-        Date dt=new Date(file.lastModified());
+        ele.setAttribute("size", "" + file.length());
+        Date dt = new Date(file.lastModified());
         //ele.setAttribute("date", ""+dt.getDate()+"/"+(dt.getMonth()+1)+"/"+(dt.getYear()+1900));
-        ele.setAttribute("date", ""+dt.toLocaleString());
-        ele.setAttribute("time", ""+dt.getHours()+":"+dt.getMinutes()+":"+dt.getSeconds());
+        ele.setAttribute("date", "" + dt.toLocaleString());
+        ele.setAttribute("time", "" + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds());
         //ele.setAttribute("icon","file");
-        
+
         //menu
-        menu=addNode("menu","menu","Menu",ele);
-        option=addNode("option","add",paramsRequest.getLocaleString("addFile"),menu);
-        option.setAttribute("action","addFile");
-        option.setAttribute("shortCut","INSERT");
-        addNode("separator","-","-",menu);
-        option=addNode("option","remove",paramsRequest.getLocaleString("removeFile"),menu);
-        option.setAttribute("action","removeFile."+id);
-        option.setAttribute("shortCut","DELETE");
-        option.setAttribute("confirm",paramsRequest.getLocaleString("confirm"));
-        addNode("separator","-","-",menu);
-        option=addNode("option","refresh",paramsRequest.getLocaleString("refresh"),menu);
-        option.setAttribute("shortCut","F5");
-        option.setAttribute("action","reload");
- 
+        menu = addNode("menu", "menu", "Menu", ele);
+        option = addNode("option", "add", paramsRequest.getLocaleString("addFile"), menu);
+        option.setAttribute("action", "addFile");
+        option.setAttribute("shortCut", "INSERT");
+        addNode("separator", "-", "-", menu);
+        option = addNode("option", "remove", paramsRequest.getLocaleString("removeFile"), menu);
+        option.setAttribute("action", "removeFile." + id);
+        option.setAttribute("shortCut", "DELETE");
+        option.setAttribute("confirm", paramsRequest.getLocaleString("confirm"));
+        addNode("separator", "-", "-", menu);
+        option = addNode("option", "refresh", paramsRequest.getLocaleString("refresh"), menu);
+        option.setAttribute("shortCut", "F5");
+        option.setAttribute("action", "reload");
+
     }
-    
+
     /**
      * Gets the dir.
      * 
@@ -487,25 +566,25 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the dir
      * @throws SWBResourceException the sWB resource exception
-     */    
+     */
     public void getDir(SWBParamRequest paramsRequest, Element root, File dir, String workpath, String webpath, int ver) throws SWBResourceException
     {
-        WebSite tma=SWBContext.getAdminWebSite();
-        Element menu=null;
-        Element option=null;
-        
-        
-        File docDir=new File(workpath+"/"+ver+"/");
+        WebSite tma = SWBContext.getAdminWebSite();
+        Element menu = null;
+        Element option = null;
+
+
+        File docDir = new File(workpath + "/" + ver + "/");
         //System.out.println("dir:"+dir);
         //System.out.println("docDir:"+docDir);
-        String id=dir.getPath().substring(docDir.getPath().length()+1);
-        id=id.replace('\\','/');
-        
+        String id = dir.getPath().substring(docDir.getPath().length() + 1);
+        id = id.replace('\\', '/');
+
         //System.out.println("id:"+id);
-        Element ele=addNode("node",id,dir.getName(),root);
+        Element ele = addNode("node", id, dir.getName(), root);
         //ele.setAttribute("action","showurl="+tma.getWebPage("WBAd_sysi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("target","work");
-        ele.setAttribute("reload","getDir."+id);
+        ele.setAttribute("reload", "getDir." + id);
         //ele.setAttribute("view","showurl="+tma.getWebPage("WBAd_infoi_RolesInfo").getUrl()+"?id="+role.getId());
         //ele.setAttribute("vtarget","info");
         ele.setAttribute("type", "DIR");
@@ -513,26 +592,27 @@ public class SWBAEditor extends GenericResource
         //root.setAttribute("icon_close","folderC");
 
         //menu
-        menu=addNode("menu","menu","Menu",ele);
-        option=addNode("option","add",paramsRequest.getLocaleString("addFile"),menu);
-        option.setAttribute("action","addFile");
-        option.setAttribute("shortCut","INSERT");
-        addNode("separator","-","-",menu);
-        option=addNode("option","refresh",paramsRequest.getLocaleString("refresh"),menu);
-        option.setAttribute("shortCut","F5");
-        option.setAttribute("action","reload");
-        
- 
-        File files[]=dir.listFiles();
-        for(int x=0;x<files.length;x++)
+        menu = addNode("menu", "menu", "Menu", ele);
+        option = addNode("option", "add", paramsRequest.getLocaleString("addFile"), menu);
+        option.setAttribute("action", "addFile");
+        option.setAttribute("shortCut", "INSERT");
+        addNode("separator", "-", "-", menu);
+        option = addNode("option", "refresh", paramsRequest.getLocaleString("refresh"), menu);
+        option.setAttribute("shortCut", "F5");
+        option.setAttribute("action", "reload");
+
+
+        File files[] = dir.listFiles();
+        for (int x = 0; x < files.length; x++)
         {
-            File file=files[x];
-            if(file.isDirectory())getDir(paramsRequest, ele, file, workpath, webpath,ver);
-            else if(file.isFile())getFile(paramsRequest, ele, file, workpath, webpath,ver);
-        }        
+            File file = files[x];
+            if (file.isDirectory())
+                getDir(paramsRequest, ele, file, workpath, webpath, ver);
+            else if (file.isFile())
+                getFile(paramsRequest, ele, file, workpath, webpath, ver);
+        }
     }
-    
-    
+
     /**
      * Gets the document.
      * 
@@ -546,7 +626,7 @@ public class SWBAEditor extends GenericResource
      * @param ver the ver
      * @return the document
      * @return
-     */    
+     */
     public Document getDocument(SWBParamRequest paramsRequest, User user, Document src, String act, String workpath, String webpath, String filename, int ver)
     {
         Document dom = null;
@@ -555,53 +635,58 @@ public class SWBAEditor extends GenericResource
             dom = SWBUtils.XML.getNewDocument();
             Element res = dom.createElement("res");
             dom.appendChild(res);
-            
-            String cmd=null;
-            String id=null;
-            int ind=act.indexOf('.');
-            if(ind>0)
+
+            String cmd = null;
+            String id = null;
+            int ind = act.indexOf('.');
+            if (ind > 0)
             {
-                cmd=act.substring(0,ind);
-                id=act.substring(ind+1);
-            }else cmd=act;
-            
-            if(cmd.equals("getFiles"))
+                cmd = act.substring(0, ind);
+                id = act.substring(ind + 1);
+            }
+            else
+                cmd = act;
+
+            if (cmd.equals("getFiles"))
             {
-                getFiles(paramsRequest, res, workpath, webpath,filename, ver);
-            }else if(cmd.equals("getFile"))
+                getFiles(paramsRequest, res, workpath, webpath, filename, ver);
+            }
+            else if (cmd.equals("getFile"))
             {
-                File file=new File(workpath+"/"+ver+"/"+id);
-                getFile(paramsRequest, res,file, workpath, webpath,ver);
-            }else if(cmd.equals("getDir"))
+                File file = new File(workpath + "/" + ver + "/" + id);
+                getFile(paramsRequest, res, file, workpath, webpath, ver);
+            }
+            else if (cmd.equals("getDir"))
             {
-                File file=new File(workpath+"/"+ver+"/"+id);
-                getDir(paramsRequest, res, file, workpath, webpath,ver);
-            }else if(cmd.equals("removeFile"))
+                File file = new File(workpath + "/" + ver + "/" + id);
+                getDir(paramsRequest, res, file, workpath, webpath, ver);
+            }
+            else if (cmd.equals("removeFile"))
             {
-                File file=new File(workpath+"/"+ver+"/"+id);
+                File file = new File(workpath + "/" + ver + "/" + id);
                 //System.out.println(file.exists()+" ->"+file);
-                if(file.delete())
+                if (file.delete())
                 {
-                    
-                }else
+                }
+                else
                 {
                     return getError(3);
                 }
-                
-            }else
+
+            }
+            else
             {
                 return getError(2);
-            }            
-        } catch (Exception e)
+            }
+        }
+        catch (Exception e)
         {
             log.error(e);
             return getError(3);
         }
         return dom;
     }
-    
-    
-    
+
     /**
      * Adds the node.
      * 
@@ -613,9 +698,11 @@ public class SWBAEditor extends GenericResource
      */
     private Element addNode(String node, String id, String name, Element parent)
     {
-        Element ret=addElement(node,null,parent);
-        if(id!=null)ret.setAttribute("id",id);
-        if(name!=null)ret.setAttribute("name",name);
+        Element ret = addElement(node, null, parent);
+        if (id != null)
+            ret.setAttribute("id", id);
+        if (name != null)
+            ret.setAttribute("name", name);
         return ret;
     }
 
@@ -631,11 +718,12 @@ public class SWBAEditor extends GenericResource
     {
         Document doc = parent.getOwnerDocument();
         Element ele = doc.createElement(name);
-        if (value != null) ele.appendChild(doc.createTextNode(value));
+        if (value != null)
+            ele.appendChild(doc.createTextNode(value));
         parent.appendChild(ele);
         return ele;
-    }    
-    
+    }
+
     /**
      * Gets the error.
      * 
@@ -656,68 +744,87 @@ public class SWBAEditor extends GenericResource
             if (id == 0)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_loginfail") + "...", err);
-            } else if (id == 1)
+            }
+            else if (id == 1)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_nouser") + "...", err);
-            } else if (id == 2)
+            }
+            else if (id == 2)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noservice") + "...", err);
-            } else if (id == 3)
+            }
+            else if (id == 3)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_serviceprocessfail") + "...", err);
-            } else if (id == 4)
+            }
+            else if (id == 4)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_parametersprocessfail") + "...", err);
-            } else if (id == 5)
+            }
+            else if (id == 5)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noTopicmap") + "...", err);
-            } else if (id == 6)
+            }
+            else if (id == 6)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noTopic") + "...", err);
-            } else if (id == 7)
+            }
+            else if (id == 7)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_usernopermiss") + "...", err);
-            } else if (id == 8)
+            }
+            else if (id == 8)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_TopicAlreadyexist") + "...", err);
-            } else if (id == 9)
+            }
+            else if (id == 9)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_byImplement") + "...", err);
-            } else if (id == 10)
+            }
+            else if (id == 10)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_TopicMapAlreadyExist") + "...", err);
-            } else if (id == 11)
+            }
+            else if (id == 11)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_FileNotFound") + "...", err);
-            } else if (id == 12)
+            }
+            else if (id == 12)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_noversions") + "...", err);
-            } else if (id == 13)
+            }
+            else if (id == 13)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_xmlinconsistencyversion") + "...", err);
-            } else if (id == 14)
+            }
+            else if (id == 14)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_noResourcesinMemory") + "...", err);
-            } else if (id == 15)
+            }
+            else if (id == 15)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_noTemplatesinMemory") + "...", err);
-            } else if (id == 16)
+            }
+            else if (id == 16)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_TemplatenotRemovedfromFileSystem") + "...", err);
-            } else if (id == 17)
+            }
+            else if (id == 17)
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getError_adminUsernotCreated") + "...", err);
-            } else
+            }
+            else
             {
                 addElement("message", SWBUtils.TEXT.getLocaleString("locale_Gateway", "usrmsg_Gateway_getService_errornotfound") + "...", err);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error(SWBUtils.TEXT.getLocaleString("locale_Gateway", "error_Gateway_getService_documentError") + "...", e);
         }
         return dom;
     }
-    
+
     /**
      * Do upload.
      * 
@@ -726,26 +833,26 @@ public class SWBAEditor extends GenericResource
      * @param paramsRequest the params request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
-     */    
+     */
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        PrintWriter out=response.getWriter();
+        PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         //StringBuffer str=new StringBuffer();
-        User user=paramsRequest.getUser();
+        User user = paramsRequest.getUser();
         try
         {
-            String tm=request.getHeader("TM");
-            String id=request.getHeader("ID");
-            String tp=request.getHeader("TP");
-            int ver=Integer.parseInt(request.getHeader("VER"));
-            String type=request.getHeader("TYPE");
-            
-            String name=request.getHeader("PATHFILEWB");
-            String doc=request.getHeader("DOCUMENT");
-            String work=null;
-            String webWork=null;
-            FileOutputStream fout=null;
+            String tm = request.getHeader("TM");
+            String id = request.getHeader("ID");
+            String tp = request.getHeader("TP");
+            int ver = Integer.parseInt(request.getHeader("VER"));
+            String type = request.getHeader("TYPE");
+
+            String name = request.getHeader("PATHFILEWB");
+            String doc = request.getHeader("DOCUMENT");
+            String work = null;
+            String webWork = null;
+            FileOutputStream fout = null;
 
 //            System.out.println("TM:"+tm);
 //            System.out.println("ID:"+id);
@@ -754,51 +861,54 @@ public class SWBAEditor extends GenericResource
 //            System.out.println("TYPE:"+type);
 //            System.out.println("PATHFILEWB:"+name);
 //            System.out.println("DOCUMENT:"+doc);
-            
-            if(type.equalsIgnoreCase("Template"))
-            {
-                Template template=SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
-                work=template.getWorkPath()+"/"+ver+"/";
 
-                if(request.getHeader("ATTACHWB")!=null)work+="images/";
-                
+            if (type.equalsIgnoreCase("Template"))
+            {
+                Template template = SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
+                work = template.getWorkPath() + "/" + ver + "/";
+
+                if (request.getHeader("ATTACHWB") != null)
+                    work += "images/";
+
                 //System.out.println("work:"+work+" name:"+name);
 
-                if(!("FINDATTACHES".equals(doc)))
+                if (!("FINDATTACHES".equals(doc)))
                 {
-                    File fpath=new File(work);
+                    File fpath = new File(work);
                     fpath.mkdirs();
-                    File file=new File(work+name);
+                    File file = new File(work + name);
                     //System.out.println("file:"+file);
-                    fout=new FileOutputStream(file);
+                    fout = new FileOutputStream(file);
                 }
-                
-                String ret=writeFile(in, fout);
+
+                String ret = writeFile(in, fout);
                 //System.out.println("ret:"+ret);
-                if(doc!=null)
+                if (doc != null)
                 {
-                    if(doc.equals("RELOAD"))
+                    if (doc.equals("RELOAD"))
                     {
                         template.reload();
                         out.println("ok");
-                    }else if(doc.equals("REPLACE"))
+                    }
+                    else if (doc.equals("REPLACE"))
                     {
-                        VersionInfo verinfo=template.getLastVersion();
-                        while(verinfo!=null && verinfo.getVersionNumber()!=ver)
+                        VersionInfo verinfo = template.getLastVersion();
+                        while (verinfo != null && verinfo.getVersionNumber() != ver)
                         {
-                            verinfo=verinfo.getPreviousVersion();
+                            verinfo = verinfo.getPreviousVersion();
                         }
-                        if(verinfo!=null)
+                        if (verinfo != null)
                         {
                             verinfo.setVersionFile(name);
                         }
                         out.println("ok");
-                    }else if(doc.equals("FINDATTACHES"))
+                    }
+                    else if (doc.equals("FINDATTACHES"))
                     {
-                        if(request.getHeader("CSSTYPE")!=null && request.getHeader("CSSTYPE").equals("TRUE"))
+                        if (request.getHeader("CSSTYPE") != null && request.getHeader("CSSTYPE").equals("TRUE"))
                         {
                             // find css attaches
-                            for(String file : SWBPortal.UTIL.findAttachesFromCss(ret))
+                            for (String file : SWBPortal.UTIL.findAttachesFromCss(ret))
                             {
                                 out.print(file);
                                 out.print("|");
@@ -808,13 +918,14 @@ public class SWBAEditor extends GenericResource
                         {
                             out.print(SWBPortal.UTIL.FindAttaches(ret));
                             out.print("|");
-                            out.print(SWBPortal.UTIL.parseHTML(ret,"images/"));
+                            out.print(SWBPortal.UTIL.parseHTML(ret, "images/"));
                         }
                         //System.out.print("TODO:SWBAeditor - FINDATTACHES");
                     }
-                }                
-                
-            }else if(type.equalsIgnoreCase("LocalContent"))
+                }
+
+            }
+            else if (type.equalsIgnoreCase("LocalContent"))
             {
                 //TODO:
 /*
@@ -826,44 +937,48 @@ public class SWBAEditor extends GenericResource
 
                 if(!("FINDATTACHES".equals(doc)))
                 {
-                    File fpath=new File(work);
-                    fpath.mkdirs();
-                    File file=new File(work+name);
-                    fout=new FileOutputStream(file);
+                File fpath=new File(work);
+                fpath.mkdirs();
+                File file=new File(work+name);
+                fout=new FileOutputStream(file);
                 }
                 
                 if(doc!=null)
                 {
-                    String ret=writeFile(in, null);
-                    
-                    if(doc.equals("RELOAD"))
-                    {
-                        writeParseFile(fout,webWork,ret);
-                        res.getRecResource().update();
-                        DBAdmLog.getInstance().saveContentLog(paramsRequest.getUser().getId(),tm,tp,"update",id,"Content updated with id:"+ id + " "+", in topic:"+ tp);
-                        out.println("ok");
-                    }else if(doc.equals("REPLACE"))
-                    {
-                        writeParseFile(fout,webWork,ret);
-                        res.setAttribute("url"+ver,name);
-                        res.updateAttributesToDB();
-                        DBAdmLog.getInstance().saveContentLog(user.getId(), tm, tp, "update", res.getId(), "Content created width id:"+res.getId()+",and title:"+res.getTitle());
-                        out.println("ok");
-                    }else if(doc.equals("FINDATTACHES"))
-                    {
-                        out.print(WBUtils.getInstance().FindAttaches(ret));
-                        out.print("|");
-                        out.print(WBUtils.getInstance().parseHTML(ret,""));
-                    }
+                String ret=writeFile(in, null);
+
+                if(doc.equals("RELOAD"))
+                {
+                writeParseFile(fout,webWork,ret);
+                res.getRecResource().update();
+                DBAdmLog.getInstance().saveContentLog(paramsRequest.getUser().getId(),tm,tp,"update",id,"Content updated with id:"+ id + " "+", in topic:"+ tp);
+                out.println("ok");
+                }else if(doc.equals("REPLACE"))
+                {
+                writeParseFile(fout,webWork,ret);
+                res.setAttribute("url"+ver,name);
+                res.updateAttributesToDB();
+                DBAdmLog.getInstance().saveContentLog(user.getId(), tm, tp, "update", res.getId(), "Content created width id:"+res.getId()+",and title:"+res.getTitle());
+                out.println("ok");
+                }else if(doc.equals("FINDATTACHES"))
+                {
+                out.print(WBUtils.getInstance().FindAttaches(ret));
+                out.print("|");
+                out.print(WBUtils.getInstance().parseHTML(ret,""));
+                }
                 }else
                 {
-                    writeFile(in, fout);
+                writeFile(in, fout);
                 }
- */
+                 */
             }
 
-        }catch(Exception e){log.error(e);}
-     }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+    }
 
     //TODO:
 //    /**
@@ -881,7 +996,6 @@ public class SWBAEditor extends GenericResource
 //            fout.close();
 //        }catch(Exception e){log.error(e);}
 //    }
-    
     /**
      * Write file.
      * 
@@ -890,10 +1004,10 @@ public class SWBAEditor extends GenericResource
      * @return the string
      * @throws IOException Signals that an I/O exception has occurred.
      * @return
-     */    
+     */
     public String writeFile(InputStream in, FileOutputStream fout) throws IOException
     {
-        StringBuffer str=new StringBuffer();
+        StringBuffer str = new StringBuffer();
         //System.out.println("file:"+file);
         try
         {
@@ -901,22 +1015,28 @@ public class SWBAEditor extends GenericResource
             int x;
             while ((x = in.read(bfile, 0, 8192)) > -1)
             {
-                if(fout!=null)fout.write(bfile,0, x);
-                else str.append(new String(bfile,0,x));
+                if (fout != null)
+                    fout.write(bfile, 0, x);
+                else
+                    str.append(new String(bfile, 0, x));
             }
             in.close();
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error(e);
-            if(fout!=null)fout.close();
+            if (fout != null)
+                fout.close();
             //out.println("Error sending file...");
             return str.toString();
-        }            
-        if(fout!=null)fout.flush();
-        if(fout!=null)fout.close();      
+        }
+        if (fout != null)
+            fout.flush();
+        if (fout != null)
+            fout.close();
         return str.toString();
     }
-    
+
     /**
      * Do download.
      * 
@@ -925,14 +1045,11 @@ public class SWBAEditor extends GenericResource
      * @param paramsRequest the params request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
-     */    
+     */
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        
     }
-    
-    
-    
+
     /**
      * Do gateway.
      * 
@@ -941,15 +1058,15 @@ public class SWBAEditor extends GenericResource
      * @param paramsRequest the params request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
-     */    
+     */
     public void doGateway(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
         //System.out.println("Hola:"+request);
         //System.out.println("URI:"+request.getServletPath());
-        PrintWriter out=response.getWriter();
+        PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
-        if (dom==null || !dom.getFirstChild().getNodeName().equals("req"))
+        if (dom == null || !dom.getFirstChild().getNodeName().equals("req"))
         {
             out.print(SWBUtils.XML.domToXml(getError(3)));
             return;
@@ -964,25 +1081,36 @@ public class SWBAEditor extends GenericResource
             response.sendError(404, request.getRequestURI());
             return;
         }
-        String ret;        
-        WebSite tm=SWBContext.getWebSite(request.getHeader("TM"));
-        
-        if(tm!=null)
+        String ret;
+        WebSite tm = SWBContext.getWebSite(request.getHeader("TM"));
+
+        if (tm != null)
         {
-            
+
             //WebPage tp=tm.getWebPage(request.getHeader("TP"));
             Document res = getService(paramsRequest, cmd, dom, paramsRequest.getUser(), request, response);
             if (res == null)
             {
                 ret = SWBUtils.XML.domToXml(getError(3));
-            } else
+            }
+            else
                 ret = SWBUtils.XML.domToXml(res, true);
             out.print(new String(ret.getBytes()));
         }
-        
+        else
+        {
+            Document res = getService(paramsRequest, cmd, dom, paramsRequest.getUser(), request, response);
+            if (res == null)
+            {
+                ret = SWBUtils.XML.domToXml(getError(3));
+            }
+            else
+                ret = SWBUtils.XML.domToXml(res, true);
+            out.print(new String(ret.getBytes()));
+        }
+
     }
-    
-    
+
     /**
      * Do view.
      * 
@@ -995,10 +1123,10 @@ public class SWBAEditor extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        PrintWriter out=response.getWriter();
+        PrintWriter out = response.getWriter();
         out.println("HTML Editor...");
         getTemplateApplet(out, "sep", "1", 1, paramsRequest.getUser(), request.getSession().getId());
-/*        
+        /*
         //String act=request.getParameter("act");
         String sid=request.getParameter("id");
         String stm=request.getParameter("tm");
@@ -1008,54 +1136,54 @@ public class SWBAEditor extends GenericResource
         
         if(nver!=null)
         {
-            out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
-            WBResourceURL url=paramsRequest.getRenderUrl();
-            url.setMode("upload");
-            url.setCallMethod(url.Call_DIRECT);
-            out.println("<param name=\"upload\" value=\""+url+"\">");
-            url.setMode("download");
-            out.println("<param name=\"download\" value=\""+url+"\">");
-            url.setMode("gateway");
-            out.println("<param name=\"gateway\" value=\""+url+"\">");
-            out.println("<param name=\"startview\" value=\"text\">");
-            out.println("<param name=\"tm\" value=\""+stm+"\">");
-            out.println("<param name=\"id\" value=\""+sid+"\">");
-            if(sid!=null)//temaplate)
-            {
-                int id=Integer.parseInt(sid);
-                Template tpl=TemplateMgr.getInstance().getTemplate(stm,id);
-                if(sver==null)sver=""+tpl.getLastversion();
-                
-                int ver=Integer.parseInt(sver);
-                if(nver.equals("true"))
-                {
-                    ver=new com.infotec.wb.services.TemplateSrv().newVersion(stm, tpl.getId(), ver,user.getId());
-                }
-                
-                out.println("<param name=\"document\" value=\""+tpl.getWebPath()+"/"+ver+"/"+tpl.getFileName(ver)+"\">");
-                out.println("<param name=\"filename\" value=\""+tpl.getFileName(ver)+"\">");
-                out.println("<param name=\"ver\" value=\""+ver+"\">");
-            }
-            out.println("</APPLET>");
+        out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
+        WBResourceURL url=paramsRequest.getRenderUrl();
+        url.setMode("upload");
+        url.setCallMethod(url.Call_DIRECT);
+        out.println("<param name=\"upload\" value=\""+url+"\">");
+        url.setMode("download");
+        out.println("<param name=\"download\" value=\""+url+"\">");
+        url.setMode("gateway");
+        out.println("<param name=\"gateway\" value=\""+url+"\">");
+        out.println("<param name=\"startview\" value=\"text\">");
+        out.println("<param name=\"tm\" value=\""+stm+"\">");
+        out.println("<param name=\"id\" value=\""+sid+"\">");
+        if(sid!=null)//temaplate)
+        {
+        int id=Integer.parseInt(sid);
+        Template tpl=TemplateMgr.getInstance().getTemplate(stm,id);
+        if(sver==null)sver=""+tpl.getLastversion();
+
+        int ver=Integer.parseInt(sver);
+        if(nver.equals("true"))
+        {
+        ver=new com.infotec.wb.services.TemplateSrv().newVersion(stm, tpl.getId(), ver,user.getId());
+        }
+
+        out.println("<param name=\"document\" value=\""+tpl.getWebPath()+"/"+ver+"/"+tpl.getFileName(ver)+"\">");
+        out.println("<param name=\"filename\" value=\""+tpl.getFileName(ver)+"\">");
+        out.println("<param name=\"ver\" value=\""+ver+"\">");
+        }
+        out.println("</APPLET>");
         }else
         {
-            WBResourceURL url=paramsRequest.getRenderUrl();
-            url.setParameter("id",request.getParameter("id"));
-            url.setParameter("tm",request.getParameter("tm"));
-            url.setParameter("version",request.getParameter("version"));
-            //url.setParameter(""request.getParameter("newvers");     
-            String str="<script>if(confirm('Quieres crear una nueva versi�n del template?'))window.location='";
-            url.setParameter("newvers","true");
-            str+=url;
-            str+="';else window.location='";
-            url.setParameter("newvers","false");
-            str+=url;
-            str+="';</script>";
-            out.println(str);
+        WBResourceURL url=paramsRequest.getRenderUrl();
+        url.setParameter("id",request.getParameter("id"));
+        url.setParameter("tm",request.getParameter("tm"));
+        url.setParameter("version",request.getParameter("version"));
+        //url.setParameter(""request.getParameter("newvers");
+        String str="<script>if(confirm('Quieres crear una nueva versi�n del template?'))window.location='";
+        url.setParameter("newvers","true");
+        str+=url;
+        str+="';else window.location='";
+        url.setParameter("newvers","false");
+        str+=url;
+        str+="';</script>";
+        out.println(str);
         }
- */
+         */
     }
-    
+
     /**
      * Gets the template applet.
      * 
@@ -1065,29 +1193,28 @@ public class SWBAEditor extends GenericResource
      * @param version the version
      * @param user the user
      * @return the template applet
-     */    
+     */
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user, String session)
     {
-        out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+SWBPlatform.getContextPath()+"/\" archive=\"swbadmin/lib/SWBAplHtmlEditor.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">");
-        String url=SWBPortal.getDistributorPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
+        out.println("<applet id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\"" + SWBPlatform.getContextPath() + "/\" archive=\"swbadmin/lib/SWBAplHtmlEditor.jar, swbadmin/lib/SWBAplCommons.jar\" width=\"100%\" height=\"500\">");
+        String url = SWBPortal.getDistributorPath() + "/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
-        out.println("<param name=\"jsess\" value=\""+session+"\">");
-        out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
-        out.println("<param name=\"download\" value=\""+url+"download"+"\">");
-        out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");
+        out.println("<param name=\"jsess\" value=\"" + session + "\">");
+        out.println("<param name=\"upload\" value=\"" + url + "upload" + "\">");
+        out.println("<param name=\"download\" value=\"" + url + "download" + "\">");
+        out.println("<param name=\"gateway\" value=\"" + url + "gateway" + "\">");
         out.println("<param name=\"startview\" value=\"text\">");
-        out.println("<param name=\"tm\" value=\""+topicmapid+"\">");
-        out.println("<param name=\"id\" value=\""+templateid+"\">");
+        out.println("<param name=\"tm\" value=\"" + topicmapid + "\">");
+        out.println("<param name=\"id\" value=\"" + templateid + "\">");
 
-        Template tpl=SWBContext.getWebSite(topicmapid).getTemplate(templateid);
-        out.println("<param name=\"document\" value=\""+SWBPortal.getWebWorkPath()+tpl.getWorkPath()+"/"+version+"/"+URLEncoder.encode(tpl.getFileName(version))+"\">");
-        out.println("<param name=\"filename\" value=\""+tpl.getFileName(version)+"\">");
-        out.println("<param name=\"ver\" value=\""+version+"\">");
-        out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");
+        Template tpl = SWBContext.getWebSite(topicmapid).getTemplate(templateid);
+        out.println("<param name=\"document\" value=\"" + SWBPortal.getWebWorkPath() + tpl.getWorkPath() + "/" + version + "/" + URLEncoder.encode(tpl.getFileName(version)) + "\">");
+        out.println("<param name=\"filename\" value=\"" + tpl.getFileName(version) + "\">");
+        out.println("<param name=\"ver\" value=\"" + version + "\">");
+        out.println("<param name=\"locale\" value=\"" + user.getLanguage() + "\">");
         out.println("<param name=\"type\" value=\"Template\">");
         out.println("</applet>");
     }
-    
     /**
      * @param out
      * @param base
@@ -1099,25 +1226,24 @@ public class SWBAEditor extends GenericResource
     /*
     public static void getContentApplet(PrintWriter out, Resource base, int version, WebPage topic, User user, String filename)
     {
-        out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
-        String url=WBUtils.getInstance().getDistPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
+    out.println("<APPLET id=\"apptpleditor\" name=\"apptpleditor\" code=\"applets.htmleditor.TemplateEditor\" codebase=\""+WBUtils.getInstance().getWebPath()+"\" ARCHIVE=\"swbadmin/lib/htmleditor.jar, swbadmin/lib/WBCommons.jar\" width=\"100%\" height=\"100%\">");
+    String url=WBUtils.getInstance().getDistPath()+"/SWBAdmin/WBAd_utl_HTMLEditor/_rid/1/_mto/3/_mod/";
 
-        out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
-        out.println("<param name=\"download\" value=\""+url+"download"+"\">");
-        out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");
-        out.println("<param name=\"startview\" value=\"html\">");
-        out.println("<param name=\"tm\" value=\""+base.getTopicMapId()+"\">");
-        out.println("<param name=\"id\" value=\""+base.getId()+"\">");
-        out.println("<param name=\"tp\" value=\""+topic.getId()+"\">");
+    out.println("<param name=\"upload\" value=\""+url+"upload"+"\">");
+    out.println("<param name=\"download\" value=\""+url+"download"+"\">");
+    out.println("<param name=\"gateway\" value=\""+url+"gateway"+"\">");
+    out.println("<param name=\"startview\" value=\"html\">");
+    out.println("<param name=\"tm\" value=\""+base.getTopicMapId()+"\">");
+    out.println("<param name=\"id\" value=\""+base.getId()+"\">");
+    out.println("<param name=\"tp\" value=\""+topic.getId()+"\">");
 
-        //todo: terminar esta parte
-        out.println("<param name=\"document\" value=\""+SWB WBUtils.getInstance().getWebWorkPath()+base.getResourceWorkPath()+"/"+version+"/"+com.infotec.appfw.util.URLEncoder.encode(filename)+"\">");
-        out.println("<param name=\"filename\" value=\""+filename+"\">");
-        out.println("<param name=\"ver\" value=\""+version+"\">");
-        out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");
-        out.println("<param name=\"type\" value=\"LocalContent\">");
-        out.println("</APPLET>");        
+    //todo: terminar esta parte
+    out.println("<param name=\"document\" value=\""+SWB WBUtils.getInstance().getWebWorkPath()+base.getResourceWorkPath()+"/"+version+"/"+com.infotec.appfw.util.URLEncoder.encode(filename)+"\">");
+    out.println("<param name=\"filename\" value=\""+filename+"\">");
+    out.println("<param name=\"ver\" value=\""+version+"\">");
+    out.println("<param name=\"locale\" value=\""+user.getLanguage()+"\">");
+    out.println("<param name=\"type\" value=\"LocalContent\">");
+    out.println("</APPLET>");
     }    
-    */
-    
+     */
 }
