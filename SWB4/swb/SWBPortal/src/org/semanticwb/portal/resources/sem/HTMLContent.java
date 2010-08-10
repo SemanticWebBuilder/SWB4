@@ -348,6 +348,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             //Ruta logica de un archivo asociado
                             String attachedFilePath = textToSave.substring(index,
                                                       quoteIndex);
+                            String tagPath = attachedFilePath.substring(0, attachedFilePath.indexOf("/images") + 1);
                             //Ruta fisica del archivo a copiar
                             String s = SWBPortal.getWorkPath()
                                     + attachedFilePath.substring(
@@ -360,8 +361,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             }
                             //Se sustituye la ruta logica por el tag
                             textToSave = SWBUtils.TEXT.replaceAll(textToSave,
-                                    attachedFilePath,
-                                    "<workpath/>" + HTMLContent.FOLDER + "/" + fileName);
+                                    tagPath, //attachedFilePath,
+                                    "<workpath/>"); // + HTMLContent.FOLDER + "/" + fileName);
                         }
                     }
                     index = textToSave.indexOf(workingDirectory);
