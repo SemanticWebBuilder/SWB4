@@ -3,6 +3,7 @@ package org.semanticwb.portal.resources.sem.news.base;
 
 public abstract class SWBNewsBase extends org.semanticwb.portal.api.GenericSemResource 
 {
+    public static final org.semanticwb.platform.SemanticProperty swbnews_mobile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbnews#mobile");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollectionCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory");
     public static final org.semanticwb.platform.SemanticProperty swbnews_category=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/swbnews#category");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection");
@@ -17,6 +18,16 @@ public abstract class SWBNewsBase extends org.semanticwb.portal.api.GenericSemRe
     public SWBNewsBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public boolean isMobile()
+    {
+        return getSemanticObject().getBooleanProperty(swbnews_mobile);
+    }
+
+    public void setMobile(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swbnews_mobile, value);
     }
 
     public void setCategory(org.semanticwb.model.ResourceCollectionCategory value)
