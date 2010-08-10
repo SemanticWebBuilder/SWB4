@@ -25,6 +25,7 @@ package org.semanticwb;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -1804,28 +1805,42 @@ public class SWBPortal
             }
             return ret.toString();
         }
-        /*public static void main(String[] args)
-        {
-            StringBuilder html=new StringBuilder();
-            File file=new File("C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\Remunera.html");
+        public static void main(String[] args)
+        {            
+            short c3=-61;
+            short a=161;
+            //File file=new File("C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\SEGOB XHTML Strict\\index_corregido.html");
+            //File file=new File("C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\utf-8.txt");
+            File file=new File("C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\3\\1\\template.html");
+            byte[] buffer=new byte[(int)file.length()];
             try
-            {
-                BufferedReader br=new BufferedReader(new FileReader(file));
-                String line=br.readLine();
-                while(line!=null)
-                {
-                    html.append(line);
-                    html.append("\r\n");
-                    line=br.readLine();
-                }
-                String htmlres=parseHTML(html.toString(),"/patito/",0);
-                System.out.println(htmlres);
+           {
+                    FileInputStream fin=new FileInputStream(file);
+                    java.io.ByteArrayOutputStream b=new ByteArrayOutputStream();
+                    int read=fin.read(buffer);
+                    while(read!=-1)
+                    {
+                        b.write(buffer, 0, read);
+                        read=fin.read(buffer);
+                    }
+                    int i=0;
+                    for(byte btest : b.toByteArray())
+                    {
+                        if((short)btest==c3)
+                        {
+                            System.out.println((int)b.toByteArray()[i+1]);
+                        }
+                        i++;
+                    }
+
+
             }
             catch(Exception e)
             {
                 e.printStackTrace();
             }
-        }*/
+
+        }
 
         /**
          * Retrieves a file name from a string representing a relative path.
