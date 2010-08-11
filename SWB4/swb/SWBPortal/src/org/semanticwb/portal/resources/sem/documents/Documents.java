@@ -495,29 +495,57 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         Resource base=getResourceBase();
-        String msg=paramRequest.getLocaleString("lblDoAdmin_undefinedOperation");
+        String msg=paramRequest.getLocaleString("msgDoAdminUndefinedOperation");
 
-        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
-        if(action.equals("add") || action.equals("edit")) {
+        String action = null!=request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if( paramRequest.Action_ADD.equals(action) || paramRequest.Action_EDIT.equals(action) ) {
+            SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
+            url.setAction("update");
+
+            out.println("<div class=\"swbform\">");
+            out.println("<form id=\"frmAdmRes\" method=\"post\" dojoType=\"dijit.form.Form\" action=\""+url.toString()+"\"> ");
+
+            out.println("<fieldset> ");
+            out.println("<legend>"+paramRequest.getLocaleString("lblDoAdminData")+"</legend>");
+            out.println("<table width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
+            out.println("<tr><td width=\"250\"></td><td></td></tr>");
+            out.println("<tr>");
+            out.println("<td class=\"datos\">"+paramRequest.getLocaleString("lblDoAdminSection")+":&nbsp;</td>");
+            out.println("<td class=\"valores\"><input type=\"text\" name=\"comments\" value=\""+base.getAttribute("comments", "")+"\" maxlength=\"75\" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\""+paramRequest.getLocaleString("lblDoAdminComments")+"\" invalidMessage=\""+paramRequest.getLocaleString("lblDoAdminInvalidValue")+"\" /></td>");
+            out.println("</tr>");
+            out.println("</table> ");
+            out.println("</fieldset> ");
+
+            out.println("<fieldset>");
+            out.println("<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
+            out.println(" <tr><td>");
+            out.println(" <button dojoType=\"dijit.form.Button\" type=\"submit\" value=\"Guardar\">"+paramRequest.getLocaleString("lblDoAdminSubmit")+"</button>&nbsp;");
+            out.println(" <button dojoType=\"dijit.form.Button\" type=\"reset\" value=\"Restablecer\">"+paramRequest.getLocaleString("lblDoAdminReset")+"</button>");
+            out.println(" </td></tr>");
+            out.println("</table> ");
+            out.println("</fieldset>");
             
+            out.println("</form> ");
+            out.println("<span class=\"requerido\">*</span> " + paramRequest.getLocaleString("lblDoAdminDataRequired"));
+            out.println("</div>");
         }else if(action.equals("update")) {
             try {
                 String wp = request.getParameter("comments").trim();
                 if( paramRequest.getWebPage().getWebSite().getWebPage(wp)==null ) {
-                    msg = paramRequest.getLocaleString("msgBadSection") +" "+ base.getId();
+                    msg = paramRequest.getLocaleString("msgDoAdminBadSection") +" "+ base.getId();
                     throw new Exception(msg);
                 }
                 base.setAttribute("comments", wp);
                 base.updateAttributesToDB();
-                msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
+                msg=paramRequest.getLocaleString("msgDoAdminOkUpdateResource") +" "+ base.getId();
             }catch(Exception e) {
                 log.error(e);
-                msg = paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId();
+                msg = paramRequest.getLocaleString("msgErrDoAdminUpdateResource") +" "+ base.getId();
             }finally {
                 out.println("<script type=\"text/javascript\">");
                 out.println("<!--");
                 out.println("  alert('"+msg+"');");
-                out.println("  window.location.href='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';");
+                out.println("  window.location.href='"+paramRequest.getRenderUrl().setAction(paramRequest.Action_EDIT).toString()+"';");
                 out.println("-->");
                 out.println("</script>");
             }
