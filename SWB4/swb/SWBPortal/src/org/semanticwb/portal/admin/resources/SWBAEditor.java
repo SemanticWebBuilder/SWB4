@@ -1162,7 +1162,7 @@ public class SWBAEditor extends GenericResource
      */
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        if(request.getHeader("PATHFILEWB")!=null)
+        if(request.getHeader("FTP")!=null)
         {
             doDownloadFile(request, response, paramsRequest);
             return;
