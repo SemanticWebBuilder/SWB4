@@ -109,6 +109,7 @@ public class FDownload extends javax.swing.JDialog {
                 con.setUseCaches(false);
                 if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
                 con.addRequestProperty("PATHFILEWB",path);
+                con.addRequestProperty("FTP","TRUE");
                 con.setDoInput(true);
                 InputStream in=con.getInputStream();
                 byte[] bcont=new byte[8192];
