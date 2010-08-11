@@ -358,7 +358,7 @@ public class Contact extends GenericAdmResource {
 
             out.println("var s = new String('');");
             out.println("s = s.concat('<div class=\"swb-contact\">');");
-            out.println("s = s.concat('<form id=\"frmContact\" name=\"frmContact\" action=\"\" method=\"post\" >');");
+            out.println("s = s.concat('<form id=\"frmContact\"  action=\"\" method=\"post\" >');");
             if( title!=null ) {
                 out.println("s = s.concat('<h3>"+title+"</h3>');");
             }
