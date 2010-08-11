@@ -162,6 +162,7 @@ public class FUpload extends javax.swing.JDialog implements FileUploadListener{
                         con.setFixedLengthStreamingMode((int)f.length());
                         if(jsess!=null)con.setRequestProperty("Cookie","JSESSIONID="+jsess);
                         con.addRequestProperty("PATHFILEWB",path);
+                        con.addRequestProperty("FTP","TRUE");
                         con.setDoOutput(true);                
                         OutputStream out=con.getOutputStream();
                         FileInputStream fin=new FileInputStream(f);
