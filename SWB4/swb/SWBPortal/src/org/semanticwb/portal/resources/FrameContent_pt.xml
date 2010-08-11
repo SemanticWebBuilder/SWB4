@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmFrameContent" action="true" method="POST">
-		<admdbconnmgr defconn="true"/>
-                <fieldset>
-		<input type="TEXT" name="url" label="* Endereço  Web do conteúdo remoto (Frame):" size="50" jsrequired="true"/>
-                </fieldset>
-                <fieldset>
-		<input type="SUBMIT" name="btnSave"  value="Salvar"/>
-		<input type="RESET"  name="btnReset" value="Cancelar"/>
-                </fieldset>
-	</form>
-	<statictext name="txtNote">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				* Dato obrigatório
-			</font>
-		]]>
-	</statictext>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Configuración de contenido">
+            <input type="text" name="url" label="Endereço Web:" promptMessage="Endereço Web" jsrequired="true"/>
+        </fieldset>
+
+        <fieldset>
+            <input type="submit" name="btnSave" id="btnSave" value="Guardar" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
+        </fieldset>
+    </form>
 </admresource>
