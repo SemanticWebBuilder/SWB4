@@ -126,6 +126,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             }
             TreePath treepath=new TreePath(nodes.toArray());
             jTreeDirs.setSelectionPath(treepath);
+            jTreeDirs.scrollPathToVisible(treepath);
         }
     }
     public void valueChanged(ListSelectionEvent e) {
@@ -664,6 +665,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jMenuBorrar = new javax.swing.JMenu();
         jMenuItemBorrarDir = new javax.swing.JMenuItem();
         jMenuItemBorrarFile = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemExit = new javax.swing.JMenuItem();
         jMenuTools = new javax.swing.JMenu();
         jMenuItemDownload = new javax.swing.JMenuItem();
         jMenuRename = new javax.swing.JMenu();
@@ -679,8 +682,6 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jMenuItemFileRename = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
         jMenuItemFileDelete = new javax.swing.JMenuItem();
-        jSeparator6 = new javax.swing.JPopupMenu.Separator();
-        jMenuItemExit = new javax.swing.JMenuItem();
         jFileChooser1 = new javax.swing.JFileChooser();
         jPanelToolbar = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -799,6 +800,16 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jMenuBorrar.add(jMenuItemBorrarFile);
 
         jMenuFile.add(jMenuBorrar);
+        jMenuFile.add(jSeparator6);
+
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
+        jMenuItemExit.setText(bundle1.getString("exit")); // NOI18N
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuItemExit);
 
         jMenuBar1.add(jMenuFile);
 
@@ -883,16 +894,6 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             }
         });
         jPopupMenuFile.add(jMenuItemFileDelete);
-        jPopupMenuFile.add(jSeparator6);
-
-        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
-        jMenuItemExit.setText(bundle1.getString("exit")); // NOI18N
-        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemExitActionPerformed(evt);
-            }
-        });
-        jPopupMenuFile.add(jMenuItemExit);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
