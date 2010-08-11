@@ -827,6 +827,115 @@ public class SWBAEditor extends GenericResource
 
     /**
      * Do upload.
+     *
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void doUploadFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String path=request.getHeader("PATHFILEWB");
+
+        if(path!=null)
+        {
+            try
+            {
+                File f=new File(path);
+                if(!SWBAFTP.hasPermission(paramRequest.getUser(), f))
+                {
+                    return;
+                }
+                if(SWBAFTP.isProtected(f))
+                {
+                   return;
+                }
+                if(f.isDirectory())
+                {
+                    SWBAFTP.log("CREATED|DIR:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                }
+                else
+                {
+                    SWBAFTP.log("CREATED|FILE:\""+f.getCanonicalPath() +"\"|USER:\""+paramRequest.getUser().getLogin()+"_"+ paramRequest.getUser().getUserRepository().getId() +"\"",request.getRemoteAddr());
+                }
+
+                FileOutputStream fout=new FileOutputStream(f);
+                InputStream in=request.getInputStream();
+                byte[] bcont=new byte[8192];
+                int ret=in.read(bcont);
+                while(ret!=-1)
+                {
+                    fout.write(bcont,0, ret);
+                    ret=in.read(bcont);
+                }
+                in.close();
+                fout.close();
+            }
+            catch(Exception e)
+            {
+                response.sendError(500,e.getMessage());
+            }
+        }
+        else
+        {
+            response.sendError(500);
+        }
+    }
+     /**
+     * Do download.
+     *
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException, a Resource Exception
+     * @throws IOException, an In Out Exception
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void doDownloadFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        String path=request.getHeader("PATHFILEWB");
+        if(path!=null)
+        {
+            try
+            {
+
+                File f=new File(path);
+                if(f.exists() && SWBAFTP.hasPermission(paramRequest.getUser(), f))
+                {
+                    response.setContentLength((int)f.length());
+                    FileInputStream fin=new FileInputStream(f);
+                    OutputStream out=response.getOutputStream();
+                    byte[] bcont=new byte[8192];
+                    int ret=fin.read(bcont);
+                    while(ret!=-1)
+                    {
+                        out.write(bcont,0, ret);
+                        ret=fin.read(bcont);
+                    }
+                    fin.close();
+                    out.close();
+                }
+                else
+                {
+                    response.sendError(500);
+                }
+            }
+            catch(Exception e)
+            {
+                response.sendError(500,e.getMessage());
+            }
+        }
+        else
+        {
+            response.sendError(500);
+        }
+    }
+    /**
+     * Do upload.
      * 
      * @param request the request
      * @param response the response
@@ -836,6 +945,11 @@ public class SWBAEditor extends GenericResource
      */
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        if(request.getHeader("PATHFILEWB")!=null)
+        {
+            doUploadFile(request,response,paramsRequest);
+            return;
+        }
         PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         //StringBuffer str=new StringBuffer();
@@ -1048,6 +1162,11 @@ public class SWBAEditor extends GenericResource
      */
     public void doDownload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
+        if(request.getHeader("PATHFILEWB")!=null)
+        {
+            doDownloadFile(request, response, paramsRequest);
+            return;
+        }
     }
 
     /**
