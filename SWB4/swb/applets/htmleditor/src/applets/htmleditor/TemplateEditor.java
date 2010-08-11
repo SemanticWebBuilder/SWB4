@@ -1027,7 +1027,7 @@ Action:caret-previous-word
         jPanel4.add(jButton1);
 
         jButtonAddFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/htmleditor/images/f_general.gif"))); // NOI18N
-        jButtonAddFiles.setToolTipText(bundle.getString("edit")); // NOI18N
+        jButtonAddFiles.setToolTipText(bundle.getString("add_files")); // NOI18N
         jButtonAddFiles.setBorderPainted(false);
         jButtonAddFiles.setFocusable(false);
         jButtonAddFiles.setMaximumSize(new java.awt.Dimension(32, 32));
