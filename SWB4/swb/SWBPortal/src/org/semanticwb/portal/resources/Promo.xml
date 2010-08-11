@@ -1,39 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
-        <admdbconnmgr defconn="true"/>
-        <fieldset legend="Aspecto">
-            <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformaciÃ³n: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/Promo/Promo.xsl" msgbydefault="Plantilla por defecto: " jsrequired="false" />
-            <input type="text" id="imgWidth" name="imgWidth" label="Ancho de la imagen (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Ancho invÃ¡lido" promptMessage="Ancho del banner, considerado en pixeles" />
-            <input type="text" id="imgHeight" name="imgHeight" label="Alto de la imagen (pixeles):" maxlength="4" regExp="\d{1,4}" invalidMessage="Altura invÃ¡lida" promptMessage="Altura del banner, considerada en pixeles" />
-        </fieldset>
+    <admdbconnmgr defconn="true"/>
+    <fieldset legend="Configuración de estrategia">
+        <input type="text" name="title" label="Título:" maxlength="50" promptMessage="Título" />
+        <input type="text" name="subtitle" label="Subtítulo:" maxlength="50" promptMessage="Subtítulo" />
+        <input type="file" name="imgfile" label="Imagen (gif, jpg, jpeg, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
+        <input type="text" name="caption" label="Pie de foto:" maxlength="50" promptMessage="Pie de foto" />
+        <textarea name="text" label="Texto:" rows="5" cols="50"  jsrequired="true"/>
+        <input type="text" name="more" label="Texto para liga:" maxlength="50" promptMessage="Texto para liga" />
+        <input type="text" name="url" label="Dirección Web:" promptMessage="Dirección Web" />
 
-        <fieldset legend="ConfiguraciÃ³n de estrategia">
-            <input type="text" name="title" label="TÃ­tulo:" maxlength="50" promptMessage="TÃ­tulo" />
-            <input type="text" name="subtitle" label="SubtÃ­tulo:" maxlength="50" promptMessage="SubtÃ­tulo" />
-            <input type="file" name="imgfile" label="Imagen (gif, jpg, jpeg, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40"/>
-            <input type="text" name="caption" label="Pie de foto:" maxlength="50" promptMessage="Pie de foto" />
-            <textarea name="text" label="Texto:" rows="5" cols="50"  jsrequired="true"/>
-            <input type="text" name="more" label="Texto para liga:" maxlength="50" promptMessage="Texto para liga" />
-            <input type="text" name="url" label="URL:" maxlength="50" promptMessage="DirecciÃ³n web" />
+        <statictext name="txtTarget">Dirigir a una nueva ventana:</statictext>
+        <input type="radio" id="target1" name="target" label="Si" value="1"/>
+        <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
 
-            <statictext name="txtTarget">Dirigir a una nueva ventana:</statictext>
-            <input type="radio" id="target1" name="target" label="Si" value="1"/>
-            <input type="radio" id="target0" name="target" label="No" value="0" checked="true"/>
+        <statictext name="note">
+        <![CDATA[
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
+            * Dato requerido
+            </font>
+        ]]>
+        </statictext>
+    </fieldset>
 
-            <statictext name="note">
-            <![CDATA[
-                <font style="color: #428AD4; font-family: Verdana; font-size:10px;">
-                * Dato requerido
-                </font>
-            ]]>
-            </statictext>
-        </fieldset>
+    <fieldset legend="Aspecto">
+        <input type="file" name="template" label="Plantilla (xsl, xslt): " showfile="true" filetype="xsl|xslt" isshowfiletype="true" isremovefile="true" removemsg="Quitar plantilla de transformación: " msg="Plantilla actual: " bydefault="{@webpath}swbadmin/xsl/Promo/PromoRightAligned.xsl" msgbydefault="Plantilla por defecto: " jsrequired="false" />
+        <input type="text" id="imgWidth"  name="imgWidth"  label="Ancho de la imagen:" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho inválido"  promptMessage="Ancho de la imagen. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="imgHeight" name="imgHeight" label="Alto de la imagen:"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura de la imagen. Ejemplos: 90%, 350px, 854" />
+    </fieldset>
 
-        <fieldset>
-            <input type="submit" name="btnSave" value="Guardar" />
-            <input type="reset"  name="btnReset" value="Restablecer"/>
-        </fieldset>
+    <fieldset>
+        <input type="submit" name="btnSave" value="Guardar" />
+        <input type="reset"  name="btnReset" value="Restablecer"/>
+    </fieldset>
     </form>
 </admresource>

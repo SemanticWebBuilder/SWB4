@@ -155,9 +155,19 @@ public class Promo extends GenericAdmResource {
 
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        Document dom=getDom(request, response, paramRequest);
-        if( dom!=null )
-            response.getWriter().println(SWBUtils.XML.domToXml(dom));
+        response.setContentType("text/xml; charset=ISO-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        Resource base=getResourceBase();
+        PrintWriter out = response.getWriter();
+        try {
+            Document dom = getDom(request, response, paramRequest);
+            out.println(SWBUtils.XML.domToXml(dom));
+        }catch(Exception e) {
+            log.error("Error in doXML method while rendering the XML script: "+base.getId()+"-"+base.getTitle(), e);
+            out.println("Error in doXML method while rendering the XML script");
+        }
     }
     
     /* (non-Javadoc)
@@ -165,20 +175,14 @@ public class Promo extends GenericAdmResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=iso-8859-1");
-        response.setHeader("Cache-Control","no-cache");
-        response.setHeader("Pragma","no-cache");
+        response.setContentType("text/html; charset=ISO-8859-1");
         
         Resource base = paramRequest.getResourceBase();
+        PrintWriter out = response.getWriter();
          try {
             Document dom = getDom(request, response, paramRequest);
-
-            //System.out.println("\n\nPromo \ndom=\n"+SWBUtils.XML.domToXml(dom));
             String html = SWBUtils.XML.transformDom(tpl, dom);
-            //System.out.println("\n\ndoView.... html=\n"+html);
-
-            response.getWriter().print(html);
-            //response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+            out.println(html);
         }
         catch(Exception e) {
             log.error("Error in doView method while rendering the resource base: "+base.getId() +"-"+ base.getTitle(), e);
@@ -707,6 +711,7 @@ public class Promo extends GenericAdmResource {
         Resource base=getResourceBase();
         //base. addHit(request, response.getUser(), response.getTopic());
         String url = base.getAttribute("url", "").trim();
-        if (!url.equals("")) response.sendRedirect(url);
+        if (!url.equals(""))
+            response.sendRedirect(url);
     }    
 }
