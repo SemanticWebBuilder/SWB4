@@ -76,6 +76,7 @@ public class InlineTextArea extends GenericResource {
             
             if(userCanEdit(paramRequest)) {
                 out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
                 out.println("dojo.require(\"dijit.InlineEditBox\");");
                 out.println("dojo.require(\"dijit.form.Textarea\");");
                 out.println("var iledit_"+base.getId()+";");
@@ -90,9 +91,10 @@ public class InlineTextArea extends GenericResource {
                 out.println("    }, 'ta_"+base.getId()+"');");
                 out.println("  }");
                 out.println(");");
+                out.println("-->");
                 out.println("</script>");
             }
-            out.println("<div id=\"ta_"+base.getId()+"\" class=\"ilta_"+base.getId()+"\">");
+            out.println("<div id=\"ta_"+base.getId()+"\" class=\"swb-ilta\">");
             out.println(base.getAttribute("text", ""));
             out.println("</div>");
 
