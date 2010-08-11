@@ -126,6 +126,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             TreePath treepath=new TreePath(nodes.toArray());
             jTreeDirs.setSelectionPath(treepath);
             jTreeDirs.scrollPathToVisible(treepath);
+            jTreeDirs.updateUI();
         }
     }
     public void valueChanged(ListSelectionEvent e) {
