@@ -80,7 +80,11 @@ public class CaseObject extends GenericResource {
         response.getWriter().println("      </ul>");
         response.getWriter().print("  </fieldset>\n");
         response.getWriter().print("</div>\n");*/
+        response.getWriter().println("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         doGraph(request, response, paramRequest);
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -102,8 +106,8 @@ public class CaseObject extends GenericResource {
                     dataset.setValue((Float)CaseProcessObject.minimum(process, "Incidente", "budget"), "Incidente", "Mínimo");
                     JFreeChart chart = ChartFactory.createBarChart(process.getTitle(), "Presupuesto", "Pesos ($)", dataset, PlotOrientation.VERTICAL, true, true, false);
                     try {
-                        ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_object.jpg"), chart, 500, 300);
-                        response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_object.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+                        ChartUtilities.saveChartAsPNG(new File(pathFile + "/" + process.getId() + "_object.png"), chart, 500, 300);
+                        response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/" + process.getId() + "_object.png); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
                     }catch (Exception e) {
                         log.error(e);
                     }
