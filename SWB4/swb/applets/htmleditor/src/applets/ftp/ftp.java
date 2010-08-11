@@ -93,8 +93,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         this.setJMenuBar(this.jMenuBar1);
         this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));
         jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,this.locale);
-        this.jTableFiles.setModel(filemodel);
-        this.setTitle("Documentos del servidor");
+        this.jTableFiles.setModel(filemodel);        
         loadDirectories();
         ArrayList<TreeNode> nodes=new ArrayList<TreeNode>();
         if(pathInit!=null && !pathInit.equals(""))
@@ -896,6 +895,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jPopupMenuFile.add(jMenuItemFileDelete);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(bundle1.getString("title_ftp")); // NOI18N
 
         jPanelToolbar.setBackground(new java.awt.Color(225, 235, 251));
         jPanelToolbar.setPreferredSize(new java.awt.Dimension(10, 30));
