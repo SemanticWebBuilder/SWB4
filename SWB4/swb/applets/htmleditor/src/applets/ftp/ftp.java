@@ -48,6 +48,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private String[] choices = new String[4];
     private Locale locale=Locale.getDefault();        
     private String pathInit;
+    Directory root;
     /** Creates new form ftp */
     public ftp(Locale locale,String jsess,URL uploadpath,URL downloadpath,String pathInit,URL urlgateway)
     {
@@ -90,41 +91,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         this.setJMenuBar(this.jMenuBar1);
         this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));
         jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,this.locale);
-        this.jTableFiles.setModel(filemodel);        
-        loadDirectories();
-        /*ArrayList<TreeNode> nodes=new ArrayList<TreeNode>();
-        if(pathInit!=null && !pathInit.equals(""))
-        {
-            Directory currentDir=(Directory)this.jTreeDirs.getModel().getRoot();
-            nodes.add(currentDir);
-            StringTokenizer st=new StringTokenizer(pathInit,"/");
-            while(st.hasMoreTokens())
-            {                
-                String dir=st.nextToken();
-                if(dir!=null && !dir.equals(""))
-                {                    
-                    for(int i=0;i<currentDir.getChildCount();i++)
-                    {
-                        Directory dirTest=(Directory)currentDir.getChildAt(i);
-                        
-                        if(dirTest.getName().equals(dir))
-                        {
-                            // expand the node
-                            nodes.add(dirTest);
-                            TreePath treepath=new TreePath(nodes.toArray());
-                            jTreeDirs.expandPath(treepath);                            
-                            jTreeDirs.updateUI();
-                            currentDir=dirTest;
-                            break;
-                        }
-                    }
-                }
-            }
-            TreePath treepath=new TreePath(nodes.toArray());
-            jTreeDirs.setSelectionPath(treepath);
-            jTreeDirs.scrollPathToVisible(treepath);
-            jTreeDirs.updateUI();
-        }*/
+        this.jTableFiles.setModel(filemodel);
+        root=loadDirectories();
     }
     public void valueChanged(ListSelectionEvent e) {
       Modificated();
@@ -894,6 +862,11 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(bundle1.getString("title_ftp")); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanelToolbar.setBackground(new java.awt.Color(225, 235, 251));
         jPanelToolbar.setPreferredSize(new java.awt.Dimension(10, 30));
@@ -1069,8 +1042,9 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             }
         }
 }//GEN-LAST:event_jTreeDirsTreeWillExpand
-    private void loadDirectories()
+    private Directory loadDirectories()
     {
+        Directory root=null;
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>" + pathInit + "</path></req>";
         //String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
         String respxml = ftp.getData(xml);
@@ -1083,9 +1057,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
                 WBTreeNode dir = enode.getFirstNode().getFirstNode();
                 if (dir.getName().equals("dir"))
                 {
-                    Directory root = new Directory(dir.getAttribute("name"), dir.getAttribute("path"));
-                    jTreeDirs.setModel(new DefaultTreeModel(root));
-
+                    root = new Directory(dir.getAttribute("name"), dir.getAttribute("path"));
+                    jTreeDirs.setModel(new DefaultTreeModel(root));                    
                     loadDirectories(dir, root);
                     loadFiles(root);
                     this.jTreeDirs.expandRow(0);
@@ -1096,6 +1069,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         {
             e.printStackTrace();
         }
+        return root;
     }
 
     public void loadFiles(Directory dir)
@@ -1814,6 +1788,23 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     {//GEN-HEADEREND:event_jMenuItemExitActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jMenuItemExitActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
+    {//GEN-HEADEREND:event_formWindowOpened
+        if(root!=null)
+        {
+            try
+            {
+                jTreeDirs.setSelectionPath(new TreePath(root));
+                jTreeDirs.updateUI();
+
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddFile;
