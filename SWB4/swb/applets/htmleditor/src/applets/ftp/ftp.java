@@ -22,10 +22,8 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.StringTokenizer;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,7 +32,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 /**
@@ -50,7 +47,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private static URL url = null;
     private String[] choices = new String[4];
     private Locale locale=Locale.getDefault();        
-
+    private String pathInit;
     /** Creates new form ftp */
     public ftp(Locale locale,String jsess,URL uploadpath,URL downloadpath,String pathInit,URL urlgateway)
     {
@@ -77,7 +74,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             //e.printStackTrace(System.out);
         }
         ftp.url=urlgateway;
-
+        this.pathInit=pathInit;
         choices[0]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si");
         choices[1]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si_todo");
         choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
@@ -95,7 +92,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,this.locale);
         this.jTableFiles.setModel(filemodel);        
         loadDirectories();
-        ArrayList<TreeNode> nodes=new ArrayList<TreeNode>();
+        /*ArrayList<TreeNode> nodes=new ArrayList<TreeNode>();
         if(pathInit!=null && !pathInit.equals(""))
         {
             Directory currentDir=(Directory)this.jTreeDirs.getModel().getRoot();
@@ -127,7 +124,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             jTreeDirs.setSelectionPath(treepath);
             jTreeDirs.scrollPathToVisible(treepath);
             jTreeDirs.updateUI();
-        }
+        }*/
     }
     public void valueChanged(ListSelectionEvent e) {
       Modificated();
@@ -1074,8 +1071,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
 }//GEN-LAST:event_jTreeDirsTreeWillExpand
     private void loadDirectories()
     {
-
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd><path>" + pathInit + "</path></req>";
+        //String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getDirectories</cmd></req>";
         String respxml = ftp.getData(xml);
         WBXMLParser parser = new WBXMLParser();
         try
