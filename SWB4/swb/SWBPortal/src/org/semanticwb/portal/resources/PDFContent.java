@@ -25,10 +25,10 @@
 package org.semanticwb.portal.resources;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -86,42 +86,38 @@ public class PDFContent extends GenericAdmResource {
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */        
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramReq) throws SWBResourceException, IOException {        
-        Resource base=getResourceBase();
-        StringBuffer ret = new StringBuffer("");        
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        
         String ind = request.getParameter("WBIndexer");
-
-        if (!"indexing".equalsIgnoreCase(ind)) {
+        if (!"indexing".equals(ind)) {
+            Resource base = getResourceBase();
+            String width = paramRequest.getArgument("width", base.getAttribute("width"));
             try {
-                String align = base.getAttribute("align", "top").trim();
-                if("center".equalsIgnoreCase(align)) {
-                    ret.append("<p align=\"center\">");
-                }
-                ret.append("<iframe id=\"WBIFrame_"+base.getId()+"\" src=\""+ SWBPortal.getWebWorkPath() + base.getWorkPath() +"/"+ base.getAttribute("archive").trim() + "\"");
-                ret.append(" width=\""+base.getAttribute("width", "100%")+"\"");
-                ret.append(" height=\""+base.getAttribute("height", "100%")+"\"");
-                ret.append(" marginwidth=\""+base.getAttribute("marginwidth", "0")+"\"");
-                ret.append(" marginheight=\""+base.getAttribute("marginheight", "0")+"\"");
-                if(!"center".equalsIgnoreCase(align)) {
-                    ret.append(" align=\""+ align +"\"");
-                }
-                ret.append(" scrolling=\""+base.getAttribute("scrollbars", "auto")+"\"");
-                ret.append(" frameborder=\""+base.getAttribute("frameborder", "0")+"\"");
-                if(!"".equalsIgnoreCase(base.getAttribute("style", ""))) {
-                    ret.append(" style=\""+base.getAttribute("style")+"\"");
-                }
-                ret.append(">");
-                ret.append(paramReq.getLocaleString("msgRequiredInternetExplorer"));
-                ret.append("</iframe>");
-                if("center".equalsIgnoreCase(align)){
-                    ret.append("</p>");
-                }
-            } 
-            catch (Exception e) { 
-                log.error("Error in resource PDFContent while bringing HTML.", e);
-            }            
+                Integer.parseInt( width.replaceAll("\\D", "") );
+            }catch(Exception e) {
+                width = null;
+            }
+            String height = paramRequest.getArgument("height", base.getAttribute("height"));
+            try {
+                Integer.parseInt( height.replaceAll("\\D", "") );
+            }catch(Exception e) {
+                height = null;
+            }
+
+            out.print("<object type=\"application/pdf\"");
+            out.print(" data=\""+SWBPortal.getWebWorkPath()+base.getWorkPath()+"/"+base.getAttribute("archive").trim()+"\"");
+            if(width!=null)
+                out.print(" width=\""+width+"\"");
+            if(height!=null)
+                out.print(" height=\""+height+"\"");
+            out.println(" class=\"swb-pdfc\">");
+
+            out.println("</object>");
         }
-        response.getWriter().print(ret.toString());
+        out.flush();
+        out.close();
     }
 }
 
