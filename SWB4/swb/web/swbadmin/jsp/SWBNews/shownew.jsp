@@ -1,3 +1,4 @@
+<%@page import="org.semanticwb.model.GenericIterator"%>
 <%@page import="org.semanticwb.model.Country"%>
 <%@page import="org.semanticwb.model.User"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -16,14 +17,22 @@
    
     User user=paramRequest.getUser();
     // muestra el recurso
-    SWBNewContent content=(SWBNewContent)request.getAttribute("content");    
+    SWBNewContent content=(SWBNewContent)request.getAttribute("content");
+    SWBNews news=(SWBNews)request.getAttribute("this");
     
     String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(user.getLanguage()));
     String image="";
     if(content.getImage()!=null)
     {
         image=content.getImage();
-        pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/image_"+image;
+        if(news.isMobile())
+        {
+            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/thmb_image_"+image;
+        }
+        else
+        {
+            pathPhoto=SWBPortal.getWebWorkPath()+content.getSemanticObject().getWorkPath()+"/image_"+image;
+        }
     }
     %>
     <h2 class="sectionTitle"><%=title%>
@@ -41,8 +50,19 @@
     <%
         if(pathPhoto!=null)
         {
-            %>
-             <img alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
+            if(news.isMobile())
+            {
+                %>
+                <img alt="Imagen noticia" src="<%=pathPhoto%>" />
+                <%
+            }
+            else
+            {
+                %>
+                <img alt="Imagen noticia" width="368" height="230" src="<%=pathPhoto%>" />
+                <%
+            }
+            %>             
         <br/>
             <%
         }
