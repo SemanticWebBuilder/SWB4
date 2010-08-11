@@ -22,8 +22,10 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.StringTokenizer;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,6 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 /**
@@ -46,12 +49,10 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private static String jsess = "";
     private static URL url = null;
     private String[] choices = new String[4];
-    private Locale locale=Locale.getDefault();
-    private URL basepath;
-    private String pathInit;
+    private Locale locale=Locale.getDefault();        
 
     /** Creates new form ftp */
-    public ftp(URL basepath,Locale locale,String jsess,URL uploadpath,URL downloadpath,String pathInit,URL urlgateway)
+    public ftp(Locale locale,String jsess,URL uploadpath,URL downloadpath,String pathInit,URL urlgateway)
     {
         super((Frame) null, true);
         locale=Locale.getDefault();
@@ -82,8 +83,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
         choices[3]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("cancel");
         initComponents();
-        this.setLocationRelativeTo(null);        
-        this.basepath = basepath;
+        this.setLocationRelativeTo(null);                
         jTreeDirs.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.jTableFiles.setDefaultRenderer(JLabel.class, new TableFileRender());
         this.jTableFiles.getSelectionModel().addListSelectionListener(this);
@@ -95,7 +95,38 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,this.locale);
         this.jTableFiles.setModel(filemodel);
         this.setTitle("Documentos del servidor");
-        loadDirectories();  
+        loadDirectories();
+        ArrayList<TreeNode> nodes=new ArrayList<TreeNode>();
+        if(pathInit!=null && !pathInit.equals(""))
+        {
+            Directory currentDir=(Directory)this.jTreeDirs.getModel().getRoot();
+            nodes.add(currentDir);
+            StringTokenizer st=new StringTokenizer(pathInit,"/");
+            while(st.hasMoreTokens())
+            {                
+                String dir=st.nextToken();
+                if(dir!=null && !dir.equals(""))
+                {                    
+                    for(int i=0;i<currentDir.getChildCount();i++)
+                    {
+                        Directory dirTest=(Directory)currentDir.getChildAt(i);
+                        
+                        if(dirTest.getName().equals(dir))
+                        {
+                            // expand the node
+                            nodes.add(dirTest);
+                            TreePath treepath=new TreePath(nodes.toArray());
+                            jTreeDirs.expandPath(treepath);                            
+                            jTreeDirs.updateUI();
+                            currentDir=dirTest;
+                            break;
+                        }
+                    }
+                }
+            }
+            TreePath treepath=new TreePath(nodes.toArray());
+            jTreeDirs.setSelectionPath(treepath);
+        }
     }
     public void valueChanged(ListSelectionEvent e) {
       Modificated();
@@ -648,6 +679,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         jMenuItemFileRename = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
         jMenuItemFileDelete = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
+        jMenuItemExit = new javax.swing.JMenuItem();
         jFileChooser1 = new javax.swing.JFileChooser();
         jPanelToolbar = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
@@ -850,6 +883,16 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
             }
         });
         jPopupMenuFile.add(jMenuItemFileDelete);
+        jPopupMenuFile.add(jSeparator6);
+
+        java.util.ResourceBundle bundle1 = java.util.ResourceBundle.getBundle("applets/ftp/ftp"); // NOI18N
+        jMenuItemExit.setText(bundle1.getString("exit")); // NOI18N
+        jMenuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemExitActionPerformed(evt);
+            }
+        });
+        jPopupMenuFile.add(jMenuItemExit);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -1767,6 +1810,12 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     {//GEN-HEADEREND:event_jMenuItemFileDeleteActionPerformed
         deleteFile();
 }//GEN-LAST:event_jMenuItemFileDeleteActionPerformed
+
+    private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItemExitActionPerformed
+    {//GEN-HEADEREND:event_jMenuItemExitActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jMenuItemExitActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddFile;
     private javax.swing.JButton jButtonDownload;
@@ -1789,6 +1838,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private javax.swing.JMenuItem jMenuItemDirDelete;
     private javax.swing.JMenuItem jMenuItemDirRename;
     private javax.swing.JMenuItem jMenuItemDownload;
+    private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemFileAddDir;
     private javax.swing.JMenuItem jMenuItemFileAddFile;
     private javax.swing.JMenuItem jMenuItemFileDelete;
@@ -1815,6 +1865,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JTable jTableFiles;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTree jTreeDirs;
