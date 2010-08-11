@@ -1,28 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="ConfiguraciÃ³n bÃ¡sica">
+    <fieldset legend="Configuración básica">
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
-        <input type="text" id="url" name="url" label="Site:" promptMessage="DirecciÃ³n web" />
-        <input type="text" id="axn" name="axn" label="AcciÃ³n:" promptMessage="Javascript aÃ§Ã£o, proposta no evento onclick" />
+        <input type="text" id="url" name="url" label="Endereço Web:" promptMessage="Endereço Web" />
+        <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Javascript ação, proposta no evento onclick" />
 
         <input type="FILE" name="img" label="** Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
-        <input type="text" id="alt" name="alt" label="Texto alternativo:" promptMessage="DescriÃ§Ã£o indicativa do banner. Acessibilidade OrientaÃ§Ã£o" />
+        <input type="text" id="alt" name="alt" label="Texto alternativo:" promptMessage="Descrição indicativa do banner. Acessibilidade Orientação" />
 
-        <textarea id="longdesc" name="longdesc" label="DescriÃ§Ã£o Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da aÃ§Ã£o. Acessibilidade OrientaÃ§Ã£o" />
+        <textarea id="longdesc" name="longdesc" label="Descrição Long:" rows="5" cols="50" wrap="virtual" promptMessage="Indicativo contorno modo Ajuda banner da ação. Acessibilidade Orientação" />
     </fieldset>
 
-    <fieldset legend="AparÃªncia">
-        <input type="text" id="width"  name="width" label="Largura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura invÃ¡lido" promptMessage="Largura da imagem. Ejemplos: 90%, 350px, 854" />
-        <input type="text" id="height" name="height" label="Altura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura invÃ¡lido" promptMessage="Altura da imagem. Ejemplos: 90%, 350px, 854" />
+    <fieldset legend="Aparência">
+        <input type="text" id="width"  name="width" label="Largura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Largura inválido" promptMessage="Largura da imagem. Ejemplos: 90%, 350px, 854" />
+        <input type="text" id="height" name="height" label="Altura da imagem:" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura inválido" promptMessage="Altura da imagem. Ejemplos: 90%, 350px, 854" />
     </fieldset>
 
-    <fieldset legend="AvanÃ§ado">
+    <fieldset legend="Avançado">
         <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
-        <textarea id="code" name="code" label="* CÃ³digo:" rows="5" cols="50" wrap="virtual"/>
+        <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
 
         <statictext name="note">
         <![CDATA[
@@ -73,7 +73,7 @@
             }else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
-                    alert('Defina la codificaciÃ³n para incluir la publicidad externa.');
+                    alert('Defina la codificación para incluir la publicidad externa.');
                     dojo.byId('code').focus();
                     return false;
                 }
