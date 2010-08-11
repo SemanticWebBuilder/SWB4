@@ -1,82 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmPDFContent" action="true" method="post">
-		<admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
-            <input type="FILE" name="archive" label="* Pdf file or plain text:" size="40" showfile="true" msg="Archivo pdf o texto plano" filetype="pdf|txt" isshowfiletype="true" jsrequired="true" />
-        </fieldset>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
+    <admdbconnmgr defconn="true"/>
+    <fieldset legend="Content Setting">
+        <input type="file" name="archive" label="PDF Document:" showfile="true" filetype="pdf" isshowfiletype="true" isremovefile="true" removemsg="Remove PDF document" size="40" jsrequired="true" />
+    </fieldset>
 
-        <fieldset legend="Forma y estilo">
-            <input type="TEXT" name="width" label="Width in pixels or nn% for percentage:" size="4" maxlength="4" />
-            <input type="TEXT" name="height" label="Height in pixels:" size="4" maxlength="4" />
-            <input type="TEXT" name="marginwidth" label="Wide margin (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="marginheight" label="High margin (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="style" label="Style for the frame:" size="80"/>
-            <statictext name="txtAlign">Alineación:</statictext>
-            <input type="RADIO" name="align" label="Top" value="top" checked="true" />
-            <input type="RADIO" name="align" label="Middle" value="middle"/>
-            <input type="RADIO" name="align" label="Bottom" value="bottom"/>
-            <input type="RADIO" name="align" label="Right" value="right"/>
-            <input type="RADIO" name="align" label="Left" value="left"/>
-            <input type="RADIO" name="align" label="Center" value="center"/>
-            <statictext name="txtTarget">Barras de desplazamiento:</statictext>
-            <input type="RADIO" name="scrollbars" label="Auto" value="auto" checked="true" />
-            <input type="RADIO" name="scrollbars" label="Yes" value="yes"/>
-            <input type="RADIO" name="scrollbars" label="No" value="no"/>
-            <input type="CHECKBOX" name="frameborder" label="Border frame" value="1"/>
-        </fieldset>
+    <fieldset legend="Look and Feel">
+        <input type="text" id="width"  name="width" label="Width" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width" promptMessage="Width. Examples: 90%, 350px, 854" jsrequired="true" />
+        <input type="text" id="height" name="height" label="Height" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Height. Examples: 90%, 350px, 854" jsrequired="true" />
 
-        <fieldset>
-            <statictext name="b">
-            <![CDATA[
-            <button id="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
-            ]]>
-            </statictext>
-        </fieldset>
-	</form>
-	<statictext name="txtNote">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				* Dato requerido
-			</font>
-		]]>
-	</statictext>
-
-    <script type="text/javascript">
+        <statictext name="note">
         <![CDATA[
-        dojo.require("dijit.form.Button");
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmPDFContent"))) {
-                        dojo.byId("frmPDFContent").submit();
-                    }
-                }
-            );
-        });
-
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmPDFContent").reset();
-                }
-            );
-        });
+            <font style="color: #428AD4; font-family: Verdana; font-size:10px;">* Required Data</font>
         ]]>
-    </script>
-	<script language="JavaScript">
-		<![CDATA[
-			function jsValida(frm) {
-				if(frm.wbfile_archive==undefined && (frm.archive.value==null || frm.archive.value=='' || frm.archive.value==' ')) {
-					alert('Especifique el archivo.');
-					frm.archive.focus();
-					return false;
-				}
-				return true;
-			}
-		]]>
-	</script>
+        </statictext>
+    </fieldset>
+
+    <fieldset>
+        <input type="submit" name="btnSave" id="btnSave" value="Save" />
+        <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
+    </fieldset>
+    </form>
 </admresource>
