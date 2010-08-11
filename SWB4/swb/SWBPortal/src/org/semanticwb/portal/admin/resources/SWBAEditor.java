@@ -945,7 +945,7 @@ public class SWBAEditor extends GenericResource
      */
     public void doUpload(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
-        if(request.getHeader("PATHFILEWB")!=null)
+        if(request.getHeader("FTP")!=null)
         {
             doUploadFile(request,response,paramsRequest);
             return;
