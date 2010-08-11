@@ -31,6 +31,7 @@
 
 package applets.htmleditor;
 
+import applets.ftp.ftp;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import javax.swing.*;
@@ -842,6 +843,7 @@ Action:caret-previous-word
         jButton6 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButtonAddFiles = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jButton15 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
@@ -1027,6 +1029,20 @@ Action:caret-previous-word
             }
         });
         jPanel4.add(jButton1);
+
+        jButtonAddFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/htmleditor/images/f_general.gif"))); // NOI18N
+        jButtonAddFiles.setToolTipText(bundle.getString("edit")); // NOI18N
+        jButtonAddFiles.setBorderPainted(false);
+        jButtonAddFiles.setFocusable(false);
+        jButtonAddFiles.setMaximumSize(new java.awt.Dimension(32, 32));
+        jButtonAddFiles.setMinimumSize(new java.awt.Dimension(25, 25));
+        jButtonAddFiles.setPreferredSize(new java.awt.Dimension(25, 25));
+        jButtonAddFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddFilesActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButtonAddFiles);
 
         jToolBar1.add(jPanel4);
 
@@ -2127,6 +2143,13 @@ Action:caret-previous-word
         }catch(Exception e)
         {e.printStackTrace(System.out);}
     }//GEN-LAST:event_jTabbedPane1StateChanged
+
+    private void jButtonAddFilesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddFilesActionPerformed
+    {//GEN-HEADEREND:event_jButtonAddFilesActionPerformed
+        URL basepath=null;        
+        ftp ftp=new ftp(basepath, locale, jsess, upurl, downurl,"",gateway);
+        ftp.setVisible(true);
+    }//GEN-LAST:event_jButtonAddFilesActionPerformed
     
     private Color stringToColor(String paramValue)
     {
@@ -2334,6 +2357,7 @@ Action:caret-previous-word
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButtonAddFiles;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
