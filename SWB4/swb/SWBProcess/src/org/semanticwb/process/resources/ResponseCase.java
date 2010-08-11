@@ -74,7 +74,11 @@ public class ResponseCase extends GenericResource {
         }
         response.getWriter().print("  </fieldset>\n");
         response.getWriter().print("</div>\n");*/
+        response.getWriter().println("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         doGraph(request, response, paramRequest);
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -91,13 +95,13 @@ public class ResponseCase extends GenericResource {
                 Process process = it.next();
                 if (crt.getMaximumProcessInstance(process) > 0) {
                     DefaultPieDataset dataCase = new DefaultPieDataset();
-                    dataCase.setValue(paramRequest.getLocaleString("minimum"), new Integer((int)crt.getMinimumProcessInstance(process)/1000));
-                    dataCase.setValue(paramRequest.getLocaleString("average"), new Integer((int)crt.getAverageProcessInstances(process)/1000));
-                    dataCase.setValue(paramRequest.getLocaleString("maximum"), new Integer((int)crt.getMaximumProcessInstance(process)/1000));
+                    dataCase.setValue(paramRequest.getLocaleString("minimum") + " " + crt.getMinimumProcessInstance(process)/1000, new Integer((int)crt.getMinimumProcessInstance(process)/1000));
+                    dataCase.setValue(paramRequest.getLocaleString("average") + " " + crt.getAverageProcessInstances(process)/1000, new Integer((int)crt.getAverageProcessInstances(process)/1000));
+                    dataCase.setValue(paramRequest.getLocaleString("maximum") + " " + crt.getMaximumProcessInstance(process)/1000, new Integer((int)crt.getMaximumProcessInstance(process)/1000));
                     JFreeChart chart = ChartFactory.createPieChart(process.getTitle(), dataCase, true, true, false);
                     try {
-                        ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_response.jpg"), chart, 500, 300);
-                        response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_response.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+                        ChartUtilities.saveChartAsPNG(new File(pathFile + "/" + process.getId() + "_response.png"), chart, 500, 300);
+                        response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/" + process.getId() + "_response.png); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
                     }catch (Exception e) {
                         log.error(e);
                     }

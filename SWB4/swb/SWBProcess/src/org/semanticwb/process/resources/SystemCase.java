@@ -62,9 +62,6 @@ public class SystemCase extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         /*CaseCountSys sys = new CaseCountSys();
-         *
-         *
-         * 
         response.getWriter().println("<div class=\"swbform\">\n");
         response.getWriter().println("  <fieldset>\n");
         response.getWriter().println("      <ul><li>Número total de instancias de procesos: " + sys.totalProcessInstance()+"</li>");
@@ -75,7 +72,11 @@ public class SystemCase extends GenericResource {
         response.getWriter().println("     <li>Número total de instancias de procesos del usuario admin: " + sys.totalProcessInstance()+"</li></ul>");
         response.getWriter().println("  </fieldset>\n");
         response.getWriter().println("</div>\n");*/
+        response.getWriter().println("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         doMeter(request, response, paramRequest);
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -99,7 +100,6 @@ public class SystemCase extends GenericResource {
             if (!filex.exists())
                 filex.mkdirs();
             ChartUtilities.saveChartAsJPEG(new File(pathFile + "/systemcase.jpg"), chart, 500, 300);
-            //ChartUtilities.saveChartAsPNG(new File(pathFile + "/systemcase.png"), chart, 500, 300);
             response.getWriter().println("<div style=\"background-image: url(" + pathFile + "/systemcase.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
         } catch (Exception e) {
             log.error(e);
@@ -133,7 +133,7 @@ public class SystemCase extends GenericResource {
             if (!filex.exists())
                 filex.mkdirs();
             ChartUtilities.saveChartAsPNG(new File(pathFile + "/systemcase.png"), chart, 500, 300);
-            response.getWriter().println("<div style=\"background-image: url(" + pathFile + "/systemcase.png); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+            response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/systemcase.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
             response.getWriter().println("<div style=\"background-image: url(/swbadmin/images/systemft.jpg); height: 27px; width: 500px; border: 0px solid black;\"> </div>");
         } catch (Exception e) {
             log.error(e);

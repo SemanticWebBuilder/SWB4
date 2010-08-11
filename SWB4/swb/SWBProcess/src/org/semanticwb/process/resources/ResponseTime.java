@@ -68,7 +68,11 @@ public class ResponseTime extends GenericResource {
         }
         response.getWriter().print("  </fieldset>\n");
         response.getWriter().print("</div>\n");*/
+        response.getWriter().println("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         doGraph(request, response, paramRequest);
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -87,8 +91,8 @@ public class ResponseTime extends GenericResource {
                     XYDataset dataset = DatasetUtilities.sampleFunction2D(normal, ResponseTimeStages.getMinimumTimeStages(process,"Start Event","Solucion")/1000, ResponseTimeStages.getMaximumTimeStages(process,"Start Event","Solucion")/1000, 100, "Escenario Inicio-Solución");
                     JFreeChart chart = ChartFactory.createXYLineChart(process.getTitle(), paramRequest.getLocaleString("seconds"), paramRequest.getLocaleString("NORMAL_DISTRIBUTION"), dataset, PlotOrientation.VERTICAL, true, true, false);
                     try {
-                        ChartUtilities.saveChartAsJPEG(new File(pathFile + process.getTitle() + "_stage.jpg"), chart, 500, 300);
-                        response.getWriter().println("<div style=\"background-image: url(" + pathFile + process.getTitle() + "_stage.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+                        ChartUtilities.saveChartAsPNG(new File(pathFile + "/" + process.getId() + "_stage.png"), chart, 500, 300);
+                        response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/" + process.getId() + "_stage.png); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
                     }catch (Exception e) {
                         log.error(e);
                     }

@@ -58,8 +58,7 @@ public class ProcessCase extends GenericResource {
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*
-         Iterator isites = ProcessSite.ClassMgr.listProcessSites();
+        /*Iterator isites = ProcessSite.ClassMgr.listProcessSites();
         response.getWriter().print("<div class=\"swbform\">\n");
         response.getWriter().print("  <fieldset>\n");
         while (isites.hasNext()) {
@@ -80,7 +79,11 @@ public class ProcessCase extends GenericResource {
         }
         response.getWriter().print("  </fieldset>\n");
         response.getWriter().print("</div>\n");*/
+        response.getWriter().println("<div class=\"swbform\">\n");
+        response.getWriter().print("  <fieldset>\n");
         doGraph(request, response, paramRequest);
+        response.getWriter().print("  </fieldset>\n");
+        response.getWriter().println("</div>\n");
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -99,13 +102,13 @@ public class ProcessCase extends GenericResource {
                 ProcessCaseCount pcc = new ProcessCaseCount(process.getURI());
                 total = pcc.totalProcessInstance();
                 if (total > 0)
-                    dataCase.setValue(process.getTitle(), new Integer(total));
+                    dataCase.setValue(process.getTitle() + " " + total, new Integer(total));
             }
         }
         JFreeChart chart = ChartFactory.createPieChart(paramRequest.getLocaleString("title"), dataCase, true, true, false);
         try {
-            ChartUtilities.saveChartAsJPEG(new File(pathFile + "processcase.jpg"), chart, 600, 400);
-            response.getWriter().println("<div style=\"background-image: url(" + pathFile + "processcase.jpg); height: 400px; width: 600px; border: 0px solid black;\"> </div>");
+            ChartUtilities.saveChartAsPNG(new File(pathFile + "/processcase.png"), chart, 600, 400);
+            response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/processcase.png); height: 400px; width: 600px; border: 0px solid black;\"> </div>");
         }catch (Exception e) {
             log.error(e);
         }
