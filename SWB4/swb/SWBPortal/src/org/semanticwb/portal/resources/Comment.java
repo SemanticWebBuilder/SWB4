@@ -142,9 +142,12 @@ public class Comment extends GenericResource {
 
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
+        Resource base = getResourceBase();
+        boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
+
         String securCodeSent = request.getParameter("cmnt_seccode");
         String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
-        if(securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) {
+        if( (hasCaptcha && securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) || !hasCaptcha ) {
             try {
                 processEmails(request, response);
                 try {
@@ -189,11 +192,10 @@ public class Comment extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String action = ((null != request.getParameter("com_act"))
-                         && (!"".equals(request.getParameter("com_act").trim()))
-                         ? request.getParameter("com_act").trim()
-                         : "com_step2");
-        Logger log = SWBUtils.getLogger(Comment.class);
+//        String action = ((null != request.getParameter("com_act")) && (!"".equals(request.getParameter("com_act").trim()))
+//                         ? request.getParameter("com_act").trim()
+//                         : "com_step2");
+
         Resource base = getResourceBase();
 
         try {
@@ -609,18 +611,19 @@ public class Comment extends GenericResource {
      *         <p>if <code>getDom</code> propagates this exception</p>.
      */
     @Override
-    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
+    public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        Resource base=getResourceBase();
+        PrintWriter out = response.getWriter();
         try {
-            Document dom = getDom(request, response, paramsRequest);
-//            if (dom != null) {
-                response.getWriter().println(SWBUtils.XML.domToXml(dom));
-//            }
+            Document dom = getDom(request, response, paramRequest);
+            out.println(SWBUtils.XML.domToXml(dom));
         }catch(Exception e) {
-            System.out.println("Error... "+e);
-            log.error(e);
+            log.error("Error in doXML method while rendering the XML script: "+base.getId()+"-"+base.getTitle(), e);
+            out.println("Error in doXML method while rendering the XML script");
         }
     }
 
@@ -697,7 +700,7 @@ public class Comment extends GenericResource {
                         html = html.replaceFirst("captcha", captcha);
                         html = html + getScript(paramRequest);
                     }else
-                        html = html.replaceFirst("captcha", "");
+                        html = html.replaceFirst("captcha", "&nbsp;");
                 }catch(TransformerException te) {
                     html = te.getMessage();
                     log.error(te.getMessage());
