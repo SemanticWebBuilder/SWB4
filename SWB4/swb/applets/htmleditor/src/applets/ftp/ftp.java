@@ -81,7 +81,8 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
         choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
         choices[3]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("cancel");
         initComponents();
-        this.setLocationRelativeTo(null);                
+        this.setLocationRelativeTo(null);
+        this.setTitle(this.getTitle()+" ( "+pathInit+" )");
         jTreeDirs.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.jTableFiles.setDefaultRenderer(JLabel.class, new TableFileRender());
         this.jTableFiles.getSelectionModel().addListSelectionListener(this);
