@@ -66,9 +66,11 @@ public class jTableFileModel extends AbstractTableModel{
         this.files.clear();
         firemodificatedlisteners();
     }
+    @Override
     public String getColumnName(int col) {
         return columnNames[col].toString();
     }
+
     public int getColumnCount() {
         return this.columnNames.length;
     }
