@@ -159,7 +159,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     }
 
     private String renderListDocuments(SWBParamRequest paramRequest) throws SWBResourceException {
-        System.out.println("lista de documentos");
+        Resource base  = getResourceBase();
         StringBuilder html = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
         //long ordinal = SWBUtils.Collections.sizeOf(listComments());
@@ -189,10 +189,11 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
                     html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
                 }else
                     html.append("<p>Autor: "+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
-                html.append("<p><a href=\""+paramRequest.getWebPage().getWebSite().getWebPage("wp61").getRealUrl()+"?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
+                html.append("<p><a href=\""+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl()+"?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
                 System.out.println("paramRequest.getWebPage().getRealUrl()="+paramRequest.getWebPage().getRealUrl());
                 System.out.println("paramRequest.getWebPage().getWebPageURL()="+paramRequest.getWebPage().getWebPageURL());
-                System.out.println("paramRequest.getWebPage().getWebSite().getWebPage(\"wp61\").getRealUrl()="+paramRequest.getWebPage().getWebSite().getWebPage("wp61").getRealUrl());
+                System.out.println("base.getAttribute(\"comments\")="+base.getAttribute("comments"));
+                System.out.println("paramRequest.getWebPage().getWebSite().getWebPage(\"wp61\").getRealUrl()="+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl());
 
                 html.append("</li>");
             }
@@ -493,7 +494,34 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        out.println("hola mundo");
+        Resource base=getResourceBase();
+        String msg=paramRequest.getLocaleString("lblDoAdmin_undefinedOperation");
+
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if(action.equals("add") || action.equals("edit")) {
+            
+        }else if(action.equals("update")) {
+            try {
+                String wp = request.getParameter("comments").trim();
+                if( paramRequest.getWebPage().getWebSite().getWebPage(wp)==null ) {
+                    msg = paramRequest.getLocaleString("msgBadSection") +" "+ base.getId();
+                    throw new Exception(msg);
+                }
+                base.setAttribute("comments", wp);
+                base.updateAttributesToDB();
+                msg=paramRequest.getLocaleString("msgOkUpdateResource") +" "+ base.getId();
+            }catch(Exception e) {
+                log.error(e);
+                msg = paramRequest.getLocaleString("msgErrUpdateResource") +" "+ base.getId();
+            }finally {
+                out.println("<script type=\"text/javascript\">");
+                out.println("<!--");
+                out.println("  alert('"+msg+"');");
+                out.println("  window.location.href='"+paramRequest.getRenderUrl().setAction("edit").toString()+"';");
+                out.println("-->");
+                out.println("</script>");
+            }
+        }
         out.flush();
         out.close();
     }
