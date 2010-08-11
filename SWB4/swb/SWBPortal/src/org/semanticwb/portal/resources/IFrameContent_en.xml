@@ -1,103 +1,26 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<xslfile>admresource.xslt</xslfile>
-	<form name="frmIFrameContent" action="true" method="POST">
-		<admdbconnmgr defconn="true"/>
-        <fieldset legend="Datos">
-            <input type="TEXT" name="url" label="Url of the remote content:" size="50" jsrequired="true"/>
-            <statictext name="txtTarget">Scrollbars:</statictext>
-            <input type="RADIO" name="scrollbars" label="Automatic" value="auto" checked="true" />
-            <input type="RADIO" name="scrollbars" label="Yes" value="yes"/>
-            <input type="RADIO" name="scrollbars" label="No" value="no"/>
-            <input type="CHECKBOX" name="frameborder" label="Border frame" value="1"/>
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" method="post" jsframework="dojo" >
+        <admdbconnmgr defconn="true"/>
+        <fieldset legend="Configuración de contenido">
+            <input type="text" name="url" label="Web address:" promptMessage="Web address" jsrequired="true"/>
         </fieldset>
-        <fieldset legend="Forma y estilo">
-            <input type="TEXT" name="width" label="Width (pixels or nn% for porcentage):" size="4" maxlength="4" />
-            <input type="TEXT" name="height" label="Height (pixels or nn% for porcentage):" size="4" maxlength="4" />
-            <input type="TEXT" name="marginwidth" label="Margin widht (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="marginheight" label="Margin height (pixels):" size="4" maxlength="4" jsvaltype="js_numbers"/>
-            <input type="TEXT" name="style" label="Style frame:" size="50"/>
-            <statictext name="txtAlign">Alineación:</statictext>
-            <input type="RADIO" name="align" label="Top" value="top"/>
-            <input type="RADIO" name="align" label="Middle" value="middle"/>
-            <input type="RADIO" name="align" label="Bottom" value="bottom"/>
-            <input type="RADIO" name="align" label="Right" value="left"/>
-            <input type="RADIO" name="align" label="Left" value="right"/>
-            <input type="RADIO" name="align" label="Center" value="center" checked="true" />
+
+        <fieldset legend="Look and Feel">
+            <input type="text" name="width"  label="Width:" maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid width" promptMessage="Width. Examples: 90%, 350px, 854" jsrequired="true" />
+            <input type="text" name="height" label="Height:"  maxlength="9" regExp="\d{1,7}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Invalid height" promptMessage="Altura. Examples: 90%, 350px, 854" jsrequired="true" />
+
+            <statictext name="note">
+		<![CDATA[
+                    <font style="color: #428AD4; font-family: Verdana; font-size: 10px;">* Required Data</font>
+		]]>
+            </statictext>
         </fieldset>
 
         <fieldset>
-            <statictext name="b">
-            <![CDATA[
-            <button id="btnSave" type="submit" name="btnSave" dojoType="dijit.form.Button">Guardar</button>
-            <button id="btnReset" type="reset" name="btnReset" dojoType="dijit.form.Button">Reestablecer</button>
-            ]]>
-            </statictext>
+            <input type="submit" name="btnSave" id="btnSave" value="Save" onclick="return jsValida(this.form)" />
+            <input type="reset"  name="btnReset" id="btnReset" value="Reset" />
         </fieldset>
-	</form>
-	<statictext name="txtNote">
-		<![CDATA[
-			<font style="color: #428AD4; font-family: Verdana; font-size: 10px;">
-				* Dato requerido
-			</font>
-		]]>
-	</statictext>
-	<script language="JavaScript">
-		<![CDATA[
-        dojo.require("dijit.form.Button");
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnSave"), "onClick",
-                function() {
-                    if(jsValida(dojo.byId("frmIFrameContent"))) {
-                        dojo.byId("frmIFrameContent").submit();
-                    }
-                }
-            );
-        });
-        dojo.addOnLoad(function(){
-            dojo.connect(dijit.byId("btnReset"), "onClick",
-                function() {
-                    dojo.byId("frmIFrameContent").reset();
-                }
-            );
-        });
-
-        function jsValida(frm) {
-            if( frm.height.value.length>0 && isNaN(parseInt(frm.height.value, 10)) ) {
-                alert('Alto debe ser numérico.');
-                frm.height.focus();
-                return false;
-            }
-            if(frm.height.value < 0) {
-                alert("Alto debe ser mayor que cero.");
-                frm.height.focus();
-                return false;
-            }
-
-            if( frm.marginwidth.value.length>0 && isNaN(parseInt(frm.marginwidth.value, 10)) ) {
-                alert('Ancho del margen debe ser numérico.');
-                frm.marginwidth.focus();
-                return false;
-            }
-            if(frm.marginwidth.value < 0) {
-                alert("Ancho del margen debe ser mayor que cero.");
-                frm.marginwidth.focus();
-                return false;
-            }
-
-            if( frm.marginheight.value.length>0 && isNaN(parseInt(frm.marginheight.value, 10)) ) {
-                alert('Altura del margen debe ser numérico.');
-                frm.marginheight.focus();
-                return false;
-            }
-            if(frm.marginheight.value < 0) {
-                alert("Altura del margen debe ser mayor que cero.");
-                frm.marginheight.focus();
-                return false;
-            }
-
-            return true;
-        }
-		]]>
-	</script>
+    </form>
 </admresource>
