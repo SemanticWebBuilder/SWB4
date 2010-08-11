@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
@@ -6,8 +6,8 @@
     <fieldset legend="Basic Configuration">
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
-        <input type="text" id="url" name="url" label="Web Address:" promptMessage="Web address" />
-        <input type="text" id="axn" name="axn" label="AcciÃ³n:" promptMessage="Action in javascript, considered in the onclick event" />
+        <input type="text" id="url" name="url" label="Web address:" promptMessage="Web address" />
+        <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Action in javascript, considered in the onclick event" />
 
         <input type="FILE" name="img" label="** Image (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Remove image" size="40" />
         <input type="text" id="alt" name="alt" label="Altern Text:" promptMessage="Indicative outline of the banner. Accessibility Guideline" />
