@@ -486,6 +486,19 @@ public class SWBAFTP extends GenericResource{
             Text etext=(Text)epath.getFirstChild();
             path=etext.getNodeValue();            
         }
+        if(path.startsWith("/work/"))
+        {
+            String newpath=SWBUtils.getApplicationPath();
+            if(newpath.endsWith("/"))
+            {
+                newpath+=path.substring(1);
+            }
+            else
+            {
+                newpath+=path;
+            }
+            path=newpath;
+        }
         File apppath=new File(path);
         if(apppath.isDirectory() && showDirectory(user, apppath))
         {
