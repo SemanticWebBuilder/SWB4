@@ -2264,16 +2264,17 @@ public class BaseNode extends BaseNodeBase
         try
         {
             String uri = getUri(propertyName);
-            Iterator<SemanticProperty> properties = clazz.listProperties();
-            while (properties.hasNext())
-            {
-                SemanticProperty property = properties.next();
-                if (property.getURI().equals(uri))
-                {
-                    getSemanticProperty = property;
-                    break;
-                }
-            }
+            getSemanticProperty = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uri);
+//            Iterator<SemanticProperty> properties = clazz.listProperties();
+//            while (properties.hasNext())
+//            {
+//                SemanticProperty property = properties.next();
+//                if (property.getURI().equals(uri))
+//                {
+//                    getSemanticProperty = property;
+//                    break;
+//                }
+//            }
         }
         catch (SWBException e)
         {
