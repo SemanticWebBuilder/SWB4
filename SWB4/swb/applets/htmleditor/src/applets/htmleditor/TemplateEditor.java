@@ -32,8 +32,6 @@
 package applets.htmleditor;
 
 import applets.ftp.ftp;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CharsetEncoder;
 import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
@@ -41,7 +39,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.awt.*;
-import java.nio.charset.Charset;
 
 /**
  *
@@ -237,7 +234,7 @@ public class TemplateEditor extends javax.swing.JApplet
         {
             URL url=new URL(this.getCodeBase(),document);
             String txt=readInputStream(htmlEditor.getStreamAndSetURL(url));
-            System.out.println(txt);
+            //System.out.println(txt);
             textEditor.setText(txt.replaceAll(workpath,""));
             
             try
@@ -612,8 +609,7 @@ Action:caret-previous-word
                 if(isUTF8)
                 {
                     line=new String(line.getBytes(reader.getEncoding()),"utf-8");
-                }
-                System.out.println(line);
+                }                
                 sb.append(line);
                 sb.append("\r\n");
                 line=br.readLine();
@@ -2146,9 +2142,22 @@ Action:caret-previous-word
 
     private void jButtonAddFilesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonAddFilesActionPerformed
     {//GEN-HEADEREND:event_jButtonAddFilesActionPerformed
-        URL basepath=null;        
-        ftp ftp=new ftp(basepath, locale, jsess, upurl, downurl,"",gateway);
-        ftp.setVisible(true);
+        
+        String path="/work/models/"+tmValue+"/Template/"+idValue+"/"+verValue+"/";
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
+        {
+            ftp ftp=new ftp(locale, jsess, upurl, downurl,path,gateway);
+            ftp.setVisible(true);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
     }//GEN-LAST:event_jButtonAddFilesActionPerformed
     
     private Color stringToColor(String paramValue)
