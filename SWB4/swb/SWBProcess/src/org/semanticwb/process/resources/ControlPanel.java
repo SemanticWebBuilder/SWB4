@@ -1505,7 +1505,7 @@ public class ControlPanel extends GenericAdmResource
                                 //strParsed = strParsed + strPropValue;
                             break;
                         case 2: //columns
-                            strParsed = strParsed + "<li>" + strPropValue + "</li>";
+                            strParsed = strParsed + "<td>" + strPropValue + "</td>";
                             break;
                     }
                 }
@@ -1603,11 +1603,14 @@ public class ControlPanel extends GenericAdmResource
                             if(arrAtt.size()==3)
                             {
                                 String strTempHref = strDefaultHref + arrAtt.get(0).toString();
+                                System.out.println("----strTempHref:" + strTempHref);
                                 String strTempLegend = arrAtt.get(1).toString();
                                 String strTempColumns = arrAtt.get(2).toString();
                                 String strHref = parseTaskAttributes(fobi, strTempHref, 0, paramRequest);
                                 String strLegend = parseTaskAttributes(fobi, strTempLegend, 1, paramRequest);
                                 Hashtable htColumns = parseTaskAttributes(fobi, strTempColumns, paramRequest);
+                                System.out.println("----strHref:" + strHref);
+                                System.out.println("----strLegend:" + strLegend);
                                 TaskLink tlink = new TaskLink(fobi, strHref, strLegend, htColumns);
                                 vTaskLinks.add(intTasks,tlink);
                                 intTasks++;
