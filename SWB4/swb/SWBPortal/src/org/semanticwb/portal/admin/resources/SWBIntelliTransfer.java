@@ -112,19 +112,19 @@ public class SWBIntelliTransfer extends GenericResource {
                 String sObjs = (String) itlhmObjts.next();
                 out.println("<tr align=\"left\">");
                 out.println("<td>");
-                out.println(sObjs);
-                out.println();
+                out.println("<input type=\"checkbox\" name=\"swbObjs\" value=\""+sObjs+"\">");
                 out.println("</td>");
                 out.println("<td>");
-                out.println("<input type=\"checkbox\" name=\"swbObjs\" value=\""+sObjs+"\">");
+                out.println(sObjs);
+                out.println();
                 out.println("</td>");
                 out.println("</tr>");
             }
         }
         out.println("</fieldset>");
         out.println("</p>");
-        out.println("<tr><td colspan=\"2\" align=\"center\">");
-        out.println("<fieldset><span align=\"center\">");
+        out.println("<tr><td colspan=\"2\">");
+        out.println("<fieldset><span>");
         out.println("<table>");
         out.println("<tr><td>");
         out.println("<input type=\"submit\" name=\"send\" value=\""+paramRequest.getLocaleString("send")+"\"/>");
