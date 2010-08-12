@@ -117,8 +117,86 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if( paramRequest.getMode().equals("vote") )
             doVote(request, response, paramRequest);
+        else if( paramRequest.getMode().equals("on") )
+            doOn(request, response, paramRequest);
+        else if( paramRequest.getMode().equals("off") )
+            doOff(request, response, paramRequest);
         else
             super.processRequest(request, response, paramRequest);
+    }
+
+    public void doOn(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        PrintWriter out = response.getWriter();
+        
+        String URI = request.getParameter("uri");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
+        WebPage wp = null;
+        double rank;
+        if( obj!=null ) {
+            rank = obj.getDoubleProperty(sp_rank);
+        }else {
+            wp = paramRequest.getWebPage();
+            rank = wp.getRank();
+        }
+        
+        int idx;
+        try {
+            idx = Integer.parseInt(request.getParameter("idx"));
+        }catch(NumberFormatException nfe) {
+            idx = 1;
+        }
+
+        out.println("<ul>");
+        for(int i=1; i<=idx; i++) {
+            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseout=\"lightoff("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<img src=\""+SWBPlatform.getContextPath()+fullStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+            out.println("</a></li>");
+        }
+        idx++;
+        for(int i=idx; i<=5; i++) {
+            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+            out.println("</a></li>");
+        }
+        out.println("</ul>");
+        out.flush();
+        out.close();
+    }
+
+    public void doOff(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=iso-8859-1");
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Pragma","no-cache");
+
+        PrintWriter out = response.getWriter();
+
+        String URI = request.getParameter("uri");
+        SemanticObject obj = SemanticObject.createSemanticObject(URI);
+        WebPage wp = null;
+        double rank;
+        if( obj!=null ) {
+            rank = obj.getDoubleProperty(sp_rank);
+        }else {
+            wp = paramRequest.getWebPage();
+            rank = wp.getRank();
+        }
+
+        out.println("<ul>");
+        for(int i=1; i<=5; i++) {
+            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+            out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
+            out.println("</a></li>");
+        }
+        out.println("</ul>");
+        out.flush();
+        out.close();
     }
 
 
@@ -155,25 +233,25 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         else
             out.println("<p>Número de votos: "+wp.getReviews()+"</p>");
 
-        SWBResourceURL url = paramRequest.getActionUrl();
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        url.setMode("vote");
-        out.println("<script type=\"text/javascript\">");
-        out.println("<!--");
-        out.println("function vote(val) {");
-        if( obj!=null ) {
-            out.println("  var uri='"+URI+"';");
-            out.println("  uri=escape(uri);");
-            out.println("  var url = '"+url+"?rating='+escape(val)+'&uri='+uri;");
-            out.println("  postHtml(url,'rate_"+obj.getId()+"');");
-        }else {
-            out.println("  var url = '"+url+"?rating='+escape(val);");
-            out.println("  postHtml(url,'rate_"+wp.getId()+"');");
-        }
-        out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
-        out.println("}");
-        out.println("-->");
-        out.println("</script>");
+//        SWBResourceURL url = paramRequest.getActionUrl();
+//        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+//        url.setMode("vote");
+//        out.println("<script type=\"text/javascript\">");
+//        out.println("<!--");
+//        out.println("function vote(val) {");
+//        if( obj!=null ) {
+//            out.println("  var uri='"+URI+"';");
+//            out.println("  uri=escape(uri);");
+//            out.println("  var url = '"+url+"?rating='+escape(val)+'&uri='+uri;");
+//            out.println("  postHtml(url,'rate_"+obj.getId()+"');");
+//        }else {
+//            out.println("  var url = '"+url+"?rating='+escape(val);");
+//            out.println("  postHtml(url,'rate_"+wp.getId()+"');");
+//        }
+//        out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
+//        out.println("}");
+//        out.println("-->");
+//        out.println("</script>");
 
         out.flush();
         out.close();
@@ -224,31 +302,55 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
                 out.println("<img src=\""+SWBPlatform.getContextPath()+getStar(i,rank*10)+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
                 out.println("</a></li>");
             }else {
-                out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
+                out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
                 out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
                 out.println("</a></li>");
             }
         }
         out.println("</ul>");
-//        if( obj!=null )
-//            out.println("<p>Número de votos: "+obj.getLongProperty(sp_reviews)+"</p>");
-//        else
-//            out.println("<p>Número de votos: "+wp.getReviews()+"</p>");
-
+        out.println("</div>");
         if( !isVoted ) {
-            SWBResourceURL url = paramRequest.getActionUrl();
+            SWBResourceURL url;
+            url = paramRequest.getRenderUrl();
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            url.setMode("vote");
+            
             out.println("<script type=\"text/javascript\">");
             out.println("<!--");
+            out.println("function lighton(idx) {");
+            if( obj!=null ) {
+                out.println("  var uri='"+URI+"';");
+                out.println("  uri=escape(uri);");
+                out.println("  var url = '"+url.setMode("on")+"?idx='+idx+'&uri='+uri;");
+                out.println("  postHtml(url,'rate_"+obj.getId()+"');");
+            }else {
+                out.println("  var url = '"+url.setMode("on")+"?idx='+idx;");
+                out.println("  postHtml(url,'rate_"+wp.getId()+"');");
+            }
+            out.println("}");
+
+            out.println("function lightoff() {");
+            if( obj!=null ) {
+                out.println("  var uri='"+URI+"';");
+                out.println("  uri=escape(uri);");
+                out.println("  var url = '"+url.setMode("off")+"?uri='+uri;");
+                out.println("  postHtml(url,'rate_"+obj.getId()+"');");
+            }else {
+                out.println("  var url = '"+url.setMode("off")+"';");
+                out.println("  postHtml(url,'rate_"+wp.getId()+"');");
+            }
+            out.println("}");
+
+
+            url = paramRequest.getActionUrl();
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
             out.println("function vote(val) {");
             if( obj!=null ) {
                 out.println("  var uri='"+URI+"';");
                 out.println("  uri=escape(uri);");
-                out.println("  var url = '"+url+"?rating='+escape(val)+'&uri='+uri;");
+                out.println("  var url = '"+url.setMode("vote")+"?rating='+val+'&uri='+uri;");
                 out.println("  postHtml(url,'rate_"+obj.getId()+"');");
             }else {
-                out.println("  var url = '"+url+"?rating='+escape(val);");
+                out.println("  var url = '"+url.setMode("vote")+"?rating='+val;");
                 out.println("  postHtml(url,'rate_"+wp.getId()+"');");
             }            
             out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
@@ -256,7 +358,6 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             out.println("-->");
             out.println("</script>");
         }
-        out.println("</div>");
         out.flush();
         out.close();
     }
