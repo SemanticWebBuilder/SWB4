@@ -22,9 +22,9 @@
     WebPage noticias= paramRequest.getWebPage().getWebSite().getWebPage(idNoticias);
     if(noticias!=null && noticias.isActive())
     {
-        SWBResourceURL urldetail=null;        
+        //SWBResourceURL urldetail=null;
         SWBResourceURL urlrss=null;
-        GenericIterator<Resource> resources=noticias.listResources();
+        /*GenericIterator<Resource> resources=noticias.listResources();
         while(resources.hasNext())
         {
             Resource resource=resources.next();
@@ -32,7 +32,7 @@
             {
 
                GenericObject obj=resource.getResourceData().createGenericInstance();
-               if(obj instanceof SWBNews)
+               if(obj instanceof SWBNews && paramRequest.getUser().haveAccess(obj))
                {
                    SWBNews semResource=(SWBNews)obj;
                    ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(resource);
@@ -43,16 +43,17 @@
                     urlrss.setMode("rss");
                     urlrss.setCallMethod(urlrss.Call_DIRECT);
                     urldetail.setMode(paramRequest.Mode_VIEW);
+                    break;
                }
             }
-        }
+        }*/
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
         int limit = 5;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
         ArrayList<SWBNewContent> contentstoshow= new ArrayList<SWBNewContent>();
-        if(urldetail!=null)
-        {            
+        //if(urldetail!=null)
+        //{
             int i=0;            
             for(SWBNewContent content : contents)
             {
@@ -112,8 +113,9 @@
                         title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
                     }
                     String url="#";
-                    urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    url=urldetail.toString();
+                    //urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
+                    //url=urldetail.toString();
+                    url=noticias.getUrl()+"?uri="+content.getResourceBase().getSemanticObject().getEncodedURI();
                     %>
                             <li><a href="<%=url%>"><%=title%></a></li>
                     <%
@@ -131,7 +133,7 @@
             %>
                 <p class="vermas"><a href="<%=urlNews%>"><%=titleviewoldNews%></a></p>
             <%
-        }
+        //}
     }
 
 %>
