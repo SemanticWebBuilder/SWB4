@@ -211,6 +211,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                     {
                         request.setAttribute("paramRequest", paramRequest);
                         request.setAttribute("news", news);
+                        request.setAttribute("this", this);
                         dis.include(request, response);
                     }
                     catch (Exception e)
@@ -242,6 +243,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("news", news);
             request.setAttribute("url", url);
+            request.setAttribute("this", this);
             dis.include(request, response);
         }
         catch (Exception e)
