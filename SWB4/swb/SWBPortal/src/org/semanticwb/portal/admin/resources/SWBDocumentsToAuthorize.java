@@ -237,7 +237,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     {
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
 
-                        out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+"\">");
+                        out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+" ("+resource.getTitle().replace('"','\'')+")\">");
                         out.println("<form class=\"swbform\">");
                         out.println("<fieldset>");
                         out.println("<table>");
@@ -353,7 +353,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     if(semanresource)
                     {
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-                        out.println("<a href=\"javascript:dijit.byId('"+id+"').show();\">Ver</a>");
+                        out.println("<a href=\"javascript:dijit.byId('"+id+"').show();\">"+paramRequest.getLocaleString("see")+"</a>");
                     }
                     else
                     {
