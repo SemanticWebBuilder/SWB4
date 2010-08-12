@@ -238,7 +238,17 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
 
                         out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+"\">");
+                        out.println("<form class=\"swbform\">");
+                        out.println("<fieldset>");
                         out.println("<table>");
+                        out.println("<tr>");
+                        out.println("<th>");
+                        out.println(paramRequest.getLocaleString("propiedad_label"));
+                        out.println("</th>");
+                        out.println("<th>");
+                        out.println(paramRequest.getLocaleString("valor_value"));
+                        out.println("</th>");
+                        out.println("</tr>");
                         Iterator<SemanticProperty> props=resource.getResourceData().getSemanticClass().listProperties();
                         while(props.hasNext())
                         {
@@ -261,7 +271,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                                 }
                                 if(value==null)
                                 {
-                                    value="No existe";
+                                    value=paramRequest.getLocaleString("novalue");
                                 }
                                
                                 out.println("<tr>");
@@ -271,6 +281,8 @@ public class SWBDocumentsToAuthorize extends GenericResource
                             }
                         }
                         out.println("</table>");
+                        out.println("</fieldset>");
+                        out.println("</form>");
                         out.println("</div>");
                     }
                 }
