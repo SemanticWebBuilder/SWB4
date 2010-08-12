@@ -80,7 +80,7 @@ public class SystemCase extends GenericResource {
     }
 
     public void doGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        /*int total, processing, closed, others = 0;
+        int total, processing, closed, others = 0;
         CaseCountSys sys = new CaseCountSys();
         DefaultPieDataset dataCase = new DefaultPieDataset();
         total = sys.totalProcessInstance();
@@ -103,7 +103,7 @@ public class SystemCase extends GenericResource {
             response.getWriter().println("<div style=\"background-image: url(" + pathFile + "/systemcase.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
         } catch (Exception e) {
             log.error(e);
-        }*/
+        }
     }
 
     public void doMeter(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -122,7 +122,10 @@ public class SystemCase extends GenericResource {
         plot.setRange(new Range(0, total));
         plot.addInterval(new MeterInterval(paramRequest.getLocaleString("STATUS_CLOSED"), new Range(0, closed), Color.lightGray, new BasicStroke(2.0f), new Color(72, 72, 255, 128)));
         plot.addInterval(new MeterInterval(paramRequest.getLocaleString("STATUS_PROCESSING"), new Range(closed + aborted, total), Color.lightGray, new BasicStroke(2.0f), new Color(255, 0, 0, 128)));
-        plot.addInterval(new MeterInterval(paramRequest.getLocaleString("STATUS_ABORTED"), new Range(closed, closed + aborted), Color.lightGray, new BasicStroke(2.0f), new Color(64, 255, 64, 128)));
+        System.out.println("aborted:" +  aborted);
+        if(aborted > 0){
+            plot.addInterval(new MeterInterval(paramRequest.getLocaleString("STATUS_ABORTED"), new Range(closed, closed + aborted), Color.lightGray, new BasicStroke(2.0f), new Color(64, 255, 64, 128)));
+        }
         plot.setDialOutlinePaint(Color.white);
         plot.setDialBackgroundPaint(new Color(172, 188, 244, 128));
         JFreeChart chart = new JFreeChart(paramRequest.getLocaleString("title"), JFreeChart.DEFAULT_TITLE_FONT, plot, false);
@@ -133,7 +136,7 @@ public class SystemCase extends GenericResource {
             if (!filex.exists())
                 filex.mkdirs();
             ChartUtilities.saveChartAsPNG(new File(pathFile + "/systemcase.png"), chart, 500, 300);
-            response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/systemcase.jpg); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
+            response.getWriter().println("<div style=\"background-image: url(" + SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/images/systemcase.png); height: 300px; width: 500px; border: 0px solid black;\"> </div>");
             response.getWriter().println("<div style=\"background-image: url(/swbadmin/images/systemft.jpg); height: 27px; width: 500px; border: 0px solid black;\"> </div>");
         } catch (Exception e) {
             log.error(e);
