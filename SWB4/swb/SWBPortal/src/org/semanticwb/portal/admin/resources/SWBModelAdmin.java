@@ -151,7 +151,7 @@ public class SWBModelAdmin extends GenericResource {
             for (int i = 0; i < files.length; i++) {
                 File filex = files[i];
                 String fileName = filex.getName();
-                if (filex.isFile() && fileName.endsWith(".zip")) {
+                if (filex.isFile() && fileName.endsWith(".zip") && !fileName.endsWith("_adv.zip")) {
                     int pos = fileName.lastIndexOf(".");
                     if (pos > -1) {
                         fileName = fileName.substring(0, pos);
