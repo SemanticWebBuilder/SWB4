@@ -355,10 +355,10 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
                         String imgview=SWBPortal.getContextPath()+"/swbadmin/icons/preview.gif";
                         
-                        out.println("<a href=\"javascript:dijit.byId('"+id+"').show();\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
+                        out.println("<a title=\""+ paramRequest.getLocaleString("properties") +"\" href=\"javascript:dijit.byId('"+id+"').show();\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
                     }   
                     String imgedit=SWBPortal.getContextPath()+"/swbadmin/icons/editar_1.gif";
-                    //out.println("<a href=\"#\" onclick=\"selectTab('"+ resource.getURI() +"','"+ SWBPortal.getContextPath() +"/swbadmin/jsp/objectTab.jsp','"+ resource.getTitle() +"','bh_AdminPorltet');return false;\"><img  src=\""+imgedit+"\"></a>");
+                    out.println("<a title=\""+paramRequest.getLocaleString("edit")+"\" href=\"#\" onclick=\"parent.selectTab('"+ resource.getURI() +"','"+ SWBPortal.getContextPath() +"/swbadmin/jsp/objectTab.jsp','"+ resource.getTitle() +"','bh_AdminPorltet');return false;\"><img  src=\""+imgedit+"\"></a>");
                     out.println("</td>");
                     out.println("</tr>");
                 }
