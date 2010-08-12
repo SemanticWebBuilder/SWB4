@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBContext;
@@ -42,8 +43,11 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.Versionable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.PFlowManager;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericSemResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBParamRequestImp;
@@ -144,6 +148,12 @@ public class SWBDocumentsToAuthorize extends GenericResource
         }
         if (sitetoShow != null)
         {
+            out.println("<script type=\"text/javascript\">");            
+            out.println("dojo.require(\"dijit.Dialog\");");
+            out.println("dojo.require(\"dijit.form.Button\");");
+            out.println("dojo.require(\"dijit.form.Textarea\");");
+            out.println("dojo.require(\"dojox.form.DropDownSelect\");");
+            out.println("</script>");
             out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
             out.println("<fieldset>");
             out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
@@ -213,6 +223,57 @@ public class SWBDocumentsToAuthorize extends GenericResource
 
             if (resources.length > 0)
             {
+                // create dialog
+                for (Resource resource : resources)
+                {
+                    GenericObject go=null;
+                    boolean semanresource=false;
+                    if(resource.getResourceData()!=null)
+                    {
+                        go=resource.getResourceData().createGenericInstance();
+                        semanresource=go instanceof GenericSemResource;
+                    }
+                    if(semanresource)
+                    {
+                        String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
+
+                        out.println("<div dojoType=\"dijit.Dialog\" id=\""+id+"\" title=\""+paramRequest.getLocaleString("properties")+"\">");
+                        out.println("<table>");
+                        Iterator<SemanticProperty> props=resource.getResourceData().getSemanticClass().listProperties();
+                        while(props.hasNext())
+                        {
+                            SemanticProperty prop=props.next();
+                            if(prop.getDisplayProperty()!=null)
+                            {
+                                String label=prop.getDisplayName(paramRequest.getUser().getLanguage());
+                                String value=null;
+                                if(prop.isDataTypeProperty())
+                                {
+                                    value=go.getSemanticObject().getProperty(prop);
+                                }
+                                else if(prop.isObjectProperty())
+                                {
+                                    SemanticObject ovalue=go.getSemanticObject().getObjectProperty(prop);
+                                    if(ovalue!=null)
+                                    {
+                                        value=ovalue.getDisplayName(paramRequest.getUser().getLanguage());
+                                    }
+                                }
+                                if(value==null)
+                                {
+                                    value="No existe";
+                                }
+                               
+                                out.println("<tr>");
+                                out.println("<td>"+ label +"</td>");
+                                out.println("<td>"+value+"</td>");
+                                out.println("</tr>");
+                            }
+                        }
+                        out.println("</table>");
+                        out.println("</div>");
+                    }
+                }
                 out.println("<form class=\"swbform\" name='swbfrmResourcesAuhotrize' method='post' action='" + paramRequest.getActionUrl() + "'>");
                 out.println("<fieldset>");
                 out.println("<input type='hidden' name='wbaction' value=''></input>");
@@ -232,17 +293,15 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("<th>");
                 out.println(paramRequest.getLocaleString("step"));
                 out.println("</th>");
+                out.println("<th>");
+                out.println(paramRequest.getLocaleString("properties"));
+                out.println("</th>");
                 out.println("</tr>");
                 for (Resource resource : resources)
                 {
                     out.println("<tr>");
                     out.println("<td width='10%'>");
-                    PFlowManager manager=new PFlowManager();
-                    //SWBResource res = SWBPortal.getResourceMgr().getResource(resource.getId());
-                    //resource.getResourceable()
-                    //SWBResourceURLImp urlpre = (SWBResourceURLImp)paramRequest.getRenderUrl();
-                    //urlpre.setResourceBase(resource);
-                    //urlpre.set
+                    PFlowManager manager=new PFlowManager();                    
                     SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
                     SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
                     if(resource.getResourceData().createGenericInstance() instanceof Versionable)
@@ -268,8 +327,26 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         }
                     }
                     out.println("</td>");
-                    out.println("<td width='30%'>");
+                    out.println("<td width='20%'>");
                     out.println(resource.getPflowInstance().getStep());
+                    out.println("</td>");
+                    out.println("</td>");
+                    out.println("<td width='10%'>");
+                    boolean semanresource=false;
+                    if(resource.getResourceData()!=null)
+                    {
+                        GenericObject go=resource.getResourceData().createGenericInstance();
+                        semanresource=go instanceof GenericSemResource;
+                    }
+                    if(semanresource)
+                    {
+                        String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
+                        out.println("<a href=\"javascript:dijit.byId('"+id+"').show();\">Ver</a>");
+                    }
+                    else
+                    {
+                        out.println(paramRequest.getLocaleString("noproperties"));
+                    }
                     out.println("</td>");
                     out.println("</tr>");
                 }
@@ -300,10 +377,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("</form>");
 
                 out.println("<script type=\"text/javascript\">");
-                out.println("document.swbfrmResourcesAuhotrize.msg.disabled=true;");
-                out.println("dojo.require(\"dijit.form.Button\");");
-                out.println("dojo.require(\"dijit.form.Textarea\");");
-                out.println("dojo.require(\"dojox.form.DropDownSelect\");");
+                out.println("document.swbfrmResourcesAuhotrize.msg.disabled=true;");               
                 out.println("function authorize()");
                 out.println("{");
                 out.println("   if(document.swbfrmResourcesAuhotrize.msg.value=='')");
