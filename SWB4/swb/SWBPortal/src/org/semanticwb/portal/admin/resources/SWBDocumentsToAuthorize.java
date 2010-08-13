@@ -154,6 +154,60 @@ public class SWBDocumentsToAuthorize extends GenericResource
             out.println("dojo.require(\"dijit.form.Textarea\");");
             out.println("dojo.require(\"dojox.form.DropDownSelect\");");            
             out.println("</script>");
+
+            out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogautorize\" title=\""+paramRequest.getLocaleString("authorize")+"\">");
+            out.println("<form name='swbfrmResourcesAuhotrize' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
+            out.println("<input type='hidden' name='wbaction' value='a'></input>");
+            out.println("<input type='hidden' name='res' value=''></input>");
+            out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println(paramRequest.getLocaleString("msg"));
+            out.println("</td>");
+            out.println("<td>");
+            out.println("<textarea rows='6' cols='30' name=\"msg\">");
+            out.println("</textarea>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align='center' colspan='2'>");
+            out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeAuthorize();\" dojoType=\"dijit.form.Button\" name=\"cancel1\" id=\"cancel1\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
+            out.println("</td>");            
+            out.println("</tr>");
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
+
+            out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogreject\" title=\""+paramRequest.getLocaleString("reject")+"\">");
+            out.println("<form name='swbfrmResourcesReject' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
+            out.println("<input type='hidden' name='wbaction' value='r'></input>");
+            out.println("<input type='hidden' name='res' value=''></input>");
+            out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println(paramRequest.getLocaleString("msg"));
+            out.println("</td>");
+            out.println("<td>");
+            out.println("<textarea rows='6' cols='30' name=\"msg\">");
+            out.println("</textarea>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("<tr>");
+            out.println("<td align='center' colspan='2'>");
+            out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeReject();\" dojoType=\"dijit.form.Button\" name=\"cancel2\" id=\"cancel2\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
+            out.println("</td>");            
+            out.println("</tr>");
+            out.println("</table>");
+            out.println("</form>");
+            out.println("</div>");
+
+            
+
             out.println("<form class=\"swbform\" name='frmseecontentsToAuthorize' action='" + paramRequest.getRenderUrl() + "' method='post'>");
             out.println("<fieldset>");
             out.println("<select name='site' dojoType=\"dojox.form.DropDownSelect\" autocomplete=\"false\">");
@@ -286,16 +340,11 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         out.println("</div>");
                     }
                 }
-                out.println("<form class=\"swbform\" name='swbfrmResourcesAuhotrize' method='post' action='" + paramRequest.getActionUrl() + "'>");
-                out.println("<fieldset>");
-                out.println("<input type='hidden' name='wbaction' value=''></input>");
-                out.println("<input type='hidden' name='url' value=''></input>");
-                out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+                out.println("<form class=\"swbform\" method='post' action='#'>");
+                out.println("<fieldset>");                                
+                
                 out.println("<table width=\"100%\">");
-                out.println("<tr>");
-                out.println("<th>");
-                out.println(paramRequest.getLocaleString("select"));
-                out.println("</th>");
+                out.println("<tr>");                
                 out.println("<th>");
                 out.println(paramRequest.getLocaleString("title"));
                 out.println("</th>");
@@ -312,7 +361,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 for (Resource resource : resources)
                 {
                     out.println("<tr>");
-                    out.println("<td width='10%'>");
+                    //out.println("<td width='10%'>");
                     PFlowManager manager=new PFlowManager();                    
                     SWBParamRequestImp  paramreq=new SWBParamRequestImp(request, resource, paramRequest.getWebPage(), user);
                     SWBResourceURL urlpreview=paramreq.getRenderUrl().setCallMethod(SWBParamRequestImp.Call_DIRECT);
@@ -321,9 +370,9 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
                         urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
                     }
-                    out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+urlpreview+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
+                    //out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+urlpreview+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
 
-                    out.println("</td>");
+                    //out.println("</td>");
                     out.println("<td width='30%'>");
                     out.println(resource.getTitle());
                     out.println("</td>");
@@ -343,7 +392,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     out.println(resource.getPflowInstance().getStep());
                     out.println("</td>");
                     out.println("</td>");
-                    out.println("<td width='10%'>");
+                    out.println("<td width='20%'>");
                     boolean semanresource=false;
                     if(resource.getResourceData()!=null)
                     {
@@ -353,43 +402,54 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     if(semanresource)
                     {
                         String id=resource.getEncodedURI().replace('%', '_').replace(':', '_').replace('/', '_');
-                        String imgview=SWBPortal.getContextPath()+"/swbadmin/icons/preview.gif";
-                        
-                        out.println("<a title=\""+ paramRequest.getLocaleString("properties") +"\" href=\"javascript:dijit.byId('"+id+"').show();\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
+                        String imgview=SWBPortal.getContextPath()+"/swbadmin/icons/preview.gif";                        
+                        out.println("<a title=\""+ paramRequest.getLocaleString("properties") +"\" onclick=\"view('"+urlpreview+"','"+ id +"')\" href=\"#\"><img src=\""+imgview+"\" alt=\""+paramRequest.getLocaleString("properties")+"\"></a>");
                     }   
                     String imgedit=SWBPortal.getContextPath()+"/swbadmin/icons/editar_1.gif";
                     out.println("<a title=\""+paramRequest.getLocaleString("edit")+"\" href=\"#\" onclick=\"parent.selectTab('"+ resource.getURI() +"','"+ SWBPortal.getContextPath() +"/swbadmin/jsp/objectTab.jsp','"+ resource.getTitle() +"','bh_AdminPorltet');return false;\"><img  src=\""+imgedit+"\"></a>");
+                    if(manager.isReviewer(resource, user))
+                    {                        
+                        String imgauthorize=SWBPortal.getContextPath()+"/swbadmin/icons/activa.gif";
+                        out.println("<a title=\""+paramRequest.getLocaleString("authorize")+"\" href=\"#\" onclick=\"showAuthorize('"+ resource.getId() +"')\"><img  src=\""+imgauthorize+"\"></a>");
+                        String imgreject=SWBPortal.getContextPath()+"/swbadmin/images/delete.gif";
+                        out.println("<a title=\""+paramRequest.getLocaleString("reject")+"\" href=\"#\" onclick=\"showReject('"+ resource.getId() +"')\"><img  src=\""+imgreject+"\"></a>");
+                    }
+                    
                     out.println("</td>");
                     out.println("</tr>");
-                }
-                out.println("<tr>");
-                out.println("<td>");
-                out.println("&nbsp;");
-                out.println("</td>");
-                out.println("</tr>");
-
-                out.println("<tr>");
-                out.println("<td colspan='4'>");
-                out.println("Mensaje:<textarea rows='6' cols='30' name=\"msg\">");
-                out.println("</textarea>");
-                out.println("</td>");
-                out.println("</tr>");
-
-                out.println("<tr>");
-                out.println("<td colspan='4'>");
-                out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
-                out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
-                out.println("<button onClick='view();' dojoType=\"dijit.form.Button\" disabled=\"true\" name='view' id='view' type='button'>Ver contenido</button>");
-
-               
-                out.println("</td>");
-                out.println("</tr>");
+                }                
                 out.println("</table>");
                 out.println("<fieldset>");
                 out.println("</form>");
 
-                out.println("<script type=\"text/javascript\">");
-                out.println("document.swbfrmResourcesAuhotrize.msg.disabled=true;");               
+                out.println("<script type=\"text/javascript\">");                
+
+                out.println("function closeAuthorize()");
+                out.println("{");
+                out.println("   var dialog=dijit.byId('dialogautorize');");
+                out.println("   dialog.hide();");
+                out.println("}");
+
+                out.println("function showAuthorize(id)");
+                out.println("{");
+                out.println("   document.swbfrmResourcesAuhotrize.res.value=id;");
+                out.println("   var dialog=dijit.byId('dialogautorize');");
+                out.println("   dialog.show();");
+                out.println("}");
+
+                out.println("function closeReject()");
+                out.println("{");
+                out.println("   var dialog=dijit.byId('dialogreject');");
+                out.println("   dialog.hide();");
+                out.println("}");
+
+                out.println("function showReject(id)");
+                out.println("{");
+                out.println("   document.swbfrmResourcesReject.res.value=id;");
+                out.println("   var dialog=dijit.byId('dialogreject');");
+                out.println("   dialog.show();");
+                out.println("}");
+
                 out.println("function authorize()");
                 out.println("{");
                 out.println("   if(document.swbfrmResourcesAuhotrize.msg.value=='')");
@@ -397,56 +457,24 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
                 out.println("       return;");
                 out.println("   }");
-                out.println("   document.swbfrmResourcesAuhotrize.wbaction.value='a';");
                 out.println("   document.swbfrmResourcesAuhotrize.submit();");
                 out.println("}");
-                out.println("function view()");
-                out.println("{");
-                out.println("   var tDiv = document.getElementById(\"previewcontent\");");                
-                out.println("   var url=document.swbfrmResourcesAuhotrize.url.value;");
-                out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500' src='\"+ url +\"'></iframe>\";");
 
-                out.println("}");
-                out.println("function habilita(valor,url)");
+                out.println("function view(url,id)");
                 out.println("{");
-                out.println("   if(valor)");
-                out.println("   {");
-                out.println("       document.swbfrmResourcesAuhotrize.url.value=url;");
-                out.println("       document.swbfrmResourcesAuhotrize.msg.disabled=false;");
-                out.println("       var button = dijit.byId(\"authorize\");");
-                //out.println("       button.setDisabled(false);");
-                out.println("       button.attr('disabled',false);");
-                out.println("       button = dijit.byId(\"reject\");");
-                //out.println("       button.setDisabled(false);");
-                out.println("       button.attr('disabled',false);");
-                out.println("       button = dijit.byId(\"view\");");
-                //out.println("       button.setDisabled(false);");
-                out.println("       button.attr('disabled',false);");
-                out.println("   }");
-                out.println("   else");
-                out.println("   {");                
-                out.println("       var button = dijit.byId(\"authorize\");");
-                //out.println("       button.setDisabled(true);");
-                out.println("       button.attr('disabled',true);");
-                out.println("       button = dijit.byId(\"reject\");");
-                //out.println("       button.setDisabled(true);");
-                out.println("       button.attr('disabled',true);");
-                out.println("       button = dijit.byId(\"view\");");
-                //out.println("       button.setDisabled(true);");
-                out.println("       button.attr('disabled',true);");
-                out.println("       document.swbfrmResourcesAuhotrize.msg.disabled=true;");
-                out.println("       alert('Usted no tiene permisos para autorizar o recharzar este contenido');");
-                out.println("   }");
+                out.println("   var tDiv = document.getElementById(\"previewcontent\");");                                
+                out.println("   tDiv.innerHTML=\"<iframe width='100%' height='500' src='\"+ url +\"'></iframe>\";");
+                out.println("   dijit.byId(id).show()");
                 out.println("}");                
+                 
                 out.println("function reject()");
                 out.println("{");
-                out.println("   if(document.swbfrmResourcesAuhotrize.msg.value=='')");
+                out.println("   if(document.swbfrmResourcesReject.msg.value=='')");
                 out.println("   {");
                 out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
                 out.println("       return;");
-                out.println("   }");
-                out.println("   document.swbfrmResourcesAuhotrize.wbaction.value='r';");
-                out.println("   document.swbfrmResourcesAuhotrize.submit();");
+                out.println("   }");                
+                out.println("   document.swbfrmResourcesReject.submit();");
                 out.println("}");
                 out.println("</script>");
             }
