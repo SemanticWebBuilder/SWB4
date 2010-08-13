@@ -31,7 +31,6 @@ public class Artifact extends GraphicalElement
     {
         x: bind x+ix;
         y: bind y+iy;
-        opacity: o;
         scaleX: bind is;
         scaleY: bind is;
         visible:false;
@@ -89,7 +88,6 @@ public class Artifact extends GraphicalElement
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
