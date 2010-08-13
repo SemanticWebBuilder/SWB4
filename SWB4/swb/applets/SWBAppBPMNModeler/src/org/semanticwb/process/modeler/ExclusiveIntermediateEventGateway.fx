@@ -76,7 +76,6 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
             translateY: bind y - w/2
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
