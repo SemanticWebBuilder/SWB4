@@ -1063,7 +1063,7 @@ public class SWBUtils {
                 //System.out.println("cad:" + cad);
             } catch (Exception e)
             {
-                SWBUtils.log.error("Error while looking for properties key", e);
+                SWBUtils.log.error("Error while looking for properties key:"+key+" in "+Bundle);
                 return "";
             }
             return cad;

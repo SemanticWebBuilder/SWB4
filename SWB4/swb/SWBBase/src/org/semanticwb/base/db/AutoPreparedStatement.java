@@ -57,7 +57,7 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
     private String args = "";
     
     /** The debug. */
-    private boolean debug = false;
+    private boolean debug = true;
     
     /** The aconn. */
     private AutoConnection aconn;
@@ -816,7 +816,7 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
             System.out.println("--> execute():" + query);
             System.out.println("--> args:" + args);
             args = "";
-            //new Exception().printStackTrace();
+            new Exception().printStackTrace();
         }
 
         try
