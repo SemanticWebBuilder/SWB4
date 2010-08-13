@@ -194,20 +194,20 @@ public class SWBDocumentsToAuthorize extends GenericResource
             {
                 selected = "checked";
             }
-            out.println("<input " + selected + " onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
+            out.println("<input " + selected + " onClick='document.frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show1' name='show' value='1'>" + paramRequest.getLocaleString("all") + "");
             selected = "";
             if (show == 2)
             {
                 selected = "checked";
             }
-            out.println("<input " + selected + " onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
+            out.println("<input " + selected + " onClick='document.frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show2'  name='show' value='2'>" + paramRequest.getLocaleString("mydocuments") + "");
             selected = "";
             if (show == 3)
             {
                 selected = "checked";
             }
 
-            out.println("<input " + selected + "  onClick='frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
+            out.println("<input " + selected + "  onClick='document.frmseecontentsToAuthorize.submit();' dojoType=\"dijit.form.RadioButton\" type='radio' id='show3' name='show' value='3'>" + paramRequest.getLocaleString("forauthorize") + "");
             out.println("</fieldset>");
             out.println("</form>");
 
