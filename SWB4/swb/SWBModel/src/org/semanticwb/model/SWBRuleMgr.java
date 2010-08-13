@@ -39,6 +39,7 @@ import org.semanticwb.model.Role;
 import org.semanticwb.model.Rule;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.w3c.dom.*;
 
@@ -107,26 +108,26 @@ public class SWBRuleMgr
      */
     public void init()
     {
-        Iterator<Rule> it = Rule.ClassMgr.listRules();
-        while (it.hasNext())
-        {
-            Rule rule = it.next();
-            try
-            {
-                String xml=rule.getXml();
-                if (xml != null)
-                {
-                    Document dom = SWBUtils.XML.xmlToDom(xml);
-                    if (dom != null)
-                    {
-                        doms.put(rule.getURI(), dom);
-                    }
-                }
-            } catch (Exception e)
-            {
-                log.error("Rule:"+rule.getURI(), e);
-            }
-        }
+//        Iterator<Rule> it = Rule.ClassMgr.listRules();
+//        while (it.hasNext())
+//        {
+//            Rule rule = it.next();
+//            try
+//            {
+//                String xml=rule.getXml();
+//                if (xml != null)
+//                {
+//                    Document dom = SWBUtils.XML.xmlToDom(xml);
+//                    if (dom != null)
+//                    {
+//                        doms.put(rule.getURI(), dom);
+//                    }
+//                }
+//            } catch (Exception e)
+//            {
+//                log.error("Rule:"+rule.getURI(), e);
+//            }
+//        }
     }
     
 //    /**
@@ -195,6 +196,15 @@ public class SWBRuleMgr
         //System.out.println("rule:"+rule+" site:"+topicmap);
         boolean ret=false;
         Document rul = doms.get(rule_uri);
+        if(rul==null)
+        {
+            SemanticObject obj=SemanticObject.createSemanticObject(rule_uri);
+            if(obj!=null)
+            {
+                reloadRule((Rule)obj.createGenericInstance());
+                rul = doms.get(rule_uri);
+            }
+        }
         if (user != null && rul != null)
         {
             Node node = rul.getChildNodes().item(0);
