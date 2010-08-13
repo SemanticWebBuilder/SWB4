@@ -61,7 +61,6 @@ public class GroupArtifact extends Artifact
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
