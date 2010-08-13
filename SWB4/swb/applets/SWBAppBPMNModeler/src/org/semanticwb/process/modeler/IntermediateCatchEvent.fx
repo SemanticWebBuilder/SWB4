@@ -73,7 +73,6 @@ public class IntermediateCatchEvent extends CatchEvent
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
