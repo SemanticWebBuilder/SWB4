@@ -170,14 +170,31 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
 
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
-        fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
-            ,SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
-
-        //Paginación (Jorge Jiménez-10/Julio/2009)
-        if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
-        if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
-        fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
-        //Termina Páginación
+        if(fileContent!=null)
+        {
+            if(fileContent.indexOf("content=\"Microsoft Word")>0)
+            {
+                //System.out.println("HtmlContent: Es de Word");
+                Resource base=getResourceBase();
+                ContentUtils contentUtils = new ContentUtils();
+                fileContent = contentUtils.predefinedStyles(fileContent, base, true); //Estilos predefinidos
+                //fileContent = contentUtils.predefinedStyles(fileContent, base, isTpred()); //Estilos predefinidos
+                //if (isPages())
+                {
+                    fileContent = contentUtils.paginationMsWord(fileContent, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
+                } //Paginación
+            }else
+            {
+                //System.out.println("HtmlContent: No es de Word");
+                fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
+                    ,SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
+                //Paginación (Jorge Jiménez-10/Julio/2009)
+                if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
+                if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
+                fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                //Termina Páginación
+            }
+        }
 
         response.getWriter().println(fileContent);
     }
