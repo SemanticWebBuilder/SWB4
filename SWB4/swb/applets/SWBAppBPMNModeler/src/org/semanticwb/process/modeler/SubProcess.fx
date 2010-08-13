@@ -19,12 +19,6 @@ import javafx.stage.Alert;
  * @author javier.solis
  */
 
-public-read var TYPE_ADHOC="adhoc";
-public-read var TYPE_LOOP="loop";
-public-read var TYPE_COMPENSATION="compensation";
-public-read var TYPE_MULTIPLE="multiple";
-public-read var TYPE_TRANSACTION="transaction";
-
 public class SubProcess extends Activity
 {
     var ix:Number;                          //offset imagen x
@@ -35,7 +29,6 @@ public class SubProcess extends Activity
     {
         x: bind x+ix;
         y: bind y+iy;
-        opacity: o;
         //smooth: true;
         scaleX: bind is;
         scaleY: bind is;
@@ -123,7 +116,6 @@ public class SubProcess extends Activity
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible:bind canView()
         };
