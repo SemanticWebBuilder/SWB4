@@ -62,7 +62,6 @@ public class GraphicalElement extends CustomNode
     public var strokeFocused=Color.web(Styles.color_focused);
 
     public var s : Number = 1;                     //size
-    public var o : Number = Styles.opacity;        //opacity
     public var stkw : Number = 2;                  //strokeWidth
     public var stkwo : Number = 3;                 //strokeWidth Over
 
@@ -452,6 +451,13 @@ public class GraphicalElement extends CustomNode
         {
             return false;
         }
+    }
+
+    /**
+    * Indica si un elemento gráfico puede agregarse o no al diagrama
+    */
+    public function canAddToDiagram(): Boolean {
+        return true;
     }
 
     public function setType(type:String):Void
