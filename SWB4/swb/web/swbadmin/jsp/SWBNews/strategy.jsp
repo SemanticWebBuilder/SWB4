@@ -82,6 +82,7 @@
                 }
 
                 String url="#";
+                url=noticias.getUrl()+"?uri="+content.getResourceBase().getSemanticObject().getEncodedURI();
                 String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
                 String image="";
                 if(content.getImage()!=null)
