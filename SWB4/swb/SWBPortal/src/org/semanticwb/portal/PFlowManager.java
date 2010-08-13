@@ -523,8 +523,11 @@ public class PFlowManager
                                         if(resource.getResourceData().instanceOf(Versionable.swb_Versionable))
                                         {
                                             Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
-                                            v.getLastVersion().setVersionAuthorized(true);
-                                            v.setActualVersion(v.getLastVersion());
+                                            if(v.getLastVersion()!=null)
+                                            {
+                                                v.getLastVersion().setVersionAuthorized(true);
+                                                v.setActualVersion(v.getLastVersion());
+                                            }
                                         }
                                     }
                                     else if (serviceName.equals("noauthorize"))
