@@ -73,7 +73,6 @@ public class IntermediateThrowEvent extends ThrowEvent
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
