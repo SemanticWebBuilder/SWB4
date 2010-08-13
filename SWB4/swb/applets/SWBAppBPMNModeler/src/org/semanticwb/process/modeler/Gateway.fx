@@ -44,7 +44,6 @@ public class Gateway extends FlowNode
                     translateY: bind y - w/2
                     scaleX: bind s;
                     scaleY: bind s;
-                    opacity: bind o;
                     effect: Styles.dropShadow
                 }
             ]
