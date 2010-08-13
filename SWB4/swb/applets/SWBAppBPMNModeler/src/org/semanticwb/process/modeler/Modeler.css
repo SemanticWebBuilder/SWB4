@@ -234,7 +234,7 @@
     -fx-arc-height: 15;
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 2;
-    -fx-fill:null;/*linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);*/
+    -fx-fill:white;/*linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);*/
 }
 
 .task:hover {
@@ -261,6 +261,7 @@
 .artifact {
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand
 }
 
 .artifact:hover {
@@ -274,6 +275,11 @@
 }
 
 .artifact#textbox {
+    -fx-stroke: null;
+    -fx-fill:null;
+}
+
+.artifact#text {
     -fx-stroke: null;
     -fx-fill:null;
 }
