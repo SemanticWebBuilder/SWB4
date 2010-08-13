@@ -71,7 +71,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
 
     /** The Constant sp_reviews. */
     private static final org.semanticwb.platform.SemanticProperty sp_reviews = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#reviews");
-    
+
     /**
      * Instantiates a new sWB rank web page.
      */
@@ -131,7 +131,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         response.setHeader("Pragma","no-cache");
 
         PrintWriter out = response.getWriter();
-        
+
         String URI = request.getParameter("uri");
         SemanticObject obj = SemanticObject.createSemanticObject(URI);
         WebPage wp = null;
@@ -142,7 +142,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             wp = paramRequest.getWebPage();
             rank = wp.getRank();
         }
-        
+
         int idx;
         try {
             idx = Integer.parseInt(request.getParameter("idx"));
@@ -152,14 +152,12 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
 
         out.println("<ul>");
         for(int i=1; i<=idx; i++) {
-            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseout=\"lightoff("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<img src=\""+SWBPlatform.getContextPath()+fullStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
             out.println("</a></li>");
         }
         idx++;
         for(int i=idx; i<=5; i++) {
-            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
             out.println("</a></li>");
@@ -187,9 +185,17 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             rank = wp.getRank();
         }
 
+        String cookieName = obj==null?paramRequest.getWebPage().getSemanticObject().getId()+PREFIX:obj.getId()+PREFIX;
+        Cookie[] cookies = request.getCookies();
+        if( cookies!=null )
+            for(Cookie cookie: cookies) {
+                if(cookie.getName().equals(cookieName)) {
+                   doView(request, response, paramRequest);
+                }
+            }
+
         out.println("<ul>");
         for(int i=1; i<=5; i++) {
-            //out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" onmouseout=\"lightoff()\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<li><a href=\"#\" onclick=\"vote("+i+")\" onmouseover=\"lighton("+i+")\" title=\""+paramRequest.getLocaleString("msg_give")+" "+i+" "+paramRequest.getLocaleString("lbl_stars")+"\">");
             out.println("<img src=\""+SWBPlatform.getContextPath()+emptyStarPath+"\" alt=\""+paramRequest.getLocaleString("msg_has")+" "+((0.0f + rank)/10.0f)+" "+paramRequest.getLocaleString("lbl_stars")+"\"/>");
             out.println("</a></li>");
@@ -213,11 +219,9 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         WebPage wp = null;
         double rank;
         if( obj!=null ) {
-            //rank = Math.round(Math.floor(obj.getDoubleProperty(sp_rank)));
             rank = obj.getDoubleProperty(sp_rank);
         }else {
             wp = paramRequest.getWebPage();
-            //rank = Math.round(Math.floor(wp.getRank()));
             rank = wp.getRank();
         }
 
@@ -264,18 +268,16 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         response.setHeader("Pragma","no-cache");
 
         PrintWriter out = response.getWriter();
-        
+
         String URI = request.getParameter("uri");
         SemanticObject obj = SemanticObject.createSemanticObject(URI);
-        
+
         WebPage wp = null;
         double rank;
         if( obj!=null ) {
-            //rank = Math.round(Math.floor(obj.getDoubleProperty(sp_rank)));
             rank = obj.getDoubleProperty(sp_rank);
         }else {
             wp = paramRequest.getWebPage();
-            //rank = Math.round(Math.floor(wp.getRank()));
             rank = wp.getRank();
         }
 
@@ -313,7 +315,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             SWBResourceURL url;
             url = paramRequest.getRenderUrl();
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            
+
             out.println("<script type=\"text/javascript\">");
             out.println("<!--");
             out.println("function lighton(idx) {");
@@ -352,7 +354,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             }else {
                 out.println("  var url = '"+url.setMode("vote")+"?rating='+val;");
                 out.println("  postHtml(url,'rate_"+wp.getId()+"');");
-            }            
+            }
             out.println("  alert('"+paramRequest.getLocaleString("msg_voteAcepted")+"');");
             out.println("}");
             out.println("-->");
@@ -380,7 +382,6 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             imgRank = halfStarPath;
         if (rank>midt)
             imgRank = fullStarPath;
-        System.out.println("-rank="+rank+", midl="+midl+", midt="+midt+", imgRank="+imgRank);
         return imgRank;
     }
 
@@ -393,6 +394,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         SemanticObject obj = SemanticObject.createSemanticObject(URI);
 
         String cookieName = obj==null?response.getWebPage().getSemanticObject().getId()+PREFIX:obj.getId()+PREFIX;
+
         Cookie[] cookies = request.getCookies();
         if( cookies!=null )
             for(Cookie cookie: cookies) {
@@ -403,13 +405,14 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
                     return;
                 }
             }
-        
+
         int vote;
         try {
             vote = Integer.parseInt(request.getParameter("rating"));
         }catch(NumberFormatException nfe) {
             vote = 0;
         }
+
         if( vote>0 ) {
             WebPage ws = response.getWebPage();
             double rank;
@@ -423,7 +426,6 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
                 rev = obj.getLongProperty(sp_reviews);
                 response.setRenderParameter("uri", URI);
             }
-            System.out.println("votar con"+vote);
             rank = rank * rev;
             rev++;
             rank = rank + vote;
@@ -436,7 +438,6 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
                 obj.setDoubleProperty(sp_rank, rank);
                 obj.setLongProperty(sp_reviews, rev);
             }
-            System.out.println("rank="+rank+", rev="+rev);
             response.setMode(response.Mode_HELP);
         }
     }
@@ -710,6 +711,4 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             return per;
         }
     }
-
-
 }
