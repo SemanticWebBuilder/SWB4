@@ -48,7 +48,6 @@ public class InclusiveGateway extends Gateway
             translateY: bind y - w/2
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
