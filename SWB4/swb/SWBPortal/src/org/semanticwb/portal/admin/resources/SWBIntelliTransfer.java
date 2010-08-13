@@ -704,7 +704,7 @@ public class SWBIntelliTransfer extends GenericResource {
                     log.debug("No creo el objeto..."+"sNewSObj:"+sNewSObj+", sOldSObj:"+sOldSObj);
                 }
             }
-            //SWBUtils.IO.removeDirectory(extractTo.getAbsolutePath());
+            SWBUtils.IO.removeDirectory(extractTo.getAbsolutePath());
         } catch (Exception e) {
             log.error(e);
         }
