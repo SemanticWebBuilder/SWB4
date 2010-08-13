@@ -257,7 +257,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        super.doView(request,response,paramRequest);
         String basePath="/work/models/"+paramRequest.getWebPage().getWebSite().getId()+"/jsp/"+ this.getClass().getSimpleName() +"/";
         String path = basePath+"content.jsp";
         if (this.getResourceBase().getProperty("mode") != null && "rss".equals(this.getResourceBase().getProperty("mode")))
