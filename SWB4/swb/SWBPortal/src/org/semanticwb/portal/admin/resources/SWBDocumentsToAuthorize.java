@@ -155,56 +155,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
             out.println("dojo.require(\"dojox.form.DropDownSelect\");");            
             out.println("</script>");
 
-            out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogautorize\" title=\""+paramRequest.getLocaleString("authorize")+"\">");
-            out.println("<form name='swbfrmResourcesAuhotrize' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
-            out.println("<input type='hidden' name='wbaction' value='a'></input>");
-            out.println("<input type='hidden' name='res' value=''></input>");
-            out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println(paramRequest.getLocaleString("msg"));
-            out.println("</td>");
-            out.println("<td>");
-            out.println("<textarea rows='6' cols='30' name=\"msg\">");
-            out.println("</textarea>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align='center' colspan='2'>");
-            out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeAuthorize();\" dojoType=\"dijit.form.Button\" name=\"cancel1\" id=\"cancel1\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
-            out.println("</td>");            
-            out.println("</tr>");
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</form>");
-            out.println("</div>");
-
-            out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogreject\" title=\""+paramRequest.getLocaleString("reject")+"\">");
-            out.println("<form name='swbfrmResourcesReject' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
-            out.println("<input type='hidden' name='wbaction' value='r'></input>");
-            out.println("<input type='hidden' name='res' value=''></input>");
-            out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println(paramRequest.getLocaleString("msg"));
-            out.println("</td>");
-            out.println("<td>");
-            out.println("<textarea rows='6' cols='30' name=\"msg\">");
-            out.println("</textarea>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("<tr>");
-            out.println("<td align='center' colspan='2'>");
-            out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
-            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeReject();\" dojoType=\"dijit.form.Button\" name=\"cancel2\" id=\"cancel2\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
-            out.println("</td>");            
-            out.println("</tr>");
-            out.println("</table>");
-            out.println("</form>");
-            out.println("</div>");
+            
 
             
 
@@ -340,6 +291,59 @@ public class SWBDocumentsToAuthorize extends GenericResource
                         out.println("</div>");
                     }
                 }
+                if(resources.length>0)
+                {
+                    out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogautorize\" title=\""+paramRequest.getLocaleString("authorize")+"\">");
+                    out.println("<form name='swbfrmResourcesAuhotrize' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
+                    out.println("<input type='hidden' name='wbaction' value='a'></input>");
+                    out.println("<input type='hidden' name='res' value=''></input>");
+                    out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println(paramRequest.getLocaleString("msg"));
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<textarea rows='6' cols='30' name=\"msg\">");
+                    out.println("</textarea>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td align='center' colspan='2'>");
+                    out.println("<button onClick='authorize();' dojoType=\"dijit.form.Button\" name='authorize' id='authorize' type='button'>"+ paramRequest.getLocaleString("authorize") +"</button>");
+                    out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeAuthorize();\" dojoType=\"dijit.form.Button\" name=\"cancel1\" id=\"cancel1\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</form>");
+                    out.println("</div>");
+
+                    out.println("<div dojoType=\"dijit.Dialog\" id=\"dialogreject\" title=\""+paramRequest.getLocaleString("reject")+"\">");
+                    out.println("<form name='swbfrmResourcesReject' class=\"swbform\" method='post' action='" + paramRequest.getActionUrl() + "'>");
+                    out.println("<input type='hidden' name='wbaction' value='r'></input>");
+                    out.println("<input type='hidden' name='res' value=''></input>");
+                    out.println("<input type='hidden' name='site' value='" + sitetoShow.getId() + "'></input>");
+                    out.println("<table>");
+                    out.println("<tr>");
+                    out.println("<td>");
+                    out.println(paramRequest.getLocaleString("msg"));
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println("<textarea rows='6' cols='30' name=\"msg\">");
+                    out.println("</textarea>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("<td align='center' colspan='2'>");
+                    out.println("<button onClick='reject();' dojoType=\"dijit.form.Button\" name='reject' id='reject' type='button'>"+ paramRequest.getLocaleString("reject") +"</button>");
+                    out.println("&nbsp;&nbsp;&nbsp;&nbsp;<button onClick=\"closeReject();\" dojoType=\"dijit.form.Button\" name=\"cancel2\" id=\"cancel2\" type=\"button\">"+ paramRequest.getLocaleString("cancel") +"</button>");
+                    out.println("</td>");
+                    out.println("</tr>");
+                    out.println("</table>");
+                    out.println("</form>");
+                    out.println("</div>");
+                }
                 out.println("<form class=\"swbform\" method='post' action='#'>");
                 out.println("<fieldset>");                                
                 
@@ -458,6 +462,8 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("       return;");
                 out.println("   }");
                 out.println("   document.swbfrmResourcesAuhotrize.submit();");
+                out.println("   var dialog=dijit.byId('dialogautorize');");
+                out.println("   dialog.hide();");
                 out.println("}");
 
                 out.println("function view(url,id)");
@@ -475,6 +481,8 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("       return;");
                 out.println("   }");                
                 out.println("   document.swbfrmResourcesReject.submit();");
+                out.println("   var dialog=dijit.byId('dialogreject');");
+                out.println("   dialog.hide();");
                 out.println("}");
                 out.println("</script>");
             }
