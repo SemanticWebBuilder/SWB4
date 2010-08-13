@@ -17,11 +17,8 @@ import javafx.scene.effect.ColorAdjust;
  * @author javier.solis
  */
 
-public-read var TYPE_ADHOC="adhoc";
-public-read var TYPE_LOOP="loop";
-public-read var TYPE_COMPENSATION="compensation";
-public-read var TYPE_MULTIPLE="multiple";
 public-read var TYPE_USER="user";
+public-read var TYPE_RULE="rule";
 public-read var TYPE_SERVICE="service";
 public-read var TYPE_SCRIPT="script";
 public-read var TYPE_MANUAL="manual";
@@ -38,7 +35,6 @@ public class Task extends Activity
     {
         x: bind x+ix;
         y: bind y+iy;
-        opacity: o;
         //smooth: true;
         scaleX: bind is;
         scaleY: bind is;
@@ -80,7 +76,6 @@ public class Task extends Activity
             ]
             scaleX: bind s
             scaleY: bind s
-            opacity: bind o
             effect: Styles.dropShadow
             visible: bind canView()
         };
