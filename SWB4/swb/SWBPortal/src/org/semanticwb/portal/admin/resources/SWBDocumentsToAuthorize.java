@@ -440,6 +440,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("function showAuthorize(id)");
                 out.println("{");
                 out.println("   document.swbfrmResourcesAuhotrize.res.value=id;");
+                out.println("   document.swbfrmResourcesAuhotrize.msg.value='';");
                 out.println("   var dialog=dijit.byId('dialogautorize');");
                 out.println("   dialog.show();");
                 out.println("}");
@@ -453,6 +454,7 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("function showReject(id)");
                 out.println("{");
                 out.println("   document.swbfrmResourcesReject.res.value=id;");
+                out.println("   document.swbfrmResourcesReject.msg.value='';");
                 out.println("   var dialog=dijit.byId('dialogreject');");
                 out.println("   dialog.show();");
                 out.println("}");
