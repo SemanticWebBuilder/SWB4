@@ -49,7 +49,7 @@
         }*/
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
-        int limit = 5;
+        int limit = 8;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
         ArrayList<SWBNewContent> contentstoshow= new ArrayList<SWBNewContent>();
         //if(urldetail!=null)
