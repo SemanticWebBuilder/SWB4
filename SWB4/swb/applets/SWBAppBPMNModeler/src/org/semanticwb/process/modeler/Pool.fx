@@ -79,7 +79,6 @@ public class Pool extends GraphicalElement
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
