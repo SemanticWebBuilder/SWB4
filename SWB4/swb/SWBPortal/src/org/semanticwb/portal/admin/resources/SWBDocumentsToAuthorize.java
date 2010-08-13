@@ -466,9 +466,9 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
                 out.println("       return;");
                 out.println("   }");
-                out.println("   document.swbfrmResourcesAuhotrize.submit();");
                 out.println("   var dialog=dijit.byId('dialogautorize');");
                 out.println("   dialog.hide();");
+                out.println("   document.swbfrmResourcesAuhotrize.submit();");                
                 out.println("}");
 
                 out.println("function view(url,id)");
@@ -484,10 +484,10 @@ public class SWBDocumentsToAuthorize extends GenericResource
                 out.println("   {");
                 out.println("       alert('" + paramRequest.getLocaleString("messageRequired") + "');");
                 out.println("       return;");
-                out.println("   }");                
-                out.println("   document.swbfrmResourcesReject.submit();");
+                out.println("   }");
                 out.println("   var dialog=dijit.byId('dialogreject');");
                 out.println("   dialog.hide();");
+                out.println("   document.swbfrmResourcesReject.submit();");                
                 out.println("}");
                 out.println("</script>");
             }
