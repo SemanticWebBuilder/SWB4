@@ -372,7 +372,10 @@ public class SWBDocumentsToAuthorize extends GenericResource
                     if(resource.getResourceData().createGenericInstance() instanceof Versionable)
                     {
                         Versionable v=(Versionable)resource.getResourceData().createGenericInstance();
-                        urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
+                        if(v!=null && v.getLastVersion()!=null)
+                        {
+                            urlpreview.setParameter("numversion", String.valueOf(v.getLastVersion().getVersionNumber()));
+                        }
                     }
                     //out.println("<input type=\"radio\" onClick=\"javascript:habilita("+ manager.isReviewer(resource, user) +",'"+urlpreview+"')\" name=\"res\" value=\"" + resource.getId() + "\"></input>");
 
