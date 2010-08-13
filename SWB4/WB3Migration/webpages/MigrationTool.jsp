@@ -12,7 +12,9 @@
 <%@page import="com.infotec.appfw.util.*,com.infotec.appfw.lib.DBPool.*,com.infotec.wb.lib.*, com.infotec.wb.services.*, com.infotec.wb.services.util.*"%>
 <%@page import="java.io.*, java.net.*, java.util.Collection, java.util.*, java.sql.*, org.w3c.dom.*"%>
 <%@page import="org.semanticwb.migration.office.*"%>
-
+<%!
+   boolean loaded=false;
+%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
@@ -67,32 +69,36 @@
             } else if ("usrrep".equals(action) || usrrep == null) {
                 // Se inicializa SemanticWebBuilder para revisar la existencia de repositorio de usuarios existentes
                 String prefix = getServletContext().getRealPath("/");
-                try {
-                    SWBUtils.createInstance(prefix);
-                } catch (Exception e) {
-                    System.out.println("Warning. Loading SWBUtils.");
-                }
-                System.out.println("SWBUtils Instance loaded....");
-                try {
-                    SWBPortal.createInstance(getServletContext());
-                    SWBPortal.setUseDB(true);
+                if(!loaded)
+                {
+                    try {
+                        SWBUtils.createInstance(prefix);
+                    } catch (Exception e) {
+                        System.out.println("Warning. Loading SWBUtils.");
+                    }
+                    System.out.println("SWBUtils Instance loaded....");
+                    try {
+                        SWBPortal.createInstance(getServletContext());
+                        SWBPortal.setUseDB(true);
 
-                    String base=SWBUtils.getApplicationPath();
-                    System.out.println("appPath: "+base);
-                    SWBPlatform.createInstance();
-                    SWBPlatform.createInstance().setContextPath(getServletContext().getContextPath());
+                        String base=SWBUtils.getApplicationPath();
+                        System.out.println("appPath: "+base);
+                        SWBPlatform.createInstance();
+                        SWBPlatform.createInstance().setContextPath(getServletContext().getContextPath());
 
-                    SWBPlatform.getSemanticMgr().initializeDB();
-                    SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb.owl");
-                    SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_rep.owl");
-                    SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/office.owl");
-                    SWBPlatform.getSemanticMgr().loadBaseVocabulary();
-                    SWBPlatform.getSemanticMgr().loadDBModels();
-                    SWBPlatform.getSemanticMgr().getOntology().rebind();
-                    System.out.println("SWBPlatform instance loaded....");
+                        SWBPlatform.getSemanticMgr().initializeDB();
+                        SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb.owl");
+                        SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/swb_rep.owl");
+                        SWBPlatform.getSemanticMgr().addBaseOntology(base+"WEB-INF/owl/office.owl");
+                        SWBPlatform.getSemanticMgr().loadBaseVocabulary();
+                        SWBPlatform.getSemanticMgr().loadDBModels();
+                        SWBPlatform.getSemanticMgr().getOntology().rebind();
+                        System.out.println("SWBPlatform instance loaded....");
 
-                } catch (Exception e) {
-                    System.out.println("Warning.... Loading SWBPlatform...."+e.getMessage());
+                    } catch (Exception e) {
+                        System.out.println("Warning.... Loading SWBPlatform...."+e.getMessage());
+                    }
+                    loaded=true;
                 }
 
                 HashMap hmurep4 = new HashMap();
