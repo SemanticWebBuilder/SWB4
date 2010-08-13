@@ -44,6 +44,9 @@ public class Event extends FlowNode
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
     protected var scaleOff:Number=0;                  //scale offset
+    protected var isInterrupting: Boolean = false;
+    protected var cancelActivity: Boolean = false;
+    protected var strokeDash : Float[];
 
     protected var colorAdjust=ColorAdjust
     {
@@ -57,7 +60,6 @@ public class Event extends FlowNode
     {
         x: bind x-ix-.5;
         y: bind y-iy-.5;
-        opacity: o;
         //smooth: true;
         scaleX: bind is+scaleOff;
         scaleY: bind is+scaleOff;
@@ -87,6 +89,7 @@ public class Event extends FlowNode
             //styleClass: "event"
             style: Styles.style_event
             //smooth:true;
+            strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
         };
 
         setType(type);
@@ -100,7 +103,6 @@ public class Event extends FlowNode
             ]
             scaleX: bind s;
             scaleY: bind s;
-            opacity: bind o;
             effect: Styles.dropShadow
             visible: bind canView()
         };
