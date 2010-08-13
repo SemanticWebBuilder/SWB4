@@ -42,6 +42,10 @@
     -fx-image:url("images/n_ciclo.png");
 }
 
+.modifierMultiInstance {
+	-fx-image:url("images/n_objeto.png");
+}
+
 .modifierCollapsed {
     -fx-image:url("images/n_collapsed.png");
 }
@@ -57,10 +61,6 @@
 
 .modifierAdhoc {
     -fx-image:url("images/n_adhoc.png");
-}
-
-.modifierMulti {
-    -fx-image:url("images/n_objeto.png");
 }
 
 .modifierUser {
@@ -217,6 +217,7 @@
     -fx-stroke:-gateway-normal-stroke;
     -fx-stroke-width: 2;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-gateway-first-color) (100%,-gateway-second-color);
+    -fx-cursor: hand;
 }
 
 .gateway:hover {
@@ -250,12 +251,22 @@
 .dataObject {
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 1;
+    -fx-cursor: hand;
     -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .dataObject:hover {
     -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2
+}
+
+.dataObject:focused {
+    -fx-stroke: -focus-stroke;
+    -fx-stroke-width: 2
+}
+
+.dataObject#label {
+    
 }
 
 .artifact {
@@ -280,18 +291,27 @@
 }
 
 .artifact#text {
-    -fx-stroke: null;
-    -fx-fill:null;
-}
-
-.dataObject:focused {
-    -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 2
+    
 }
 
 .connObject {
     -fx-stroke:-normal-stroke;
     -fx-stroke-width: 2;
+    -fx-cursor: hand;
+}
+
+.connObject#label {
+    
+}
+
+.connObject#labelBox {
+    
+}
+
+.connObject#diamond {
+    -fx-stroke:-normal-stroke;
+    -fx-stroke-width: 2;
+    -fx-fill: white;
 }
 
 .connObject:hover {
@@ -306,19 +326,19 @@
 
 .arrowMessage {
     -fx-stroke: -normal-stroke;
-    -fx-fill: #FFFFFF;
+    -fx-fill: white;
     -fx-stroke-width: 2;
 }
 
 .arrowMessage:hover {
     -fx-stroke:-hover-stroke;
-    -fx-fill: #FFFFFF;
+    -fx-fill: white;
     -fx-stroke-width: 3;
 }
 
 .arrowMessage:focused {
     -fx-stroke:-focus-stroke;
-    -fx-fill: #FFFFFF;
+    -fx-fill: white;
     -fx-stroke-width: 3;
 }
 
