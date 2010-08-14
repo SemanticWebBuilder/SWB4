@@ -3110,7 +3110,9 @@ public Document getDomProperty(SemanticProperty prop)
      */
     public String getWorkPath()
     {
-        return "/models/"+getModel().getName()+"/"+getSemanticClass().getClassGroupId()+"/"+getId();
+        SemanticClass cls=getSemanticClass();
+        if(cls==null)System.out.println("Class null:"+getURI());
+        return "/models/"+getModel().getName()+"/"+cls.getClassGroupId()+"/"+getId();
     }
 
     /**
