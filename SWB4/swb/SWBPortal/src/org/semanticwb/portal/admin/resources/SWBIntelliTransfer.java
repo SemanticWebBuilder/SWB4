@@ -44,8 +44,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
+ * Clase que exporta e importa elementos que se escojan de un sitio
  * @author jorge.jimenez
+ * creación:Agosto 2010
  */
 public class SWBIntelliTransfer extends GenericResource {
 
@@ -470,6 +471,11 @@ public class SWBIntelliTransfer extends GenericResource {
         }
     }
 
+    /**
+     * Metodo de instalación de un zip con partes de un sitio
+     * @param wsite
+     * @param zipFile
+     */
     private void installAdvZip(WebSite wsite, File zipFile)
     {
         String modelspath = SWBPortal.getWorkPath() + "/models/";
@@ -537,25 +543,25 @@ public class SWBIntelliTransfer extends GenericResource {
                                     bResourceTypeExist=true;  //Existe x lo tanto no se creara
                                 }
                             }else if(objUri.indexOf("#WebPage:home")>-1){
+                                //Si es de tipo webpage:home ya no se generaría ya que supuestamente
+                                //Ya debe existir un home en el sitio en el que se va a  importar
                                 bisWebPageHome=true;
                             }
-                        }else if(contToken == 3) {
-                            if(bisWebPageHome)
+                        }else if(contToken == 3) { //Para el registro de referencias hacia el homePage que estan en el
+                            //sitio original y la idea por supuesto es de que pasen igual al sitio a importar(destino)
+                            //siempre y cuando se hayan exportado dichas referencias (ej. Templates al home, recursos al home, etc)
+                            if(bisWebPageHome) //Si es el token 3 y tiene la bandera bisWebPageHome en true
                             {
                                 int pos=token.indexOf("<");
                                 if(pos>-1){
                                     int pos1=token.indexOf(">", pos);
                                     if(pos1>-1){
                                         String sobjUriToken3=token.substring(pos+1, pos1);
-                                        //System.out.println("sobjUriToken3:"+sobjUriToken3);
                                         if(linkedHashMap.containsKey(sobjUriToken3)){
-                                            //System.out.println("sobjUriToken3 Identificado:"+sobjUriToken3);
                                             bResourceTypeExist=false;
                                             bisWebPageHome=false;
                                         }else{
-                                            //System.out.println("sobjNew que revisa si existe:"+sobjNew);
                                             if(SemanticObject.createSemanticObject(sobjNew)!=null) {
-                                                //System.out.println("sobjNew que Existe y no creara:"+sobjNew);
                                                 bResourceTypeExist=true;  //Existe x lo tanto no se creara
                                             }else{
                                                 bResourceTypeExist=false;
@@ -570,15 +576,13 @@ public class SWBIntelliTransfer extends GenericResource {
                                 if(!bisWebPageHome)
                                 {
                                     if(!linkHmapObjs.containsKey(objUri)){
-                                        //System.out.println("objUri:"+objUri+",sobjNew:"+sobjNew);
                                         ArrayList newArray=new ArrayList();
                                         newArray.add(line);
                                         linkHmapObjs.put(objUri, newArray);
 
                                         //Revisa si existe el sobjId
-                                        //String sobjNew=objUri.replaceAll(oldNamespace, wsite.getNameSpace());
                                         if(objUri.indexOf("#WebPage:home")==-1){
-                                            //System.out.println("objUri a Hadh:"+objUri+", sobjNew:"+givemeUri2Create(sobjNew));
+                                            //se guarda una relación del uri antiguo con un nuevo uri generado para el sitio en donde se importara
                                             linkedHashMap.put(objUri, givemeUri2Create(sobjNew));
                                         }
                                     }else{ //Agrega la linea a el arraylist
@@ -597,16 +601,7 @@ public class SWBIntelliTransfer extends GenericResource {
             reader.close();
 
 
-            /*
-            Iterator<String> ItTmp=linkedHashMap.keySet().iterator();
-            while(ItTmp.hasNext()){
-                String hashKey=ItTmp.next();
-                System.out.println("hashKey:"+hashKey+", hashValue:"+linkedHashMap.get(hashKey));
-            }*/
-
-
-
-
+            
             //Barrer Hash para para crear cada objeto y crear todas sus propiedades en un archivo
             File fileModified=new File(modelspath + wsite.getId()+"_i_tmp" + "/"+wsite.getId()+"_tmp.nt");
             FileOutputStream out = new FileOutputStream(fileModified);
@@ -614,17 +609,13 @@ public class SWBIntelliTransfer extends GenericResource {
             while(itObjs.hasNext()){
                 String sobjOld=itObjs.next();
                 String uri2create=(String)linkedHashMap.get(sobjOld);
-                //System.err.println("sobjOld:"+sobjOld+", valueJ:"+(String)linkedHashMap.get(sobjOld));
                 Iterator<String> itLines=((ArrayList)linkHmapObjs.get(sobjOld)).iterator();
                 while(itLines.hasNext()){
                     String strLine=itLines.next();
-                    //System.out.println("Valor de Arreglo:"+strLine);
-                    //System.out.println("uri2create:"+uri2create+",sobjOld:"+sobjOld);
-
+                   
                     //Revisar si hay algun uri en el tercer token que coincida con alguno de los cambiados y que estan en el
-                    //has, de ser así tambien reemplazarlo
+                    //hash, de ser así tambien reemplazarlo
                     int contToken=0;
-                    //System.out.println("stmp:"+stmp);
                     StringTokenizer strTokens = new StringTokenizer(strLine, " ", false);
                     while (strTokens.hasMoreElements()) {
                         String token = strTokens.nextToken();
@@ -639,10 +630,7 @@ public class SWBIntelliTransfer extends GenericResource {
                                 if(pos1>-1){
                                     String tmpToken=token.substring(pos+1, pos1);
                                     if(linkedHashMap.containsKey(tmpToken)){
-                                        //System.out.println("tmpTokenJorge:"+tmpToken);
                                         String newObjUri=(String)linkedHashMap.get(tmpToken);
-                                        //System.out.println("El HashContine el token:");
-                                        //System.out.println("Reemplaza:"+tmpToken+",por:"+newObjUri);
                                         strLine=strLine.replaceAll(tmpToken, newObjUri);
                                     }
                                 }
@@ -653,7 +641,6 @@ public class SWBIntelliTransfer extends GenericResource {
                         strLine=strLine.replaceAll(sobjOld, uri2create);
                     }
                     strLine=strLine.replaceAll(oldNamespace, wsite.getNameSpace())+"\n";
-                    //por le nuevo, ya que se ha detectado que si no se hace no funcionan
                     //Reemplazar en Xml de los ResourceFilter, pero puede haber más cosas que se tuvieran que validar
                     if(sobjOld.indexOf("#swb_ResourceFilter:")>-1){
                       if(strLine.indexOf("<topicmap id=\\\""+oldIDModel+"\\\">")>-1){
@@ -683,7 +670,6 @@ public class SWBIntelliTransfer extends GenericResource {
                 SemanticObject semObj=SemanticObject.createSemanticObject(sNewSObj);
                 if(semObj!=null){ //Debería siempre entrar a esta opción, de lo contrario no se realizó bien la creación del objeto
                     String newSObjPath=semObj.getWorkPath();
-                    //System.out.println("semObj existente:"+semObj+",newSObjPath:"+newSObjPath);
                     int pos=sOldSObj.indexOf("#");
                     if(pos>-1){
                         int pos1=sOldSObj.indexOf(":", pos);
@@ -691,11 +677,9 @@ public class SWBIntelliTransfer extends GenericResource {
                         {
                             String dirOldSObj=sOldSObj.substring(pos+1, pos1);
                             String idOldSobj=sOldSObj.substring(pos1+1);
-                            //System.out.println("Ruta final oldSOBJ:"+modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/");
                             File fileOldSObjPath=new File(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/");
                             if(fileOldSObjPath.isDirectory() && fileOldSObjPath.exists())
                             {
-                                //System.out.println("Ruta final NewSOBJ:"+SWBPortal.getWorkPath() + newSObjPath+"/");
                                 SWBUtils.IO.copyStructure(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/", SWBPortal.getWorkPath() + newSObjPath+"/");
                             }
                         }
@@ -717,9 +701,7 @@ public class SWBIntelliTransfer extends GenericResource {
         int pos=sobj.lastIndexOf(":");
         if(pos>-1){
             uriPart1=sobj.substring(0, pos);
-            //System.out.println("uriPart1J:"+uriPart1);
             String uriPart2=sobj.substring(pos+1);
-            //System.out.println("uriPart1:"+uriPart1+",uriPart2:"+uriPart2);
             return createSemObj(uriPart1, uriPart2);
         }
         return null;
@@ -738,7 +720,6 @@ public class SWBIntelliTransfer extends GenericResource {
 
 
     private String getNumericSemObjUri(String uriPart1, String uriPart2, int cont){
-        //System.out.println("Entra a getNumericSemObjUri:"+uriPart1+uriPart2);
         int tmpCont=cont+1;
         String uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
         SemanticObject semObj=SemanticObject.createSemanticObject(uriaCrear);
@@ -750,7 +731,6 @@ public class SWBIntelliTransfer extends GenericResource {
 
 
     private String getStringSemObjUri(String uriPart1, String uriPart2, int cont){
-        //System.out.println("Entra a getStringSemObjUri:"+uriPart1+uriPart2);
         String uriaCrear=null;
         if(cont<1) uriaCrear=uriPart1+":"+uriPart2 ;
         else uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
@@ -915,7 +895,7 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
     /**
-     * Grabado de WorkPath de objeto semantico
+     * Grabado de WorkPath de objeto semantico al zip en la exportación
      * @param sObjUri
      */
     private void addObjWorkPath2Zip(Iterator<String> itLinkedList, ZipOutputStream zos, File fBase)
