@@ -537,15 +537,14 @@ public class SWBIntelliTransfer extends GenericResource {
                             //De ser así, ya no lo crearía, ya que si lo creo se generaria otro ResourceType
                             //diferente al que ya esta, ej. otro ResourceType Banner, Window, etc. Esta es la única Excepción
                             if(objUri.indexOf("#swb_ResourceType:")>-1 || objUri.indexOf("#swb_Language:")>-1 ||
-                                 objUri.indexOf("#swb_Device:")>-1 || objUri.indexOf("#swb_Country:")>-1 ||
-                                 objUri.indexOf("#swb_TemplateGroup:")>-1){ //Es de tipo ResourceType
+                                 objUri.indexOf("#swb_Device:")>-1 || objUri.indexOf("#swb_Country:")>-1){ //Es de tipo ResourceType
                                 if(SemanticObject.createSemanticObject(sobjNew)!=null) {
                                     bResourceTypeExist=true;  //Existe x lo tanto no se creara
                                 }
                             }else if(objUri.indexOf("#WebPage:home")>-1){
                                 //Si es de tipo webpage:home ya no se generaría ya que supuestamente
                                 //Ya debe existir un home en el sitio en el que se va a  importar
-                                bisWebPageHome=true;
+                                //bisWebPageHome=true;
                             }
                         }else if(contToken == 3) { //Para el registro de referencias hacia el homePage que estan en el
                             //sitio original y la idea por supuesto es de que pasen igual al sitio a importar(destino)
@@ -584,6 +583,8 @@ public class SWBIntelliTransfer extends GenericResource {
                                         if(objUri.indexOf("#WebPage:home")==-1){
                                             //se guarda una relación del uri antiguo con un nuevo uri generado para el sitio en donde se importara
                                             linkedHashMap.put(objUri, givemeUri2Create(sobjNew));
+                                        }else{
+                                            linkedHashMap.put(objUri, wsite.getHomePage().getURI());
                                         }
                                     }else{ //Agrega la linea a el arraylist
                                         ArrayList alist=(ArrayList)linkHmapObjs.get(objUri);
