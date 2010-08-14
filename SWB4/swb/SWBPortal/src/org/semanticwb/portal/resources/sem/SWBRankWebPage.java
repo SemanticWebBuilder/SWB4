@@ -93,8 +93,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
      * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
      */
     @Override
-    public void setResourceBase(Resource base) throws SWBResourceException
-    {
+    public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         fullStarPath =  getFullStar();
         halfStarPath = getHalfStar();
@@ -190,7 +189,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         if( cookies!=null )
             for(Cookie cookie: cookies) {
                 if(cookie.getName().equals(cookieName)) {
-                   doView(request, response, paramRequest);
+                   doVote(request, response, paramRequest);
                 }
             }
 
@@ -233,9 +232,9 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         }
         out.println("</ul>");
         if( obj!=null )
-            out.println("<p>Número de votos: "+obj.getLongProperty(sp_reviews)+"</p>");
+            out.println("<p>"+paramRequest.getLocaleString("msgDoViewVotes")+": "+obj.getLongProperty(sp_reviews)+"</p>");
         else
-            out.println("<p>Número de votos: "+wp.getReviews()+"</p>");
+            out.println("<p>"+paramRequest.getLocaleString("msgDoViewVotes")+": "+wp.getReviews()+"</p>");
 
 //        SWBResourceURL url = paramRequest.getActionUrl();
 //        url.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -310,6 +309,14 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             }
         }
         out.println("</ul>");
+
+        if( isVoted ) {
+            if( obj!=null )
+                out.println("<p>"+paramRequest.getLocaleString("msgDoViewVotes")+": "+obj.getLongProperty(sp_reviews)+"</p>");
+            else
+                out.println("<p>"+paramRequest.getLocaleString("msgDoViewVotes")+": "+wp.getReviews()+"</p>");
+        }
+
         out.println("</div>");
         if( !isVoted ) {
             SWBResourceURL url;
