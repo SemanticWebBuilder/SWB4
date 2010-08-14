@@ -307,23 +307,24 @@ private Document m_filter = null;
         }
     }
 
-//    @Override
-//    public void setXml(String xml)
-//    {
-//        //Garantiza que se borren las propiedades
-//        getSemanticObject().getRDFResource().removeAll(swb_xml.getRDFProperty());
-//        super.setXml(xml);
-//        m_dom=null;
-//    }
-    /**
- * Adds the hit.
- * 
- * @param request the request
- * @param user the user
- * @param page the page
- */
-public void addHit(HttpServletRequest request, User user, WebPage page) {
+    //    @Override
+    //    public void setXml(String xml)
+    //    {
+    //        //Garantiza que se borren las propiedades
+    //        getSemanticObject().getRDFResource().removeAll(swb_xml.getRDFProperty());
+    //        super.setXml(xml);
+    //        m_dom=null;
+    //    }
+        /**
+     * Adds the hit.
+     *
+     * @param request the request
+     * @param user the user
+     * @param page the page
+     */
+    public void addHit(HttpServletRequest request, User user, WebPage page) {
         //TODO:
+        incHits();
     }
 
     /**
