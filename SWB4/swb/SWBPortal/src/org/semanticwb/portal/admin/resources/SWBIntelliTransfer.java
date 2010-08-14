@@ -669,20 +669,25 @@ public class SWBIntelliTransfer extends GenericResource {
                 String sNewSObj=(String)linkedHashMap.get(sOldSObj);
                 SemanticObject semObj=SemanticObject.createSemanticObject(sNewSObj);
                 if(semObj!=null){ //Debería siempre entrar a esta opción, de lo contrario no se realizó bien la creación del objeto
-                    String newSObjPath=semObj.getWorkPath();
-                    int pos=sOldSObj.indexOf("#");
-                    if(pos>-1){
-                        int pos1=sOldSObj.indexOf(":", pos);
-                        if(pos1>-1)
-                        {
-                            String dirOldSObj=sOldSObj.substring(pos+1, pos1);
-                            String idOldSobj=sOldSObj.substring(pos1+1);
-                            File fileOldSObjPath=new File(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/");
-                            if(fileOldSObjPath.isDirectory() && fileOldSObjPath.exists())
+                    try{
+                        String newSObjPath=semObj.getWorkPath();
+                        int pos=sOldSObj.indexOf("#");
+                        if(pos>-1){
+                            int pos1=sOldSObj.indexOf(":", pos);
+                            if(pos1>-1)
                             {
-                                SWBUtils.IO.copyStructure(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/", SWBPortal.getWorkPath() + newSObjPath+"/");
+                                String dirOldSObj=sOldSObj.substring(pos+1, pos1);
+                                String idOldSobj=sOldSObj.substring(pos1+1);
+                                File fileOldSObjPath=new File(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/");
+                                if(fileOldSObjPath.isDirectory() && fileOldSObjPath.exists())
+                                {
+                                    SWBUtils.IO.copyStructure(modelspath + wsite.getId()+"_i_tmp" + "/"+dirOldSObj+"/"+idOldSobj+"/", SWBPortal.getWorkPath() + newSObjPath+"/");
+                                }
                             }
                         }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        log.error(e);
                     }
                 }else{ //No debería irse por este else
                     log.debug("No creo el objeto..."+"sNewSObj:"+sNewSObj+", sOldSObj:"+sOldSObj);
