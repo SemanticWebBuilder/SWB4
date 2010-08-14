@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAddNew" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="ConfiguraciÃ³n de estrategia">
+    <fieldset legend="Configuración de estrategia">
         <input type="text" id="cluster" name="cluster" label="Subtipo de Banner:" size="50" required="true" promptMessage="Nombre del Subtipo de Banners que se incluyen en el carrusel" />
-        <input type="text" id="width"  name="width" label="Ancho de las imÃ¡genes:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Ancho invÃ¡lido" promptMessage="Ancho de la imagen. Ejemplos: 350px, 854" />
-        <input type="text" id="height" name="height" label="Alto de las imÃ¡genes:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Altura invÃ¡lida" promptMessage="Altura de la imagen. Ejemplos: 350px, 854" />
     </fieldset>
+
+    <fieldset legend="Apariencia">
+        <input type="text" id="width"  name="width" label="Ancho de las imágenes:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 350px, 854" />
+        <input type="text" id="height" name="height" label="Alto de las imágenes:" maxlength="9" regExp="\d{1,9}(|px)" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 350px, 854" />
+
+        <input type="text" id="theight" name="theight" label="Altura del título:" maxlength="9" regExp="\d{1,5}" invalidMessage="Altura inválida" promptMessage="Altura del título. Considerada en pixeles" />
+    </fieldset>
+
     <fieldset>
         <input type="submit" name="btnSave" id="btnSave" value="Guardar" onclick="return jsValida(this.form)" />
         <input type="reset"  name="btnReset" id="btnReset" value="Restablecer" />
