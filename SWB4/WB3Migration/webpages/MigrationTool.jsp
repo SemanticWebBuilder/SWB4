@@ -490,6 +490,7 @@
                     <ul>
                         <li><input type="checkbox" name="catalog" id="cat8" value="resourcesubtype" disabled><label for="cat8">Sub-Tipos de recursos <%=hmcat.get("resourcesubtype") != null ? "(" + hmcat.get("resourcesubtype") + ")" : ""%></label></li>
                         <li><input type="checkbox" name="catalog" id="cat5" value="template" disabled><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat16" value="templateassoc" disabled><label for="cat16">Asociar Plantillas a secciones, seleccionar ya que se terminen de migrar todos las plantillas.</label></li>
                     </ul>
                 </fieldset>
                 <fieldset><legend>&nbsp;&nbsp;Lista de Catálogos - Paso 3&nbsp;&nbsp;</legend>
@@ -817,7 +818,8 @@
                     %>
                     <ul>
                         <li><input type="checkbox" name="catalog" id="cat8" value="resourcesubtype" <%=(hmcat.get("resourcesubtype") != null || !doResSubType ? "disabled" : "checked")%>><label for="cat8">Sub-Tipos de recursos <%=hmcat.get("resourcesubtype") != null ? "(" + hmcat.get("resourcesubtype") + ")" : ""%></label></li>
-                        <li><input type="checkbox" name="catalog" id="cat5" value="template" <%=(hmcat.get("template") != null || !doTemplate ? "disabled" : "checked")%>><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat5" value="template" <%=(hmcat.get("template") != null || !doTemplate ? "" : "checked")%>><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat16" value="templateassoc" ><label for="cat16">Asociar Plantillas a secciones, seleccionar ya que se terminen de migrar todos las plantillas.</label></li>
                     </ul>
                 </fieldset>
                 <fieldset><legend>&nbsp;&nbsp;Lista de Catálogos - Paso 3&nbsp;&nbsp;</legend>
@@ -891,6 +893,7 @@
                             idmax = 0;
                             //Enumeration enutpl = DBTemplate.getInstance().getTemplates(site);
 
+                            boolean dotplassoc=Boolean.FALSE;
                             Collection colTpl = TemplateMgr.getInstance().getTemplates(site).values();
                             Iterator ittpl = colTpl.iterator();
                             while (ittpl.hasNext()) {
@@ -900,146 +903,222 @@
 
                                 RecTemplate rtpl = templ.getRecTemplate();
 
-                                org.semanticwb.model.Template tpl = ws.createTemplate(Integer.toString(rtpl.getId()));
-                                tpl.setTitle(rtpl.getTitle());
-                                tpl.setDescription(rtpl.getDescription());
-                                tpl.setActive(rtpl.getActive() == 1 ? true : false);
+                                org.semanticwb.model.Template tpl = null;
+                                tpl = ws.getTemplate(Integer.toString(rtpl.getId()));
+                                if(tpl==null)
+                                {
+                                    dotplassoc=Boolean.TRUE;
+                                    tpl = ws.createTemplate(Integer.toString(rtpl.getId()));
+                                    tpl.setTitle(rtpl.getTitle());
+                                    tpl.setDescription(rtpl.getDescription());
+                                    tpl.setActive(rtpl.getActive() == 1 ? true : false);
 
-                                TemplateGroup tplgp = ws.getTemplateGroup(Integer.toString(rtpl.getGrpid()));
-
-                                if (null == tplgp) { 
-                                    tplgp=ws.getTemplateGroup("1");  
-                                }
-
-                                tpl.setGroup(tplgp);
-
-                                System.out.println("filename: "+templ.getFileName(rtpl.getActualversion())+", version actual: "+rtpl.getActualversion());
-
-                                VersionInfo vi = ws.createVersionInfo();
-                                vi.setVersionFile(templ.getFileName(rtpl.getActualversion()));
-                                vi.setVersionNumber(1);
-                                vi.setVersionComment("Template importado");
-
-                                tpl.setActualVersion(vi);
-                                tpl.setLastVersion(vi);
-
-                                //copiado de archivos
-
-                                int versionactual = rtpl.getActualversion();
-                                int i_tplId = rtpl.getId();
-
-                                String sourceDirectory = "/sites/" + site + "/templates/" + i_tplId + "/" + versionactual + "/";
-                                String targetDirectory = path2 + site + "/Template/" + i_tplId + "/1/";
-                                String destinationPath = "/models/"+site + "/Template/" + i_tplId + "/1/";
-
-                                if (path2 != null && path2.trim().length() > 0) {
-                                    // copiando version actual
-                                    File sourcePath = new File(WBUtils.getInstance().getWorkPath() + sourceDirectory);
-
-                                    if (sourcePath.exists() && sourcePath.isDirectory()) //revisar si existe la fuente, si no hace nada y regresa false
+                                    String repName = tm.getDbdata().getRepository();
+                                    UserRepository urep = UserRepository.ClassMgr.getUserRepository(repName + "_usr");
+                                    String idadm = rtpl.getIdadm();
+                                    if(idadm!=null&&idadm.indexOf("_")>-1)
                                     {
-                                        File targetPath = new File(targetDirectory);
-                                        if (!targetPath.exists()) // si no existe el target lo crea
+                                        idadm = idadm.substring(0,idadm.indexOf("_"));
+                                    }
+                                    try{
+                                        tpl.setCreated(new java.util.Date(rtpl.getCreated().getTime()));
+                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de creación del template.");}
+                                    if(null!=idadm)
+                                    {
+                                        try{
+                                            tpl.setCreator(urep.getUser(idadm));
+                                        } catch(Exception e){System.out.println("No se pudo poner el usuario creador del template.");}
+                                        try{
+                                            tpl.setModifiedBy(urep.getUser(idadm));
+                                        } catch(Exception e){System.out.println("No se pudo poner el usuario de modificación del template.");}
+                                    }
+                                    try{
+                                        tpl.setUpdated(new java.util.Date(rtpl.getLastupdate().getTime()));
+                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de actualización del template.");}
+                                    
+
+                                    TemplateGroup tplgp = ws.getTemplateGroup(Integer.toString(rtpl.getGrpid()));
+
+                                    if (null == tplgp) {
+                                        tplgp=ws.getTemplateGroup("1");
+                                    }
+
+                                    tpl.setGroup(tplgp);
+
+                                    System.out.println("filename: "+templ.getFileName(rtpl.getActualversion())+", version actual: "+rtpl.getActualversion());
+
+                                    VersionInfo vi = ws.createVersionInfo();
+                                    vi.setVersionFile(templ.getFileName(rtpl.getActualversion()));
+                                    vi.setVersionNumber(1);
+                                    vi.setVersionComment("Template importado");
+
+                                    tpl.setActualVersion(vi);
+                                    tpl.setLastVersion(vi);
+
+                                    //copiado de archivos
+
+                                    int versionactual = rtpl.getActualversion();
+                                    int i_tplId = rtpl.getId();
+
+                                    String sourceDirectory = "/sites/" + site + "/templates/" + i_tplId + "/" + versionactual + "/";
+                                    String targetDirectory = path2 + site + "/Template/" + i_tplId + "/1/";
+                                    String destinationPath = "/models/"+site + "/Template/" + i_tplId + "/1/";
+
+                                    if (path2 != null && path2.trim().length() > 0) {
+                                        // copiando version actual
+                                        File sourcePath = new File(WBUtils.getInstance().getWorkPath() + sourceDirectory);
+
+                                        if (sourcePath.exists() && sourcePath.isDirectory()) //revisar si existe la fuente, si no hace nada y regresa false
                                         {
-                                            targetPath.mkdirs();
-                                        }
-                                        if (targetPath != null && targetPath.exists()) //si existe el target
-                                        {
-                                            String sourceWebPath =  AFUtils.getInstance().getEnv("wb/sourceWebPath");
-                                            System.out.println("sourceWebPath:"+sourceWebPath);
-                                            //if(null!=sourceWebPath&&sourceWebPath.trim().length()==0)
-                                                sourceWebPath="";
+                                            File targetPath = new File(targetDirectory);
+                                            if (!targetPath.exists()) // si no existe el target lo crea
+                                            {
+                                                targetPath.mkdirs();
+                                            }
+                                            if (targetPath != null && targetPath.exists()) //si existe el target
+                                            {
+                                                String sourceWebPath =  AFUtils.getInstance().getEnv("wb/sourceWebPath");
+                                                System.out.println("sourceWebPath:"+sourceWebPath);
+                                                //if(null!=sourceWebPath&&sourceWebPath.trim().length()==0)
+                                                    sourceWebPath="";
 
-                                            String sourceParserPath = sourceWebPath+WBUtils.getInstance().getWebWorkPath() + sourceDirectory;
-                                            System.out.println("Ruta origen:"+sourceParserPath);
+                                                String sourceParserPath = sourceWebPath+WBUtils.getInstance().getWebWorkPath() + sourceDirectory;
+                                                System.out.println("Ruta origen:"+sourceParserPath);
 
-                                            String destinationWebWorkPath =  AFUtils.getInstance().getEnv("swb/webWorkPath");
-                                            if(null!=destinationWebWorkPath&&destinationWebWorkPath.trim().length()==0) destinationWebWorkPath="";
+                                                String destinationWebWorkPath =  AFUtils.getInstance().getEnv("swb/webWorkPath");
+                                                if(null!=destinationWebWorkPath&&destinationWebWorkPath.trim().length()==0) destinationWebWorkPath="";
 
-                                            String destinationWebPath =  AFUtils.getInstance().getEnv("swb/destinationWebPath");
-                                            if(null!=destinationWebPath&&destinationWebPath.trim().length()==0) destinationWebPath="";
+                                                String destinationWebPath =  AFUtils.getInstance().getEnv("swb/destinationWebPath");
+                                                if(null!=destinationWebPath&&destinationWebPath.trim().length()==0) destinationWebPath="";
 
-                                            String targetParserPath = destinationWebPath+destinationWebWorkPath + destinationPath;
-                                            System.out.println("Nueva Ruta:"+targetParserPath);
+                                                String targetParserPath = destinationWebPath+destinationWebWorkPath + destinationPath;
+                                                System.out.println("Nueva Ruta:"+targetParserPath);
 
-                                            AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceParserPath, targetParserPath);
-                                        }
-                                    }
-                                }
-
-                                if (rtpl.getId() > idmax) {
-                                    idmax = rtpl.getId();
-                                }
-                                numTemplates++;
-
-                                if (templ.getInterval() != null) {
-                                    //System.out.println("Revisando Intervalo Template... ");
-
-                                    String xmlconfig = templ.getXml();
-
-                                    if (xmlconfig != null) {
-                                        if (xmlconfig.indexOf("<interval>") > 0) {
-                                            String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"), xmlconfig.lastIndexOf("</interval>") + 11);
-                                            //System.out.println("Intervalo (Template): " + intervalo);
-
-                                            Document dom = SWBUtils.XML.xmlToDom(intervalo);
-                                            String titulo = dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
-                                            //System.out.println("Titulo (Template): " + titulo);
-
-                                            org.semanticwb.model.Calendar schedule = ws.createCalendar();
-                                            schedule.setActive(Boolean.TRUE);
-                                            schedule.setTitle(titulo);
-                                            schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
-
-                                            CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
-                                            calRef.setCalendar(schedule);
-                                            calRef.setActive(Boolean.TRUE);
-                                            tpl.addCalendarRef(calRef);
+                                                AFUtils.getInstance().copyStructure(WBUtils.getInstance().getWorkPath() + sourceDirectory, targetDirectory, true, sourceParserPath, targetParserPath);
+                                            }
                                         }
                                     }
-                                }
 
-                                // Revisando roles asociados al template
-                                // Roles
-                                Iterator itroles = templ.getRoles();
-                                while (itroles.hasNext()) {
-                                    Integer irole = (Integer) itroles.next();
-                                    //System.out.println("template/role: " + irole.toString());
-                                    String usrreptemp = usrrep;
-                                    if (usrrep.startsWith("swb4|")) {
-                                        usrreptemp = usrrep.substring(usrrep.indexOf("swb4|") + 5);
+                                    if (rtpl.getId() > idmax) {
+                                        idmax = rtpl.getId();
                                     }
-                                    org.semanticwb.model.Role rrole = UserRepository.ClassMgr.getUserRepository(usrreptemp).getRole(Integer.toString(irole.intValue()));
-                                    if (rrole != null) {
-                                        RoleRef rolref = ws.createRoleRef();
-                                        rolref.setRole(rrole);
-                                        rolref.setActive(Boolean.TRUE);
-                                        tpl.addRoleRef(rolref);
+                                    numTemplates++;
+
+                                    if (templ.getInterval() != null) {
+                                        //System.out.println("Revisando Intervalo Template... ");
+
+                                        String xmlconfig = templ.getXml();
+
+                                        if (xmlconfig != null) {
+                                            if (xmlconfig.indexOf("<interval>") > 0) {
+                                                String intervalo = xmlconfig.substring(xmlconfig.indexOf("<interval>"), xmlconfig.lastIndexOf("</interval>") + 11);
+                                                //System.out.println("Intervalo (Template): " + intervalo);
+
+                                                Document dom = SWBUtils.XML.xmlToDom(intervalo);
+                                                String titulo = dom.getElementsByTagName("title").item(0).getFirstChild().getNodeValue();
+                                                //System.out.println("Titulo (Template): " + titulo);
+
+                                                org.semanticwb.model.Calendar schedule = ws.createCalendar();
+                                                schedule.setActive(Boolean.TRUE);
+                                                schedule.setTitle(titulo);
+                                                schedule.getSemanticObject().setProperty(org.semanticwb.model.Calendar.swb_xml, intervalo);
+
+                                                CalendarRef calRef = CalendarRef.ClassMgr.createCalendarRef(ws);
+                                                calRef.setCalendar(schedule);
+                                                calRef.setActive(Boolean.TRUE);
+                                                tpl.addCalendarRef(calRef);
+                                            }
+                                        }
+                                    }
+
+                                    // Revisando roles asociados al template
+                                    // Roles
+                                    Iterator itroles = templ.getRoles();
+                                    while (itroles.hasNext()) {
+                                        Integer irole = (Integer) itroles.next();
+                                        //System.out.println("template/role: " + irole.toString());
+                                        String usrreptemp = usrrep;
+                                        if (usrrep.startsWith("swb4|")) {
+                                            usrreptemp = usrrep.substring(usrrep.indexOf("swb4|") + 5);
+                                        }
+                                        org.semanticwb.model.Role rrole = UserRepository.ClassMgr.getUserRepository(usrreptemp).getRole(Integer.toString(irole.intValue()));
+                                        if (rrole != null) {
+                                            RoleRef rolref = ws.createRoleRef();
+                                            rolref.setRole(rrole);
+                                            rolref.setActive(Boolean.TRUE);
+                                            tpl.addRoleRef(rolref);
+                                        }
+                                    }
+
+                                    //Revisando reglas asociadas al template
+                                    Iterator itrules = templ.getRules();
+                                    while (itrules.hasNext()) {
+                                        Integer irule = (Integer) itrules.next();
+                                        org.semanticwb.model.Rule rrule = ws.getRule(Integer.toString(irule.intValue()));
+                                        RuleRef rulref = ws.createRuleRef();
+                                        rulref.setRule(rrule);
+                                        rulref.setActive(Boolean.TRUE);
+                                        tpl.addRuleRef(rulref);
                                     }
                                 }
+                                else
+                                {
 
-                                //Revisando reglas asociadas al template
-                                Iterator itrules = templ.getRules();
-                                while (itrules.hasNext()) {
-                                    Integer irule = (Integer) itrules.next();
-                                    org.semanticwb.model.Rule rrule = ws.getRule(Integer.toString(irule.intValue()));
-                                    RuleRef rulref = ws.createRuleRef();
-                                    rulref.setRule(rrule);
-                                    rulref.setActive(Boolean.TRUE);
-                                    tpl.addRuleRef(rulref);
+                                    String repName = tm.getDbdata().getRepository();
+                                    UserRepository urep = UserRepository.ClassMgr.getUserRepository(repName + "_usr");
+
+                                    String idadm = rtpl.getIdadm();
+                                    if(idadm!=null&&idadm.indexOf("_")>-1)
+                                    {
+                                        idadm = idadm.substring(0,idadm.indexOf("_"));
+                                    }
+
+                                    System.out.println("Actualizando información del template."+tpl.getId());
+                                    try{
+                                        tpl.setCreated(new java.util.Date(rtpl.getCreated().getTime()));
+                                        System.out.println(" -------------- Se actualizó fecha de creacion.");
+                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de creación del template.");}
+                                    if(null!=idadm)
+                                    {
+                                        try{
+                                            tpl.setCreator(urep.getUser(idadm));
+                                            System.out.println(" -------------- Se actualizó usuario creador.");
+                                        } catch(Exception e){System.out.println("No se pudo poner el usuario creador del template.");}
+                                        try{
+                                            tpl.setModifiedBy(urep.getUser(idadm));
+                                            System.out.println(" -------------- Se actualizó usuario de modificacion.");
+                                        } catch(Exception e){System.out.println("No se pudo poner el usuario de modificación del template.");}
+                                    }
+                                    try{
+                                        tpl.setUpdated(new java.util.Date(rtpl.getLastupdate().getTime()));
+                                        System.out.println(" -------------- Se actualizó fecha de modificacion.");
+                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de actualización del template.");}
+                                    
                                 }
 
                             }
-                            idmax++;
-                            ws.getSemanticObject().getModel().setCounterValue(org.semanticwb.model.Template.sclass.getClassGroupId(), idmax);
 
-                            //Revisando y relacionando templates con las secciones
+                            if(dotplassoc)
+                            {
+                                idmax++;
+                                ws.getSemanticObject().getModel().setCounterValue(org.semanticwb.model.Template.sclass.getClassGroupId(), idmax);
 
-                            //Para el home
-                            setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
+                                //Revisando y relacionando templates con las secciones
 
-                            //Para el resto de la estructura del sitio
-                            reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
+                                //Para el home
+                                //setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
+
+                                //Para el resto de la estructura del sitio
+                                //reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
+                            }
+                        }
+                        else  if ("templateassoc".equals(arrCat[i]))
+                        {
+                                //Para el home
+                                setWebPageAssociation(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
+
+                                //Para el resto de la estructura del sitio
+                                reviewWebPageAsoc(tm.getHome(), ws, TopicMap.CNF_WBTemplate, usrrep,Boolean.FALSE);
                         }
                     }
                 }
@@ -1077,6 +1156,7 @@
                     <ul>
                         <li><input type="checkbox" name="catalog" id="cat8" value="resourcesubtype" disabled><label for="cat8">Sub-Tipos de recursos <%=hmcat.get("resourcesubtype") != null ? "(" + hmcat.get("resourcesubtype") + ")" : ""%></label></li>
                         <li><input type="checkbox" name="catalog" id="cat5" value="template" disabled><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                        <li><input type="checkbox" name="catalog" id="cat16" value="templateassoc" disabled><label for="cat16">Asociar Plantillas a secciones, seleccionar ya que se terminen de migrar todos las plantillas.</label></li>
                     </ul>
                 </fieldset>
 
@@ -1200,6 +1280,28 @@
                                                         restype.setTitle("HTMLContent");
                                                     }
                                                     res.setResourceType(restype);
+
+                                                    String idadm = rresb.getIdAdm();
+                                                    if(idadm!=null&&idadm.indexOf("_")>-1)
+                                                    {
+                                                        idadm = idadm.substring(0,idadm.indexOf("_"));
+                                                    }
+                                                    try{
+                                                        res.setCreated(new java.util.Date(rresb.getCreated().getTime()));
+                                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de creación del recurso.");}
+                                                    if(null!=idadm)
+                                                    {
+                                                        try{
+                                                            res.setCreator(urep.getUser(idadm));
+                                                        } catch(Exception e){System.out.println("No se pudo poner el usuario creador del recurso.");}
+                                                        try{
+                                                            res.setModifiedBy(urep.getUser(idadm));
+                                                        } catch(Exception e){System.out.println("No se pudo poner el usuario de modificación del recurso.");}
+                                                    }
+                                                    try{
+                                                        res.setUpdated(new java.util.Date(rresb.getLastupdate().getTime()));
+                                                    } catch(Exception e){System.out.println("No se pudo poner la fecha de actualización del recurso.");}
+                                                    
 
                                                     RecSubType rsty = DBCatalogs.getInstance().getSubType(site,rresb.getIdSubType());
                                                     if(rsty!=null)
@@ -1380,7 +1482,31 @@
                                                     }
                                                 }
                                             }
+                                        else
+                                        {
+                                            String idadm = rresb.getIdAdm();
+                                            if(null!=idadm && idadm.indexOf("_")>-1)
+                                            {
+                                                idadm = idadm.substring(0,idadm.indexOf("_"));
+                                            }
+                                            try{
+                                                res.setCreated(new java.util.Date(rresb.getCreated().getTime()));
+                                            } catch(Exception e){System.out.println("No se pudo poner la fecha de creación del recurso.");}
+                                            if(null!=idadm)
+                                            {
+                                                try{
+                                                    res.setCreator(urep.getUser(idadm));
+                                                } catch(Exception e){System.out.println("No se pudo poner el usuario creador del recurso.");}
+                                                try{
+                                                    res.setModifiedBy(urep.getUser(idadm));
+                                                } catch(Exception e){System.out.println("No se pudo poner el usuario de modificación del recurso.");}
+                                            }
+                                            try{
+                                                res.setUpdated(new java.util.Date(rresb.getLastupdate().getTime()));
+                                            } catch(Exception e){System.out.println("No se pudo poner la fecha de actualización del recurso.");}
+                                            
                                         }
+                                       }
                                     }
                                     catch(Exception ex)
                                     {
@@ -1498,6 +1624,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat8" value="resourcesubtype" disabled><label for="cat8">Sub-Tipos de recursos <%=hmcat.get("resourcesubtype") != null ? "(" + hmcat.get("resourcesubtype") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="catalog" id="cat5" value="template" disabled><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                    <li><input type="checkbox" name="catalog" id="cat16" value="templateassoc" disabled><label for="cat16">Asociar Plantillas a secciones, seleccionar ya que se terminen de migrar todos las plantillas.</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Lista de Catálogos - Paso 3 (Completado)&nbsp;&nbsp;</legend>
@@ -1838,6 +1965,7 @@
                 <ul>
                     <li><input type="checkbox" name="catalog" id="cat8" value="resourcesubtype" disabled><label for="cat8">Sub-Tipos de recursos <%=hmcat.get("resourcesubtype") != null ? "(" + hmcat.get("resourcesubtype") + ")" : ""%></label></li>
                     <li><input type="checkbox" name="catalog" id="cat5" value="template" disabled><label for="cat5">Plantillas <%=hmcat.get("template") != null ? "(" + hmcat.get("template") + ")" : ""%></label></li>
+                    <li><input type="checkbox" name="catalog" id="cat16" value="templateassoc" disabled><label for="cat16">Asociar Plantillas a secciones, seleccionar ya que se terminen de migrar todos las plantillas.</label></li>
                 </ul>
             </fieldset>
             <fieldset  style="background-color:#A9F5D0;"><legend>&nbsp;&nbsp;Lista de Catálogos - Paso 3 (Completado)&nbsp;&nbsp;</legend>
@@ -2170,6 +2298,19 @@
             wp.setUpdated(new java.util.Date());
             if(topic.getSortName()!=null) wp.setSortName(topic.getSortName());
 
+            String idadm = topic.getDbdata().getIdAdm();
+            if(null!=idadm && idadm.indexOf("_")>-1)
+            {
+                idadm = idadm.substring(0,idadm.indexOf("_"));
+                try{
+                    User usr =  ws.getUserRepository().getUser(idadm);
+                    if(null!=usr){
+                        wp.setCreator(usr);
+                        wp.setModifiedBy(usr);
+                    }
+                }catch(Exception e){System.out.println("Error al obtener el usuario creador del topico.");}
+            }
+            
             //Revisando si tiene una ruta virtual o una ruta amigable asociada
             if(topic.getSubjectIdentity()!=null)
             {
