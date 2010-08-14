@@ -127,12 +127,15 @@ public class Banner extends GenericAdmResource {
                 }else {
                     String action = base.getAttribute("axn");
                     out.print("<a class=\"swb-banner\"");
-                    if( wburl!=null )
-                        out.print(" href=\""+wburl+"\"");
-                    else
-                        out.print(" href=\"#\"");
-                    if( action!=null )
-                        out.print(" onclick=\""+action+"\"");
+//                    if( wburl!=null )
+//                        out.print(" href=\""+wburl+"\"");
+//                    else
+//                        out.print(" href=\"#\"");
+//                    if( action!=null )
+//                        out.print(" onclick=\""+action+"\"");
+                    out.print(" href=\""+url+"\"");
+                    out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+
                     out.println(" title=\""+base.getAttribute("title","")+"\">");
                     out.print("<img src=\"");
                     out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
@@ -237,14 +240,13 @@ public class Banner extends GenericAdmResource {
      */
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        System.out.println("banner... processAction");
         Resource base=getResourceBase();
-
         base.addHit(request, response.getUser(), response.getWebPage());
-
-        String url = base.getAttribute("url");
-        if( url!=null ) {
-            url = replaceTags(url, request, response.getUser(), response.getWebPage());
-            response.sendRedirect(url);
-        }
+//        String url = base.getAttribute("url");
+//        if( url!=null ) {
+//            url = replaceTags(url, request, response.getUser(), response.getWebPage());
+//            response.sendRedirect(url);
+//        }
     }
 }
