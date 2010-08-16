@@ -95,7 +95,7 @@ import org.semanticwb.platform.SemanticClass;
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
-    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.ClassMgr.swboffice_OfficeDocument;
+    private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
     private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
     private static final String REP_FILE = "swbfilerep:RepositoryFile";
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
