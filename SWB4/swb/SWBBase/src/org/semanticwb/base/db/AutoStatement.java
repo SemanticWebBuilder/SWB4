@@ -234,8 +234,8 @@ public class AutoStatement implements java.sql.Statement {
     {
         if (debug)
         {
-            //System.out.println("s.executeQuery:" + str);
-            System.out.println("s.executeQuery");
+            System.out.println("s.executeQuery:" + str);
+            //System.out.println("s.executeQuery");
         }
         checkStatement();
         try

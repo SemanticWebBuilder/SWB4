@@ -816,7 +816,7 @@ public boolean execute(String str, String[] str1) throws java.sql.SQLException
             System.out.println("--> execute():" + query);
             System.out.println("--> args:" + args);
             args = "";
-            //new Exception().printStackTrace();
+            new Exception().printStackTrace();
         }
 
         try
