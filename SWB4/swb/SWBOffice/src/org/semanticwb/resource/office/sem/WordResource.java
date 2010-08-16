@@ -81,7 +81,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
 
     public static org.semanticwb.resource.office.sem.WordResource createWordResource(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.resource.office.sem.WordResource) model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ClassMgr.sclass), ClassMgr.sclass);
+        return (org.semanticwb.resource.office.sem.WordResource) model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
     @Override
@@ -193,7 +193,9 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
                         // eliminar <head><body>, etc
 
-                        
+
+
+
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
@@ -240,7 +242,32 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     }
                     if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
                     {
-                        continue;
+                        if(tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
+                        {
+                            tok.nextToken();
+                            tok.parseTag(tok.getStringValue(), tag);
+                            ttype = tok.getTokenType();
+                            if(ttype==HtmlStreamTokenizer.TT_TEXT)
+                            {
+                                tok.nextToken();
+                                tok.parseTag(tok.getStringValue(), tag);
+                                ttype = tok.getTokenType();
+                                if(ttype==HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                                {
+                                    continue;
+                                }
+                            }
+                            else if(ttype==HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                            {
+                                  continue;
+
+                            }
+
+                        }
+                        else
+                        {
+                            continue;
+                        }
                     }
                     if (tag.getTagString().toLowerCase().equals("a"))
                     {
