@@ -51,9 +51,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.rdf.model.impl.ModelCom;
+import com.hp.hpl.jena.sdb.layout1.StoreRDB;
 import com.hp.hpl.jena.sdb.sql.SDBConnection;
 import com.hp.hpl.jena.sdb.store.DatabaseType;
 import com.hp.hpl.jena.sdb.store.LayoutType;
+import com.hp.hpl.jena.sdb.store.StoreFactory;
+import com.hp.hpl.jena.sdb.store.StoreMaker;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.vocabulary.RDFS;
@@ -253,21 +256,27 @@ public class SemanticMgr implements SWBInstanceObject
         String M_DB = SWBUtils.DB.getDatabaseType(pool.getName());
 
         if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_SDB)) {
-            StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
-            //SDBConnection con=new SDBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD);
-            SDBConnection con = new SDBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection());
-            //SDBConnection con=new SDBConnection_SWB();
-            store = SDBFactory.connectStore(con, sd);
-            //Revisar si las tablas existen
-            List list = store.getConnection().getTableNames();
-            //System.out.println("list:"+list);
-            if (!(list.contains("nodes") || list.contains("NODES") || list.contains("Nodes"))
-                    && !(list.contains("triples") || list.contains("TRIPLES") || list.contains("Triples"))
-                    && !(list.contains("quads") || list.contains("QUADS") || list.contains("Quads"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS, MySQL usa Capitalizados
+            try
             {
-                log.event("Formating Database Tables...");
-                store.getTableFormatter().create();
-            }
+                //StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
+                StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
+                //SDBConnection con=new SDBConnection(M_DB_URL, M_DB_USER, M_DB_PASSWD);
+                SDBConnection con = new SDBConnection(SWBUtils.DB.getDefaultPool().newAutoConnection());
+                //SDBConnection con=new SDBConnection_SWB();
+
+                store = SDBFactory.connectStore(con, sd);
+                //Revisar si las tablas existen
+                List list = store.getConnection().getTableNames();
+                //System.out.println("list:"+list);
+        
+                if (!(list.contains("nodes") || list.contains("NODES") || list.contains("Nodes"))
+                        && !(list.contains("triples") || list.contains("TRIPLES") || list.contains("Triples"))
+                        && !(list.contains("quads") || list.contains("QUADS") || list.contains("Quads"))) //MAPS74 Oracle maneja los nombres en MAYUSCULAS, MySQL usa Capitalizados
+                {
+                    log.event("Formating Database Tables...");
+                    store.getTableFormatter().create();
+                }
+            }catch(Throwable e){log.error(e);}
         } else if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB)) {
             log.info("TDB Detected...," + SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             timer = new Timer();
