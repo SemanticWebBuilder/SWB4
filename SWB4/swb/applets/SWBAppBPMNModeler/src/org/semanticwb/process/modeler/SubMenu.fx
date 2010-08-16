@@ -43,32 +43,47 @@ public class SubMenu extends CustomNode
     public var imageClicked:String;
     public var subBar:Node;
     public var buttons:ImgButton[];
+    public var action:function():Void;
 
     var content:Node;
-
-    var dx:Number;                        //temporal drag x
-    var dy:Number;                        //temporal drag y
-
     var over:Boolean;
     var clicked:Boolean;
 
-    public var action:function():Void;
+    //Image for start of submenu
+    def imgSubMenuInicio: Image = Image {
+        url: "{__DIR__}images/submenu_inicio.png"
+    }
+
+    //Image for end of submenu
+    def imgSubMenuFin: Image = Image {
+        url: "{__DIR__}images/submenu_fin.png"
+    }
 
     public override function create(): Node
     {
+        def imgN: Image = Image {
+            url: "{__DIR__}{image}"
+        }
+
+        def imgO: Image = Image {
+            url: "{__DIR__}{imageOver}"
+        }
+
+        def imgC: Image = Image {
+            url: "{__DIR__}{imageClicked}"
+        }
+        
          content=Group
          {
              content:[
                ImageView {
-	         image: Image {
-		   url: "{__DIR__}{image}"
-	         }
+	         image: imgN
+                 smooth: false
                  visible: bind (not over)
                },
                ImageView {
-	         image: Image {
-		   url: "{__DIR__}{imageOver}"
-	         }
+	         image: imgO
+                 smooth: false
                  visible: bind over
                }
             ]
@@ -102,10 +117,8 @@ public class SubMenu extends CustomNode
             }
             onKeyTyped: function( e: KeyEvent ):Void
             {
-                 //clicked=true;
                  action();
             }
-            //blocksMouse:true
         }
 
          subBar=Group
@@ -120,20 +133,17 @@ public class SubMenu extends CustomNode
                     vertical:true
                     content: [
                         ImageView {
-                            image: Image {
-                                url: "{__DIR__}{imageClicked}"
-                            }
+                            image: imgC
+                            smooth: false
                         },
                         ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/submenu_inicio.png"
-                            }
+                            image: imgSubMenuInicio
+                            smooth: false
                         },
                         buttons,
                         ImageView {
-                            image: Image {
-                                url: "{__DIR__}images/submenu_fin.png"
-                            }
+                            image: imgSubMenuFin
+                            smooth: false
                         }
                     ]
                 }
