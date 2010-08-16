@@ -343,7 +343,7 @@ public class CodeGenerator
             }
             if(tpp.isDataTypeProperty())
             {
-                if (!(tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate()))
+                if (!(tpp.isBinary() ||  tpp.isString() || tpp.isXML() || tpp.isInt() || tpp.isFloat() || tpp.isDouble() || tpp.isLong() || tpp.isByte() || tpp.isShort() || tpp.isBoolean() || tpp.isDateTime() || tpp.isDate()))
                 {
                     throw new CodeGeneratorException("The property "+tpp.getURI()+" for semantic class " + clazz.getURI() + " is defined as DataType Property, but the type is "+ tpp.getRange().getURI() +" \r\n");
                 }
