@@ -447,24 +447,44 @@ public class SWBAWebPageContents extends GenericResource {
 
                 out.println("<a href=\"#\"  title=\""+ paramRequest.getLocaleString("documentAdmin")+"\" onclick=\"selectTab('" + sobj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.scape4Script(sobj.getDisplayName()) + "','bh_AdminPorltet');return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\""+"documentAdmin"+"\"></a>");
 
+
                 if (send2Flow) {
+                    boolean canSend2Flow = Boolean.TRUE;
                     String pfid = null;
                     PFlow[] arrPf = pfmgr.getFlowsToSendContent(res);
                     if (arrPf.length == 1) {
                         pfid = arrPf[0].getId();
                     }
-                    SWBResourceURL url2flow = paramRequest.getRenderUrl();
-                    url2flow.setParameter("suri", id);
-                    url2flow.setParameter("sprop", idp);
-                    url2flow.setMode("doPflowMsg");
-                    url2flow.setParameter("sval", sobj.getURI());
-                    url2flow.setParameter("page", ""+p);
-                    url2flow.setParameter("pfid", pfid);
-                    url2flow.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
-                    if (idptype != null) {
-                        url2flow.setParameter("sproptype", idptype);
+
+                    GenericObject gores = sobj.createGenericInstance();
+                    if(gores!=null && gores instanceof Versionable )
+                    {
+                        Versionable vgo = (Versionable) gores;
+                        if(vgo.getActualVersion()==null || vgo.getLastVersion()==null)
+                        {
+                            canSend2Flow = Boolean.FALSE;
+                        }
                     }
-                    out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" onclick=\"showDialog('" + url2flow + "','"+ paramRequest.getLocaleString("comentary")+"'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\"></a>");
+
+                    if(canSend2Flow)
+                    {
+                        SWBResourceURL url2flow = paramRequest.getRenderUrl();
+                        url2flow.setParameter("suri", id);
+                        url2flow.setParameter("sprop", idp);
+                        url2flow.setMode("doPflowMsg");
+                        url2flow.setParameter("sval", sobj.getURI());
+                        url2flow.setParameter("page", ""+p);
+                        url2flow.setParameter("pfid", pfid);
+                        url2flow.setParameter("search", (busqueda.trim().length()>0?busqueda:""));
+                        if (idptype != null) {
+                            url2flow.setParameter("sproptype", idptype);
+                        }
+                        out.println("<a href=\"#\" title=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" onclick=\"showDialog('" + url2flow + "','"+ paramRequest.getLocaleString("comentary")+"'); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\"></a>");
+                    }
+                    else
+                    {
+                        out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/enviar-flujo.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("senddocument2flow")+"\" title=\""+ paramRequest.getLocaleString("canNOTsenddocument2flow")+"\">");
+                    }
                 } else if (isInFlow && !isAuthorized) {
                     out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/espera_autorizacion.gif\" border=\"0\" alt=\""+ paramRequest.getLocaleString("documentwaiting")+"\">");
                 } else if (isInFlow && isAuthorized) {
