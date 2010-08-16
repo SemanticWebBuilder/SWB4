@@ -93,6 +93,7 @@
 "version" = "Version"
 "condition" = "Condition"
 "message" = "Message"
+"path" = "Path"
 "msgError1" = "Activity cannot have Sequence Flows coming from Event-based Gateway"
 "msgError2" = "Text Annotation must be linked by using non-directional Association"
 "msgError3" = "Artifact must be linked by using Association Flow"
