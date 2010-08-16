@@ -91,7 +91,8 @@ public-read var dropShadow:DropShadow=null;
 //}
 
 public-read var style_tooltip="-fx-fill: #FFFF66; -fx-stroke: #000000; -fx-stroke-width: 0; -fx-arc-width: 0; -fx-arc-height: 0;";
-public-read var style_containerButton="-fx-fill: #e5e5ff; -fx-stroke: #FFFFFF; -fx-stroke-width: 0; -fx-arc-width: 0; -fx-arc-height: 0;";
-public-read var style_containerButtonText="-fx-stroke: #0000FF; -fx--fx-stroke-width: 0;";
-
+//public-read var style_containerButton="-fx-fill: #e5e5ff; -fx-stroke: #FFFFFF; -fx-stroke-width: 0; -fx-arc-width: 0; -fx-arc-height: 0;";
+public def style_containerButton="-fx-fill: null;";
+//public-read var style_containerButtonText="-fx-stroke: #0000FF; -fx--fx-stroke-width: 0;";
+public def style_containerButtonText="-fx-font-family: 'Verdana'; -fx-font-size: 10pt; -fx-fontstyle: normal; -fx-font-weight: normal; -fx-smooth: false;";
 public var opacity : Number = 1;
