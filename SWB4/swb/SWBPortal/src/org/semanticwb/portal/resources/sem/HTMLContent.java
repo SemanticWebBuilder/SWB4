@@ -356,33 +356,28 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                         + contentPath + "/index.html");
                 filename = file.getName();
                 FileWriter writer = new FileWriter(file);
+                //System.out.println("workingDirectory:"+workingDirectory);
 
-                int index = 0;
-                while (index != -1) {
-                    if (index != 0) {
-                        int quoteIndex = textToSave.indexOf("\"", index);
-                        if (quoteIndex != -1) {
-                            //Ruta logica de un archivo asociado
-                            String attachedFilePath = textToSave.substring(index,
-                                                      quoteIndex);
-                            String tagPath = attachedFilePath.substring(0, attachedFilePath.indexOf("/images") + 1);
-                            //Ruta fisica del archivo a copiar
-                            String s = SWBPortal.getWorkPath()
-                                    + attachedFilePath.substring(
-                                            attachedFilePath.indexOf("work") + 4);
-                            String fileName = s.substring(s.lastIndexOf("/") + 1);
-                            //Solo copia archivos de versiones anteriores
-                            if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1) {
-                                SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName,
-                                                 false, "", "");
-                            }
-                            //Se sustituye la ruta logica por el tag
-                            textToSave = SWBUtils.TEXT.replaceAll(textToSave,
-                                    tagPath, //attachedFilePath,
-                                    "<workpath/>"); // + HTMLContent.FOLDER + "/" + fileName);
-                        }
+                //Replace WorkPath
+                textToSave = SWBUtils.TEXT.replaceAll(textToSave, workingDirectory+"/"+versionNumber+"/", "<workpath/>");
+
+                int i=textToSave.indexOf("<workpath/>");
+                while(i>-1)
+                {
+                    String fileName=textToSave.substring(i+11,textToSave.indexOf("\"",i+11));
+                    String s=SWBPortal.getWorkPath()+resource.getWorkPath()+"/"+versionNumber+"/"+fileName;
+                    int ls=fileName.indexOf("/");
+                    if(ls>-1)
+                    {
+                        fileName=fileName.substring(ls+1);
                     }
-                    index = textToSave.indexOf(workingDirectory);
+                    //System.out.println("fileName:"+fileName);
+                    //Solo copia archivos de versiones anteriores
+                    if (s.indexOf(resource.getWorkPath() + "/" + versionNumber) == -1)
+                    {
+                        SWBUtils.IO.copy(s, directoryToCreate + "/" + fileName, false, "", "");
+                    }
+                    i=textToSave.indexOf("<workpath/>",i+11);
                 }
 
                 writer.write(textToSave);
