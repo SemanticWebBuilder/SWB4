@@ -60,7 +60,7 @@ public class SWBOfficeManager implements OfficeManager
     private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
     private static final String LANGUAGE_BY_DEFAULT = "es";
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
-    private final SemanticClass cm_content = OfficeContent.ClassMgr.swboffice_OfficeContent;
+    private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
 
     public SWBOfficeManager(SWBRepositoryManager manager)
     {
@@ -101,7 +101,7 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getCategoryType()
     {
-        return OfficeCategory.ClassMgr.swboffice_OfficeCategory.getPrefix() + ":" + OfficeCategory.ClassMgr.swboffice_OfficeCategory.getName();
+        return OfficeCategory.swboffice_OfficeCategory.getPrefix() + ":" + OfficeCategory.swboffice_OfficeCategory.getName();
     }
 
     public String getPropertyTitleType()
@@ -116,12 +116,12 @@ public class SWBOfficeManager implements OfficeManager
 
     public String getPropertyFileType()
     {
-        return OfficeDocument.ClassMgr.swboffice_file.getPrefix() + ":" + OfficeDocument.ClassMgr.swboffice_file.getName();
+        return OfficeDocument.swboffice_file.getPrefix() + ":" + OfficeDocument.swboffice_file.getName();
     }
 
     public String getPropertyType()
     {
-        return OfficeContent.ClassMgr.swboffice_officetype.getPrefix() + ":" + OfficeContent.ClassMgr.swboffice_officetype.getName();
+        return OfficeContent.swboffice_officetype.getPrefix() + ":" + OfficeContent.swboffice_officetype.getName();
     }
 
     public String getUserType()
