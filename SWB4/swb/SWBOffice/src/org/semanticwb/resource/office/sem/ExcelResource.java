@@ -165,6 +165,6 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     }
     public static org.semanticwb.resource.office.sem.ExcelResource createExcelResource(String id, org.semanticwb.model.SWBModel model)
     {
-        return (org.semanticwb.resource.office.sem.ExcelResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, ClassMgr.sclass), ClassMgr.sclass);
+        return (org.semanticwb.resource.office.sem.ExcelResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 }
