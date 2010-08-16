@@ -129,7 +129,16 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             read = in.read(buffer);
                         }
                         String htmlOut = null;
-                        html = new StringBuilder(replaceHtml(html.toString()));
+                        boolean deletestyles=false;
+                        try
+                        {
+                            deletestyles=this.isDeletestyles();
+                        }
+                        catch(Exception e)
+                        {
+                            log.error(e);
+                        }
+                        html = new StringBuilder(replaceHtml(html.toString(),deletestyles));
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -218,11 +227,12 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         }
     }
 
-    public static String replaceHtml(String datos)
+    public static String replaceHtml(String datos,boolean deletesytyles)
     {
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
         StringBuilder ret = new StringBuilder();
         HtmlTag tag = new HtmlTag();
+        boolean omit=false;
         try
         {
             while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
@@ -240,7 +250,15 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     {
                         continue;
                     }
-                    if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
+                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("style") && !tag.isEndTag())
+                    {                        
+                        omit=true;                       
+                    }
+                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("style") && tag.isEndTag())
+                    {
+                        omit=false;
+                    }
+                    else if(tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
                     {
                         if(tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
                         {
@@ -269,7 +287,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             continue;
                         }
                     }
-                    if (tag.getTagString().toLowerCase().equals("a"))
+                    else if(tag.getTagString().toLowerCase().equals("a"))
                     {
                         String value=tag.getParam("href");
                         if(value!=null && value.startsWith("docrep://")) // liga al repositorio
@@ -307,17 +325,20 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         }
                         else
                         {
-                            ret.append(tok.getRawString());
+                            if(!omit)
+                                ret.append(tok.getRawString());
                         }
                     }
                     else
                     {
-                        ret.append(tok.getRawString());
+                        if(!omit)
+                            ret.append(tok.getRawString());
                     }
                 }
                 else if (ttype == HtmlStreamTokenizer.TT_TEXT)
                 {
-                    ret.append(tok.getRawString());
+                    if(!omit)
+                        ret.append(tok.getRawString());
                 }
 
             }
