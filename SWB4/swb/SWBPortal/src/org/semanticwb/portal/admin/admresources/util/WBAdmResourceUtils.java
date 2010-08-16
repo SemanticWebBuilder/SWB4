@@ -1816,5 +1816,42 @@ public class WBAdmResourceUtils {
         sbfRet.append("\n}");
         return sbfRet.toString();
     }
-   
+
+    /**
+     * Crea una función JavaScript específica.
+     *
+     * @return    Regresa un nuevo String que contiene la función openHelp() de JavaScript.
+     */
+    public String loadOpenHelp()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\nfunction openHelp(pIdRsc, pField, pTemplate)");
+        sbfRet.append("\n{");
+        sbfRet.append("\n   window.open('" + SWBPortal.getContextPath() + "admin/help/resources/HelpResource.jsp?rsc=' + pIdRsc + '&fld=' + pField + '&tpl=' + pTemplate,'WBHelp','menubar=no,toolbar=no,status=no,location=no,directories=no,scrollbars=yes,resizable=yes,width=500,height=380,top=20,left=20');");
+        sbfRet.append("\n}");
+        return sbfRet.toString();
+    }
+
+    /**
+     * Obtiene los estilos por default.
+     *
+     * @return    Regresa un nuevo String que contiene los estilos.
+     */
+    public String loadHtmlStyles()
+    {
+        StringBuffer sbfRet = new StringBuffer();
+        sbfRet.append("\n<STYLE type=\"text/css\">");
+        sbfRet.append("\nA {");
+        sbfRet.append("\nfont-family: Arial, Helvetica, sans-serif; font-size: 12px; ");
+        sbfRet.append("\nfont-style: normal; line-height: 16px; font-weight: normal; font-variant: normal; ");
+        sbfRet.append("\ntext-transform: none; color:#000099; text-decoration: none; }");
+        sbfRet.append("\nA:hover {");
+        sbfRet.append("\nfont-family: Arial, Helvetica, sans-serif; font-size: 12px; ");
+        sbfRet.append("\nfont-style: normal; line-height: 16px; font-weight: bold; font-variant: normal; ");
+        sbfRet.append("\ntext-transform: none; color:#000099; text-decoration: underline; ");
+        sbfRet.append("\nbackground-color: #F4F4FB }");
+        sbfRet.append("\n</STYLE>");
+        return sbfRet.toString();
+    }
+
 }
