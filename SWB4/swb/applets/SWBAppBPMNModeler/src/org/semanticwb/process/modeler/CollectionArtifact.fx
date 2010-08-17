@@ -16,7 +16,7 @@ public class CollectionArtifact extends Artifact
 {
     override public function create(): Node
     {
-        type=TYPE_MULTIPLE;
+        type=TYPE_COLLECTION;
         return super.create();
     }
 }
