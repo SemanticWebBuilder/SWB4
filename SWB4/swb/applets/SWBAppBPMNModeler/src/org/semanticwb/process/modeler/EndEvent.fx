@@ -5,9 +5,7 @@
  */
 
 package org.semanticwb.process.modeler;
-
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -18,16 +16,11 @@ public class EndEvent extends ThrowEvent
     public override function create(): Node
     {
          var ret=super.create();
-         stroke=Color.web(Styles.color_endEvent);
-         shape.strokeWidth=4;
-         stkw=4;
-         stkwo=5;
-
          colorAdjust.hue=-0.03;
          colorAdjust.brightness=-0.33;
          colorAdjust.contrast=0.25;
          colorAdjust.saturation=1;
-
+         shape.styleClass = "endEvent";
          return ret;
     }
 
@@ -47,6 +40,4 @@ public class EndEvent extends ThrowEvent
         }
         return ret;
     }
-
 }
-
