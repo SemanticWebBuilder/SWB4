@@ -43,6 +43,7 @@ public class IntermediateCatchEvent extends CatchEvent
             radius: bind w/2
             styleClass: "interEvent"
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+            onKeyPressed: onKeyPressed
         };
 
         setType(type);
