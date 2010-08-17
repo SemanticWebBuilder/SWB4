@@ -46,6 +46,7 @@ public class GroupArtifact extends Artifact
             translateX:bind x-w/2
             translateY:bind y-h/2
             strokeDashArray: [20,5,3,5]
+            onKeyPressed: onKeyPressed
         };
 
         setType(type);
