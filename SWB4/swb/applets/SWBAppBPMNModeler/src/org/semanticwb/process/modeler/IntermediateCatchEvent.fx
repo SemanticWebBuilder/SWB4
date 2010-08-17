@@ -8,9 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
 import org.semanticwb.process.modeler.SequenceFlow;
 
 /**
@@ -22,12 +20,8 @@ public class IntermediateCatchEvent extends CatchEvent
     public override function create(): Node
     {
         initializeCustomNode();
-        stroke=Color.web(Styles.color_interEvent);
-        cursor=Cursor.HAND;
         w=30;
         h=30;
-        stkw=2;
-        stkwo=2;
         scaleOff=-0.1;
         text=EditableText
         {
@@ -47,9 +41,8 @@ public class IntermediateCatchEvent extends CatchEvent
             centerX: bind x
             centerY: bind y
             radius: bind w/2
-            //styleClass: "event"
-            style: Styles.style_event
-            //smooth:true;
+            styleClass: "interEvent"
+            strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
         };
 
         setType(type);
@@ -58,22 +51,19 @@ public class IntermediateCatchEvent extends CatchEvent
         {
             content: [
                 shape,
-                //text,
                 Circle
                 {
                     centerX: bind x
                     centerY: bind y
                     radius: bind w/2-3
-                    stroke: bind shape.stroke
-                    //styleClass: "event"
-                    style: Styles.style_event
-                    //smooth:true;
+                    strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+                    styleClass: "interEvent"
+                    id: "marker"
                 },
                 message, text
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
@@ -126,6 +116,3 @@ public class IntermediateCatchEvent extends CatchEvent
         return ret;
     }
 }
-
-
-
