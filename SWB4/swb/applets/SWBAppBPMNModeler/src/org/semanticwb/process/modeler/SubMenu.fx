@@ -165,4 +165,3 @@ public class SubMenu extends CustomNode
          return content;
     }
 }
-
