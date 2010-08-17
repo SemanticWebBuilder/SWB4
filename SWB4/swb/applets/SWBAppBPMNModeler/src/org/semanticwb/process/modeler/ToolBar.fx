@@ -54,7 +54,6 @@ public class ToolBar extends CustomNode
     public var h:Number;
     var dx : Number;                        //temporal drag x
     var dy : Number;                        //temporal drag y
-
     var isApplet:Boolean=FX.getArgument(WBConnection.PRM_CGIPATH).toString()!=null;
 
     var fileChooser = javax.swing.JFileChooser{};
@@ -538,7 +537,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_normal2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=Task
                         {
@@ -548,81 +546,12 @@ public class ToolBar extends CustomNode
                         }
                     }
                 },
-//                ImgButton {
-//                    text:"Adhoc Task"
-//                    toolBar:this;
-//                    image: "images/subtask_adhoc1.png"
-//                    imageOver: "images/subtask_adhoc2.png"
-//                    action: function():Void
-//                    {
-//                        //println("click");
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=AdhocTask
-//                        {
-//                            modeler:modeler
-//                            title:"Adhoc Task"
-//                            uri:"new:adhoctask:{counter++}"
-//                        }
-//                    }
-//                },
-//                ImgButton {
-//                    text:"Loop Task"
-//                    toolBar:this;
-//                    image: "images/subtask_ciclo1.png"
-//                    imageOver: "images/subtask_ciclo2.png"
-//                    action: function():Void
-//                    {
-//                        //println("click");
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=LoopTask
-//                        {
-//                            modeler:modeler
-//                            title:"Loop Task"
-//                            uri:"new:looptask:{counter++}"
-//                        }
-//                    }
-//                },
-//                ImgButton {
-//                    text:"Compensation Task"
-//                    toolBar:this;
-//                    image: "images/subtask_compensa1.png"
-//                    imageOver: "images/subtask_compensa2.png"
-//                    action: function():Void
-//                    {
-//                        //println("click");
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=CompensationTask
-//                        {
-//                            modeler:modeler
-//                            title:"Compensation Task"
-//                            uri:"new:compensationtask:{counter++}"
-//                        }
-//                    }
-//                },
-//                ImgButton {
-//                    text:"Multiple Task"
-//                    toolBar:this;
-//                    image: "images/subtask_instancia1.png"
-//                    imageOver: "images/subtask_instancia2.png"
-//                    action: function():Void
-//                    {
-//                        //println("click");
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=MultipleTask
-//                        {
-//                            modeler:modeler
-//                            title:"Multiple Task"
-//                            uri:"new:multipletask:{counter++}"
-//                        }
-//                    }
-//                },
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("userTask")
                     image: "images/task_usr1.png"
                     imageOver: "images/task_usr2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=UserTask
                         {
@@ -638,7 +567,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_servicio2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=ServiceTask
                         {
@@ -654,7 +582,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_script2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=ScriptTask
                         {
@@ -670,7 +597,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_manual2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=ManualTask
                         {
@@ -686,7 +612,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_envio2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=SendTask
                         {
@@ -702,7 +627,6 @@ public class ToolBar extends CustomNode
                     imageOver: "images/task_recive2.png"
                     action: function():Void
                     {
-                        //println("click");
                         modeler.disablePannable=true;
                         modeler.tempNode=ReceiveTask
                         {
@@ -752,51 +676,6 @@ public class ToolBar extends CustomNode
                         }
                     }
                 },
-//                ImgButton {
-//                    text:"Loop SubProcess"
-//                    toolBar:this;
-//                    image: "images/subtask_ciclo+1.png"
-//                    imageOver: "images/subtask_ciclo+2.png"
-//                    action: function():Void {
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=LoopSubProcess
-//                        {
-//                            modeler:modeler
-//                            title:"Loop SubProcess"
-//                            uri:"new:loopsubprocess:{counter++}"
-//                        }
-//                    }
-//                },
-//                ImgButton {
-//                    text:"Compensation SubProcess"
-//                    toolBar:this;
-//                    image: "images/subtask_compensa+1.png"
-//                    imageOver: "images/subtask_compensa+2.png"
-//                    action: function():Void {
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=CompensationSubProcess
-//                        {
-//                            modeler:modeler
-//                            title:"Compensation SubProcess"
-//                            uri:"new:compensationsubprocess:{counter++}"
-//                        }
-//                    }
-//                },
-//                ImgButton {
-//                    text:"Multiple SubProcess"
-//                    toolBar:this;
-//                    image: "images/subtask_instancia+1.png"
-//                    imageOver: "images/subtask_instancia+2.png"
-//                    action: function():Void {
-//                        modeler.disablePannable=true;
-//                        modeler.tempNode=MultipleSubProcess
-//                        {
-//                            modeler:modeler
-//                            title:"Multiple SubProcess"
-//                            uri:"new:multiplesubprocess:{counter++}"
-//                        }
-//                    }
-//                },
                 ImgButton {
                     text: ModelerUtils.getLocalizedString("transaction")
                     image: "images/subtask_transaccion1.png"
