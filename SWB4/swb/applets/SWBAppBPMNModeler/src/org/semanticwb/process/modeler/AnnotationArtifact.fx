@@ -8,7 +8,6 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
@@ -23,11 +22,8 @@ public class AnnotationArtifact extends Artifact
     override public function create(): Node
     {
         resizeable=true;
-        cursor=Cursor.HAND;
         w=80;
         h=60;
-        stkw=2;
-        stkwo=2;
         text=EditableText
         {
             text: bind title with inverse
@@ -35,6 +31,8 @@ public class AnnotationArtifact extends Artifact
             y:bind y
             width: bind w-6
             height: bind h
+            styleClass: "artifact"
+            id: "text"
         }
 
         shape=Path
@@ -45,9 +43,9 @@ public class AnnotationArtifact extends Artifact
                 LineTo { x: 0  y: bind h },
                 LineTo { x: bind w/4  y: bind h },
             ]
-            style:Styles.style_artifact
             translateX:bind x-w/2
             translateY:bind y-h/2
+            styleClass: "artifact"
         }
 
         setType(type);
@@ -60,14 +58,13 @@ public class AnnotationArtifact extends Artifact
                     y:bind y-h/2
                     width:bind w
                     height:bind h
-                    //style:Styles.style_artifact
-                    fill:null
+                    styleClass: "artifact"
+                    id: "textbox"
                 }
                 ,shape,text
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
