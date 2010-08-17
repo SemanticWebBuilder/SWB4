@@ -132,3 +132,4 @@
 "msgError36" = "Message Start Event can have only one incoming Message Flow"
 "msgError37" = "Pool cannot be linked using Sequence Flow"
 "msgError38" = "Intermediate Throw Event cannot be linked to Event-based Gateway"
+"msgError39" = "Parallel Event cannot be attached to Activity"
