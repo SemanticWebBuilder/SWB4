@@ -143,6 +143,7 @@ public class ConnectionObject  extends CustomNode
                 ]
                 strokeWidth: bind path.strokeWidth
                 stroke: bind path.stroke
+
             };
         } else if (type.equals(ARROW_TYPE_MESSAGE)) {
             arrow = Path {
@@ -187,13 +188,13 @@ public class ConnectionObject  extends CustomNode
         if(ModelerUtils.clickedNode==null)
         {
             ModelerUtils.clickedNode=this;
-            modeler.setFocusedNode(this);
-            path.requestFocus();
+            modeler.setFocusedNode(this);            
         }
     }
 
     override var onMouseReleased = function( e: MouseEvent ):Void
     {
+        path.requestFocus();
         if(ModelerUtils.clickedNode==this)
         {
             ModelerUtils.clickedNode=null;
