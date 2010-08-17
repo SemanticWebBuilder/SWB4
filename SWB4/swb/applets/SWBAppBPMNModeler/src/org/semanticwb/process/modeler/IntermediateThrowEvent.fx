@@ -21,13 +21,10 @@ public class IntermediateThrowEvent extends ThrowEvent
     public override function create(): Node
     {
         initializeCustomNode();
-        stroke=Color.web(Styles.color_interEvent);
-        cursor=Cursor.HAND;
         w=30;
         h=30;
-        stkw=2;
-        stkwo=2;
         scaleOff=-0.1;
+        
         text=EditableText
         {
             text: bind title with inverse
@@ -47,9 +44,7 @@ public class IntermediateThrowEvent extends ThrowEvent
             centerX: bind x
             centerY: bind y
             radius: bind w/2
-            //styleClass: "event"
-            style: Styles.style_event
-            //smooth:true;
+            styleClass: "interEvent"
         };
 
         setType(type);
@@ -58,22 +53,18 @@ public class IntermediateThrowEvent extends ThrowEvent
         {
             content: [
                 shape,
-                //text,
                 Circle
                 {
                     centerX: bind x
                     centerY: bind y
                     radius: bind w/2-3
-                    stroke: bind shape.stroke
-                    //styleClass: "event"
-                    style: Styles.style_event
-                    //smooth:true;
+                    styleClass: "interEvent"
+                    id: "marker"
                 },
                 message,text
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
