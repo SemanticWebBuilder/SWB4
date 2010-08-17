@@ -154,6 +154,8 @@ namespace WBOffice4
 
         protected internal abstract OfficeDocument Open(FileInfo file);
 
+        protected internal abstract OfficeDocument Open(FileInfo file,String contentid,String rep);
+
         /// <param name="obj">Clase <see cref="T:System.Object"/> que se va a comparar con la clase <see cref="T:System.Object"/> actual.</param>
         /// <returns>Es true si el objeto <see cref="T:System.Object"/> especificado es igual al objeto <see cref="T:System.Object"/> actual; en caso contrario, es false.</returns>
         public override bool Equals(object obj)
@@ -183,6 +185,7 @@ namespace WBOffice4
             {
                 FormOpenContent frm = new FormOpenContent(this, documentType);
                 frm.ShowDialog();
+                frm.open();
             }
         }
         public static void ChangePassword()

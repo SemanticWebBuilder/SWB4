@@ -108,5 +108,13 @@ namespace WB4Office2003Library
             Excel.Workbook workbook = application.Workbooks.Open(file.FullName, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
             return new Excel2003OfficeDocument(workbook);
         }
+
+        protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
+        {
+            Excel.Workbook workbook = application.Workbooks.Open(file.FullName, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
+            Excel2003OfficeDocument officeDocument=new Excel2003OfficeDocument(workbook);
+            officeDocument.SaveContentProperties(contentid, rep);
+            return officeDocument;
+        }
     }
 }

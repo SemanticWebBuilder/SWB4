@@ -123,5 +123,22 @@ namespace WB4Office2003Library
             Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
             return new Word2003OfficeDocument(doc);
         }
+        protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
+        {
+            object filedocxtoOpen = file.FullName;
+            if (file.Extension.Equals(HtmlExtension, StringComparison.CurrentCultureIgnoreCase) || file.Extension.Equals(".htm", StringComparison.CurrentCultureIgnoreCase))
+            {
+                FileInfo docFile = new FileInfo(file.FullName.Replace(file.Extension, ".doc"));
+                if (docFile.Exists)
+                {
+                    filedocxtoOpen = docFile.FullName;
+                }
+            }
+            object missing = Type.Missing;
+            Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+            Word2003OfficeDocument officeDocument=new Word2003OfficeDocument(doc);
+            officeDocument.SaveContentProperties(contentid, rep);
+            return officeDocument;
+        }
     }
 }

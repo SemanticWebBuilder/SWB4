@@ -33,8 +33,10 @@ namespace WBOffice4.Forms
 {
     internal partial class FormOpenContent : TSWizards.BaseWizard
     {
+        private SelectDirectory select;
         private OfficeApplication application;
         private DocumentType documentType;
+        private String contentfile;
         public FormOpenContent(OfficeApplication application, DocumentType documentType)
         {
             InitializeComponent();
@@ -47,7 +49,14 @@ namespace WBOffice4.Forms
         {
             this.AddStep(new Search(documentType));
             this.AddStep(new SelectVersionToOpen(documentType.ToString().ToLower()));
-            this.AddStep(new SelectDirectory(application));
+            select=new SelectDirectory(application);
+            this.AddStep(select);
+        }
+
+        public void open()
+        {
+            select.open();
+
         }
     }
 }

@@ -23,6 +23,7 @@
  
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -108,9 +109,27 @@ namespace WB4Office2007Library
         protected override OfficeDocument Open(System.IO.FileInfo file)
         {
             object filedocxtoOpen = file.FullName;            
-            object missing = Type.Missing;            
-            Word.Document doc=application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
-            return new Word2007OfficeDocument(doc);            
+            object missing = Type.Missing;
+            Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);            
+            OfficeDocument officeDocument=new Word2007OfficeDocument(doc);            
+            return officeDocument;
+        }
+        protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
+        {
+            object filedocxtoOpen = file.FullName;            
+            object missing = Type.Missing;
+            Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+            try
+            {
+                Office.DocumentProperties docProperties = (Office.DocumentProperties)doc.CustomDocumentProperties;
+            }
+            catch(Exception ue)
+            {
+                Debug.WriteLine(ue.Message);
+            }
+            OfficeDocument officeDocument=new Word2007OfficeDocument(doc);
+            officeDocument.SaveContentProperties(contentid, rep);
+            return officeDocument;
         }
     }
 }

@@ -113,5 +113,12 @@ namespace WB4Office2007Library
             Excel.Workbook workbook = application.Workbooks.Open(file.FullName, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
             return new Excel2007OfficeDocument(workbook);
         }
+        protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
+        {
+            Excel.Workbook workbook = application.Workbooks.Open(file.FullName, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
+            Excel2007OfficeDocument officeDocument=new Excel2007OfficeDocument(workbook);
+            officeDocument.SaveContentProperties(contentid, rep);
+            return officeDocument;
+        }
     }
 }
