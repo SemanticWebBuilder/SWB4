@@ -40,15 +40,19 @@ namespace WB4WordOffice2007
 
         public void NoDocumentsActive()
         {
-            this.buttonOpen.Visible = true;
-            this.buttonPublish.Visible = false;
-            this.buttonCleanPropeties.Visible = false;
+            NoDocumentPublished();
             this.buttonSave.Visible = false;
+            this.buttonShowDocumentDetail.Visible=false;
+            this.buttonAddLink.Visible = false;
+            this.buttonAddLinkDo.Visible = false;
         }
         public void DocumentsActive()
         {
             this.buttonOpen.Visible = true;
             this.buttonSave.Visible = true;
+            this.buttonShowDocumentDetail.Visible = true;
+            this.buttonAddLink.Visible = true;
+            this.buttonAddLinkDo.Visible = true;
         }
         public void NoDocumentPublished()
         {
@@ -58,15 +62,17 @@ namespace WB4WordOffice2007
             this.buttonPublish.Visible = false;
             this.buttonDelete.Visible = false;
             this.buttonSave.Visible = true;
+            this.buttonShowDocumentDetail.Visible = true;
+            this.buttonAddLink.Visible = true;
+            this.buttonAddLinkDo.Visible = true;
         }
         public void DocumentPublished()
         {
-            this.buttonOpen.Visible = true;
+            NoDocumentPublished();            
             this.buttonInformation.Visible = true;
             this.buttonCleanPropeties.Visible = true;
             this.buttonDelete.Visible = true;
-            this.buttonPublish.Visible = true;
-            this.buttonSave.Visible = true;
+            this.buttonPublish.Visible = true;                                    
         }
         private void RibbonMenuWord_Load(object sender, RibbonUIEventArgs e)
         {
