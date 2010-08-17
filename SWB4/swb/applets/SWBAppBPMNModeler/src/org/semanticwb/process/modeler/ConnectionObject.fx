@@ -10,9 +10,7 @@ import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import java.lang.Math;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
@@ -40,7 +38,6 @@ public class ConnectionObject  extends CustomNode
     public var uri : String;
     public var text : EditableText;
     public var points : Point[];
-    public var strokeWidth : Number=2;
     public var arrowType : String;
 
     protected var path : Path;
@@ -434,5 +431,4 @@ public class ConnectionObject  extends CustomNode
     {
         return modeler.containerElement==ini.container or modeler.containerElement==end.container;
     }
-
 }
