@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import org.semanticwb.process.modeler.CompensationIntermediateCatchEvent;
 
 /**
@@ -20,16 +19,6 @@ public class FlowNode extends GraphicalElement
     {
         zindex=2;
         return super.create();
-    }
-
-    override public function mousePressed( e: MouseEvent )
-    {
-        super.mousePressed(e);
-    }
-
-    override public function mouseReleased( e: MouseEvent )
-    {
-        super.mouseReleased(e);
     }
 
     public override function canAttach(parent:GraphicalElement):Boolean
