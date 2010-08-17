@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
-import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -27,17 +26,12 @@ public class ConditionalFlow extends SequenceFlow
         //Se reemplaza
         var poly=Polygon
         {
-            points:[
-                 0,-6,
-                 6, 0,
-                 0, 6,
-                -6, 0
-            ]
+            points:[0, -6, 6, 0, 0, 6, -6, 0]
             translateX:bind points[0].x
             translateY:bind points[0].y
-            style:Styles.style_flow
+            styleClass: "connObject"
+            id: "diamond"
             stroke:bind path.stroke
-            fill:Color.WHITE
             visible:bind not(ini instanceof Gateway)
         };
 
@@ -51,11 +45,9 @@ public class ConditionalFlow extends SequenceFlow
                         poly,
                         arrow
                     ]
-                    effect: Styles.dropShadow
                 },
                 text
             ]
-            opacity: bind o;
             visible: bind canView()
         };
         return ret;
@@ -69,7 +61,6 @@ public class ConditionalFlow extends SequenceFlow
             modeler.setFocusedNode(this);
             if(e.clickCount >= 2)
             {
-                //println("starEditing");
                 text.startEditing();
             }
         }
@@ -82,6 +73,4 @@ public class ConditionalFlow extends SequenceFlow
             ModelerUtils.clickedNode=null;
         }
     }
-
-
 }
