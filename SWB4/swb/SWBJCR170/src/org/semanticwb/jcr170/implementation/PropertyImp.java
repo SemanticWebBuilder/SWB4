@@ -523,7 +523,11 @@ public final class PropertyImp implements Property
 
     public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
     {
-        throw new UnsupportedOperationException(NOT_SUPPORTED_YET);
+        System.out.println("Removiendo propiedad "+this.getPath());
+        if(parent.getBaseNode()!=null)
+        {
+            parent.getBaseNode().removeProperty(this.name);
+        }
     }
 
     @Override
