@@ -20,5 +20,4 @@ public class SequenceFlow extends ConnectionObject
         var ret=super.create();
         return ret;
     }
-
 }
