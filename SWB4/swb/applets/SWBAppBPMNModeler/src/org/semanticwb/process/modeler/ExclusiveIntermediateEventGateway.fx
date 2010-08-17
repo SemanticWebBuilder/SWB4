@@ -8,10 +8,8 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
 /**
@@ -23,15 +21,12 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
     public override function create(): Node
     {
         initializeCustomNode();
-        stroke=Color.web(Styles.color_gateway);
-        cursor=Cursor.HAND;
         w=50;
         h=50;
         shape= Polygon
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
-            style: Styles.style_gateway
-            //smooth: true;
+            styleClass: "gateway"
         };
 
         var colorAdjust=ColorAdjust
@@ -44,7 +39,7 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
 
         var message=ImageView
         {
-            image:Styles.ICO_EVENT_W_MULTIPLE
+            styleClass: "modifierMultipleCatch"
             x: 14
             y: 13
             scaleX: 1
@@ -60,15 +55,13 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
                     centerX: w/2
                     centerY: h/2
                     radius: w/3.5
-                    style: Styles.style_simbol2
-                    //smooth: true;
+                    styleClass: "modifierGateway2"
                 }, Circle
                 {
                     centerX: w/2
                     centerY: h/2
                     radius: w/3.5-3
-                    style: Styles.style_simbol2
-                    //smooth: true;
+                    styleClass: "modifierGateway2"
                 },
                 message
             ]
@@ -76,9 +69,7 @@ public class ExclusiveIntermediateEventGateway extends EventBasedGateway
             translateY: bind y - w/2
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
 }
-
