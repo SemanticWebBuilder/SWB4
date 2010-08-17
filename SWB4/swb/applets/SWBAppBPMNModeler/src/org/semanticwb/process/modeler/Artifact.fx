@@ -10,17 +10,11 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Polyline;
 
-/**
- * @author javier.solis
- */
-
-public def TYPE_MULTIPLE="multiple";
+public def TYPE_COLLECTION="collection";
 public def TYPE_INPUT="input";
 public def TYPE_OUTPUT="output";
-
 public class Artifact extends GraphicalElement
 {
     protected var ix:Number;                          //offset imagen x
@@ -38,11 +32,8 @@ public class Artifact extends GraphicalElement
 
     override public function create(): Node
     {
-        cursor=Cursor.HAND;
         w=55;
         h=60;
-        stkw=1;
-        stkwo=2;
         text=EditableText
         {
             text: bind title with inverse
@@ -50,6 +41,8 @@ public class Artifact extends GraphicalElement
             y:bind y 
             width: bind w
             height: bind h
+            styleClass: "dataObject"
+            id: "label"
         }
 
         setType(type);
@@ -66,7 +59,7 @@ public class Artifact extends GraphicalElement
             ]
             translateX:bind x-w/2
             translateY:bind y-h/2
-            style:Styles.style_artifact
+            styleClass: "dataObject"
         };
 
         return Group
@@ -84,28 +77,12 @@ public class Artifact extends GraphicalElement
                     stroke:bind shape.stroke
                     strokeWidth:bind shape.strokeWidth
                 },
-                message,text,
+                message,text
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
-    }
-
-    override public function mouseEntered( e: MouseEvent )
-    {
-        super.mouseEntered(e);
-    }
-
-    override public function mouseExited( e: MouseEvent )
-    {
-        super.mouseExited(e);
-    }
-
-    override public function mousePressed( e: MouseEvent )
-    {
-       super.mousePressed(e);
     }
 
     public override function setType(type:String):Void
@@ -114,22 +91,22 @@ public class Artifact extends GraphicalElement
         message.visible=true;
         if(type.equals(TYPE_INPUT))
         {
-            message.image=Styles.ICO_EVENT_W_LINK;
-            ix=-message.image.width/2;
-            iy=h/2-message.image.height;
-            is=.9;
+            message.styleClass = "modifierLinkCatch";
+            ix=-25;
+            iy=-30;
+            is=.7;
         }else if(type.equals(TYPE_OUTPUT))
         {
-            message.image=Styles.ICO_EVENT_B_LINK;
-            ix=-message.image.width/2;
-            iy=h/2-message.image.height;
-            is=.9;
-        }else if(type.equals(TYPE_MULTIPLE))
+            message.styleClass = "modifierLinkThrow";
+            ix=-25;
+            iy=-30;
+            is=.7;
+        }else if(type.equals(TYPE_COLLECTION))
         {
-            message.image=Styles.ICO_TASK_MULTIPLE;
-            ix=-message.image.width/2;
-            iy=h/2-message.image.height-3;
-            is=1;
+            message.styleClass = "modifierMultiInstance";
+            ix=-6;
+            iy=13;
+            is=.8;
         }else
         {
              message.visible=false;
