@@ -8,7 +8,6 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 
@@ -60,6 +59,7 @@ public class Artifact extends GraphicalElement
             translateX:bind x-w/2
             translateY:bind y-h/2
             styleClass: "dataObject"
+            onKeyPressed: onKeyPressed
         };
 
         return Group
