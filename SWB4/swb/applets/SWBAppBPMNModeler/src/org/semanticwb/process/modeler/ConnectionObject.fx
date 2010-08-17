@@ -83,6 +83,7 @@ public class ConnectionObject  extends CustomNode
                 ]
                 styleClass: "connObject"
                 strokeDashArray: strokeDash
+                onKeyPressed: onKeyPressed
             };
         }else
         {
@@ -95,6 +96,7 @@ public class ConnectionObject  extends CustomNode
                 ]
                 styleClass: "connObject"
                 strokeDashArray: strokeDash
+                onKeyPressed: onKeyPressed
             };
         }
 
