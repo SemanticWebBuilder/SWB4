@@ -749,7 +749,7 @@ namespace WBOffice4
             }
 
         }
-        internal void SaveContentProperties(string contentId, String repositoryName)
+        public void SaveContentProperties(string contentId, String repositoryName)
         {
             this.contentID = contentId;
             this.reporitoryID = repositoryName;

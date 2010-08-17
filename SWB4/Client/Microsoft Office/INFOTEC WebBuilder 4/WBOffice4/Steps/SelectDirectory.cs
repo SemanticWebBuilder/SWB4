@@ -112,9 +112,13 @@ namespace WBOffice4.Steps
     }
     internal partial class SelectDirectory : TSWizards.BaseInteriorStep
     {
+        private String fileName;
+        private VersionInfo version;
+        private String rep;
+        private FileInfo contentfile;
         public static readonly String DIRECTORY_PATH = "DIRECTORY_PATH";
         private static String lastpath = null;
-        OfficeApplication application;
+        private OfficeApplication application;
         public SelectDirectory(OfficeApplication application)
         {
             InitializeComponent();
@@ -459,18 +463,19 @@ namespace WBOffice4.Steps
 
         private void SelectDirectory_ValidateStep(object sender, CancelEventArgs e)
         {
+            //System.Threading.Thread t=null;
             if (this.treedir.SelectedNode != null && this.treedir.SelectedNode.Tag is DirectoryInfo)
             {
                 DirectoryInfo dir = (DirectoryInfo)this.treedir.SelectedNode.Tag;
                 lastpath = dir.FullName;
                 this.Wizard.Data[DIRECTORY_PATH] = lastpath;
-                String rep = this.Wizard.Data[Search.REPOSITORY_ID].ToString();
-                VersionInfo version = (VersionInfo)this.Wizard.Data[SelectVersionToOpen.VERSION];
+                rep = this.Wizard.Data[Search.REPOSITORY_ID].ToString();
+                version = (VersionInfo)this.Wizard.Data[SelectVersionToOpen.VERSION];
                 IOfficeApplication app = OfficeApplication.OfficeApplicationProxy;
                 this.Wizard.SetProgressBarInit(5, 1, "Descargando contenido...");
-                String fileName = app.openContent(rep, version);
+                fileName = app.openContent(rep, version);
                 this.Wizard.SetProgressBarInit(5, 2, "Validando contenido...");
-                FileInfo contentfile = new FileInfo(dir.FullName + "/" + fileName);
+                contentfile = new FileInfo(dir.FullName + "/" + fileName);
                 if (contentfile.Exists)
                 {
                     DialogResult res = MessageBox.Show(this, "Existe un archivo con el nombre " + fileName + "\r\n¿Desea sobre escribir el archivo?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -521,24 +526,18 @@ namespace WBOffice4.Steps
                         s.Close();
                     }
                     this.Wizard.SetProgressBarInit(5, 3, "Abriendo contenido...");
-                    this.Wizard.Visible = false;
-                    this.Wizard.Close();
-                    
-                    OfficeDocument document = application.Open(contentfile);
-                    //this.Wizard.Visible = true;
-                    //this.Wizard.SetProgressBarInit(5, 4, "Guardando contenido...");
-                    document.SaveContentProperties(version.contentId, rep);
-                    document.Save();
-                    this.Wizard.SetProgressBarEnd();
-                    MessageBox.Show(this, "¡Se ha abierto un contenido con el nombre " + fileName + "!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);                    
+                    //t = new System.Threading.Thread(new System.Threading.ThreadStart(open));                    
+                    this.Wizard.Visible = false;                    
+                    this.Wizard.Close();                                                           
                 }
                 catch (Exception ue)
                 {
                     MessageBox.Show(this, "El contenido tiene una falla\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
-                {
-                    zipFile.Delete();
+                {       
+                    
+                    zipFile.Delete();                    
                 }
 
             }
@@ -547,6 +546,27 @@ namespace WBOffice4.Steps
                 MessageBox.Show(this, "¡Debe indicar un directorio!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        public void open()
+        {
+            if (contentfile != null && contentfile.Exists && rep!=null && version!=null)
+            {
+                try
+                {
+                    OfficeDocument document = application.Open(contentfile, version.contentId, rep);                    
+                    //document.SaveContentProperties(version.contentId, rep);                    
+                    document.Save();
+                    MessageBox.Show(this, "¡Se ha abierto un contenido con el nombre " + fileName + "!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ue)
+                {
+                    MessageBox.Show(this, "El contenido tiene una falla\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            
+        }
+
+        
         protected void ExtractFile(Stream inputStream, string entryName, DateTime entryDate, long entrySize, DirectoryInfo ToDirectory)
         {
 

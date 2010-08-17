@@ -501,14 +501,19 @@
     <Compile Include="Interfaces\ElementInfo.cs" />
     <Compile Include="Interfaces\FlowContentInformation.cs" />
     <Compile Include="Interfaces\LanguageInfo.cs" />
+    <Compile Include="Interfaces\ObjecInfo.cs" />
     <Compile Include="Interfaces\PageInfo.cs" />
     <Compile Include="Interfaces\PFlow.cs" />
+    <Compile Include="Interfaces\PropertyObjectInfo.cs" />
     <Compile Include="Interfaces\RepositoryInfo.cs" />
     <Compile Include="Interfaces\SemanticFileRepository.cs" />
     <Compile Include="Interfaces\SemanticFolderRepository.cs" />
     <Compile Include="Interfaces\SemanticRepository.cs" />
     <Compile Include="Interfaces\SiteInfo.cs" />
+    <Compile Include="Interfaces\ISmartTag.cs" />
     <Compile Include="Interfaces\Value.cs" />
+    <Compile Include="Controls\PropertyItem.cs" />
+    <Compile Include="Proxy\SmartTagProxy.cs" />
     <Compile Include="Steps\CategoryNode.cs" />
     <Compile Include="Steps\ContentProperties.cs">
       <SubType>UserControl</SubType>

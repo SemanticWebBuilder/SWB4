@@ -122,5 +122,21 @@ namespace WB4Office2007Library
             PowerPoint.Presentation presentation = application.Presentations.Open(filedocxtoOpen, Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse, Office.MsoTriState.msoTrue);
             return new PowerPoint2007OfficeDocument(presentation);    
         }
+        protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
+        {
+            string filedocxtoOpen = file.FullName;
+            if (file.Extension.Equals(HtmlExtension, StringComparison.CurrentCultureIgnoreCase) || file.Extension.Equals(".htm", StringComparison.CurrentCultureIgnoreCase))
+            {
+                FileInfo docFile = new FileInfo(file.FullName.Replace(file.Extension, ".ppt"));
+                if (docFile.Exists)
+                {
+                    filedocxtoOpen = docFile.FullName;
+                }
+            }
+            PowerPoint.Presentation presentation = application.Presentations.Open(filedocxtoOpen, Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse, Office.MsoTriState.msoTrue);
+            PowerPoint2007OfficeDocument officeDocument=new PowerPoint2007OfficeDocument(presentation);
+            officeDocument.SaveContentProperties(contentid, rep);
+            return officeDocument;
+        }
     }
 }
