@@ -14,10 +14,9 @@ import javafx.scene.text.TextOrigin;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TextBox;
 import javafx.scene.shape.Rectangle;
-import org.semanticwb.process.modeler.Styles;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.control.Tooltip;
 import javafx.scene.text.TextBoundsType;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -29,13 +28,11 @@ public class EditableText extends CustomNode
     public var y : Number;
     public var width : Number;
     public var height : Number;
-
     public var text : String;
     public var fill : Boolean;
 
     var textb : TextBox;
     var textl : Text;
-
     var first : Boolean =true;
 
     var f=bind textb.focused on replace
@@ -55,7 +52,6 @@ public class EditableText extends CustomNode
 
     public function stopEditing() :Void
     {
-        //textb.unselect();
         text=textb.text;
         cancelEditing();
     }
@@ -65,7 +61,6 @@ public class EditableText extends CustomNode
         textb.visible=false;
         textl.visible=true;
     }
-
 
     public function startEditing() :Void
     {
@@ -81,14 +76,12 @@ public class EditableText extends CustomNode
         textl= Text
         {
              content: bind "{text}\r"
-             style: Styles.style_task_text
              textOrigin: TextOrigin.TOP
              textAlignment: TextAlignment.CENTER
              wrappingWidth: bind width
              translateX:bind x-(textl.boundsInLocal.width)/2+2
              translateY:bind y-(textl.boundsInLocal.height)/2
              boundsType:TextBoundsType.VISUAL
-             //smooth:true;
              visible: true
         };
 
@@ -101,28 +94,24 @@ public class EditableText extends CustomNode
                 y:bind textl.translateY-2
                 width:bind textl.boundsInLocal.width
                 height:bind textl.boundsInLocal.height
-                style: Styles.style_tooltip
+                styleClass: "editableText"
             };
         }
 
         textb= TextBox
         {
              text: text
-             style: Styles.style_task_textbox
+             styleClass: "editableTextBox"
              translateX:bind x - width/2
              translateY:bind y -10
              width:bind width
              height: 20
              visible: false
              selectOnFocus:true
-             //tooltip:Tooltip{text:bind text}
-             //multiline:true
              onKeyTyped:function(k:KeyEvent)
              {
-                 //if(k.char=="\n")stopEditing();
                  var c=0+k.char.charAt(0);
                  if(c==27)cancelEditing();
-                 //println(c);
              }
              action: function() {
                 stopEditing();
@@ -133,6 +122,12 @@ public class EditableText extends CustomNode
             content: [
                back,textl,textb
             ]
+            
+            onMouseClicked: function (e: MouseEvent): Void {
+                if (e.clickCount >= 2) {
+                    startEditing()
+                }
+            }
         };
     }
 }
