@@ -137,8 +137,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         catch(Exception e)
                         {
                             log.error(e);
-                        }
-                        html = new StringBuilder(replaceHtml(html.toString(),deletestyles));
+                        }                        
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -204,7 +203,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
 
 
 
-
+                        htmlOut = cleanHTML(htmlOut,deletestyles);
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
@@ -227,7 +226,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         }
     }
 
-    public static String replaceHtml(String datos,boolean deletesytyles)
+    public static String cleanHTML(String datos,boolean deletesytyles)
     {
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
         StringBuilder ret = new StringBuilder();
