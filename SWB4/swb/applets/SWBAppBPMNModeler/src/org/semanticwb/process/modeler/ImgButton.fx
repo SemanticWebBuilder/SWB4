@@ -29,24 +29,29 @@ public class ImgButton extends CustomNode
     public var content:Node;
     public var subMenu:SubMenu;
     public var toolBar:ToolBar;
-
     public var action:function():Void;
 
     override protected function create():Node
     {
+        def imgN: Image = Image {
+            url: "{__DIR__}{image}"
+        }
+
+        def imgO: Image = Image {
+            url: "{__DIR__}{imageOver}"
+        }
+        
          content=Group
          {
              content:[
                ImageView {
-	         image: Image {
-		   url: "{__DIR__}{image}"
-	         }
+	         image: imgN
+                 smooth: false
                  visible: bind not over
                },
                ImageView {
-	         image: Image {
-		   url: "{__DIR__}{imageOver}"
-	         }
+	         image: imgO
+                 smooth: false
                  visible: bind over
                }
             ]
@@ -106,4 +111,3 @@ public class ImgButton extends CustomNode
         return content;
     }
 }
-
