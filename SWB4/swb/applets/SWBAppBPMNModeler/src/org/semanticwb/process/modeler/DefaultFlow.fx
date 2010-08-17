@@ -5,11 +5,9 @@
  */
 
 package org.semanticwb.process.modeler;
-
 import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
-
 
 /**
  * @author javier.solis
@@ -31,13 +29,11 @@ public class DefaultFlow extends SequenceFlow
             startY:bind points[0].y+dify-5
             endX:bind points[0].x+difx+5
             endY:bind points[0].y+dify+5
-            style:Styles.style_flow
-            strokeWidth:bind strokeWidth
+            styleClass: "connObject"
             stroke:bind path.stroke
         }
-
-
         super.create();
+        
         return Group
         {
             content: [
@@ -48,13 +44,10 @@ public class DefaultFlow extends SequenceFlow
                         line,
                         arrow
                     ]
-                    effect: Styles.dropShadow
                 },
                 text
             ]
-            opacity: bind o;
             visible: bind canView()
         };
     }
-
 }
