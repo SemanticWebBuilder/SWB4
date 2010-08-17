@@ -10,8 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
-import javafx.scene.shape.Line;
 import javafx.stage.Alert;
 
 /**
@@ -28,11 +26,8 @@ public class Lane extends GraphicalElement
 
     override public function create(): Node
     {
-        stkw=1;
-        stkwo=1;
         resizeable=true;
         resizeType=ResizeNode.RESIZE_V;
-        cursor=Cursor.HAND;
         //w=600;
         h=200;
         useGrid=false;
@@ -52,28 +47,17 @@ public class Lane extends GraphicalElement
             y: bind y-h/2+1
             width: bind w-20
             height: bind h-1
-            style: Styles.style_pool
-            //smooth:true;
+            styleClass: "pool"
         };
 
         return Group
         {
             content: [
                 shape,
-//                Line
-//                {
-//                    startX: bind x-w/2+20
-//                    startY: bind y-h/2+1
-//                    endX: bind x-w/2+20
-//                    endY: bind y+h/2-1
-//                    style: Styles.style_pool_line
-//                    stroke: bind shape.stroke
-//                },
                 text
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
@@ -109,8 +93,6 @@ public class Lane extends GraphicalElement
         if(a!=null)ret=a as Pool;
         return ret;
     }
-    
-
 
     override public function mouseDragged( e: MouseEvent )
     {
@@ -134,9 +116,9 @@ public class Lane extends GraphicalElement
         p.snapToGrid();
     }
 
-
     override public function remove(validate:Boolean)
     {
+        //TODO: Internacionalizar mensaje
        if(not validate or sizeof graphChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
        {
            //println("remove lane {getGraphParent()}");
@@ -178,6 +160,4 @@ public class Lane extends GraphicalElement
     {
         //The parent change in function of childs
     }
-
-
 }
