@@ -45,6 +45,7 @@ public class IntermediateThrowEvent extends ThrowEvent
             centerY: bind y
             radius: bind w/2
             styleClass: "interEvent"
+            onKeyPressed: onKeyPressed
         };
 
         setType(type);
