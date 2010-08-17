@@ -446,3 +446,11 @@
 .scrollView {
 	-fx-background-color: #EDEDED;/*linear (0%,0%) to (0%,100%) stops (0%,antiquewhite) (100%,indianred);*/
 }
+
+.splash {
+	-fx-font-family: "Verdana";
+    -fx-font-size: 11pt;
+    -fx-fontstyle: normal;
+    -fx-font-weight: normal;
+    -fx-smooth: false;
+}
