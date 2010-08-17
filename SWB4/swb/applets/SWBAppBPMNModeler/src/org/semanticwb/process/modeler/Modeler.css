@@ -444,10 +444,18 @@
 }
 
 .scrollView {
-	-fx-background-color: #EDEDED;/*linear (0%,0%) to (0%,100%) stops (0%,antiquewhite) (100%,indianred);*/
+	-fx-background-color: linear (0%,0%) to (0%,100%) stops (0%,#B9D6D6) (100%,#DDECEB);/*#EDEDED;*/
 }
 
 .splash {
+	-fx-font-family: "Verdana";
+    -fx-font-size: 11pt;
+    -fx-fontstyle: normal;
+    -fx-font-weight: normal;
+    -fx-smooth: false;
+}
+
+.group#label {
 	-fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
