@@ -8,9 +8,9 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Polygon;
-import javafx.scene.paint.Color;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 
 /**
  * @author javier.solis
@@ -18,18 +18,26 @@ import javafx.scene.paint.Color;
 
 public class Gateway extends FlowNode
 {
+    public var modifier: ImageView;
+    protected var colorAdjust: ColorAdjust;
+    
     public override function create(): Node
     {
         initializeCustomNode();
-        stroke=Color.web(Styles.color_gateway);
-        cursor=Cursor.HAND;
         w=50;
         h=50;
+        
+        colorAdjust = ColorAdjust {
+            hue: 0.25
+            brightness: 0.28
+            contrast: 0.25
+            saturation: 1
+        };
+
         shape= Polygon
         {
             points: [w/2,0,w,h/2,w/2,h,0,h/2]
-            style: Styles.style_gateway
-            //smooth: true;
+            styleClass: "gateway"
         };
 
         return Group
@@ -44,7 +52,6 @@ public class Gateway extends FlowNode
                     translateY: bind y - w/2
                     scaleX: bind s;
                     scaleY: bind s;
-                    effect: Styles.dropShadow
                 }
             ]
             visible: bind canView()
@@ -113,4 +120,3 @@ public class Gateway extends FlowNode
         return ret;
     }
 }
-
