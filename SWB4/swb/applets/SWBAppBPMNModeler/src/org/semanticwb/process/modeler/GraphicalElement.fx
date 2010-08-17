@@ -98,14 +98,6 @@ public class GraphicalElement extends CustomNode
         onParentYChange();
     }
 
-    var focusState = bind focused on replace
-    {
-        if (not focused)
-        {
-            shape.stroke=stroke;
-        }
-    }
-
     public function onParentXChange()
     {
         if(graphParent!=null)x=px+dpx;
@@ -115,7 +107,6 @@ public class GraphicalElement extends CustomNode
     {
         if(graphParent!=null)y=py+dpy;
     }
-
 
     protected function initializeCustomNode():Void
     {
@@ -130,11 +121,6 @@ public class GraphicalElement extends CustomNode
             width: bind w
             height: bind h
         }
-
-//        tooltip = Tooltip
-//        {
-//            text: bind toolTipText;
-//        }
     }
 
     public override function create(): Node
@@ -171,16 +157,7 @@ public class GraphicalElement extends CustomNode
                 //println("starEditing");
                 if(containerable)
                 {
-                    if(text.boundsInLocal.contains(e.sceneX, e.sceneY))
-                    {
-                        text.startEditing();
-                    }else
-                    {
-                        modeler.containerElement=this;
-                    }
-                }else
-                {
-                    text.startEditing();
+                    modeler.containerElement=this;
                 }
             }
         }
@@ -216,13 +193,10 @@ public class GraphicalElement extends CustomNode
     public function mousePressed( e: MouseEvent )
     {
         modeler.setFocusedNode(this);
-        //if(modeler.tempNode==null)
-            modeler.disablePannable=true;
+        modeler.disablePannable=true;
         dx=x-e.sceneX;
         dy=y-e.sceneY;
-        //toFront();
         requestFocus();
-        //println("onMousePress node:{e}");
 
         if(e.secondaryButtonDown)
         {
@@ -248,7 +222,7 @@ public class GraphicalElement extends CustomNode
 
     public function mouseReleased( e: MouseEvent )
     {
-        //if(modeler.tempNode==null)modeler.disablePannable=false;
+        shape.requestFocus();
         snapToGrid();
 
         //check drop over node
@@ -280,7 +254,6 @@ public class GraphicalElement extends CustomNode
             }
         }
         setGraphParent(overNode);
-        //println("onMouseRelease {overNode.title}");
     }
 
     public function getGraphParent() : GraphicalElement
@@ -344,9 +317,6 @@ public class GraphicalElement extends CustomNode
 
     override var onMouseEntered = function(e)
     {
-        //var name=getClass().getName();
-        //println(name);
-//        tooltip.activate();
         over=true;
         if (title == null or title.trim() == "") {
             ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
@@ -358,17 +328,12 @@ public class GraphicalElement extends CustomNode
 
     public function mouseEntered( e: MouseEvent )
     {
-        //println("x:{x} {localToScene(x,y).x}");
         modeler.overNode=this;
-        shape.stroke=strokeOver;
-        shape.strokeWidth=stkwo;
-        //overtimer.playFromStart();
         if(modeler.tempNode==null)modeler.disablePannable=true;
     }
 
     override var onMouseExited = function(e)
     {
-//        tooltip.deactivate();
         over=false;
         ModelerUtils.stopToolTip();
         mouseExited(e);
@@ -381,9 +346,6 @@ public class GraphicalElement extends CustomNode
             modeler.overNode=null;
             if(modeler.tempNode==null)modeler.disablePannable=false;
         }
-        if(focused) shape.stroke=strokeFocused
-        else shape.stroke=stroke;
-        shape.strokeWidth=stkw;
     }
 
 
@@ -398,7 +360,6 @@ public class GraphicalElement extends CustomNode
         {
             remove(true);
         }
-        //println(e);
     }
 
     public function remove(validate:Boolean) : Void
@@ -529,8 +490,6 @@ public class GraphicalElement extends CustomNode
             return ele.getFirstGraphParent();
         }
     }
-
-
 
     /**
     *  Regresa el primer padre si es un pool de lo contrario regresa null
