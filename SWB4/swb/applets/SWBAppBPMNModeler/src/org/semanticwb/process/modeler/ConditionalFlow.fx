@@ -22,7 +22,7 @@ public class ConditionalFlow extends SequenceFlow
         title= ModelerUtils.getLocalizedString("condition");
         arrowType=ARROW_TYPE_SEQUENCE;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
-        super.create();
+        
         //Se reemplaza
         var poly=Polygon
         {
@@ -34,6 +34,7 @@ public class ConditionalFlow extends SequenceFlow
             stroke:bind path.stroke
             visible:bind not(ini instanceof Gateway)
         };
+        super.create();
 
         var ret=Group
         {
@@ -63,14 +64,6 @@ public class ConditionalFlow extends SequenceFlow
             {
                 text.startEditing();
             }
-        }
-    }
-
-    override var onMouseReleased = function( e: MouseEvent ):Void
-    {
-        if(ModelerUtils.clickedNode==this)
-        {
-            ModelerUtils.clickedNode=null;
         }
     }
 }
