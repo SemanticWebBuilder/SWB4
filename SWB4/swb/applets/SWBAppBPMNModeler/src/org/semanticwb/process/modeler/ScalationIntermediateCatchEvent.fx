@@ -33,7 +33,7 @@ public class ScalationIntermediateCatchEvent extends IntermediateCatchEvent
 
         if (link instanceof SequenceFlow and link.ini instanceof EventBasedGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage("EscalationEvent cannot be linked to EventBasedGateway");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError40"));
         }
         return ret;
     }
