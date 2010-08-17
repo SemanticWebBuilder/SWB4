@@ -130,3 +130,4 @@
 "msgError34" = "Start Event cannot have incoming Message Flow"
 "msgError35" = "Start Event cannot have outgoing Message Flow"
 "msgError36" = "Message Start Event can have only one incoming Message Flow"
+"msgError37" = "Pool cannot be linked using Sequence Flow"
