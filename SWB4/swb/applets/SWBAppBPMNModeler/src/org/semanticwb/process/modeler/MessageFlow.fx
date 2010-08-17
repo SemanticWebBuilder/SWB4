@@ -19,10 +19,9 @@ public class MessageFlow extends ConnectionObject
 {
     public override function create(): Node
     {
-        title="Message";
+        title=ModelerUtils.getLocalizedString("Message");
         arrowType=ARROW_TYPE_MESSAGE;
         strokeDash=[2,5];
-        strokeWidth=1;
         notGroup=true;  //No agrega los elementos path y arrow al grupo
         cubicCurve=true;
         super.create();
@@ -37,16 +36,15 @@ public class MessageFlow extends ConnectionObject
                             radius: 5
                             centerX:bind points[0].x
                             centerY:bind points[0].y
-                            style:Styles.style_flow
+                            styleClass: "connObject"
+                            id: "tail"
                             stroke:bind path.stroke
                         },
                         arrow
                     ]
-                    effect: Styles.dropShadow
                 },
                 text
             ]
-            opacity: bind o;
             visible: bind canView()
         };
     }
@@ -59,7 +57,6 @@ public class MessageFlow extends ConnectionObject
             modeler.setFocusedNode(this);
             if(e.clickCount >= 2)
             {
-                //println("starEditing");
                 text.startEditing();
             }
         }
@@ -72,5 +69,4 @@ public class MessageFlow extends ConnectionObject
             ModelerUtils.clickedNode=null;
         }
     }
-
 }
