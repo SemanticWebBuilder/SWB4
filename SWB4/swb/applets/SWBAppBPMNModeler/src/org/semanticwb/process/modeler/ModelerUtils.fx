@@ -32,7 +32,6 @@ public function setErrorMessage(message:String)
 {
     errorMessage=message;
     showToolTip(ToolTip.TOOLTIP_ERROR, message, 0, getToolTip().scene.height-20);
-    //startToolTip(message, getToolTip().scene.width/2, getToolTip().scene.height/2);
 }
 
 public function getLocalizedString(key: String): String {
@@ -54,7 +53,7 @@ public var popup=MenuPopup{
     animate:true
     // opciones del menu
     content: [
-        MenuItem { text:"Say Hello!", call: function(e:MouseEvent):Void{println("Hello");} },
+        MenuItem { text:"Say Hello!", call: function(e:MouseEvent):Void{if (e.source instanceof CatchEvent)println("Clicked node is a catch event");} },
         MenuItem { text:"Again, say Hello!", call:function(e:MouseEvent):Void{println("Hello 2");} },
         MenuSeparator { },
         MenuItem { text:"Say Bye!", call: function(e:MouseEvent):Void{println("Bye");} }
