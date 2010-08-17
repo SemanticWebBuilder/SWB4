@@ -11,9 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Group;
 import javafx.scene.Cursor;
 import javafx.scene.text.Text;
-import javafx.scene.text.Font;
 import javafx.scene.shape.Rectangle;
-import org.semanticwb.process.modeler.Styles;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -34,18 +32,17 @@ public class ContainerButton extends CustomNode
         var root = Group {
             content: [
                 Rectangle {
-                    style:Styles.style_containerButton
+                    styleClass: "containerButton"
                     width: bind t.boundsInParent.width+5
                     height: bind t.boundsInParent.height+5
                 },
                 t = Text {
                     x:bind r.x+4;
                     y:bind r.y+12;
-                    content:bind if(container!=null)container.title else ModelerUtils.getLocalizedString("root")
-                    font: Font {size:10 name:"Verdana"}
+                    content:bind if(container!=null)container.title else ModelerUtils.getLocalizedString("root")                    
                     fill: bind if(container!=modeler.containerElement)Color.BLUE else Color.BLACK
-                    //underline:bind if(container!=modeler.containerElement)true else false
-                    smooth:true
+                    styleClass: "containerButton"
+                    id: "label"
                 }
             ]
             cursor:bind if(container!=modeler.containerElement)Cursor.HAND else Cursor.DEFAULT;
