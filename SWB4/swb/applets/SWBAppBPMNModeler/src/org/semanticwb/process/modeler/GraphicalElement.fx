@@ -25,16 +25,10 @@ import javafx.util.Sequences;
  */
 
 public class GraphicalElement extends CustomNode
-{
-    public var modeler:Modeler;
-    public var x : Number;
-    public var y : Number;
-    public var w : Number;
-    public var h : Number;
-
+{    
+    public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
     public-read var sceneX:Number;
     public-read var sceneY:Number;
-
 //    var sx= bind x on replace
 //    {
 //        sceneX=localToScene(x, y).x;
@@ -46,48 +40,34 @@ public class GraphicalElement extends CustomNode
 //    }
     
     public var type:String;                     //tipo del elemento
-
     public var title : String;                  //titulo del elemento
     public var toolTipText : String;            //tooltip del elemento
-
-//    protected var tooltip: Tooltip;
-
     public var uri : String;                    //uri del elemento
+    public var s : Number = 1;                     //size
+    public var resizeable:Boolean=false;
+    public var resizeType:Number=ResizeNode.RESIZE_A;
+    public var modeler:Modeler;
+    public var x : Number;
+    public var y : Number;
+    public var w : Number;
+    public var h : Number;
+    public var containerable:Boolean=false;               //can contains
+    public var useGrid:Boolean=true;                    //Se usa snap to grid
 
     protected var shape : Shape;
     protected var text : EditableText;          //objeto para editar el titulo
-
-    public var stroke=Color.web(Styles.color);
-    public var strokeOver=Color.web(Styles.color_over);
-    public var strokeFocused=Color.web(Styles.color_focused);
-
-    public var s : Number = 1;                     //size
-    public var stkw : Number = 2;                  //strokeWidth
-    public var stkwo : Number = 3;                 //strokeWidth Over
-
-    public var resizeable:Boolean=false;
-    public var resizeType:Number=ResizeNode.RESIZE_A;
-
-    var mx : Number;                               //temporal movimiento x
-    var my : Number;                               //temporal movimiento y
     protected var dx : Number;                               //temporal drag x
     protected var dy : Number;                               //temporal drag y
-
     protected var zindex=0;
-
     protected var graphParent:GraphicalElement;
     protected var graphChilds:GraphicalElement[];
-
     protected var dpx : Number;                     //diference of parent
     protected var dpy : Number;                     //diference of parent
-
     protected var container:GraphicalElement;                 //Container Element
     protected var containerChilds:GraphicalElement[];         //Container Childs
-    public var containerable:Boolean=false;               //can contains
-
-    public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
-
-    public var useGrid:Boolean=true;                    //Se usa snap to grid
+    
+    var mx : Number;                               //temporal movimiento x
+    var my : Number;                               //temporal movimiento y       
 
     var px = bind graphParent.x on replace
     {
@@ -145,16 +125,13 @@ public class GraphicalElement extends CustomNode
 
     public function mouseClicked( e: MouseEvent )
     {
-        //println("onMouseClicked node:{e}");
         if(e.button==e.button.SECONDARY)
         {
-            //println("popup");
             ModelerUtils.popup.event=e;
         }else
         {
             if(e.clickCount >= 2)
             {
-                //println("starEditing");
                 if(containerable)
                 {
                     modeler.containerElement=this;
@@ -162,7 +139,6 @@ public class GraphicalElement extends CustomNode
             }
         }
     }
-
 
     override var onMouseDragged = function ( e: MouseEvent ) : Void
     {
@@ -263,7 +239,6 @@ public class GraphicalElement extends CustomNode
 
     public function setGraphParent(parent:GraphicalElement):Void
     {
-        //println("{this} setGraphParent {parent}");
         if(parent!=null)
         {
             dpx=x-parent.x;
@@ -272,13 +247,11 @@ public class GraphicalElement extends CustomNode
             delete this from graphParent.graphChilds;
             graphParent=parent;
             insert this into parent.graphChilds;
-            //println("add {uri} parent:{parent.uri}");
             modeler.moveFront(this, parent);
         }else
         {
             delete this from graphParent.graphChilds;
             graphParent=null;
-            //println("remove {uri} parent:{parent.uri}");
         }
     }
 
@@ -348,7 +321,6 @@ public class GraphicalElement extends CustomNode
         }
     }
 
-
     override var onKeyPressed = function( e: KeyEvent )
     {
         keyPressed(e);
@@ -365,7 +337,6 @@ public class GraphicalElement extends CustomNode
     public function remove(validate:Boolean) : Void
     {
         var del:Node[];
-        //println("remove {this} {validate}");
         setGraphParent(null);
         setContainer(null);
         insert this into del;
@@ -398,7 +369,6 @@ public class GraphicalElement extends CustomNode
     {
         return true;
     }
-
 
     /**
     * Indica si puede o no establecer una coneccion con el objeto inicial de la relacion
@@ -503,7 +473,4 @@ public class GraphicalElement extends CustomNode
             return null;
         }
     }
-
-
 }
-
