@@ -83,13 +83,8 @@ public class Event extends FlowNode
             centerY: bind y
             radius: bind w/2
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
-            onKeyPressed: function(e: KeyEvent) {
-                if(e.code==e.code.VK_DELETE)
-                {
-                    remove(true);
-                }
-            }
-        };
+            onKeyPressed: onKeyPressed
+        }
 
         setType(type);
 
