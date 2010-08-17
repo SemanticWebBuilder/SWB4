@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -19,8 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Collection;
+import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
@@ -326,6 +327,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
             HashMap<String, SemanticProperty> hmConfcol = new HashMap();
             HashMap<String, SemanticProperty> hmConfbus = new HashMap();
             HashMap<String, SemanticObject> hmfiltro = new HashMap();
+            HashMap<String, SemanticObject> hmSearchParam = new HashMap();
             if (gobj instanceof Collection) {
                 col = (Collection) gobj;
                 //WebSite ws = SWBContext.getWebSite(gobj.getSemanticObject().getModel().getModelObject().getURI());
@@ -418,20 +420,28 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         while (itsprop.hasNext()) {
                             //System.out.println("revisando object properties");
                             SemanticProperty semanticProp = itsprop.next();
-                            SemanticClass sc =semanticProp.getRangeClass();
+                            SemanticClass sc = semanticProp.getRangeClass();
                             if(sc!=null)
                             {
+
                                 out.println("<tr>");
                                 String paramsearch = null;
-                                if(request.getParameter("search_"+sc.getClassId())!=null)
+                                if(request.getParameter("search_"+sc.getClassId())!=null&&request.getParameter("search_"+sc.getClassId()).trim().length()>0)
                                 {
                                     paramsearch=request.getParameter("search_"+sc.getClassId());
+                                    hmSearchParam.put("search_"+sc.getClassId(), ont.getSemanticObject(paramsearch));
                                 }
                                 out.println("<td align=\"right\">");
                                 out.println("<label for=\"" + sc.getURI() + "_search\">" + sc.getDisplayName(user.getLanguage()) + ": </label></td><td><select name=\"search_"+sc.getClassId()+"\" id=\"" + sc.getURI() + "_search\" >");
-                                out.println("<option value=\"Selecciona filtro\" selected >");
+                                out.println("<option value=\"\" selected >Selecciona filtro");
                                 out.println("</option>");
-                                Iterator<SemanticObject> sobj = sc.listInstances();
+
+                                //DisplayProperty dp = new DisplayProperty(semanticProp.getDisplayProperty());
+
+                                Iterator<SemanticObject> sobj = gobj.getSemanticObject().getModel().listInstancesOfClass(sc); //sc.listInstances();
+                                if(sc.equals(User.swb_User)) sobj = sc.listInstances();
+//                                SWBFormMgr fmgr = new SWBFormMgr(sc, gobj.getSemanticObject(),SWBFormMgr.MODE_VIEW);
+//                                fmgr.
                                 while (sobj.hasNext()) {
                                     SemanticObject semanticObject = sobj.next();
                                     out.println("<option value=\"" + semanticObject.getURI() + "\" "+(paramsearch!=null&&paramsearch.equals(semanticObject.getURI())?"selected":"")+">");
@@ -531,7 +541,76 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                         //Llenado de la tabla
 
-                        if (!busqueda.equals("")) {
+                        if (!busqueda.equals("")||!hmSearchParam.isEmpty()) {
+
+                            HashMap<String, SemanticObject> hmResults = new HashMap();
+                            HashMap<String, SemanticObject> hmRemove = new HashMap();
+                            Iterator<SemanticObject> itsprop2 = null;
+                            if(!busqueda.equals("")||(!busqueda.equals("")&&!hmSearchParam.isEmpty()))
+                            {
+                                itsprop2 = hmfiltro.values().iterator();
+                            }
+                            else if(busqueda.equals("")&&!hmSearchParam.isEmpty())
+                            {
+                                itsprop2 = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol);
+                            }
+
+                            if(!hmSearchParam.isEmpty())
+                            {
+                                while (itsprop2.hasNext())
+                                {
+                                    //System.out.println("Filtrado por tipo de elementos");
+                                    SemanticObject sofil = itsprop2.next();
+
+                                    Iterator<SemanticProperty> sempropit = hmConfbus.values().iterator();
+                                    while (sempropit.hasNext()) {
+
+                                        SemanticProperty semanticProp = sempropit.next();
+                                        //System.out.println("Revisando propiedad: "+semanticProp.getName());
+                                        if(semanticProp.isObjectProperty())
+                                        {
+                                            //System.out.println("Object property....");
+                                            SemanticClass semclass = semanticProp.getRangeClass();
+                                            if(semclass!=null)
+                                            {
+                                                //System.out.println("class id: "+semclass.getClassId());
+                                                if(hmSearchParam.get("search_"+semclass.getClassId())!=null)
+                                                {
+                                                    //System.out.println("Aplica Filtro encontrado...");
+                                                    SemanticObject so = hmSearchParam.get("search_"+semclass.getClassId());
+                                                    String URIfilter = so.getURI();
+
+                                                    SemanticObject sotmp = sofil.getObjectProperty(semanticProp);
+                                                    //System.out.println("comparando "+URIfilter+ " con "+(sotmp!=null?sotmp.getURI():"nulo"));
+                                                    if(sotmp!=null&&sotmp.getURI().equals(URIfilter))
+                                                    {
+                                                        //System.out.println("Conservando elemento.");
+                                                        hmResults.put(sofil.getURI(), sofil);
+                                                    }
+                                                    else
+                                                    {
+                                                        //System.out.println("Quitando elemento");
+                                                        hmRemove.put(sofil.getURI(), sofil);
+                                                        
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //limpiando el filtro
+                                hmfiltro=new HashMap();
+                                Iterator<SemanticObject> itresults = hmResults.values().iterator();
+                                while (itresults.hasNext()) {
+                                    SemanticObject semObject = itresults.next();
+                                    if(hmRemove.get(semObject.getURI())==null)
+                                    {
+                                        //pasando elementos válidos
+                                        hmfiltro.put(semObject.getURI(), semObject);
+                                    }
+                                }
+                            }
+
                             itso = hmfiltro.values().iterator();
 
                         } else {
