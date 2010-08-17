@@ -29,7 +29,6 @@ public class ContainerPath extends CustomNode
     public var w:Number;
     public var h:Number;
     public var flow:Flow;
-
     public var contents: Node[];
 
     var container = bind modeler.containerElement on replace
@@ -43,19 +42,19 @@ public class ContainerPath extends CustomNode
         return Text
         {
             content: txt
-            style: Styles.style_containerButtonText
+            styleClass: "containerButton"
+            id: "label"
         };
     }
 
-
     public function addContainer(container:GraphicalElement): Void
     {
-        //println("addContainer:{container}");
         var button = ContainerButton
         {
             container:container
             modeler:modeler
         }
+        
         insert button before contents[0];
         if(container!=null)
         {
@@ -71,9 +70,8 @@ public class ContainerPath extends CustomNode
                     },
                     Polyline {
                         points: bind [r.x, r.y, r.x + r.width, r.y + r.height / 2, r.x, r.y + r.height]
-                        fill: null
-                        stroke: Color.web("#666666")
-                        strokeWidth: 1
+                        styleClass: "containerPath"
+                        id: "separator"
                     }
                 ]
             }
@@ -89,7 +87,6 @@ public class ContainerPath extends CustomNode
                     height: bind h
                     width: bind w
                     content: bind contents
-                    //style:Styles.style_task
                     nodeHPos:HPos.RIGHT
         };
         var ret=Group
@@ -102,12 +99,7 @@ public class ContainerPath extends CustomNode
                     y:bind flow.boundsInLocal.minY-1
                     width:bind flow.boundsInLocal.width+2
                     height:bind flow.boundsInLocal.height+2
-                    //style:Styles.style_pool
-                    fill: Color.web("#F2F2F2")
-                    stroke: Color.web("#666666")
-                    strokeWidth: 1
-                    arcWidth: 6
-                    arcHeight: 6
+                    styleClass: "containerPath"
                 },
                 flow
              ]
