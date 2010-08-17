@@ -23,7 +23,7 @@ public class ThrowEvent extends Event
         
         if (link.ini instanceof EventBasedGateway) {
             ret = false;
-            ModelerUtils.setErrorMessage("ThrowEvent cannot be linked to EventBasedGateway");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError38"));
         }
         return ret;
     }
