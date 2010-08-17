@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.input.KeyEvent;
 
 /**
  * @author javier.solis
@@ -82,6 +83,12 @@ public class Event extends FlowNode
             centerY: bind y
             radius: bind w/2
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
+            onKeyPressed: function(e: KeyEvent) {
+                if(e.code==e.code.VK_DELETE)
+                {
+                    remove(true);
+                }
+            }
         };
 
         setType(type);
