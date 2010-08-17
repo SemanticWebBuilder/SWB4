@@ -475,7 +475,9 @@ namespace WBOffice4.Steps
                 this.Wizard.SetProgressBarInit(5, 1, "Descargando contenido...");
                 fileName = app.openContent(rep, version);
                 this.Wizard.SetProgressBarInit(5, 2, "Validando contenido...");
-                contentfile = new FileInfo(dir.FullName + "/" + fileName);
+                String pathFile = dir.FullName + "/" + fileName;
+                pathFile=pathFile.Replace('/','\\');
+                contentfile = new FileInfo(pathFile);
                 if (contentfile.Exists)
                 {
                     DialogResult res = MessageBox.Show(this, "Existe un archivo con el nombre " + fileName + "\r\n¿Desea sobre escribir el archivo?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
