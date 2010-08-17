@@ -65,19 +65,17 @@ public class Modeler extends CustomNode
          {
              node:content
              layoutInfo: LayoutInfo{ width:bind width, height: bind height }
-             //tooltip:Tooltip{text:"hola"}
              pannable: bind pannable and not disablePannable
-             //translateX:40;
              cursor:bind if(pannable)Cursor.MOVE else Cursor.DEFAULT
+             
              onMousePressed: function( e: MouseEvent ):Void
              {
-                //println("onMousePressed modeler:{e}");
                 mousex=e.x+getXScroll();
                 mousey=e.y+getYScroll();
+
                 if(tempNode!=null)
                 {
                     var close: Boolean=true;
-
                     if(tempNode instanceof GraphicalElement)
                     {
                         if(ModelerUtils.clickedNode==null) //elemento sobre modeler
@@ -115,19 +113,21 @@ public class Modeler extends CustomNode
                                 }
                             }else
                             {
-                                add(tempNode);
                                 var a=tempNode as GraphicalElement;
-                                a.x=e.x+getXScroll();
-                                a.y=e.y+getYScroll();
-                                a.snapToGrid();
-                                if(a.canAttach(ModelerUtils.clickedNode as GraphicalElement))
-                                {
-                                    a.setGraphParent(ModelerUtils.clickedNode as GraphicalElement);
+                                if (a.canAddToDiagram()) {
+                                    add(tempNode);
+                                    a.x=e.x+getXScroll();
+                                    a.y=e.y+getYScroll();
+                                    a.snapToGrid();
+                                    if(a.canAttach(ModelerUtils.clickedNode as GraphicalElement))
+                                    {
+                                        a.setGraphParent(ModelerUtils.clickedNode as GraphicalElement);
+                                    }
+                                    a.setContainer(containerElement);
                                 }
-                                a.setContainer(containerElement);
                             }
                         }else//se presiono algun boton del toolbar
-                        {
+                        {                            
                             close=false;
                         }
                     }else if(tempNode instanceof ConnectionObject)
@@ -150,14 +150,12 @@ public class Modeler extends CustomNode
                     {
                         tempNode=null;
                         disablePannable=false;
-                        //println(e);
-                        //println(tempNode);
                     }
                 }
              }
+             
              onMouseDragged: function( e: MouseEvent ):Void
              {
-                //println("onMouseDragged modeler:{e}");
                 if(tempNode!=null)
                 {
                     mousex=e.x+getXScroll();
@@ -168,7 +166,6 @@ public class Modeler extends CustomNode
                         //activa el conection object cuando se inicia el drag
                         if(not tempNode.visible)
                         {
-                            //println("drag connection");
                             tempNode.visible=true;
                         }
 
@@ -189,6 +186,7 @@ public class Modeler extends CustomNode
                     a.end=null;
                 }
              }
+             
              onMouseReleased: function( e: MouseEvent ):Void
              {
                  //println("onMouseReleased modeler:{e}");
