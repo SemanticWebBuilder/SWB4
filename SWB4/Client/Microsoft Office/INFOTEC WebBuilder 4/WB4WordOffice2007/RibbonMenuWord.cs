@@ -44,7 +44,7 @@ namespace WB4WordOffice2007
             this.buttonSave.Visible = false;
             this.buttonShowDocumentDetail.Visible=false;
             this.buttonAddLink.Visible = false;
-            this.buttonAddLinkDo.Visible = false;
+            this.buttonAddLinkDo.Visible = false;            
         }
         public void DocumentsActive()
         {
