@@ -120,25 +120,25 @@ public class SubProcess extends Activity
         super.setType(type);
         if(type.equals(TYPE_ADHOC))
         {
-            message.image=Styles.ICO_TASK_ADHOC;
+            message.styleClass =  "modifierAdhoc";
             ix=-message.image.width/2-15;
             iy=h/2-message.image.height-11;
             is=1;
         }else if(type.equals(TYPE_COMPENSATION))
         {
-            message.image=Styles.ICO_EVENT_W_COMPENSATION;
+            message.styleClass =  "modifierComp";
             ix=-message.image.width/2-19;
             iy=h/2-message.image.height-9;
             is=1;
         }else if(type.equals(TYPE_LOOP))
         {
-            message.image=Styles.ICO_TASK_LOOP;
+            message.styleClass =  "modifierLoop";
             ix=-message.image.width/2-15;
             iy=h/2-message.image.height-10;
             is=1;
         }else if(type.equals(TYPE_MULTIPLE))
         {
-            message.image=Styles.ICO_TASK_MULTIPLE;
+            message.styleClass =  "modifierMult";
             ix=-message.image.width/2-16;
             iy=h/2-message.image.height-8;
             is=1;
