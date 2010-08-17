@@ -132,3 +132,4 @@
 "msgError36" = "Un Evento Inicial de Mensage puede tener un solo Flujo de Mensaje entrante"
 "msgError37" = "Un Pool no puede conectarse usando Flujos de Secuencia"
 "msgError38" = "Un Evento Intermedio Disparador no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
+"msgError39" = "Un Evento Intermedio Paralelo no puede adherirse a una Actividad"
