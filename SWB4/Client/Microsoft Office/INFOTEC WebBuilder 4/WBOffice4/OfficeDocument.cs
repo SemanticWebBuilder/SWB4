@@ -400,6 +400,21 @@ namespace WBOffice4
             DirectoryInfo temporalFile = new DirectoryInfo(this.FilePath.Directory + Separator + guid);
             CopyAttachmentsToDirectory(temporalFile);
             SaveHtmlPrepareAndGetFiles(guid);
+            if (this.FilePath.Exists)
+            {
+                String newpath = temporalFile + "/" + FilePath.Name;
+                newpath=newpath.Replace('/','\\');
+                try
+                {
+                    this.FilePath.CopyTo(newpath);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.Message);
+                    Debug.WriteLine(ue.StackTrace);
+                    
+                }
+            }
             FileInfo zipFile = new FileInfo(this.FilePath.Directory + Separator + guid + ".zip");
             if (zipFile.Exists)
             {
