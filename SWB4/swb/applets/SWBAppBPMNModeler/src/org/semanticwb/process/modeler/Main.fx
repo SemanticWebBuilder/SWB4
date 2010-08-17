@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.Cursor;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.util.StringLocalizer;
+import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
@@ -22,7 +23,6 @@ var localizer: StringLocalizer = StringLocalizer {}
 
 //public-read var inBrowser = "true".equals(FX.getArgument("isApplet") as String);
 
-//println("dir:{__DIR__}");
 ModelerUtils.setLocalizer(localizer);
 
 var modeler:Modeler = Modeler
@@ -115,8 +115,7 @@ var scene : Scene = Scene {
     ]
     width: 600
     height: 300
-    stylesheets: bind Styles.stylesheets
-    //fill: Color.TRANSPARENT
+    stylesheets: "{__DIR__}Modeler.css"
 }
 
 var stage : Stage = Stage {
