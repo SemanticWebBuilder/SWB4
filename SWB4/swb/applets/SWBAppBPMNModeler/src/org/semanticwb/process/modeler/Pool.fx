@@ -15,7 +15,6 @@ import javafx.scene.shape.Line;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.stage.Alert;
 import org.semanticwb.process.modeler.MessageFlow;
-import org.semanticwb.process.modeler.AssociationFlow;
 
 /**
  * @author javier.solis
@@ -33,11 +32,8 @@ public class Pool extends GraphicalElement
 
     override public function create(): Node
     {
-        //stkw=2;
-        //stkwo=2;
         resizeable=true;
         resizeType=ResizeNode.RESIZE_A;
-        cursor=Cursor.HAND;
         w=600;
         h=200;
         text=EditableText
@@ -56,7 +52,7 @@ public class Pool extends GraphicalElement
             y: bind y-h/2
             width: bind w
             height: bind h
-            style: Styles.style_pool
+            styleClass: "pool"
         };
 
         return Group
@@ -68,8 +64,8 @@ public class Pool extends GraphicalElement
                     startY: bind y-h/2+1
                     endX: bind x-w/2+20
                     endY: bind y+h/2-1
-                    style: Styles.style_pool_line
                     stroke: bind shape.stroke
+                    styleClass: "pool"
                 },text,
                 Group
                 {
@@ -79,29 +75,13 @@ public class Pool extends GraphicalElement
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
-
-    }
-
-    override public function mouseEntered( e: MouseEvent )
-    {
-        super.mouseEntered(e);
-    }
-
-    override public function mouseExited( e: MouseEvent )
-    {
-        super.mouseExited(e);
-    }
-
-    override public function mousePressed( e: MouseEvent )
-    {
-       super.mousePressed(e);
     }
 
     override public function remove(validate:Boolean)
     {
+        //TODO: Internacionalizar mensaje
        if(not validate or sizeof graphChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
        {
            super.remove(validate);
@@ -110,7 +90,6 @@ public class Pool extends GraphicalElement
 
     public function removeLane(lane:Lane)
     {
-        //println("{this} removeLane {lane}");
         delete lane from lanes;
         if(sizeof lanes==0)resizeType=ResizeNode.RESIZE_A;
         updateSize();
@@ -118,7 +97,6 @@ public class Pool extends GraphicalElement
 
     public function addLane():Lane
     {
-        //println("{this} addLane");
         var lane=Lane
         {
             title:"Lane"
@@ -156,8 +134,6 @@ public class Pool extends GraphicalElement
         }
     }
 
-
-
     public function getLaneByURI(uri:String):GraphicalElement
     {
         for(lane in lanes)
@@ -173,7 +149,7 @@ public class Pool extends GraphicalElement
         var ret = true;
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Pool cannot have outgoing SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError37"));
         }        
         return ret;
     }
@@ -183,15 +159,14 @@ public class Pool extends GraphicalElement
         var ret = true;
         if (link instanceof SequenceFlow) {
             ret = false;
-            ModelerUtils.setErrorMessage("Pool cannot have incoming SequenceFlow");
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError37"));
         }
         if (link instanceof MessageFlow) {
             if (link.ini.getPool() == this) {
                 ret = false;
-                ModelerUtils.setErrorMessage("Cannot link MessageFlow from within the Pool");
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError16"));
             }
         }
         return ret;
     }
-
 }
