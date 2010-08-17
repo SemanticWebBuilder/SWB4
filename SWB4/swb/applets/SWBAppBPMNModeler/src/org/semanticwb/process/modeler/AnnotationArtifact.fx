@@ -46,6 +46,7 @@ public class AnnotationArtifact extends Artifact
             translateX:bind x-w/2
             translateY:bind y-h/2
             styleClass: "artifact"
+            onKeyPressed: onKeyPressed
         }
 
         setType(type);
