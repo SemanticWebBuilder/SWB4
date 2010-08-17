@@ -220,7 +220,6 @@ public class ConnectionObject  extends CustomNode
         {
             remove();
         }
-        //println(e);
     }
 
     protected bound function getConnectionX(ini: GraphicalElement, end: GraphicalElement): Number
