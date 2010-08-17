@@ -8,7 +8,6 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
@@ -16,27 +15,26 @@ import javafx.scene.effect.ColorAdjust;
 /**
  * @author javier.solis
  */
-public-read var CATCH_TIMER="w_timer";
-public-read var CATCH_MESSAGE="w_message";
-public-read var CATCH_RULE="w_conditinal";
-public-read var CATCH_LINK="w_link";
-public-read var CATCH_MULTIPLE="w_multiple";
-public-read var CATCH_SIGNAL="w_signal";
-public-read var CATCH_PARALLEL="w_parallel";
-public-read var CATCH_SCALATION="w_scalation";
-public-read var CATCH_ERROR="w_error";
-public-read var CATCH_COMPENSATION="w_compensation";
-public-read var CATCH_CANCELATION="w_cancelation";
-
-public-read var THROW_MESSAGE="b_message";
-public-read var THROW_ERROR="b_error";
-public-read var THROW_CANCELATION="b_cancelation";
-public-read var THROW_COMPENSATION="b_compensation";
-public-read var THROW_SIGNAL="b_signal";
-public-read var THROW_MULTIPLE="b_multiple";
-public-read var THROW_SCALATION="b_scalation";
-public-read var THROW_TERMINATION="b_termination";
-public-read var THROW_LINK="b_link";
+public def CATCH_TIMER="w_timer";
+public def CATCH_MESSAGE="w_message";
+public def CATCH_RULE="w_conditinal";
+public def CATCH_LINK="w_link";
+public def CATCH_MULTIPLE="w_multiple";
+public def CATCH_SIGNAL="w_signal";
+public def CATCH_PARALLEL="w_parallel";
+public def CATCH_SCALATION="w_scalation";
+public def CATCH_ERROR="w_error";
+public def CATCH_COMPENSATION="w_compensation";
+public def CATCH_CANCELATION="w_cancelation";
+public def THROW_MESSAGE="b_message";
+public def THROW_ERROR="b_error";
+public def THROW_CANCELATION="b_cancelation";
+public def THROW_COMPENSATION="b_compensation";
+public def THROW_SIGNAL="b_signal";
+public def THROW_MULTIPLE="b_multiple";
+public def THROW_SCALATION="b_scalation";
+public def THROW_TERMINATION="b_termination";
+public def THROW_LINK="b_link";
 
 public class Event extends FlowNode
 {
@@ -60,16 +58,13 @@ public class Event extends FlowNode
     {
         x: bind x-ix-.5;
         y: bind y-iy-.5;
-        //smooth: true;
         scaleX: bind is+scaleOff;
         scaleY: bind is+scaleOff;
         effect: colorAdjust;
     };
 
     public override function create(): Node
-    {
-        initializeCustomNode();
-        cursor=Cursor.HAND;
+    {        
         w=30;
         h=30;
         text=EditableText
@@ -86,9 +81,6 @@ public class Event extends FlowNode
             centerX: bind x
             centerY: bind y
             radius: bind w/2
-            //styleClass: "event"
-            style: Styles.style_event
-            //smooth:true;
             strokeDashArray: bind if (isInterrupting and cancelActivity) [2, 5] else null
         };
 
@@ -103,7 +95,6 @@ public class Event extends FlowNode
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
@@ -114,121 +105,121 @@ public class Event extends FlowNode
         message.visible=true;
         if(type.equals(CATCH_TIMER))
         {
-            message.image=Styles.ICO_EVENT_W_TIMER;
+            message.styleClass = "modifierTimer";
             ix=11;
-            iy=11;
-            is=1;
+            iy=10.7;
+            is=0.95;
         }else if(type.equals(CATCH_LINK))
         {
-            message.image=Styles.ICO_EVENT_W_LINK;
+            message.styleClass = "modifierLinkCatch";
             ix=10;
             iy=10;
             is=0.9;
         }else if(type.equals(CATCH_MESSAGE))
         {
-            message.image=Styles.ICO_EVENT_W_MESSAGE;
+            message.styleClass = "modifierMessageCatch";
             ix=9;
             iy=8;
             is=1;
         }else if(type.equals(CATCH_RULE))
         {
-            message.image=Styles.ICO_EVENT_W_CONDITINAL;
+            message.styleClass = "modifierRule";
             ix = 9.5;
             iy = 9.5;
             is = 1;
         }else if(type.equals(CATCH_SIGNAL))
         {
-            message.image=Styles.ICO_EVENT_W_SIGNAL;
+            message.styleClass = "modifierSignalCatch";
             ix=10;
             iy=11;
             is=1.1;
         }else if(type.equals(CATCH_MULTIPLE))
         {
-            message.image=Styles.ICO_EVENT_W_MULTIPLE;
+            message.styleClass = "modifierMultipleCatch";
             ix=11;
             iy=12;
             is=1;
         }else if(type.equals(CATCH_PARALLEL))
         {
-            message.image=Styles.ICO_EVENT_W_PARALLEL;
+            message.styleClass = "modifierParallel";
             ix=9;
             iy=9;
             is=1.1;
         }else if(type.equals(CATCH_SCALATION))
         {
-            message.image=Styles.ICO_EVENT_W_SCALATION;
+            message.styleClass = "modifierScalationCatch";
             ix=9;
             iy=12;
             is=1;
         }else if(type.equals(CATCH_ERROR))
         {
-            message.image=Styles.ICO_EVENT_W_ERROR;
+            message.styleClass = "modifierErrorCatch";
             ix=10;
             iy=10;
             is=1;
         }else if(type.equals(CATCH_COMPENSATION))
         {
-            message.image=Styles.ICO_EVENT_W_COMPENSATION;
+            message.styleClass = "modifierCompensateCatch";
             ix=11;
             iy=6;
             is=1;
         }else if(type.equals(CATCH_CANCELATION))
         {
-            message.image=Styles.ICO_EVENT_W_CANCELATION;
+            message.styleClass = "modifierCancelCatch";
             ix=9;
             iy=9;
             is=1.1;
         }else if(type.equals(THROW_LINK))
         {
-            message.image=Styles.ICO_EVENT_B_LINK;
+            message.styleClass = "modifierLinkThrow";
             ix=10;
             iy=10;
             is=0.9;
         }else if(type.equals(THROW_MESSAGE))
         {
-            message.image=Styles.ICO_EVENT_B_MESSAGE;
+            message.styleClass = "modifierMessageThrow";
             ix=9;
             iy=8;
             is=1;
         }else if(type.equals(THROW_SIGNAL))
         {
-            message.image=Styles.ICO_EVENT_B_SIGNAL;
+            message.styleClass = "modifierSignalThrow";
             ix=10;
             iy=11;
             is=1.1;
         }else if(type.equals(THROW_MULTIPLE))
         {
-            message.image=Styles.ICO_EVENT_B_MULTIPLE;
+            message.styleClass = "modifierMultipleThrow";
             ix=11;
             iy=12;
             is=1;
         }else if(type.equals(THROW_SCALATION))
         {
-            message.image=Styles.ICO_EVENT_B_SCALATION;
+            message.styleClass = "modifierScalationThrow";
             ix=9;
             iy=12;
             is=1;
         }else if(type.equals(THROW_ERROR))
         {
-            message.image=Styles.ICO_EVENT_B_ERROR;
+            message.styleClass = "modifierErrorThrow";
             ix=10;
             iy=10;
             is=1;
         }else if(type.equals(THROW_COMPENSATION))
         {
-            message.image=Styles.ICO_EVENT_B_COMPENSATION;
+            message.styleClass = "modifierCompensateThrow";
             ix=11;
             iy=6;
             is=1;
         }else if(type.equals(THROW_CANCELATION))
         {
-            message.image=Styles.ICO_EVENT_B_CANCELATION;
+            message.styleClass = "modifierCancelThrow";
             ix=9;
             iy=9;
             is=1.1;
         }else if(type.equals(THROW_TERMINATION))
         {
-            message.image=Styles.ICO_EVENT_B_TERMINATION;
+            message.styleClass = "modifierTerminate";
             ix=8;
             iy=8;
             is=1.1;
@@ -247,5 +238,4 @@ public class Event extends FlowNode
         }
         return ret;
     }
-
 }
