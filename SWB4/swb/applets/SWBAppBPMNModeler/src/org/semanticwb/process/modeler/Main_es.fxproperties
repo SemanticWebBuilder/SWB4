@@ -130,3 +130,4 @@
 "msgError34" = "Un Evento Inicial no puede tener Flujos de Mensaje entrantes"
 "msgError35" = "Un Evento Inicial no puede tener Flujos de Mensaje salientes"
 "msgError36" = "Un Evento Inicial de Mensage puede tener un solo Flujo de Mensaje entrante"
+"msgError37" = "Un Pool no puede conectarse usando Flujos de Secuencia"
