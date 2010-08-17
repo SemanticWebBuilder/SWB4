@@ -47,6 +47,7 @@ public class DataStoreArtifact extends Artifact
             styleClass: "dataObject"
             translateX:bind x-w/2
             translateY:bind y-h/2
+            onKeyPressed: onKeyPressed
         }
 
         setType(type);
