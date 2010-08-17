@@ -8,9 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
 import org.semanticwb.process.modeler.ModelerUtils;
 import javafx.stage.Alert;
@@ -53,6 +51,7 @@ public class Pool extends GraphicalElement
             width: bind w
             height: bind h
             styleClass: "pool"
+            onKeyPressed: onKeyPressed
         };
 
         return Group
