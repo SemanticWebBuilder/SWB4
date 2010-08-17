@@ -38,7 +38,7 @@ namespace WB4WordOffice2007
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
 
-            Globals.ThisAddIn.VstoSmartTags.Add(new WB4SmartTag());
+            //Globals.ThisAddIn.VstoSmartTags.Add(new WB4SmartTag());
             officeApplication = new WordOfficeApplication(this.Application);            
             OfficeApplication.MenuListener = Globals.Ribbons.RibbonMenuWord;
             

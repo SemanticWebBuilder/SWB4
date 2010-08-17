@@ -36,7 +36,7 @@ namespace WBOffice4.Forms
         private SelectDirectory select;
         private OfficeApplication application;
         private DocumentType documentType;
-        private String contentfile;
+        //private String contentfile;
         public FormOpenContent(OfficeApplication application, DocumentType documentType)
         {
             InitializeComponent();
