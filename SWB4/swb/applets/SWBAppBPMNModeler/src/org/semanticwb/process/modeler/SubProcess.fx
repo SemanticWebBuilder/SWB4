@@ -9,7 +9,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Line;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
@@ -29,9 +28,9 @@ public class SubProcess extends Activity
     {
         x: bind x+ix;
         y: bind y+iy;
-        //smooth: true;
         scaleX: bind is;
         scaleY: bind is;
+
         effect: ColorAdjust
         {
             hue:-0.83
@@ -46,7 +45,6 @@ public class SubProcess extends Activity
         resizeable=true;
         containerable=true;
         initializeCustomNode();
-        cursor=Cursor.HAND;
         w=100;
         h=60;
 
@@ -67,10 +65,7 @@ public class SubProcess extends Activity
             y: bind y-h/2
             width: bind w
             height: bind h
-            //effect: lighting
-            //styleClass: "task"
-            style: Styles.style_task
-            //smooth:true;
+            styleClass: "task"
         };
 
         var trans;
@@ -80,10 +75,10 @@ public class SubProcess extends Activity
             {
                 x: bind x-w/2+3
                 y: bind y-h/2+3
-                width: w-6
-                height: h-6
-                style: Styles.style_task
-                //smooth:true;
+                width: bind w-6
+                height: bind h-6
+                stroke: bind shape.stroke
+                styleClass: "task"
             };
         }
 
@@ -96,27 +91,26 @@ public class SubProcess extends Activity
                     y: bind y+7
                     width: 14
                     height: 14
-                    style: Styles.style_message
-                    //smooth:true;
+                    styleClass: "modifierCollapsed"
+                    id: "rect"
                 }, Line{
                     startX: bind x-5
                     startY: bind y+14
                     endX: bind x+5
                     endY: bind y+14
-                    style: Styles.style_message
-                    //smooth:true;
+                    styleClass: "modifierCollapsed"
+                    id: "rect"
                 }, Line{
                     startX: bind x
                     startY: bind y+14-5
                     endX: bind x
                     endY: bind y+14+5
-                    style: Styles.style_message
-                    //smooth:true;
+                    styleClass: "modifierCollapsed"
+                    id: "rect"
                 }, message
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible:bind canView()
         };
     }
@@ -151,10 +145,6 @@ public class SubProcess extends Activity
         }else if(type.equals(TYPE_TRANSACTION))
         {
              message.visible=false;
-//            message.image=Styles.ICO_TASK_USER;
-//            ix=-w/2+5;
-//            iy=-h/2+3;
-//            is=1;
         }else
         {
             message.visible=false;
@@ -163,6 +153,7 @@ public class SubProcess extends Activity
 
     override public function remove(validate:Boolean)
     {
+        //TODO: Internacionalizar mensaje
         if(not validate or sizeof containerChilds == 0 or Alert.confirm("Remove {this}", "Are you sure you want to delete \"{this.title}\" {this}?"))
         {
             for(child in containerChilds)
@@ -174,5 +165,4 @@ public class SubProcess extends Activity
             super.remove(validate);
         }
     }
-
 }
