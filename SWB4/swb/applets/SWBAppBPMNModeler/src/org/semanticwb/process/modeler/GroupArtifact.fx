@@ -7,9 +7,7 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Cursor;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.LineTo;
@@ -23,11 +21,9 @@ public class GroupArtifact extends Artifact
     override public function create(): Node
     {
         resizeable=true;
-        cursor=Cursor.HAND;
         w=150;
         h=150;
-        stkw=2;
-        stkwo=2;
+        
         text=EditableText
         {
             text: bind title with inverse
@@ -46,7 +42,7 @@ public class GroupArtifact extends Artifact
                 LineTo { x: bind w  y: 0 },
                 LineTo { x: 0  y: 0 }
             ]
-            style:Styles.style_connection
+            styleClass: "connObject"
             translateX:bind x-w/2
             translateY:bind y-h/2
             strokeDashArray: [20,5,3,5]
@@ -61,7 +57,6 @@ public class GroupArtifact extends Artifact
             ]
             scaleX: bind s;
             scaleY: bind s;
-            effect: Styles.dropShadow
             visible: bind canView()
         };
     }
