@@ -67,6 +67,7 @@ public class Modeler extends CustomNode
              layoutInfo: LayoutInfo{ width:bind width, height: bind height }
              pannable: bind pannable and not disablePannable
              cursor:bind if(pannable)Cursor.MOVE else Cursor.DEFAULT
+             styleClass: "scrollView"
              
              onMousePressed: function( e: MouseEvent ):Void
              {
