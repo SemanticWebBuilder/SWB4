@@ -432,7 +432,7 @@
 }
 
 .pool:hover {
-    -fx-stroke: -over-stroke;
+    -fx-stroke: -hover-stroke;
     -fx-stroke-width: 2;
 }
 
