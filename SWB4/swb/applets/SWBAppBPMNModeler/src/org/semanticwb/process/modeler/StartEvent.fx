@@ -7,7 +7,6 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 
 /**
  * @author javier.solis
