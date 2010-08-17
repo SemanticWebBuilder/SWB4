@@ -15,7 +15,7 @@
     -gateway-first-color: #FFFDE2;
     -gateway-second-color: #FFFAA6;
     -sequence-normal-stroke: -normal-stroke;
-    -tooltip-stroke: black;
+    -tooltip-stroke: gray;
     -tooltip-first-color: #fafad2;
     -tooltip-second-color: #E5B949;
     -tooltip-third-color: #daa520;
@@ -23,7 +23,10 @@
     -tooltip-light-first-color: #FFFFFF;
     -task-first-color: #FFFFFF;
     -task-second-color: #BFD2E0;
-    /*-pool-normal-stroke:*/
+    -containerbutton-color:#F2F2F2;
+    -containerbutton-stroke:#666666;
+    -pool-normal-stroke:#ADADAE;
+    -pool-color:#E8E8FF;
 }
 .modifierGateway {
     -fx-stroke: -gateway-normal-stroke;
@@ -160,6 +163,7 @@
 }
 
 .startEvent {
+	-fx-cursor: hand;
     -fx-stroke: -startevent-normal-stroke;
     -fx-stroke-width:2;
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-startevent-first-color) (100%,-startevent-second-color);
@@ -200,6 +204,7 @@
 .endEvent {
     -fx-stroke:-endevent-normal-stroke;
     -fx-stroke-width: 4;
+    -fx-cursor: hand;
     -fx-fill:linear (0%,0%) to (100%,0%) stops (0%,-endevent-first-color) (100%,-endevent-second-color);
 }
 
@@ -235,7 +240,8 @@
     -fx-arc-height: 15;
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 2;
-    -fx-fill:white;/*linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);*/
+    -fx-cursor: hand;
+    -fx-fill:linear (0%,0%) to (0%,100%) stops (0%,-task-first-color) (100%,-task-second-color);
 }
 
 .task:hover {
@@ -265,10 +271,6 @@
     -fx-stroke-width: 2
 }
 
-.dataObject#label {
-    
-}
-
 .artifact {
     -fx-stroke: -normal-stroke;
     -fx-stroke-width: 2;
@@ -290,22 +292,10 @@
     -fx-fill:null;
 }
 
-.artifact#text {
-    
-}
-
 .connObject {
     -fx-stroke:-normal-stroke;
     -fx-stroke-width: 2;
     -fx-cursor: hand;
-}
-
-.connObject#label {
-    
-}
-
-.connObject#labelBox {
-    
 }
 
 .connObject#diamond {
@@ -324,36 +314,41 @@
     -fx-stroke-width: 3;
 }
 
-.arrowMessage {
-    -fx-stroke: -normal-stroke;
+.containerButton {
+	-fx-fill: null;
+}
+
+.containerPath {
+	-fx-fill: -containerbutton-color;
+	-fx-stroke: -containerbutton-stroke;
+	-fx-stroke-width: 1;
+	-fx-arc-width: 6;
+    -fx-arc-height: 6;
+}
+
+.containerPath#separator {
+	-fx-fill: null;
+	-fx-stroke: -containerbutton-stroke;
+	-fx-stroke-width: 1;
+}
+
+.containerButton#label {
+	-fx-font-family: "Verdana";
+    -fx-font-size: 10pt;
+    -fx-fontstyle: normal;
+    -fx-font-weight: normal;
+    -fx-smooth: false;
+}
+
+.arrowMessage {    
     -fx-fill: white;
-    -fx-stroke-width: 2;
 }
 
 .arrowMessage:hover {
-    -fx-stroke:-hover-stroke;
-    -fx-fill: white;
     -fx-stroke-width: 3;
 }
 
 .arrowMessage:focused {
-    -fx-stroke:-focus-stroke;
-    -fx-fill: white;
-    -fx-stroke-width: 3;
-}
-
-.arrowNormal {
-    -fx-stroke:-normal-stroke;
-    -fx-stroke-width: 2;
-}
-
-.arrowNormal:hover {
-    -fx-stroke:-hover-stroke;
-    -fx-stroke-width: 3;
-}
-
-.arrowNormal:focused {
-    -fx-stroke:-focus-stroke;
     -fx-stroke-width: 3;
 }
 
@@ -368,6 +363,7 @@
 .editableTextBox {
     -fx-font-size: 14px;
     -fx-font-family: "Helvetica, Arial";
+    -fx-font-weight: bold;
     -fx-focus-fill: transparent;
     -fx-shadow-fill: transparent;
 }
@@ -429,16 +425,18 @@
 }
 
 .pool {
-    -fx-stroke: -pool-stroke;
+    -fx-stroke: -pool-normal-stroke;
+    -fx-fill: -pool-color;
     -fx-stroke-width: 1;
+    -fx-cursor:hand;
 }
 
 .pool:hover {
     -fx-stroke: -over-stroke;
-    -fx-stroke-width: 1;
+    -fx-stroke-width: 2;
 }
 
 .pool:focused {
     -fx-stroke: -focus-stroke;
-    -fx-stroke-width: 1;
+    -fx-stroke-width: 2;
 }
