@@ -27,6 +27,7 @@ import javafx.scene.input.KeyEvent;
 public def ARROW_TYPE_SEQUENCE="sequence";
 public def ARROW_TYPE_MESSAGE="mesage";
 public def ARROW_TYPE_ASSOCIATION="association";
+public def ARROW_TYPE_NONE="none";
 
 public class ConnectionObject  extends CustomNode
 {
@@ -34,39 +35,23 @@ public class ConnectionObject  extends CustomNode
     public var ini : GraphicalElement;
     public var end : GraphicalElement;
     public var cubicCurve : Boolean;
-
     public var title : String;
     public var action : String=bind title;
     public var uri : String;
-
     public var text : EditableText;
-
     public var points : Point[];
     public var strokeWidth : Number=2;
     public var arrowType : String;
 
     protected var path : Path;
     protected var arrow : Path;
-    protected var o : Number = Styles.opacity;                   //opacity
     protected var strokeDash : Float[];
-
     protected var notGroup : Boolean;               //No agrega los elementos path y arrow al grupo
 
-    var focusState = bind focused on replace
-    {
-        if (not focused)
-        {
-            path.stroke=Color.web(Styles.color);
-            arrow.stroke=Color.web(Styles.color);
-        }
-    }
-
-	var pini: Point;
-	var pend: Point;
+    var pini: Point;
+    var pend: Point;
     public override function create(): Node
     {
-        cursor=Cursor.HAND;
-
         pini=Point{ x: bind getConnectionX(ini,end) y: bind getConnectionY(ini,end) };
         pend=Point{ x: bind getConnectionX(end,ini) y: bind getConnectionY(end,ini) };
         var pinter1=Point{ x: bind getInter1ConnectionX(ini,end,pini,pend) y: bind getInter1ConnectionY(ini,end,pini,pend) };
@@ -99,10 +84,8 @@ public class ConnectionObject  extends CustomNode
                         y: bind pend.y
                     }
                 ]
-                style: Styles.style_connection
+                styleClass: "connObject"
                 strokeDashArray: strokeDash
-                strokeWidth: strokeWidth;
-                //smooth:true;
             };
         }else
         {
@@ -113,12 +96,8 @@ public class ConnectionObject  extends CustomNode
                     LineTo{x:bind pinter2.x,y:bind pinter2.y},
                     LineTo{x:bind pend.x,y:bind pend.y}
                 ]
-                style: Styles.style_connection
+                styleClass: "connObject"
                 strokeDashArray: strokeDash
-                strokeWidth: strokeWidth;
-                //smooth:true;
-                //strokeLineCap: StrokeLineCap.ROUND
-                //strokeLineJoin: StrokeLineJoin.ROUND
             };
         }
 
@@ -134,11 +113,9 @@ public class ConnectionObject  extends CustomNode
                             path,
                             arrow
                         ]
-                        effect: Styles.dropShadow
                     },
                     text
                 ]
-                opacity: bind o;
                 visible: bind canView()
             };
         }else
@@ -165,8 +142,8 @@ public class ConnectionObject  extends CustomNode
                         y:bind pend.y-8.0*Math.sin(getArrow(45.0))
                     },
                 ]
-                stroke:Color.web(Styles.color);
-                strokeWidth:1;
+                strokeWidth: bind path.strokeWidth
+                stroke: bind path.stroke
             };
         } else if (type.equals(ARROW_TYPE_MESSAGE)) {
             arrow = Path {
@@ -185,9 +162,9 @@ public class ConnectionObject  extends CustomNode
                     },
                     ClosePath{}
                 ]
-                fill:Color.WHITE;
-                strokeWidth:1;
-                //stroke: Color.web(Styles.color);
+                strokeWidth: bind path.strokeWidth
+                stroke: bind path.stroke
+                styleClass: "arrowMessage"
             };
         }
     }
@@ -212,7 +189,7 @@ public class ConnectionObject  extends CustomNode
         {
             ModelerUtils.clickedNode=this;
             modeler.setFocusedNode(this);
-            requestFocus();
+            path.requestFocus();
         }
     }
 
@@ -227,26 +204,12 @@ public class ConnectionObject  extends CustomNode
     override var onMouseEntered = function(e)
     {
         if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=true;
-        path.stroke=Color.web(Styles.color_over);
-        arrow.stroke=Color.web(Styles.color_over);
-        path.strokeWidth=strokeWidth+1;
+        
     }
 
     override var onMouseExited = function(e)
     {
-        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false;
-
-        if(focused)
-        {
-            path.stroke=Color.web(Styles.color_focused);
-            arrow.stroke=Color.web(Styles.color_focused);
-        }else
-        {
-            path.stroke=Color.web(Styles.color);
-            arrow.stroke=Color.web(Styles.color);
-        }
-
-        path.strokeWidth=strokeWidth;
+        if(modeler.tempNode==null and ModelerUtils.clickedNode==null)modeler.disablePannable=false        
     }
 
     override var onKeyPressed = function( e: KeyEvent )
