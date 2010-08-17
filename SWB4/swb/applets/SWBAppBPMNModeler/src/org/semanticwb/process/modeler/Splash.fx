@@ -10,7 +10,6 @@ import javafx.scene.CustomNode;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
-import javafx.scene.text.Font;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import org.semanticwb.process.modeler.ModelerUtils;
