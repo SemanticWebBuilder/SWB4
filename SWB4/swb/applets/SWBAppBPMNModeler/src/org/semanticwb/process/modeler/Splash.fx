@@ -69,7 +69,7 @@ public class Splash extends CustomNode
                     x:bind x+110
                     y:bind y+35
                     content:bind "{ModelerUtils.getLocalizedString("version")}: {ModelerUtils.version}"
-                    font: Font {size:12 name:"Verdana"}
+                    styleClass: "splash"
                 }
             ]
         }
@@ -90,5 +90,4 @@ public class Splash extends CustomNode
         timeLine.playFromStart();
         requestFocus();
     }
-
 }
