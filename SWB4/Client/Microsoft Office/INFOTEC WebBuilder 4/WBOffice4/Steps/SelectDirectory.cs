@@ -25,6 +25,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -552,18 +553,19 @@ namespace WBOffice4.Steps
         public void open()
         {
             if (contentfile != null && rep!=null && version!=null)
-            {
-                
-                    try
-                    {
-                        OfficeDocument document = application.Open(contentfile, version.contentId, rep);                        
-                        document.Save();                        
-                        MessageBox.Show(this, "¡Se ha abierto un contenido con el nombre " + fileName + "!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ue)
-                    {
-                        MessageBox.Show(this, "El contenido tiene una falla\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
+            {                
+                try
+                {
+                    OfficeDocument document = application.Open(contentfile, version.contentId, rep);                        
+                    document.Save();                        
+                    MessageBox.Show(this, "¡Se ha abierto un contenido con el nombre " + fileName + "!", this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ue)
+                {
+                    Debug.WriteLine(ue.Message);
+                    Debug.WriteLine(ue.StackTrace);
+                    MessageBox.Show(this, "El contenido tiene una falla\r\nDetalle: " + ue.Message, this.Wizard.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
                 
                 
             }

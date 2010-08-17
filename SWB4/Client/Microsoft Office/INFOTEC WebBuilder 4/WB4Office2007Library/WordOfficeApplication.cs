@@ -117,13 +117,31 @@ namespace WB4Office2007Library
         }
         protected override OfficeDocument Open(System.IO.FileInfo file,String contentid,String rep)
         {
+            object missing = Type.Missing;
+            object format = Word.WdSaveFormat.wdFormatDocument;
             OfficeDocument officeDocument = null;
+            object filedocxtoOpen = file.FullName;
             if (file.Exists)
-            {
-                object filedocxtoOpen = file.FullName;
-                object missing = Type.Missing;
-                Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
-                officeDocument = new Word2007OfficeDocument(doc);
+            {   
+                try
+                {
+                    Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+                    officeDocument = new Word2007OfficeDocument(doc);
+                }
+                catch (Exception e)
+                {
+                    String path = file.FullName.Replace(".doc", ".html");
+                    FileInfo fHTML = new FileInfo(path);
+                    if (fHTML.Exists)
+                    {
+                        filedocxtoOpen = path;
+                        Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+                        filedocxtoOpen = file.FullName;
+                        doc.SaveAs(ref filedocxtoOpen, ref format, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+                        doc.ActiveWindow.View.Type = Word.WdViewType.wdPrintView;
+                        officeDocument = new Word2007OfficeDocument(doc);
+                    }
+                }
             }
             else
             {
@@ -131,12 +149,11 @@ namespace WB4Office2007Library
                 FileInfo fHTML = new FileInfo(path);
                 if (fHTML.Exists)
                 {
-                    object filedocxtoOpen = path;
-                    object format = Word.WdSaveFormat.wdFormatDocument;
-                    object missing = Type.Missing;
+                    filedocxtoOpen = path;
                     Word.Document doc = application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
                     filedocxtoOpen = file.FullName;
-                    doc.SaveAs(ref filedocxtoOpen, ref format, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);                    
+                    doc.SaveAs(ref filedocxtoOpen, ref format, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
+                    doc.ActiveWindow.View.Type = Word.WdViewType.wdPrintView;
                     officeDocument = new Word2007OfficeDocument(doc);
                 }
             }
