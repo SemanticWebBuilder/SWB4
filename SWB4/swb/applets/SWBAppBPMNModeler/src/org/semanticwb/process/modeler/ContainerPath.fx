@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 import javafx.geometry.HPos;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polyline;
-import javafx.scene.paint.Color;
 
 
 /**
