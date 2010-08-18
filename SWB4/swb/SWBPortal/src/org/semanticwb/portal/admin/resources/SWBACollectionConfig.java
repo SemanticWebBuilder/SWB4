@@ -18,15 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Collection;
-import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -438,10 +438,21 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                                 //DisplayProperty dp = new DisplayProperty(semanticProp.getDisplayProperty());
 
-                                Iterator<SemanticObject> sobj = gobj.getSemanticObject().getModel().listInstancesOfClass(sc); //sc.listInstances();
-                                if(sc.equals(User.swb_User)) sobj = sc.listInstances();
+                                SemanticModel smodel = gobj.getSemanticObject().getModel();
+                                if(smodel.getModelObject().getGenericInstance()!=null && smodel.getModelObject().getGenericInstance() instanceof WebSite)
+                                {
+
+                                }
+                                Iterator<SemanticObject> sobj = smodel.listInstancesOfClass(sc); //sc.listInstances();
+                                if(sc.equals(User.swb_User))
+                                {
+                                    sobj = sc.listInstances();
+//                                    if(smodel.getModelObject().getGenericInstance()!=null && smodel.getModelObject().getGenericInstance() instanceof WebSite)
+//                                    {
+//                                      sobj =  ((WebSite)smodel.getModelObject().getGenericInstance()).getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sc);
+//                                    }
+                                }
 //                                SWBFormMgr fmgr = new SWBFormMgr(sc, gobj.getSemanticObject(),SWBFormMgr.MODE_VIEW);
-//                                fmgr.
                                 while (sobj.hasNext()) {
                                     SemanticObject semanticObject = sobj.next();
                                     out.println("<option value=\"" + semanticObject.getURI() + "\" "+(paramsearch!=null&&paramsearch.equals(semanticObject.getURI())?"selected":"")+">");
