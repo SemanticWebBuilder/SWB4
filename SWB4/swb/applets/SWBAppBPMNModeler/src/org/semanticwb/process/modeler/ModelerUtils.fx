@@ -44,19 +44,20 @@ public function setLocalizer (loc: StringLocalizer) : Void {
 }
 
 // Primer menu flotante
-public var popup=MenuPopup{
-    corner:20
-    padding:8
-    borderWidth:4
-    //borderColor:bind dynamicColor
-    opacity: 0.9
-    animate:true
-    // opciones del menu
+public var popup=MenuPopup {
     content: [
-        MenuItem { text:"Say Hello!", call: function(e:MouseEvent):Void{if (e.source instanceof CatchEvent)println("Clicked node is a catch event");} },
-        MenuItem { text:"Again, say Hello!", call:function(e:MouseEvent):Void{println("Hello 2");} },
-        MenuSeparator { },
-        MenuItem { text:"Say Bye!", call: function(e:MouseEvent):Void{println("Bye");} }
+        Action {
+           label: "Item1"
+           action: function(e: MouseEvent) {
+               println("Item1 clicked");
+           }
+        },
+        Action {
+           label: "Item2"
+           action: function(e: MouseEvent) {
+               println("Item2 clicked");
+           }
+        }
     ]
 };
 
