@@ -1035,19 +1035,17 @@ public class AdvancedSearch extends GenericAdmResource {
         mapKey = (mapKey == null ? "" : mapKey);
 
         //Build query to return classes with literal values in their properties
-        String queryString = StringUtils.join("\n", new String[]{
-                    "PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>",
-                    "PREFIX pf:     <http://jena.hpl.hp.com/ARQ/property#>",
-                    "PREFIX swb:    <http://www.semanticwebbuilder.org/swb4/ontology#>",
-                    "PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                    "PREFIX owl:    <http://www.w3.org/2002/07/owl#>",
-                    "SELECT ?obj ?prop ?lit {",
-                    "    ?lit pf:textMatch '" + q + "'.",
-                    "    ?obj ?prop ?lit.",
-                    "    ?obj rdf:type ?type.",
-                    "    ?type rdf:type swb:Class",
-                    "}"
-                });
+        String queryString = "PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>\n" +
+                    "PREFIX pf:     <http://jena.hpl.hp.com/ARQ/property#>\n" +
+                    "PREFIX swb:    <http://www.semanticwebbuilder.org/swb4/ontology#>\n" +
+                    "PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                    "PREFIX owl:    <http://www.w3.org/2002/07/owl#>\n" +
+                    "SELECT ?obj ?prop ?lit {\n" +
+                    "    ?lit pf:textMatch '" + q + "'.\n" +
+                    "    ?obj ?prop ?lit.\n" +
+                    "    ?obj rdf:type ?type.\n" +
+                    "    ?type rdf:type swb:Class\n" +
+                    "}\n";
 
         // Make globally available
         LARQ.setDefaultIndex(index);
