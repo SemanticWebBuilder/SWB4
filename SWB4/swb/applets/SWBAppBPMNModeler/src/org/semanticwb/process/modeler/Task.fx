@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -62,6 +63,7 @@ public class Task extends Activity
             width: bind w
             height: bind h
             styleClass: "task"
+            onKeyPressed: onKeyPressed
         };
 
         return Group
@@ -73,7 +75,7 @@ public class Task extends Activity
             scaleY: bind s
             visible: bind canView()
         };
-    }    
+    }
     
     public override function setType(type:String):Void
     {
