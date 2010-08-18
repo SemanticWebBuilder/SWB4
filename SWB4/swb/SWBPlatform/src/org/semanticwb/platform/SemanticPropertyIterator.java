@@ -29,6 +29,7 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
 import org.semanticwb.SWBPlatform;
 
@@ -59,7 +60,12 @@ public class SemanticPropertyIterator implements Iterator
      */
     public boolean hasNext() 
     {
-        return it.hasNext();
+        boolean ret=it.hasNext();
+        if(!ret && it instanceof ClosableIterator)
+        {
+            ((ClosableIterator)it).close();
+        }
+        return ret;
     }
 
     /* (non-Javadoc)
