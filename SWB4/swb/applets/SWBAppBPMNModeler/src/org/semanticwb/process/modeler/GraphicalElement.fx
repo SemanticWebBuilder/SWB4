@@ -9,7 +9,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.CustomNode;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import java.lang.Math;
 import javafx.scene.input.KeyEvent;
@@ -25,7 +24,7 @@ import javafx.util.Sequences;
  */
 
 public class GraphicalElement extends CustomNode
-{    
+{
     public-read var over:Boolean;                       //el mause se encuentra sobre el elemento
     public-read var sceneX:Number;
     public-read var sceneY:Number;
@@ -38,7 +37,7 @@ public class GraphicalElement extends CustomNode
 //    {
 //        sceneY=localToScene(x, y).y;
 //    }
-    
+
     public var type:String;                     //tipo del elemento
     public var title : String;                  //titulo del elemento
     public var toolTipText : String;            //tooltip del elemento
@@ -65,9 +64,9 @@ public class GraphicalElement extends CustomNode
     protected var dpy : Number;                     //diference of parent
     protected var container:GraphicalElement;                 //Container Element
     protected var containerChilds:GraphicalElement[];         //Container Childs
-    
+
     var mx : Number;                               //temporal movimiento x
-    var my : Number;                               //temporal movimiento y       
+    var my : Number;                               //temporal movimiento y
 
     var px = bind graphParent.x on replace
     {
@@ -358,7 +357,7 @@ public class GraphicalElement extends CustomNode
         {
             modeler.remove(node);
         }
-        
+
         ModelerUtils.setResizeNode(null);
     }
 
@@ -408,7 +407,7 @@ public class GraphicalElement extends CustomNode
 
     public function updateSize()
     {
-        
+
     }
 
     public function getInputConnectionObjects(): ConnectionObject[]
