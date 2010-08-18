@@ -124,8 +124,10 @@ public class EditableText extends CustomNode
             ]
             
             onMouseClicked: function (e: MouseEvent): Void {
-                if (e.clickCount >= 2) {
-                    startEditing()
+                if (e.button == e.button.PRIMARY) {
+                    if (e.clickCount >= 2) {
+                        startEditing()
+                    }
                 }
             }
         };
