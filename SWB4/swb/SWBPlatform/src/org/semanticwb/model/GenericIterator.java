@@ -26,6 +26,7 @@ package org.semanticwb.model;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
 import org.semanticwb.platform.SemanticObject;
 
@@ -80,7 +81,12 @@ public class GenericIterator<T extends GenericObject> implements Iterator
      */
     public boolean hasNext() 
     {
-        return iterator.hasNext();
+        boolean ret=iterator.hasNext();
+        if(!ret && iterator instanceof ClosableIterator)
+        {
+            ((ClosableIterator)iterator).close();
+        }
+        return ret;
     }
     
     /* (non-Javadoc)

@@ -30,6 +30,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
 
 // TODO: Auto-generated Javadoc
@@ -69,7 +70,12 @@ public class SemanticObjectIterator implements Iterator
      */
     public boolean hasNext() 
     {
-        return it.hasNext();
+        boolean ret=it.hasNext();
+        if(!ret && it instanceof ClosableIterator)
+        {
+            ((ClosableIterator)it).close();
+        }
+        return ret;
     }
 
     /* (non-Javadoc)

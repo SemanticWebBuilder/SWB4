@@ -30,6 +30,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
 import org.semanticwb.*;
 
@@ -85,6 +86,12 @@ public class SemanticClassIterator<T extends SemanticClass> implements Iterator
             next=true;
             retnext=ret;
         }
+
+        if(!retnext && m_it instanceof ClosableIterator)
+        {
+            ((ClosableIterator)m_it).close();
+        }
+
         return retnext;
     }
     

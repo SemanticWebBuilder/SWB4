@@ -26,6 +26,7 @@ package org.semanticwb.platform;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.util.iterator.ClosableIterator;
 import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
@@ -85,7 +86,12 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
      */
     public boolean hasNext() 
     {
-        return iterator.hasNext();
+        boolean ret=iterator.hasNext();
+        if(!ret && iterator instanceof ClosableIterator)
+        {
+            ((ClosableIterator)iterator).close();
+        }
+        return ret;
     }
     
     /* (non-Javadoc)
