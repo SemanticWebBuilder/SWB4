@@ -616,9 +616,11 @@ namespace WBOffice4
                 char letra = letras[i];
                 if (Char.IsPunctuation(letra))
                 {
-                    MessageBox.Show("El nombre del archivo tiene caracteres de puntuación" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
-
+                    if (letra != '_')
+                    {
+                        MessageBox.Show("El nombre del archivo tiene caracteres de puntuación" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
                 }
                 else if (Char.IsWhiteSpace(letra))
                 {
@@ -628,13 +630,19 @@ namespace WBOffice4
                 }
                 else if (!Char.IsLetterOrDigit(letra))
                 {
-                    MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
+                    if (letra != '_')
+                    {
+                        MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
                 }
                 else if (letra > 123)
                 {
-                    MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
+                    if (letra != '_')
+                    {
+                        MessageBox.Show("El nombre del archivo tiene caracteres no válidos" + ": " + letra + "", "Validación de nombre de archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
                 }
             }            
             return true;
