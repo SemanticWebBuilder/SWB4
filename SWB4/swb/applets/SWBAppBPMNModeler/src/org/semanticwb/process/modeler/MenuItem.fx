@@ -39,7 +39,7 @@ public class MenuItem extends CustomNode {
             r = Rectangle {
                 x: bind x
                 y: bind y
-                height: 2
+                height: 1
                 width: bind w
                 styleClass: "menuItemSeparator"
             }
