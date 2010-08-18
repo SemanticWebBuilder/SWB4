@@ -462,3 +462,40 @@
     -fx-font-weight: normal;
     -fx-smooth: false;
 }
+
+.menuItem {
+	-fx-arc-width: 6;
+	-fx-arc-height: 6;
+	-fx-cursor: hand;
+	-fx-fill: #E6E8EA;
+	-fx-opacity: 1;
+}
+
+.menuItemSeparator {
+	-fx-cursor: hand;
+	-fx-fill: gray;
+	-fx-opacity: 1;
+}
+
+.menuItem:hover {
+	-fx-fill: #3370CE;
+}
+
+.menuItem#caption {
+	-fx-fill: black;
+	-fx-text-origin: top;
+	-fx-font-family: "Verdana";
+    -fx-font-size: 11pt;
+    -fx-fontstyle: normal;
+    -fx-font-weight: normal;
+}
+
+.menu {
+	-fx-stroke: black;
+    -fx-stroke-width: 1;
+	-fx-arc-width: 6;
+	-fx-arc-height: 6;
+	-fx-cursor: hand;
+	-fx-fill: #E6E8EA;
+	-fx-opacity: 1;
+}
