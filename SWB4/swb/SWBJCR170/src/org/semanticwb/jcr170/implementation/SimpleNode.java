@@ -65,6 +65,7 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
@@ -89,7 +90,7 @@ import org.semanticwb.repository.Versionable;
  */
 public class SimpleNode implements Node
 {
-
+    private boolean delete=false;
     private static final String JCR_FROZENNODE_NAME = "jcr:frozenNode";
     private static Logger log = SWBUtils.getLogger(SimpleNode.class);
     private String id;
@@ -774,7 +775,7 @@ public class SimpleNode implements Node
     }
 
     protected boolean isVersionable()
-    {
+    {        
         return mixins.contains(Versionable.mix_Versionable);
     }
 
@@ -992,6 +993,50 @@ public class SimpleNode implements Node
                 child.node.remove();
             }
         }
+        
+        if(delete)
+        {
+            for(PropertyImp prop :  this.properties.values())
+            {
+                prop.remove();
+            }            
+            if(isVersionable())
+            {                
+                VersionHistory vh=this.getVersionHistory();
+                VersionIterator vi=vh.getAllVersions();
+                while(vi.hasNext())
+                {
+                    Version v=vi.nextVersion();
+                    v.remove();
+                }
+                vh.save();
+            }
+            for (SimpleNode child : this.childs.values())
+            {
+                for(PropertyImp prop :  child.properties.values())
+                {
+                    prop.remove();
+                }
+                if(child.isVersionable())
+                {                    
+                    VersionHistory vh=child.getVersionHistory();
+                    VersionIterator vi=vh.getAllVersions();
+                    while(vi.hasNext())
+                    {
+                        Version v=vi.nextVersion();
+                        v.remove();
+                    }
+                    vh.save();
+                }
+                child.delete=delete;
+                child.removeChilds();
+                if (child.node != null)
+                {
+                    child.node.remove();
+                }
+            }
+            
+        }                
         // delete childNodes
         this.removedchilds.clear();
     }
@@ -1193,6 +1238,7 @@ public class SimpleNode implements Node
             parent.removedchilds.add(this);
         }
         parent.childs.remove(this.id);
+        delete=true;
         session.removeSimpleNode(this);
         parent.modified = true;
         this.modified = true;
