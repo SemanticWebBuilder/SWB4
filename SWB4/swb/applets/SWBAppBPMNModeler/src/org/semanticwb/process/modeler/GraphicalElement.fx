@@ -64,6 +64,7 @@ public class GraphicalElement extends CustomNode
     protected var dpy : Number;                     //diference of parent
     protected var container:GraphicalElement;                 //Container Element
     protected var containerChilds:GraphicalElement[];         //Container Childs
+    protected var menuOptions: Action[];
 
     var mx : Number;                               //temporal movimiento x
     var my : Number;                               //temporal movimiento y
@@ -100,6 +101,19 @@ public class GraphicalElement extends CustomNode
             width: bind w
             height: bind h
         }
+
+        setCommonMenuOptions();
+    }
+
+    public function setCommonMenuOptions () {
+        var props:Action = Action {
+            label: "Propiedades..."
+            action: function (e: MouseEvent) {
+                println("Editando propiedades de {this.title}");
+            }
+        }
+
+        insert props into menuOptions;
     }
 
     public override function create(): Node
@@ -126,7 +140,8 @@ public class GraphicalElement extends CustomNode
     {
         if(e.button==e.button.SECONDARY)
         {
-            ModelerUtils.popup.event=e;
+            ModelerUtils.popup.setOptions(menuOptions);
+            ModelerUtils.popup.show(e);
         }else
         {
             if(e.clickCount >= 2)
