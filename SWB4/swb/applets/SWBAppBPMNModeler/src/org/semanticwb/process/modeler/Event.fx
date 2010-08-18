@@ -64,7 +64,8 @@ public class Event extends FlowNode
     };
 
     public override function create(): Node
-    {        
+    {
+        setCommonMenuOptions();
         w=30;
         h=30;
         text=EditableText
@@ -106,6 +107,7 @@ public class Event extends FlowNode
         message.visible=true;
         if(type.equals(CATCH_TIMER))
         {
+            isInterrupting = true;
             message.styleClass = "modifierTimer";
             ix=11;
             iy=10.7;
@@ -118,24 +120,28 @@ public class Event extends FlowNode
             is=0.9;
         }else if(type.equals(CATCH_MESSAGE))
         {
+            isInterrupting = true;
             message.styleClass = "modifierMessageCatch";
             ix=9;
             iy=8;
             is=1;
         }else if(type.equals(CATCH_RULE))
         {
+            isInterrupting = true;
             message.styleClass = "modifierRule";
             ix = 9.5;
             iy = 9.5;
             is = 1;
         }else if(type.equals(CATCH_SIGNAL))
         {
+            isInterrupting = true;
             message.styleClass = "modifierSignalCatch";
             ix=10;
             iy=11;
             is=1.1;
         }else if(type.equals(CATCH_MULTIPLE))
         {
+            isInterrupting = true;
             message.styleClass = "modifierMultipleCatch";
             ix=11;
             iy=12;
@@ -148,6 +154,7 @@ public class Event extends FlowNode
             is=1.1;
         }else if(type.equals(CATCH_SCALATION))
         {
+            isInterrupting = true;
             message.styleClass = "modifierScalationCatch";
             ix=9;
             iy=12;
