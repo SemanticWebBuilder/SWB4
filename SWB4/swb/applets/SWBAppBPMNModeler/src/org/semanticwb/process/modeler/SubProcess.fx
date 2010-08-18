@@ -120,7 +120,17 @@ public class SubProcess extends Activity
     override var onMouseClicked = function (e: MouseEvent): Void {
         if (e.button == e.button.PRIMARY) {
             if (e.clickCount >= 2) {
-                text.startEditing()
+                if (e.sceneX > text.boundsInParent.minX and e.sceneX < text.boundsInParent.maxX) {
+                    if (e.sceneY > text.boundsInParent.minY and e.sceneY < text.boundsInParent.maxY) {
+                        text.startEditing()
+                    } else {
+                        if(containerable)
+                        {
+                            modeler.containerElement=this;
+                        }
+                    }
+
+                }
             }
         }
     }
