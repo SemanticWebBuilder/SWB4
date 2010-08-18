@@ -140,6 +140,7 @@ public class GraphicalElement extends CustomNode
     {
         if(e.button==e.button.SECONDARY)
         {
+            ModelerUtils.stopToolTip();
             ModelerUtils.popup.setOptions(menuOptions);
             ModelerUtils.popup.show(e);
         }else
