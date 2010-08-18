@@ -943,7 +943,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             session = loader.openSession(repositoryName, this.user, this.password);
             Node nodeContent = session.getNodeByUUID(contentID);
             String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-            Node resNode = nodeContent.addNode(JCR_CONTENT, swb_office.getPrefix() + ":" + swb_office.getName());
+            Node resNode = nodeContent.getNode(JCR_CONTENT);
             String userlogin=resNode.getProperty(cm_user).getString();
             if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
             {
@@ -963,10 +963,20 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         }
                     }
                 }
+                VersionIterator it = resNode.getVersionHistory().getAllVersions();
+                while (it.hasNext())
+                {
+                    Version version = it.nextVersion();
+                    if (!version.getName().equals("jcr:rootVersion"))
+                    {
+                        version.getNode(JCR_FROZEN_NODE).remove();
+                    }
+                }
+                resNode.getVersionHistory().save();
+                resNode.remove();
                 nodeContent.remove();
                 parent.save();
             }
-
         }
         catch (ItemNotFoundException infe)
         {
