@@ -51,7 +51,6 @@ public class MenuItem extends CustomNode {
                 height: bind t.boundsInLocal.height + 7
                 styleClass: "menuItem"
             }
-
             t2 = Text {
                 textOrigin: TextOrigin.TOP
                 x: bind if (sizeToText) r.boundsInParent.minX + (r.width - t.boundsInLocal.width) / 2 else textOffsetX
