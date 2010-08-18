@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
 import javafx.stage.Alert;
+import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
@@ -66,6 +67,7 @@ public class SubProcess extends Activity
             width: bind w
             height: bind h
             styleClass: "task"
+            onKeyPressed: onKeyPressed
         };
 
         var trans;
@@ -111,8 +113,16 @@ public class SubProcess extends Activity
             ]
             scaleX: bind s;
             scaleY: bind s;
-            visible:bind canView()
+            visible:bind canView()            
         };
+    }
+
+    override var onMouseClicked = function (e: MouseEvent): Void {
+        if (e.button == e.button.PRIMARY) {
+            if (e.clickCount >= 2) {
+                text.startEditing()
+            }
+        }
     }
 
     public override function setType(type:String):Void
