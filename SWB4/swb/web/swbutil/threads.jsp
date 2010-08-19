@@ -4,6 +4,7 @@
     Author     : jei
 --%>
 
+<%@page import="org.semanticwb.portal.monitor.SWBThreadDumper"%>
 <%@page import="java.lang.management.ManagementFactory"%>
 <%@page import="java.lang.management.ThreadMXBean"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,5 +26,7 @@
                 out.println("<br>");
             }           
         %>
+
+        <pre><%=SWBThreadDumper.dumpThreadWithStackTrace()%></pre>
     </body>
 </html>
