@@ -677,6 +677,20 @@ public class ToolBar extends CustomNode
                     }
                 },
                 ImgButton {
+                    text: ModelerUtils.getLocalizedString("eventSubProcess")
+                    image: "images/subtask_evento1.png"
+                    imageOver: "images/subtask_evento2.png"
+                    action: function():Void {
+                        modeler.disablePannable=true;
+                        modeler.tempNode=EventSubProcess
+                        {
+                            modeler:modeler
+                            title: ModelerUtils.getLocalizedString("eventSubProcess")
+                            uri:"new:eventsubprocess:{counter++}"
+                        }
+                    }
+                },
+                ImgButton {
                     text: ModelerUtils.getLocalizedString("transaction")
                     image: "images/subtask_transaccion1.png"
                     imageOver: "images/subtask_transaccion2.png"
@@ -692,7 +706,6 @@ public class ToolBar extends CustomNode
                 },
             ]
         };
-
 
         var startEvent=SubMenu
         {
