@@ -21,6 +21,7 @@ public class AnnotationArtifact extends Artifact
 {
     override public function create(): Node
     {
+        setCommonMenuOptions();
         resizeable=true;
         w=80;
         h=60;
