@@ -491,6 +491,7 @@
 }
 
 .menu {
+	-fx-effect: dropshadow(gaussian, #707070, 10, 0, 3, 3);
 	-fx-stroke: black;
     -fx-stroke-width: 1;
 	-fx-arc-width: 6;
