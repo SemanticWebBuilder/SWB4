@@ -26,6 +26,7 @@ public class Lane extends GraphicalElement
 
     override public function create(): Node
     {
+        setCommonMenuOptions();
         resizeable=true;
         resizeType=ResizeNode.RESIZE_V;
         //w=600;
