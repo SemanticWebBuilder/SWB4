@@ -19,11 +19,15 @@ import javafx.scene.input.MouseEvent;
  * @author javier.solis
  */
 
+public def TYPE_TRANSACTION="transaction";
+public def TYPE_EVENT="event";
+public def TYPE_ADHOC="adhoc";
 public class SubProcess extends Activity
 {
     var ix:Number;                          //offset imagen x
     var iy:Number;                          //offset imagen x
     var is:Number=1;                        //image scale
+    protected var strokeDash : Float[];
 
     public var message=ImageView
     {
@@ -66,6 +70,7 @@ public class SubProcess extends Activity
             y: bind y-h/2
             width: bind w
             height: bind h
+            strokeDashArray: bind strokeDash
             styleClass: "task"
             onKeyPressed: onKeyPressed
         };
@@ -132,13 +137,21 @@ public class SubProcess extends Activity
 
                 }
             }
+        } else if (e.button == e.button.SECONDARY) {
+            if (modeler.getFocusedNode() == this) {
+                ModelerUtils.stopToolTip();
+                ModelerUtils.popup.setOptions(menuOptions);
+                ModelerUtils.popup.show(e);
+            }
         }
     }
 
     public override function setType(type:String):Void
     {
         super.setType(type);
-        if(type.equals(TYPE_ADHOC))
+        if (type.equals(TYPE_EVENT)) {
+            strokeDash = [2, 5];
+        } else if(type.equals(TYPE_ADHOC))
         {
             message.styleClass =  "modifierAdhoc";
             ix=-message.image.width/2-15;
