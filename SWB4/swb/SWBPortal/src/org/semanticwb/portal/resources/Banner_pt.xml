@@ -7,6 +7,10 @@
         <input type="radio" id="local0" name="local" label="Local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
         <input type="text" id="url" name="url" label="Endereço Web:" promptMessage="Endereço Web" />
+        <statictext name="txtTarget">Em uma nova janela:</statictext>
+	<input type="RADIO" name="target" label="Sim" value="1"/>
+	<input type="RADIO" name="target" label="Não" value="0"/>
+
         <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Javascript ação, proposta no evento onclick" />
 
         <input type="FILE" name="img" label="** Imagem (jpg, jpeg, gif, png, swf):" showfile="true" filetype="jpg|jpeg|gif|png|swf" isshowfiletype="true" isremovefile="true" removemsg="Quitar imagen" size="40" />
@@ -32,6 +36,7 @@
             </font>
         ]]>
         </statictext>
+        <input type="text" id="priority" name="priority" label="Prioridad:" promptMessage="Prioridad de la imagen" />
     </fieldset>
 
     <fieldset>
@@ -42,6 +47,8 @@
 
     <script type="text/javascript">
         <![CDATA[
+        if(!document.frmAdmRes.target[0].checked && !document.frmAdmRes.target[1].checked)
+		document.frmAdmRes.target[1].checked=true;
         dojo.require("dijit.form.Button");
         dojo.require("dijit.form.ValidationTextBox");
 
