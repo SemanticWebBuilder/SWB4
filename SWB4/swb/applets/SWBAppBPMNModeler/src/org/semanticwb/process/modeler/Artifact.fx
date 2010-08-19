@@ -31,6 +31,7 @@ public class Artifact extends GraphicalElement
 
     override public function create(): Node
     {
+        setCommonMenuOptions();
         w=55;
         h=60;
         text=EditableText
