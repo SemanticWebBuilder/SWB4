@@ -712,6 +712,7 @@ public class SemanticObject
                     }
                 }
             }
+            it.close();
         }
         //System.out.println(" m_cls:"+m_cls);
         return m_cls;
@@ -729,7 +730,8 @@ public class SemanticObject
             //TODO:
             return null;//m_virtclass;
         }
-        return new SemanticClassIterator<SemanticClass>(m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty()));
+        Iterator it=new SemanticClassIterator<SemanticClass>(m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty()));
+        return SWBUtils.Collections.copyIterator(it).iterator();
     }
 
     /**
@@ -774,6 +776,7 @@ public class SemanticObject
                     stit.remove();
                 }
             }
+            stit.close();
         }
         return this;
     }
@@ -1010,6 +1013,7 @@ public Document getDomProperty(SemanticProperty prop)
                             staux.remove();
                         }
                     }
+                    stit.close();
                     //stm=getLocaleStatement(prop,lang);
                 }
             }
@@ -1159,6 +1163,7 @@ public Document getDomProperty(SemanticProperty prop)
                     stit.remove();
                 }
             }
+            stit.close();
         }
         removePropertyValueCache(prop, lang);
         return this;
@@ -1271,6 +1276,7 @@ public Document getDomProperty(SemanticProperty prop)
                 stmt.remove();
             }
         }
+        it.close();
         removePropertyValueCache(prop, "list");
         return this;
     }
@@ -1306,6 +1312,7 @@ public Document getDomProperty(SemanticProperty prop)
             Property prop=stmt.getPredicate();
             properties.add(this.m_model.getSemanticProperty(prop.getURI()));
         }
+        props.close();
         return properties.iterator();
     }
     
@@ -1599,6 +1606,7 @@ public Document getDomProperty(SemanticProperty prop)
                 break;
             }
         }
+        stit.close();
         return st;
     }
 
@@ -3132,6 +3140,7 @@ public Document getDomProperty(SemanticProperty prop)
             Statement st=stit.nextStatement();
             ret=ret+st.getString()+"\n";
         }
+        stit.close();
         return ret;
     }
 

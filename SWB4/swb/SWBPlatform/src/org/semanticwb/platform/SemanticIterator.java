@@ -71,6 +71,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
     {
         this.iterator=iterator;
         this.invert=invert;
+        //System.out.println("  Create Iterator");
     }
     
     /* (non-Javadoc)
@@ -89,6 +90,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
         boolean ret=iterator.hasNext();
         if(!ret && iterator instanceof ClosableIterator)
         {
+            //System.out.println("  Close Iterator");
             ((ClosableIterator)iterator).close();
         }
         return ret;
