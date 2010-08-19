@@ -50,8 +50,6 @@ public class GroupArtifact extends Artifact
             onKeyPressed: onKeyPressed
         };
 
-        setType(type);
-
         return Group
         {
             content: [
