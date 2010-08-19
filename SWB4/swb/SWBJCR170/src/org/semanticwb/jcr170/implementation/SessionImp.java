@@ -743,7 +743,7 @@ public class SessionImp implements Session
         if (nodeToReturn == null)
         {
 
-            Iterator<SemanticObject> it = SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(Referenceable.jcr_uuid, uuid);
+            Iterator<SemanticObject> it = SWBUtils.Collections.copyIterator(SWBContext.getWorkspace(workspaceName).getSemanticObject().getModel().listSubjects(Referenceable.jcr_uuid, uuid)).iterator();
             while (it.hasNext())
             {
                 SemanticObject obj = it.next();
