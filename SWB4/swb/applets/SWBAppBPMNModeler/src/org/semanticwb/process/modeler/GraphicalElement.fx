@@ -106,12 +106,20 @@ public class GraphicalElement extends CustomNode
     }
 
     public function setCommonMenuOptions () {
-        var props:Action = Action {
+        var props:Action[] = [
+            Action {
+            label: "Eliminar"
+            action: function (e: MouseEvent) {
+                    remove(true);
+                }
+            },
+            Action {
             label: "Propiedades..."
             action: function (e: MouseEvent) {
-                println("Editando propiedades de {this.title}");
+                    println("Editando propiedades de {this.title}");
+                }
             }
-        }
+        ];
 
         insert props into menuOptions;
     }
