@@ -2,7 +2,7 @@
 <project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.web.project</type>
     <configuration>
-<!--
+        <!--
         <buildExtensions xmlns="http://www.netbeans.org/ns/ant-build-extender/1">
             <extension file="rest-build.xml" id="rest.2"/>
         </buildExtensions>
@@ -56,15 +56,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.arq-2.8.2.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.iri-0.8.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.jena-2.6.2.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -264,10 +256,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.sdb-1.3.1.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.commons-beanutils-1.7.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -284,11 +272,23 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.slf4j-log4j12-1.5.6.jar}</file>
+                    <file>${file.reference.PDFBox-0.7.3.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.PDFBox-0.7.3.jar}</file>
+                    <file>${file.reference.arq-2.8.5.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jena-2.6.3.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.sdb-1.3.2.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.slf4j-log4j12-1.5.8.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -296,11 +296,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.tdb-0.8.4.jar}</file>
+                    <file>${file.reference.lucene-analyzers-2.4.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.lucene-analyzers-2.4.1.jar}</file>
+                    <file>${file.reference.tdb-0.8.7.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -381,6 +381,10 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.antlrworks-1.4.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${reference.SWBSIP.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
@@ -491,6 +495,14 @@
             </reference>
             <reference>
                 <foreign-project>SWBRepositoryManager</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>SWBSIP</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
