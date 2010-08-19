@@ -186,6 +186,7 @@
                     break;
                 }
             }
+            it.close();
         }else if(act!=null && act.equals("update"))
         {
             String oval=request.getParameter("oval");
@@ -202,6 +203,7 @@
                     break;
                 }
             }
+            it.close();
             res.addProperty(prop, val);
         }else if(act!=null && act.equals("edit"))
         {
