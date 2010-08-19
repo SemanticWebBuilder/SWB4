@@ -21,6 +21,7 @@ public class DataStoreArtifact extends Artifact
 {
     override public function create(): Node
     {
+        setCommonMenuOptions();
         w=80;
         h=60;
         text=EditableText
