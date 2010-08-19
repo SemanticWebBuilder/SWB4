@@ -354,7 +354,7 @@
     -fx-stroke-width: 3;
 }
 
-.editableText {
+.editableTextBox {
     -fx-fill: #FFFF66;
     -fx-stroke: #000000;
     -fx-stroke-width: 0;
@@ -362,7 +362,7 @@
     -fx-arc-height: 0;
 }
 
-.editableTextBox {
+.editableText {
     -fx-font-size: 14px;
     -fx-font-family: "Helvetica, Arial";
     -fx-font-weight: bold;
