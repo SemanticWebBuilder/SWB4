@@ -14,6 +14,7 @@
 "adhocSubProcess" = "AdHoc Sub-Process"
 "transaction" = "Transaction"
 "subProcess" = "Sub-Process"
+"eventSubProcess" = "Event Sub-Process"
 "file" = "File"
 "new" = "New Diagram"
 "open" = "Open Existing Diagram"
