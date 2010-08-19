@@ -16,7 +16,7 @@ public class AdhocTask extends Task
 {
     public override function create(): Node
     {
-        type=TYPE_ADHOC;
+        //type=TYPE_ADHOC;
         return super.create();
     }
 }
