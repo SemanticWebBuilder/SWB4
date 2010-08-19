@@ -17,6 +17,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.portal.api.SWBResourceURL;
 import org.w3c.dom.Document;
 
 /**
@@ -66,14 +67,10 @@ public class EgobTopMenuURL extends EgobTopMenu
         if (paramRequest.getArgument("separator") != null) strSeparator = (String) paramRequest.getArgument("separator");
         if (paramRequest.getArgument("frame") != null)
         {
+            SWBResourceURL urlBaseCallDirect=paramRequest.getRenderUrl();
+            urlBaseCallDirect.setCallMethod(paramRequest.Call_DIRECT);
             html.append("<FRAME SRC=\"");
-            html.append(WBUtils.getInstance().getWebPath());
-            html.append("res/");
-            html.append(wpage.getWebSiteId());
-            html.append("/");
-            html.append(wpage.getId());
-            html.append("/");
-            html.append(base.getId());
+            html.append(urlBaseCallDirect.toString());
             html.append("\" NAME=\"top\" SCROLLING=\"No\" noresize BORDER=0 frameborder=\"NO\">");
         } else
         {
