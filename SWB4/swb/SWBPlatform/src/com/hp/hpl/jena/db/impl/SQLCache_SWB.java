@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.db.PoolConnection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -53,7 +54,7 @@ public class SQLCache_SWB extends SQLCache
     private static Logger log=SWBUtils.getLogger(SQLCache_SWB.class);
 
     /** The arr. */
-    private ArrayList arr=new ArrayList();
+    //private ArrayList arr=new ArrayList();
 
     /**
      * Constructor. Creates a new cache sql statements for interfacing to
@@ -73,6 +74,17 @@ public class SQLCache_SWB extends SQLCache
         setCachePreparedStatements(false);
     }
 
+    String getStackTrace()
+    {
+        StringBuffer ret=new StringBuffer();
+        StackTraceElement ste[]=Thread.currentThread().getStackTrace();
+        for(int i=0;i<ste.length;i++)
+        {
+            ret.append(ste[i].toString()+"\n");
+        }
+        return ret.toString();
+    }
+
 	/**
 	 * Prepare a SQL statement for the given statement string.
 	 * 
@@ -87,10 +99,12 @@ public class SQLCache_SWB extends SQLCache
 	private synchronized PreparedStatement doPrepareSQLStatement(String sql) throws SQLException {
 		if (m_connection == null) return null;
 		//return getConnection().prepareStatement(sql);
-        //System.out.println("create statement:"+arr.size());
         //Connection con=SWBUtils.DB.getNoPoolConnection("swb");
         Connection con=SWBUtils.DB.getDefaultConnection();
-        arr.add(con);
+//        ((PoolConnection)con).setDescription(getStackTrace());
+//        System.out.println("Create connection:"+con);
+        //new Exception().printStackTrace();
+        //arr.add(con);
         //return new PoolPreparedStatement(con.prepareStatement(sql),con);
         return con.prepareStatement(sql);
 	}
@@ -208,6 +222,8 @@ public class SQLCache_SWB extends SQLCache
 		}
 	}
 
+
+
     /**
      * Return a prepared statement to the statement pool for reuse by
      * another caller. Any close problems logged rather than raising exception
@@ -222,8 +238,14 @@ public class SQLCache_SWB extends SQLCache
             try {
                 ps.close();
                 Connection con=ps.getConnection();
-                arr.remove(con);
+                //arr.remove(con);
                 con.close();
+//                System.out.println("Close Connection:"+con);
+//                String st=getStackTrace();
+//                if(st.indexOf("final")>-1)
+//                {
+//                    System.out.println(((PoolConnection)con).getDescription()+"\n-------\n"+st);
+//                }
                 //System.out.println("close statement:"+arr.size());
             } catch (SQLException e) {
                 log.warn("Problem discarded prepared statement", e);

@@ -537,6 +537,7 @@ public SemanticObject getSemanticObject(String uri)
         
         StmtIterator sit = ont.listStatements(m.getResource(ontprop.getURI()), null, (RDFNode)null);
         m.add(sit);
+        sit.close();
         
         cls=new SemanticClass(cls.getOntClass());                         //actualizar clase
         SWBPlatform.getSemanticMgr().getVocabulary().registerClass(cls);  //
@@ -647,6 +648,7 @@ public SemanticObject getSemanticObject(String uri)
             Statement stmt=it.nextStatement();
             return stmt.getLong();
         }
+        it.close();
         return 0;
     }
 
@@ -671,6 +673,7 @@ public SemanticObject getSemanticObject(String uri)
             Statement stmt=getRDFModel().createLiteralStatement(res, prop, val);
             getRDFModel().add(stmt);
         }
+        it.close();
     }
 
     /**

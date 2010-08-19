@@ -797,6 +797,7 @@ public class SemanticMgr implements SWBInstanceObject
                 //System.out.println("cache ontology:"+m);
             }
         }
+        it.close();
 
         if(m==null) //No es una ontologia
         {

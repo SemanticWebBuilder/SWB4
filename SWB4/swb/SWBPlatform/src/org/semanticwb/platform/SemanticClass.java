@@ -484,6 +484,7 @@ public class SemanticClass
                  Statement statement=it.nextStatement();
                  literals.add(new SemanticLiteral(statement));
              }
+             it.close();
         }catch(PropertyNotFoundException noe){}
         return literals.iterator();
     }
@@ -508,6 +509,7 @@ public class SemanticClass
                  SemanticObject object=SemanticObject.createSemanticObject(res);
                  objects.add(object);
              }
+             it.close();
         }catch(PropertyNotFoundException noe){}
         return objects.iterator();
     }
@@ -568,6 +570,7 @@ public class SemanticClass
                 Statement stmt=it.nextStatement();
                 ret.add(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stmt.getSubject().getURI()));
             }
+            it.close();
         }
         return ret.iterator();
     }
