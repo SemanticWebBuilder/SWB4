@@ -94,7 +94,6 @@ public var x: Number = 0;
     public function setOptions(acts: Action[]) {
         if (acts != null and acts.size() > 0) {
             this.content = acts;
-            buildOptions(acts);
         }
     }
 }
