@@ -20,6 +20,7 @@ public class GroupArtifact extends Artifact
 {
     override public function create(): Node
     {
+        setCommonMenuOptions();
         resizeable=true;
         w=150;
         h=150;
