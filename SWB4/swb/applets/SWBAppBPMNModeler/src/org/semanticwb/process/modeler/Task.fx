@@ -11,7 +11,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.input.MouseEvent;
 
 /**
  * @author javier.solis
