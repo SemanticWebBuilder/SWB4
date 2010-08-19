@@ -163,7 +163,7 @@ public class TematicIndexXSL extends GenericAdmResource
             while(hijos.hasNext())
             {
                 WebPage hijo=hijos.next();
-                //if (paramsRequest.getUser().haveAccess(hijo, false)) 
+                if (paramRequest.getUser().haveAccess(hijo))
                 {
                     ison++;
                     Element son = dom.createElement("son");
@@ -196,7 +196,7 @@ public class TematicIndexXSL extends GenericAdmResource
                     while(nietos.hasNext())
                     {
                         WebPage nieto= nietos.next();
-                        //if (paramRequest.getUser().haveAccess(nieto, false)) 
+                        if (paramRequest.getUser().haveAccess(nieto))
                         {
                             igrandson++;
                             Element grandson = dom.createElement("grandson");
