@@ -30,6 +30,7 @@ public class Pool extends GraphicalElement
 
     override public function create(): Node
     {
+        setCommonMenuOptions();
         resizeable=true;
         resizeType=ResizeNode.RESIZE_A;
         w=600;
