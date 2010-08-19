@@ -32,8 +32,8 @@ public class Task extends Activity
 
     protected var message=ImageView
     {
-        x: bind x+ix;
-        y: bind y+iy;
+        x: bind shape.boundsInLocal.minX+10;
+        y: bind shape.boundsInLocal.minY+10;
         scaleX: bind is;
         scaleY: bind is;
 
@@ -67,7 +67,7 @@ public class Task extends Activity
 
         return Group
         {
-            content: [
+            content:[
                 shape,text,message
             ]
             scaleX: bind s
