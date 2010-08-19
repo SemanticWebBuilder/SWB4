@@ -113,6 +113,7 @@ public class GraphicalElement extends CustomNode
                     remove(true);
                 }
             },
+            Action{isSeparator: true},
             Action {
             label: "Propiedades..."
             action: function (e: MouseEvent) {
