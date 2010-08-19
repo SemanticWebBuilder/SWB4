@@ -21,7 +21,7 @@ public class CatchEvent extends Event
         if (isInterrupting) {
             var actions: Action[] = [
                 Action {
-                    label: bind if (this.cancelActivity) "Interruptor" else "No Interruptor"
+                    label: bind if (this.cancelActivity) ModelerUtils.getLocalizedString("actInterrupting") else ModelerUtils.getLocalizedString("actNonInterrupting")
                     action: function (e: MouseEvent) {
                         this.cancelActivity = not this.cancelActivity;
                     }
