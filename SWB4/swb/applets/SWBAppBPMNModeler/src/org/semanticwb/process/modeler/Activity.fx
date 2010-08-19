@@ -12,12 +12,9 @@ import javafx.scene.Node;
  * @author javier.solis
  */
 
-public def TYPE_ADHOC="adhoc";
 public def TYPE_LOOP="loop";
 public def TYPE_COMPENSATION="compensation";
 public def TYPE_MULTIPLE="multiple";
-public def TYPE_TRANSACTION="transaction";
-
 public class Activity extends FlowNode
 {
     public override function create(): Node
@@ -37,5 +34,4 @@ public class Activity extends FlowNode
         }
         return ret;
     }
-
 }
