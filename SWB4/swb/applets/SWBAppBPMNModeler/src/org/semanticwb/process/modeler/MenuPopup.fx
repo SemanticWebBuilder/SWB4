@@ -18,7 +18,6 @@ public var x: Number = 0;
     var maxH: Number = 0;
     var maxW: Number = 0;
     var os: MenuItem[];
-    var ev: MouseEvent;
 
     public var content:Action[] = null on replace {
         buildOptions(content);
@@ -83,9 +82,8 @@ public var x: Number = 0;
     }
 
     public function show (e: MouseEvent): Void {
-        ev = e;
-        this.x = e.sceneX;
-        this.y = e.sceneY;
+        this.x = e.sceneX - 10;
+        this.y = e.sceneY - 10;
         this.visible = (e.button == e.button.SECONDARY);
     }
 
