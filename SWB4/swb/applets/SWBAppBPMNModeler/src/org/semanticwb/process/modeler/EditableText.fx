@@ -87,18 +87,17 @@ public class EditableText extends CustomNode
         };
 
         var back;
-//        if(text!=null and fill)
-//        {
-        back=Rectangle
-        {
-            x:bind textl.translateX-2
-            y:bind textl.translateY-2
-            width:bind textl.boundsInLocal.width
-            height:bind textl.boundsInLocal.height
-            styleClass: "editableTextBox"
-            visible: bind fill
-        };
-//        }
+        if(text!=null and fill)
+            {
+            back=Rectangle
+            {
+                x:bind textl.translateX-2
+                y:bind textl.translateY-2
+                width:bind textl.boundsInLocal.width
+                height:bind textl.boundsInLocal.height
+                styleClass: "editableTextBox"
+            }
+        }
 
         textb= TextBox
         {
