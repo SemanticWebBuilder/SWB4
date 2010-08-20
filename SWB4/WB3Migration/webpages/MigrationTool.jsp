@@ -730,7 +730,7 @@
                                 }
                             }
                             idmax++;
-                            ws.getSemanticObject().getModel().setCounterValue(TemplateGroup.sclass.getClassGroupId(), idmax);
+                            ws.getSemanticObject().getModel().setCounterValue(Dns.sclass.getClassGroupId(), idmax);
                         }
 
                         if ("rules".equals(arrCat[i])) {
@@ -851,7 +851,6 @@
                         out.println(" val : " + arrCat[i]);
 
                         if ("resourcesubtype".equals(arrCat[i])) {
-                            idmax = 0;
                             Collection colLang = DBCatalogs.getInstance().getSubTypes(site).values();
                             numResSubType = colLang.size();
                             Iterator itsty = colLang.iterator();
@@ -888,6 +887,7 @@
                                     }
                                 } else continue;
                             }
+                            
                         }
                         if ("template".equals(arrCat[i])) {
                             idmax = 0;
@@ -2120,13 +2120,13 @@
                                             String tfont = wbresource.getResourceBase().getAttribute("tfont",null);
                                             String npages = wbresource.getResourceBase().getAttribute("npages",null);
                                             String tpred = wbresource.getResourceBase().getAttribute("tpred",null);
-                                            if(pages!=null && pages.equals("1")) so.setBooleanProperty(WordResource.ClassMgr.swboffice_pages, Boolean.TRUE);
-                                            if(position!=null) so.setIntProperty(WordResource.ClassMgr.swboffice_position, Integer.parseInt(position));
-                                            if(txtant!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtant, txtant);
-                                            if(txtsig!=null) so.setProperty(WordResource.ClassMgr.swboffice_txtsig, txtsig);
-                                            if(tfont!=null) so.setProperty(WordResource.ClassMgr.swboffice_tfont, tfont);
-                                            if(npages!=null) so.setIntProperty(WordResource.ClassMgr.swboffice_npages, Integer.parseInt(npages));
-                                            if(tpred!=null) so.setProperty(WordResource.ClassMgr.swboffice_tpred, tpred);
+                                            if(pages!=null && pages.equals("1")) so.setBooleanProperty(WordResource.swboffice_pages, Boolean.TRUE);
+                                            if(position!=null) so.setIntProperty(WordResource.swboffice_position, Integer.parseInt(position));
+                                            if(txtant!=null) so.setProperty(WordResource.swboffice_txtant, txtant);
+                                            if(txtsig!=null) so.setProperty(WordResource.swboffice_txtsig, txtsig);
+                                            if(tfont!=null) so.setProperty(WordResource.swboffice_tfont, tfont);
+                                            if(npages!=null) so.setIntProperty(WordResource.swboffice_npages, Integer.parseInt(npages));
+                                            if(tpred!=null) so.setProperty(WordResource.swboffice_tpred, tpred);
                                         }
                                         System.out.println("Paginacion de Contenido corregida: "+wbresource.getResourceBase().getId() );
                                     }
