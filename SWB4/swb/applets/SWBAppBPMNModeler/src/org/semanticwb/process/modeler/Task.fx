@@ -104,21 +104,21 @@ public class Task extends Activity
 
         var actions: Action[] = [
             Action {
-                label: "Multi-Instancia"
+                label: ModelerUtils.getLocalizedString("actMultiInstance");
                 status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_MULTIPLE);
                 }
             },
             Action {
-                label: "Ciclo"
+                label: ModelerUtils.getLocalizedString("actLoop");
                 status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_LOOP);
                 }
             },
             Action {
-                label: "Compensación"
+                label: ModelerUtils.getLocalizedString("actCompensa");
                 status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                 action: function (e: MouseEvent) {
                     this.setModifier(TYPE_COMPENSATION);
