@@ -145,3 +145,4 @@
 "msgError41" = "Event Sub-Process cannot start with a Normal Start Event"
 "msgError42" = "Event Sub-Process cannot start with a Timer Start Event"
 "msgError43" = "Event Sub-Process cannot start with a Parallel Start Event"
+"msgError44" = "Event Sub-Process cannot have more than one Start Event"
