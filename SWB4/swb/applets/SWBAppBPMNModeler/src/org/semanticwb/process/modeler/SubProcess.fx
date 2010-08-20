@@ -14,6 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
 import javafx.stage.Alert;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
+import javafx.geometry.VPos;
+import javafx.scene.layout.HBox;
 
 /**
  * @author javier.solis
@@ -23,27 +26,63 @@ public def TYPE_TRANSACTION="transaction";
 public def TYPE_EVENT="event";
 public def TYPE_ADHOC="adhoc";
 public class SubProcess extends Activity
-{
-    var ix:Number;                          //offset imagen x
-    var iy:Number;                          //offset imagen x
-    var is:Number=1;                        //image scale
+{    
+    protected var isMultiInstance: Boolean = false;
+    protected var isLoop: Boolean = false;
+    protected var isForCompensation: Boolean = false;
+    protected var isAdHoc: Boolean = false;
+    protected var isTransaction: Boolean = false;
     protected var strokeDash : Float[];
+    var icons: ImageView[];
+    var adjust: ColorAdjust = ColorAdjust {
+        hue: -0.83
+        brightness: -0.07
+        contrast: 0.25
+        saturation: 1
+    }
 
-    public var message=ImageView
-    {
-        x: bind x+ix;
-        y: bind y+iy;
-        scaleX: bind is;
-        scaleY: bind is;
-
-        effect: ColorAdjust
-        {
-            hue:-0.83
-            brightness:-0.07
-            contrast:0.25
-            saturation:1
+    def imgCollapsed = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_collapsed.png"
         }
-    };
+        effect: adjust
+    }
+
+    def imgLoop = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_ciclo.png"
+        }
+        effect: adjust
+    }
+
+    def imgMulti = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_objeto.png"
+        }
+        effect: adjust
+    }
+
+    def imgComp = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_compensa_b.png"
+        }
+        effect: adjust
+    }
+
+    def imgAdHoc = ImageView {
+        image: Image {
+            url: "{__DIR__}images/n_adhoc.png"
+        }
+        effect: adjust
+    }
+
+    var modifiers: HBox = HBox {
+        nodeVPos: VPos.CENTER
+        translateX: bind shape.boundsInLocal.minX + (shape.boundsInLocal.width - modifiers.boundsInLocal.width) / 2
+        translateY: bind shape.boundsInLocal.minY + shape.boundsInLocal.height - (modifiers.boundsInLocal.height + 6)
+        spacing: 5
+        content: bind icons
+    }
 
     public override function create(): Node
     {
@@ -75,46 +114,57 @@ public class SubProcess extends Activity
             onKeyPressed: onKeyPressed
         };
 
-        var trans;
-        if(type.equals(TYPE_TRANSACTION))
-        {
-            trans=Rectangle
-            {
-                x: bind x-w/2+3
-                y: bind y-h/2+3
-                width: bind w-6
-                height: bind h-6
-                stroke: bind shape.stroke
-                styleClass: "task"
-            };
+        if (type.equals(TYPE_ADHOC)) {
+            isAdHoc = true;
         }
+
+        var trans;
+        if (type.equals(TYPE_TRANSACTION)) {
+            isTransaction = true;
+            trans = Rectangle
+            {
+                x: bind x - w / 2 + 3
+                y: bind y - h / 2 + 3
+                width: w - 6
+                height: h - 6
+                styleClass: "task"
+            }
+        }
+
+        if (not isTransaction) {
+            var actions: Action[] = [
+                Action {
+                    label: "Multi-Instancia"
+                    status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                    action: function (e: MouseEvent) {
+                        this.setModifier(TYPE_MULTIPLE);
+                    }
+                },
+                Action {
+                    label: "Ciclo"
+                    status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                    action: function (e: MouseEvent) {
+                        this.setModifier(TYPE_LOOP);
+                    }
+                },
+                Action {
+                    label: "Compensación"
+                    status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
+                    action: function (e: MouseEvent) {
+                        this.setModifier(TYPE_COMPENSATION);
+                    }
+                },
+                Action {isSeparator: true}
+            ];
+                insert actions before menuOptions[0];
+        }
+
+        getMarkers();
 
         return Group
         {
             content: [
-                shape, trans, text, Rectangle
-                {
-                    x: bind x-7
-                    y: bind y+7
-                    width: 14
-                    height: 14
-                    styleClass: "modifierCollapsed"
-                    id: "rect"
-                }, Line{
-                    startX: bind x-5
-                    startY: bind y+14
-                    endX: bind x+5
-                    endY: bind y+14
-                    styleClass: "modifierCollapsed"
-                    id: "rect"
-                }, Line{
-                    startX: bind x
-                    startY: bind y+14-5
-                    endX: bind x
-                    endY: bind y+14+5
-                    styleClass: "modifierCollapsed"
-                    id: "rect"
-                }, message
+                shape, trans, text, modifiers
             ]
             scaleX: bind s;
             scaleY: bind s;
@@ -146,42 +196,46 @@ public class SubProcess extends Activity
         }
     }
 
-    public override function setType(type:String):Void
-    {
-        super.setType(type);
-        if (type.equals(TYPE_EVENT)) {
-            strokeDash = [2, 5];
-        } else if(type.equals(TYPE_ADHOC))
-        {
-            message.styleClass =  "modifierAdhoc";
-            ix=-message.image.width/2-15;
-            iy=h/2-message.image.height-11;
-            is=1;
-        }else if(type.equals(TYPE_COMPENSATION))
-        {
-            message.styleClass =  "modifierComp";
-            ix=-message.image.width/2-19;
-            iy=h/2-message.image.height-9;
-            is=1;
-        }else if(type.equals(TYPE_LOOP))
-        {
-            message.styleClass =  "modifierLoop";
-            ix=-message.image.width/2-15;
-            iy=h/2-message.image.height-10;
-            is=1;
-        }else if(type.equals(TYPE_MULTIPLE))
-        {
-            message.styleClass =  "modifierMult";
-            ix=-message.image.width/2-16;
-            iy=h/2-message.image.height-8;
-            is=1;
-        }else if(type.equals(TYPE_TRANSACTION))
-        {
-             message.visible=false;
-        }else
-        {
-            message.visible=false;
+    public function setModifier(modif: String): Void {
+        if(modif.equals(TYPE_COMPENSATION)) {
+            isForCompensation = not isForCompensation;
+        } else if(modif.equals(TYPE_LOOP)) {
+            isLoop = not isLoop;
+
+            if (isLoop) {
+                if (isMultiInstance) {
+                    isMultiInstance = false;
+                }
+            }
+        } else if(modif.equals(TYPE_MULTIPLE)) {
+            isMultiInstance = not isMultiInstance;
+
+            if (isMultiInstance) {
+                if (isLoop) {
+                    isLoop = false;
+                }
+            }
         }
+        getMarkers();
+    }
+
+    function getMarkers() : Void {
+        delete icons;
+
+        if (isAdHoc) {
+            insert imgAdHoc into icons;
+        }
+
+        if (isLoop) {
+            insert imgLoop into icons;
+        } else if (isMultiInstance) {
+            insert imgMulti into icons;
+        }
+
+        if (isForCompensation) {
+            insert imgComp into icons;
+        }
+        insert imgCollapsed into icons;
     }
 
     override public function remove(validate:Boolean)
