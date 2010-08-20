@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -23,6 +24,7 @@ import org.semanticwb.model.Collection;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
@@ -629,7 +631,26 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         }
 
                         //PAGINACION
-                        Set<SemanticObject> setso = SWBComparator.sortByCreatedSet(itso,false);
+
+
+                        List cplist = SWBUtils.Collections.copyIterator(itso);
+                        Set<SemanticObject> setso = null;
+                        if(gobj instanceof Traceable)
+                        {
+                            if(cplist.size()>1)
+                            {
+                                setso = SWBComparator.sortByCreatedSet(itso,false);
+                                itso=setso.iterator();
+                            }
+                            else
+                            {
+                                itso = cplist.iterator();
+                            }
+                        }
+                        else
+                        {
+                            itso = cplist.iterator();
+                        }
                         int ps=20;
                         int l=setso.size();
                         int p=0;
