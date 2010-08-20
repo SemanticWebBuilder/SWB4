@@ -35,4 +35,23 @@ public class MessageStartEvent extends StartEvent
         }
         return ret;
     }
+
+    override public function canAddToDiagram(): Boolean {
+        var ret = true;
+        var c = 0;
+        if (modeler.containerElement instanceof EventSubProcess) {
+            for (child in modeler.containerElement.containerChilds) {
+                if (child instanceof StartEvent) {
+                    c++;
+                }
+            }
+
+            if (c != 0) {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+            }
+        }
+
+        return ret;
+    }
 }
