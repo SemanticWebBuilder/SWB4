@@ -685,7 +685,14 @@ public SemanticObject getSemanticObject(String uri)
     public synchronized long getCounter(SemanticClass cls)
     {
         //System.out.println("cls:"+cls+" "+cls.getRootClass());
-        return getCounter(cls.getClassGroupId());
+        long id=0;
+        String uri=null;
+        do
+        {
+            id=getCounter(cls.getClassGroupId());
+            uri=getObjectUri(""+id, cls);
+        }while(SemanticObject.createSemanticObject(uri) != null);
+        return id;
     }
 
     /**
