@@ -230,8 +230,7 @@ public class SWBAEditor extends GenericResource
             {
                 templatepath=templatepath.substring(5);
             }
-            webpath = SWBPortal.getWebWorkPath() + templatepath ;
-            System.out.println(webpath);
+            webpath = SWBPortal.getWebWorkPath() + templatepath ;            
             workpath = template.getWorkPath();
             if (sver == null)
                 ver = template.getLastVersion().getVersionNumber();
