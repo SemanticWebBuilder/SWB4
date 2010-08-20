@@ -639,7 +639,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         {
                             if(cplist.size()>1)
                             {
-                                setso = SWBComparator.sortByCreatedSet(itso,false);
+                                setso = SWBComparator.sortByCreatedSet(cplist.iterator(),false);
                                 itso=setso.iterator();
                             }
                             else
