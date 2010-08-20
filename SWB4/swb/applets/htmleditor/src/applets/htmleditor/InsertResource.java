@@ -188,7 +188,7 @@ public class InsertResource extends javax.swing.JDialog {
                 this.tag=null;
             }
         }
-        super.show();
+        super.setVisible(true);
     }
     
     private String getData(String xml)
