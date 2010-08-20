@@ -49,6 +49,7 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
     private Locale locale=Locale.getDefault();        
     private String pathInit;
     Directory root;
+    boolean open=false;
     /** Creates new form ftp */
     public ftp(Locale locale,String jsess,URL uploadpath,URL downloadpath,String pathInit,URL urlgateway)
     {
@@ -1792,18 +1793,22 @@ public class ftp extends javax.swing.JDialog implements FileListener,ListSelecti
 
     private void formWindowOpened(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowOpened
     {//GEN-HEADEREND:event_formWindowOpened
-        if(root!=null)
+        if(!open)
         {
-            try
+            if(root!=null)
             {
-                jTreeDirs.setSelectionPath(new TreePath(root));
-                jTreeDirs.updateUI();
+                try
+                {
+                    jTreeDirs.setSelectionPath(new TreePath(root));
+                    jTreeDirs.updateUI();
 
+                }
+                catch(Throwable e)
+                {
+                    e.printStackTrace();
+                }
             }
-            catch(Throwable e)
-            {
-                e.printStackTrace();
-            }
+            open=true;
         }
     }//GEN-LAST:event_formWindowOpened
 
