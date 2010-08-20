@@ -16,7 +16,7 @@
     -gateway-second-color: #FFFAA6;
     -sequence-normal-stroke: -normal-stroke;
     -tooltip-stroke: gray;
-    -tooltip-first-color: #fafad2;
+    -tooltip-first-color: lightyellow;
     -tooltip-second-color: #E5B949;
     -tooltip-third-color: #daa520;
     -tooltip-light-second-color: #FFFFFF00;
@@ -51,11 +51,6 @@
 
 .modifierCollapsed {
     -fx-image:url("images/n_collapsed.png");
-}
-
-.modifierCollapsed#rect {
-    -fx-stroke: -normal-stroke;
-    -fx-fill:white;
 }
 
 .modifierComp {
@@ -163,7 +158,7 @@
 }
 
 .startEvent {
-    -fx-cursor: hand;
+	-fx-cursor: hand;
     -fx-stroke: -startevent-normal-stroke;
     -fx-stroke-width:2;
     -fx-fill:white;
@@ -188,7 +183,7 @@
 .interEvent#marker {
     -fx-stroke:-interevent-normal-stroke;
     -fx-stroke-width: 1;
-    -fx-fill:null;
+    -fx-fill:white;
 }
 
 .interEvent:hover {
@@ -289,7 +284,7 @@
 
 .artifact#textbox {
     -fx-stroke: null;
-    -fx-fill:white;
+    -fx-fill:null;
 }
 
 .connObject {
@@ -354,7 +349,7 @@
     -fx-stroke-width: 3;
 }
 
-.editableText {
+.editableTextBox {
     -fx-fill: #FFFF66;
     -fx-stroke: #000000;
     -fx-stroke-width: 0;
@@ -362,7 +357,7 @@
     -fx-arc-height: 0;
 }
 
-.editableTextBox {
+.editableText {
     -fx-font-size: 14px;
     -fx-font-family: "Helvetica, Arial";
     -fx-font-weight: bold;
@@ -387,11 +382,11 @@
 .ToolTip#rect {
     -fx-arc-width: 10;
     -fx-arc-height: 10;
-    -fx-fill: #FEFEC6;
+    -fx-fill: -tooltip-first-color;
 }
 
 .ToolTip#triangle {
-    -fx-fill:#FEFEC6;
+    -fx-fill:-tooltip-first-color;
 }
 
 .ToolTip#triangleBorder {
@@ -415,11 +410,11 @@
 .ToolTipError#rect {
     -fx-arc-width: 10;
     -fx-arc-height: 10;
-    -fx-fill: #FEFEC6;
+    -fx-fill: -tooltip-first-color;
 }
 
 .ToolTipError#triangle {
-    -fx-fill:#FEFEC6;
+    -fx-fill:white;
 }
 
 .ToolTipError#triangleBorder {
@@ -444,11 +439,11 @@
 }
 
 .scrollView {
-    -fx-background-color: white;
+    -fx-background-color: #EDEDED;
 }
 
 .splash {
-	-fx-font-family: "Verdana";
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
@@ -456,7 +451,7 @@
 }
 
 .group#label {
-	-fx-font-family: "Verdana";
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
@@ -464,38 +459,39 @@
 }
 
 .menuItem {
-	-fx-arc-width: 6;
-	-fx-arc-height: 6;
-	-fx-cursor: hand;
-	-fx-fill: #E6E8EA;
-	-fx-opacity: 1;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+    -fx-cursor: hand;
+    -fx-fill: #E6E8EA;
+    -fx-opacity: 1;
 }
 
 .menuItemSeparator {
-	-fx-cursor: hand;
-	-fx-fill: gray;
-	-fx-opacity: 1;
+    -fx-cursor: hand;
+    -fx-fill: gray;
+    -fx-opacity: 1;
 }
 
 .menuItem:hover {
-	-fx-fill: #3370CE;
+    -fx-fill: #3370CE;
 }
 
 .menuItem#caption {
-	-fx-fill: black;
-	-fx-text-origin: top;
-	-fx-font-family: "Verdana";
+    -fx-fill: black;
+    -fx-text-origin: top;
+    -fx-font-family: "Verdana";
     -fx-font-size: 11pt;
     -fx-fontstyle: normal;
     -fx-font-weight: normal;
 }
 
 .menu {
-	-fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, #707070, 10, 0, 3, 3);
+    -fx-stroke: black;
     -fx-stroke-width: 1;
-	-fx-arc-width: 6;
-	-fx-arc-height: 6;
-	-fx-cursor: hand;
-	-fx-fill: #E6E8EA;
-	-fx-opacity: 1;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+    -fx-cursor: hand;
+    -fx-fill: #E6E8EA;
+    -fx-opacity: 1;
 }
