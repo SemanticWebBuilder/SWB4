@@ -224,7 +224,14 @@ public class SWBAEditor extends GenericResource
         if ("Template".equalsIgnoreCase(type))
         {
             Template template = SWBPortal.getTemplateMgr().getTemplateImp(SWBContext.getWebSite(tm).getTemplate(id));
-            webpath = SWBPortal.getWebWorkPath() + template.getWorkPath();
+            String templatepath=template.getWorkPath();
+            templatepath=templatepath.substring(SWBUtils.getApplicationPath().length());
+            if(templatepath.startsWith("/work/"))
+            {
+                templatepath=templatepath.substring(5);
+            }
+            webpath = SWBPortal.getWebWorkPath() + templatepath ;
+            System.out.println(webpath);
             workpath = template.getWorkPath();
             if (sver == null)
                 ver = template.getLastVersion().getVersionNumber();
@@ -335,6 +342,7 @@ public class SWBAEditor extends GenericResource
         }
         else if (cmd.equals("initFiles"))
         {
+
             return initFiles(paramsRequest, user, src, workpath, webpath, filename, ver);
         }
         else
@@ -517,10 +525,11 @@ public class SWBAEditor extends GenericResource
         Element menu = null;
         Element option = null;
 
-        File docDir = new File(workpath + "/" + ver + "/");
-        String id = file.getPath().substring(docDir.getPath().length() + 1);
-        id = id.replace('\\', '/');
+        File docDir = new File(workpath + "/" + ver + "/");        
+        String id = file.getPath().substring(docDir.getPath().length() + 1);        
+        id = id.replace('\\', '/');        
         String path = webpath + "/" + ver + "/" + id;
+        //System.out.println("path: "+path);
         //System.out.println("id:"+id);
         //System.out.println("path:"+path);
         Element ele = addNode("node", id, file.getName(), root);
