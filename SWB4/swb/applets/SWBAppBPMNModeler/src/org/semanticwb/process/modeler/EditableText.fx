@@ -82,29 +82,30 @@ public class EditableText extends CustomNode
              translateX:bind x-(textl.boundsInLocal.width)/2+2
              translateY:bind y-(textl.boundsInLocal.height)/2
              boundsType:TextBoundsType.VISUAL
-             styleClass: "editableText"
              visible: true
+             styleClass: "editableText"
         };
 
         var back;
-        if(text!=null and fill)
+//        if(text!=null and fill)
+//        {
+        back=Rectangle
         {
-            back=Rectangle
-            {
-                x:bind textl.translateX-2
-                y:bind textl.translateY-2
-                width:bind textl.boundsInLocal.width
-                height:bind textl.boundsInLocal.height
-                styleClass: "editableTextBox"
-            };
-        }
+            x:bind textl.translateX-2
+            y:bind textl.translateY-2
+            width:bind textl.boundsInLocal.width
+            height:bind textl.boundsInLocal.height
+            styleClass: "editableTextBox"
+            visible: bind fill
+        };
+//        }
 
         textb= TextBox
         {
              text: text
              styleClass: "editableText"
-             translateX:bind x - width/2
-             translateY:bind y -10
+             translateX:bind textl.translateX
+             translateY:bind textl.translateY
              width:bind width
              height: 20
              visible: false
