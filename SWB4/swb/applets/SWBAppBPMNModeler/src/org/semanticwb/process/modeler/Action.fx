@@ -15,5 +15,5 @@ public class Action {
     public var action: function(e: MouseEvent): Void;
     public var offsety: Number;
     public var isSeparator: Boolean = false;
-    public var status: String;
+    public var status: String = MenuItem.STATUS_ENABLED;
 }
