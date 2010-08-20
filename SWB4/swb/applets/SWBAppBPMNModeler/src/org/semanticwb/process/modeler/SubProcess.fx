@@ -9,7 +9,6 @@ package org.semanticwb.process.modeler;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Group;
-import javafx.scene.shape.Line;
 import javafx.scene.image.ImageView;
 import javafx.scene.effect.ColorAdjust;
 import javafx.stage.Alert;
@@ -90,9 +89,7 @@ public class SubProcess extends Activity
         containerable=true;
         initializeCustomNode();
         w=100;
-        h=60;
-
-        setType(type);
+        h=60;        
 
         text=EditableText
         {
@@ -114,9 +111,7 @@ public class SubProcess extends Activity
             onKeyPressed: onKeyPressed
         };
 
-        if (type.equals(TYPE_ADHOC)) {
-            isAdHoc = true;
-        }
+        setType(type);
 
         var trans;
         if (type.equals(TYPE_TRANSACTION)) {
@@ -134,21 +129,21 @@ public class SubProcess extends Activity
         if (not isTransaction) {
             var actions: Action[] = [
                 Action {
-                    label: "Multi-Instancia"
+                    label: ModelerUtils.getLocalizedString("actMultiInstance");
                     status: bind if (isMultiInstance) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_MULTIPLE);
                     }
                 },
                 Action {
-                    label: "Ciclo"
+                    label: ModelerUtils.getLocalizedString("actLoop");
                     status: bind if (isLoop) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_LOOP);
                     }
                 },
                 Action {
-                    label: "Compensación"
+                    label: ModelerUtils.getLocalizedString("actCompensa");
                     status: bind if (isForCompensation) MenuItem.STATUS_SELECTED else MenuItem.STATUS_ENABLED
                     action: function (e: MouseEvent) {
                         this.setModifier(TYPE_COMPENSATION);
@@ -156,7 +151,7 @@ public class SubProcess extends Activity
                 },
                 Action {isSeparator: true}
             ];
-                insert actions before menuOptions[0];
+            insert actions before menuOptions[0];
         }
 
         getMarkers();
@@ -184,7 +179,6 @@ public class SubProcess extends Activity
                             modeler.containerElement=this;
                         }
                     }
-
                 }
             }
         } else if (e.button == e.button.SECONDARY) {
@@ -250,6 +244,16 @@ public class SubProcess extends Activity
             delete containerChilds;
 
             super.remove(validate);
+        }
+    }
+
+    override function setType(type: String) {
+        if (type.equals(TYPE_ADHOC)) {
+            isAdHoc = true;
+        }
+
+        if (type.equals(TYPE_EVENT)) {
+            strokeDash = [2, 5];
         }
     }
 }
