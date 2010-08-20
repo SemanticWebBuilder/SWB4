@@ -633,7 +633,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         //PAGINACION
 
 
-                        List cplist = SWBUtils.Collections.copyIterator(itso);
+                        List<SemanticObject> cplist = SWBUtils.Collections.copyIterator(itso);
                         Set<SemanticObject> setso = null;
                         if(sccol.isSubClass(Traceable.swb_Traceable))
                         {
