@@ -48,7 +48,8 @@ import org.semanticwb.portal.util.ContentUtils;
  */
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
-
+    private static final OfficeDocument document = new OfficeDocument();
+    private static final ContentUtils contentUtils = new ContentUtils();
     int snpages = 15;
     String stxtant = "Anterior";
     String stxtsig = "Siguiente";
@@ -87,13 +88,13 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        ContentUtils contentUtils = new ContentUtils();
+        
         Resource base = paramRequest.getResourceBase();
         WebPage page = paramRequest.getWebPage();
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
-        OfficeDocument document = new OfficeDocument();
+        
         try
         {
             User user = paramRequest.getUser();
