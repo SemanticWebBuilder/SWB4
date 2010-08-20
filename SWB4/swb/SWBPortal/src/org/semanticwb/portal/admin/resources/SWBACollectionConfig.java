@@ -644,6 +644,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             }
                             else
                             {
+
                                 itso = cplist.iterator();
                             }
                         }
@@ -652,11 +653,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             itso = cplist.iterator();
                         }
                         int ps=20;
-                        int l=setso.size();
+                        int l=cplist.size();
                         int p=0;
                         if(page!=null)p=Integer.parseInt(page);
                         int x=0;
-                        itso=setso.iterator();
+                        //itso=setso.iterator();
                         /////////////////////////////////
 
                         while (itso.hasNext()) {
