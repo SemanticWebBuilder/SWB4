@@ -361,6 +361,9 @@ public class GraphicalElement extends CustomNode
     public function remove(validate:Boolean) : Void
     {
         var del:Node[];
+        if (modeler.containerElement != null) {
+            delete this from modeler.containerElement.containerChilds;
+        }
         setGraphParent(null);
         setContainer(null);
         insert this into del;
