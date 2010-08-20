@@ -635,7 +635,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                         List cplist = SWBUtils.Collections.copyIterator(itso);
                         Set<SemanticObject> setso = null;
-                        if(gobj instanceof Traceable)
+                        if(sccol.isSubClass(Traceable.swb_Traceable))
                         {
                             if(cplist.size()>1)
                             {
