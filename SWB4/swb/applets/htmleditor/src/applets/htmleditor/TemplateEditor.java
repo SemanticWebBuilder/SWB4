@@ -531,7 +531,9 @@ Action:caret-previous-word
                 dd.setVersion(verValue);
                 dd.setType(typeValue);
                 //dd.setDSize(300,100);
-                dd.show();
+                //dd.show();
+                dd.setVisible(true);
+
                 if(dd.getReturnValue())
                 {
                     sendHTML(html,filename,true,false);
@@ -708,7 +710,8 @@ Action:caret-previous-word
         files.setId(idValue);
         files.setVersion(verValue);
         files.setType(typeValue);
-        files.show();
+        files.init();
+        files.setVisible(true);
         
         ImagePreview img=files.getSelectedImage();
         if(img!=null)
@@ -791,7 +794,8 @@ Action:caret-previous-word
         ins.setJSession(jsess);
         //ins.setTag(getSelectedText());
         //ins.setEditor(this);
-        ins.show();
+        //ins.show();
+        ins.setVisible(true);
         if(ins.getResultValue()==2)
         {
             insertCustomHTML(ins.getTag());
@@ -806,8 +810,8 @@ Action:caret-previous-word
         ins.setLocale(locale);
         //ins.setTag(getSelectedText());
         //ins.setEditor(this);
-        ins.show();
-        
+        //ins.show();
+        ins.setVisible(true);
         if(ins.getResultValue()==2)
         {
             insertCustomHTML(ins.getTag().getHtml()+"<p style=\"margin-top: 0\">&#160;</p>");
@@ -1633,7 +1637,8 @@ Action:caret-previous-word
         s.setText(getSelectedText());
         s.setEditor(this);
         s.setLocale(locale);
-        s.show();
+        //s.show();
+        s.setVisible(true);
         
     }//GEN-LAST:event_mnuReplaceActionPerformed
     
@@ -1690,7 +1695,8 @@ Action:caret-previous-word
         s.setText(getSelectedText());
         s.setEditor(this);
         s.setLocale(locale);
-        s.show();
+        //s.show();
+        s.setVisible(true);
     }//GEN-LAST:event_mnuFindActionPerformed
     
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton14ActionPerformed
