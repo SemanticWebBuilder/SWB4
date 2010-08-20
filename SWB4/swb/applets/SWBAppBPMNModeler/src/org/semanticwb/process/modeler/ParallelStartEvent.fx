@@ -19,4 +19,13 @@ public class ParallelStartEvent extends StartEvent
         type=CATCH_PARALLEL;
         return super.create();
     }
+
+    override public function canAddToDiagram(): Boolean {
+        var ret = true;
+        if (modeler.containerElement != null and modeler.containerElement instanceof EventSubProcess) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError43"));
+        }
+        return ret;
+    }
 }
