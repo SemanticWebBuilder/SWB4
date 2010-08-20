@@ -85,13 +85,15 @@ public class Modeler extends CustomNode
                             {
                                 //no se permite crear lanes sin pool
                             }else
-                            {
-                                if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                            {                                
                                 var a=tempNode as GraphicalElement;
-                                a.x=e.x+getXScroll();
-                                a.y=e.y+getYScroll();
-                                a.snapToGrid();
-                                a.setContainer(containerElement);
+                                if (a.canAddToDiagram()) {
+                                    if(tempNode instanceof Pool)addFirst(tempNode) else add(tempNode);
+                                    a.x=e.x+getXScroll();
+                                    a.y=e.y+getYScroll();
+                                    a.snapToGrid();
+                                    a.setContainer(containerElement);
+                                }
                             }
                         }else if(ModelerUtils.clickedNode instanceof Pool or ModelerUtils.clickedNode instanceof Lane)
                         {
