@@ -58,6 +58,9 @@ public class TextArea extends TextAreaBase {
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                                 String mode, String lang) 
     {
+        if (obj == null) {
+            obj = new SemanticObject();
+        }        
 //        boolean IPHONE = false;
 //        boolean XHTML  = false;
         boolean DOJO   = false;
@@ -70,7 +73,6 @@ public class TextArea extends TextAreaBase {
         if (type.equals("dojo")) {
             DOJO = true;
         }
-
         String         ret      = "";
         String         name     = prop.getName();
         String         label    = prop.getDisplayName(lang);
@@ -78,14 +80,12 @@ public class TextArea extends TextAreaBase {
         boolean        required = prop.isRequired();
         String         pmsg     = null;
         String         imsg     = null;
-
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
 
             pmsg = dobj.getPromptMessage();
             imsg = dobj.getInvalidMessage();
         }
-
         if (required && imsg == null) {
             imsg = label + " es requerido.";
 
@@ -93,7 +93,6 @@ public class TextArea extends TextAreaBase {
                 imsg = label + " is required.";
             }
         }
-
         if (pmsg == null) {
             pmsg = "Captura " + label + ".";
 
@@ -101,29 +100,25 @@ public class TextArea extends TextAreaBase {
                 pmsg = "Enter " + label + ".";
             }
         }
-
         String value = request.getParameter(prop.getName());
 
         if (value == null) {
             value = obj.getProperty(prop);
         }
-
         if (value == null) {
             value = "";
         }
-
         if (mode.equals("edit") || mode.equals("create")) {
-
             // *******************************************************
-            Iterator itAttr = attributes.keySet().iterator();
+            //Iterator itAttr = attributes.keySet().iterator();
 
-            while (itAttr.hasNext()) {
-                String attrName = (String) itAttr.next();
+//            while (itAttr.hasNext()) {
+//                String attrName = (String) itAttr.next();
+//
+//                System.out.println("attrName:" + attrName + "attrValue:" + attributes.get(attrName));
+//            }
 
-                System.out.println("attrName:" + attrName + "attrValue:" + attributes.get(attrName));
-            }
-
-            String path = SWBPlatform.getContextPath() + "/resources/jsp/forum/images/emotion/";
+            //String path = SWBPlatform.getContextPath() + "/resources/jsp/forum/images/emotion/";
 
             ret = "<textarea name=\"" + name + "\" dojoType_=\"dijit.Editor\"";
 
@@ -152,8 +147,7 @@ public class TextArea extends TextAreaBase {
             }
         } else if (mode.equals("view")) {
             ret = "<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>";
-        }
-
+        }        
         return ret;
     }
 }
