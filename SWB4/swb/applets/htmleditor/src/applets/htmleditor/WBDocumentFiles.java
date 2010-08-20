@@ -791,10 +791,10 @@ public class WBDocumentFiles extends javax.swing.JDialog
     public void addFile()
     {
         JFileChooser fc = new JFileChooser();
-        fc.setMultiSelectionEnabled(true);
-        
+        fc.setMultiSelectionEnabled(true);        
         fc.setCurrentDirectory(TemplateEditor.curDir);
-        int returnVal = fc.showSaveDialog(this);
+        //int returnVal = fc.showSaveDialog(this);
+        int returnVal = fc.showOpenDialog(this);
         TemplateEditor.curDir = fc.getCurrentDirectory();
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -824,7 +824,8 @@ public class WBDocumentFiles extends javax.swing.JDialog
                     up.setId(id);
                     up.setVersion(version);
                     up.setType(type);
-                    up.show();
+                    //up.show();
+                    up.setVisible(true);
                     up.sendFile(path+files[f].getName(), files[f]);
 
                     String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>"+"getFile."+WBXMLParser.encode(path+files[f].getName(),"UTF8")+"</cmd></req>";
@@ -858,14 +859,15 @@ public class WBDocumentFiles extends javax.swing.JDialog
             }
         }catch(Exception e){JOptionPane.showConfirmDialog(this,e,"WebBuilder",JOptionPane.OK_OPTION,JOptionPane.ERROR_MESSAGE);}
     }
-    
-    public void show()
+    /*@Override
+    public void setVisible(boolean visible)
     {
-        init();
-        super.show();
-    }
+        if(visible)
+            init();
+        super.setVisible(visible);
+    }*/
     
-    private void init()
+    public void init()
     {
         renderer=new WBDocFilesTreeRender();
         jTree1.setCellEditor(new WBTreeCellEditor(jTree1,renderer,null));
@@ -1386,7 +1388,8 @@ public class WBDocumentFiles extends javax.swing.JDialog
             files.setId("2");
             files.setTopicMap("Test");
             files.setVersion("1");
-            files.show();
+            //files.show();
+            files.setVisible(true);
             //System.out.println("FIN:");
         }catch(Exception e){System.out.println(e);}
     }
