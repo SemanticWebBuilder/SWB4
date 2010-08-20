@@ -36,6 +36,7 @@ import org.semanticwb.portal.api.*;
 
 public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTResourceBase
 {
+    private static final OfficeDocument document = new OfficeDocument();
     public PPTResource()
     {
         super();
@@ -77,8 +78,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
 
         String version = getVersionToShow();
         String contentId = getContent();
-        String repositoryName = getRepositoryName();
-        OfficeDocument document = new OfficeDocument();
+        String repositoryName = getRepositoryName();        
         try
         {
             User user = paramRequest.getUser();

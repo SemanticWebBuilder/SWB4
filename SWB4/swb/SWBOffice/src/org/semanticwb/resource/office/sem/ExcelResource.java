@@ -44,6 +44,7 @@ import org.semanticwb.portal.api.*;
 
 public class ExcelResource extends org.semanticwb.resource.office.sem.base.ExcelResourceBase
 {
+    private static final OfficeDocument document = new OfficeDocument();
     public ExcelResource()
     {
         super();
@@ -131,7 +132,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
-        OfficeDocument document = new OfficeDocument();
+        
         try
         {
             User user = paramRequest.getUser();
