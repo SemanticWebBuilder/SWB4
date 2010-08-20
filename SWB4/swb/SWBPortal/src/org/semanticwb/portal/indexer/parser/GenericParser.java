@@ -23,9 +23,12 @@
 
 package org.semanticwb.portal.indexer.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.Tagable;
@@ -50,6 +53,7 @@ import org.semanticwb.portal.indexer.SWBIndexer;
  */
 public class GenericParser
 {
+    private static Logger log=SWBUtils.getLogger(GenericParser.class);
     
     /**
      * Checks wheter a {@link Searchable} object can be indexed.
@@ -268,17 +272,26 @@ public class GenericParser
      * filtrar resultados por categoría (canal).
      * 
      * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param list  Lista para validar referencia ciclicas
      * @return      Navigation path to the {@link Searchable} object. Ruta de
      *              navegación hacia el objeto {@link Searchable}.
      */
-    private String _getIndexCategory(Searchable gen) {
+    private String _getIndexCategory(Searchable gen, ArrayList list) {
         String ret = gen.getId();
+        list.add(gen);
         SemanticObject obj = gen.getSemanticObject();
         Iterator<SemanticObject> it = obj.listHerarquicalParents();
         if (it.hasNext()) {
             SemanticObject parent = it.next();
-            if (parent.instanceOf(Searchable.swb_Searchable)) {
-                ret = _getIndexCategory((Searchable) parent.createGenericInstance()) + " " + ret;
+            if (parent.instanceOf(Searchable.swb_Searchable))
+            {
+                if(!list.contains(parent))
+                {
+                    ret = _getIndexCategory((Searchable) parent.createGenericInstance(),list) + " " + ret;
+                }else
+                {
+                    log.error("Ciclic reference found:"+gen.getURI()+" --> "+parent.getURI());
+                }
             }
         }
         return ret;
@@ -296,7 +309,7 @@ public class GenericParser
      *          Ruta de navegación hacia el objeto {@link Searchable}.
      */
     public String getIndexCategory(Searchable gen) {
-        return _getIndexCategory(gen);
+        return _getIndexCategory(gen, new ArrayList());
     }
 
     /**
