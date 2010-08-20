@@ -28,8 +28,8 @@ public class GroupArtifact extends Artifact
         text=EditableText
         {
             text: bind title with inverse
-            x:bind x
-            y:bind y
+            x:bind shape.boundsInParent.minX + text.boundsInLocal.width / 2 + (shape.boundsInParent.width - text.boundsInLocal.width) / 2
+            y:bind shape.boundsInParent.minY + 15
             width: bind w-6
             height: bind h
         }
