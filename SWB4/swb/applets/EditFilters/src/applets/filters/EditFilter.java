@@ -76,7 +76,7 @@ public class EditFilter extends javax.swing.JApplet {
             }
         }        
         initComponents();
-        this.setJMenuBar(this.jMenuBar1);
+        //this.setJMenuBar(this.jMenuBar1);
         jsess=this.getParameter(PRM_JSESS);
         cgiPath=this.getParameter(PRM_CGIPATH);
         topicmap=this.getParameter("tm");
@@ -1257,9 +1257,6 @@ public class EditFilter extends javax.swing.JApplet {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItemVerFiltros = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
@@ -1276,19 +1273,6 @@ public class EditFilter extends javax.swing.JApplet {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTreeDirs = new javax.swing.JTree();
-
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale); // NOI18N
-        jMenu1.setText(bundle.getString("Herramientas")); // NOI18N
-
-        jMenuItemVerFiltros.setText(bundle.getString("ver_filtros")); // NOI18N
-        jMenuItemVerFiltros.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemVerFiltrosActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItemVerFiltros);
-
-        jMenuBar1.add(jMenu1);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(10, 30));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -1325,6 +1309,7 @@ public class EditFilter extends javax.swing.JApplet {
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale); // NOI18N
         jTabbedPane1.addTab(bundle.getString("filtro_sitios"), jPanel3); // NOI18N
 
         jPanel5.setLayout(new java.awt.BorderLayout());
@@ -1388,22 +1373,6 @@ public class EditFilter extends javax.swing.JApplet {
     private void jTreeMenusMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTreeMenusMouseMoved
         this.jTreeMenus.setSelectionPath(this.jTreeMenus.getPathForLocation(evt.getX(), evt.getY()));
     }//GEN-LAST:event_jTreeMenusMouseMoved
-
-    private void jMenuItemVerFiltrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemVerFiltrosActionPerformed
-        //JSObject win = (JSObject) JSObject.getWindow(this);
-        //String[] params=new String[0];
-        //params[0]=eid.getFirstNode().getText();
-        //win.call("doView", params);        
-        try
-        {
-            URL document=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),url_script);
-            this.getAppletContext().showDocument(document,"work");
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jMenuItemVerFiltrosActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         /*
@@ -2034,9 +2003,6 @@ public class EditFilter extends javax.swing.JApplet {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItemVerFiltros;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
