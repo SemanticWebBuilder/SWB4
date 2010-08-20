@@ -321,7 +321,7 @@ public class WBXMLParser {
         for(int x=0;x<str.length();x++)
         {
             char ch=str.charAt(x);
-            System.out.println("char:"+(int)ch+" "+ch);
+            //System.out.println("char:"+(int)ch+" "+ch);
             if(((int)ch)>graterthan)
             {
                 str.replace(x,x+1,"&#"+(int)ch+";");
