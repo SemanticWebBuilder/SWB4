@@ -36,6 +36,7 @@ public class MenuItem extends CustomNode {
             content: bind caption
             textOrigin: TextOrigin.TOP
             font: bind if (status.equals(STATUS_SELECTED)) Font.font("Verdana", FontWeight.BOLD, 11) else Font.font("Verdana", 11)
+            id: "caption"
         }
 
         var t2: Text;
