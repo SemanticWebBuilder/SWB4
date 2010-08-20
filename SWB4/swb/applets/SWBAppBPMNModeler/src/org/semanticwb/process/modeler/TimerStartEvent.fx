@@ -19,4 +19,13 @@ public class TimerStartEvent extends StartEvent
         type=CATCH_TIMER;
         return super.create();
     }
+
+    override public function canAddToDiagram(): Boolean {
+        var ret = true;
+        if (modeler.containerElement != null and modeler.containerElement instanceof EventSubProcess) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError42"));
+        }
+        return ret;
+    }
 }
