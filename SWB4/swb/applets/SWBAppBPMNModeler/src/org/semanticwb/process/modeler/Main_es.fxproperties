@@ -142,3 +142,6 @@
 "msgError38" = "Un Evento Intermedio Disparador no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
 "msgError39" = "Un Evento Intermedio Paralelo no puede adherirse a una Actividad"
 "msgError40" = "Un Evento Intermedio de Escalamiento no puede conectarse con una Compuerta Exclusiva Basada en Eventos"
+"msgError41" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Normal"
+"msgError42" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Temporizado"
+"msgError43" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Paralelo"
