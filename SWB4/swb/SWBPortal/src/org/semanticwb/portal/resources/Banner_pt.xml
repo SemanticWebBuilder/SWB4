@@ -36,7 +36,7 @@
             </font>
         ]]>
         </statictext>
-        <input type="text" id="priority" name="priority" label="Prioridad:" promptMessage="Prioridad de la imagen" />
+        <input type="text" id="index" name="index" label="Index:" promptMessage="Index de la imagen" />
     </fieldset>
 
     <fieldset>
