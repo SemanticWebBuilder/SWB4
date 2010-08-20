@@ -65,6 +65,7 @@ public var x: Number = 0;
                 action: option.action
                 textOffsetX: bind x + optionsMargin * 3
                 isSeparator: bind option.isSeparator;
+                status: bind option.status
             }
 
             if (o.getWidth() > maxW) {
