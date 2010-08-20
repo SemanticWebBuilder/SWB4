@@ -52,8 +52,12 @@ public class StartEvent extends CatchEvent
         return ret;
     }
 
-    override public function canAttach(parent:GraphicalElement):Boolean
-    {
-        return super.canAttach(parent);
+    override public function canAddToDiagram(): Boolean {
+        var ret = super.canAddToDiagram();
+        if (modeler.containerElement != null and modeler.containerElement instanceof EventSubProcess) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError41"));
+        }
+        return ret;
     }
 }
