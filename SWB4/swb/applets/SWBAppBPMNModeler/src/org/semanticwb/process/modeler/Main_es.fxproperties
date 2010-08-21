@@ -146,3 +146,4 @@
 "msgError42" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Temporizado"
 "msgError43" = "Un Sub-Proceso de Evento no puede iniciar con un Evento de Inicio Paralelo"
 "msgError44" = "Un Sub-Proceso de Evento no debe tener más de un Evento de Inicio"
+"msgError45" = "Un Pool no puede agregarse en un Sub-Proceso"
