@@ -140,10 +140,11 @@ public class ConnectionObject  extends CustomNode
                         x:bind pend.x+8.0*Math.cos(getArrow(45.0))
                         y:bind pend.y-8.0*Math.sin(getArrow(45.0))
                     },
+                    ClosePath{}
                 ]
                 strokeWidth: bind path.strokeWidth
                 stroke: bind path.stroke
-
+                fill: bind path.stroke
             };
         } else if (type.equals(ARROW_TYPE_MESSAGE)) {
             arrow = Path {
