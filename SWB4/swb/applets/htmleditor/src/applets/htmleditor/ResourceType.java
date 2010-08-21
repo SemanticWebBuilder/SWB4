@@ -45,6 +45,7 @@ public class ResourceType extends DefaultMutableTreeNode implements SelectableNo
     JLabel label=new JLabel();
     JRadioButton radio=new JRadioButton();
     String id,topicmap;
+    
     public ResourceType(String id,String topicmap,String name,ButtonGroup bg) {
         this.id=id;
         this.topicmap=topicmap;
@@ -53,13 +54,15 @@ public class ResourceType extends DefaultMutableTreeNode implements SelectableNo
         label.setOpaque(false);
         radio.setOpaque(false);
         panel.setOpaque(false);
-        this.label.setBackground(Color.WHITE);        
-        label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/htmleditor/images/f_resourcetype.gif")));
+        this.label.setBackground(Color.WHITE);
+        javax.swing.ImageIcon i=new javax.swing.ImageIcon(getClass().getResource("/applets/htmleditor/images/f_resourcetype.gif"));                
+        label.setIcon(i);
+        panel.setMinimumSize(new Dimension(100, i.getIconHeight()));
         panel.add(radio);
         panel.add(label);  
         this.radio.setBackground(Color.WHITE);
         bg.add(radio);        
-    }
+    }    
     public String getID()
     {
         return id;
