@@ -147,3 +147,4 @@
 "msgError43" = "Event Sub-Process cannot start with a Parallel Start Event"
 "msgError44" = "Event Sub-Process cannot have more than one Start Event"
 "msgError45" = "Pool cannot be added to a Sub-Process"
+"msgError46" = "Group cannot be linked using Connection Object"
