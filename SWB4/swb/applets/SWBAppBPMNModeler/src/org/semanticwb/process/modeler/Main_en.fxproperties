@@ -148,3 +148,4 @@
 "msgError44" = "Event Sub-Process cannot have more than one Start Event"
 "msgError45" = "Pool cannot be added to a Sub-Process"
 "msgError46" = "Group cannot be linked using Connection Object"
+"msgError47" = "Event Sub-Process cannot be linked using Sequence Flow"
