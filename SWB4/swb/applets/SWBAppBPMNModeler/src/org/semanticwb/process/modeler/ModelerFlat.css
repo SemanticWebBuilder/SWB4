@@ -410,7 +410,7 @@
 .ToolTipError#rect {
     -fx-arc-width: 10;
     -fx-arc-height: 10;
-    -fx-fill: -tooltip-first-color;
+    -fx-fill: indianred;
 }
 
 .ToolTipError#triangle {
