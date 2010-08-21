@@ -169,4 +169,13 @@ public class Pool extends GraphicalElement
         }
         return ret;
     }
+
+    override public function canAddToDiagram(): Boolean {
+        var ret = super.canAddToDiagram();
+        if (modeler.containerElement != null and modeler.containerElement instanceof SubProcess) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError45"));
+        }
+        return ret;
+    }
 }
