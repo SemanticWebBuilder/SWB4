@@ -91,7 +91,9 @@ public class InsertResource extends javax.swing.JDialog {
         Root root=new Root("Tipos de recursos");        
         DefaultTreeModel model=new DefaultTreeModel(root);
         this.jTreeTipoRecurso.setModel(model);
-        this.jTreeTipoRecurso.setCellRenderer(new CheckRenderer());        
+        this.jTreeTipoRecurso.setCellRenderer(new CheckRenderer());
+        javax.swing.ImageIcon i=new javax.swing.ImageIcon(getClass().getResource("/applets/htmleditor/images/f_resourcetype.gif"));        
+        this.jTreeTipoRecurso.setRowHeight((int)(i.getIconHeight()*1.5));
         jTreeTipoRecurso.addMouseListener(new CheckListener()); 
         String respxml=this.getData("<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getResourceTypeCat</cmd><tm>" + topicMap + "</tm></req>");
         
@@ -107,7 +109,7 @@ public class InsertResource extends javax.swing.JDialog {
                 {
                     
                     WBTreeNode etype=(WBTreeNode)it.next();
-                    ResourceType type=new ResourceType(etype.getAttribute("id"), etype.getAttribute("topicmap"), etype.getAttribute("name"), this.buttonGroup);
+                    ResourceType type=new ResourceType(etype.getAttribute("id"), etype.getAttribute("topicmap"), etype.getAttribute("name"), this.buttonGroup);                                      
                     root.add(type);
                     Iterator itsub=etype.getNodesbyName("subResourceType");
                     while(itsub.hasNext())
@@ -126,7 +128,7 @@ public class InsertResource extends javax.swing.JDialog {
         this.jTreeTipoRecurso.expandPath(new TreePath(root));
     }
     
-    public void show()
+    public void init()
     {
         ret=0;
         loadResources();    
@@ -329,8 +331,7 @@ public class InsertResource extends javax.swing.JDialog {
     }//GEN-LAST:event_jTreeTipoRecursoMouseMoved
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        setVisible(false);
-        dispose();
+        setVisible(false);        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
