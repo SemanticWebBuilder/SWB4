@@ -795,6 +795,7 @@ Action:caret-previous-word
         //ins.setTag(getSelectedText());
         //ins.setEditor(this);
         //ins.show();
+        ins.init();
         ins.setVisible(true);
         if(ins.getResultValue()==2)
         {
