@@ -62,10 +62,12 @@ public class GroupArtifact extends Artifact
     }
 
     public override function canStartLink(link:ConnectionObject) : Boolean {
+        ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError46"));
         return false;
     }
 
     public override function canEndLink(link:ConnectionObject) : Boolean {
+        ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError46"));
         return false;
     }
 }
