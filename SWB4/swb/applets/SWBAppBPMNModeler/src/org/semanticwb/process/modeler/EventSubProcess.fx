@@ -15,4 +15,24 @@ public class EventSubProcess extends SubProcess {
         type = TYPE_EVENT;
         return super.create();
     }
+
+    override public function canStartLink(link: ConnectionObject) {
+        var ret = super.canStartLink(link);
+
+        if (link instanceof SequenceFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError47"));
+        }
+        return ret;
+    }
+
+    override public function canEndLink(link: ConnectionObject) {
+        var ret = super.canStartLink(link);
+
+        if (link instanceof SequenceFlow) {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError47"));
+        }
+        return ret;
+    }
 }
