@@ -122,6 +122,7 @@ public class SubProcess extends Activity
                 y: bind y - h / 2 + 3
                 width: w - 6
                 height: h - 6
+                stroke: bind shape.stroke
                 styleClass: "task"
             }
         }
