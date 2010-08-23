@@ -59,8 +59,7 @@ public class StartEvent extends CatchEvent
             if (modeler.containerElement instanceof EventSubProcess) {
                 ret = false;
                 ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError41"));
-            }
-            if (modeler.containerElement instanceof AdhocSubProcess) {
+            } else if (modeler.containerElement instanceof AdhocSubProcess) {
                 ret = false;
                 ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
             }
