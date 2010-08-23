@@ -50,7 +50,6 @@ public class ErrorStartEvent extends StartEvent
             ret = false;
             ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError51"));
         }
-
         return ret;
     }
 }
