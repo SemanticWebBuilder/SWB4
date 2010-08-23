@@ -152,3 +152,4 @@
 "msgError48" = "Un Sub-Proceso AdHoc no debe tener Eventos de Inicio"
 "msgError49" = "Un Sub-Proceso AdHoc no debe tener Eventos Finales"
 "msgError50" = "Un Sub-Proceso o una Transacción debe comenzar con un Evento de Inicio Normal"
+"msgError51" = "Este evento no puede usarse en un Proceso de nivel superior"
