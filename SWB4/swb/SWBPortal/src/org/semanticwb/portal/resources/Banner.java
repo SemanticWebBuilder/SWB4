@@ -133,8 +133,11 @@ public class Banner extends GenericAdmResource {
 //                        out.print(" href=\"#\"");
 //                    if( action!=null )
 //                        out.print(" onclick=\""+action+"\"");
-                    out.print(" href=\""+url+"\"");
-                    out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+                    if( url!=null ) {
+                        out.print(" href=\""+url+"\"");
+                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+                    }else
+                        out.print(" href=\"#\"");
 
                     String target = base.getAttribute("target", "0").trim();
                     if (target.equals("1")) out.println(" target=\"_newbnr\"");
