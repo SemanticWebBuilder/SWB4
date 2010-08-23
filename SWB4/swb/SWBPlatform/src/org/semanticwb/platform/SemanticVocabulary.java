@@ -226,7 +226,10 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
     
     /** The Constant SWB_PROP_CLASSGROUPID. */
     public static final String SWB_PROP_CLASSGROUPID = URI + "classGroupId";
-    
+
+    /** The Constant SWB_PROP_DISABLECACHE. */
+    public static final String SWB_PROP_DISABLECACHE = URI + "disableCache";
+
     /** The Constant SWB_PROP_PREFIX. */
     public static final String SWB_PROP_PREFIX = URI + "prefix";
     
