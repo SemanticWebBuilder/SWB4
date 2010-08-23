@@ -71,6 +71,19 @@ public class RecTopic implements WBDBRecord
     public RecTopic(org.semanticwb.model.WebPage webpage)
     {
         wp = webpage;
+        this.id = wp.getId();
+        this.idtm = wp.getWebSiteId();
+        this.idadm = "_";
+        this.active = wp.isActive()?1:0;
+        this.xml = null;
+        this.xmlconf = null;
+        this.created = null;
+        this.system = 0;
+        this.lastupdate = null;
+        this.deleted = wp.isDeleted()?1:0;
+        this.views = wp.getViews();
+        this.indexable = wp.isIndexable()?1:0;
+        this.hidden = wp.isHidden()?1:0;
     }
 
     public org.semanticwb.model.WebPage getNative()

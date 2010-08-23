@@ -69,8 +69,15 @@ public class Topic
 
     public Topic(org.semanticwb.model.WebPage webpage)
     {
+        m_id = webpage.getId();
         wp = webpage;
         dbdata = new RecTopic(webpage);
+        m_instanceof = new ArrayList();
+        m_subjectidentity = null;
+        m_basenames = new ArrayList();
+        m_occurs = new ArrayList();
+        //m_child = new ArrayList();
+        m_associations = new ArrayList();
     }
 
     public org.semanticwb.model.WebPage getNative()
@@ -496,6 +503,7 @@ public class Topic
      */
     public Set getSortChildSet(boolean active, Topic scope)
     {
+        //System.out.println("getSortChildSet:"+this);
         TreeSet set;
         if(scope==null)
         {
@@ -509,11 +517,13 @@ public class Topic
         while (it.hasNext())
         {
             Topic tp = (Topic) it.next();
+            //System.out.println("child:"+tp);
             if (tp.getDbdata().getDeleted() == 1) continue;
             if (active && tp.getDbdata().getActive() == 0) continue;
             if (active && tp.getDbdata().getHidden() == 1) continue;
             if (active && !tp.checkSchedule(true)) continue;
             set.add(tp);
+            //System.out.println("add:"+tp);
         }
         return set;
     }    
@@ -552,11 +562,14 @@ public class Topic
 */
     public Iterator getTypes()
     {
-        ArrayList arr = new ArrayList(this.getInstanceOf().size());
-        Iterator it = getInstanceOf().iterator();
+        ArrayList arr = new ArrayList();
+        Topic type=getType();
+        if(type!=null)arr.add(type);
+        Iterator<WebPage> it = getNative().listVirtualParents();
         while (it.hasNext())
         {
-            arr.add(((InstanceOf) it.next()).getTopicRef());
+            WebPage wp=it.next();
+            arr.add(new Topic(wp));
         }
         return arr.iterator();
     }
@@ -566,12 +579,7 @@ public class Topic
      */
     public Topic getType()
     {
-        Iterator it = getInstanceOf().iterator();
-        if (it.hasNext())
-        {
-            return ((InstanceOf) it.next()).getTopicRef();
-        }
-        return null;
+        return new Topic(getNative().getParent());
     }
 
     /** Regresa padres ordenados alfabeticamente, valida los padres activos y borrados
@@ -841,7 +849,9 @@ public class Topic
      */
     public String getSortName(Topic scope, boolean returnBaseName)
     {
-        return wp.getSortName();
+        String ret=wp.getSortName();
+        if(ret==null && returnBaseName)ret=wp.getDisplayName();
+        return ret;
     }
 
 
