@@ -46,6 +46,9 @@ public class CompensationStartEvent extends StartEvent
                 ret = false;
                 ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError50"));
             }
+        } else {
+            ret = false;
+            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError51"));
         }
         return ret;
     }
