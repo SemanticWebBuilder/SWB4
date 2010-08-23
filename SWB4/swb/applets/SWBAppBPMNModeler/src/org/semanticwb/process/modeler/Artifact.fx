@@ -136,11 +136,6 @@ public class Artifact extends GraphicalElement
     public override function canEndLink(link:ConnectionObject) : Boolean {
         var ret = super.canEndLink(link);
 
-        if (link.ini instanceof Event) {
-            ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError4"));
-        }
-
         if (not(link instanceof AssociationFlow)) {
             ret = false;
             ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError3"));
