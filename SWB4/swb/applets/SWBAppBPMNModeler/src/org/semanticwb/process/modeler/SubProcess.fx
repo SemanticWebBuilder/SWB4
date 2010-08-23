@@ -254,7 +254,7 @@ public class SubProcess extends Activity
         }
 
         if (type.equals(TYPE_EVENT)) {
-            strokeDash = [2, 4];
+            strokeDash = [1, 6];
         }
     }
 }
