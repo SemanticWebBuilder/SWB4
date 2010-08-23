@@ -58,6 +58,7 @@ public class InsertResource extends javax.swing.JDialog {
         locale=Locale.getDefault();
         this.jTextFieldName.setDocument(new FixedNumericDocument(50, false));
     }
+    @Override
     public void setLocale(Locale locale)
     {
         this.locale=locale;
@@ -100,11 +101,11 @@ public class InsertResource extends javax.swing.JDialog {
         try
         {
             WBXMLParser parser=new WBXMLParser();
-            WBTreeNode node=parser.parse(respxml);
-            if(node.getFirstNode()!=null)
+            WBTreeNode nodetree=parser.parse(respxml);
+            if(nodetree.getFirstNode()!=null)
             {               
                 
-                Iterator it=node.getFirstNode().getNodesbyName("resourceType");
+                Iterator it=nodetree.getFirstNode().getNodesbyName("resourceType");
                 while(it.hasNext())
                 {
                     
@@ -189,8 +190,7 @@ public class InsertResource extends javax.swing.JDialog {
             {
                 this.tag=null;
             }
-        }
-        super.setVisible(true);
+        }        
     }
     
     private String getData(String xml)
@@ -342,7 +342,7 @@ public class InsertResource extends javax.swing.JDialog {
 //            return;
 //        }
         boolean selected=false;
-        SelectableNode node=null;
+        SelectableNode selectableNode=null;
         Object root=this.jTreeTipoRecurso.getModel().getRoot();
         int iTypes=this.jTreeTipoRecurso.getModel().getChildCount(root);
         for(int i=0;i<iTypes;i++)
@@ -353,7 +353,7 @@ public class InsertResource extends javax.swing.JDialog {
                 ResourceType resType=(ResourceType)otype;                                
                 if(resType.isSelected())
                 {
-                    node=resType;
+                    selectableNode=resType;
                     selected=true;
                     break;
                 }
@@ -366,7 +366,7 @@ public class InsertResource extends javax.swing.JDialog {
                         SubResourceType oSubType=(SubResourceType)subres;
                         if(oSubType.isSelected())
                         {
-                            node=oSubType;
+                            selectableNode=oSubType;
                             selected=true;
                             continue;
                         }
@@ -374,7 +374,7 @@ public class InsertResource extends javax.swing.JDialog {
                 }                                
             }
         }
-        if(!selected || node==null)
+        if(!selected || selectableNode==null)
         {            
             this.jTreeTipoRecurso.grabFocus();
             JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("indicar_tipo_recurso"),java.util.ResourceBundle.getBundle("applets/htmleditor/InsertResource",locale).getString("title"),JOptionPane.ERROR_MESSAGE);            
@@ -392,9 +392,9 @@ public class InsertResource extends javax.swing.JDialog {
             nt="NAME=\""+ this.jTextFieldName.getText().trim() +"\" ";
         }
 
-        if(node instanceof ResourceType)
+        if(selectableNode instanceof ResourceType)
         {
-            ResourceType res=(ResourceType)node;
+            ResourceType res=(ResourceType)selectableNode;
             if(innerText==null || innerText.length()==0)
             {
                 this.tag="<RESOURCE "+nt+"TYPE=\""+ res.getID() +"\"/>";
@@ -406,7 +406,7 @@ public class InsertResource extends javax.swing.JDialog {
         }
         else
         {
-            SubResourceType subres=(SubResourceType)node;
+            SubResourceType subres=(SubResourceType)selectableNode;
             ResourceType res=(ResourceType)subres.getParent();
             if(innerText==null || innerText.length()==0)
             {
