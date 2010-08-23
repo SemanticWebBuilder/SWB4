@@ -40,4 +40,15 @@ public class EndEvent extends ThrowEvent
         }
         return ret;
     }
+
+    override public function canAddToDiagram(): Boolean {
+        var ret = super.canAddToDiagram();
+        if (modeler.containerElement != null) {
+            if (modeler.containerElement instanceof AdhocSubProcess) {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError49"));
+            }
+        }
+        return ret;
+    }
 }
