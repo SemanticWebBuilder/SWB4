@@ -149,3 +149,5 @@
 "msgError45" = "Pool cannot be added to a Sub-Process"
 "msgError46" = "Group cannot be linked using Connection Object"
 "msgError47" = "Event Sub-Process cannot be linked using Sequence Flow"
+"msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
+"msgError49" = "End Event cannot be used in Ad-Hoc Sub-Process"
