@@ -145,9 +145,11 @@
 "msgError41" = "Event Sub-Process cannot start with a Normal Start Event"
 "msgError42" = "Event Sub-Process cannot start with a Timer Start Event"
 "msgError43" = "Event Sub-Process cannot start with a Parallel Start Event"
-"msgError44" = "Event Sub-Process cannot have more than one Start Event"
+"msgError44" = "Sub-Process cannot have more than one Start Event"
 "msgError45" = "Pool cannot be added to a Sub-Process"
 "msgError46" = "Group cannot be linked using Connection Object"
 "msgError47" = "Event Sub-Process cannot be linked using Sequence Flow"
 "msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
 "msgError49" = "End Event cannot be used in Ad-Hoc Sub-Process"
+"msgError50" = "Sub-Process and Transaction must start with Normal Start Event"
+
