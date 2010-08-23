@@ -126,6 +126,10 @@ public class ConnectionObject  extends CustomNode
     
     function setType(type: String): Void {
         if (type.equals(ARROW_TYPE_SEQUENCE) or type.equals(ARROW_TYPE_ASSOCIATION)) {
+            var closePath = null;
+            if (type.equals(ARROW_TYPE_SEQUENCE)) {
+                closePath = ClosePath{};
+            }
             arrow = Path {
                 elements: [
                     MoveTo{
@@ -140,11 +144,11 @@ public class ConnectionObject  extends CustomNode
                         x:bind pend.x+8.0*Math.cos(getArrow(45.0))
                         y:bind pend.y-8.0*Math.sin(getArrow(45.0))
                     },
-                    ClosePath{}
+                    closePath
                 ]
                 strokeWidth: bind path.strokeWidth
                 stroke: bind path.stroke
-                fill: bind path.stroke
+                fill: bind if (closePath == null) null else path.stroke
             };
         } else if (type.equals(ARROW_TYPE_MESSAGE)) {
             arrow = Path {
