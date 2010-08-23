@@ -236,14 +236,4 @@ public class Event extends FlowNode
              message.visible=false;
         }
     }
-
-    public override function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = super.canEndLink(link);
-
-        if (link instanceof AssociationFlow and link.ini instanceof Artifact) {
-            ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError11"));
-        }
-        return ret;
-    }
 }
