@@ -102,8 +102,8 @@ public class EditFilter extends javax.swing.JApplet {
         loadElements();
         loadDirectories();
         
-        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTreeFilter</cmd></req>";
-        String resp=this.getData(xml);                                        
+        String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>initTreeFilter</cmd><id>"+this.id +"</id><tm>"+topicmap+"</tm></req>";
+        String resp=this.getData(xml);        
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode nodexml=parser.parse(resp);
         if(nodexml.getFirstNode()!=null)
@@ -622,7 +622,7 @@ public class EditFilter extends javax.swing.JApplet {
             {
                WBTreeNode enode=(WBTreeNode)it.next();
                String reload=enode.getAttribute("reload");                        
-               if(reload.startsWith("getTopic"))
+               if(reload!=null && reload.startsWith("getTopic"))
                {
                    String stopicmap=enode.getAttribute("topicmap");
                    Object objroot=this.jTreeElements.getModel().getRoot();                           
@@ -664,7 +664,7 @@ public class EditFilter extends javax.swing.JApplet {
         if(id!=null)
         {
             String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>getFilter</cmd><id>"+ this.id +"</id></req>";
-            String resp=this.getData(xml);                
+            String resp=this.getData(xml);            
             WBXMLParser parser=new WBXMLParser();
             WBTreeNode nodexml=parser.parse(resp);
             WBTreeNode eresp=nodexml.getFirstNode();
@@ -692,7 +692,7 @@ public class EditFilter extends javax.swing.JApplet {
                         {
                            WBTreeNode enode=(WBTreeNode)it.next();
                            String reload=enode.getAttribute("reload");                        
-                           if(reload.startsWith("getTopic"))
+                           if(reload!=null && reload.startsWith("getTopic"))
                            {
                                String stopicmap=enode.getAttribute("topicmap");
                                Object objroot=this.jTree.getModel().getRoot();                           
@@ -954,18 +954,19 @@ public class EditFilter extends javax.swing.JApplet {
             
             WBTreeNode evt=ochild.getNodebyName("events");
             if(evt!=null)
-            {
+            {                
                 WBTreeNode willexpand=evt.getNodebyName("willExpand");
                 if(willexpand!=null)
-                {
+                {             
+                    topic.add(new DefaultMutableTreeNode());
                     topic.setWillExpand(true);
                 }                
             }
-            fillTreeTopic(ochild,topicmap,topic);            
+            fillTreeTopic(ochild,topicmap,topic);
         }
     }
     void fillTreeTopic(WBTreeNode node,String topicmap,TopicMap tm)
-    {
+    {        
         Iterator nodes=node.getNodesbyName("node");
         while(nodes.hasNext())
         {
@@ -991,11 +992,11 @@ public class EditFilter extends javax.swing.JApplet {
                     e.printStackTrace();
                 }
             }
+            
             topic.setEditable(editable);
             tm.add(topic);
             this.findTopic(this.jTree,topic);
-            /*this.findTopic(this.jTreeElements,topic);
-            this.findTopic(this.jTreeMenus,topic);*/
+            
             if(topic.getParent()!=null)
             {
                 if(topic.getParent() instanceof Topic)
@@ -1034,16 +1035,20 @@ public class EditFilter extends javax.swing.JApplet {
                    topic.setChecked(true);
                }               
             }
+            
             WBTreeNode evt=ochild.getNodebyName("events");
             if(evt!=null)
             {
+                
                 WBTreeNode willexpand=evt.getNodebyName("willExpand");
                 if(willexpand!=null)
                 {
+                    
                     topic.setWillExpand(true);
+                    topic.add(new DefaultMutableTreeNode());
                 }                
             }
-            fillTreeTopic(ochild,topicmap,topic);            
+            fillTreeTopic(ochild,topicmap,topic);
         }
     }
     public String getData(String xml)
@@ -1066,7 +1071,7 @@ public class EditFilter extends javax.swing.JApplet {
                 ret.append(inputLine);
                 ret.append("\n");
             }
-            in.close();
+            in.close();            
         }catch(Exception e){e.printStackTrace();}
         return ret.toString();
     }
@@ -1235,7 +1240,7 @@ public class EditFilter extends javax.swing.JApplet {
     public void loadTopic(Topic topic)
     {
         String xml="<?xml version=\"1.0\" encoding=\"UTF-8\"?><req><cmd>"+ topic.getRealoadPath() +"</cmd></req>";
-        String resp=this.getData(xml);                  
+        String resp=this.getData(xml);        
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode exml=parser.parse(resp);
         if(exml.getFirstNode()!=null)
@@ -1787,9 +1792,9 @@ public class EditFilter extends javax.swing.JApplet {
                        WBTreeNode etp=efilter.addNode();
                        etp.setName("node");
                        etp.addAttribute("id",topic.getID());
-                       etp.addAttribute("icon",topic.getIconName());
+                       //etp.addAttribute("icon",topic.getIconName());
                        etp.addAttribute("topicmap",topic.getTopicMapID());
-                       etp.addAttribute("reload",topic.getRealoadPath());     
+                       etp.addAttribute("reload",topic.getRealoadPath());
                        String path=getPath(topic);
                        etp.addAttribute("path",path);     
                        reloads.add(topic.getRealoadPath());
@@ -1961,7 +1966,7 @@ public class EditFilter extends javax.swing.JApplet {
     private void jTreeTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_jTreeTreeWillExpand
         if(evt.getPath().getLastPathComponent() instanceof Topic)
         {
-            Topic topic=(Topic)evt.getPath().getLastPathComponent();
+            Topic topic=(Topic)evt.getPath().getLastPathComponent();            
             if(topic.getWillExpand())
             {
                 topic.removeAllChildren();  
