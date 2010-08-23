@@ -16,7 +16,7 @@ public class AssociationFlow extends ConnectionObject
 {
     public override function create(): Node
     {
-        strokeDash=[2,5];
+        strokeDash=[1,5];
         cubicCurve=true;
         var ret=super.create();
         return ret;
