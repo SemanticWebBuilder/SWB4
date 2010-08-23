@@ -593,6 +593,11 @@ private SWBResourceCachedMgr cache;
                             Class wbreswrapper = Class.forName("infotec.wb2.lib.WBResourceWrapperNew");
                             Constructor cons = wbreswrapper.getConstructor(new Class[]{wbresource});
                             aux = cons.newInstance(new Object[]{obj});
+
+                            wbresource = Class.forName("com.infotec.wb.lib.WBResource");
+                            wbreswrapper = Class.forName("org.semanticwb.api.WBResourceToSWBResourceWrapper");
+                            cons = wbreswrapper.getConstructor(new Class[]{wbresource});
+                            aux = cons.newInstance(new Object[]{aux});
                         }
                     }
                 } catch (Exception e)
