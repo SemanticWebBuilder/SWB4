@@ -815,6 +815,7 @@ Action:caret-previous-word
             ins.setGateway(gateway);
             ins.setLocale(locale);
             ins.setTopicMap(tmValue);
+            ins.setLocationRelativeTo(null);
             ins.setJSession(jsess);            
             ins.init();
             ins.setVisible(true);
