@@ -195,7 +195,7 @@ public class InsertResource extends javax.swing.JDialog {
     
     private String getData(String xml)
     {
-        StringBuffer ret=new StringBuffer();
+        StringBuilder ret=new StringBuilder();
         try
         {
             //URL gurl=new URL(this.url,cgi);
