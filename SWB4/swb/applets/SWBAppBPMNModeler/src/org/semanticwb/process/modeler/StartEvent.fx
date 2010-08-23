@@ -7,6 +7,7 @@
 package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
+import org.semanticwb.process.modeler.AdhocSubProcess;
 
 /**
  * @author javier.solis
@@ -54,9 +55,15 @@ public class StartEvent extends CatchEvent
 
     override public function canAddToDiagram(): Boolean {
         var ret = super.canAddToDiagram();
-        if (modeler.containerElement != null and modeler.containerElement instanceof EventSubProcess) {
-            ret = false;
-            ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError41"));
+        if (modeler.containerElement != null) {
+            if (modeler.containerElement instanceof EventSubProcess) {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError41"));
+            }
+            if (modeler.containerElement instanceof AdhocSubProcess) {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
+            }
         }
         return ret;
     }
