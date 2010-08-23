@@ -703,41 +703,59 @@ Action:caret-previous-word
     
     public void insertImage()
     {
-        WBDocumentFiles files=new WBDocumentFiles(new javax.swing.JFrame(), true,locale);
-        files.setGateway(gateway);
-        files.setUpload(upurl);
-        files.setTopicMap(tmValue);
-        files.setId(idValue);
-        files.setVersion(verValue);
-        files.setType(typeValue);
-        files.init();
-        files.setVisible(true);
-        
-        ImagePreview img=files.getSelectedImage();
-        if(img!=null)
+        WBDocumentFiles files=null;
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        try
         {
-            String simg="<img src=\""+img.getFilePath()+"\" width=\""+img.getImageWidth()+"\" height=\""+img.getImageHeight()+"\">";
-            if(oldTab.equals("text"))
-            {
-                try
-                {
-                    textEditor.getDocument().insertString(textEditor.getCaret().getDot(), simg,null);
-                }catch(Exception e)
-                {e.printStackTrace();}
-            }else
-            {
-                System.out.println("simg:"+simg);
-                try
-                {
-                    HTMLDocument doc=(HTMLDocument)htmlEditor.getDocument();
-                    doc.insertBeforeStart(doc.getCharacterElement(htmlEditor.getSelectionEnd()),simg);
-                }catch(Exception e)
-                {e.printStackTrace();}
-            }
+            files=new WBDocumentFiles(new javax.swing.JFrame(), true,locale);
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale);
+            files.setTitle(bundle.getString("image"));
+            files.setGateway(gateway);
+            files.setUpload(upurl);
+            files.setTopicMap(tmValue);
+            files.setId(idValue);
+            files.setVersion(verValue);
+            files.setType(typeValue);
+            files.init();
+            files.setLocationRelativeTo(null);
+            files.setVisible(true);
         }
-        
-        files.setVisible(false);
-        files.dispose();
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+        if(files!=null)
+        {
+            ImagePreview img=files.getSelectedImage();
+            if(img!=null)
+            {
+                String simg="<img src=\""+img.getFilePath()+"\" width=\""+img.getImageWidth()+"\" height=\""+img.getImageHeight()+"\">";
+                if(oldTab.equals("text"))
+                {
+                    try
+                    {
+                        textEditor.getDocument().insertString(textEditor.getCaret().getDot(), simg,null);
+                    }catch(Exception e)
+                    {e.printStackTrace();}
+                }else
+                {
+                    System.out.println("simg:"+simg);
+                    try
+                    {
+                        HTMLDocument doc=(HTMLDocument)htmlEditor.getDocument();
+                        doc.insertBeforeStart(doc.getCharacterElement(htmlEditor.getSelectionEnd()),simg);
+                    }catch(Exception e)
+                    {e.printStackTrace();}
+                }
+            }
+
+            files.setVisible(false);
+            files.dispose();
+        }
     }
     
     public void insertHTML(String html)
@@ -786,21 +804,32 @@ Action:caret-previous-word
     
     public void insertResource()
     {
-        Frame parent = new Frame();
-        InsertResource ins=new InsertResource(parent,true);
-        ins.setGateway(gateway);
-        ins.setLocale(locale);
-        ins.setTopicMap(tmValue);
-        ins.setJSession(jsess);
-        //ins.setTag(getSelectedText());
-        //ins.setEditor(this);
-        //ins.show();
-        ins.init();
-        ins.setVisible(true);
-        if(ins.getResultValue()==2)
+        this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        InsertResource ins=null;
+        try
         {
-            insertCustomHTML(ins.getTag());
-            //System.out.println("OK");
+            Frame parent = new Frame();
+            ins=new InsertResource(parent,true);
+            java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("applets/htmleditor/TemplateEditor",locale);
+            ins.setTitle(bundle.getString("resource")); // NOI18N)
+            ins.setGateway(gateway);
+            ins.setLocale(locale);
+            ins.setTopicMap(tmValue);
+            ins.setJSession(jsess);            
+            ins.init();
+            ins.setVisible(true);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+        if(ins!=null && ins.getResultValue()==2)
+        {
+            insertCustomHTML(ins.getTag());            
         }
     }
     
