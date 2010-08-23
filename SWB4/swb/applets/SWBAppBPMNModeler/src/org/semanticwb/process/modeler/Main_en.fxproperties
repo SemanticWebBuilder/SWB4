@@ -152,4 +152,4 @@
 "msgError48" = "Start Event cannot be used in Ad-Hoc Sub-Process"
 "msgError49" = "End Event cannot be used in Ad-Hoc Sub-Process"
 "msgError50" = "Sub-Process and Transaction must start with Normal Start Event"
-
+"msgError51" = "This event cannot be used in a Top-Level Process"
