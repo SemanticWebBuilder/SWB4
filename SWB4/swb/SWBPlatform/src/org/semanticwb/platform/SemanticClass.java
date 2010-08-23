@@ -91,6 +91,9 @@ public class SemanticClass
     
     /** The m_autogen id. */
     private Boolean m_autogenId=null;
+
+    /** The m_autogen id. */
+    private Boolean m_disableCache=null;
     
     /** The m_cls. */
     private Class m_cls=null;
@@ -381,6 +384,30 @@ public class SemanticClass
         //log.trace("isAutogenId:"+m_autogenId);
         return m_autogenId;
     }
+
+    /**
+     * Checks if disble cache.
+     *
+     * @return true, if is disable cache
+     */
+    public boolean isDisableCache()
+    {
+        if(m_disableCache==null)
+        {
+            Property prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(SemanticVocabulary.SWB_PROP_DISABLECACHE).getRDFProperty();
+            //System.out.println("Class:"+m_class+" ->"+className);
+            try
+            {
+                m_disableCache=m_class.getRequiredProperty(prop).getBoolean();
+            }catch(PropertyNotFoundException noe)
+            {
+                m_disableCache=false;
+            }
+        }
+        //log.trace("isDisableCache:"+m_disableCache);
+        return m_disableCache;
+    }
+
 
 //    /**
 //     * si el objeto relacionado soporta drag and drop
