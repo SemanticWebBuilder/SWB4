@@ -8,6 +8,7 @@ package org.semanticwb.process.modeler;
 
 import javafx.scene.Node;
 import org.semanticwb.process.modeler.ModelerUtils;
+import org.semanticwb.process.modeler.AdhocSubProcess;
 
 /**
  * @author javier.solis
@@ -39,19 +40,30 @@ public class MessageStartEvent extends StartEvent
     override public function canAddToDiagram(): Boolean {
         var ret = true;
         var c = 0;
-        if (modeler.containerElement instanceof EventSubProcess) {
+
+        if (modeler.containerElement != null) {
             for (child in modeler.containerElement.containerChilds) {
                 if (child instanceof StartEvent) {
                     c++;
                 }
             }
 
-            if (c != 0) {
+            if (modeler.containerElement instanceof AdhocSubProcess) {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError48"));
+            } else if (modeler.containerElement instanceof EventSubProcess) {
+                if (c != 0) {
+                    ret = false;
+                    ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+                }
+            } else if (c != 0) {
                 ret = false;
                 ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError44"));
+            } else {
+                ret = false;
+                ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError50"));
             }
         }
-
         return ret;
     }
 }
