@@ -21,7 +21,7 @@ public class CompensationStartEvent extends StartEvent
     }
 
     override public function canAddToDiagram(): Boolean {
-        var ret = true;
+        var ret = super.canAddToDiagram();
         var c = 0;
         if (modeler.containerElement instanceof EventSubProcess) {
             for (child in modeler.containerElement.containerChilds) {
