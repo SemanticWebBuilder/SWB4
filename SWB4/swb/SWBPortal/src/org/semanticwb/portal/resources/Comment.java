@@ -1150,8 +1150,7 @@ public class Comment extends GenericResource {
      */
     private String getForm(HttpServletRequest request, SWBParamRequest paramsRequest) {
 
-        String name = getClass().getName().substring(
-                      getClass().getName().lastIndexOf(".") + 1);
+        String name = getClass().getName().substring(getClass().getName().lastIndexOf(".") + 1);
 //        String webWorkPath = "/work";
 //        String path = SWBPlatform.getContextPath() + "/swbadmin/xsl/" + name + "/";
         WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
@@ -1173,32 +1172,20 @@ public class Comment extends GenericResource {
             ret.append(" (xsl, xslt):</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"template\" onChange=\"isFileType(this, 'xsl|xslt');\" />");
-            if (path.indexOf(webWorkPath) != -1) {
-                ret.append("<p>"
-                        + paramsRequest.getLocaleString("msgCurrentTemplate")
-                        + " <a href=\"" + path
-                        + base.getAttribute("template").trim() + "\">"
-                        + base.getAttribute("template").trim() + "</a></p>");
+            //if (path.indexOf(webWorkPath) != -1) {
+            if( !"".equals(base.getAttribute("template", "").trim()) ) {
+                ret.append("<p>"+paramsRequest.getLocaleString("msgCurrentTemplate")+" <a href=\"" + path + base.getAttribute("template").trim() + "\">" + base.getAttribute("template").trim() + "</a></p>");
             } else {
-                ret.append("<p>" + paramsRequest.getLocaleString("msgByDefault")
-                        + " <a href=\"" + path + name + ".xsl\">" + name
-                        + ".xsl</a></p>");
+                ret.append("<p>" + paramsRequest.getLocaleString("msgByDefault")+" <a href=\"" + path + name + ".xsl\">" + name + ".xsl</a></p>");
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgImage")
-                    + " (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg):</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
-                ret.append("<p>"
-                        + admResUtils.displayImage(base,
-                        base.getAttribute("img").trim(), "img")
-                        + "<input type=\"checkbox\" name=\"noimg\" value=\"1\"/>"
-                        + paramsRequest.getLocaleString("msgCutImage") + " <i>"
-                        + base.getAttribute("img").trim() + "</i></p>");
+                ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img")+"<input type=\"checkbox\" name=\"noimg\" value=\"1\"/>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
             }
             ret.append("</td> \n");
             ret.append("</tr> \n");
@@ -1208,51 +1195,39 @@ public class Comment extends GenericResource {
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"alt\" ");
             if (!"".equals(base.getAttribute("alt", "").trim())) {
-                ret.append(" value=\""
-                        + base.getAttribute("alt").trim().replaceAll("\"","&#34;")
-                        + "\"");
+                ret.append(" value=\""+base.getAttribute("alt").trim().replaceAll("\"","&#34;")+"\"");
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgButton") + "</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgButton") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"btntexto\" ");
             if (!"".equals(base.getAttribute("btntexto", "").trim())) {
-                ret.append(" value=\""
-                        + base.getAttribute("btntexto").trim().replaceAll("\"",
-                        "&#34;") + "\"");
+                ret.append(" value=\""+base.getAttribute("btntexto").trim().replaceAll("\"", "&#34;") + "\"");
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgLink") + "</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgLink") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"lnktexto\" ");
             if (!"".equals(base.getAttribute("lnktexto", "").trim())) {
-                ret.append(" value=\""
-                        + base.getAttribute("lnktexto").trim().replaceAll("\"",
-                        "&#34;") + "\"");
+                ret.append(" value=\"" + base.getAttribute("lnktexto").trim().replaceAll("\"", "&#34;") + "\"");
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgStyle") + "</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgStyle") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"text\" name=\"blnstyle\" ");
             if (!"".equals(base.getAttribute("blnstyle", "").trim())) {
-                ret.append(" value=\""
-                        + base.getAttribute("blnstyle").trim().replaceAll("\"",
-                        "&#34;") + "\"");
+                ret.append(" value=\""+base.getAttribute("blnstyle").trim().replaceAll("\"", "&#34;") + "\"");
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgFirstName") + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgFirstName") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"firstname\" value=\"1\"");
             if ("1".equals(base.getAttribute("firstname", "0"))) {
@@ -1261,8 +1236,7 @@ public class Comment extends GenericResource {
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgLastName") + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgLastName") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"lastname\" value=\"1\"");
             if ("1".equals(base.getAttribute("lastname", "0"))) {
@@ -1271,8 +1245,7 @@ public class Comment extends GenericResource {
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgMiddleName") + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgMiddleName") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"checkbox\" name=\"middlename\" value=\"1\"");
             if ("1".equals(base.getAttribute("middlename", "0"))) {
@@ -1281,14 +1254,11 @@ public class Comment extends GenericResource {
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgSubmitImage")
-                    + " (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgSubmitImage")+" (bmp, gif, jpg, jpeg):</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"imgenviar\" onClick=\"this.form.btnenviar.value='';\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
             if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
-                ret.append("<p>" + admResUtils.displayImage(base,
-                        base.getAttribute("imgenviar").trim(), "imgenviar")
+                ret.append("<p>" + admResUtils.displayImage(base, base.getAttribute("imgenviar").trim(), "imgenviar")
                         + "<input type=\"checkbox\" name=\"noimgenviar\" value=\"1\"/>"
                         + paramsRequest.getLocaleString("msgCutImage") + " <i>"
                         + base.getAttribute("imgenviar").trim() + "</i></p>");
@@ -1391,58 +1361,46 @@ public class Comment extends GenericResource {
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
-
-
-
             ret.append("</table> \n");
             ret.append("</fieldset><br />");
+
+//            ret.append("<fieldset>");
+//            ret.append("<legend>"+paramsRequest.getLocaleString("msgStep2")+"</legend>");
+//            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\">");
+//            ret.append("<tr><td width=\"40%\"></td><td width=\"60%\"></td>");
+//            ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));
+//            ret.append("</table> \n");
+//            ret.append("</fieldset><br />");
+
             ret.append("<fieldset>");
             ret.append("<legend>"+paramsRequest.getLocaleString("msgStep2")+"</legend>");
-            ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\">");
-
-            ret.append("<tr><td width=\"40%\"></td><td width=\"60%\"></td>");
-            ret.append(admResUtils.loadWindowConfiguration(base, paramsRequest));
-
-            ret.append("</table> \n");
-            ret.append("</fieldset><br />");
-            ret.append("<fieldset>");
-            ret.append("<legend>"+paramsRequest.getLocaleString("msgStep3")+"</legend>");
             ret.append("<table width=\"100%\"  border=\"0\" cellpadding=\"0\" cellspacing=\"7\">");
             ret.append("<tr><td width=\"40%\"></td><td width=\"60%\"></td>");
 
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgSubjectTag") + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgSubjectTag") + "</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"text\" size=\"50\" name=\"subject\" ");
             if (!"".equals(base.getAttribute("subject", "").trim())) {
-                ret.append(" value=\""
-                        + base.getAttribute("subject").trim().replaceAll("\"",
-                        "&#34;") + "\"");
+                ret.append(" value=\"" + base.getAttribute("subject").trim().replaceAll("\"","&#34;") + "\"");
             }
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgMessageHeader")
-                    + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgMessageHeader") + "</td> \n");
             ret.append("<td>");
             ret.append("<textarea name=headermsg>");
             if (!"".equals(base.getAttribute("headermsg", "").trim())) {
-                ret.append(base.getAttribute("headermsg").trim().replaceAll("\"",
-                        "&#34;"));
+                ret.append(base.getAttribute("headermsg").trim().replaceAll("\"","&#34;"));
             }
             ret.append("</textarea></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgMessageFooter")
-                    + "</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgMessageFooter") + "</td> \n");
             ret.append("<td>");
             ret.append("<textarea name=footermsg>");
             if (!"".equals(base.getAttribute("footermsg", "").trim())) {
-                ret.append(base.getAttribute("footermsg").trim().replaceAll("\"",
-                        "&#34;"));
+                ret.append(base.getAttribute("footermsg").trim().replaceAll("\"", "&#34;"));
             }
             ret.append("</textarea></td> \n");
             ret.append("</tr> \n");
@@ -1451,15 +1409,10 @@ public class Comment extends GenericResource {
             ret.append("<table> \n");
             ret.append("<tr> \n");
             ret.append("<td></td> \n");
-            ret.append("<td>* "
-                    + paramsRequest.getLocaleString("msgTypeComment")
-                    + "&nbsp;&nbsp;</td> \n");
-            ret.append("<td>" + paramsRequest.getLocaleString("msgArea")
-                    + "&nbsp;&nbsp;</td> \n");
-            ret.append("<td>" + paramsRequest.getLocaleString("msgResponsable")
-                    + "&nbsp;&nbsp;</td> \n");
-            ret.append("<td>" + paramsRequest.getLocaleString("msgEmail")
-                    + "</td> \n");
+            ret.append("<td>* "+paramsRequest.getLocaleString("msgTypeComment")+"&nbsp;&nbsp;</td> \n");
+            ret.append("<td>" + paramsRequest.getLocaleString("msgArea") + "&nbsp;&nbsp;</td> \n");
+            ret.append("<td>" + paramsRequest.getLocaleString("msgResponsable") + "&nbsp;&nbsp;</td> \n");
+            ret.append("<td>" + paramsRequest.getLocaleString("msgEmail") + "</td> \n");
             ret.append("</tr> \n");
 
             String comentarios = "";
@@ -1538,6 +1491,7 @@ public class Comment extends GenericResource {
             ret.append("</tr> \n");
             ret.append("</table> \n");
             ret.append("</fieldset>\n");
+            
             ret.append("<fieldset>\n");
             ret.append("<table> \n");
             ret.append("<tr> \n");
