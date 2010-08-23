@@ -28,7 +28,6 @@
  */
 package org.semanticwb.portal.admin.resources;
 
-import com.sun.org.apache.xpath.internal.FoundIndex;
 import java.io.*;
 import javax.servlet.http.*;
 import javax.servlet.*;
@@ -40,11 +39,9 @@ import java.util.ArrayList;
 
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
-import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 
 import org.semanticwb.model.AdminFilter;
-import org.semanticwb.model.Filterable;
 import org.semanticwb.model.FilterableClass;
 import org.semanticwb.model.FilterableNode;
 import org.semanticwb.model.GenericObject;
@@ -61,7 +58,6 @@ import org.semanticwb.platform.SemanticClass;
 
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
-import org.semanticwb.portal.SWBAdminFilterMgr;
 import org.semanticwb.portal.admin.resources.wbtree.SWBTreeExt;
 import org.semanticwb.portal.api.SWBResourceURL;
 
@@ -664,21 +660,21 @@ public class SWBAFilters extends SWBATree {
      * @param ele the ele
      */
     public void RevisaNodo(Node ele) {
-        Vector vnodes = new Vector();
+        ArrayList<Node> vnodes = new ArrayList<Node>();
         NodeList nodes = ele.getChildNodes();
         for (int i = 0; i < nodes.getLength(); i++) {
             vnodes.add(nodes.item(i));
         }
         for (int i = 0; i < vnodes.size(); i++) {
-            if (vnodes.elementAt(i) instanceof Element) {
-                Element e = (Element) vnodes.elementAt(i);
+            if (vnodes.get(i) instanceof Element) {
+                Element e = (Element) vnodes.get(i);
                 if (!isNameValid(e) || !isValid(e.getAttribute("reload"))) {
-                    ele.removeChild((Node) vnodes.elementAt(i));
+                    ele.removeChild((Node) vnodes.get(i));
                 } else {
                     RevisaNodo(e);
                 }
             } else {
-                RevisaNodo((Node) vnodes.elementAt(i));
+                RevisaNodo((Node) vnodes.get(i));
             }
         }
     }
