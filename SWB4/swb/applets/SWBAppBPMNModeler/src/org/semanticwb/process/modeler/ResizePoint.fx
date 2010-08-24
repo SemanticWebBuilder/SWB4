@@ -78,7 +78,7 @@ public class ResizePoint extends CustomNode
             centerY:bind attachedNode.y+(iy*attachedNode.h)//-modeler.getYScroll()
             radius:5
             cursor:cursor
-            style:Styles.style_resize
+            styleClass: "resizepoint"
             onMousePressed:function( e: MouseEvent ):Void
             {
                 if(ModelerUtils.clickedNode==null)
@@ -103,18 +103,22 @@ public class ResizePoint extends CustomNode
                 {
                     if(ix!=0)
                     {
-                        attachedNode.w=Math.abs(ox-(e.sceneX));
-                        attachedNode.x=ox+attachedNode.w*ix;
+                        if (Math.abs(ox-(e.sceneX)) > attachedNode.minW) {
+                            attachedNode.w=Math.abs(ox-(e.sceneX));
+                            attachedNode.x=ox+attachedNode.w*ix;
+                        }
                     }
                     if(iy!=0)
                     {
-                        attachedNode.h=Math.abs(oy-(e.sceneY));
-                        if(attachedNode instanceof Lane)
-                        {
-                            //attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;
-                        }else
-                        {
-                            attachedNode.y=oy+attachedNode.h*iy;
+                        if (Math.abs(oy-(e.sceneY)) > attachedNode.minH) {
+                            attachedNode.h=Math.abs(oy-(e.sceneY));
+                            if(attachedNode instanceof Lane)
+                            {
+                                //attachedNode.y=attachedNode.getGraphParent().y-attachedNode.getGraphParent().h/2+attachedNode.boundsInParent.minY+attachedNode.h/2;
+                            }else
+                            {
+                                attachedNode.y=oy+attachedNode.h*iy;
+                            }
                         }
                     }
                 }
