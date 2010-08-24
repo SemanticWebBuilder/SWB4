@@ -68,6 +68,8 @@ public class GraphicalElement extends CustomNode
 
     var mx : Number;                               //temporal movimiento x
     var my : Number;                               //temporal movimiento y
+    public var minW: Number;
+    public var minH: Number;
 
     var px = bind graphParent.x on replace
     {
@@ -101,6 +103,8 @@ public class GraphicalElement extends CustomNode
             width: bind w
             height: bind h
         }
+        minW = w;
+        minH = h;
 
         setCommonMenuOptions();
     }
