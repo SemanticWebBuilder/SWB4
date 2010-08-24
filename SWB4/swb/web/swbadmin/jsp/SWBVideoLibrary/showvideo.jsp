@@ -133,10 +133,10 @@
         }
     
         String viewAll="[Ver todos los videos]";
-        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
+        /*if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
         {
             viewAll="[View all videos]";
-        }
+        }*/
     %>
         
     <p><a href="<%=urlall%>"><%=viewAll%></a></p>
