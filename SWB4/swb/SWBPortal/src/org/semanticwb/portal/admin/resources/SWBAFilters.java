@@ -595,6 +595,7 @@ public class SWBAFilters extends SWBATree {
         }
         return getAllNodes;
     }
+    
     private Set<SemanticObject> getNodesInFilter(String id,UserRepository map)
     {
         Set<SemanticObject> getNodesInFilter=new HashSet<SemanticObject>();
