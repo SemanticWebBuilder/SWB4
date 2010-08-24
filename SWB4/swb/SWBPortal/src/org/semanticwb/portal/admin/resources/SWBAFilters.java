@@ -546,11 +546,10 @@ public class SWBAFilters extends SWBATree {
             NodeList ids=src.getElementsByTagName("id");
             if(ids.getLength()==1)
             {
-
                 String id=((Element)ids.item(0)).getTextContent();                
-                String tm=((Element)src.getElementsByTagName("tm").item(0)).getTextContent();                
+                String tm=((Element)src.getElementsByTagName("tm").item(0)).getTextContent();
                 UserRepository site=UserRepository.ClassMgr.getUserRepository(tm);
-                if(site!=null)
+                if(site!=null && id!=null)
                 {
                     nodesFilter=getNodesInFilter(id,site);
                 }
@@ -600,25 +599,33 @@ public class SWBAFilters extends SWBATree {
     {
         Set<SemanticObject> getNodesInFilter=new HashSet<SemanticObject>();
         AdminFilter admfilter = AdminFilter.ClassMgr.getAdminFilter(id, map);
-        Document exmlfilter = SWBUtils.XML.xmlToDom(admfilter.getXml());
-        NodeList nodes=exmlfilter.getElementsByTagName("sites");        
-        for(int i=0;i<nodes.getLength();i++)
+        if(admfilter!=null && admfilter.getXml()!=null)
         {
-            Element sites=(Element)nodes.item(i);
-            NodeList nodesFilter=sites.getElementsByTagName("node");
-            for(int j=0;j<nodesFilter.getLength();j++)
+            Document exmlfilter = SWBUtils.XML.xmlToDom(admfilter.getXml());
+            if(exmlfilter!=null)
             {
-                Element obj=(Element)nodesFilter.item(j);
-                String idObj=obj.getAttribute("id");                
-                SemanticObject objFilter=SemanticObject.getSemanticObject(idObj);
-                if(objFilter!=null)
+                NodeList nodes=exmlfilter.getElementsByTagName("sites");
+                for(int i=0;i<nodes.getLength();i++)
                 {
-                    getNodesInFilter.add(objFilter);
+                    Element sites=(Element)nodes.item(i);
+                    NodeList nodesFilter=sites.getElementsByTagName("node");
+                    for(int j=0;j<nodesFilter.getLength();j++)
+                    {
+                        Element obj=(Element)nodesFilter.item(j);
+                        String idObj=obj.getAttribute("id");
+                        if(idObj!=null)
+                        {
+                            SemanticObject objFilter=SemanticObject.getSemanticObject(idObj);
+                            if(objFilter!=null)
+                            {
+                                getNodesInFilter.add(objFilter);
+                            }
+                        }
+
+                    }
                 }
-                
             }
         }
-
         return getNodesInFilter;
     }
     /**
