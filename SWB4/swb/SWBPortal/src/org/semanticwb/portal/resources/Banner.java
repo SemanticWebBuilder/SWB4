@@ -125,24 +125,16 @@ public class Banner extends GenericAdmResource {
                     out.println(">");
                     out.println("</embed></object>");
                 }else {
-                    String action = base.getAttribute("axn");
-                    out.print("<a class=\"swb-banner\"");
-//                    if( wburl!=null )
-//                        out.print(" href=\""+wburl+"\"");
-//                    else
-//                        out.print(" href=\"#\"");
-//                    if( action!=null )
-//                        out.print(" onclick=\""+action+"\"");
                     if( url!=null ) {
-                        out.print(" href=\""+url+"\"");
-                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
-                    }else
-                        out.print(" href=\"#\"");
-
-                    String target = base.getAttribute("target", "0").trim();
-                    if (target.equals("1")) out.println(" target=\"_newbnr\"");
-
-                    out.println(" title=\""+base.getAttribute("title","")+"\">");
+                        String action = base.getAttribute("axn");
+                        out.print("<a class=\"swb-banner\"");
+//                        if( url!=null ) {
+                            out.print(" href=\""+url+"\"");
+                            out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+//                        }else
+//                            out.print(" href=\"#\"");
+                        out.println(" title=\""+base.getAttribute("title","")+"\">");
+                    }
                     out.print("<img src=\"");
                     out.print(SWBPortal.getWebWorkPath() + base.getWorkPath() + "/" + img + "\"");
                     out.print(" alt=\""+base.getAttribute("alt", paramRequest.getLocaleString("goto")+" "+base.getAttribute("title",""))+"\"");
@@ -153,7 +145,9 @@ public class Banner extends GenericAdmResource {
                     if( longdesc!=null )
                         out.print(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
                     out.println("/>");
-                    out.print("</a>");
+
+                    if( url!=null )
+                        out.print("</a>");
                 }
 
                 if( longdesc!=null )
