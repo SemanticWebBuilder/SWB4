@@ -75,16 +75,9 @@
     <h2 class="blogTitle">
     <script type="text/javascript">
             <!--
-            document.write('Gobierno Federal Presidencia México Felipe Calderón');
-            -->
-        </script></h2><br/>
-    <p>
-    <script type="text/javascript">
-            <!--
             document.write('<%=title%>');
             -->
-        </script></p>
-
+        </script></h2><br/>
         <%
         if(originaltitle!=null && !originaltitle.equals(""))
         {
