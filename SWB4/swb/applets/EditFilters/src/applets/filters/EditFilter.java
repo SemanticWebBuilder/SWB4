@@ -137,8 +137,14 @@ public class EditFilter extends javax.swing.JApplet {
             Iterator nodes=res.getNodesbyName("node");
             while(nodes.hasNext())
             {
-                WBTreeNode node=(WBTreeNode)nodes.next();                
-                ImageIcon icon=(ImageIcon)this.icons.get(node.getAttribute("icon"));
+                WBTreeNode node=(WBTreeNode)nodes.next();
+
+                ImageIcon icon=null;
+                if(node.getAttribute("icon")!=null && !node.getAttribute("icon").equals(""))
+                {
+                    icon=(ImageIcon)this.icons.get(node.getAttribute("icon"));
+                }
+                //(ImageIcon)this.icons.get(node.getAttribute("icon"));
                 String name=node.getAttribute("name");
                 TopicMap root=new TopicMap(node.getAttribute("icon"),node.getAttribute("id"),name,node.getAttribute("reload"),icon);
                 boolean editable=true;
