@@ -143,34 +143,37 @@ public class Comment extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
         Resource base = getResourceBase();
-        boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
+        String action = response.getAction();
+        if(response.Action_ADD.equals(action)){
+            boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
 
-        String securCodeSent = request.getParameter("cmnt_seccode");
-        String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
-        if( (hasCaptcha && securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) || !hasCaptcha ) {
-            try {
-                processEmails(request, response);
+            String securCodeSent = request.getParameter("cmnt_seccode");
+            String securCodeCreated = (String)request.getSession(true).getAttribute("cs");
+            if( (hasCaptcha && securCodeCreated!=null && securCodeCreated.equalsIgnoreCase(securCodeSent)) || !hasCaptcha ) {
                 try {
-                    feedCommentLog(request, response);
-                }catch (IOException ioe) {
-                    log.error("Error in resource Comment, while trying to log the action. ", ioe);
+                    processEmails(request, response);
+                    try {
+                        feedCommentLog(request, response);
+                    }catch (IOException ioe) {
+                        log.error("Error in resource Comment, while trying to log the action. ", ioe);
+                    }
+                    response.setMode(response.Mode_HELP);
+                }catch(TransformerException te) {
+                    log.error("Error in resource Comment, while trying to send the email. ", te);
+                    response.setRenderParameter(_FAIL, te.getMessage());
+                }catch(SWBResourceException re) {
+                    log.error("Error in resource Comment, while trying to send the email. ", re);
+                    response.setRenderParameter(_FAIL, re.getMessage());
+                }catch(Exception e) {
+                    log.error("Error in resource Comment, while trying to send the email. ", e);
+                    response.setRenderParameter(_FAIL, e.getMessage());
                 }
-                response.setMode(response.Mode_HELP);
-            }catch(TransformerException te) {
-                log.error("Error in resource Comment, while trying to send the email. ", te);
-                response.setRenderParameter(_FAIL, te.getMessage());
-            }catch(SWBResourceException re) {
-                log.error("Error in resource Comment, while trying to send the email. ", re);
-                response.setRenderParameter(_FAIL, re.getMessage());
-            }catch(Exception e) {
-                log.error("Error in resource Comment, while trying to send the email. ", e);
-                response.setRenderParameter(_FAIL, e.getMessage());
-            }
-        }else {
-            Enumeration e = request.getParameterNames();
-            while(e.hasMoreElements()){
-                String key = (String)e.nextElement();
-                response.setRenderParameter(key, request.getParameter(key));
+            }else {
+                Enumeration e = request.getParameterNames();
+                while(e.hasMoreElements()){
+                    String key = (String)e.nextElement();
+                    response.setRenderParameter(key, request.getParameter(key));
+                }
             }
         }
     }
@@ -215,16 +218,12 @@ public class Comment extends GenericResource {
 //                url.setParameter("com_act", "com_step3");
 //                url.setTopic(paramRequest.getWebPage());
 //                /*url.setCallMethod(reqParams.Call_DIRECT);*/
-                SWBResourceURL url = paramRequest.getActionUrl();
+                SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_ADD);
 
                 Element root = dom.createElement("form");
-                root.setAttribute("path",
-                        SWBPlatform.getContextPath() + "/swbadmin/css/");
+                root.setAttribute("path", SWBPlatform.getContextPath() + "/swbadmin/css/");
                 root.setAttribute("accion", url.toString());
-                root.setAttribute("styleClass",
-                        base.getAttribute("styleClass", "").equals("")
-                        ? "<div>"
-                        : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
+                root.setAttribute("styleClass", base.getAttribute("styleClass", "").equals("") ? "<div>" : "<div class=\"" + base.getAttribute("styleClass", "") + "\">");
                 root.setAttribute("styleClassClose", "</div>");
                 dom.appendChild(root);
                 Element emn = null;
@@ -307,8 +306,6 @@ public class Comment extends GenericResource {
                 emn.setAttribute("inname", "tarMsg");
                 root.appendChild(emn);
                 emn = dom.createElement("fsubmit");
-
-                System.out.println("base.getAttribute(\"imgenviar\")="+base.getAttribute("imgenviar"));
                 
                 if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                     emn.setAttribute("img", "1");
@@ -693,7 +690,6 @@ public class Comment extends GenericResource {
             }else {
                 boolean hasCaptcha = Boolean.parseBoolean(base.getAttribute("captcha"));
                 Document dom = getDom(request, response, paramRequest);
-                System.out.println("\n\nxml comment\n"+SWBUtils.XML.domToXml(dom));
                 String html;
                 try {
                     html = SWBUtils.XML.transformDom(tpl, dom);
@@ -707,7 +703,6 @@ public class Comment extends GenericResource {
                     html = te.getMessage();
                     log.error(te.getMessage());
                 }
-                System.out.println("\nhtml=\n"+html);
                 out.println(html);
             }
         }
@@ -717,18 +712,22 @@ public class Comment extends GenericResource {
     
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        if( paramRequest.getCallMethod()==paramRequest.Call_CONTENT ) {
+            response.setContentType("text/html; charset=ISO-8859-1");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setHeader("Pragma", "no-cache");
 
-        PrintWriter out = response.getWriter();
-        out.println("<div class=\"swb-comment\"><p class=\"swb-comment-tnks\">");
-        out.println(paramRequest.getLocaleString("msgSendEmail"));
-        out.println("</p><p>");
-        out.println("<a class=\"swb-comment-othr\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">"+paramRequest.getLocaleString("msgDoViewAnotherMsg")+"</a>");
-        out.println("</p></div>");
-        out.flush();
-        out.close();
+            PrintWriter out = response.getWriter();
+            out.println("<div class=\"swb-comment\"><p class=\"swb-comment-tnks\">");
+            out.println(paramRequest.getLocaleString("msgSendEmail"));
+            out.println("</p><p>");
+            out.println("<a class=\"swb-comment-othr\" href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW)+"\">"+paramRequest.getLocaleString("msgDoViewAnotherMsg")+"</a>");
+            out.println("</p></div>");
+            out.flush();
+            out.close();
+        }else {
+            doView(request, response, paramRequest);
+        }
     }
 
     private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws TransformerException, SWBResourceException, Exception {
@@ -845,9 +844,9 @@ public class Comment extends GenericResource {
                     if (value != null) {
                         String file = admResUtils.getFileName(base, value);
                         if (file != null && !file.trim().equals("")) {
-                            if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif")) {
+                            if (!admResUtils.isFileType(file, "jpg|jpeg|gif|png")) {
                                 msg = paramsRequest.getLocaleString("msgErrFileType")
-                                        + " <i>bmp, jpg, jpeg, gif</i>: " + file;
+                                        + " <i>jpg, jpeg, gif, png</i>: " + file;
                             } else {
                                 if (admResUtils.uploadFile(base, fup, "img")) {
                                     base.setAttribute("img", file);
@@ -879,24 +878,16 @@ public class Comment extends GenericResource {
                              && !"".equals(fup.getFileName("imgenviar").trim())
                              ? fup.getFileName("imgenviar").trim()
                              : null);
-                    System.out.println("value="+value);
-
                     if (value != null) {
-                        System.out.println("1");
                         String file = admResUtils.getFileName(base, value);
                         if (file != null && !file.trim().equals("")) {
-                            System.out.println("2");
                             if (!admResUtils.isFileType(file, "jpg|jpeg|gif|png")) {
-                                System.out.println("3");
                                 msg = paramsRequest.getLocaleString("msgErrFileType") + " <i>jpg, jpeg, gif, png</i>: " + file;
                             }else {
-                                System.out.println("4");
                                 if (admResUtils.uploadFile(base, fup, "imgenviar")) {
                                     base.setAttribute("imgenviar", file);
-                                    System.out.println("5");
                                 } else {
                                     msg = paramsRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
-                                    System.out.println("6");
                                 }
                             }
                         } else {
@@ -924,9 +915,9 @@ public class Comment extends GenericResource {
                     if (value != null) {
                         String file = admResUtils.getFileName(base, value);
                         if (file != null && !file.trim().equals("")) {
-                            if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif")) {
+                            if (!admResUtils.isFileType(file, "jpg|jpeg|gif|png")) {
                                 msg = paramsRequest.getLocaleString("msgErrFileType")
-                                        + " <i>bmp, jpg, jpeg, gif</i>: " + file;
+                                        + " <i>jpg, jpeg, gif, png</i>: " + file;
                             } else {
                                 if (admResUtils.uploadFile(base, fup, "imglimpiar")) {
                                     base.setAttribute("imglimpiar", file);
@@ -1190,9 +1181,9 @@ public class Comment extends GenericResource {
             ret.append("</td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgImage")+" (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgImage")+" (jpg, jpeg, gif, png):</td> \n");
             ret.append("<td>");
-            ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            ret.append("<input type=\"file\" name=\"img\" onClick=\"this.form.btntexto.value=''; this.form.lnktexto.value=''\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\"/>");
             if (!"".equals(base.getAttribute("img", "").trim())) {
                 ret.append("<p>"+admResUtils.displayImage(base, base.getAttribute("img").trim(), "img")+"<input type=\"checkbox\" name=\"noimg\" value=\"1\"/>" + paramsRequest.getLocaleString("msgCutImage") + " <i>" + base.getAttribute("img").trim() + "</i></p>");
             }
@@ -1263,11 +1254,9 @@ public class Comment extends GenericResource {
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgSubmitImage")+" (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgSubmitImage")+" (jpg, jpeg, gif, png):</td> \n");
             ret.append("<td>");
-            ret.append("<input type=\"file\" name=\"imgenviar\" onClick=\"this.form.btnenviar.value='';\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
-
-            System.out.println("base.getAttribute(\"imgenviar\")="+base.getAttribute("imgenviar"));
+            ret.append("<input type=\"file\" name=\"imgenviar\" onClick=\"this.form.btnenviar.value='';\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\"/>");
 
             if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                 ret.append("<p>" + admResUtils.displayImage(base, base.getAttribute("imgenviar"), "imgenviar")
@@ -1302,11 +1291,9 @@ public class Comment extends GenericResource {
             ret.append("/></td> \n");
             ret.append("</tr> \n");
             ret.append("<tr> \n");
-            ret.append("<td align=\"right\">"
-                    + paramsRequest.getLocaleString("msgResetImage")
-                    + " (bmp, gif, jpg, jpeg):</td> \n");
+            ret.append("<td align=\"right\">" + paramsRequest.getLocaleString("msgResetImage") + " (jpg, jpeg, gif, png):</td> \n");
             ret.append("<td>");
-            ret.append("<input type=\"file\" name=\"imglimpiar\" onClick=\"this.form.btnlimpiar.value='';\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+            ret.append("<input type=\"file\" name=\"imglimpiar\" onClick=\"this.form.btnlimpiar.value='';\" onChange=\"isFileType(this, 'jpg|jpeg|gif|png');\"/>");
             if (!"".equals(base.getAttribute("imglimpiar", "").trim())) {
                 ret.append("<p>" + admResUtils.displayImage(base,
                         base.getAttribute("imglimpiar").trim(), "imglimpiar")
@@ -1666,9 +1653,9 @@ public class Comment extends GenericResource {
             ret.append("\n      }");
             ret.append("\n   }");
             ret.append("\n   if (!isFileType(pForm.template, 'xsl|xslt')) return false;");
-            ret.append("\n   if (!isFileType(pForm.img, 'bmp|jpg|jpeg|gif')) return false;");
-            ret.append("\n   if (!isFileType(pForm.imgenviar, 'bmp|jpg|jpeg|gif')) return false;");
-            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'bmp|jpg|jpeg|gif')) return false;");
+            ret.append("\n   if (!isFileType(pForm.img, 'jpg|jpeg|gif|png')) return false;");
+            ret.append("\n   if (!isFileType(pForm.imgenviar, 'jpg|jpeg|gif|png')) return false;");
+            ret.append("\n   if (!isFileType(pForm.imglimpiar, 'jpg|jpeg|gif|png')) return false;");
             ret.append("\n   if (!isNumber(pForm.width)) return false;");
             ret.append("\n   if (!isNumber(pForm.height)) return false;");
             ret.append("\n   if (!isNumber(pForm.top)) return false;");
