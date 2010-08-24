@@ -138,10 +138,10 @@ public class EditFilter extends javax.swing.JApplet {
             while(nodes.hasNext())
             {
                 WBTreeNode node=(WBTreeNode)nodes.next();                
-                ImageIcon icon=(ImageIcon)this.icons.get(node.getAttribute("icon"));                
+                ImageIcon icon=(ImageIcon)this.icons.get(node.getAttribute("icon"));
                 String name=node.getAttribute("name");
                 TopicMap root=new TopicMap(node.getAttribute("icon"),node.getAttribute("id"),name,node.getAttribute("reload"),icon);
-                boolean editable=true;            
+                boolean editable=true;
                 if(node.getAttribute("access")!=null)
                 {
                     try
@@ -160,6 +160,7 @@ public class EditFilter extends javax.swing.JApplet {
                         e.printStackTrace();
                     }
                 }
+
                 root.setEditable(editable);
                 this.jTree.setModel(new DefaultTreeModel(root));                
                 fillTreeTopicMap(node,root);
@@ -1629,8 +1630,7 @@ public class EditFilter extends javax.swing.JApplet {
                            {
                                WBTreeNode etm=eSites.addNode();
                                etm.setName("node");
-                               etm.addAttribute("id",map.getID());                       
-                               etm.addAttribute("icon",map.getIconName());
+                               etm.addAttribute("id",map.getID());                                                      
                                etm.addAttribute("topicmap",map.getID());
                                etm.addAttribute("reload",map.getRealoadPath());
                                String path=getPath(map);               
