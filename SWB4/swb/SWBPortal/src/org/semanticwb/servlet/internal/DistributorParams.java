@@ -484,7 +484,14 @@ public class DistributorParams
                     user.setLanguage(lang);
                 }else
                 {
-                    log.warn("Language not found:"+site.getId()+":"+lang);
+                    Language l=site.getLanguage();
+                    if(l==null)
+                    {
+                        Iterator<Language> i=SWBUtils.Collections.copyIterator(site.listLanguages()).iterator();
+                        if(i.hasNext())l=i.next();
+                    }
+                    if(l!=null)user.setLanguage(l.getId());
+                    //log.warn("Language not found:"+site.getId()+":"+lang);
                 }
             }
         }
