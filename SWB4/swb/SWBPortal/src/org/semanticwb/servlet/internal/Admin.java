@@ -253,8 +253,7 @@ public class Admin implements InternalServlet
                 {
                     date = dateFormats[i].parse(headerValue);
                 }
-                catch(java.text.ParseException e) { }
-
+                catch(Exception e) { }
             if(date != null && lastModified <= date.getTime() + 1000L)
             {
                 response.setStatus(304);
