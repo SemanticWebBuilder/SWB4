@@ -67,7 +67,7 @@
                     }
                 }                
             }
-            if(contentstoshow.size()>0)
+            if(contentstoshow.size()>0 && contents.get(0).getImage()!=null)
             {
                 SWBNewContent content=contentstoshow.get(0);
                 String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
@@ -83,7 +83,7 @@
 
                 String url="#";
                 url=noticias.getUrl()+"?uri="+content.getResourceBase().getSemanticObject().getEncodedURI();
-                String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+                String pathPhoto = null;//SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
                 String image="";
                 if(content.getImage()!=null)
                 {
@@ -95,12 +95,22 @@
                 %>
                     <div class="mainNews">
                       <p><a href="<%=url%>"><%=title%></a></p>
-                      <img src="<%=pathPhoto%>" alt="<%=titleImage%>" />
+                      <%
+                        if(pathPhoto!=null)
+                        {
+                            %>
+                            <img src="<%=pathPhoto%>" alt="<%=titleImage%>" />
+                            <%
+                        }
+                      %>
+                      
                       <div class="clear">&nbsp;</div>
                     </div>
                 <%
                 contentstoshow.remove(0);
             }
+
+
             if(contentstoshow.size()>0)
             {
                 %>
@@ -126,11 +136,11 @@
                 <%
             }
             String urlNews=noticias.getUrl();
-            String titleviewoldNews="Ver noticias anteriores";
-            if(usrlanguage!=null && !usrlanguage.equals("es"))
+            String titleviewoldNews="Ver más";
+            /*if(usrlanguage!=null && !usrlanguage.equals("es"))
             {
                 titleviewoldNews="View old news";
-            }
+            }*/
             %>
                 <p class="vermas"><a href="<%=urlNews%>"><%=titleviewoldNews%></a></p>
             <%
