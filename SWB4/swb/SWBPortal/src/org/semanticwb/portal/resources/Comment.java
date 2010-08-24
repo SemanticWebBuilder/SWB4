@@ -308,6 +308,8 @@ public class Comment extends GenericResource {
                 root.appendChild(emn);
                 emn = dom.createElement("fsubmit");
 
+                System.out.println("base.getAttribute(\"imgenviar\")="+base.getAttribute("imgenviar"));
+                
                 if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
                     emn.setAttribute("img", "1");
                     emn.setAttribute("src", webWorkPath + base.getAttribute("imgenviar").trim());
@@ -669,7 +671,7 @@ public class Comment extends GenericResource {
                 out.println("<form method=\"post\" action=\""+surl+"\" class=\"swb-comment-stgy\" >");
                 out.println("<input type=\"submit\" value=\""+base.getAttribute("label")+"\" />");
                 out.println("</form>");
-            }else if( base.getAttribute("image")!=null ) {
+            }else if( base.getAttribute("img")!=null ) {
                 out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">");
                 out.println("<img src=\""+webWorkPath+base.getAttribute("img")+"\" alt=\""+base.getAttribute("alt",paramRequest.getLocaleString("msgComments"))+"\" class=\"cmt-stg-img\" />");
                 out.println("</a>");
@@ -705,6 +707,7 @@ public class Comment extends GenericResource {
                     html = te.getMessage();
                     log.error(te.getMessage());
                 }
+                System.out.println("\nhtml=\n"+html);
                 out.println(html);
             }
         }
@@ -876,18 +879,24 @@ public class Comment extends GenericResource {
                              && !"".equals(fup.getFileName("imgenviar").trim())
                              ? fup.getFileName("imgenviar").trim()
                              : null);
+                    System.out.println("value="+value);
+
                     if (value != null) {
+                        System.out.println("1");
                         String file = admResUtils.getFileName(base, value);
                         if (file != null && !file.trim().equals("")) {
-                            if (!admResUtils.isFileType(file, "bmp|jpg|jpeg|gif")) {
-                                msg = paramsRequest.getLocaleString("msgErrFileType")
-                                        + " <i>bmp, jpg, jpeg, gif</i>: " + file;
-                            } else {
+                            System.out.println("2");
+                            if (!admResUtils.isFileType(file, "jpg|jpeg|gif|png")) {
+                                System.out.println("3");
+                                msg = paramsRequest.getLocaleString("msgErrFileType") + " <i>jpg, jpeg, gif, png</i>: " + file;
+                            }else {
+                                System.out.println("4");
                                 if (admResUtils.uploadFile(base, fup, "imgenviar")) {
                                     base.setAttribute("imgenviar", file);
+                                    System.out.println("5");
                                 } else {
-                                    msg = paramsRequest.getLocaleString("msgErrUploadFile")
-                                            + " <i>" + value + "</i>.";
+                                    msg = paramsRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                                    System.out.println("6");
                                 }
                             }
                         } else {
@@ -936,7 +945,7 @@ public class Comment extends GenericResource {
                 setAttribute(base, fup, "alt");
                 setAttribute(base, fup, "btntexto");
                 setAttribute(base, fup, "lnktexto");
-                setAttribute(base, fup, "blnstyle");
+//                setAttribute(base, fup, "blnstyle");
                 setAttribute(base, fup, "altenviar");
                 setAttribute(base, fup, "btnenviar");
                 setAttribute(base, fup, "altlimpiar");
@@ -944,19 +953,19 @@ public class Comment extends GenericResource {
                 setAttribute(base, fup, "firstname", "1");
                 setAttribute(base, fup, "lastname", "1");
                 setAttribute(base, fup, "middlename", "1");
-                setAttribute(base, fup, "styleClass");
+//                setAttribute(base, fup, "styleClass");
                 setAttribute(base, fup, "captcha");
-                setAttribute(base, fup, "menubar", "yes");
-                setAttribute(base, fup, "toolbar", "yes");
-                setAttribute(base, fup, "status", "yes");
-                setAttribute(base, fup, "location", "yes");
-                setAttribute(base, fup, "directories", "yes");
-                setAttribute(base, fup, "scrollbars", "yes");
-                setAttribute(base, fup, "resizable", "yes");
-                setAttribute(base, fup, "width");
-                setAttribute(base, fup, "height");
-                setAttribute(base, fup, "top");
-                setAttribute(base, fup, "left");
+//                setAttribute(base, fup, "menubar", "yes");
+//                setAttribute(base, fup, "toolbar", "yes");
+//                setAttribute(base, fup, "status", "yes");
+//                setAttribute(base, fup, "location", "yes");
+//                setAttribute(base, fup, "directories", "yes");
+//                setAttribute(base, fup, "scrollbars", "yes");
+//                setAttribute(base, fup, "resizable", "yes");
+//                setAttribute(base, fup, "width");
+//                setAttribute(base, fup, "height");
+//                setAttribute(base, fup, "top");
+//                setAttribute(base, fup, "left");
                 setAttribute(base, fup, "subject");
                 setAttribute(base, fup, "headermsg");
                 setAttribute(base, fup, "footermsg");
@@ -1257,8 +1266,11 @@ public class Comment extends GenericResource {
             ret.append("<td align=\"right\">"+paramsRequest.getLocaleString("msgSubmitImage")+" (bmp, gif, jpg, jpeg):</td> \n");
             ret.append("<td>");
             ret.append("<input type=\"file\" name=\"imgenviar\" onClick=\"this.form.btnenviar.value='';\" onChange=\"isFileType(this, 'bmp|jpg|jpeg|gif');\"/>");
+
+            System.out.println("base.getAttribute(\"imgenviar\")="+base.getAttribute("imgenviar"));
+
             if (!"".equals(base.getAttribute("imgenviar", "").trim())) {
-                ret.append("<p>" + admResUtils.displayImage(base, base.getAttribute("imgenviar").trim(), "imgenviar")
+                ret.append("<p>" + admResUtils.displayImage(base, base.getAttribute("imgenviar"), "imgenviar")
                         + "<input type=\"checkbox\" name=\"noimgenviar\" value=\"1\"/>"
                         + paramsRequest.getLocaleString("msgCutImage") + " <i>"
                         + base.getAttribute("imgenviar").trim() + "</i></p>");
@@ -1846,8 +1858,6 @@ public class Comment extends GenericResource {
  * @version 1.0
  */
 class TypeComment {
-
-
     private String comentario;
     private String area;
     private String responsable;
@@ -1867,8 +1877,7 @@ class TypeComment {
      * @param responsable destinatario. <p>recipient</p>
      * @param email cuenta de correo del destinatario. <p>recipient's e-mail account</p>
      */
-    public TypeComment(String comentario, String area, String responsable,
-            String email) {
+    public TypeComment(String comentario, String area, String responsable, String email) {
         this.comentario = comentario;
         this.area = area;
         this.responsable = responsable;
