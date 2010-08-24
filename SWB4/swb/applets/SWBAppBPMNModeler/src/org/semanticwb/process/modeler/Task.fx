@@ -86,10 +86,10 @@ public class Task extends Activity
     public override function create(): Node
     {
         resizeable=true;
-        initializeCustomNode();
         w=100;
         h=60;
-
+        initializeCustomNode();
+        
         setType(type);
 
         shape= Rectangle
