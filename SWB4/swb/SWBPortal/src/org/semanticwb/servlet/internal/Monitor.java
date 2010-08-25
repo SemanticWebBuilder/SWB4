@@ -126,7 +126,9 @@ private Vector<SWBMonitorData> buffer;
         try
         {
             SemanticProperty sp = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getSemanticProperty(SWBPlatform.getSemanticMgr().SWBAdmin + "/PrivateKey");
+            //System.out.println("sp:"+sp);
             String priv = SWBPlatform.getSemanticMgr().getModel(SWBPlatform.getSemanticMgr().SWBAdmin).getModelObject().getProperty(sp);
+            //System.out.println("priv:"+priv);
             if (null==priv)
             {
                 org.semanticwb.SWBPlatform.getSemanticMgr().createKeyPair();
