@@ -31,6 +31,7 @@ public class Lane extends GraphicalElement
         resizeType=ResizeNode.RESIZE_V;
         //w=600;
         h=200;
+        minH = 200;
         useGrid=false;
         text=EditableText
         {
