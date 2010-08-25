@@ -1431,7 +1431,7 @@ public class EditFilter extends javax.swing.JApplet {
                WBTreeNode etm=eElements.addNode();
                etm.setName("node");
                etm.addAttribute("id",root.getID());                       
-               etm.addAttribute("icon",root.getIconName());
+               //etm.addAttribute("icon",root.getIconName());
                etm.addAttribute("topicmap",root.getTopicMapID());
                etm.addAttribute("reload",root.getRealoadPath());
                String path=getPath(root);               
@@ -1464,7 +1464,7 @@ public class EditFilter extends javax.swing.JApplet {
                                WBTreeNode etm=eElements.addNode();
                                etm.setName("node");
                                etm.addAttribute("id",topic.getID());                       
-                               etm.addAttribute("icon",topic.getIconName());
+                               //etm.addAttribute("icon",topic.getIconName());
                                etm.addAttribute("topicmap",topic.getTopicMapID());
                                etm.addAttribute("reload",topic.getRealoadPath());
                                String path=getPath(topic);               
@@ -1542,7 +1542,7 @@ public class EditFilter extends javax.swing.JApplet {
                WBTreeNode etm=eMenus.addNode();
                etm.setName("node");
                etm.addAttribute("id",root.getID());                       
-               etm.addAttribute("icon",root.getIconName());
+               //etm.addAttribute("icon",root.getIconName());
                etm.addAttribute("topicmap",root.getTopicMapID());
                etm.addAttribute("reload",root.getRealoadPath());
                String path=getPath(root);               
@@ -1575,7 +1575,7 @@ public class EditFilter extends javax.swing.JApplet {
                                WBTreeNode etm=eMenus.addNode();
                                etm.setName("node");
                                etm.addAttribute("id",topic.getID());                       
-                               etm.addAttribute("icon",topic.getIconName());
+                               //etm.addAttribute("icon",topic.getIconName());
                                etm.addAttribute("topicmap",topic.getTopicMapID());
                                etm.addAttribute("reload",topic.getRealoadPath());
                                String path=getPath(topic);               
@@ -1604,7 +1604,7 @@ public class EditFilter extends javax.swing.JApplet {
                WBTreeNode etm=eSites.addNode();
                etm.setName("node");
                etm.addAttribute("id",root.getID());                       
-               etm.addAttribute("icon",root.getIconName());
+               //etm.addAttribute("icon",root.getIconName());
                etm.addAttribute("topicmap",root.getID());
                etm.addAttribute("reload",root.getRealoadPath());
                String path=getPath(root);               
@@ -1675,7 +1675,7 @@ public class EditFilter extends javax.swing.JApplet {
                                        WBTreeNode etp=efilter.addNode();
                                        etp.setName("node");
                                        etp.addAttribute("id",topic.getID());
-                                       etp.addAttribute("icon",topic.getIconName());
+                                       //etp.addAttribute("icon",topic.getIconName());
                                        etp.addAttribute("topicmap",topic.getTopicMapID());
                                        etp.addAttribute("reload",topic.getRealoadPath());                   
                                        String path=getPath(topic);               
@@ -1837,7 +1837,7 @@ public class EditFilter extends javax.swing.JApplet {
                                WBTreeNode etp=efilter.addNode();
                                etp.setName("node");
                                etp.addAttribute("id",topic.getID());
-                               etp.addAttribute("icon",topic.getIconName());
+                               //etp.addAttribute("icon",topic.getIconName());
                                etp.addAttribute("topicmap",topic.getTopicMapID());
                                etp.addAttribute("reload",topic.getRealoadPath());                   
                                String path=getPath(topic);
@@ -1913,7 +1913,7 @@ public class EditFilter extends javax.swing.JApplet {
                        WBTreeNode etp=efilter.addNode();
                        etp.setName("node");
                        etp.addAttribute("id",topic.getID());
-                       etp.addAttribute("icon",topic.getIconName());
+                       //etp.addAttribute("icon",topic.getIconName());
                        etp.addAttribute("topicmap",topic.getTopicMapID());
                        etp.addAttribute("reload",topic.getRealoadPath()); 
                        String path=getPath(topic);
@@ -1952,7 +1952,7 @@ public class EditFilter extends javax.swing.JApplet {
                                WBTreeNode etp=efilter.addNode();
                                etp.setName("node");
                                etp.addAttribute("id",topic.getID());
-                               etp.addAttribute("icon",topic.getIconName());
+                               //etp.addAttribute("icon",topic.getIconName());
                                etp.addAttribute("topicmap",topic.getTopicMapID());
                                etp.addAttribute("reload",topic.getRealoadPath());                   
                                String path=getPath(topic);
