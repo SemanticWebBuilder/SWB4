@@ -87,6 +87,7 @@ public class ResizePoint extends CustomNode
                     ModelerUtils.clickedNode=this;
                     ox=attachedNode.x-attachedNode.w*ix;
                     oy=attachedNode.y-attachedNode.h*iy;
+                    attachedNode.resizing = true;
                 }
             }
             onMouseReleased:function( e: MouseEvent ):Void
@@ -94,6 +95,7 @@ public class ResizePoint extends CustomNode
                 if(ModelerUtils.clickedNode==this)
                 {
                     ModelerUtils.clickedNode=null;
+                    attachedNode.resizing = false;
                     attachedNode.snapToGrid();
                 }
             }
