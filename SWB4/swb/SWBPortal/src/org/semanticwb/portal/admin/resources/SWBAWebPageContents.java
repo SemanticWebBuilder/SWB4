@@ -768,7 +768,18 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\"" + sobj.getURI() + "/sptype\" value=\"global|" + sobj.getURI() + "\" >");
                     out.println("</td>");
                     out.println("<td>");
+
+                    SWBResourceURL urladdglobal = paramRequest.getRenderUrl();
+                    urladdglobal.setMode(SWBResourceURL.Mode_EDIT);
+                    urladdglobal.setParameter("act", "edit");
+                    urladdglobal.setParameter("suri",id);
+                    urladdglobal.setParameter("sprop",idp);
+                    urladdglobal.setParameter("sproptype",idptype);
+                    urladdglobal.setParameter("sobj","global|" + sobj.getURI());
+
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
                     out.println(stitle);
+                    out.println("</a");
                     out.println("</td>");
                     out.println("<td>");
                     out.println(sdescription != null ? sdescription : "");
@@ -811,7 +822,19 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\"" + sobj.getURI() + "/sptype\" value=\"global|" + sobj.getURI() + "\" >");
                     out.println("</td>");
                     out.println("<td>");
+
+                    SWBResourceURL urladdglobal = paramRequest.getRenderUrl();
+                    urladdglobal.setMode(SWBResourceURL.Mode_EDIT);
+                    urladdglobal.setParameter("act", "edit");
+                    urladdglobal.setParameter("suri",id);
+                    urladdglobal.setParameter("sprop",idp);
+                    urladdglobal.setParameter("sproptype",idptype);
+                    urladdglobal.setParameter("sobj","global|" + sobj.getURI());
+
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladdglobal + "',this); return false;\">");
                     out.println(stitle);
+                    out.println("</a");
+
                     out.println("</td>");
                     out.println("<td>");
                     out.println(sdescription != null ? sdescription : "");
@@ -886,7 +909,19 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\"" + sobj.getURI() + "/sptype\" value=\"" + sobj.getURI() + "\" >");
                     out.println("</td>");
                     out.println("<td>");
+
+                    SWBResourceURL urladds = paramRequest.getRenderUrl();
+                    urladds.setMode(SWBResourceURL.Mode_EDIT);
+                    urladds.setParameter("act", "edit");
+                    urladds.setParameter("suri",id);
+                    urladds.setParameter("sprop",idp);
+                    urladds.setParameter("sproptype",idptype);
+                    urladds.setParameter("sobj", sobj.getURI());
+
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
                     out.println(stitle);
+                    out.println("</a");
+
                     out.println("</td>");
                     out.println("<td>");
                     out.println(sdescription != null ? sdescription : "");
@@ -931,7 +966,19 @@ public class SWBAWebPageContents extends GenericResource {
                     out.println("<input type=\"radio\" dojoType=\"dijit.form.RadioButton\" name=\"sobj\" id=\"" + sobj.getURI() + "/sptype\" value=\"" + sobj.getURI() + "\" >");
                     out.println("</td>");
                     out.println("<td>");
+
+                    SWBResourceURL urladds = paramRequest.getRenderUrl();
+                    urladds.setMode(SWBResourceURL.Mode_EDIT);
+                    urladds.setParameter("act", "edit");
+                    urladds.setParameter("suri",id);
+                    urladds.setParameter("sprop",idp);
+                    urladds.setParameter("sproptype",idptype);
+                    urladds.setParameter("sobj", sobj.getURI());
+                            
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urladds + "',this); return false;\">");
                     out.println(stitle);
+                    out.println("</a");
+
                     out.println("</td>");
                     out.println("<td>");
                     out.println(sdescription != null ? sdescription : "");
