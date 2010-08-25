@@ -622,6 +622,7 @@ public SemanticObject getSemanticObject(String uri)
      */
     public void write(OutputStream out, String lang)
     {
+        //System.out.println("write:"+getName());
         if(m_model instanceof OntModel)
         {
             ((OntModel)m_model).writeAll(out, lang, null);
@@ -629,6 +630,7 @@ public SemanticObject getSemanticObject(String uri)
         {
             m_model.write(out,lang);
         }
+        //System.out.println("write end");
     }
 
     /**
