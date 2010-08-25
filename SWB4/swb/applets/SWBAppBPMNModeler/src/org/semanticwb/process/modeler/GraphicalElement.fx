@@ -70,6 +70,7 @@ public class GraphicalElement extends CustomNode
     var my : Number;                               //temporal movimiento y
     public var minW: Number;
     public var minH: Number;
+    public var resizing: Boolean = false;
 
     var px = bind graphParent.x on replace
     {
@@ -319,10 +320,12 @@ public class GraphicalElement extends CustomNode
     override var onMouseEntered = function(e)
     {
         over=true;
-        if (title == null or title.trim() == "") {
-            ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
-        } else {
-            ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+        if (not resizing) {
+            if (title == null or title.trim() == "") {
+                ModelerUtils.startToolTip("{toolTipText}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+            } else {
+                ModelerUtils.startToolTip("{title}", x - w / 2 - modeler.getXScroll(), y + h / 2 - modeler.getYScroll() + 3);
+            }
         }
         mouseEntered(e);
     }
