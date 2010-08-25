@@ -45,7 +45,8 @@ import java.awt.Cursor;
  * @author Victor Lorenzana
  */
 public class EditFilter extends javax.swing.JApplet {
-    
+
+    public static final Color colorPath=new Color(6,102,153);
     private final String PRM_JSESS="jsess";
     private final String PRM_CGIPATH="cgipath";
     
@@ -679,15 +680,7 @@ public class EditFilter extends javax.swing.JApplet {
             {
                 WBTreeNode efilter=eresp.getNodebyName("filter");
                 if(efilter!=null)
-                {
-                    /*
-                    this.jTextFieldName.setText(efilter.getAttribute("name"));
-                    WBTreeNode edesc=efilter.getNodebyName("description");
-                    if(edesc!=null)
-                    {
-                        this.jTextAreaDescription.setText(edesc.getFirstNode().getText());
-                    }
-                    */
+                {                    
                     loadFilterElements(efilter);
                     loadFilterMenu(efilter);
                     loadFilterDirs(efilter);
@@ -698,8 +691,9 @@ public class EditFilter extends javax.swing.JApplet {
                         while(it.hasNext())
                         {
                            WBTreeNode enode=(WBTreeNode)it.next();
-                           String reload=enode.getAttribute("reload");                        
-                           if(reload!=null && reload.startsWith("getTopic"))
+                           String reload=enode.getAttribute("reload");
+                           
+                           if(reload!=null && reload.startsWith("getSemanticObject"))
                            {
                                String stopicmap=enode.getAttribute("topicmap");
                                Object objroot=this.jTree.getModel().getRoot();                           
@@ -711,13 +705,13 @@ public class EditFilter extends javax.swing.JApplet {
                                         TopicMap map=(TopicMap)this.jTree.getModel().getChild(objroot, ichild);
                                         if(map.getID().equals(stopicmap))
                                         {
-                                            this.jTree.expandPath(new TreePath(map.getPath()));                           
+                                            this.jTree.expandPath(new TreePath(map.getPath()));                                            
                                             if(enode.getAttribute("reload")!=null && !enode.getAttribute("reload").equals(""))
                                             {
                                                 StringTokenizer st=new StringTokenizer(enode.getAttribute("reload"),".");
-                                                if(st.nextToken().equals("getTopic"))
+                                                if(st.nextToken().equals("getSemanticObject"))
                                                 {
-                                                    String path=enode.getAttribute("path");
+                                                    String path=enode.getAttribute("path");                                                    
                                                     StringTokenizer stpath=new StringTokenizer(path,"|");                                                    
                                                     Object root=map;                                                     
                                                     while(stpath.hasMoreElements())
@@ -728,44 +722,22 @@ public class EditFilter extends javax.swing.JApplet {
                                                         {
                                                             if(this.jTree.getModel().getChild(root,i) instanceof Topic)
                                                             {                                                                
-                                                                Topic tp=(Topic)this.jTree.getModel().getChild(root,i);
+                                                                Topic tp=(Topic)this.jTree.getModel().getChild(root,i);                                                                
                                                                 if(tp.getID().equalsIgnoreCase(topicid))
                                                                 {
-                                                                    tp.setLabelParent(tp, new Color(81,137,42));
+                                                                    tp.setLabelParent(tp, colorPath);
                                                                     this.jTree.expandPath(new TreePath(tp.getPath()));                           
                                                                     root=tp;                                                                   
                                                                     break;
                                                                 }                                                                
                                                             }
-                                                        }
-                                                        
+                                                        }                                                        
                                                     }
-                                                    /*Root shortcuts=null;
-                                                    int l=this.jTree.getModel().getChildCount(map);
-                                                    for(int i=0;i<l;i++)
-                                                    {
-                                                        if(this.jTree.getModel().getChild(map, i) instanceof Root)
-                                                        {
-                                                            shortcuts=(Root)this.jTree.getModel().getChild(map, i);
-                                                            break;
-                                                        }
-                                                    }
-                                                    String path="/applets/filters/images/f_general.gif";
-                                                    ImageIcon oicon=new javax.swing.ImageIcon(getClass().getResource(path));
-                                                    if(shortcuts==null)
-                                                    {
-                                                        shortcuts=new Root(java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale).getString("sections_permiss"),oicon);
-                                                        map.add(shortcuts);
-                                                    }                                           
-                                                    Topic nodetopic=new Topic(enode.getAttribute("icon"), enode.getAttribute("topicmap"),  enode.getAttribute("id"), "",enode.getAttribute("reload"),oicon);
-                                                    shortcuts.add(nodetopic);
-                                                    this.reLoadTopic(topicmap,nodetopic);*/
                                                 }
                                             }
                                         }
                                    }
                                }
-
                            }
                         }
                         it=sites.getNodesbyName("node");
@@ -1387,20 +1359,7 @@ public class EditFilter extends javax.swing.JApplet {
     }//GEN-LAST:event_jTreeMenusMouseMoved
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        /*
-        if(this.jTextFieldName.getText().equals(""))
-        {
-            this.jTextFieldName.grabFocus();
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale).getString("indicar_nombre"),java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
-            return;                
-        }
-        if(this.jTextAreaDescription.getText().equals(""))
-        {
-            this.jTextAreaDescription.grabFocus();
-            JOptionPane.showMessageDialog(this,java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale).getString("indicar_description"),java.util.ResourceBundle.getBundle("applets/filters/EditFilter",locale).getString("title"),JOptionPane.ERROR_MESSAGE);
-            return;   
-        }
-        */
+       
         WBXMLParser parser=new WBXMLParser();
         WBTreeNode exml=parser.parse("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         WBTreeNode ereq=exml.addNode();
