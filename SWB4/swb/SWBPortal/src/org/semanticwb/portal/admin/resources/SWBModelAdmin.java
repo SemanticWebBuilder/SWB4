@@ -28,10 +28,8 @@
 package org.semanticwb.portal.admin.resources;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,7 +50,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
@@ -212,8 +209,7 @@ public class SWBModelAdmin extends GenericResource {
 
             out.println(strbf.toString());
         } catch (Exception e) {
-            log.debug(e);
-            e.printStackTrace();
+            log.error(e);
         }
     }
 
@@ -289,11 +285,11 @@ public class SWBModelAdmin extends GenericResource {
                     out.println("<input type=\"hidden\" name=\"zipName\" value=\"" + request.getParameter("zipName") + "\"");
                     out.println("</form>");
                 } catch (Exception e) {
-                    log.debug(e);
+                    log.error(e);
                 }
             }
         } catch (Exception e) {
-            log.debug(e);
+            log.error(e);
         }
     }
 
@@ -337,7 +333,7 @@ public class SWBModelAdmin extends GenericResource {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e);
         }
         return SWBUtils.TEXT.replaceFirstIgnoreCase(SWBUtils.XML.domToXml(dom), "xmlns:" + oldID, "xmlns:" + newID);
     }
@@ -400,8 +396,7 @@ public class SWBModelAdmin extends GenericResource {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                log.debug(e);
+                log.error(e);
             }
         } else if (response.getAction().equals("delete")) {
             File fichero = new File(request.getParameter("zipName"));
@@ -426,8 +421,7 @@ public class SWBModelAdmin extends GenericResource {
                     zos.putNextEntry(entry);
                     zos.write("Model File SemanticWebBuilderOS".getBytes());
                     zos.closeEntry();
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {log.error(e);}
 
                 //-------------Generación de archivo rdf del sitio especificado----------------
                 try {
@@ -436,9 +430,7 @@ public class SWBModelAdmin extends GenericResource {
                     site.getSemanticObject().getModel().write(out,"N-TRIPLE");
                     out.flush();
                     out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) {log.error(e);}
                 //----------Generación de archivo siteInfo.xml del sitio especificado-----------
                 ArrayList aFiles = new ArrayList();
                 File file = new File(zipdirectory + "siteInfo.xml");
@@ -479,7 +471,7 @@ public class SWBModelAdmin extends GenericResource {
                     out.flush();
                     out.close();
                 } catch (Exception e) {
-                    log.debug(e);
+                    log.error(e);
                 }
                 zos.close();
 
@@ -514,8 +506,7 @@ public class SWBModelAdmin extends GenericResource {
                 response.setRenderParameter("wsUri", uri);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                log.debug(e);
+                log.error(e);
             }
         }else if (response.getAction().equals("install")) {
             try{
