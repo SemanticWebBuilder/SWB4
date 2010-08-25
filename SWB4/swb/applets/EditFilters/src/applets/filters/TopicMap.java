@@ -151,7 +151,7 @@ public class TopicMap extends DefaultMutableTreeNode implements SelectableNode{
                     topicmap.setEnabled(false);
                 }
             }
-            setLabelParent(this,new Color(81,137,42));
+            setLabelParent(this,EditFilter.colorPath);
         }
         else
         {
