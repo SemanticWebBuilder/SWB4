@@ -30,7 +30,7 @@ public class EndEvent extends ThrowEvent
     }
 
     override public function canEndLink(link:ConnectionObject) : Boolean {
-        var ret = true;
+        var ret = super.canEndLink(link);
         if (not(link instanceof SequenceFlow)) {
             ret = false;
             ModelerUtils.setErrorMessage(ModelerUtils.getLocalizedString("msgError8"));
