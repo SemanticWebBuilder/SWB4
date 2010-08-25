@@ -24,6 +24,8 @@ public class GroupArtifact extends Artifact
         resizeable=true;
         w=150;
         h=150;
+        minW = w;
+        minH = h;
         
         text=EditableText
         {
