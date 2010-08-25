@@ -145,7 +145,7 @@ public class Directory extends DefaultMutableTreeNode implements SelectableNode 
                     directory.setEnabled(false);
                 }
             }
-             setLabelParent(this,new Color(81,137,42));
+             setLabelParent(this,EditFilter.colorPath);
         }
         else
         {
