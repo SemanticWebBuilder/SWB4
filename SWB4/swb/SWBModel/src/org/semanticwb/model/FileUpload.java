@@ -32,6 +32,7 @@ import org.semanticwb.platform.SemanticProperty;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -101,6 +102,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
     public String renderXHTML(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
                               String mode, String lang) {
 
+
         // boolean DOJO=false;
         // if(type.equals("dojo"))DOJO=true;
         String         ret      = "";
@@ -110,6 +112,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         boolean        required = prop.isRequired();
         String         pmsg     = null;
         String         imsg     = null;
+
 
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
@@ -143,7 +146,8 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
         if (mode.equals("edit") || mode.equals("create")) {
             String attchMsg = "";
             String ext= "";
-            if(request.getAttribute("extensions")!=null)  ext=(String)request.getAttribute("extensions");
+            //if(getFileFilter()!=null) ext=getFileFilter();
+            if(ext.trim().length()==0 && request.getAttribute("extensions")!=null)  ext=(String)request.getAttribute("extensions");
             //String ext= "jpg|gif|png";
 
             if ((name != null) && (request.getAttribute("attachCount_" + name) != null)) {
@@ -205,6 +209,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
 //                    + "\" style=\"width:5px; float: right;\"></div>\n" + "</div>\n";
             ret += "<iframe id='target_upload_" + name + "' name='target_upload_" + name
                    + "' src='' style='display: none'></iframe><br/>" +    //
+                   "<input type=\"hidden\" name=\"FUpLsize\" value=\""+getFileMaxSize()+"\">"+
                 attchMsg + "<input id=\"" + name + "\" name=\"" + name
                     + "\" type=\"file\" onChange=\"javascript:if(uploadjs_" + name + "(this.form)) {return startUploadMonitoring('" + name + "');}\"> <br/>"
                     + "<div id=\"uploadStatus_" + name + "\" style=\"width:230px\">\n"
@@ -219,7 +224,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                    + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){ forma." + name+ ".value=\"\"; return false; }"     // TODO:Internacionalizar
                     +"  var encoding=forma.encoding;\n" + "  forma.encoding='multipart/form-data';\n"
                     + "  var method=forma.method;\n" + "  forma.method='post';\n" + "  var action=forma.action;\n"
-                    + "  forma.action='" + SWBPlatform.getContextPath() + "/Upload';\n"
+                    + "  forma.action='" + SWBPlatform.getContextPath() + "/Upload?FUpLsize="+getFileMaxSize()+"';\n"
                     + "  var target=forma.target;\n" + "  forma.target='target_upload_" + name + "';\n"
                     + "  forma.submit();\n" + "  forma.encoding=encoding;\n" + "  forma.method=method;\n"
                     + "  forma.action=action;\n" + "  forma.target=target;\n" + "  return true;\n" + "}\n"
