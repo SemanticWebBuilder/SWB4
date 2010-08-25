@@ -159,7 +159,7 @@ public class Topic extends DefaultMutableTreeNode implements SelectableNode{
                     topic.setEnabled(false);
                 }
             }
-             setLabelParent(this,new Color(81,137,42));     
+             setLabelParent(this,EditFilter.colorPath);
         }
         else
         {
@@ -198,7 +198,7 @@ public class Topic extends DefaultMutableTreeNode implements SelectableNode{
                     topic.setEnabled(false);
                 }
             }
-             setLabelParent(this,new Color(81,137,42));  
+             setLabelParent(this,EditFilter.colorPath);
         }
         else
         {
