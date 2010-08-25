@@ -49,6 +49,7 @@ import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
@@ -900,7 +901,26 @@ public class SWBAFilters extends SWBATree {
         }
         return doc;
     }
+    private String getPath(SemanticObject obj)
+    {
+        String getPath="";
+        Iterator<SemanticObject> parents=obj.listHerarquicalParents();
+        if(parents.hasNext())
+        {
+            SemanticObject parent=parents.next();
+            String pathnew=getPath(parent);
+            if(pathnew.equals(""))
+            {
+                getPath = parent.getURI();
+            }
+            else
+            {
+                getPath = pathnew + "|" + parent.getURI();
+            }
+        }
+        return getPath;
 
+    }
     /**
      * Gets the filter.
      * 
@@ -936,7 +956,31 @@ public class SWBAFilters extends SWBATree {
                         Element enode = (Element) nodes.item(i);
                         String topicid = enode.getAttribute("id");
                         String path = topicid;
-                        String topicmap = enode.getAttribute("topicmap");
+                        //String topicmap = enode.getAttribute("topicmap");
+
+                        SemanticObject obj=SemanticObject.createSemanticObject(topicid);
+                        if(obj!=null)
+                        {
+                            String newpath=getPath(obj);
+                            if(!newpath.equals(""))
+                            {
+                                path=getPath(obj)+"|"+path;
+                            }
+                        }
+                        
+
+                        /*SemanticObject objModel=SemanticObject.createSemanticObject(topicmap);
+                        if(objModel!=null)
+                        {
+                            GenericObject gomodel=objModel.createGenericInstance();
+                            if(gomodel instanceof SWBModel)
+                            {
+                                SemanticObject obj=SemanticObject.createSemanticObject(id);
+                                Iter obj.listHerarquicalParents();
+                            }
+                            
+                        }*/
+                        /*
                         WebSite topicMap = SWBContext.getWebSite(topicmap);
                         if (topicMap != null) {
                             WebPage topic = topicMap.getWebPage(topicid);
@@ -946,7 +990,9 @@ public class SWBAFilters extends SWBATree {
                                     topic = topic.getParent();
                                 }
                             }
-                        }
+                        }*/
+
+
                         enode.setAttribute("path", path);
                     }
                 }
