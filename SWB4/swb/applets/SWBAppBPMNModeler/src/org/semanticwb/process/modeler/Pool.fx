@@ -35,6 +35,8 @@ public class Pool extends GraphicalElement
         resizeType=ResizeNode.RESIZE_A;
         w=600;
         h=200;
+        minW = w;
+        minH = h;
         text=EditableText
         {
             text: bind title with inverse
