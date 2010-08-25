@@ -51,6 +51,25 @@ public class Driver_MySQL_SWB extends Driver_MySQL {
         LONG_OBJECT_LENGTH_MAX = LONG_OBJECT_LENGTH = 250;
     }
 
+    // Valida Inconsistencia de Long Literals
+    @Override
+    protected String IDtoString ( int dbID, String table, String RDBcode )
+    {
+        String ret=null;
+        RDBLongObject lobj = IDtoLongObject(dbID, table);
+        if ( lobj == null )
+        {
+            log.error("Invalid Long literal ID: " + dbID);
+            return "0::";
+        }
+        else
+        {
+            ret=super.IDtoString(dbID, table, RDBcode);
+        }
+        //System.out.println("ret:"+ret);
+        return ret;
+    }
+
     /**
      * Set the database connection.
      * 
