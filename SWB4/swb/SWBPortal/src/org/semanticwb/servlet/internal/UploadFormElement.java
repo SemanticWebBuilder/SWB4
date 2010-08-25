@@ -87,7 +87,7 @@ public class UploadFormElement implements InternalServlet {
             factory.setSizeThreshold(4096); // 4Kb tamaño por encima del cual los ficheros son escritos directamente en disco
             factory.setRepository(new File(SWBPortal.getWorkPath()));
             ServletFileUpload upload = new ServletFileUpload(factory);
-            upload.setSizeMax(1024*4064); //512 Kb tamaño maximo de archivo a subir
+            //upload.setSizeMax(1024*4064); //512 Kb tamaño maximo de archivo a subir
             List items = upload.parseRequest(request);
             boolean hasError = false;
 
