@@ -71,6 +71,7 @@ import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.util.db.GenericDB;
 import org.w3c.dom.Element;
 import org.w3c.dom.Document;
 
@@ -3487,43 +3488,47 @@ public class MainSurvey extends GenericResource
         
         if(!existe)
         {
-            Connection con = null;
-            Statement st = null;
+//            Connection con = null;
+//            Statement st = null;
             try
             {
-                String dbname=SWBUtils.DB.getDatabaseName().toLowerCase();
-                if(dbname.lastIndexOf("informix")>-1) dbname="informix";
-                if(dbname.lastIndexOf("mysql")>-1) dbname="mysql";
-                if(dbname.lastIndexOf("microsoft sql server")>-1) dbname="sqlserver";
-                if(dbname.lastIndexOf("adaptive server enterprise")>-1) dbname="sybase";
-                if(dbname.lastIndexOf("postgresql")>-1) dbname="postgres";
-                if(dbname.lastIndexOf("oracle")>-1) dbname="oracle";
-                InputStream  is_filesql = this.getClass().getResourceAsStream("survey_script_"+dbname+".sql");
-                String file =SWBUtils.IO.readInputStream((is_filesql));
-                con=SWBUtils.DB.getDefaultConnection();
-                st=con.createStatement();
-                int x=0;
-                if(file!=null)
-                {
-                    StringTokenizer sto=new StringTokenizer(file,";");
-                    while(sto.hasMoreTokens())
-                    {
-                        String query=sto.nextToken();
-                        x=st.executeUpdate(query);
-                    }
-                }
-                if(st != null) st.close();
-                if(con != null) con.close();
+//                String dbname=SWBUtils.DB.getDatabaseName().toLowerCase();
+//                if(dbname.lastIndexOf("informix")>-1) dbname="informix";
+//                if(dbname.lastIndexOf("mysql")>-1) dbname="mysql";
+//                if(dbname.lastIndexOf("microsoft sql server")>-1) dbname="sqlserver";
+//                if(dbname.lastIndexOf("adaptive server enterprise")>-1) dbname="sybase";
+//                if(dbname.lastIndexOf("postgresql")>-1) dbname="postgres";
+//                if(dbname.lastIndexOf("oracle")>-1) dbname="oracle";
+//                InputStream  is_filesql = this.getClass().getResourceAsStream("survey_script_"+dbname+".sql");
+//                String file =SWBUtils.IO.readInputStream((is_filesql));
+//                con=SWBUtils.DB.getDefaultConnection();
+//                st=con.createStatement();
+//                int x=0;
+//                if(file!=null)
+//                {
+//                    StringTokenizer sto=new StringTokenizer(file,";");
+//                    while(sto.hasMoreTokens())
+//                    {
+//                        String query=sto.nextToken();
+//                        x=st.executeUpdate(query);
+//                    }
+//                }
+//                if(st != null) st.close();
+//                if(con != null) con.close();
+
+                GenericDB db = new GenericDB();
+                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/survey.xml");
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
             }
             catch(Exception e)
             {
                 log.error("Error while trying to create resource tables, class - MainSurvey, method - install",e);
             }
-            finally
-            {
-                st = null;
-                con = null;
-            }
+//            finally
+//            {
+//                st = null;
+//                con = null;
+//            }
         }
         // cargando el cat�logo por sitio
         Timestamp ahora = new Timestamp(System.currentTimeMillis());
