@@ -25,6 +25,8 @@ public class AnnotationArtifact extends Artifact
         resizeable=true;
         w=80;
         h=60;
+        minW = w;
+        minH = h;
         text=EditableText
         {
             text: bind title with inverse
