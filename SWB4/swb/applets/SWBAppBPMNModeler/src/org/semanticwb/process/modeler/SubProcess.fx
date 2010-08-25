@@ -87,9 +87,9 @@ public class SubProcess extends Activity
     {
         resizeable=true;
         containerable=true;
-        initializeCustomNode();
         w=100;
-        h=60;        
+        h=60;
+        initializeCustomNode();
 
         text=EditableText
         {
@@ -120,8 +120,8 @@ public class SubProcess extends Activity
             {
                 x: bind x - w / 2 + 3
                 y: bind y - h / 2 + 3
-                width: w - 6
-                height: h - 6
+                width: bind w - 6
+                height: bind h - 6
                 stroke: bind shape.stroke
                 styleClass: "task"
             }
