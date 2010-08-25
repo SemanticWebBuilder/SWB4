@@ -495,3 +495,9 @@
     -fx-fill: #E6E8EA;
     -fx-opacity: 1;
 }
+
+.resizepoint {
+	-fx-fill: #f5f5ff;
+	-fx-stroke: #03689a;
+	-fx-stroke-width: 1;
+}
