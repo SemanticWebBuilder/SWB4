@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable
+public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty swb_rtJspPath=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#rtJspPath");
     public static final org.semanticwb.platform.SemanticClass swb_JSPResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#JSPResourceType");
@@ -42,6 +42,18 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
             return (getJSPResourceType(id, model)!=null);
         }
 
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResource(org.semanticwb.model.Resource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
@@ -54,6 +66,18 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
             return it;
         }
 
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResourceCollection(org.semanticwb.model.ResourceCollection value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_resourceCollectionInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResourceCollection(org.semanticwb.model.ResourceCollection value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_resourceCollectionInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
         public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeBySubType(org.semanticwb.model.ResourceSubType value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType, value.getSemanticObject(),sclass));
@@ -63,18 +87,6 @@ public abstract class JSPResourceTypeBase extends org.semanticwb.model.ResourceT
         public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeBySubType(org.semanticwb.model.ResourceSubType value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType,value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.model.JSPResourceType> listJSPResourceTypeByResource(org.semanticwb.model.Resource value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.JSPResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
             return it;
         }
 

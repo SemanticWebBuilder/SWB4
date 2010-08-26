@@ -1,7 +1,7 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceCollectionCategoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ResourceCollectionCategoryBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCollection");
@@ -140,31 +140,6 @@ public abstract class ResourceCollectionCategoryBase extends org.semanticwb.mode
          return ret;
     }
 
-    public String getTitle()
-    {
-        return getSemanticObject().getProperty(swb_title);
-    }
-
-    public void setTitle(String value)
-    {
-        getSemanticObject().setProperty(swb_title, value);
-    }
-
-    public String getTitle(String lang)
-    {
-        return getSemanticObject().getProperty(swb_title, null, lang);
-    }
-
-    public String getDisplayTitle(String lang)
-    {
-        return getSemanticObject().getLocaleProperty(swb_title, lang);
-    }
-
-    public void setTitle(String title, String lang)
-    {
-        getSemanticObject().setProperty(swb_title, title, lang);
-    }
-
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasResource));
@@ -204,6 +179,31 @@ public abstract class ResourceCollectionCategoryBase extends org.semanticwb.mode
              ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
+    }
+
+    public String getTitle()
+    {
+        return getSemanticObject().getProperty(swb_title);
+    }
+
+    public void setTitle(String value)
+    {
+        getSemanticObject().setProperty(swb_title, value);
+    }
+
+    public String getTitle(String lang)
+    {
+        return getSemanticObject().getProperty(swb_title, null, lang);
+    }
+
+    public String getDisplayTitle(String lang)
+    {
+        return getSemanticObject().getLocaleProperty(swb_title, lang);
+    }
+
+    public void setTitle(String title, String lang)
+    {
+        getSemanticObject().setProperty(swb_title, title, lang);
     }
 
     public java.util.Date getUpdated()
