@@ -234,6 +234,32 @@ public class SemanticProperty
     }
 
     /**
+     * Gets the Comment.
+     *
+     * @return the label
+     */
+    public String getComment()
+    {
+        return getComment(null);
+    }
+
+    /**
+     * Gets the label.
+     *
+     * @param lang the lang
+     * @return the label
+     */
+    public String getComment(String lang)
+    {
+        String ret = null;
+        if (m_prop instanceof OntProperty)
+        {
+            ret = ((OntProperty) m_prop).getComment(lang);
+        }
+        return ret;
+    }
+
+    /**
      * Gets the label.
      * 
      * @param lang the lang
