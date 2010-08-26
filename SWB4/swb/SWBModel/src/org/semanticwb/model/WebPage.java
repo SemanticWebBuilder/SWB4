@@ -442,8 +442,7 @@ public class WebPage extends WebPageBase
     /**
      * Indica si la pagina tienen alguna regla, rol o grupo de usuarios asignado o heredado.
      * 
-     * @return true, if is filtered
-     * @return
+     * @return true, if is filtered     
      */
     public boolean isFiltered()
     {
