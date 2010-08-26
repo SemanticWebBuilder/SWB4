@@ -743,13 +743,23 @@ public class SemanticClass
     }
     /**
      * Regresa el valor de la propiedad rdf:comment de la clase
-     * @param lang
-     * @return
+     * @param lang Language of the comment
+     * @return The comment in the ontology
      */
 
     public String getComment(String lang)
     {
         return m_class.getComment(lang);
+    }
+
+    /**
+     * Regresa el valor de la propiedad rdf:comment de la clase
+     * @return The comment in the ontology
+     */
+
+    public String getComment()
+    {
+        return m_class.getComment(null);
     }
 
     /**
