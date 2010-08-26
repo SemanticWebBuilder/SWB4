@@ -732,7 +732,7 @@ public class SemanticClass
     }
 
     /**
-     * Regresa el valor de la propiedad rdf:label del la clase
+     * Regresa el valor de la propiedad rdf:label de la clase
      * 
      * @param lang the lang
      * @return the label
@@ -740,6 +740,16 @@ public class SemanticClass
     public String getLabel(String lang)
     {
         return m_class.getLabel(lang);
+    }
+    /**
+     * Regresa el valor de la propiedad rdf:comment de la clase
+     * @param lang
+     * @return
+     */
+
+    public String getComment(String lang)
+    {
+        return m_class.getComment(lang);
     }
 
     /**
