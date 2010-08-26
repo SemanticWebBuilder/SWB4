@@ -28,6 +28,7 @@ import org.semanticwb.*
 import org.semanticwb.platform.*
 import org.semanticwb.portal.community.base.*
 import java.util.*
+import java.util.concurrent.*
 
 //long time1 = System.currentTimeMillis()
 WebSite wsid = request.getAttribute("topic").getWebSite()
@@ -139,24 +140,26 @@ def recurseContenedor(Contenedor home, int level){
 }
 
 class LocalCache{
-    static  Contenedor inicio = null
+    static ConcurrentHashMap<String,Contenedor> cachecontainer = new ConcurrentHashMap<String,Contenedor>();
     static long timer = 0
     //static long cache_time = 1000L*60*60*12
     static long cache_time = 1000L*60*15 // 1000L*10 //1000L*60*15
 
     static public Contenedor getInicio(WebSite wsid){
+        Contenedor inicio = cachecontainer.get(wsid.getId())
         if (null==inicio || System.currentTimeMillis()>timer+cache_time) {
-            init(wsid)
+            inicio = init(wsid)
         }
         return inicio
     }
 
-    static private synchronized void init(WebSite wsid){
-        if (null!=inicio && (System.currentTimeMillis()<timer+cache_time)) return
+    static private synchronized Contenedor init(WebSite wsid){
+        Contenedor actual = cachecontainer.get(wsid.getId())
+        if (null!=actual && (System.currentTimeMillis()<timer+cache_time)) return actual
         timer = System.currentTimeMillis()
         //        WebPage homeTeaser = org.semanticwb.model.SWBContext.getWebSite("Ciudad_Digital").getWebPage("HomeTeasers")
         WebPage homeTeaser = wsid.getWebPage("HomeTeasers")
-        inicio = new Contenedor(homeTeaser, new TreeSet<Contenedor>(new CompContenedor()))
+        Contenedor inicio = new Contenedor(homeTeaser, new TreeSet<Contenedor>(new CompContenedor()))
         WebPage lugar = wsid.getWebPage("Sitios_de_Interes")
         WebPage servicio = wsid.getWebPage("Servicios")
         WebPage organizacion = wsid.getWebPage("Organizaciones")
@@ -292,6 +295,8 @@ class LocalCache{
            
             
         }
+        cachecontainer.put(wsid.getId(),inicio)
+        return inicio
     }
 
     static boolean findif(WebPage curr, WebPage lookup) {
