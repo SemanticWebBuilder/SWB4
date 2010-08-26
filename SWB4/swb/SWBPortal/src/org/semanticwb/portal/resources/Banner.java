@@ -125,14 +125,10 @@ public class Banner extends GenericAdmResource {
                     out.println(">");
                     out.println("</embed></object>");
                 }else {
-                    if( url!=null ) {
-                        String action = base.getAttribute("axn");
+                    if( url!=null ) {                        
                         out.print("<a class=\"swb-banner\"");
-//                        if( url!=null ) {
-                            out.print(" href=\""+url+"\"");
-                            out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
-//                        }else
-//                            out.print(" href=\"#\"");
+                        out.print(" href=\""+url+"\"");
+                        out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
                         out.println(" title=\""+base.getAttribute("title","")+"\">");
                     }
                     out.print("<img src=\"");
@@ -144,6 +140,11 @@ public class Banner extends GenericAdmResource {
                         out.print(" height=\""+height+"\"");
                     if( longdesc!=null )
                         out.print(" longdesc=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).toString()+"\"");
+                    String action = base.getAttribute("axn");
+                    if( action!=null ) {
+                        action = action.replaceAll("\"", "'");
+                        out.print(" onclick=\""+action+"\"");
+                    }
                     out.println("/>");
 
                     if( url!=null )
