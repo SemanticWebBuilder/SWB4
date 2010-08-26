@@ -32,7 +32,6 @@ import org.semanticwb.platform.SemanticProperty;
 //~--- JDK imports ------------------------------------------------------------
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 // TODO: Auto-generated Javadoc
 /**
