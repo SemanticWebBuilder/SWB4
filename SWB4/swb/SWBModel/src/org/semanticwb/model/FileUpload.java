@@ -151,7 +151,10 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             //String ext= "jpg|gif|png";
 
             if ((name != null) && (request.getAttribute("attachCount_" + name) != null)) {
-                attchMsg = "Archivo(s) existentes:<br/>";
+                attchMsg = lang.equals("en")?"Existing files":"Archivo(s) existentes:";
+                attchMsg=attchMsg+"<br/>";
+
+
 
                 int count = Integer.parseInt((String) request.getAttribute("attachCount_" + name));
 
@@ -181,6 +184,10 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
             }
 
             String formName = (String) request.getAttribute("formName");
+
+            String fileNotEmpty = lang.equals("en")?"File field must not be empty":"El campo archivo no debe estar vacio";
+            String extAllowed=lang.equals("en")?"Allowed extensions":"Extensiones permitidas";
+
 
             // Página ejemplo de implementación:http://blog.tremend.ro/2007/03/01/ajax-file-upload-monitoring-monitor-your-file-upload-with-dwr-and-commons-fileupload/
             // Fecha de implemetación:26/Febrero/2009
@@ -220,7 +227,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + "   </div>\n" + "   <div id=\"uploadPercentage_" + name
                     + "\" style=\"width:5px; float: right;\"></div>\n" + "</div>\n";
             ret += "<script type=\"text/javascript\">\n" + "function uploadjs_" + name + "(forma){\n" + "if(forma."
-                   + name + ".value==''){alert('El campo archivo no debe estar vacio');forma." + name
+                   + name + ".value==''){alert('"+fileNotEmpty+"');forma." + name
                    + ".focus(); return false;} if(!isFileType(forma." + name+".value, '"+ ext +"' ) ){ forma." + name+ ".value=\"\"; return false; }"     // TODO:Internacionalizar
                     +"  var encoding=forma.encoding;\n" + "  forma.encoding='multipart/form-data';\n"
                     + "  var method=forma.method;\n" + "  forma.method='post';\n" + "  var action=forma.action;\n"
@@ -242,7 +249,7 @@ public class FileUpload extends org.semanticwb.model.base.FileUploadBase {
                     + " \n         swFormat=swFormat.substring(swFormat.indexOf(\"|\")+1);"
                     + " \n      }"
                     + " \n      while(pExt.indexOf(\"|\")!=-1) pExt=pExt.replace('|',',');"
-                    + " \n        alert('Extensiones permitidas: ' + pExt.replace('|',','));"
+                    + " \n        alert('"+extAllowed+": ' + pExt.replace('|',','));"
                     + " \n      return false;"
                     + " \n   }"
                     + " \n   else return true;"
