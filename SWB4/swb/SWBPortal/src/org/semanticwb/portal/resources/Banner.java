@@ -77,7 +77,7 @@ public class Banner extends GenericAdmResource {
             String local = base.getAttribute("local", "0");
             String code =base.getAttribute("code");
             if( local.equals("0")||code==null ) {
-                String img = base.getAttribute("img");
+                String img = base.getAttribute("img","");
                 String longdesc = base.getAttribute("longdesc");
                 String url = base.getAttribute("url");
 
