@@ -247,7 +247,8 @@ public class ResourceParser extends GenericParser {
         if (page != null) {
             ret = super.getUrl(page);
         } else if (((Resource)gen).getResourceType().getResourceCollection() != null ) {
-            ret = ((Resource)gen).getResourceType().getResourceCollection().getDisplayWebPage() + "?uri=" + ((Resource)gen).getEncodedURI();
+            ret = ((Resource)gen).getResourceType().getResourceCollection().getDisplayWebPage() +
+                    "?uri=" + ((Resource)gen).getEncodedURI();
         }
         return ret;
     }
