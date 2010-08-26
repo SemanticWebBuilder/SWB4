@@ -158,6 +158,9 @@ public class SemanticVocabulary
     
     /** The Constant SWB_FORMELEMENT. */
     public static final String SWB_FORMELEMENT = URI + "FormElement";
+
+    /** The Constant SWB_SWBFORMELEMENT. */
+    public static final String SWB_SWBFORMELEMENT = URI + "SWBFormElement";
     
     /** The Constant SWB_SEMANTICRESOURCE. */
     public static final String SWB_SEMANTICRESOURCE = URI + "SemanticResource";
