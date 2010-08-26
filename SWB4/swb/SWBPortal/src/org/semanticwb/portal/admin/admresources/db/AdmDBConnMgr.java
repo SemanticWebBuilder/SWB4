@@ -411,11 +411,19 @@ public class AdmDBConnMgr {
     public String update2DB(User user) {
         this.user = user;
         try {
-            if (getXmlParams() != null && defconn == true) {
-                base.setXml(getXmlParams());
+            String xml=getXmlParams();
+            if (xml != null && defconn == true)
+            {
+                if(xml.length()>0)
+                {
+                    base.setXml(xml);
+                }else
+                {
+                    log.error("Error updating xml of resource:"+base.getId());
+                }
             //base.u(user.getId(), "resource width id:"+ base.getId()+",was updated succefully");
             } else { //No es base de datos defecto de recurso
-                if (getXmlParams() != null && defconn == false) {
+                if (xml != null && defconn == false) {
                     loadXmlRes();
                     if (existRecord) {
                         if (update2NoDefDB()) {
