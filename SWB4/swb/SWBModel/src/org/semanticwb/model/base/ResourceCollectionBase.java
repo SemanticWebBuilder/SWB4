@@ -1,10 +1,12 @@
 package org.semanticwb.model.base;
 
 
-public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.PFlowRefable
+public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollectionCategory=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollectionCategory");
     public static final org.semanticwb.platform.SemanticProperty swb_hasResourceCollectionCategoryInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasResourceCollectionCategoryInv");
+    public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    public static final org.semanticwb.platform.SemanticProperty swb_displayWebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#displayWebPage");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCollectionType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCollectionType");
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection");
@@ -84,6 +86,18 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
         public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByCategory(org.semanticwb.model.ResourceCollectionCategory value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasResourceCollectionCategoryInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollectionByDisplayWebPage(org.semanticwb.model.WebPage value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceCollection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_displayWebPage,value.getSemanticObject(),sclass));
             return it;
         }
 
@@ -254,6 +268,33 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
          if(obj!=null)
          {
              ret=(org.semanticwb.model.ResourceCollectionCategory)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+    public void setDisplayWebPage(org.semanticwb.model.WebPage value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_displayWebPage, value.getSemanticObject());
+        }else
+        {
+            removeDisplayWebPage();
+        }
+    }
+
+    public void removeDisplayWebPage()
+    {
+        getSemanticObject().removeProperty(swb_displayWebPage);
+    }
+
+    public org.semanticwb.model.WebPage getDisplayWebPage()
+    {
+         org.semanticwb.model.WebPage ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_displayWebPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.WebPage)obj.createGenericInstance();
          }
          return ret;
     }

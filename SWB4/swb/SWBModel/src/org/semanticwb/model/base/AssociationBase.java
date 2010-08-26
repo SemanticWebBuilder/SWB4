@@ -3,10 +3,10 @@ package org.semanticwb.model.base;
 
 public abstract class AssociationBase extends org.semanticwb.model.SWBClass 
 {
-    public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasMember");
     public static final org.semanticwb.platform.SemanticClass swb_Topic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Topic");
     public static final org.semanticwb.platform.SemanticProperty swb_assType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assType");
+    public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasMember");
     public static final org.semanticwb.platform.SemanticClass swb_Association=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Association");
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Association");
 
@@ -51,18 +51,6 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
             return (getAssociation(id, model)!=null);
         }
 
-        public static java.util.Iterator<org.semanticwb.model.Association> listAssociationByMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasMember, value.getSemanticObject(),sclass));
-            return it;
-        }
-
-        public static java.util.Iterator<org.semanticwb.model.Association> listAssociationByMember(org.semanticwb.model.AssMember value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasMember,value.getSemanticObject(),sclass));
-            return it;
-        }
-
         public static java.util.Iterator<org.semanticwb.model.Association> listAssociationByType(org.semanticwb.model.Topic value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_assType, value.getSemanticObject(),sclass));
@@ -74,11 +62,50 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
             org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_assType,value.getSemanticObject(),sclass));
             return it;
         }
+
+        public static java.util.Iterator<org.semanticwb.model.Association> listAssociationByMember(org.semanticwb.model.AssMember value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasMember, value.getSemanticObject(),sclass));
+            return it;
+        }
+
+        public static java.util.Iterator<org.semanticwb.model.Association> listAssociationByMember(org.semanticwb.model.AssMember value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Association> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasMember,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public AssociationBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    public void setType(org.semanticwb.model.Topic value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_assType, value.getSemanticObject());
+        }else
+        {
+            removeType();
+        }
+    }
+
+    public void removeType()
+    {
+        getSemanticObject().removeProperty(swb_assType);
+    }
+
+    public org.semanticwb.model.Topic getType()
+    {
+         org.semanticwb.model.Topic ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_assType);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Topic)obj.createGenericInstance();
+         }
+         return ret;
     }
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember> listMembers()
@@ -118,33 +145,6 @@ public abstract class AssociationBase extends org.semanticwb.model.SWBClass
          if(obj!=null)
          {
              ret=(org.semanticwb.model.AssMember)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-    public void setType(org.semanticwb.model.Topic value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_assType, value.getSemanticObject());
-        }else
-        {
-            removeType();
-        }
-    }
-
-    public void removeType()
-    {
-        getSemanticObject().removeProperty(swb_assType);
-    }
-
-    public org.semanticwb.model.Topic getType()
-    {
-         org.semanticwb.model.Topic ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_assType);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Topic)obj.createGenericInstance();
          }
          return ret;
     }
