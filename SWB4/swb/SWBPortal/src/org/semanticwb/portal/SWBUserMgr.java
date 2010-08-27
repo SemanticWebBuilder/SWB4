@@ -45,6 +45,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Device;
+import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBSessionUser;
 import org.semanticwb.model.User;
@@ -172,6 +173,18 @@ public class SWBUserMgr
         if(ret==null)
         {
             String language = request.getLocale().getLanguage().trim();
+
+            if(!site.hasLanguage(language))
+            {
+                Language l=site.getLanguage();
+                if(l==null)
+                {
+                    Iterator<Language> i=SWBUtils.Collections.copyIterator(site.listLanguages()).iterator();
+                    if(i.hasNext())l=i.next();
+                }
+                if(l!=null)language=l.getId();
+            }
+
             //language=DBUser.getInstance(repository).getProperty("defaultLanguage",language);        
             
             ret=new SWBSessionUser(rep);
