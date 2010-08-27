@@ -88,9 +88,7 @@ public class RecommendSwf extends Recommend {
      * @throws SWBResourceException the sWB resource exception
      */       
     @Override
-    public Document getDom(HttpServletRequest request,
-            HttpServletResponse response, SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
+    public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
         String action = (null != request.getParameter("rec_act")
                 && !"".equals(request.getParameter("rec_act").trim()))
@@ -101,7 +99,7 @@ public class RecommendSwf extends Recommend {
         try {        
             Document  dom = SWBUtils.XML.getNewDocument();
             if ("rec_step3".equals(action)) {
-                dom = getDomEmail(request, response, paramRequest); // Envia correo
+//                dom = super.getDomEmail(request, paramRequest)getDomEmail(request, response, paramRequest); // Envia correo
             } else { // Nueva ventana con formulario               
                 User user = paramRequest.getUser();
                 SWBResourceURLImp url = new SWBResourceURLImp(request, base,
