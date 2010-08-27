@@ -35,7 +35,14 @@ namespace WB4WordOffice2007
         private WordOfficeApplication application;
         public RibbonMenuWord()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ue)
+            {
+                System.Windows.Forms.MessageBox.Show(ue.StackTrace, ue.Message);
+            }
         }
 
         public void NoDocumentsActive()
