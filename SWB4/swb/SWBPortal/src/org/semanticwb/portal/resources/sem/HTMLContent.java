@@ -405,6 +405,9 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 log.error("Al escribir el archivo", e);
             }
         }
+        //Borrar cache
+        SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(resource);
+        
         if (textSaved) {
             message = "El contenido ha sido guardado exit&oacute;samente";
         } else {
