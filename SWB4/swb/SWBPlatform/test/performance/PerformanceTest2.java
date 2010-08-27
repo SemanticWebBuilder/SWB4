@@ -30,6 +30,7 @@ package performance;
 
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -95,68 +96,134 @@ public class PerformanceTest2
         System.out.println("used:"+used);
         long time=System.currentTimeMillis();
 
-        TreeSet set=new TreeSet();
+        SemanticInstanceCacheMgr cache=new SemanticInstanceCacheMgr();
         
-        for(int x=0;x<1000000;x++)
+        for(int x=0;x<10000000;x++)
         {
-            set.add(new SemanticObjectCache("http://www.sep.gob.mx/webpage:"+x,"http://www.sep.gob.mx/WebPage"));
+            cache.add("http://www.sep.gob.mx/webpage#WebPage:"+x,"http://www.sep.gob.mx#WebPage");
         }
         
         System.out.println("Time:"+(System.currentTimeMillis()-time));
         used=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
         System.out.println("used:"+(used-ini));
         System.gc();
+        try
+        {
+            Thread.currentThread().sleep(15000);
+        }catch(InterruptedException e){}
+        used=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
         System.out.println("used:"+(used-ini));
+        cache.contains(null);
     }
 }
 
-class SemanticObjectCache implements Comparable<SemanticObjectCache>
+class SemanticInstanceCacheMgr
 {
-    String uri;
-    String sclass;
+    private ConcurrentHashMap<String, SemanticInstanceCache> map=new ConcurrentHashMap();
 
-    public SemanticObjectCache() {
+    private int precount=0;
+    private ConcurrentHashMap<String, String> pre=new  ConcurrentHashMap();
+
+    private String compressUri(String uri)
+    {
+        String ret=uri;
+        int i=uri.lastIndexOf("#");
+        String base="";
+        if(i>-1)
+        {
+            base = uri.substring(0, i);
+            String head=uri.substring(i);
+            String com=pre.get(base);
+            if(com==null)
+            {
+                com=""+precount;
+                pre.put(base, com);
+                precount++;
+            }
+            ret=com+head;
+        }
+        //System.out.println(uri+" "+base+" "+ret);
+        return ret;
     }
 
-    public SemanticObjectCache(String uri, String sclass)
+    private String indexUri(String uri)
+    {
+        String ret=pre.get(uri);
+        if(ret==null)
+        {
+            ret=""+precount;
+            pre.put(uri, ret);
+            precount++;
+        }
+        return ret;
+    }
+
+
+    public void add(String uri, String scls)
+    {
+        uri=compressUri(uri);
+        scls=indexUri(scls);
+        map.put(uri, new SemanticInstanceCache(uri,scls));
+    }
+
+    public void remove(String uri)
+    {
+        uri=compressUri(uri);
+        map.remove(uri);
+    }
+
+    public boolean contains(String uri)
+    {
+        uri=compressUri(uri);
+        return map.contains(uri);
+    }
+
+    public int size()
+    {
+        return map.size();
+    }
+}
+
+class SemanticInstanceCache implements Comparable<SemanticInstanceCache>
+{
+    private String uri;
+    private String sclass;
+
+    public SemanticInstanceCache(String uri, String sclass)
     {
         this.uri=uri;
         this.sclass=sclass;
     }
 
-
-    public String getSClass() {
+    public String getSClass()
+    {
         return sclass;
     }
 
-    public void setSClass(String sclass) {
-        this.sclass = sclass;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
-
-    @Override
-    public String toString() {
+    public String getUri()
+    {
         return uri;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public String toString()
+    {
+        return uri;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
         return obj.toString().equals(uri);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return uri.hashCode();
     }
 
-    public int compareTo(SemanticObjectCache o)
+    public int compareTo(SemanticInstanceCache o)
     {
         return uri.compareTo(o.toString());
     }
