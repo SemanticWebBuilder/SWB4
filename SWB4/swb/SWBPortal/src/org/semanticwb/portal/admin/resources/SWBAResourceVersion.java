@@ -586,7 +586,8 @@ public class SWBAResourceVersion extends GenericResource {
 
             // Para recargar el recurso
             SWBResource swres = (SWBResource) sobase.getGenericInstance();
-            swres.setResourceBase(swres.getResourceBase());
+            SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(swres.getResourceBase());
+            //swres.setResourceBase(swres.getResourceBase());
 
             response.setRenderParameter(act, "");
             response.setMode(response.Mode_VIEW);
