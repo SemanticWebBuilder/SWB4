@@ -1,3 +1,13 @@
+  (En desarrollo)
+
+  4.0.1.7
+    - Correccion de modos de despliegue, Cambio de modo de estrategia a sistema, validacion de envio de correo del recurso comment (CarlosR)
+    - Correccion de ligas nulas en recurso banner (CarlosR)
+    - Se implemento compatibilidad a recursos de version 2 de WB (Jei)
+    - Se mejoró la carga del applet de filtros de administración (victorl)
+    - Mejoras en el applet de edición de plantillas, para soporte a MAC OS (victorl)
+    - En el plug-in de office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
+    - Mejora en la apertura de documentos (victorl).
   4.0.1.6
     - Soporte a paginas de Error multilenguaje (Jei)
     - Se agrego funcionalidad de Colecciones de Recursos (Jei)
@@ -5,7 +15,7 @@
     - Se agrego soporte a descripciones en multiples idiomas (Jei)
     - Se agrego búsqueda en la administración contenidos por sección (Juan)
     - Se agrego paginación en la administración de contenidos por sección (Juan)
-  4.0.1.5  (En desarrollo)
+  4.0.1.5  
     - Soporte a SQLServer 2008 (Jei)
     - Nuevo Blog con persitencia semantica (Victor L)
     - Se agregó opción "solo acceso" al filtrado de ips (Jei)
@@ -30,6 +40,5 @@
     - Se corrigieron las deficiencias sobre la especificación xhtml stricto 1.0 para el recurso WBMenuNivel
     - CPU Time por thread para monitoreo (Serch)
     - Se corrigió la visualización de archivos Flash mostrados a través de recursos HTMLContent
-
   4.0.1.4  31/05/2010
     
