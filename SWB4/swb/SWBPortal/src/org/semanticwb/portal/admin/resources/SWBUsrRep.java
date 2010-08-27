@@ -74,7 +74,7 @@ public class SWBUsrRep extends GenericResource {
     String PATH = SWBPortal.getWorkPath() + "/";
     
     /** The WEBPATH. */
-    String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/";
+    String WEBPATH = SWBPortal.getWebWorkPath() + "/sitetemplates/repsusers/";
     
     /** The MODELS. */
     String MODELS = PATH + "models/";
