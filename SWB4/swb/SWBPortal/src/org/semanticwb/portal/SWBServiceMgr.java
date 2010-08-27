@@ -258,7 +258,11 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         //System.out.println("Instanceof SWBResource:"+res);
                         try
                         {
-                            if(res!=null)res.setResourceBase(res.getResourceBase());
+                            if(res!=null)
+                            {
+                                res.setResourceBase(res.getResourceBase());
+                                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(res.getResourceBase());
+                            }
                         }catch(Exception e){log.error(e);}
                     }
                     if(obj.instanceOf(Dns.sclass)&& prop.equals(Dns.swb_dns))
@@ -338,7 +342,6 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
                         indexer.indexSerchable(searchable);
                     }
                 }
-
             }
         }catch(Exception e){log.error(e);}
     }
