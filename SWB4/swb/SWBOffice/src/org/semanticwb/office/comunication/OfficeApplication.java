@@ -645,7 +645,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 Node frozenNode = versiontoReturn.getNode("jcr:frozenNode");
                 String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
                 String file = frozenNode.getProperty(cm_file).getString();
-                String encode = System.getenv("Dfile.encoding");
+                String encode=System.getProperty("file.encoding","utf-8");
                 if (encode == null || encode.equals(""))
                 {
                     encode = "utf-8";
