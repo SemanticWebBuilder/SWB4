@@ -139,7 +139,7 @@ public class SWBResourceCachedMgr
     }
 
     /**
-     * Removes the resource.
+     * Removes the resource from cache
      * 
      * @param base the base
      */
