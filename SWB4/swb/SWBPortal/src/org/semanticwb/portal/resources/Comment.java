@@ -652,7 +652,6 @@ public class Comment extends GenericResource {
 
         if( paramRequest.getCallMethod()==paramRequest.Call_STRATEGY ) {
             String surl = paramRequest.getWebPage().getUrl();
-            //SWBResourceURLImp url = null;
             Iterator<Resourceable> res = base.listResourceables();
             while(res.hasNext()) {
                 Resourceable re = res.next();
@@ -674,7 +673,7 @@ public class Comment extends GenericResource {
                 out.println("</a>");
             }else {
                 out.println("<div class=\"swb-comment\">");
-                out.println("<a href=\""+surl+"\" class=\"swb-contact-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">"+paramRequest.getLocaleString("msgComments")+"</a>");
+                out.println("<a href=\""+surl+"\" class=\"swb-comment-stgy\" title=\""+paramRequest.getLocaleString("msgComments")+"\">"+paramRequest.getLocaleString("msgComments")+"</a>");
                 out.println("</div>");
             }
         }else {
