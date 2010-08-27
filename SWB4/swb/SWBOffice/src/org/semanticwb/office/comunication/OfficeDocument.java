@@ -523,7 +523,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values, InputStream in, String filename) throws Exception
     {
-        String encode = System.getenv("Dfile.encoding");
+        String encode=System.getProperty("file.encoding","utf-8");        
         if (encode == null || encode.equals(""))
         {
             encode = "utf-8";
@@ -735,7 +735,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
      */
     public String updateContent(String repositoryName, String contentId, String file, ResourceInfo[] resources, PFlow[] flows, String[] msg) throws Exception
     {
-        String encode = System.getenv("Dfile.encoding");
+        String encode=System.getProperty("file.encoding","utf-8");
         if (encode == null || encode.equals(""))
         {
             encode = "utf-8";
