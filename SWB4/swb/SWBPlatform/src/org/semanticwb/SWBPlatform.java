@@ -101,7 +101,7 @@ public class SWBPlatform
     private static SemanticMgr semanticMgr=null;
 
     /** The Constant version. */
-    protected static final String version = "4.0.1.7";
+    protected static final String version = "4.0.1.8";
     
     /**
      * Instantiates a new sWB platform.
