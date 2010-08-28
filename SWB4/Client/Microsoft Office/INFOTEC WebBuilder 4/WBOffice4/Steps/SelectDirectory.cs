@@ -621,6 +621,15 @@ namespace WBOffice4.Steps
                             }
                         }
                     }
+                    else if (entrySize == -1)
+                    {
+                        int read = inputStream.Read(data, 0, data.Length);
+                        while (read != 0)
+                        {
+                            sw.Write(data, 0, read);
+                            read = inputStream.Read(data, 0, data.Length);
+                        }
+                    }
                     sw.Close();
                 }
             }
