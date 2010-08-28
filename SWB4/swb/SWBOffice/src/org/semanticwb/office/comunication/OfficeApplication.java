@@ -584,18 +584,36 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                 {
                     Node parent = node.getParent();
                     String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-                    Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
-                    String userlogin=resNode.getProperty(cm_user).getString();
-                    if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                    try
                     {
-                        ContentInfo info = new ContentInfo();
-                        info.id = node.getUUID();
-                        info.title = node.getProperty(cm_title).getValue().getString();
-                        info.descripcion = node.getProperty(cm_description).getValue().getString();
-                        info.categoryId = parent.getUUID();
-                        info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                        info.created = node.getProperty("jcr:created").getDate().getTime();
-                        contents.add(info);
+                        Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
+                        String userlogin=resNode.getProperty(cm_user).getString();
+                        if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                        {
+                            ContentInfo info = new ContentInfo();
+                            info.id = node.getUUID();
+                            info.title = node.getProperty(cm_title).getValue().getString();
+                            info.descripcion = node.getProperty(cm_description).getValue().getString();
+                            info.categoryId = parent.getUUID();
+                            info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                            info.created = node.getProperty("jcr:created").getDate().getTime();
+                            contents.add(info);
+                        }
+                    }
+                    catch(RuntimeException rte)
+                    {
+                        try
+                        {
+                            String id = node.getUUID();
+                            String titlenode = node.getProperty(cm_title).getValue().getString();
+                            String categoryIdnode = parent.getUUID();
+                            String categoryTitle=parent.getProperty(cm_title).getValue().getString();
+                            log.error("Error triyng to get the content with id "+id+" and title "+titlenode+" and category "+categoryIdnode+" and the title of category is "+categoryTitle,rte);
+                        }
+                        catch(Throwable t)
+                        {
+                            log.error(t);
+                        }
                     }
                 }
                 else
