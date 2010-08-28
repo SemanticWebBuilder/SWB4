@@ -95,24 +95,6 @@ public class BannerCluster extends GenericAdmResource
                                     }
                                 }
                                 banners.put(new Integer(r.getAttribute("index")), r);
-
-//                                String title = r.getDisplayTitle(lang)==null?"":r.getDisplayTitle(lang);
-//                                String desc = r.getDisplayDescription(lang)==null?"":r.getDisplayDescription(lang);
-//                                String url = r.getAttribute("url","#");
-//                                String img = (new StringBuilder()).append(webWorkPath).append(r.getWorkPath()).append("/").append(r.getAttribute("img")).toString();
-//                                String alt = r.getAttribute("alt", title);
-//                                b.append("<div class=\"swb-banner-cluster-ci\">");
-//                                b.append("  <div class=\"swb-cluster-img\">");
-//                                b.append("    <a href=\""+url+"\">");
-//                                b.append("      <img src=\""+img+"\" alt=\""+alt+"\" width=\""+width+"\" height=\""+height+"\" />");
-//                                b.append("    </a>");
-//                                b.append("  </div>");
-//                                b.append("  <div class=\"swb-cluster-despliega\" id=\"r"+base.getId()+"_"+(i++)+"\" onmouseover=\"expande(this.id)\" onmouseout=\"collapse(this.id)\">");
-//                                b.append("    <p class=\"swb-cluster-titulo\"><a href=\""+url+"\">"+title+"</a></p>");
-//                                b.append("    <p>&nbsp;</p>");
-//                                b.append("    <p class=\"swb-cluster-desc\"><a href=\""+url+"\">"+desc+"</a></p>");
-//                                b.append("  </div>");
-//                                b.append("</div>");
                             }
                         }
                         break;
