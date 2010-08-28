@@ -27,6 +27,7 @@
     <fieldset legend="Avançado">
         <input type="radio" id="local1" name="local" label="Externo" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
         <textarea id="code" name="code" label="* Código:" rows="5" cols="50" wrap="virtual"/>
+        <input type="text" id="index" name="index" label="Índice:" maxlength="7" regExp="\d{1,7}" invalidMessage="Índice inválido" promptMessage="Imagem de índice numérico" />
 
         <statictext name="note">
         <![CDATA[
@@ -36,7 +37,6 @@
             </font>
         ]]>
         </statictext>
-        <input type="text" id="index" name="index" label="Index:" promptMessage="Index de la imagen" />
     </fieldset>
 
     <fieldset>
