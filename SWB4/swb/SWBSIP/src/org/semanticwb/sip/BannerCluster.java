@@ -1,15 +1,15 @@
 package org.semanticwb.sip;
 
 import java.io.*;
+import java.util.Comparator;
 import java.util.Iterator;
-import java.util.TreeMap;
+import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.model.base.ResourceBase;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.resources.Banner;
 
 public class BannerCluster extends GenericAdmResource
 {
@@ -23,7 +23,7 @@ public class BannerCluster extends GenericAdmResource
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
 
-        StringBuilder b = new StringBuilder();;
+        StringBuilder b = new StringBuilder();
         int i = 0;
 
         String width = base.getAttribute("width");
@@ -70,7 +70,8 @@ public class BannerCluster extends GenericAdmResource
         out.println("<div class=\"swb-banner-cluster\">");
         String cluster = base.getAttribute("cluster", "carrusel");
 
-        TreeMap<Integer,Resource>banners = new TreeMap<Integer,Resource>();
+        //TreeMap<Integer,Resource>banners = new TreeMap<Integer,Resource>( new BannerSortComparator());
+        TreeSet<Resource>banners = new TreeSet<Resource>( new BannerSortComparator() );
 
         Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
         while( itResourceTypes.hasNext() ) {
@@ -87,6 +88,7 @@ public class BannerCluster extends GenericAdmResource
                                 try {
                                     Integer.parseInt(r.getAttribute("index"));
                                 }catch(NumberFormatException nfe) {
+                                    System.out.println("error  **** "+nfe);
                                     r.setAttribute("index","0");
                                     try {
                                         r.updateAttributesToDB();
@@ -94,7 +96,7 @@ public class BannerCluster extends GenericAdmResource
                                         continue;
                                     }
                                 }
-                                banners.put(new Integer(r.getAttribute("index")), r);
+                                banners.add(r);
                             }
                         }
                         break;
@@ -104,9 +106,9 @@ public class BannerCluster extends GenericAdmResource
             }
         }
 
-        Iterator it = banners.keySet().iterator();
+        Iterator<Resource> it = banners.iterator();
         while(it.hasNext()) {
-            Resource r = banners.get(it.next());
+            Resource r = it.next();
             String title = r.getDisplayTitle(lang)==null?"":r.getDisplayTitle(lang);
             String desc = r.getDisplayDescription(lang)==null?"":r.getDisplayDescription(lang);
             String url = r.getAttribute("url","#");
@@ -135,3 +137,21 @@ public class BannerCluster extends GenericAdmResource
         out.close();
     }
 }
+
+class BannerSortComparator implements Comparator {
+    public int compare ( Object o1, Object o2 ) {
+        Resource r1 = (Resource)o1;
+        Resource r2 = (Resource)o2;
+        int i1 = Integer.parseInt(r1.getAttribute("index"));
+        int i2 = Integer.parseInt(r2.getAttribute("index"));
+        if( i2>i1 )
+            return -1;
+        else
+            return 1;
+    }
+
+//    @Override
+//    public boolean equals(Object o)   {
+//        return false;
+//    }
+  }
