@@ -148,7 +148,7 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         out.println("   <legend>¿Quién puede ver este documento?</legend>");
         out.println("   <div>");
         out.println("    <p><label for=\"scope0\"><input type=\"radio\" name=\"scope\" id=\"scope0\" value=\"false\" />&nbsp;Cualquiera</label></p>");
-        out.println("    <p><label for=\"scope1\"><input type=\"radio\" name=\"scope\" id=\"scope1\" value=\"true\" checked=\"checked\" />&nbsp;Sólo miembros del comité</label></p>");
+        out.println("    <p><label for=\"scope1\"><input type=\"radio\" name=\"scope\" id=\"scope1\" value=\"true\" checked=\"checked\" />&nbsp;Sólo miembros</label></p>");
         out.println("   </div>");
         out.println("  </fieldset>        ");
         out.println("  </div>");
@@ -166,40 +166,52 @@ public class Documents extends org.semanticwb.portal.resources.sem.documents.bas
         //int ordinal = 1;
         SWBResourceURL url = paramRequest.getActionUrl().setAction(paramRequest.Action_REMOVE);
         SWBResourceURL dplyURL = paramRequest.getRenderUrl().setMode(paramRequest.Mode_HELP).setCallMethod(paramRequest.Call_DIRECT);
+
+        User user = paramRequest.getUser();
+        html.append("<p>");
+        html.append("usuario: "+user.getFullName()+". Grupo: "+user.getUserGroup());
+        html.append("</p>");
         
         html.append("<div class=\"swb-comentario-sem-lista\">");
-        Iterator<Document> itDocuments = SWBComparator.sortByCreated(listDocuments(),false);
-        if(itDocuments.hasNext()) {
-            html.append("<h2>documentos</h2>");
-            html.append("<ol>");
-            User user = paramRequest.getUser();
-            UserGroup ug = user.getUserGroup();
-            while(itDocuments.hasNext()) {
-                Document document = itDocuments.next();
-                if(document.getCreator()==null)
-                    continue;
-                if( !document.getCreator().getUserGroup().equals(ug) && document.isHidden() )
-                    continue;
-                html.append("<li>");
-                html.append("<p>"+document.getTitle()+"</p>");
-                html.append("<p>"+document.getDescription()+"</p>");
-                //html.append("<p><a onclick=\"displayDocto('"+dplyURL.setParameter("uri", document.getURI())+"', '"+document.getFilename()+"', 'width=640, height=480, scrollbars, resizable, alwaysRaised, menubar')\" href=\"#\" title=\"ver documento\">"+document.getFilename()+"</a></p>");
-                html.append("<p><a href=\""+dplyURL.setParameter("uri", document.getURI())+"\" title=\"ver documento\">"+document.getFilename()+"</a></p>");
-                if( document.getCreator().equals(user) ) {
-                    html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
-                }else
-                    html.append("<p>Autor: "+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
-                html.append("<p><a href=\""+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl()+"?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
-                System.out.println("paramRequest.getWebPage().getRealUrl()="+paramRequest.getWebPage().getRealUrl());
-                System.out.println("paramRequest.getWebPage().getWebPageURL()="+paramRequest.getWebPage().getWebPageURL());
-                System.out.println("base.getAttribute(\"comments\")="+base.getAttribute("comments"));
-                System.out.println("paramRequest.getWebPage().getWebSite().getWebPage(\"wp61\").getRealUrl()="+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl());
+        try {
+            Iterator<Document> itDocuments = SWBComparator.sortByCreated(listDocuments(),false);
+//            Iterator<Document> itDocuments = listDocuments();
+            if(itDocuments.hasNext()) {
+                html.append("<h2>documentos</h2>");
+                html.append("<ol>");
+//                User user = paramRequest.getUser();
+                UserGroup ug = user.getUserGroup();
+                while(itDocuments.hasNext()) {
+                    Document document = itDocuments.next();
+                    if(document!=null && document.getCreator()==null)
+                        continue;
+                    if( document.getCreator().getUserGroup()!=null && !document.getCreator().getUserGroup().equals(ug) && document.isHidden() )
+                        continue;
+                    html.append("<li>");
+                    html.append("<p>"+document.getTitle()+"</p>");
+                    html.append("<p>"+document.getDescription()+"</p>");
+                    //html.append("<p><a onclick=\"displayDocto('"+dplyURL.setParameter("uri", document.getURI())+"', '"+document.getFilename()+"', 'width=640, height=480, scrollbars, resizable, alwaysRaised, menubar')\" href=\"#\" title=\"ver documento\">"+document.getFilename()+"</a></p>");
+                    html.append("<p><a href=\""+dplyURL.setParameter("uri", document.getURI())+"\" title=\"ver documento\">"+document.getFilename()+"</a></p>");
+                    if( document.getCreator().equals(user) ) {
+                        html.append("<p><a onclick=\"validateRemoveDoctoElement('"+url.setParameter("uri",document.getURI())+"')\" href=\"#\">Eliminar</a></p>");
+                    }else
+                        html.append("<p>Autor: "+(document.getCreator()==null?"Anónimo":document.getCreator().getFullName())+". "+sdf.format(document.getCreated())+"</p>");
+                    if( base.getAttribute("comments")!=null && paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments"))!=null )
+                        html.append("<p><a href=\""+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl()+"?uri="+document.getEncodedURI()+"\">Comentar</a></p>");
+                    System.out.println("paramRequest.getWebPage().getRealUrl()="+paramRequest.getWebPage().getRealUrl());
+                    System.out.println("paramRequest.getWebPage().getWebPageURL()="+paramRequest.getWebPage().getWebPageURL());
+                    System.out.println("base.getAttribute(\"comments\")="+base.getAttribute("comments"));
+                    //System.out.println("paramRequest.getWebPage().getWebSite().getWebPage(\"wp61\").getRealUrl()="+paramRequest.getWebPage().getWebSite().getWebPage(base.getAttribute("comments")).getRealUrl());
 
-                html.append("</li>");
-            }
-            html.append("</ol>");
-        }else
-            html.append("<!-- no hay documentos -->");
+                    html.append("</li>");
+                }
+                html.append("</ol>");
+            }else
+                html.append("<!-- no hay documentos -->");
+        }catch(Exception e) {
+            html.append("<p> Sin documentos. Gracias<p>");
+            System.out.println("\n\nError en documentos....\n"+e);
+        }
         html.append("</div>");
         return html.toString();
     }
