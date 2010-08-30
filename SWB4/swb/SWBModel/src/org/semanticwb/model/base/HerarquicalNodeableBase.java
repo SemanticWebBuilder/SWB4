@@ -9,11 +9,26 @@ public interface HerarquicalNodeableBase extends org.semanticwb.model.GenericObj
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.HerarquicalNode> listHerarquicalNodes();
     public boolean hasHerarquicalNode(org.semanticwb.model.HerarquicalNode value);
 
+   /**
+   * Adds the HerarquicalNode
+   * @param value An instance of org.semanticwb.model.HerarquicalNode
+   */
     public void addHerarquicalNode(org.semanticwb.model.HerarquicalNode value);
 
+   /**
+   * Remove all the values for the property HerarquicalNode
+   */
     public void removeAllHerarquicalNode();
 
+   /**
+   * Remove a value from the property HerarquicalNode
+   * @param value An instance of org.semanticwb.model.HerarquicalNode
+   */
     public void removeHerarquicalNode(org.semanticwb.model.HerarquicalNode value);
 
+/**
+* Gets the HerarquicalNode
+* @return a instance of org.semanticwb.model.HerarquicalNode
+*/
     public org.semanticwb.model.HerarquicalNode getHerarquicalNode();
 }
