@@ -165,6 +165,7 @@ public class SWBAListRelatedObjects extends GenericResource {
 
             while (itso.hasNext()) {
                 SemanticObject sobj = itso.next();
+                if(sobj.getBooleanProperty(Trashable.swb_deleted))continue;
                 out.println("<tr>");
 
                 // Action
