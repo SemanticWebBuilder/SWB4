@@ -182,16 +182,60 @@ namespace WB4Office2007Library
         private ICollection<FileInfo> GetInlineShapesLinks()
         {
             List<FileInfo> attachments = new List<FileInfo>();
-            foreach (Word.InlineShape shape in document.InlineShapes)
+            try
             {
-                if (shape.LinkFormat != null)
+                
+                foreach (Word.InlineShape shape in document.InlineShapes)
                 {
-                    FileInfo file = UriToFile(shape.LinkFormat.SourceFullName);
-                    if (file != null)
+                    bool isLinkShape = shape.Type == Word.WdInlineShapeType.wdInlineShapeLinkedOLEObject || shape.Type == Word.WdInlineShapeType.wdInlineShapeLinkedPicture || shape.Type == Word.WdInlineShapeType.wdInlineShapeLinkedPictureHorizontalLine;
+                    if (isLinkShape && shape.LinkFormat != null && shape.LinkFormat.Type != Word.WdLinkType.wdLinkTypePicture)
                     {
-                        attachments.Add(file);
+                        FileInfo file = UriToFile(shape.LinkFormat.SourceFullName);
+                        if (file != null)
+                        {
+                            attachments.Add(file);
+                        }
                     }
                 }
+                foreach (Word.Shape shape in document.Shapes)
+                {
+                    if (shape.Hyperlink != null)
+                    {
+                        Word.Hyperlink link = shape.Hyperlink;
+                        if (link.Address != null)
+                        {
+                            FileInfo file = UriToFile(link.Address);
+                            if (file != null)
+                            {
+                                attachments.Add(file);
+                            }
+                        }
+                    }
+                }
+
+                foreach (Word.InlineShape shape in document.InlineShapes)
+                {
+                    if (shape.Hyperlink != null)
+                    {
+                        Word.Hyperlink link = shape.Hyperlink;
+                        if (link.Address != null)
+                        {
+                            FileInfo file = UriToFile(link.Address);
+                            if (file != null)
+                            {
+                                attachments.Add(file);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    WBOffice4.OfficeApplication.WriteError(e);
+                }
+                catch { }
             }
             return attachments;
         }
