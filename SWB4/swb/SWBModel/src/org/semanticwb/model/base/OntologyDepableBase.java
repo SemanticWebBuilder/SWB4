@@ -9,11 +9,26 @@ public interface OntologyDepableBase extends org.semanticwb.model.GenericObject
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.Ontology> listOntologies();
     public boolean hasOntology(org.semanticwb.model.Ontology value);
 
+   /**
+   * Adds the Ontology
+   * @param value An instance of org.semanticwb.model.Ontology
+   */
     public void addOntology(org.semanticwb.model.Ontology value);
 
+   /**
+   * Remove all the values for the property Ontology
+   */
     public void removeAllOntology();
 
+   /**
+   * Remove a value from the property Ontology
+   * @param value An instance of org.semanticwb.model.Ontology
+   */
     public void removeOntology(org.semanticwb.model.Ontology value);
 
+/**
+* Gets the Ontology
+* @return a instance of org.semanticwb.model.Ontology
+*/
     public org.semanticwb.model.Ontology getOntology();
 }

@@ -9,11 +9,26 @@ public interface UserGroupableBase extends org.semanticwb.model.GenericObject
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroup> listUserGroups();
     public boolean hasUserGroup(org.semanticwb.model.UserGroup value);
 
+   /**
+   * Adds the UserGroup
+   * @param value An instance of org.semanticwb.model.UserGroup
+   */
     public void addUserGroup(org.semanticwb.model.UserGroup value);
 
+   /**
+   * Remove all the values for the property UserGroup
+   */
     public void removeAllUserGroup();
 
+   /**
+   * Remove a value from the property UserGroup
+   * @param value An instance of org.semanticwb.model.UserGroup
+   */
     public void removeUserGroup(org.semanticwb.model.UserGroup value);
 
+/**
+* Gets the UserGroup
+* @return a instance of org.semanticwb.model.UserGroup
+*/
     public org.semanticwb.model.UserGroup getUserGroup();
 }

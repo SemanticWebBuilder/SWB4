@@ -2,6 +2,9 @@ package org.semanticwb.model.base;
 
 public interface PFlowRefableBase extends org.semanticwb.model.Referensable
 {
+   /**
+   * Referencia a un objeto de tipo PFlow 
+   */
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRef");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPFlowRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPFlowRef");
     public static final org.semanticwb.platform.SemanticClass swb_PFlowRefable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#PFlowRefable");
@@ -10,11 +13,26 @@ public interface PFlowRefableBase extends org.semanticwb.model.Referensable
     public boolean hasPFlowRef(org.semanticwb.model.PFlowRef value);
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listInheritPFlowRefs();
 
+   /**
+   * Adds the PFlowRef
+   * @param value An instance of org.semanticwb.model.PFlowRef
+   */
     public void addPFlowRef(org.semanticwb.model.PFlowRef value);
 
+   /**
+   * Remove all the values for the property PFlowRef
+   */
     public void removeAllPFlowRef();
 
+   /**
+   * Remove a value from the property PFlowRef
+   * @param value An instance of org.semanticwb.model.PFlowRef
+   */
     public void removePFlowRef(org.semanticwb.model.PFlowRef value);
 
+/**
+* Gets the PFlowRef
+* @return a instance of org.semanticwb.model.PFlowRef
+*/
     public org.semanticwb.model.PFlowRef getPFlowRef();
 }
