@@ -268,14 +268,6 @@
     </rdfs:subClassOf>
     <rdfs:label xml:lang="en">Publish Flow</rdfs:label>
     <rdfs:subClassOf>
-      <swb:Interface rdf:ID="Trashable">
-        <rdfs:subClassOf>
-          <owl:Class rdf:about="#SWBInterface"/>
-        </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
       <owl:Class rdf:about="#FilterableClass"/>
     </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -580,7 +572,14 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Undeleteable"/>
-    <rdfs:subClassOf rdf:resource="#Trashable"/>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Trashable">
+        <rdfs:subClassOf>
+          <owl:Class rdf:about="#SWBInterface"/>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#CalendarRefable"/>
     </rdfs:subClassOf>
