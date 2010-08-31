@@ -73,15 +73,18 @@ public class BannerCluster extends GenericAdmResource
         //TreeMap<Integer,Resource>banners = new TreeMap<Integer,Resource>( new BannerSortComparator());
         TreeSet<Resource>banners = new TreeSet<Resource>( new BannerSortComparator() );
 
-        Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
-        while( itResourceTypes.hasNext() ) {
-            ResourceType rt = itResourceTypes.next();
-            if( rt.getId().equalsIgnoreCase("Banner") ) {
+        ResourceType rt = ResourceType.ClassMgr.getResourceType("Banner", paramRequest.getWebPage().getWebSite());
+
+//        Iterator<ResourceType> itResourceTypes = paramRequest.getWebPage().getWebSite().listResourceTypes();
+//        while( itResourceTypes.hasNext() ) {
+//            ResourceType rt = itResourceTypes.next();
+//            if( rt.getId().equalsIgnoreCase("Banner") ) {
                 Iterator<ResourceSubType> itResSubTypes = rt.listSubTypes();
                 while( itResSubTypes.hasNext() ) {
                     ResourceSubType st = itResSubTypes.next();
                     if( st.getId().equalsIgnoreCase(cluster) ) {
-                        Iterator<Resource> itRes = ResourceBase.ClassMgr.listResourceByResourceSubType(st, paramRequest.getWebPage().getWebSite());
+                        //Iterator<Resource> itRes = ResourceBase.ClassMgr.listResourceByResourceSubType(st, paramRequest.getWebPage().getWebSite());
+                        Iterator<Resource> itRes = st.listResources();
                         while( itRes.hasNext() ) {
                             Resource r = itRes.next();
                             if( r.isActive() && r.isValid() && user.haveAccess(r) ) {
@@ -102,9 +105,9 @@ public class BannerCluster extends GenericAdmResource
                         break;
                     }
                 }
-                break;
-            }
-        }
+//                break;
+//            }
+//        }
 
         Iterator<Resource> it = banners.iterator();
         while(it.hasNext()) {
