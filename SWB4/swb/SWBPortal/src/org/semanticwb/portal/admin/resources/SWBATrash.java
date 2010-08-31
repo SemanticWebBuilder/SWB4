@@ -34,6 +34,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticOntology;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
 // TODO: Auto-generated Javadoc
@@ -49,6 +53,7 @@ public class SWBATrash extends GenericResource {
     
     /** The debugvar. */
     private boolean debugvar=true;
+    private Resource base=null;
     
     /**
      * Creates a new instance of SWBATrash.
@@ -67,40 +72,37 @@ public class SWBATrash extends GenericResource {
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        Resource base=getResourceBase();
+        base=getResourceBase();
+        String  trashtype = base.getAttribute("trash","site");
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        String id = request.getParameter("suri");
         PrintWriter out = response.getWriter();
-        String selected = "section";
-        if(base.getAttribute("view")!=null) selected = base.getAttribute("view");
-        out.println("<form action=\""+paramRequest.getActionUrl().setAction("update").toString()+"\" method=\"post\" class=\"box\">");
-        out.println("<TABLE width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
-        out.println("<TR>");
-        out.println("<TD width=\"150\" align=\"right\" class=\"datos\"> "+paramRequest.getLocaleString("TrashType")+"</TD>");
-        out.println("<TD class=\"valores\"><select name=\"view\" class=\"valores\">");
-        String strSelect ="";
-        if(selected.equals("content")) strSelect = " selected ";
-        out.println("<option value=\"content\" "+strSelect+">"+paramRequest.getLocaleString("selectContent")+"</option>");
-        strSelect ="";
-        if(selected.equals("resource")) strSelect = " selected ";
-        out.println("<option value=\"resource\" "+strSelect+">"+paramRequest.getLocaleString("selectResource")+"</option>");
-        strSelect ="";
-        if(selected.equals("section")) strSelect = " selected ";
-        out.println("<option value=\"section\" "+strSelect+">"+paramRequest.getLocaleString("selectSection")+"</option>");
-        strSelect ="";
-        if(selected.equals("site")) strSelect = " selected ";
-        out.println("<option value=\"site\" "+strSelect+">"+paramRequest.getLocaleString("selectSite")+"</option>");
-        strSelect ="";
-        if(selected.equals("template")) strSelect = " selected ";
-        out.println("<option value=\"template\" "+strSelect+">"+paramRequest.getLocaleString("selectTemplate")+"</option>");
-        out.println("</select></TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD colspan=2 align=\"right\" class=\"datos\"><HR size=\"1\" noshade><input type=submit class=\"boton\" value=\""+paramRequest.getLocaleString("btnSend")+"\"></TD>");
-        out.println("</TR>");
-        out.println("</TABLE>");
-        out.println("</TD>");
-        out.println("</TR>");
-        out.println("</TABLE></form></P>");
-        
+        SWBResourceURL urlact = paramRequest.getActionUrl();
+        urlact.setAction("updcfg");
+        out.println("<div class=\"swbform\">");
+        out.println("<form id=\"" + id + "/trashAdmin\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/trashAdmin'); return false;\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
+        out.println("<fieldset>");
+        out.println("<legend>");
+        out.println(paramRequest.getLocaleString("msgResourceConfig"));
+        out.println("</legend>");
+        out.println("<ul style=\"list-style:none;\">");
+        out.println("<li>");
+        out.println("<input type=\"radio\" id=\""+id+"/trashtypesite\" name=\"trashtype\" value=\"site\" "+(trashtype.equals("site")?"checked":"")+"><label for=\""+id+"/trashtypesite\">manejo de papelera para sitios.</label>");
+        out.println("</li>");
+        out.println("<li>");
+        out.println("<input type=\"radio\" id=\""+id+"/trashtypeelements\" name=\"trashtype\" value=\"elements\" "+(trashtype.equals("elements")?"checked":"")+"><label for=\""+id+"/trashtypeelements\">manejo de papelera para elementos del sitio.</label>");
+        out.println("</li>");
+        out.println("</ul>");
+        out.println("</fieldset>");
+
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >" + paramRequest.getLocaleString("btnSave") + "</button>"); //
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
     }
 
     /**
@@ -114,484 +116,231 @@ public class SWBATrash extends GenericResource {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        base=getResourceBase();
+        String  trashtype = base.getAttribute("trash","site");
+        String id = request.getParameter("suri");
+        PrintWriter out = response.getWriter();
+
+        WebPage wp = paramRequest.getWebPage();
         User user = paramRequest.getUser();
-        
-        Resource base=getResourceBase();
-        StringBuffer ret = new StringBuffer("");
-        WebPage topic = paramRequest.getWebPage();
-        int num =0;
-        if(request.getParameter("ax")==null){
-            
-            String view = "section";
-            if(base.getAttribute("view")!=null) view=base.getAttribute("view");
-            
-            String tab_list_1 = null;
-            String tab_list_2 = null;
-            
-            String viewSite = request.getParameter("site");
-            if(request.getParameter("tm")!=null) viewSite=request.getParameter("tm");
-            SWBResourceURL urlSection = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-            urlSection.setParameter("view","section");
-            SWBResourceURL urlTemplate = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-            urlTemplate.setParameter("view","template");
-            SWBResourceURL urlContent = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-            urlContent.setParameter("view","content");
-            SWBResourceURL urlResource = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-            urlResource.setParameter("view","resource");
-            SWBResourceURL urlSite = paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW);
-            urlSite.setParameter("view","site");
-            
-            String strSection = "<a href=\""+urlSection.toString()+"\">"+paramRequest.getLocaleString("linkSection")+"</a>";
-            String strTemplate = "<a href=\""+urlTemplate.toString()+"\">"+paramRequest.getLocaleString("linkTemplate")+"</a>";
-            String strContent = "<a href=\""+urlContent.toString()+"\">"+paramRequest.getLocaleString("linkContent")+"</a>";
-            String strResource = "<a href=\""+urlResource.toString()+"\">"+paramRequest.getLocaleString("linkResource")+"</a>";
-            String strSite = "<a href=\""+urlSite.toString()+"\">"+paramRequest.getLocaleString("linkSite")+"</a>";
-            
-            if (view == null || view.equals("")){
-                // se ven las secciones por default
-                view = "section";
-                strSection = "<b>"+paramRequest.getLocaleString("msgSection")+"</b>";
-            }
-            StringBuffer sbtm = new StringBuffer("");
-            if (view.equals("section") || view.equals("template") || view.equals("content") || view.equals("resource") ){
-                // se arma lista de sitios, el primer sitio de la lista sería el de default
-                
-                Iterator<WebSite> etm = SWBContext.listWebSites();
-                
-                num = 0;
-                String control = "\n<tr><td colspan=7 class=\"datos\">"+paramRequest.getLocaleString("msgExistingSites")+" <select name=\"sitios\" onchange=\"javascript:go(forma);\" class=\"valores\">";
-                String piecontrol = "\n</select></td></tr>";
-                if(request.getParameter("tm")!=null){
-                    control = "<input type=hidden name=\"sitios\" class=\"valores\" value=\""+request.getParameter("tm")+"\">";
-                    piecontrol="";
-                }
-                sbtm.append(control);
-                if(!piecontrol.equals("")) {
-                    while(etm.hasNext()){
-                        WebSite rtm = etm.next();
-                        num++;
-                        int permiso = 0;
-                        //TODO: AdmFilterMgr.getInstance().haveAccess2TopicMap
-                        //permiso = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramRequest.getUser(),viewSite);
-                        permiso = 1; //Temporal
-                        if(viewSite == null | viewSite.equals("")) viewSite = rtm.getId();
-                        String opcion = "";
-                        if(!rtm.isDeleted())
-                            if(viewSite.equals(rtm.getId()))
-                                opcion = "\n<option value=\""+topic.getUrl()+"?view="+view+"&site="+rtm.getId()+"\" selected>"+rtm.getTitle()+"</option> ";
-                            else
-                                opcion = "\n<option value=\""+topic.getUrl()+"?view="+view+"&site="+rtm.getId()+"\">"+rtm.getTitle()+"</option> ";
-                        
-                        if(permiso>0){
-                            
-                            if( (!view.equals("content") && !view.equals("section")) ){
-                                sbtm.append(opcion);
-                            }
-                            else{
-                                if( (view.equals("content") || view.equals("section")) && !rtm.getId().equals(SWBContext.WEBSITE_GLOBAL))
-                                    sbtm.append(opcion);
-                            }
-                            
-                        }
-                    }
-                }
-                sbtm.append(piecontrol);
-            }
-            
-            if(view.equals("site"))
-                if(view.equals("site")) strSite = "<b>"+paramRequest.getLocaleString("msgSite")+"</b>";
-            tab_list_1 ="";// "<tr><td colspan=6>"+strSection + " \\ " + strTemplate + " \\ " + strContent + " \\ " + strResource + " \\ " + strSite + " \\</td></tr><tr><td colspan=6><hr></td></tr>";
-            tab_list_2 = sbtm.toString();
-            // Armado de enlistado de elementos borrados
-            
-            String strHeader = "";
-            StringBuffer strTable = new StringBuffer("");
-            StringBuffer strAll = new StringBuffer("");
-            
-            //int permisoTM =0;
-            //TODO: AdmFilterMgr.getInstance().haveAccess2TopicMap()
-            //permisoTM = AdmFilterMgr.getInstance().haveAccess2TopicMap(paramRequest.getUser(),viewSite);
-            StringBuffer formAll = new StringBuffer("");
-            
-            SWBResourceURL urlAction = paramRequest.getActionUrl();
-            
-            formAll.append("\n\n<form name=\"frmAll\" method=\"post\" action=\""+urlAction+"\">");
-            formAll.append("\n<input type=\"hidden\" name=\"view\" value=\""+view+"\">");
-            if(!view.equals("site")) formAll.append("\n<input type=\"hidden\" name=\"site\" value=\""+viewSite+"\">");
-            formAll.append("\n<input type=\"hidden\" name=\"ax\" value=\"\">");
-            
-            
-            // lista con todos los elementos encontrados
-            //StringBuffer strList = new StringBuffer("");
-            if(view.equals("section")){
-                
-                Iterator<WebPage> enumT = SWBContext.getWebSite(viewSite).listWebPages();
-                num = 0;
-                String rowColor="";
-                boolean cambiaColor = true;
-                while (enumT.hasNext()){
-                    WebPage rT = enumT.next();
-                    WebSite thisTM = SWBContext.getWebSite(viewSite);
-                    WebPage thisTopic = thisTM.getWebPage(rT.getId());
-                    if(rT.isDeleted()){
-                        //TODO: AdmFilterMgr.getInstance().haveAccess2Topic()
-                        //if(AdmFilterMgr.getInstance().haveAccess2Topic(user,thisTopic))
-                        {
-                            SWBResourceURL urlRecover=paramRequest.getActionUrl();   //?view="+view+"&site="+viewSite+"&ax=recover&id="+rT.getId()+"
-                            urlRecover.setParameter("view",view);
-                            urlRecover.setParameter("site",viewSite);
-                            urlRecover.setParameter("ax","recover");
-                            urlRecover.setParameter("id",rT.getId().toString());
-                            
-                            SWBResourceURL urlRemove=paramRequest.getActionUrl();   //?view="+view+"&site="+viewSite+"&ax=eliminate&id="+rT.getId()+",
-                            urlRemove.setParameter("view",view);
-                            urlRemove.setParameter("site",viewSite);
-                            urlRemove.setParameter("ax","eliminate");
-                            urlRemove.setParameter("id",rT.getId().toString());
-                            
-                            rowColor="#EFEDEC";
-                            if(!cambiaColor) rowColor="#FFFFFF";
-                            cambiaColor = !(cambiaColor);
-                            strTable.append("\n<tr bgcolor=\""+rowColor+"\">");
-                            strTable.append("\n<td class=\"valores\">"+rT.getId()+"</td>");
-                            strTable.append("\n<td class=\"valores\">"+ thisTopic.getTitle() +"</td>");
-                            //TODO: dateFormat()
-                            strTable.append("\n<td class=\"valores\">"+rT.getCreated()+"</td>");
-                            strTable.append("\n<td class=\"valores\">"+rT.getUpdated()+"</td>");
-                            strTable.append("\n<td class=\"valores\"><a href=\""+urlRecover.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover.gif\" border=0 title=\""+paramRequest.getLocaleString("titleRecover")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverSection")+"?'))return true; else return false;\"></a></td>");
-                            strTable.append("\n<td class=\"valores\" colspan=2><a href=\""+urlRemove.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio.gif\" border=0  title=\""+paramRequest.getLocaleString("titleEliminate")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteSection")+"?'))return true; else return false;\"></a></td>");
-                            strTable.append("\n</tr>");
-                            strAll.append(rT.getId()+",");
-                            formAll.append("\n<input type=\"hidden\" name=\"idlist\" value=\""+rT.getId()+"\">");
-                        }
-                        num++;
-                    }
-                }
 
-                strHeader = "<tr  ><td class=\"tabla\">"+paramRequest.getLocaleString("thID")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thName")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thCreated")+"</td><td class=\"tabla\" >"+paramRequest.getLocaleString("thLastUpdate")+"</td><td colspan=3 class=\"valores\"><a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover2.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecoverAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverAllSections")+"?')){delRec('recover',"+num+");} else {return (false);}\"></a>  <a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio2.gif\" border=0 title=\""+paramRequest.getLocaleString("titleEliminateAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteAllSections")+"?')){delRec('eliminate',"+num+");} else return false;\"></a></td></tr>";
-            }
-            
-            if(view.equals("template")){
-                WebSite ws = SWBContext.getWebSite(viewSite);
-                Iterator<Template> enumT = ws.listTemplates();
-                num=0;
-                String rowColor="";
-                boolean cambiaColor = true;
-                while (enumT.hasNext()){
-                    Template rT = enumT.next();
-                    if(rT.isDeleted()){
-                        //TODO: AdmFilterMgr.getInstance().haveAccess2GrpTemplate()
-                        //if(AdmFilterMgr.getInstance().haveAccess2GrpTemplate(user,viewSite,rT.getTemplateGroup().getId())==2)
-                        {
-                            //System.out.println("TM param: "+viewSite+ ", DBCatalog: " + DBCatalogs.getInstance().getGrpTemplate(viewSite,rT.getGrpid()).getTopicMapId());
-                            if(viewSite.equals(rT.getGroup().getWebSite().getId())) {
-                                SWBResourceURL urlRecover=paramRequest.getActionUrl();   //?view="+view+"&site="+viewSite+"&ax=recover&id="+rT.getId()+"
-                                urlRecover.setParameter("view",view);
-                                urlRecover.setParameter("site",viewSite);
-                                urlRecover.setParameter("ax","recover");
-                                urlRecover.setParameter("id",rT.getId());
-                                
-                                SWBResourceURL urlRemove=paramRequest.getActionUrl();   //?view="+view+"&site="+viewSite+"&ax=eliminate&id="+rT.getId()+",
-                                urlRemove.setParameter("view",view);
-                                urlRemove.setParameter("site",viewSite);
-                                urlRemove.setParameter("ax","eliminate");
-                                urlRemove.setParameter("id",rT.getId());
-                                rowColor="#EFEDEC";
-                                if(!cambiaColor) rowColor="#FFFFFF";
-                                cambiaColor = !(cambiaColor);
-                                strTable.append("<tr bgcolor=\""+rowColor+"\"><td class=\"valores\">"+rT.getId()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rT.getTitle()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rT.getDescription()+"</td>");
-                                //TODO: dateFormat()
-                                strTable.append("<td class=\"valores\">"+rT.getCreated()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rT.getUpdated()+"</td>");
-                                strTable.append("<td class=\"valores\" colspan=3><a href=\""+urlRecover.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecover")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverTemplate")+"?'))return true; else return false;\"></a></td><td><a href=\""+urlRemove.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio.gif\" border=0  title=\""+paramRequest.getLocaleString("titleEliminate")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteTemplate")+"?'))return true; else return false;\"></a></td>");
-                                strTable.append("</tr>");
-                                strAll.append(rT.getId()+",");
-                                formAll.append("\n<input type=\"hidden\" name=\"idlist\" value=\""+rT.getId()+"\">");
-                                num++;
-                            }
-                        }
-                    }
-                }
 
-                strHeader = "<tr ><td class=\"tabla\">"+paramRequest.getLocaleString("thID")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thName")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thDescription")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thCreated")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thLastUpdate")+"</td><td colspan=2 class=\"valores\"><a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover2.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecoverAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverAllTemplates")+"?')){delRec('recover',"+num+");} else {return (false);}\"></a>  <a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio2.gif\" border=0 title=\""+paramRequest.getLocaleString("titleEliminateAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteAllTemplates")+"?')){delRec('eliminate',"+num+");} else return false;\"></a></td></tr>";
-            }
-            
-            if(view.equals("content")){
-                WebSite otm = SWBContext.getWebSite(viewSite);
-                try{
-                    Iterator<WebPage> itKS = otm.listWebPages();
-                    num=0;
-                    String rowColor="";
-                    boolean cambiaColor = true;
-                    while(itKS.hasNext()){
-                        WebPage Tp = itKS.next();
-                        //if(AdmFilterMgr.getInstance().haveAccess2Topic(user,Tp))  //TODO:
-                        {
-                            //ArrayList alOcc = Tp.getOccurrences();
-                            //Iterator itOcc = alOcc.iterator();
-                            Iterator<Resource> itOcc = Tp.listResources();
-                            while(itOcc.hasNext()){
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject so = ont.getSemanticObject(id);
 
-                                Resource rOcc =  itOcc.next();
-                                String strTopicAsoc=Tp.getTitle(); //TopicMgr.getInstance().getTopicMap(rOcc.getIdtm()).getWebPage(rOcc.getIdtp()).getDisplayName();
-                                String strTopicAsocID=Tp.getId(); //rOcc.getIdtp();
-                                if(rOcc.isDeleted()){
-                                    num++;
-                                    Iterator<Resource> enuRes = SWBContext.getWebSite(viewSite).listResources();//DBResource.getInstance().getResources(viewSite);
-                                    boolean pasa = false;
-                                    while(enuRes.hasNext()){
-                                        Resource recRes = enuRes.next();
-                                        if(recRes.equals(rOcc)) pasa=true;
-                                    }
-                                    if(pasa){
-                                        Resource rRes = rOcc; //SWBContext.getWebSite(viewSite).getResource(rOcc.getResourceData());
-                                        if(rRes!=null&&!rRes.equals(null)){
-                                            
-                                            SWBResourceURL urlRecover=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=recover&id="+rOcc.getId()+
-                                            urlRecover.setParameter("view",view);
-                                            urlRecover.setParameter("site",viewSite);
-                                            urlRecover.setParameter("ax","recover");
-                                            urlRecover.setParameter("id",rOcc.getId());
-                                            
-                                            SWBResourceURL urlRemove=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=eliminate&id="+rRes.getId()+"&idocc="+rOcc.getId()+
-                                            urlRemove.setParameter("view",view);
-                                            urlRemove.setParameter("site",viewSite);
-                                            urlRemove.setParameter("ax","eliminate");
-                                            urlRemove.setParameter("id",rRes.getId());
-                                            urlRemove.setParameter("idocc",rOcc.getId());
-                                            rowColor="#EFEDEC";
-                                            if(!cambiaColor) rowColor="#FFFFFF";
-                                            cambiaColor = !(cambiaColor);
-                                            strTable.append("<tr bgcolor=\""+rowColor+"\">");
-                                            strTable.append("<td class=\"valores\">"+rRes.getId()+"</td>");
-                                            strTable.append("<td class=\"valores\">"+ rRes.getTitle()+"</td>");
-                                            strTable.append("<td class=\"valores\">"+rRes.getDescription()+"</td>");
-                                            strTable.append("<td class=\"valores\">"+strTopicAsoc+" | "+strTopicAsocID+"</td>");//strTopicAsoc
-                                            //TODO: dateFormat()
-                                            strTable.append("<td class=\"valores\">"+rRes.getCreated()+"</td>");
-                                            strTable.append("<td class=\"valores\">"+rRes.getUpdated()+"</td>");
-                                            strTable.append("<td class=\"valores\"><a href=\""+urlRecover.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecover")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverContent")+"?'))return true; else return false;\"></a></td>");
-                                            strTable.append("<td><a href=\""+urlRemove.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio.gif\" border=0  title=\""+paramRequest.getLocaleString("titleEliminate")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteContent")+"?'))return true; else return false;\"></a></td>");
-                                            strTable.append("</tr>");
-                                            strAll.append(rRes.getId()+"|"+rOcc.getId()+",");
-                                            formAll.append("\n<input type=\"hidden\" name=\"idlist\" value=\""+rRes.getId()+"|"+rOcc.getId()+"\">");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    strHeader = "<tr ><td class=\"tabla\">"+paramRequest.getLocaleString("thID")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thName")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thDescription")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thSection")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thCreated")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thLastUpdate")+"</td><td colspan=2 class=\"tabla\"><a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover2.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecoverAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverAllContents")+"?')){delRec('recover',"+num+");} else {return (false);}\"></a>  <a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio2.gif\" border=0 title=\""+paramRequest.getLocaleString("titleEliminateAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteAllContents")+"?')){delRec('eliminate',"+num+");} else return false;\"></a></td></tr>";
-                }
-                catch(Exception e){ log.error( paramRequest.getLocaleString("msgErrorTrash")+". WBATrash.doView.content ",e); }
-                otm = null;
-                
-            }
-            if(view.equals("resource")){
-                Iterator<Resource> enumT = SWBContext.getWebSite(viewSite).listResources();
-                
-                try{
-                    num=0;
-                    String rowColor="";
-                    boolean cambiaColor = true;
-                    while (enumT.hasNext()){
-                        Resource rRes = enumT.next();
-                        int oType = rRes.getResourceType().getResourceMode();
-                        //try{
-                        ResourceType oRec = rRes.getResourceType(); //DBResourceType.getInstance().getResourceType(rRes.getTypeMap(),oType);
-                        if(rRes!=null && oRec!=null && rRes.isDeleted() && (oRec.getResourceMode()==2 || oRec.getResourceMode()==3)){
-                            //TODO: AdmFilterMgr.getInstance().haveAccess2ResourceType()
-                            //if(AdmFilterMgr.getInstance().haveAccess2ResourceType(user,viewSite,Integer.parseInt(rRes.getId()),rRes.getResourceType().getWebSite().getId())==2)
-                            {
-                                SWBResourceURL urlRecover=paramRequest.getActionUrl();   //"?view="+view+"&site="+viewSite+"&ax=recover&id="+rRes.getId()+
-                                urlRecover.setParameter("view",view);
-                                urlRecover.setParameter("site",viewSite);
-                                urlRecover.setParameter("ax","recover");
-                                urlRecover.setParameter("id",rRes.getId());
-                                
-                                SWBResourceURL urlRemove=paramRequest.getActionUrl();   // "?view="+view+"&site="+viewSite+"&ax=eliminate&id="+rRes.getId()+
-                                urlRemove.setParameter("view",view);
-                                urlRemove.setParameter("site",viewSite);
-                                urlRemove.setParameter("ax","eliminate");
-                                urlRemove.setParameter("id",rRes.getId());
-                                rowColor="#EFEDEC";
-                                if(!cambiaColor) rowColor="#FFFFFF";
-                                cambiaColor = !(cambiaColor);
-                                strTable.append("<tr bgcolor=\""+rowColor+"\">");
-                                strTable.append("<td class=\"valores\">"+rRes.getId()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rRes.getTitle()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rRes.getDescription()+"</td>");
-                                //TODO: dateFormat()
-                                strTable.append("<td class=\"valores\">"+rRes.getCreated()+"</td>");
-                                strTable.append("<td class=\"valores\">"+rRes.getUpdated()+"</td>");
-                                strTable.append("<td class=\"valores\"><a href=\""+urlRecover.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecover")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverResource")+"?'))return true; else return false;\"></a></td>");
-                                strTable.append("<td class=\"valores\"><a href=\""+urlRemove.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio.gif\" border=0  title=\""+paramRequest.getLocaleString("titleEliminate")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteResource")+"?'))return true; else return false;\"></a></td>");
-                                strTable.append("</tr>");
-                                strAll.append(rRes.getId()+",");
-                                formAll.append("\n<input type=\"hidden\" name=\"idlist\" value=\""+rRes.getId()+"\">");
-                            }
-                            num++;
-                        }
-                        
-                    }
-                    
-                    strHeader = "<tr ><td class=\"tabla\">"+paramRequest.getLocaleString("thID")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thName")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thDescription")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thCreated")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thLastUpdate")+"</td><td colspan=2 class=\"tabla\"><a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover2.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecoverAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverAllResources")+"?')){delRec('recover',"+num+");} else {return (false);}\"></a>  <a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio2.gif\" border=0 title=\""+paramRequest.getLocaleString("titleEliminateAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteAllResources")+"?')){delRec('eliminate',"+num+");} else return false;\"></a></td></tr>";
-                }
-                catch(Exception e){  log.error(paramRequest.getLocaleString("msgErrorTrash")+". WBATrash.doView.resource ",e);   }
-            }
-            if(view.equals("site")){
-                Iterator<WebSite> enumTM = SWBContext.listWebSites();
-                num=0;
-                String rowColor="";
-                boolean cambiaColor = true;
-                while (enumTM.hasNext()){
-                    WebSite rTM = enumTM.next();
-                    if(rTM.isDeleted()){
-                        //TODO: AdmFilterMgr.getInstance().haveAccess2TopicMap()
-                        //if(AdmFilterMgr.getInstance().haveAccess2TopicMap(paramRequest.getUser(),rTM.getId())==2)
-                        {
-                            SWBResourceURL urlRecover=paramRequest.getActionUrl();   // "?view="+view+"&ax=recover&id="+rTM.getId()+
-                            urlRecover.setParameter("view",view);
-                            urlRecover.setParameter("ax","recover");
-                            urlRecover.setParameter("id",rTM.getId());
-                            
-                            SWBResourceURL urlRemove=paramRequest.getActionUrl();   // "?view="+view+"&ax=eliminate&id="+rTM.getId()+
-                            urlRemove.setParameter("view",view);
-                            urlRemove.setParameter("ax","eliminate");
-                            urlRemove.setParameter("id",rTM.getId());
-                            rowColor="#EFEDEC";
-                            if(!cambiaColor) rowColor="#FFFFFF";
-                            cambiaColor = !(cambiaColor);
-                            strTable.append("<tr bgcolor=\""+rowColor+"\">");
-                            strTable.append("<td class=\"valores\">"+rTM.getId()+"</td>");
-                            strTable.append("<td class=\"valores\">"+rTM.getTitle()+"</td><td class=\"valores\">"+rTM.getDescription()+"</td>");
-                            //TODO: dateFormat()
-                            strTable.append("<td class=\"valores\">"+rTM.getCreated()+"</td>");
-                            strTable.append("<td class=\"valores\">"+rTM.getUpdated()+"</td>");
-                            strTable.append("<td class=\"valores\"><a href=\""+urlRecover.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecover")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverSite")+"?'))return true; else return false;\"></a></td>");
-                            strTable.append("<td class=\"valores\" colspan=2><a href=\""+urlRemove.toString()+"\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio.gif\" border=0  title=\""+paramRequest.getLocaleString("titleEliminate")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteSite")+"?'))return true; else return false;\"></a></td>");
-                            strTable.append("</tr>");
-                            strAll.append(rTM.getId()+",");
-                            formAll.append("\n<input type=\"hidden\" name=\"idlist\" value=\""+rTM.getId()+"\">");
-                        }
-                        num++;
-                    }
-                }
-
-                String tempLink = "";
-                if(num>0)
-                {
-                    tempLink = "";
-                }
-                
-                
-                strHeader = "<tr><td class=\"tabla\">"+paramRequest.getLocaleString("thID")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thName")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thDescription")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thCreated")+"</td><td class=\"tabla\">"+paramRequest.getLocaleString("thLastUpdate")+"</td><td colspan=2 class=\"tabla\"><a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/recover2.gif\" border=0  title=\""+paramRequest.getLocaleString("titleRecoverAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureRecoverAllSites")+"?')){delRec('recover',"+num+");} else {return (false);}\"></a>  <a href=\"#\"><image src=\""+SWBPlatform.getContextPath()+"wbadmin/images/trash_vacio2.gif\" border=0 title=\""+paramRequest.getLocaleString("titleEliminateAll")+"\" onclick=\"javascript:if(confirm('"+paramRequest.getLocaleString("confirmShureDeleteAllSites")+"?')){delRec('eliminate',"+num+");} else return false;\"></a></td></tr>";
-            }
-            
-            strTable.append("</table>");
-            
-            if(view.equals("section")){
-                if( request.getParameter("tree")!=null && request.getParameter("tree").equals("reload") ){
-                    WebSite tm = SWBContext.getWebSite(request.getParameter("tmp"));
-                    WebPage tp = null;
-                    if(request.getParameter("tpp")!=null) {
-                        tp = tm.getWebPage(request.getParameter("tpp"));
-                        ret.append("<script>");
-                        ret.append("wbTree_executeAction('gotonode.topic."+tm.getId()+"."+tp.getId()+"'); ");
-                        ret.append("wbTree_reload();");
-                        ret.append("wbTree_executeAction('gotonode.topic."+tm.getId()+"."+tp.getId()+"'); ");
-                        ret.append("</script>");
-                    }
-                }
-            }
-            if(view.equals("template")){
-                if( request.getParameter("tree")!=null && request.getParameter("tree").equals("reload") ){
-                    
-                    if(request.getParameter("idtmp")!=null) {
-                        Template temp = SWBContext.getWebSite(viewSite).getTemplate(request.getParameter("idtmp"));
-                        
-                        TemplateGroup rgr = temp.getGroup();
-                        
-                        String ttm = ""; //"global";
-                        ttm = rgr.getWebSite().getId();
-                        
-                        ret.append("\n<script>");
-                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getGroup().getId()+"'); ");
-                        ret.append("wbTree_reload();");
-                        ret.append("wbTree_executeAction('gotopath."+ttm+".templates."+temp.getGroup().getId()+"."+temp.getId()+"'); ");
-                        ret.append("</script>");
-                    }
-                }
-            }
-            if(view.equals("resource")){
-                if( request.getParameter("tree")!=null && request.getParameter("tree").equals("reload") ){
-                    if(request.getParameter("idres")!=null) {
-                        try{
-                            Resource rRes = SWBContext.getWebSite(viewSite).getResource(request.getParameter("idres"));
-                            int oType = rRes.getResourceType().getResourceMode();
-                            ResourceType oRec = rRes.getResourceType();
-                            String nodo = "sysresources";
-                            if(oRec!=null&&oRec.getResourceMode()==2) nodo = "advresources";
-                            ret.append("<script>");
-                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getResourceType().getResourceMode()+"');");
-                            ret.append("wbTree_reload();");
-                            ret.append("wbTree_executeAction('gotopath."+nodo+"."+rRes.getResourceType().getResourceMode()+"."+rRes.getId()+"'); ");
-                            ret.append("</script>");
-                        }
-                        catch(Exception e){log.error(e);}
-                    }
-                }
-            }
-            if(view.equals("site")){
-                if( request.getParameter("tree")!=null && request.getParameter("tree").equals("reload") ){
-                    if(request.getParameter("tmp")!=null) {
-                        ret.append("<script>");
-                        ret.append("wbTree_executeAction('gotopath."+request.getParameter("tmp")+"'); ");
-                        ret.append("wbTree_reload();");
-                        ret.append("wbTree_executeAction('gotopath."+request.getParameter("tmp")+"'); ");
-                        ret.append("</script>");
-                    }
-                    else {
-                        ret.append("<script>");
-                        ret.append("wbTree_executeAction('gotopath'); ");
-                        ret.append("wbTree_reload();");
-                        ret.append("</script>");
-                    }
-                }
-            }
-            
-            formAll.append("\n</form>\n");
-            
-            ret.append("\n<form name=forma method=\"post\" class=\"box\">");
-            ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">");
-            if(request.getParameter("tm")==null) ret.append(tab_list_2);
-            ret.append(strHeader);
-            ret.append(strTable.toString());
-            ret.append("\n</form>");
-            
-            ret.append(formAll.toString());
-            SWBResourceURL urlAdmin = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
-            ret.append("\n<script language=\"javascript\">");
-            ret.append("\n function go(forma)");
-            ret.append("\n {");
-            ret.append("\n  document.forma.action =  document.forma.sitios.value;");
-            ret.append("\n  document.forma.submit();");
-            ret.append("\n }");
-            ret.append("\n function delRec(accion,num)");
-            ret.append("\n {");
-            ret.append("\n  if(num>0)");
-            ret.append("\n      {");
-            ret.append("\n          document.frmAll.ax.value =  accion;");
-            ret.append("\n          document.frmAll.submit();");
-            ret.append("\n      }");
-            ret.append("\n }");
-            ret.append("\n </script>");
+        SWBResourceURL urlact = paramRequest.getActionUrl();
+        out.println("<div class=\"swbform\">");
+        out.println("<form id=\"" + id + "/trash\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/trash'); return false;\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
+        out.println("<fieldset>");
+        out.println("<legend>");
+        out.println(paramRequest.getLocaleString("msgDeletedElements"));
+        out.println("</legend>");
+        SWBResourceURL urlfilter = paramRequest.getRenderUrl();
+        urlfilter.setParameter("suri", id);
+        out.println("<ul style=\"list-style:none;\">");
+        out.println("<li>");
+        String pfilter = request.getParameter("filtersel");
+        if(pfilter==null) pfilter="";
+        out.println("<label for=\""+id+"/filtertrash\">"+paramRequest.getLocaleString("msgFilterElements")+":</label>");
+        out.println("<select id=\""+id+"/filtertrash\" name=\"filtersel\" >");
+        out.println("<option value=\"\" "+(pfilter.equals("")?"selected":"")+" > </option>");
+        SemanticClass scls = Trashable.swb_Trashable;
+        Iterator<SemanticClass> itsc = scls.listSubClasses(true);
+        while (itsc.hasNext()) {
+            SemanticClass semClass = itsc.next();
+            out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
         }
-        response.getWriter().print(ret.toString());
+        out.println("</selected>");
+        out.println("</li>");
+        out.println("</ul>");
+        out.println("</fieldset>");
+        
+        out.println("<fieldset>");
+//        out.println("<legend>");
+//        out.println(paramRequest.getLocaleString("msgDeletedElements"));
+//        out.println("</legend>");
+        out.println("<table width=\"100%\">");
+        out.println("<thead>");
+
+        SemanticProperty sptemp=null;
+
+        out.println("<tr>");
+        out.println("<th>");
+        out.println(paramRequest.getLocaleString("th_action"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramRequest.getLocaleString("th_title"));
+        out.println("</th>");
+        out.println("<th>");
+        out.println(paramRequest.getLocaleString("th_type"));
+        out.println("</th>");
+        sptemp = Traceable.swb_created;
+        String propname = sptemp.getName();
+        try {
+            propname = sptemp.getDisplayName(user.getLanguage());
+        } catch (Exception e) {
+        }
+        out.println("<th>");
+        out.println(propname);
+        out.println("</th>");
+        sptemp = Traceable.swb_updated;
+        propname = sptemp.getName();
+        try {
+            propname = sptemp.getDisplayName(user.getLanguage());
+        } catch (Exception e) {
+        }
+        out.println("<th>");
+        out.println(propname);
+        out.println("</th>");
+        sptemp = Traceable.swb_modifiedBy;
+        propname = sptemp.getName();
+        try {
+            propname = sptemp.getDisplayName(user.getLanguage());
+        } catch (Exception e) {
+        }
+        out.println("<th>");
+        out.println(propname);
+        out.println("</th>");
+        sptemp = Activeable.swb_active;
+        propname = sptemp.getName();
+        try {
+            propname = sptemp.getDisplayName(user.getLanguage());
+        } catch (Exception e) {
+        }
+        out.println("<th>");
+        out.println(propname);
+        out.println("</th>");
+        
+        out.println("</thead>");
+
+        out.println("<tbody>");
+
+        //Muestra los elementos borrados
+        Iterator<SemanticObject> itso = so.getModel().listSubjects(Trashable.swb_deleted, Boolean.TRUE);
+        while (itso.hasNext()) {
+            SemanticObject semObj = itso.next();
+            out.println("<tr>");
+            out.println("<td>");
+
+            out.println("<input type=\"hidden\" name=\"sval\" value=\""+semObj.getURI()+"\">");
+
+            SWBResourceURL urlrem = paramRequest.getActionUrl();
+            urlrem.setAction("remove");
+            urlrem.setParameter("suri",id);
+            urlrem.setParameter("sval", semObj.getURI());
+
+            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminar")+"?')){submitUrl('" + urlrem + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_removeSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_removeSO") + "\"></a>");
+
+            SWBResourceURL urlrec = paramRequest.getActionUrl();
+            urlrec.setAction("recover");
+            urlrec.setParameter("suri",id);
+            urlrec.setParameter("sval", semObj.getURI()); //
+
+            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmRecover")+"?')){submitUrl('" + urlrec + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_recoverSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_recoverSO") + "\"></a>");
+            out.println("</td>");
+
+            out.println("<td>");
+            out.println("<a href=\"#\" onclick=\"addNewTab('" + semObj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semObj.getDisplayName() + "');return false;\" title=\""+paramRequest.getLocaleString("msg_SODetail")+"\">"+semObj.getDisplayName(user.getLanguage())+"</a>");
+            out.println("</td>");
+            out.println("<td>");
+            out.println(semObj.getSemanticClass().getName());
+            out.println("</td>");
+            out.println("<td>");
+            if (semObj.getProperty(Traceable.swb_created) != null) {
+                sptemp = Traceable.swb_created;
+                out.print(getValueSemProp(semObj, sptemp));
+            }
+            else out.println(" --- ");
+            out.println("</td>");
+            out.println("<td>");
+            if (semObj.getProperty(Traceable.swb_updated) != null) {
+                sptemp = Traceable.swb_updated;
+                out.print(getValueSemProp(semObj, sptemp));
+            }
+            else out.println(" --- ");
+            out.println("</td>");
+            out.println("<td>");
+            if (semObj.getObjectProperty(Traceable.swb_modifiedBy) != null)
+            {
+                sptemp = Traceable.swb_modifiedBy;
+                semObj = semObj.getObjectProperty(sptemp);
+
+                if (null != semObj) {
+                    log.debug("MODIFIEDBY-------" + semObj.getURI());
+                    out.println("<a href=\"#\"  onclick=\"addNewTab('" + semObj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semObj.getDisplayName() + "');return false;\" >");
+                    out.println(semObj.getProperty(User.swb_usrLogin));
+                    out.println("</a>");
+                }
+            }
+            else out.println(" --- ");
+            out.println("</td>");
+            out.println("<td>");
+            if (semObj.getProperty(Activeable.swb_active) != null)
+            {
+                boolean activo = false;
+                if (semObj.getBooleanProperty(Activeable.swb_active))
+                {
+                    activo = true;
+                }
+                SWBResourceURL urlu = paramRequest.getActionUrl();
+                urlu.setParameter("suri", id);
+                urlu.setParameter("sval", semObj.getURI());
+                urlu.setAction("updstatus");
+                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" onclick=\"return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
+            }
+            else out.println(" --- ");
+            out.println("</td>");
+        }
+        out.println("</tbody>");
+        out.println("<tfooter>");
+        out.println("</tfooter>");
+        out.println("</table>");
+        out.println("</fieldset>");
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" name=\""+id+"/btndelete\" id=\""+id+"/btndelete\">" + paramRequest.getLocaleString("btnDeleteAll")); //onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminarAll")+"')){submitForm('" + id + "/trash');}return false;\"
+        
+        out.println("<script type=\"dojo/method\" event=\"onClick\">");
+        out.println(" if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminarAll")+"?')){");
+        out.println(" var myform=this.form.domNode;   ");
+        SWBResourceURL urldellall = paramRequest.getActionUrl();
+        urldellall.setAction("remove");
+        out.println(" myform.action='"+urldellall.toString()+"'; ");
+        out.println(" submitForm('" + id + "/trash');");
+        out.println(" }");
+        out.println(" return false; ");
+        out.println("</script>");
+
+        out.println("</button>"); //
+
+
+
+        out.println("<button dojoType=\"dijit.form.Button\" name=\""+id+"/btnrecover\" id=\""+id+"/btnrecover\">" + paramRequest.getLocaleString("btnRecoverAll")); //onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmRecoverAll")+"')){submitForm('" + id + "/trash');}return false;\"
+
+        out.println("<script type=\"dojo/method\" event=\"onClick\">");
+        out.println(" if(confirm('"+paramRequest.getLocaleString("msgConfirmRecoverAll")+"?')){");
+        out.println(" var myform=this.form.domNode;   ");
+        SWBResourceURL urlrecall = paramRequest.getActionUrl();
+        urlrecall.setAction("recover");
+        out.println(" myform.action='"+urlrecall.toString()+"'; ");
+        out.println(" submitForm('" + id + "/trash');");
+        out.println(" }");
+        out.println(" return false; ");
+        out.println("</script>");
+
+        out.println("</button>");
+
+
+        out.println("</fieldset>");
+        out.println("</form>");
+        out.println("</div>");
+
+        
     }
 
     /**
@@ -606,236 +355,92 @@ public class SWBATrash extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         
         
-        Resource base=getResourceBase();
-        String view="section";
-        if(base.getAttribute("view")!=null) view = base.getAttribute("view");
-        String viewSite=request.getParameter("site");
-        String ax=request.getParameter("ax");
-        //String id=request.getParameter("id");
-        String idocc=request.getParameter("idocc");
-        String idlist=request.getParameter("idlist");
-        //StringTokenizer strToken=null;
-        String[] strSections=null;
-        String thisToken = null;
+        base=getResourceBase();
+        String view=base.getAttribute("trash","site");
+        
+        String id=request.getParameter("suri");
         User user = response.getUser();
-//        if(user==null) user = new User(response.getWebPage().getWebSite().getUserRepository());
-        WebPage topic = response.getWebPage();
+        WebPage wp = response.getWebPage();
+
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject so = ont.getSemanticObject(id);
+
         String accion = response.getAction();
-        if(viewSite!=null) response.setRenderParameter("tm",viewSite);
-        if(accion!=null && accion.equals("update")){
+        
+        if(accion!=null && accion.equals("updcfg")){
             try{
-                if(request.getParameter("view")!=null){
-                    base.setAttribute("view", request.getParameter("view"));
-                    base.updateAttributesToDB();
-                }
-                else{
-                    base.setAttribute("view", "section");
+                if(request.getParameter("trashtype")!=null){
+                    System.out.println("tipo papelera: "+request.getParameter("trashtype"));
+                    base.setAttribute("trash", request.getParameter("trashtype"));
                     base.updateAttributesToDB();
                 }
             }
             catch(Exception e){log.error(e);}
-            response.setMode(response.Mode_VIEW);
         }
-        else{
-            if(idlist!=null)  strSections=request.getParameterValues("idlist"); //strToken = new StringTokenizer(idlist,",");
-            else strSections=request.getParameterValues("id"); //strToken = new StringTokenizer(id,",");
-            if(!view.equals(null) && !view.equals("")){
-                if(view.equals("section")){
-                    try{
-                        if(!ax.equals(null)){
-                            if(ax.equals("recover")){
-                                int cuenta =0;
-                                for(int i=0; i<strSections.length;i++){
-                                    cuenta++;
-                                    thisToken = strSections[i];
-                                    WebPage rT = SWBContext.getWebSite(viewSite).getWebPage(thisToken);
-                                    rT.setDeleted(false);
-                                    //rT.update();
-                                    rT.setModifiedBy(user);
-                                    rT=null;
-                                }
-                                if(cuenta==1){
-                                    response.setRenderParameter("tpp",thisToken);
-                                    response.setRenderParameter("tmp",viewSite);
-                                    response.setRenderParameter("tree","reload");
-                                }
-                            }
-                            if(ax.equals("eliminate")){
-                                WebSite tm = SWBContext.getWebSite(viewSite);
-                                for(int i=0; i<strSections.length;i++){
-                                    thisToken = strSections[i];
-                                    tm.removeWebPage(thisToken);
-                                    //WebPage tp = tm.getWebPage(thisToken); //tm.getWebPage(thisToken,true);
-                                    //WebPageSrv tpRem = new WebPageSrv();
-                                    //tpRem.removeWebPageFromWastebasket(tp,user);
-                                    //tpRem=null;
-                                    //tp=null;
-                                }
-                                tm=null;
-                            }
-                        }
-                        response.setRenderParameter("view","section");
-                        response.setRenderParameter("site",viewSite);
-                        response.setMode(response.Mode_VIEW);
-                        
+        else if(accion!=null && accion.equals("remove"))
+        {
+            String[] sval=request.getParameterValues("sval");
+            if(sval.length>0)
+            {
+                for(int i=0;i<sval.length;i++)
+                {
+                    SemanticObject sorem = ont.getSemanticObject(sval[i]);
+                    if(null!=sorem)
+                    {
+                        sorem.remove();
                     }
-                    catch(Exception e){ log.error(response.getLocaleString("msgErrorUpdateDeleteTopic")+", WBATrash.processAction.section",e); }
-                }
-                if(view.equals("template")){
-                    try{
-                        if(!ax.equals(null)){
-                            if(ax.equals("recover")){
-                                int cuenta=0;
-                                String grpTemID="0";
-                                for(int i=0; i<strSections.length;i++){
-                                    cuenta++;
-                                    thisToken = strSections[i];
-                                    Template rTemplate = SWBContext.getWebSite(viewSite).getTemplate(thisToken);
-                                    rTemplate.setDeleted(false);
-                                    //rTemplate.update();
-                                    rTemplate.setModifiedBy(user);
-                                    grpTemID = rTemplate.getGroup().getId();
-                                    rTemplate=null;
-                                }  
-                                if(cuenta==1){
-                                    response.setRenderParameter("idtmp",thisToken);
-                                    response.setRenderParameter("tree","reload");
-                                }
-                                
-                            }
-                            if(ax.equals("eliminate"))
-                            {
-                                for(int i=0; i<strSections.length;i++){
-                                    thisToken = strSections[i];
-                                    //TemplateSrv tser = new TemplateSrv();
-                                    try{
-                                        SWBContext.getWebSite(viewSite).removeTemplate(thisToken);
-                                        //tser.removeTemplate(viewSite,Integer.parseInt(thisToken),user.getId());
-                                    }
-                                    catch(Exception e){ log.error(response.getLocaleString("msgErrorDeleteTemplate")+", WBATrash.processAction",e);}
-                                    //tser=null;
-                                }
-                            }
-                        }
-                        response.setRenderParameter("view","template");
-                        response.setRenderParameter("site",viewSite);
-                    }
-                    catch(Exception e){ log.error(response.getLocaleString("msgErrorUpdateDeleteTemplate")+", WBATrash.processAction.template",e); }
-                }
-                
-                if(view.equals("content")){
-                    try{
-                        if(!ax.equals(null)){
-                            if(ax.equals("recover"))
-                            {
-                                for(int i=0; i<strSections.length;i++){
-                                    WebSite localTM = topic.getWebSite();
-                                    //localTM.update2DB();
-                                    thisToken = strSections[i];
-                                    if(idlist!=null){
-                                        StringTokenizer localToken = new StringTokenizer(thisToken,"|");
-                                        thisToken=localToken.nextToken();
-                                        thisToken=localToken.nextToken();
-                                    }
-                                    ResourceRef rOcc = SWBContext.getWebSite(viewSite).getResourceRef(thisToken);
-                                    //rOcc.setDeleted(false);
-                                    //rOcc.update();
-                                    rOcc=null;
-                                }
-                            }
-                            if(ax.equals("eliminate"))
-                            {
-                                for(int i=0; i<strSections.length;i++){
-                                    thisToken = strSections[i];
-                                    if(idlist!=null){
-                                        StringTokenizer localToken = new StringTokenizer(thisToken,"|");
-                                        thisToken=localToken.nextToken();
-                                        idocc=localToken.nextToken();
-                                    }
-                                    SWBContext.getWebSite(viewSite).removeResourceRef(idocc.trim());
-                                }
-                            }
-                            response.setRenderParameter("view","content");
-                            response.setRenderParameter("site",viewSite);
-                        }
-                    }
-                    catch(Exception e){ log.error(response.getLocaleString("msgErrorUpdateEraseContent")+". WBATrash.processAction.content", e); }
-                }
-                
-                if(view.equals("resource")){
-                    try{
-                        if(!ax.equals(null)){
-                            if(ax.equals("recover")){
-                                int cuenta=0;
-                                for(int i=0; i<strSections.length;i++){
-                                    cuenta++;
-                                    thisToken = strSections[i];
-                                    Resource rRes = SWBContext.getWebSite(viewSite).getResource(thisToken);
-                                    rRes.setDeleted(false);
-                                    rRes.setModifiedBy(user);
-                                    //rRes.update(user.getId(),response.getLocaleString("msgLogResourceUndeleted"));
-                                }
-                                if(cuenta==1){
-                                    response.setRenderParameter("idres",thisToken);
-                                    response.setRenderParameter("tree","reload");
-                                }
-                            }
-                            if(ax.equals("eliminate"))
-                            {
-                                for(int i=0; i<strSections.length;i++){
-                                    thisToken = strSections[i];
-                                    //ResourceSrv resSrv = new ResourceSrv();
-                                    //resSrv.removeResource(viewSite, Long.parseLong(thisToken), request, response.getUser());
-                                    SWBContext.getWebSite(viewSite).removeResource(thisToken);
-                                    //RecResource rRes = DBResource.getInstance().getResource(viewSite,Long.parseLong(thisToken));
-                                    //WBResource wbRes = ResourceMgr.getInstance().getResource(viewSite,Long.parseLong(thisToken));
-                                    //rRes.remove(user.getId(),response.getLocaleString("msgLogResourceDeleted"));
-                                    //WBResourceUtils.getInstance().removeResource(wbRes.getResourceBase());
-                                    //rRes=null;
-                                    //resSrv=null;
-                                }
-                            }
-                            response.setRenderParameter("view","resource");
-                            response.setRenderParameter("site",viewSite);
-                        }
-                    }
-                    catch(Exception e){ log.error(response.getLocaleString("msgErrorUpdateEraseResource")+", WBATrash.processAction.resource",e); }
-                }
-                if(view.equals("site")){
-                    try{
-                        if(!ax.equals(null)){
-                            if(ax.equals("recover")){
-                                int cuenta = 0;
-                                for(int i=0; i<strSections.length;i++){
-                                    cuenta++;
-                                    thisToken = strSections[i];
-                                    WebSite rTM = SWBContext.getWebSite(thisToken);
-                                    rTM.setDeleted(false);
-                                    rTM.setModifiedBy(user);
-                                    //rTM.update();
-                                    rTM=null;
-                                }
-                                if(cuenta==1){
-                                    response.setRenderParameter("tmp",thisToken);
-                                    response.setRenderParameter("tree","reload");
-                                }
-                            }
-                            if(ax.equals("eliminate")){
-                                for(int i=0; i<strSections.length;i++){
-                                    thisToken = strSections[i];
-                                    SWBContext.removeWebSite(thisToken);
-                                    //WebSiteSrv tmserv = new WebSitepSrv();
-                                    //tmserv.removeWebSite(thisToken, user,request);
-                                    //tmserv = null;
-                                }
-                                response.setRenderParameter("tree","reload");
-                            }
-                            response.setRenderParameter("view","site");
-                        }
-                    }
-                    catch(Exception e){ log.error(response.getLocaleString("msgErrorUpdateEraseTopicMap")+", WBATrash.processAction.site",e); }
                 }
             }
         }
+        else if(accion!=null && accion.equals("recover"))
+        {
+            String[] sval=request.getParameterValues("sval");
+            if(sval.length>0)
+            {
+                for(int i=0;i<sval.length;i++)
+                {
+                    SemanticObject sorec = ont.getSemanticObject(sval[i]);
+                    if(null!=sorec)
+                    {
+                        sorec.setBooleanProperty(Trashable.swb_deleted, false);
+                    }
+                }
+            }
+        }
+        if(id!=null) response.setRenderParameter("suri",id);
+    }
+
+    /**
+     * Gets the value sem prop.
+     *
+     * @param obj the obj
+     * @param prop the prop
+     * @return the value sem prop
+     * @return
+     */
+    public String getValueSemProp(SemanticObject obj, SemanticProperty prop) {
+        String ret = "";
+        try {
+            if (prop.isDataTypeProperty()) {
+                log.debug("getValueSemProp(" + prop.getName() + ")" + obj.getProperty(prop));
+                if (prop.isBoolean()) {
+                    ret = "" + obj.getBooleanProperty(prop);
+                }
+                if (prop.isInt() || prop.isFloat()) {
+                    ret = "" + obj.getLongProperty(prop);
+                }
+                if (prop.isString()) {
+                    ret = obj.getProperty(prop);
+                }
+                if (prop.isDateTime()) {
+                    ret = "" + obj.getDateProperty(prop);
+                }
+            } else if (prop.isObjectProperty()) {
+                ret = obj.getObjectProperty(prop).getURI();
+            }
+        } catch (Exception e) {
+            ret = "Not set";
+        }
+        return ret;
     }
 }
