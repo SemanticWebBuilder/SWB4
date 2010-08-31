@@ -44,6 +44,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.rdf.model.impl.LiteralImpl;
 import com.hp.hpl.jena.sparql.util.CollectionUtils;
 import java.io.File;
 import java.io.OutputStream;
@@ -135,26 +136,40 @@ public class SemanticModel
     }
 
     /**
-     * List subjects.
+     * List subjects by boolean.
      * 
      * @param prop the prop
      * @param value the value
      * @return the iterator
      */
-    public Iterator<SemanticObject> listSubjects(SemanticProperty prop,String value)
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, boolean value)
+    {
+        SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), getRDFModel().createTypedLiteral(value)), true);
+        return it;
+    }
+
+    /**
+     * List subjects by string.
+     *
+     * @param prop the prop
+     * @param value the value
+     * @return the iterator
+     */
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, String value)
     {
         SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), value), true);
         return it;
     }
 
+
     /**
-     * List subjects.
+     * List subjects by object.
      * 
      * @param prop the prop
      * @param obj the obj
      * @return the iterator
      */
-    public Iterator<SemanticObject> listSubjects(SemanticProperty prop,SemanticObject obj)
+    public Iterator<SemanticObject> listSubjects(SemanticProperty prop, SemanticObject obj)
     {
         SemanticIterator<SemanticObject> it = new SemanticIterator(getRDFModel().listStatements(null, prop.getRDFProperty(), obj.getRDFResource()), true);
         return it;
