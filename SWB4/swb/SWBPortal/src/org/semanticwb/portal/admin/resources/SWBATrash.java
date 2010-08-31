@@ -124,6 +124,7 @@ public class SWBATrash extends GenericResource {
         base=getResourceBase();
         String  trashtype = base.getAttribute("trash","site");
         String id = request.getParameter("suri");
+        String page = request.getParameter("page");
         PrintWriter out = response.getWriter();
 
         WebPage wp = paramRequest.getWebPage();
@@ -223,8 +224,34 @@ public class SWBATrash extends GenericResource {
 
         //Muestra los elementos borrados
         Iterator<SemanticObject> itso = so.getModel().listSubjects(Trashable.swb_deleted, Boolean.TRUE);
+        
+        HashMap<String, SemanticObject> hmnum = new HashMap();
+        while (itso.hasNext()) {
+            SemanticObject semanticObject = itso.next();
+            hmnum.put(semanticObject.getURI(), semanticObject);
+        }
+
+        int ps=20;
+        int l=hmnum.size();
+        int p=0;
+        if(page!=null)p=Integer.parseInt(page);
+        int x=0;
+        
+        itso = hmnum.values().iterator();
         while (itso.hasNext()) {
             SemanticObject semObj = itso.next();
+
+            //PAGINACION ////////////////////
+            if(x<p*ps)
+            {
+                x++;
+                continue;
+            }
+            if(x==(p*ps+ps) || x==l)break;
+            x++;
+            /////////////////////////////////
+
+
             out.println("<tr>");
             out.println("<td>");
 
@@ -297,17 +324,45 @@ public class SWBATrash extends GenericResource {
             else out.println(" --- ");
             out.println("</td>");
         }
+
         out.println("</tbody>");
         out.println("<tfooter>");
         out.println("</tfooter>");
         out.println("</table>");
         out.println("</fieldset>");
+
+        if(p>0 || x<l) //Requiere paginacion
+        {
+            out.println("<fieldset>");
+            out.println("<center>");
+            int pages=(int)(l+ps/2)/ps;
+            for(int z=0;z<pages;z++)
+            {
+                SWBResourceURL urlNew = paramRequest.getRenderUrl();
+                urlNew.setParameter("suri", id);
+                urlNew.setParameter("page", ""+z);
+                urlNew.setParameter("act", "stpBusqueda");
+//                urlNew.setParameter("search",busqueda);
+//                urlNew.setParameter("clsuri", sccol.getURI());
+
+                if(z!=p)
+                {
+                    out.println("<a href=\"#\" onclick=\"submitUrl('" + urlNew + "',this); return false;\">"+(z+1)+"</a> ");
+                }else
+                {
+                    out.println((z+1)+" ");
+                }
+            }
+            out.println("</center>");
+            out.println("</fieldset>");
+        }
+
         out.println("<fieldset>");
         out.println("<button dojoType=\"dijit.form.Button\" name=\""+id+"/btndelete\" id=\""+id+"/btndelete\">" + paramRequest.getLocaleString("btnDeleteAll")); //onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminarAll")+"')){submitForm('" + id + "/trash');}return false;\"
         
         out.println("<script type=\"dojo/method\" event=\"onClick\">");
         out.println(" if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminarAll")+"?')){");
-        out.println(" var myform=this.form.domNode;   ");
+        out.println(" var myform=document.getElementById('" + id + "/trash');   ");
         SWBResourceURL urldellall = paramRequest.getActionUrl();
         urldellall.setAction("remove");
         out.println(" myform.action='"+urldellall.toString()+"'; ");
@@ -324,7 +379,7 @@ public class SWBATrash extends GenericResource {
 
         out.println("<script type=\"dojo/method\" event=\"onClick\">");
         out.println(" if(confirm('"+paramRequest.getLocaleString("msgConfirmRecoverAll")+"?')){");
-        out.println(" var myform=this.form.domNode;   ");
+        out.println(" var myform=document.getElementById('" + id + "/trash');   ");
         SWBResourceURL urlrecall = paramRequest.getActionUrl();
         urlrecall.setAction("recover");
         out.println(" myform.action='"+urlrecall.toString()+"'; ");
@@ -366,7 +421,9 @@ public class SWBATrash extends GenericResource {
         SemanticObject so = ont.getSemanticObject(id);
 
         String accion = response.getAction();
-        
+
+        //System.out.println("processAction("+accion+")");
+
         if(accion!=null && accion.equals("updcfg")){
             try{
                 if(request.getParameter("trashtype")!=null){
@@ -380,10 +437,11 @@ public class SWBATrash extends GenericResource {
         else if(accion!=null && accion.equals("remove"))
         {
             String[] sval=request.getParameterValues("sval");
-            if(sval.length>0)
+            if(null!=sval&&sval.length>0)
             {
                 for(int i=0;i<sval.length;i++)
                 {
+                    System.out.println("remove ..."+sval[i]);
                     SemanticObject sorem = ont.getSemanticObject(sval[i]);
                     if(null!=sorem)
                     {
@@ -395,10 +453,11 @@ public class SWBATrash extends GenericResource {
         else if(accion!=null && accion.equals("recover"))
         {
             String[] sval=request.getParameterValues("sval");
-            if(sval.length>0)
+            if(null!=sval&&sval.length>0)
             {
                 for(int i=0;i<sval.length;i++)
                 {
+                    System.out.println("recover... "+sval[i]);
                     SemanticObject sorec = ont.getSemanticObject(sval[i]);
                     if(null!=sorec)
                     {
