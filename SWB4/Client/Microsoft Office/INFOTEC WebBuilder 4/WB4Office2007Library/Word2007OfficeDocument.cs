@@ -143,6 +143,8 @@ namespace WB4Office2007Library
 
         protected override FileInfo SaveAsHtml(System.IO.DirectoryInfo dir)
         {
+            document.WebOptions.AllowPNG = true;
+            document.WebOptions.RelyOnVML = false;
             object file = document.FullName;
             FileInfo fileDoc = new FileInfo(document.FullName);
             if (!fileDoc.Extension.Equals(Office2003Extension, StringComparison.OrdinalIgnoreCase))
@@ -159,6 +161,8 @@ namespace WB4Office2007Library
             {
                 HTMLFile.Delete();
             }
+            document.WebOptions.AllowPNG = true;
+            document.WebOptions.RelyOnVML = false;
             document.SaveAs(ref fileName, ref objformatHTML, ref missing, ref missing, ref objfalse, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
             ((Word.DocumentClass)document).Close(ref objtrue, ref missing, ref missing);
             document = (Word.DocumentClass)application.Documents.Open(ref filedocxtoOpen, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
