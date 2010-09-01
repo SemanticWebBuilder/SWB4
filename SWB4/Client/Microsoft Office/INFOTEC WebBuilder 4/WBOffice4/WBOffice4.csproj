@@ -247,6 +247,9 @@
     <EmbeddedResource Include="Controls\PropertyEditor.resx">
       <DependentUpon>PropertyEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SelectWebPage.resx">
+      <DependentUpon>SelectWebPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TitleEditor.resx">
       <DependentUpon>TitleEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -307,6 +310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPublishcontentToPage.resx">
       <DependentUpon>FormPublishcontentToPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSelectPageToOpen.resx">
+      <DependentUpon>FormSelectPageToOpen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSendToAutorize.resx">
       <DependentUpon>FormSendToAutorize.cs</DependentUpon>
@@ -417,6 +423,12 @@
     <None Include="Resources\see.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\SelectWebPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SelectWebPage.Designer.cs">
+      <DependentUpon>SelectWebPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TitleEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -482,6 +494,12 @@
     <Compile Include="Forms\FormPeriodicidad.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormSelectPageToOpen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSelectPageToOpen.Designer.cs">
+      <DependentUpon>FormSelectPageToOpen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormSendToAutorize.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -523,6 +541,7 @@
     </Compile>
     <Compile Include="Steps\DatabaseSetup.cs" />
     <Compile Include="Resources\DummyNode.cs" />
+    <Compile Include="Steps\HomeWebPageTreeNode.cs" />
     <Compile Include="Steps\LanguageListItem.cs" />
     <Compile Include="Steps\RepositoryNode.cs" />
     <Compile Include="Steps\SelectSiteCreatePage.cs">
@@ -535,6 +554,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Steps\SelectSitePublish.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Steps\SelectSiteToOpen.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Steps\SelectWebPageID.cs">
@@ -555,6 +577,8 @@
     <Compile Include="Steps\ViewProperties.Designer.cs">
       <DependentUpon>ViewProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Steps\WebPageTreeNode.cs" />
+    <Compile Include="Steps\WebSiteTreeNode.cs" />
     <Compile Include="Utils\DatabaseSetup.cs" />
     <Compile Include="Utils\SBWInstallerEventLog.cs">
       <SubType>Component</SubType>
