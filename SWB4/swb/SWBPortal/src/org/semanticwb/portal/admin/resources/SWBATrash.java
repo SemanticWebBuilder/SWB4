@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -135,7 +136,8 @@ public class SWBATrash extends GenericResource {
 
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject so = ont.getSemanticObject(id);
+        SemanticObject so = null;
+
 
         SWBResourceURL urlact = paramRequest.getActionUrl();
         out.println("<div class=\"swbform\">");
@@ -145,37 +147,42 @@ public class SWBATrash extends GenericResource {
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("msgDeletedElements"));
         out.println("</legend>");
-        SWBResourceURL urlfilter = paramRequest.getRenderUrl();
-        urlfilter.setParameter("suri", id);
-        out.println("<ul style=\"list-style:none;\">");
-        out.println("<li>");
         String pfilter = request.getParameter("filtersel");
         if(pfilter==null) pfilter="";
-        out.println("<label for=\""+id+"/filtertrash\">"+paramRequest.getLocaleString("msgFilterElements")+":</label>");
-        out.println("<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" id=\""+id+"/filtertrash\" name=\"filtersel\" >");
-        out.println("<option value=\"\" "+(pfilter.equals("")?"selected=\"selected\"":"")+" > </option>");
-        SemanticClass scls = Trashable.swb_Trashable;
-        Iterator<SemanticClass> itsc = scls.listSubClasses(true);
-        while (itsc.hasNext()) {
-            SemanticClass semClass = itsc.next();
-            out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected=\"selected\" ":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
+
+        if(trashtype.equals("elements"))
+        {
+            so = ont.getSemanticObject(id);
+            SWBResourceURL urlfilter = paramRequest.getRenderUrl();
+            urlfilter.setParameter("suri", id);
+            out.println("<ul style=\"list-style:none;\">");
+            out.println("<li>");
+            out.println("<label for=\""+id+"/filtertrash\">"+paramRequest.getLocaleString("msgFilterElements")+":</label>");
+            out.println("<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" id=\""+id+"/filtertrash\" name=\"filtersel\" >");
+            out.println("<option value=\"\" "+(pfilter.equals("")?"selected=\"selected\"":"")+" > </option>");
+            SemanticClass scls = Trashable.swb_Trashable;
+            Iterator<SemanticClass> itsc = scls.listSubClasses(true);
+            while (itsc.hasNext()) {
+                SemanticClass semClass = itsc.next();
+                if(!semClass.getClassId().equals(WebSite.swb_WebSite))
+                {
+                    out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected=\"selected\" ":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
+                }
+            }
+            out.println("<script type=\"dojo/method\" event=\"onChange\" args=\"item\">");
+
+            out.println(" var urlfilter='" + urlfilter + "'+'&filtersel='+dijit.byId('"+id+"/filtertrash').attr('value');   ");
+
+            out.println(" alert(urlfilter); ");
+            out.println(" submitUrl(urlfilter,this.domNode);");
+
+            out.println(" return false; ");
+            out.println("</script>");
+            out.println("</selected>");
+            out.println("</li>");
+            out.println("</ul>");
+            out.println("</fieldset>");
         }
-        out.println("<script type=\"dojo/method\" event=\"onChange\" args=\"item\">");
-
-        out.println(" var urlfilter='" + urlfilter + "'+'&filtersel='+dijit.byId('"+id+"/filtertrash').attr('value');   ");
-
-        out.println(" alert(urlfilter); ");
-        out.println(" submitUrl(urlfilter,this.domNode);");
-
-        out.println(" return false; ");
-        out.println("</script>");
-
-
-
-        out.println("</selected>");
-        out.println("</li>");
-        out.println("</ul>");
-        out.println("</fieldset>");
         
         out.println("<fieldset>");
         out.println("<table width=\"100%\">");
@@ -235,7 +242,27 @@ public class SWBATrash extends GenericResource {
         out.println("<tbody>");
 
         //Muestra los elementos borrados
+        // Para listar elementos borrados
         Iterator<SemanticObject> itso = so.getModel().listSubjects(Trashable.swb_deleted, Boolean.TRUE);
+
+        //Si son sitios, para mostrar los sitios eliminados
+        if(trashtype.equals("site"))
+        {
+            HashMap<String, SemanticObject> hmdelsite = new HashMap();
+            Iterator<SemanticModel> itsmodel = ont.listSubModels();
+            while (itsmodel.hasNext()) {
+                SemanticModel sm = itsmodel.next();
+                SemanticObject smso = sm.getModelObject();
+                if(smso.instanceOf(Trashable.swb_Trashable))
+                {
+                    if(smso.getBooleanProperty(Trashable.swb_deleted))
+                    {
+                       hmdelsite.put(smso.getURI(), smso);
+                    }
+                }
+            }
+            itso = hmdelsite.values().iterator();
+        }
         
         HashMap<String, SemanticObject> hmnum = new HashMap();
         while (itso.hasNext()) {
@@ -245,19 +272,29 @@ public class SWBATrash extends GenericResource {
 
         HashMap<String, SemanticObject> hmfiltro = new HashMap();
         Iterator<SemanticObject> itfiltro = hmnum.values().iterator();
-        while (itfiltro.hasNext()) {
-            SemanticObject semanticObject = itfiltro.next();
-
+        if(pfilter!=null&&pfilter.trim().length()>0)
+        {
+            while (itfiltro.hasNext()) {
+                SemanticObject semanticObject = itfiltro.next();
+                if(pfilter.equals(semanticObject.transformToSemanticClass().getClassId()))
+                {
+                    hmfiltro.put(semanticObject.getURI(), semanticObject);
+                }
+            }
+        }
+        else
+        {
+            hmfiltro = hmnum;
         }
 
 
         int ps=20;
-        int l=hmnum.size();
+        int l=hmfiltro.size();
         int p=0;
         if(page!=null)p=Integer.parseInt(page);
         int x=0;
         
-        itso = hmnum.values().iterator();
+        itso = hmfiltro.values().iterator();
         while (itso.hasNext()) {
             SemanticObject semObj = itso.next();
 
@@ -461,7 +498,7 @@ public class SWBATrash extends GenericResource {
             {
                 for(int i=0;i<sval.length;i++)
                 {
-                    System.out.println("remove ..."+sval[i]);
+                    //System.out.println("remove ..."+sval[i]);
                     SemanticObject sorem = ont.getSemanticObject(sval[i]);
                     if(null!=sorem)
                     {
@@ -477,7 +514,7 @@ public class SWBATrash extends GenericResource {
             {
                 for(int i=0;i<sval.length;i++)
                 {
-                    System.out.println("recover... "+sval[i]);
+                    //System.out.println("recover... "+sval[i]);
                     SemanticObject sorec = ont.getSemanticObject(sval[i]);
                     if(null!=sorec)
                     {
