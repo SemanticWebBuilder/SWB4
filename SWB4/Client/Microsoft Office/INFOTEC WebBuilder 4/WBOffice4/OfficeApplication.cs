@@ -50,7 +50,7 @@ namespace WBOffice4
         private static IMenuListener _MenuListener;
         private static IOfficeDocument officedocument;
         private static IOfficeApplication officeApplication;
-        public static readonly double m_version = 4.004;
+        public static readonly double m_version = 4.009;
         static OfficeApplication()
         {            
             try
