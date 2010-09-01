@@ -35,20 +35,16 @@ namespace WBOffice4.Steps
     {
         ResourceInfo resourceInfo;
         public SelectSiteMoveContent(ResourceInfo resourceInfo)
-            : base(null)
+            : base()
         {
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
             this.resourceInfo = resourceInfo;
-        }
-        protected override void onAddNode(TreeNode node)
-        {
-            
-        }
+        }        
         private void SelectSite_ValidateStep(object sender, CancelEventArgs e)
         {
-            if (this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)
+            if (selectWebPage.SelectedWebPage!=null)
             {
-                WebPageInfo webpage = this.treeView1.SelectedNode.Tag as WebPageInfo;
+                WebPageInfo webpage = selectWebPage.SelectedWebPage.WebPageInfo;
                 this.Wizard.Data[WEB_PAGE] = webpage;
                 OfficeApplication.OfficeDocumentProxy.changeResourceOfWebPage(this.resourceInfo, webpage);                
                 this.Wizard.Close();

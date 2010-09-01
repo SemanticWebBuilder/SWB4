@@ -57,7 +57,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAddPage = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.panelSelectWebPage = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,30 +103,24 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // treeView1
+            // panelSelectWebPage
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.FullRowSelect = true;
-            this.treeView1.ImageIndex = 0;
-            this.treeView1.ImageList = this.imageList1;
-            this.treeView1.Location = new System.Drawing.Point(0, 25);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.Size = new System.Drawing.Size(472, 211);
-            this.treeView1.TabIndex = 2;
-            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.panelSelectWebPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelSelectWebPage.Location = new System.Drawing.Point(0, 25);
+            this.panelSelectWebPage.Name = "panelSelectWebPage";
+            this.panelSelectWebPage.Size = new System.Drawing.Size(472, 211);
+            this.panelSelectWebPage.TabIndex = 2;
             // 
             // SelectSite
             // 
-            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.panelSelectWebPage);
             this.Controls.Add(this.toolStrip1);
             this.Name = "SelectSite";
             this.StepDescription = "Seleccione una página web";
             this.StepTitle = "Seleccione una página web";
             this.Controls.SetChildIndex(this.toolStrip1, 0);
+            this.Controls.SetChildIndex(this.panelSelectWebPage, 0);
             this.Controls.SetChildIndex(this.Description, 0);
-            this.Controls.SetChildIndex(this.treeView1, 0);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -140,6 +134,6 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         protected System.Windows.Forms.ToolStripButton toolStripButtonAddPage;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        protected System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.Panel panelSelectWebPage;
     }
 }

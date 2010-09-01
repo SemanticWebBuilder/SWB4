@@ -35,38 +35,44 @@ namespace WBOffice4.Steps
 {
     public class SelectSitePublish : SelectSite
     {
-        
-        public SelectSitePublish(OfficeDocument document)
-            : base(document)
-        {            
-            this.ValidateStep+=new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
-            
-        }        
-        public SelectSitePublish(String title, String description,OfficeDocument document)
-            : base(title, description,document)
+        private DocumentType type;
+        private OfficeDocument document;
+        private String m_title, m_description;
+        public SelectSitePublish(OfficeDocument document, WebSiteInfo webSiteInfo)
+            : base(webSiteInfo)
         {
-            this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
             this.document = document;
+            type = document.DocumentType;
+            this.ValidateStep+=new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
+            selectWebPage.AddNode += new WBOffice4.Controls.NodeEvent(selectWebPage_onAddNode);
         }
-        protected override void onAddNode(TreeNode node)
+
+        void selectWebPage_onAddNode(TreeNode node)
         {
-            if (node.Tag != null && node.Tag is WebPageInfo)
+            if (node is WebPageTreeNode)
             {
-                WebPageInfo page = node.Tag as WebPageInfo;
-                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(document.DocumentType.ToString(),page))
+                WebPageInfo page = ((WebPageTreeNode)node).WebPageInfo;
+                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type.ToString(), page))
                 {
                     node.ForeColor = Color.Gray;
                 }
-
             }
         }
-        private void SelectSitePublish_ValidateStep(object sender, CancelEventArgs e)
+        public SelectSitePublish(String title, String description, OfficeDocument document, WebSiteInfo webSiteInfo)
+            : base(webSiteInfo)
         {
-            if (this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)
+            this.m_title = title;
+            this.m_description = description;
+            this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSitePublish_ValidateStep);
+            this.document = document;
+        }
+        
+        protected virtual void SelectSitePublish_ValidateStep(object sender, CancelEventArgs e)
+        {
+            if (selectWebPage.SelectedWebPage!=null)
             {
-                WebPageInfo webpage = this.treeView1.SelectedNode.Tag as WebPageInfo;
-                String type = document.DocumentType.ToString();
-                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type,webpage))
+                WebPageInfo webpage = selectWebPage.SelectedWebPage.WebPageInfo;
+                if (!OfficeApplication.OfficeDocumentProxy.canPublishToResourceContent(type.ToString(),webpage))
                 {
                     MessageBox.Show(this, "No tiene permisos para publicar en esta página", this.Wizard.Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     e.Cancel = true;

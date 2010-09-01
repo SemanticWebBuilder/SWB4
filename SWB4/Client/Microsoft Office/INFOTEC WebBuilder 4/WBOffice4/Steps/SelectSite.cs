@@ -28,119 +28,69 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using WBOffice4.Controls;
 using WBOffice4.Interfaces;
 namespace WBOffice4.Steps
 {
     public abstract partial class SelectSite : TSWizards.BaseInteriorStep
-    {
+    {        
         public static readonly String WEB_PAGE = "WEB_PAGE";
-        protected String m_title;
-        protected String m_description;
-        protected OfficeDocument document;
-        public SelectSite(OfficeDocument document)
+        protected SelectWebPage selectWebPage;
+        protected bool showCreatePage;
+        public SelectSite() : this(true)
+        {
+        }
+        public SelectSite(WebSiteInfo siteInfo)
+            : this(true,siteInfo)
+        {
+            
+        }
+        public SelectSite(bool showCreatePage) : this(showCreatePage,null)
+        {
+
+        }
+        public SelectSite(bool showCreatePage, WebSiteInfo siteInfo)
         {
             InitializeComponent();
-            this.document = document;
-            foreach (WebSiteInfo site in OfficeApplication.OfficeApplicationProxy.getSites())
+            this.showCreatePage = showCreatePage;
+            if (!showCreatePage)
             {
-                TreeNode siteNode = new TreeNode(site.title, 1, 1);
-                siteNode.Tag = site;
-                treeView1.Nodes.Add(siteNode);
-                addHomePage(siteNode, site);
+                this.toolStrip1.Visible = false;
             }
+            if (siteInfo == null)
+            {
+                selectWebPage = new SelectWebPage();
+            }
+            else
+            {
+                selectWebPage = new SelectWebPage(siteInfo);
+            }
+            this.panelSelectWebPage.Controls.Add(selectWebPage);
+            selectWebPage.Dock = DockStyle.Fill;
+            selectWebPage.ClickNode += new NodeEvent(AfterSelect);
+            
         }
-        public SelectSite(String title, String description, OfficeDocument document)
+        protected virtual void AfterSelect(TreeNode node)
         {
-
-            InitializeComponent();
-            this.m_title = title;
-            this.document = document;
-            this.m_description = description;
-            foreach (WebSiteInfo site in OfficeApplication.OfficeApplicationProxy.getSites())
-            {
-                TreeNode siteNode=new TreeNode(site.title,1,1);
-                siteNode.Tag = site;
-                treeView1.Nodes.Add(siteNode);
-                addHomePage(siteNode,site);
-            }
-        }
-        protected abstract void onAddNode(TreeNode node);
-       
-        private void addHomePage(TreeNode siteNode, WebSiteInfo site)
-        {
-            WebPageInfo home=OfficeApplication.OfficeApplicationProxy.getHomePage(site);
-            int indeximage = 0;
-            if (!home.active)
-            {
-                indeximage = 3;
-            }
-            TreeNode homeNode = new TreeNode(home.title, indeximage, indeximage);
-            homeNode.Tag = home;
-            homeNode.ToolTipText = home.description;
-            siteNode.Nodes.Add(homeNode);
-            if (home.childs > 0)
-            {
-                TreeNode dummy = new TreeNode("");
-                homeNode.Nodes.Add(dummy);
-            }
-            onAddNode(homeNode);
-            //addChilds(homeNode, home);
-        }
-        private void addWebPage(TreeNode pageNode, WebPageInfo page)
-        {
-            foreach (WebPageInfo childPage in OfficeApplication.OfficeApplicationProxy.getPages(page))
-            {
-                int indeximage = 2;
-                if (!childPage.active)
+            this.toolStripButtonAddPage.Enabled = false;
+            if (showCreatePage && node is WebPageTreeNode)
+            {   
+                WebPageTreeNode page = node as WebPageTreeNode;
+                if (OfficeApplication.OfficeApplicationProxy.canCreatePage(page.WebPageInfo))
                 {
-                    indeximage = 4;
-                }
-                TreeNode childPageNode = new TreeNode(childPage.title,indeximage,indeximage);
-                childPageNode.Tag = childPage;
-                childPageNode.ToolTipText = childPage.description;
-                pageNode.Nodes.Add(childPageNode);                
-                if (childPage.childs > 0)
-                {
-                    TreeNode dummy = new TreeNode("");
-                    childPageNode.Nodes.Add(dummy);
-                }
-                onAddNode(childPageNode);
-            }
-        }
-
-        
-
-        private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-        {
-            if (e.Node.Nodes.Count == 1 && e.Node.Nodes[0].Text == "" && e.Node.Nodes[0].Tag==null)
-            {
-                e.Node.Nodes.Clear();
-                addWebPage(e.Node, (WebPageInfo)e.Node.Tag);
-            }
-        }
-
-        protected virtual void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            this.toolStripButtonAddPage.Enabled = false;            
-            if (e.Node.Tag!=null && e.Node.Tag is WebPageInfo)
-            {
-                this.toolStripButtonAddPage.Enabled = true;                
+                    this.toolStripButtonAddPage.Enabled = true;
+                }                
             }
         }
 
         private void toolStripButtonAddPage_Click(object sender, EventArgs e)
         {
-            if (this.treeView1.SelectedNode!=null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo)
+            OfficeApplication.CreatePage();
+            if (selectWebPage.SelectedWebPage != null)
             {
-                bool expanded = this.treeView1.SelectedNode.IsExpanded;
-                OfficeApplication.CreatePage();
-                this.treeView1.SelectedNode.Nodes.Clear();
-                addWebPage(this.treeView1.SelectedNode, (WebPageInfo)this.treeView1.SelectedNode.Tag);
-                if (expanded)
-                {
-                    this.treeView1.SelectedNode.Expand();
-                }
-            }
+                selectWebPage.SelectedWebPage.ReLoadChilds();
+                selectWebPage.SelectedWebPage.Expand();
+            }            
         }
     }
 }
