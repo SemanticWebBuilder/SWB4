@@ -36,18 +36,32 @@ namespace WBOffice4.Forms
     {
         private OfficeDocument document;
         private String title,description;
+        private WebSiteInfo site;
         public FormPublishcontentToPage(OfficeDocument document)
         {
             InitializeComponent();
-            this.document = document;            
+            this.document = document;
+            if (document.reporitoryID != null)
+            {
+                foreach (RepositoryInfo rep in OfficeApplication.OfficeApplicationProxy.getRepositories())
+                {
+                    if (rep.name.Equals(document.reporitoryID) && rep.siteInfo!=null)
+                    {
+                        site = new WebSiteInfo();
+                        site.id = rep.siteInfo.id;
+                        site.title = rep.siteInfo.title;
+                    }
+                }
+            }
 
-        }        
-        public FormPublishcontentToPage(OfficeDocument document,String title,String description)
+        }
+        public FormPublishcontentToPage(OfficeDocument document, String title, String description, WebSiteInfo site)
         {
             InitializeComponent();
             this.document = document;
             this.title = title;
             this.description = description;
+            this.site = site;
         }
 
         private void FormPublishcontentToPage_LoadSteps(object sender, EventArgs e)
@@ -61,7 +75,7 @@ namespace WBOffice4.Forms
                 {
                     this.AddStep(new ViewProperties());
                 }
-                this.AddStep(new SelectSitePublish(document));
+                this.AddStep(new SelectSitePublish(document,site));
                 
             }
             else
@@ -71,7 +85,7 @@ namespace WBOffice4.Forms
                 {
                     this.AddStep(new ViewProperties());
                 }                
-                this.AddStep(new SelectSitePublish(title, description,document));                
+                this.AddStep(new SelectSitePublish(title, description,document,site));                
             }
             
         }
