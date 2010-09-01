@@ -37,8 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlRpcTest", "XmlRpcTest\Xm
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebBuilderOffice20074Setup", "SemanticINFOTECWebBuilder4Setup\SemanticINFOTECWebBuilder4Setup.vdproj", "{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SemanticWebBuilderOffice2003Setup", "SemanticWebBuilderOffice2003Setup\SemanticWebBuilderOffice2003Setup.vdproj", "{10888BA6-BC8C-4A6E-86E3-E462A33EB298}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsPropertyEditorTest", "WindowsFormsPropertyEditorTest\WindowsFormsPropertyEditorTest.csproj", "{3E9193A8-B060-468B-99EB-AE628A1BAFDC}"
 EndProject
 Global
@@ -112,8 +110,6 @@ Global
 		{11E645A3-60E8-420D-8F5A-33F257747D95}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}.Debug|Any CPU.ActiveCfg = Debug
 		{AC2289C4-3C56-4C9D-B7C1-3BEA11E8F58A}.Release|Any CPU.ActiveCfg = Release
-		{10888BA6-BC8C-4A6E-86E3-E462A33EB298}.Debug|Any CPU.ActiveCfg = Debug
-		{10888BA6-BC8C-4A6E-86E3-E462A33EB298}.Release|Any CPU.ActiveCfg = Release
 		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E9193A8-B060-468B-99EB-AE628A1BAFDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
