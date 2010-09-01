@@ -79,6 +79,14 @@ namespace WBOffice4.Steps
                 this.Wizard.Data[NODE_TYPE] = this.ComboBoxType.SelectedItem;
                 FileInfo zipFile = null;
                 String repositoryName = this.Wizard.Data[SelectCategory.REPOSITORY_ID].ToString();
+                RepositoryInfo rep = null;
+                foreach (RepositoryInfo temp in OfficeApplication.OfficeApplicationProxy.getRepositories())
+                {
+                    if (temp.name.Equals(repositoryName))
+                    {
+                        rep = temp;
+                    }
+                }
                 String title = this.Wizard.Data[TitleAndDescription.TITLE].ToString();
                 String description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
                 ContentType contentType = (ContentType)this.Wizard.Data[TitleAndDescription.NODE_TYPE]; String categoryID = this.Wizard.Data[SelectCategory.CATEGORY_ID].ToString();
@@ -109,12 +117,15 @@ namespace WBOffice4.Steps
                         document.SaveContentProperties(contentID, repositoryName);
                         WebSiteInfo[] sites=OfficeApplication.OfficeApplicationProxy.getSites();
                         this.Wizard.SetProgressBarEnd();
-                        if (sites != null && sites.Length > 0)
+                        if (sites != null && sites.Length > 0 && rep!=null && rep.siteInfo!=null)
                         {
                             DialogResult res = MessageBox.Show(this, "¿Desea publicar el contenido en una página web?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);                                                        
                             if (res == DialogResult.Yes)
                             {
-                                document.Publish(title, description);
+                                WebSiteInfo webSiteInfo = new WebSiteInfo();
+                                webSiteInfo.id = rep.siteInfo.id;
+                                webSiteInfo.title = rep.siteInfo.title;
+                                document.Publish(title, description,webSiteInfo);
                             }
                         }
                         if (OfficeApplication.MenuListener != null)
