@@ -515,7 +515,7 @@ namespace WBOffice4
                 OfficeApplication.WriteError(e);
             }
         }
-        public void Publish(String title, String description)
+        public void Publish(String title, String description,WebSiteInfo site)
         {
             try
             {
@@ -524,10 +524,10 @@ namespace WBOffice4
                     WebSiteInfo[] sites = OfficeApplication.OfficeApplicationProxy.getSites();
                     if (sites == null || sites.Length == 0)
                     {
-                        MessageBox.Show("¡No hay sitios web creados!", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("¡No hay sitios web creados, debe crear un sitio para publicar un documento!", "Publicación de contenido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
-                    FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description);
+                    FormPublishcontentToPage frm = new FormPublishcontentToPage(this, title, description,site);
                     frm.ShowDialog();
                 }
             }
