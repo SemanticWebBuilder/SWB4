@@ -42,10 +42,12 @@ namespace WBOffice4.Steps
         public static readonly String CATEGORY_ID = "CATEGORY_ID";
         public static readonly String REPOSITORY_ID = "REPOSITORY_ID";
         private OfficeDocument document;
-        public SelectCategory(OfficeDocument document)
+        private bool showDefaultRepository;
+        public SelectCategory(OfficeDocument document,bool showDefaultRepository)
         {
             InitializeComponent();
             this.document = document;
+            this.showDefaultRepository = showDefaultRepository;
         }
 
         private void New2_ValidateStep(object sender, CancelEventArgs e)
@@ -84,17 +86,38 @@ namespace WBOffice4.Steps
             {
                 foreach (RepositoryInfo repository in OfficeApplication.OfficeApplicationProxy.getRepositories())
                 {
-                    RepositoryNode repositoryNode = new RepositoryNode(repository);
-                    root.Nodes.Add(repositoryNode);                    
-                    foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.name))
-                    {                        
-                        CategoryNode categoryNode = new CategoryNode(category, repository);
-                        repositoryNode.Nodes.Add(categoryNode);
-                        if (category.childs > 0)
+                    if (!repository.name.Equals("defaultWorkspace@swb"))
+                    {
+                        RepositoryNode repositoryNode = new RepositoryNode(repository);
+                        root.Nodes.Add(repositoryNode);
+                        foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.name))
                         {
-                            TreeNode dummyNode = new DummyNode();
-                            categoryNode.Nodes.Add(dummyNode);                            
-                        }                        
+                            CategoryNode categoryNode = new CategoryNode(category, repository);
+                            repositoryNode.Nodes.Add(categoryNode);
+                            if (category.childs > 0)
+                            {
+                                TreeNode dummyNode = new DummyNode();
+                                categoryNode.Nodes.Add(dummyNode);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (showDefaultRepository)
+                        {
+                            RepositoryNode repositoryNode = new RepositoryNode(repository);
+                            root.Nodes.Add(repositoryNode);
+                            foreach (CategoryInfo category in OfficeApplication.OfficeApplicationProxy.getCategories(repository.name))
+                            {
+                                CategoryNode categoryNode = new CategoryNode(category, repository);
+                                repositoryNode.Nodes.Add(categoryNode);
+                                if (category.childs > 0)
+                                {
+                                    TreeNode dummyNode = new DummyNode();
+                                    categoryNode.Nodes.Add(dummyNode);
+                                }
+                            }
+                        }
                     }
                 }
             }
