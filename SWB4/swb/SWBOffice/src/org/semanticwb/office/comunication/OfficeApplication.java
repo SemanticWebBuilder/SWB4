@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
@@ -53,6 +54,7 @@ import org.semanticwb.jcr170.implementation.SWBRepository;
 import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.Resourceable;
@@ -88,6 +90,9 @@ import org.semanticwb.office.interfaces.SemanticRepository;
 import org.semanticwb.office.interfaces.SemanticFolderRepository;
 import org.semanticwb.office.interfaces.SemanticFileRepository;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.resource.office.sem.ExcelResource;
+import org.semanticwb.resource.office.sem.PPTResource;
+import org.semanticwb.resource.office.sem.WordResource;
 
 /**
  *
@@ -510,122 +515,167 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
         return ((su!=null && ouser.hasUserGroup(su)));
     }
-    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType,WebPageInfo webPageInfo) throws Exception
+    {
+        if(webPageInfo==null)
+        {
+            return search(repositoryName,title,description,category,type,officeType);
+        }
+        WebSite site=WebSite.ClassMgr.getWebSite(webPageInfo.siteID);
+        if(site==null)
+        {
+            return search(repositoryName,title,description,category,type,officeType);
+        }
+        WebPage page=site.getWebPage(webPageInfo.id);
+        if(page==null)
+        {
+            return search(repositoryName,title,description,category,type,officeType);
+        }
+        HashSet<String> resourcesToSeach=new HashSet<String>();
+        GenericIterator<Resource> resources=page.listResources();
+        while(resources.hasNext())
+        {
+            Resource resource=resources.next();
+            String sclass=resource.getResourceType().getResourceClassName();
+            boolean isOffice=sclass.equals(WordResource.class.getCanonicalName()) || sclass.equals(ExcelResource.class.getCanonicalName()) || sclass.equals(PPTResource.class.getCanonicalName());
+            if(isOffice)
+            {
+                if(resource.getResourceData()!=null)
+                {
+                    GenericObject go=resource.getResourceData().createGenericInstance();
+                    if(go!=null && go instanceof OfficeResource)
+                    {
+                        OfficeResource officeResource=(OfficeResource)go;
+                        if(officeResource.getContent()!=null)
+                        {
+                            resourcesToSeach.add(officeResource.getContent());                            
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+        ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
+        for(String uuid : resourcesToSeach)
+        {
+            List<ContentInfo> temp=search(repositoryName, title, description, category, type, officeType, uuid);            
+            if(temp!=null && temp.size()>0)
+            {
+                contents.addAll(temp);
+            }
+        }
+        return contents.toArray(new ContentInfo[contents.size()]);
+    }
+    private List<ContentInfo> search(String repositoryName, String title, String description, String category, String type, String officeType,String uuid) throws Exception
     {
         Session session = null;
         ArrayList<ContentInfo> contents = new ArrayList<ContentInfo>();
-        try
+        HashSet<String> repositories=new HashSet<String>();
+
+        if(repositoryName==null || repositoryName.equals("") || repositoryName.equals("*"))
         {
-            session = loader.openSession(repositoryName, this.user, this.password);
-            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
-            String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
-            String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
-            Query query = null;
-            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            repositoryName=null;
+        }
+        if(repositoryName==null)
+        {
+            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+            RepositoryInfo[] repInfo= loader.getWorkspacesForOffice(ouser);
+            for(RepositoryInfo info : repInfo)
             {
-                StringBuilder statement = new StringBuilder("SELECT DISTINCT ?x ");
-
-                statement.append(" WHERE {");
-
-                if (!(title.equals("") || title.equals("*")))
-                {
-                    statement.append(" ?x ");
-                    statement.append(cm_title);
-                    statement.append(" ?title . ");
-                    statement.append("FILTER regex(?title,\"");
-                    statement.append(title);
-                    statement.append("\") ");
-                }
-
-
-                if (!(officeType.equals("") || officeType.equals("*")))
-                {
-                    statement.append(" ?x ");
-                    statement.append(cm_officeType);
-                    statement.append(" ?officetype . ");
-                    statement.append(" FILTER (?officetype=\"");
-                    statement.append(officeType);
-                    statement.append("\") ");
-                }
-
-                if (!(description.equals("") || description.equals("*")))
-                {
-                    statement.append(" ?x ");
-                    statement.append(cm_description);
-                    statement.append(" ?description . ");
-                    statement.append(" FILTER regex(?description, \"");
-                    statement.append(description);
-                    statement.append("\") ");
-                }
-
-
-
-                if (!(type.equals("") || type.equals("*")))
-                {
-                    statement.append(" ?x jcr:primaryType ?type . ");
-                    statement.append(" FILTER (?type=\"");
-                    statement.append(type);
-                    statement.append("\") ");
-                }
-                statement.append(" } ");
-                query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
-
+                repositories.add(info.name);
             }
-            else
+        }
+        else
+        {
+            repositories.add(repositoryName);
+        }
+        
+        for(String repositoryToseach : repositories)
+        {
+            repositoryName=repositoryToseach;
+            try
             {
-                query = session.getWorkspace().getQueryManager().createQuery("//" + type, Query.XPATH);
-            }
-            String cm_user = loader.getOfficeManager(repositoryName).getUserType();
-            QueryResult result = query.execute();
-            NodeIterator nodeIterator = result.getNodes();
-            while (nodeIterator.hasNext())
-            {
-                Node node = nodeIterator.nextNode();
-                if (category == null || category.equals("") || category.equals("*"))
+                session = loader.openSession(repositoryName, this.user, this.password);
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
+                Query query = null;
+                if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
                 {
-                    Node parent = node.getParent();
-                    
-                    try
+                    StringBuilder statement = new StringBuilder("SELECT DISTINCT ?x ");
+
+                    statement.append(" WHERE {");
+
+                    if (!(title.equals("") || title.equals("*")))
                     {
-                        Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
-                        String userlogin=resNode.getProperty(cm_user).getString();
-                        if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
-                        {
-                            ContentInfo info = new ContentInfo();
-                            info.id = node.getUUID();
-                            info.title = node.getProperty(cm_title).getValue().getString();
-                            info.descripcion = node.getProperty(cm_description).getValue().getString();
-                            info.categoryId = parent.getUUID();
-                            info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
-                            info.created = node.getProperty("jcr:created").getDate().getTime();
-                            contents.add(info);
-                        }
+                        statement.append(" ?x ");
+                        statement.append(cm_title);
+                        statement.append(" ?title . ");
+                        statement.append("FILTER regex(?title,\"");
+                        statement.append(title.replace("\"", "\\\""));
+                        statement.append("\",\"i\") ");
                     }
-                    catch(RuntimeException rte)
+
+                    if (uuid!=null && !uuid.equals("") && !uuid.equals("*"))
                     {
-                        try
-                        {
-                            String id = node.getUUID();
-                            String titlenode = node.getProperty(cm_title).getValue().getString();
-                            String categoryIdnode = parent.getUUID();
-                            String categoryTitle=parent.getProperty(cm_title).getValue().getString();
-                            log.error("Error triyng to get the content with id "+id+" and title "+titlenode+" and category "+categoryIdnode+" and the title of category is "+categoryTitle,rte);
-                        }
-                        catch(Throwable t)
-                        {
-                            log.error(t);
-                        }
+                        statement.append(" ?x jcr:uuid ?uuid . ");
+                        statement.append(" FILTER (?uuid=\"");
+                        statement.append(uuid);
+                        statement.append("\") ");
                     }
+
+
+                    if (!(officeType.equals("") || officeType.equals("*")))
+                    {
+                        statement.append(" ?x ");
+                        statement.append(cm_officeType);
+                        statement.append(" ?officetype . ");
+                        statement.append(" FILTER (?officetype=\"");
+                        statement.append(officeType);
+                        statement.append("\") ");
+                    }
+
+                    if (!(description.equals("") || description.equals("*")))
+                    {
+                        statement.append(" ?x ");
+                        statement.append(cm_description);
+                        statement.append(" ?description . ");
+                        statement.append(" FILTER regex(?description, \"");
+                        statement.append(description.replace("\"", "\\\""));
+                        statement.append("\",\"i\") ");
+                    }
+
+
+
+                    if (!(type.equals("") || type.equals("*")))
+                    {
+                        statement.append(" ?x jcr:primaryType ?type . ");
+                        statement.append(" FILTER (?type=\"");
+                        statement.append(type);
+                        statement.append("\") ");
+                    }
+                    statement.append(" } ");
+                    query = session.getWorkspace().getQueryManager().createQuery(statement.toString(), "SPARQL");
+
                 }
                 else
                 {
-                    Node parent = node.getParent();
-
-                    if (category.equals(parent.getUUID()))
+                    query = session.getWorkspace().getQueryManager().createQuery("//" + type, Query.XPATH);
+                }
+                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                QueryResult result = query.execute();
+                NodeIterator nodeIterator = result.getNodes();
+                while (nodeIterator.hasNext())
+                {
+                    Node node = nodeIterator.nextNode();
+                    if (category == null || category.equals("") || category.equals("*"))
                     {
+                        Node parent = node.getParent();
+
                         try
                         {
-                            Node resNode = node.getNode(JCR_CONTENT);
+                            Node resNode = node.getNode(JCR_CONTENT);//, swb_office.getPrefix() + ":" + swb_office.getName());
                             String userlogin=resNode.getProperty(cm_user).getString();
                             if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
                             {
@@ -633,6 +683,7 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                                 info.id = node.getUUID();
                                 info.title = node.getProperty(cm_title).getValue().getString();
                                 info.descripcion = node.getProperty(cm_description).getValue().getString();
+                                info.respositoryName=repositoryName;
                                 info.categoryId = parent.getUUID();
                                 info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
                                 info.created = node.getProperty("jcr:created").getDate().getTime();
@@ -655,21 +706,66 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
                             }
                         }
                     }
+                    else
+                    {
+                        Node parent = node.getParent();
+
+                        if (category.equals(parent.getUUID()))
+                        {
+                            try
+                            {
+                                Node resNode = node.getNode(JCR_CONTENT);
+                                String userlogin=resNode.getProperty(cm_user).getString();
+                                if(isSu() || (userlogin!=null && userlogin.equals(this.user)))
+                                {
+                                    ContentInfo info = new ContentInfo();
+                                    info.id = node.getUUID();
+                                    info.title = node.getProperty(cm_title).getValue().getString();
+                                    info.descripcion = node.getProperty(cm_description).getValue().getString();
+                                    info.respositoryName=repositoryName;
+                                    info.categoryId = parent.getUUID();
+                                    info.categoryTitle = parent.getProperty(cm_title).getValue().getString();
+                                    info.created = node.getProperty("jcr:created").getDate().getTime();
+                                    contents.add(info);
+                                }
+                            }
+                            catch(RuntimeException rte)
+                            {
+                                try
+                                {
+                                    String id = node.getUUID();
+                                    String titlenode = node.getProperty(cm_title).getValue().getString();
+                                    String categoryIdnode = parent.getUUID();
+                                    String categoryTitle=parent.getProperty(cm_title).getValue().getString();
+                                    log.error("Error triyng to get the content with id "+id+" and title "+titlenode+" and category "+categoryIdnode+" and the title of category is "+categoryTitle,rte);
+                                }
+                                catch(Throwable t)
+                                {
+                                    log.error(t);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.debug(e);
+                throw e;
+            }
+            finally
+            {
+                if (session != null)
+                {
+                    session.logout();
                 }
             }
         }
-        catch (Exception e)
-        {
-            log.debug(e);
-            throw e;
-        }
-        finally
-        {
-            if (session != null)
-            {
-                session.logout();
-            }
-        }
+        return contents;
+    }
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
+    {
+        List<ContentInfo> contents=search(repositoryName, title, description, category, type, officeType, "*");
         return contents.toArray(new ContentInfo[contents.size()]);
     }
 
