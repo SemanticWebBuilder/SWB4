@@ -54,6 +54,9 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.buttonSelectWebPage = new System.Windows.Forms.Button();
+            this.textBox_WebPage = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -94,6 +97,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.buttonSelectWebPage);
+            this.tabPage1.Controls.Add(this.textBox_WebPage);
+            this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.buttonSearch);
             this.tabPage1.Controls.Add(this.comboBoxType);
             this.tabPage1.Controls.Add(this.label5);
@@ -113,9 +119,36 @@
             this.tabPage1.Text = "Criterios de búsqueda";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // buttonSelectWebPage
+            // 
+            this.buttonSelectWebPage.Location = new System.Drawing.Point(413, 149);
+            this.buttonSelectWebPage.Name = "buttonSelectWebPage";
+            this.buttonSelectWebPage.Size = new System.Drawing.Size(30, 23);
+            this.buttonSelectWebPage.TabIndex = 13;
+            this.buttonSelectWebPage.Text = "...";
+            this.buttonSelectWebPage.UseVisualStyleBackColor = true;
+            this.buttonSelectWebPage.Click += new System.EventHandler(this.buttonSelectWebPage_Click);
+            // 
+            // textBox_WebPage
+            // 
+            this.textBox_WebPage.Enabled = false;
+            this.textBox_WebPage.Location = new System.Drawing.Point(161, 151);
+            this.textBox_WebPage.Name = "textBox_WebPage";
+            this.textBox_WebPage.Size = new System.Drawing.Size(246, 20);
+            this.textBox_WebPage.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(17, 153);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Página Web:";
+            // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(176, 166);
+            this.buttonSearch.Location = new System.Drawing.Point(176, 177);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
             this.buttonSearch.TabIndex = 10;
@@ -305,6 +338,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBoxCategories;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.TextBox textBox_WebPage;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button buttonSelectWebPage;
 
 
 

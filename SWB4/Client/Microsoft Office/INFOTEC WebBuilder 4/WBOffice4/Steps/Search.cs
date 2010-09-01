@@ -29,7 +29,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using WBOffice4.Interfaces;
-
+using WBOffice4.Forms;
 namespace WBOffice4.Steps
 {
     internal partial class Search : TSWizards.BaseInteriorStep
@@ -41,10 +41,15 @@ namespace WBOffice4.Steps
         {
             InitializeComponent();
             this.comboBoxRepositories.Items.Clear();
+            RepositoryInfo repall = new RepositoryInfo();
+            repall.exclusive = false;
+            repall.name = "Todos";
+            repall = null;
             foreach (RepositoryInfo rep in OfficeApplication.OfficeApplicationProxy.getRepositories())
             {
                 this.comboBoxRepositories.Items.Add(rep);
             }
+
             this.documentType = documentType;
             if (this.comboBoxRepositories.Items.Count > 0)
             {
@@ -61,7 +66,20 @@ namespace WBOffice4.Steps
                 String type = ((ContentType)this.comboBoxType.SelectedItem).id;
                 this.listView1.Items.Clear();
                 this.Cursor = Cursors.WaitCursor;
-                ContentInfo[] contents = OfficeApplication.OfficeApplicationProxy.search(rep, this.textBoxTitle.Text, this.textBoxDescription.Text, category, type, this.documentType.ToString().ToUpper());
+                WebPageInfo page = null;
+                if (this.textBox_WebPage.Tag != null && this.textBox_WebPage.Tag is WebPageInfo)
+                {
+                    page = this.textBox_WebPage.Tag as WebPageInfo;
+                }
+                ContentInfo[] contents=null;
+                if (page == null)
+                {
+                    contents = OfficeApplication.OfficeApplicationProxy.search(rep, this.textBoxTitle.Text, this.textBoxDescription.Text, category, type, this.documentType.ToString().ToUpper());
+                }
+                else
+                {
+                    contents = OfficeApplication.OfficeApplicationProxy.search(rep, this.textBoxTitle.Text, this.textBoxDescription.Text, category, type, this.documentType.ToString().ToUpper(), page);
+                }                
                 this.Cursor = Cursors.Default;
                 if (contents.Length == 0)
                 {
@@ -90,6 +108,8 @@ namespace WBOffice4.Steps
             if (this.comboBoxRepositories.SelectedItem != null)
             {
                 String rep = this.comboBoxRepositories.SelectedItem.ToString();
+                this.textBox_WebPage.Text = "";
+                this.textBox_WebPage.Tag = null;
                 this.comboBoxCategories.Items.Clear();
                 CategoryInfo all=new CategoryInfo();
                 all.UDDI = "*";
@@ -138,6 +158,37 @@ namespace WBOffice4.Steps
         private void Search_ShowStep(object sender, TSWizards.ShowStepEventArgs e)
         {
             this.textBoxTitle.Focus();
+        }
+
+        private void buttonSelectWebPage_Click(object sender, EventArgs e)
+        {
+            if (this.comboBoxRepositories.SelectedItem != null)
+            {
+                RepositoryInfo rep = (RepositoryInfo)this.comboBoxRepositories.SelectedItem;
+                if (rep.siteInfo != null)
+                {
+                    WebSiteInfo webSiteInfo = new WebSiteInfo();
+                    webSiteInfo.id = rep.siteInfo.id;
+                    webSiteInfo.title = rep.siteInfo.title;
+                    FormSelectPageToOpen frm = new FormSelectPageToOpen(documentType, webSiteInfo);
+                    DialogResult result = frm.ShowDialog(this);
+                    if (result == DialogResult.OK && frm.WebPage != null)
+                    {
+                        this.textBox_WebPage.Text = frm.WebPage.title;
+                        this.textBox_WebPage.Tag = frm.WebPage;
+                    }
+                }
+                else
+                {
+                    FormSelectPageToOpen frm = new FormSelectPageToOpen(documentType);
+                    DialogResult result = frm.ShowDialog(this);
+                    if (result == DialogResult.OK && frm.WebPage != null)
+                    {
+                        this.textBox_WebPage.Text = frm.WebPage.title;
+                        this.textBox_WebPage.Tag = frm.WebPage;
+                    }
+                }
+            }
         }
     }
 }
