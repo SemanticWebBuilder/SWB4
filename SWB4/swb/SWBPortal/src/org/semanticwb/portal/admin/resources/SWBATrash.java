@@ -125,6 +125,9 @@ public class SWBATrash extends GenericResource {
         String  trashtype = base.getAttribute("trash","site");
         String id = request.getParameter("suri");
         String page = request.getParameter("page");
+
+        //System.out.println("filterselect="+request.getParameter("filtersel"));
+
         PrintWriter out = response.getWriter();
 
         WebPage wp = paramRequest.getWebPage();
@@ -149,23 +152,32 @@ public class SWBATrash extends GenericResource {
         String pfilter = request.getParameter("filtersel");
         if(pfilter==null) pfilter="";
         out.println("<label for=\""+id+"/filtertrash\">"+paramRequest.getLocaleString("msgFilterElements")+":</label>");
-        out.println("<select id=\""+id+"/filtertrash\" name=\"filtersel\" >");
-        out.println("<option value=\"\" "+(pfilter.equals("")?"selected":"")+" > </option>");
+        out.println("<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" id=\""+id+"/filtertrash\" name=\"filtersel\" >");
+        out.println("<option value=\"\" "+(pfilter.equals("")?"selected=\"selected\"":"")+" > </option>");
         SemanticClass scls = Trashable.swb_Trashable;
         Iterator<SemanticClass> itsc = scls.listSubClasses(true);
         while (itsc.hasNext()) {
             SemanticClass semClass = itsc.next();
-            out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
+            out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected=\"selected\" ":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
         }
+        out.println("<script type=\"dojo/method\" event=\"onChange\" args=\"item\">");
+
+        out.println(" var urlfilter='" + urlfilter + "'+'&filtersel='+dijit.byId('"+id+"/filtertrash').attr('value');   ");
+
+        out.println(" alert(urlfilter); ");
+        out.println(" submitUrl(urlfilter,this.domNode);");
+
+        out.println(" return false; ");
+        out.println("</script>");
+
+
+
         out.println("</selected>");
         out.println("</li>");
         out.println("</ul>");
         out.println("</fieldset>");
         
         out.println("<fieldset>");
-//        out.println("<legend>");
-//        out.println(paramRequest.getLocaleString("msgDeletedElements"));
-//        out.println("</legend>");
         out.println("<table width=\"100%\">");
         out.println("<thead>");
 
@@ -230,6 +242,14 @@ public class SWBATrash extends GenericResource {
             SemanticObject semanticObject = itso.next();
             hmnum.put(semanticObject.getURI(), semanticObject);
         }
+
+        HashMap<String, SemanticObject> hmfiltro = new HashMap();
+        Iterator<SemanticObject> itfiltro = hmnum.values().iterator();
+        while (itfiltro.hasNext()) {
+            SemanticObject semanticObject = itfiltro.next();
+
+        }
+
 
         int ps=20;
         int l=hmnum.size();
@@ -427,7 +447,7 @@ public class SWBATrash extends GenericResource {
         if(accion!=null && accion.equals("updcfg")){
             try{
                 if(request.getParameter("trashtype")!=null){
-                    System.out.println("tipo papelera: "+request.getParameter("trashtype"));
+                    //System.out.println("tipo papelera: "+request.getParameter("trashtype"));
                     base.setAttribute("trash", request.getParameter("trashtype"));
                     base.updateAttributesToDB();
                 }
