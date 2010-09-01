@@ -33,19 +33,38 @@ namespace WBOffice4.Steps
 {
     public class SelectSiteCreatePage: SelectSite
     {
-        public SelectSiteCreatePage(OfficeDocument document) : base(document)
+        private String title, description;
+        private OfficeDocument document;
+        public SelectSiteCreatePage(OfficeDocument document) : base(false)
         {
-            this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);            
+            this.document = document;
+            this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
+            selectWebPage.AddNode += new WBOffice4.Controls.NodeEvent(selectWebPage_onAddNode);
+        }
+
+        void selectWebPage_onAddNode(TreeNode node)
+        {            
+            if (node is WebPageTreeNode)
+            {
+                WebPageInfo page = ((WebPageTreeNode)node).WebPageInfo;
+                if (!OfficeApplication.OfficeApplicationProxy.canCreatePage(page))
+                {
+                    node.ForeColor = Color.Gray;
+                }         
+            }
         }
         public SelectSiteCreatePage(String title, String description,OfficeDocument document)
-            : base(title, description,document)
+            : base()
         {
+            this.title = title;
+            this.description = description;
+            this.document = document;
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
         }
         
         private void SelectSite_ValidateStep(object sender, CancelEventArgs e)
         {
-            if (!(this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo))
+            if (selectWebPage.SelectedWebPage==null)
             {
                 MessageBox.Show(this, "¡Debe indicar una página web!", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
@@ -53,7 +72,7 @@ namespace WBOffice4.Steps
             }
             else
             {
-                WebPageInfo parent = (WebPageInfo)this.treeView1.SelectedNode.Tag;
+                WebPageInfo parent = selectWebPage.SelectedWebPage.WebPageInfo;
                 if (OfficeApplication.OfficeApplicationProxy.canCreatePage(parent))
                 {
                     this.Wizard.Data[SelectSiteCreatePage.WEB_PAGE] = parent;
@@ -67,34 +86,6 @@ namespace WBOffice4.Steps
                 }
                 
             }
-        }
-        protected override void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            base.treeView1_AfterSelect(sender, e);
-            if (this.toolStripButtonAddPage.Enabled && e.Node.Tag!=null && e.Node.Tag is WebPageInfo)
-            {
-                if (OfficeApplication.OfficeApplicationProxy.canCreatePage((WebPageInfo)e.Node.Tag))
-                {
-                    this.toolStripButtonAddPage.Enabled = true;
-                }
-                else
-                {
-                    this.toolStripButtonAddPage.Enabled = false;
-                }
-            }
-        }
-        protected override void onAddNode(TreeNode node)
-        {
-            if (node.Tag != null && node.Tag is WebPageInfo)
-            {
-                WebPageInfo page = node.Tag as WebPageInfo;
-                
-                if (!OfficeApplication.OfficeApplicationProxy.canCreatePage(page))
-                {
-                    node.ForeColor = Color.Gray;
-                }
-                
-            }
-        }
+        }                
     }
 }

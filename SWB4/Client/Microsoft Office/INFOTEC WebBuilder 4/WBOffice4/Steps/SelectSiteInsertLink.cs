@@ -32,27 +32,24 @@ namespace WBOffice4.Steps
 {
     public class SelectSiteInsertLink : SelectSite
     {
-        
+        private OfficeDocument document;
         public SelectSiteInsertLink(OfficeDocument document)
-            : base(document)
+            : base()
         {
+            this.document = document;
             this.ValidateStep += new System.ComponentModel.CancelEventHandler(SelectSite_ValidateStep);
             
-        }
-        protected override void onAddNode(TreeNode node)
-        {
-            
-        }
+        }        
         private void SelectSite_ValidateStep(object sender, CancelEventArgs e)
         {
-            if (!(this.treeView1.SelectedNode != null && this.treeView1.SelectedNode.Tag != null && this.treeView1.SelectedNode.Tag is WebPageInfo))
+            if (selectWebPage.SelectedWebPage==null)
             {
                 MessageBox.Show(this, "¡Debe indicar una página web", "Seleccionar página web", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 e.Cancel = true;
             }
             else
             {
-                WebPageInfo webpage = this.treeView1.SelectedNode.Tag as WebPageInfo;
+                WebPageInfo webpage = selectWebPage.SelectedWebPage.WebPageInfo;
                 Uri address=OfficeApplication.OfficeApplicationProxy.WebAddress;
                 String host;
                 if (address.Port == 80)
