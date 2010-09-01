@@ -36,7 +36,7 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeApplication
 {
 
-    public static double version = 4.004;
+    public static double version = 4.009;
 
     @XmlRpcMethod(methodName = "OfficeApplication.isValidVersion")
     public boolean isValidVersion(double version) throws Exception;
@@ -96,6 +96,9 @@ public interface IOfficeApplication
 
     @XmlRpcMethod(methodName = "OfficeApplication.search")
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception;
+
+    @XmlRpcMethod(methodName = "OfficeApplication.search")
+    public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType,WebPageInfo webPageInfo) throws Exception;
 
     @XmlRpcMethod(methodName = "OfficeApplication.openContent")
     public String openContent(String repositoryName, VersionInfo versioninfo) throws Exception;
