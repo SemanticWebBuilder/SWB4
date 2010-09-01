@@ -70,6 +70,9 @@ namespace WBOffice4.Interfaces
         ContentType[] getContentTypes(String repositoryName);
 
         [XmlRpcMethod("OfficeApplication.search")]
+        ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType, WebPageInfo uriWebPage);
+
+        [XmlRpcMethod("OfficeApplication.search")]
         ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType);
 
         [XmlRpcMethod("OfficeApplication.openContent")]
