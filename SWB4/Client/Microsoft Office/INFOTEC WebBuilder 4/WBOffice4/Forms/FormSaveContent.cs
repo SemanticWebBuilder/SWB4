@@ -42,7 +42,7 @@ namespace WBOffice4.Forms
         }        
         private void FormPublishContent_LoadSteps(object sender, EventArgs e)
         {            
-            this.AddStep(new SelectCategory(document));
+            this.AddStep(new SelectCategory(document,false));
             this.AddStep(new TitleAndDescription(document,true));
             this.AddStep(new ContentProperties(document));
             this.AddStep(new SummaryNew(document));
