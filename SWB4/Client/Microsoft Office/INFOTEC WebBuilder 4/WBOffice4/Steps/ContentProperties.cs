@@ -61,6 +61,14 @@ namespace WBOffice4.Steps
             String description = this.Wizard.Data[TitleAndDescription.DESCRIPTION].ToString();
             String categoryID = this.Wizard.Data[SelectCategory.CATEGORY_ID].ToString();
             String repositoryName = this.Wizard.Data[SelectCategory.REPOSITORY_ID].ToString();
+            RepositoryInfo rep = null;
+            foreach(RepositoryInfo temp in OfficeApplication.OfficeApplicationProxy.getRepositories())
+            {
+                if(temp.name.Equals(repositoryName))
+                {
+                    rep=temp;
+                }
+            }
             ContentType contentType = (ContentType)this.Wizard.Data[TitleAndDescription.NODE_TYPE];
             PropertyInfo[] properties = OfficeApplication.OfficeDocumentProxy.getContentProperties(repositoryName, contentType.id);
             String[] values = this.propertyEditor1.Values;
@@ -87,12 +95,15 @@ namespace WBOffice4.Steps
                 document.SaveContentProperties(contentID, repositoryName);
                 this.Wizard.SetProgressBarEnd();
                 WebSiteInfo[] sites=OfficeApplication.OfficeApplicationProxy.getSites();
-                if (sites != null && sites.Length > 0)
+                if (sites != null && sites.Length > 0 && rep!=null && rep.siteInfo!=null)
                 {
                     DialogResult res = MessageBox.Show(this, "¿Desea publicar el contenido en una página web?", this.Wizard.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);                                        
                     if (res == DialogResult.Yes)
                     {
-                        document.Publish(title, description);
+                        WebSiteInfo webSiteInfo = new WebSiteInfo();
+                        webSiteInfo.id = rep.siteInfo.id;
+                        webSiteInfo.title = rep.siteInfo.title;
+                        document.Publish(title, description, webSiteInfo);
                     }
                 }
                 if (OfficeApplication.MenuListener != null)
