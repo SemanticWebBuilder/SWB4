@@ -258,6 +258,47 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     {
                         omit=false;
                     }
+                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("font"))
+                    {
+
+                    }
+                    else if(deletesytyles && (tag.getTagString().toLowerCase().equals("b") || tag.getTagString().toLowerCase().equals("p") || tag.getTagString().toLowerCase().equals("span")) && !tag.isEndTag() && !tag.isEmpty())
+                    {
+                        boolean exists=false;
+                        int params=tag.getParamCount();
+                        for(int i=0;i<params;i++)
+                        {
+                            String name=tag.getParamName(i);
+                            if(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang"))
+                            {
+                                exists=true;
+                            }
+                        }
+                        if(!exists)
+                        {
+                            ret.append(tok.getRawString());
+                        }
+                        else
+                        {
+                            ret.append("<");
+                            ret.append(tag.getTagString());                            
+                            Enumeration names=tag.getParamNames();
+                            while(names.hasMoreElements())
+                            {
+                                String name=names.nextElement().toString();
+                                String svalue=tag.getParam(name);
+                                if(!(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang")))
+                                {
+                                    ret.append(" ");
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    ret.append(svalue);
+                                    ret.append("\"");
+                                }
+                            }
+                            ret.append(">");
+                        }
+                    }
                     else if(tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
                     {
                         if(tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
@@ -309,14 +350,14 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                                     ret.append(name);
                                     ret.append("=\"");
                                     ret.append(svalue);
-                                    ret.append("\" ");
+                                    ret.append("\"");
                                 }
                                 else
                                 {
                                     ret.append(name);
                                     ret.append("=\"");
                                     ret.append(path);
-                                    ret.append("\" ");
+                                    ret.append("\"");
                                 }
 
 
