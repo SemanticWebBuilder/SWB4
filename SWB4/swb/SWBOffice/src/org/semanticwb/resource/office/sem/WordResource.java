@@ -411,8 +411,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     public void setResourceBase(Resource base)
     {
         try
-        {
-            ContentUtils contentUtils = new ContentUtils();
+        {            
             super.setResourceBase(base);
             contentUtils.setResourceBase(base, "Content");
         }
