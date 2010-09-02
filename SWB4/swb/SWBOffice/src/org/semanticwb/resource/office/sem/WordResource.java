@@ -401,7 +401,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         {
             log.error(e);
         }
-        return ret.toString();
+        return ret.toString().replace("<span></span>", "").replace("<span> </span>", "");
     }
 
     /**
