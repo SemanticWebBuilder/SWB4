@@ -48,6 +48,7 @@ import org.semanticwb.portal.util.ContentUtils;
  */
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
+
     private static final OfficeDocument document = new OfficeDocument();
     private static final ContentUtils contentUtils = new ContentUtils();
     int snpages = 15;
@@ -88,13 +89,13 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        
+
         Resource base = paramRequest.getResourceBase();
         WebPage page = paramRequest.getWebPage();
         String version = getVersionToShow();
         String contentId = getContent();
         String repositoryName = getRepositoryName();
-        
+
         try
         {
             User user = paramRequest.getUser();
@@ -130,15 +131,15 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             read = in.read(buffer);
                         }
                         String htmlOut = null;
-                        boolean deletestyles=false;
+                        boolean deletestyles = false;
                         try
                         {
-                            deletestyles=this.isDeletestyles();
+                            deletestyles = this.isDeletestyles();
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             log.error(e);
-                        }                        
+                        }
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -186,7 +187,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         {
                             iswordcontent = false;
                         }
-                        
+
                         if (iswordcontent)
                         { //Contenido MsWord
                             htmlOut = contentUtils.predefinedStyles(htmlOut, base, isTpred()); //Estilos predefinidos
@@ -204,7 +205,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
 
 
 
-                        htmlOut = cleanHTML(htmlOut,deletestyles);
+                        htmlOut = cleanHTML(htmlOut, deletestyles);
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();
@@ -227,12 +228,12 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         }
     }
 
-    public static String cleanHTML(String datos,boolean deletesytyles)
+    public static String cleanHTML(String datos, boolean deletesytyles)
     {
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
         StringBuilder ret = new StringBuilder();
         HtmlTag tag = new HtmlTag();
-        boolean omit=false;
+        boolean omit = false;
         try
         {
             while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
@@ -250,44 +251,43 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                     {
                         continue;
                     }
-                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("style") && !tag.isEndTag())
-                    {                        
-                        omit=true;                       
-                    }
-                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("style") && tag.isEndTag())
+                    else if (deletesytyles && tag.getTagString().toLowerCase().equals("style") && !tag.isEndTag())
                     {
-                        omit=false;
+                        omit = true;
                     }
-                    else if(deletesytyles && tag.getTagString().toLowerCase().equals("font"))
+                    else if (deletesytyles && tag.getTagString().toLowerCase().equals("style") && tag.isEndTag())
                     {
-
+                        omit = false;
                     }
-                    else if(deletesytyles && (tag.getTagString().toLowerCase().equals("b") || tag.getTagString().toLowerCase().equals("p") || tag.getTagString().toLowerCase().equals("span")) && !tag.isEndTag() && !tag.isEmpty())
+                    else if (deletesytyles && (tag.getTagString().toLowerCase().equals("font") || tag.getTagString().toLowerCase().equals("o:p")))
                     {
-                        boolean exists=false;
-                        int params=tag.getParamCount();
-                        for(int i=0;i<params;i++)
+                    }
+                    else if (deletesytyles && (tag.getTagString().toLowerCase().equals("b") || tag.getTagString().toLowerCase().equals("br") || tag.getTagString().toLowerCase().equals("div") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("p") || tag.getTagString().toLowerCase().equals("span")) && !tag.isEndTag() && !tag.isEmpty())
+                    {
+                        boolean exists = false;
+                        int params = tag.getParamCount();
+                        for (int i = 0; i < params; i++)
                         {
-                            String name=tag.getParamName(i);
-                            if(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang"))
+                            String name = tag.getParamName(i);
+                            if (name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class"))
                             {
-                                exists=true;
+                                exists = true;
                             }
                         }
-                        if(!exists)
+                        if (!exists)
                         {
                             ret.append(tok.getRawString());
                         }
                         else
                         {
                             ret.append("<");
-                            ret.append(tag.getTagString());                            
-                            Enumeration names=tag.getParamNames();
-                            while(names.hasMoreElements())
+                            ret.append(tag.getTagString());
+                            Enumeration names = tag.getParamNames();
+                            while (names.hasMoreElements())
                             {
-                                String name=names.nextElement().toString();
-                                String svalue=tag.getParam(name);
-                                if(!(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang")))
+                                String name = names.nextElement().toString();
+                                String svalue = tag.getParam(name);
+                                if (!(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class")))
                                 {
                                     ret.append(" ");
                                     ret.append(name);
@@ -299,26 +299,26 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             ret.append(">");
                         }
                     }
-                    else if(tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
+                    else if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
                     {
-                        if(tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
+                        if (tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
                         {
                             tok.nextToken();
                             tok.parseTag(tok.getStringValue(), tag);
                             ttype = tok.getTokenType();
-                            if(ttype==HtmlStreamTokenizer.TT_TEXT)
+                            if (ttype == HtmlStreamTokenizer.TT_TEXT)
                             {
                                 tok.nextToken();
                                 tok.parseTag(tok.getStringValue(), tag);
                                 ttype = tok.getTokenType();
-                                if(ttype==HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                                if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
                                 {
                                     continue;
                                 }
                             }
-                            else if(ttype==HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                            else if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
                             {
-                                  continue;
+                                continue;
 
                             }
 
@@ -328,32 +328,45 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             continue;
                         }
                     }
-                    else if(tag.getTagString().toLowerCase().equals("a"))
+                    else if (tag.getTagString().toLowerCase().equals("a"))
                     {
-                        String value=tag.getParam("href");
-                        if(value!=null && value.startsWith("docrep://")) // liga al repositorio
+                        String value = tag.getParam("href");
+                        if (value != null && value.startsWith("docrep://")) // liga al repositorio
                         {
-                            value=value.substring(8);
-                            if(value.startsWith("//"))
+                            value = value.substring(8);
+                            if (value.startsWith("//"))
                             {
-                                value=value.substring(1);
+                                value = value.substring(1);
                             }
-                            String path=SWBPortal.getDistributorPath()+value;
-                            ret.append("<a ");
-                            Enumeration names=tag.getParamNames();
-                            while(names.hasMoreElements())
+                            String path = SWBPortal.getDistributorPath() + value;
+                            ret.append("<a");
+                            Enumeration names = tag.getParamNames();
+                            while (names.hasMoreElements())
                             {
-                                String name=names.nextElement().toString();
-                                String svalue=tag.getParam(name);
-                                if(!name.toLowerCase().equals("href"))
+                                String name = names.nextElement().toString();
+                                String svalue = tag.getParam(name);
+                                if (!name.toLowerCase().equals("href"))
                                 {
-                                    ret.append(name);
-                                    ret.append("=\"");
-                                    ret.append(svalue);
-                                    ret.append("\"");
+                                    if (deletesytyles && !(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class")))
+                                    {
+                                        ret.append(" ");
+                                        ret.append(name);
+                                        ret.append("=\"");
+                                        ret.append(svalue);
+                                        ret.append("\"");
+                                    }
+                                    else
+                                    {
+                                        ret.append(" ");
+                                        ret.append(name);
+                                        ret.append("=\"");
+                                        ret.append(svalue);
+                                        ret.append("\"");
+                                    }
                                 }
                                 else
                                 {
+                                    ret.append(" ");
                                     ret.append(name);
                                     ret.append("=\"");
                                     ret.append(path);
@@ -366,19 +379,19 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         }
                         else
                         {
-                            if(!omit)
+                            if (!omit)
                                 ret.append(tok.getRawString());
                         }
                     }
                     else
                     {
-                        if(!omit)
+                        if (!omit)
                             ret.append(tok.getRawString());
                     }
                 }
                 else if (ttype == HtmlStreamTokenizer.TT_TEXT)
                 {
-                    if(!omit)
+                    if (!omit)
                         ret.append(tok.getRawString());
                 }
 
