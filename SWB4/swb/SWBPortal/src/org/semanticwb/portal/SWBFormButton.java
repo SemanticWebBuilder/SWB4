@@ -50,6 +50,7 @@ public class SWBFormButton
     
     /** The busy button. */
     private boolean busyButton=false;
+    private int busyTimeOut=0;
 
     /**
      * Instantiates a new sWB form button.
@@ -82,13 +83,15 @@ public class SWBFormButton
         if(DOJO)
         {
             //TODO: Bug in IE
-//            if(busyButton)
-//            {
-//                ret.append(" dojoType=\"dojox.form.BusyButton\" busyLabel=\""+getTitle(lang)+"\" timeout=\"10000\"");
-//            }else
-//            {
+            if(busyButton)
+            {
+                ret.append(" dojoType=\"dojox.form.BusyButton\"");
+                if(busyTimeOut>0)
+                    ret.append(" timeout=\""+busyTimeOut+"\"");
+            }else
+            {
                 ret.append(" dojoType=\"dijit.form.Button\"");
-//            }
+            }
         }
         ret.append(" "+getAttributes());
         ret.append(">");
@@ -164,7 +167,7 @@ public class SWBFormButton
      */
     public static SWBFormButton newSaveButton()
     {
-        return new SWBFormButton().setTitle("Guardar", "es").setTitle("Save", "en").setAttribute("type", "submit").setBusyButton(true);
+        return new SWBFormButton().setTitle("Guardar", "es").setTitle("Save", "en").setAttribute("type", "submit").setBusyButton(false);
     }
 
     /**
@@ -214,7 +217,7 @@ public class SWBFormButton
      */
     public static SWBFormButton newDeleteButton()
     {
-        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setBusyButton(true);
+        return new SWBFormButton().setTitle("Eliminar", "es").setTitle("Delete", "en").setBusyButton(false);
     }
 
     /**
@@ -244,6 +247,17 @@ public class SWBFormButton
      */
     public SWBFormButton setBusyButton(boolean busyButton) {
         this.busyButton = busyButton;
+        return this;
+    }
+
+
+    public int getBusyTimeOut() {
+        return busyTimeOut;
+    }
+
+    public SWBFormButton setBusyTimeOut(int busyTimeOut)
+    {
+        this.busyTimeOut = busyTimeOut;
         return this;
     }
 
