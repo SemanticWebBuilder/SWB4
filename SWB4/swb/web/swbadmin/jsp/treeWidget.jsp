@@ -57,7 +57,7 @@
 <div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
   store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <!-- tree widget -->
-<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit.tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
+<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController_="dijit.tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
     <script type="dojo/method" event="onClick" args="item, node">
         //alert('onClick');
         if(item)
