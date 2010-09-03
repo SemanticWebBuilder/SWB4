@@ -5,7 +5,7 @@
 
     public void getAllChilds(List list, SemanticObject obj)
     {
-        list.add(obj);
+        list.add(obj.getURI());
         Iterator<SemanticObject> it=obj.listHerarquicalChilds();
         while(it.hasNext())
         {
@@ -33,7 +33,7 @@
     if(suri==null)
     {
         String code=SWBUtils.IO.readInputStream(request.getInputStream());
-        System.out.println(code);
+        //System.out.println(code);
         String uri=SWBContext.getAdminWebSite().getHomePage().getEncodedURI();
 %>
     Error params not found...
@@ -59,20 +59,36 @@
             SemanticObject vp=ont.getSemanticObject(virp);
             obj.removeObjectProperty(WebPage.swb_hasWebPageVirtualParent, vp);
             out.println("Referencia eliminada...");
-            out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+vp.getURI()+"');</script>");
+            out.println("<script type=\"text/javascript\">reloadTreeNodeByURI('"+vp.getURI()+"',false);</script>");
         }else
         {
             String type=obj.getSemanticClass().getDisplayName(lang);
             ArrayList list=new ArrayList();
             getAllChilds(list, obj);
-            obj.remove();
+            boolean trash=false;
+            if(obj.instanceOf(Trashable.swb_Trashable))
+            {
+                boolean del=obj.getBooleanProperty(Trashable.swb_deleted);
+                if(!del)trash=true;
+            }
+            if(!trash)
+            {
+                obj.remove();
+            }else
+            {
+                obj.setBooleanProperty(Trashable.swb_deleted, true);
+            }
             out.println(type+" fue eliminado...");
-            Iterator<SemanticObject> it=list.iterator();
+            out.println("<script type=\"text/javascript\">");
+            Iterator<String> it=list.iterator();
             while(it.hasNext())
             {
-                SemanticObject ch=it.next();
-                out.println("<script type=\"text/javascript\">removeTreeNodeByURI('"+ch.getURI()+"');</script>");
+                String ch=it.next();
+                out.println("closeTab('"+ch+"');");
+                //System.out.println(ch);
             }
+            out.println("removeTreeNodeByURI('"+obj.getURI()+"',false);");
+            out.println("</script>");
         }
     }
     //out.println(obj.getDisplayName(lang)+" "+act);

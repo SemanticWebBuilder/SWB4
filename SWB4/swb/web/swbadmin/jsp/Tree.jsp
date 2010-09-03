@@ -271,6 +271,7 @@
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         if(node.getId().equals("hn_Classes"))
         {
@@ -289,7 +290,7 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         Iterator<SemanticObject> it=null;
         if(cls!=null)
@@ -355,6 +356,7 @@
         }
         //System.out.println("herarprop:"+herarprop);
 
+        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -389,17 +391,21 @@
             if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
+                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     //TODO:Separar en una clase treeController
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(user, obj))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
+
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -498,7 +504,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         if(restype.getResourceMode()!=restype.MODE_CONTENT)
         {
@@ -538,12 +544,13 @@
             if(hasChilds && !addChilds)
             {
                 if (addDummy) {
-                    childs.put(getDummyNode());
+                    //childs.put(getDummyNode());
                 } else {
                     jobj.put("hasChilds", "true");
                 }
                 events.put(getEvent("onOpen", getReloadAction()));
             }
+            if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
         }
     }
 
@@ -592,6 +599,7 @@
     {
         boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
         if(!fullaccess && !SWBPortal.getAdminFilterMgr().haveChildAccessToSemanticObject(user, obj))return;
+        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         String lang=user.getLanguage();
         boolean hasChilds=false;
@@ -783,7 +791,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         if(!virtual)
         {
@@ -833,12 +841,13 @@
             if(hasChilds && !addChilds)
             {
                 if (addDummy) {
-                    childs.put(getDummyNode());
+                    //childs.put(getDummyNode());
                 } else {
                     jobj.put("hasChilds", "true");
                 }
                 events.put(getEvent("onOpen", getReloadAction()));
             }
+            if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
         }
     }
 
@@ -852,7 +861,6 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntClass> carr=new ArrayList();
@@ -905,6 +913,7 @@
         }
         menus.put(getMenuReload(user.getLanguage()));
 
+        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -928,11 +937,13 @@
             if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
+                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addHNProperties(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
@@ -943,7 +954,7 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntProperty> carr=new ArrayList();
@@ -989,6 +1000,7 @@
         }
         menus.put(getMenuReload(user.getLanguage()));
 
+        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -1012,11 +1024,13 @@
             //if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
+                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addClass(JSONArray arr, OntClass cls, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1032,7 +1046,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1042,6 +1056,7 @@
 
         Iterator<OntClass> it=cls.listSubClasses(true);
 
+        boolean hasChilds=false;
         if(addChilds)
         {
             while(it.hasNext())
@@ -1054,11 +1069,13 @@
             if(it.hasNext())
             {
                 jobj.put("hasChilds", "true");
+                hasChilds=true;
                 events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addProperty(JSONArray arr, OntProperty prop, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1073,7 +1090,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        jobj.putOpt("children", childs);
+        //jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1082,6 +1099,7 @@
         //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
 
         Iterator it=prop.listSubProperties();
+        boolean hasChilds=false;
         if(addChilds)
         {
             while(it.hasNext())
@@ -1094,11 +1112,13 @@
             if(it.hasNext())
             {
                 jobj.put("hasChilds", "true");
+                hasChilds=true;
                 events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
+        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 /*
     public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException

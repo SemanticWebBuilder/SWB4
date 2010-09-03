@@ -45,7 +45,7 @@
             out.println("<script type=\"text/javascript\">");
             out.println("   addItemByURI(mfavoStore, null, '"+obj.getURI()+"');");
             out.println("   updateTreeNodeByURI('"+suri+"');");
-            //out.println("   mfavo.rootNode.expand();");
+            out.println("   reloadTab('"+suri+"');");
             out.println("</script>");
         }else
         {
@@ -57,7 +57,8 @@
             out.println(obj.getSemanticClass().getDisplayName(lang)+" fue eliminado...");
             out.println("<script type=\"text/javascript\">");
             out.println("   removeTreeNode(mfavoStore, getItem(mfavoStore,'"+suri+"'),false);");
-            out.println("   updateTreeNodeByURI('"+suri+"');");
+            //out.println("   updateTreeNodeByURI('"+suri+"');");
+            out.println("   reloadTab('"+suri+"');");
             out.println("</script>");
 
         }
