@@ -9,6 +9,7 @@ import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphListener;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.faster.GraphMemFaster;
+import com.hp.hpl.jena.shared.PrefixMapping;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,56 +31,65 @@ public class GraphCached extends GraphMemFaster implements GraphListener
     }
 
     public void notifyAddTriple(Graph g, Triple t) {
-        System.out.println("notifyAddTriple");
+        //System.out.println("notifyAddTriple");
         base.add(t);
     }
 
     public void notifyAddArray(Graph g, Triple[] triples) {
-        System.out.println("notifyAddArray");
+        //System.out.println("notifyAddArray");
         base.getBulkUpdateHandler().add(triples);
     }
 
     public void notifyAddList(Graph g, List<Triple> triples) {
-        System.out.println("notifyAddList");
+        //System.out.println("notifyAddList");
         base.getBulkUpdateHandler().add(triples);
     }
 
     public void notifyAddIterator(Graph g, Iterator<Triple> it) {
-        System.out.println("notifyAddIterator");
+        //System.out.println("notifyAddIterator");
         base.getBulkUpdateHandler().add(it);
     }
 
     public void notifyAddGraph(Graph g, Graph added) {
-        System.out.println("notifyAddGraph");
+        //System.out.println("notifyAddGraph");
         base.getBulkUpdateHandler().add(added);
     }
 
     public void notifyDeleteTriple(Graph g, Triple t) {
-        System.out.println("notifyDeleteTriple");
+        //System.out.println("notifyDeleteTriple");
         base.delete(t);
     }
 
     public void notifyDeleteList(Graph g, List<Triple> L) {
-        System.out.println("notifyDeleteList");
+        //System.out.println("notifyDeleteList");
         base.getBulkUpdateHandler().delete(L);
     }
 
     public void notifyDeleteArray(Graph g, Triple[] triples) {
-        System.out.println("notifyDeleteArray");
+        //System.out.println("notifyDeleteArray");
         base.getBulkUpdateHandler().delete(triples);
     }
 
     public void notifyDeleteIterator(Graph g, Iterator<Triple> it) {
-        System.out.println("notifyDeleteIterator");
+        //System.out.println("notifyDeleteIterator");
         base.getBulkUpdateHandler().delete(it);
     }
 
     public void notifyDeleteGraph(Graph g, Graph removed) {
-        System.out.println("notifyDeleteGraph");
+        //System.out.println("notifyDeleteGraph");
         base.getBulkUpdateHandler().delete(removed);
     }
 
     public void notifyEvent(Graph source, Object value) {
-        System.out.println("notifyEvent");
+        //System.out.println("notifyEvent");
     }
+
+    @Override
+    public PrefixMapping getPrefixMapping() {
+        return base.getPrefixMapping();
+    }
+
+
+
+
 }

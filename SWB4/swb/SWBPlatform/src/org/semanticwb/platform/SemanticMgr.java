@@ -91,6 +91,8 @@ public class SemanticMgr implements SWBInstanceObject
 {
     private static String NULL="__NULL__";
 
+    private boolean useCache=false;
+
     /**
      * The Enum ModelSchema.
      */
@@ -248,6 +250,10 @@ public class SemanticMgr implements SWBInstanceObject
      * Initialize db.
      */
     public void initializeDB() {
+
+        useCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
+        log.event("tipleFullCache:"+useCache);
+
         //System.out.println("initializeDB");
         DBConnectionPool pool = SWBUtils.DB.getDefaultPool();
 //        String M_DB_URL         = pool.getURL();
@@ -610,6 +616,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return the model
      */
     public SemanticModel getModel(String name) {
+        //System.out.println("getModel:"+name+" "+m_models.get(name));
         return m_models.get(name);
     }
 
@@ -642,6 +649,7 @@ public class SemanticMgr implements SWBInstanceObject
      * Load db models.
      */
     public void loadDBModels() {
+
         log.debug("loadDBModels");
         //LoadModels
         if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_SDB)) {
@@ -681,7 +689,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return
      */
     private SemanticModel loadDBModel(String name) {
-        return loadDBModel(name, false);
+        return loadDBModel(name, useCache);
     }
 
     /**
@@ -692,8 +700,10 @@ public class SemanticMgr implements SWBInstanceObject
      * @return
      */
     private SemanticModel loadDBModel(String name, boolean cached) {
+        //new Exception().printStackTrace();
         Model model = loadRDFDBModel(name);
         if (cached) {
+            //System.out.println("Cache:"+name);
             model = new ModelCom(new GraphCached((model.getGraph())));
         }
         if (name.equals(SWBAdmin) && !SWBPlatform.createInstance().isAdminDev()) {
@@ -805,6 +815,7 @@ public class SemanticMgr implements SWBInstanceObject
         }
 
         //TODO:notify this
+        //System.out.println("Model:"+name);
         m_models.put(name, m);
         m_nsmodels.put(m.getNameSpace(), m);
         log.debug("Add NS:" + m.getNameSpace() + " " + m.getName());
@@ -822,7 +833,7 @@ public class SemanticMgr implements SWBInstanceObject
      * @return the semantic model
      */
     public SemanticModel createModel(String name, String nameSpace) {
-        return createDBModel(name, nameSpace, false);
+        return createDBModel(name, nameSpace, useCache);
     }
 
     /**

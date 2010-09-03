@@ -1010,7 +1010,7 @@ public Document getDomProperty(SemanticProperty prop)
                         if(lg!=null && lg.length()==0)lg=null;
                         if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
                         {
-                            staux.remove();
+                            stit.remove();
                         }
                     }
                     stit.close();
