@@ -173,7 +173,7 @@ public class SWBATrash extends GenericResource {
 
             out.println(" var urlfilter='" + urlfilter + "'+'&filtersel='+dijit.byId('"+id+"/filtertrash').attr('value');   ");
 
-            out.println(" alert(urlfilter); ");
+            //out.println(" alert(urlfilter); ");
             out.println(" submitUrl(urlfilter,this.domNode);");
 
             out.println(" return false; ");
