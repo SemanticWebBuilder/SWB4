@@ -77,7 +77,7 @@ public class UserRepository extends UserRepositoryBase {
     private static final String DEFTYPE = "_ExtendedAttributes";
     
     /** The DEFSEMCLASS. */
-    private static SemanticClass DEFSEMCLASS;
+    private static SemanticClass DEFSEMCLASS = null;
 
     /**
      * Instantiates a new user repository.
@@ -106,11 +106,12 @@ public class UserRepository extends UserRepositoryBase {
         }
         EXTERNAL = ret;
         bridge = classRet;
+//        System.out.println("*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=*+=");
         //Reemplazando el código posterior:
         Iterator<SemanticClass> it = UserTypeDef.sclass.listSubClasses();
         while (it.hasNext()) {
             SemanticClass utd = it.next();
-            //System.out.println("Adding: "+utd.getName());
+            System.out.println("Adding: "+utd.getName());
             if (!DEFTYPE.equals(utd.getName())) {
                 userTypes.put(utd.getName(), utd);
             } else {
@@ -118,17 +119,17 @@ public class UserRepository extends UserRepositoryBase {
             }
             Iterator<SemanticProperty> itsp = utd.listProperties();
             while (itsp.hasNext()) {
-                //System.out.println("=======================================");
+//                System.out.println("=======================================");
                 SemanticProperty sp = itsp.next();
-                //System.out.println("testing:"+sp.getURI()+"-"+getId());
-                //System.out.println("Range:"+sp.getRange());
-                //System.out.println("dip:"+sp.getDisplayProperty());
+//                System.out.println("testing:"+sp.getURI()+"-"+getId());
+//                System.out.println("Range:"+sp.getRange());
+//                System.out.println("dip:"+sp.getDisplayProperty());
                 if (null == sp.getRange() || null == sp.getDisplayProperty()) //|| !sp.getURI().startsWith(getId()))
                 {
                     continue;
                 }
                 userProps.put(sp.getName(), sp);
-                //System.out.println("Nombre:"+ sp.getName());
+//                System.out.println("Nombre:"+ sp.getName());
             }
         }
         //System.out.println("***********UserRepository***************");
@@ -363,7 +364,7 @@ public class UserRepository extends UserRepositoryBase {
      * @return the extended attribute
      */
     public SemanticProperty getExtendedAttribute(String name) {
-        return getExtendedAttributesClass().getProperty(name);
+        return null==getExtendedAttributesClass()?null:getExtendedAttributesClass().getProperty(name);
     }
 
     /*public SemanticProperty createIntExtendedAttribute(String name)
@@ -616,16 +617,18 @@ public class UserRepository extends UserRepositoryBase {
      */
     public Iterator<SemanticProperty> listExtendedAttributes() {
         ArrayList<SemanticProperty> alsp = new ArrayList<SemanticProperty>();
-        Iterator<SemanticProperty> itsp = getExtendedAttributesClass().listProperties();
-        while (itsp.hasNext()) {
-            SemanticProperty sp = itsp.next();
-            log.debug("Encontrada... " + sp + " - " + sp.getURI());
-            if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
-            {
-                continue;
+        if (null!=getExtendedAttributesClass()){
+            Iterator<SemanticProperty> itsp = getExtendedAttributesClass().listProperties();
+            while (itsp.hasNext()) {
+                SemanticProperty sp = itsp.next();
+                log.debug("Encontrada... " + sp + " - " + sp.getURI());
+                if (null == sp.getRange() || null == sp.getDisplayProperty())// || !sp.getURI().startsWith(getId()))
+                {
+                    continue;
+                }
+                log.trace("Agregada... " + sp);
+                alsp.add(sp);
             }
-            log.trace("Agregada... " + sp);
-            alsp.add(sp);
         }
         return alsp.iterator();
     }
@@ -677,14 +680,16 @@ public class UserRepository extends UserRepositoryBase {
         }
         sc = getExtendedAttributesClass();
         Iterator<SemanticProperty> itsp = sc.listProperties();
-        while (itsp.hasNext()) {
-            SemanticProperty sp = itsp.next();
-            log.trace("Encontrada..E. " + sp);
-            if (null == sp.getRange() || null == sp.getDisplayProperty()) {
-                continue;
+        if (null!=sc) {
+            while (itsp.hasNext()) {
+                SemanticProperty sp = itsp.next();
+                log.trace("Encontrada..E. " + sp);
+                if (null == sp.getRange() || null == sp.getDisplayProperty()) {
+                    continue;
+                }
+                log.trace("Agregada..E. " + sp);
+                alsp.add(sp);
             }
-            log.trace("Agregada..E. " + sp);
-            alsp.add(sp);
         }
         Iterator<String> itut = getUserTypes();
         while (itut.hasNext()) {
