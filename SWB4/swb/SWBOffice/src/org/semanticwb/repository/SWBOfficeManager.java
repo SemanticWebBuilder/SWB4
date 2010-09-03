@@ -142,8 +142,8 @@ public class SWBOfficeManager implements OfficeManager
                 SWBModel model = models.next();
                 if (model.getSemanticObject().getSemanticClass().equals(Workspace.sclass) || model.getSemanticObject().getSemanticClass().isSubClass(Workspace.sclass))
                 {
-                    if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, model.getSemanticObject()))
-                    {
+                    //if (SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, site.getSemanticObject()))
+                    //{
                         String name = model.getId() + "@" + manager.getName();
                         RepositoryInfo info = new RepositoryInfo(name);
                         info.exclusive = true;
@@ -152,7 +152,7 @@ public class SWBOfficeManager implements OfficeManager
                         info.siteInfo.title = site.getTitle();
                         info.siteInfo.id = site.getId();
                         workspaces.put(name, info);
-                    }
+                    //}
                 }
             }
         }
