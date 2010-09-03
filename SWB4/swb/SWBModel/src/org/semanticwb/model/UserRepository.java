@@ -679,8 +679,9 @@ public class UserRepository extends UserRepositoryBase {
             }
         }
         sc = getExtendedAttributesClass();
-        Iterator<SemanticProperty> itsp = sc.listProperties();
+        Iterator<SemanticProperty> itsp = null;
         if (null!=sc) {
+            itsp = sc.listProperties();
             while (itsp.hasNext()) {
                 SemanticProperty sp = itsp.next();
                 log.trace("Encontrada..E. " + sp);
