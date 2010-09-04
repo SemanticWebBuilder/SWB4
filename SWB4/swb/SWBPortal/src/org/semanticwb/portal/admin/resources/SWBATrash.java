@@ -138,11 +138,47 @@ public class SWBATrash extends GenericResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject so = null;
 
+        String returi = request.getParameter("returi");
+
+        
+        if(null!=returi)
+        {
+            StringTokenizer stoken = new StringTokenizer(request.getParameter("returi"),",");
+            boolean retreload = request.getParameter("reload")!=null&&request.getParameter("reload").equals("true")?true:false;
+            boolean retclose = request.getParameter("closetab")!=null&&request.getParameter("closetab").equals("true")?true:false;
+            out.println("<script type=\"text/javascript\">");
+            while(stoken.hasMoreElements())
+            {
+                String token = stoken.nextToken();
+                //System.out.println("returi:"+token);
+                SemanticObject obj = ont.getSemanticObject(token);
+                if(retreload&&null!=obj)
+                {
+                    SemanticObject parent=obj.getHerarquicalParent();
+                    if(parent==null)parent=obj.getModel().getModelObject();
+                    if(obj.instanceOf(WebSite.sclass))
+                    {
+                        out.println("addItemByURI(mtreeStore, null, '" + obj.getURI() + "');");
+                    }
+                    else
+                    {
+                        out.println("reloadTreeNodeByURI('"+parent.getURI()+"');");
+                    }
+                    out.println("reloadTab('"+obj.getURI()+"');");
+                }
+                else if (retclose)
+                {
+                    out.println("   closeTab('" + token + "');");
+                }
+            }
+            out.println("</script>");
+        }
 
         SWBResourceURL urlact = paramRequest.getActionUrl();
         out.println("<div class=\"swbform\">");
         out.println("<form id=\"" + id + "/trash\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/trash'); return false;\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
+        
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("msgDeletedElements"));
@@ -155,8 +191,8 @@ public class SWBATrash extends GenericResource {
             so = ont.getSemanticObject(id);
             SWBResourceURL urlfilter = paramRequest.getRenderUrl();
             urlfilter.setParameter("suri", id);
-            out.println("<ul style=\"list-style:none;\">");
-            out.println("<li>");
+
+            out.println("<p>");
             out.println("<label for=\""+id+"/filtertrash\">"+paramRequest.getLocaleString("msgFilterElements")+":</label>");
             out.println("<select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"true\" id=\""+id+"/filtertrash\" name=\"filtersel\" >");
             out.println("<option value=\"\" "+(pfilter.equals("")?"selected=\"selected\"":"")+" > </option>");
@@ -169,7 +205,7 @@ public class SWBATrash extends GenericResource {
                     out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected=\"selected\" ":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
                 }
             }
-            out.println("<script type=\"dojo/method\" event=\"onChange\" args=\"item\">");
+            out.println("<script type=\"dojo/method\" event=\"onChange\" >");
 
             out.println(" var urlfilter='" + urlfilter + "'+'&filtersel='+dijit.byId('"+id+"/filtertrash').attr('value');   ");
 
@@ -179,10 +215,12 @@ public class SWBATrash extends GenericResource {
             out.println(" return false; ");
             out.println("</script>");
             out.println("</selected>");
-            out.println("</li>");
-            out.println("</ul>");
-            out.println("</fieldset>");
+            out.println("</p>");
+//            out.println("</li>");
+//            out.println("</ul>");
         }
+        out.println("</fieldset>");
+        
         
         out.println("<fieldset>");
         out.println("<table width=\"100%\">");
@@ -236,6 +274,7 @@ public class SWBATrash extends GenericResource {
         out.println("<th>");
         out.println(propname);
         out.println("</th>");
+        out.println("</tr>");
         
         out.println("</thead>");
 
@@ -276,7 +315,10 @@ public class SWBATrash extends GenericResource {
         {
             while (itfiltro.hasNext()) {
                 SemanticObject semanticObject = itfiltro.next();
-                if(pfilter.equals(semanticObject.transformToSemanticClass().getClassId()))
+
+                SemanticClass sc = semanticObject.getSemanticClass();
+                //System.out.println( "filtro: "+pfilter+" sc:"+(sc!=null?sc.getClassId():"null") );
+                if(sc!=null&&pfilter.equals(sc.getClassId()))
                 {
                     hmfiltro.put(semanticObject.getURI(), semanticObject);
                 }
@@ -319,14 +361,14 @@ public class SWBATrash extends GenericResource {
             urlrem.setParameter("suri",id);
             urlrem.setParameter("sval", semObj.getURI());
 
-            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminar")+"?')){submitUrl('" + urlrem + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_removeSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_removeSO") + "\"></a>");
+            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmEliminar")+"?')){submitUrl('" + urlrem + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_removeSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/trash_vacio.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_removeSO") + "\"></a>");
 
             SWBResourceURL urlrec = paramRequest.getActionUrl();
             urlrec.setAction("recover");
             urlrec.setParameter("suri",id);
             urlrec.setParameter("sval", semObj.getURI()); //
 
-            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmRecover")+"?')){submitUrl('" + urlrec + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_recoverSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_recoverSO") + "\"></a>");
+            out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmRecover")+"?')){submitUrl('" + urlrec + "',this);} return false;\" title=\""+paramRequest.getLocaleString("msg_recoverSO")+"\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/recover.gif\" border=\"0\" alt=\"" + paramRequest.getLocaleString("msg_recoverSO") + "\"></a>");
             out.println("</td>");
 
             out.println("<td>");
@@ -367,27 +409,24 @@ public class SWBATrash extends GenericResource {
             out.println("<td>");
             if (semObj.getProperty(Activeable.swb_active) != null)
             {
-                boolean activo = false;
-                if (semObj.getBooleanProperty(Activeable.swb_active))
-                {
-                    activo = true;
-                }
+                boolean activo = semObj.getBooleanProperty(Activeable.swb_active);
                 SWBResourceURL urlu = paramRequest.getActionUrl();
                 urlu.setParameter("suri", id);
                 urlu.setParameter("sval", semObj.getURI());
                 urlu.setAction("updstatus");
-                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" onclick=\"return false;\"  " + (activo ? "checked='checked'" : "") + "/>");
+                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" disabled=\"true\"  " + (activo ? "checked='checked'" : "") + "/>");
             }
             else out.println(" --- ");
             out.println("</td>");
+            out.println("</tr>");
         }
 
         out.println("</tbody>");
-        out.println("<tfooter>");
-        out.println("</tfooter>");
+//        out.println("<tfooter>");
+//        out.println("</tfooter>");
         out.println("</table>");
         out.println("</fieldset>");
-
+        
         if(p>0 || x<l) //Requiere paginacion
         {
             out.println("<fieldset>");
@@ -496,6 +535,7 @@ public class SWBATrash extends GenericResource {
             String[] sval=request.getParameterValues("sval");
             if(null!=sval&&sval.length>0)
             {
+                String returi = "";
                 for(int i=0;i<sval.length;i++)
                 {
                     //System.out.println("remove ..."+sval[i]);
@@ -504,7 +544,14 @@ public class SWBATrash extends GenericResource {
                     {
                         sorem.remove();
                     }
+                    returi = returi + sval[i];
+                    if(i<sval.length) returi = returi +",";
                 }
+                if(returi.length()>0) {
+                    response.setRenderParameter("closetab", "true");
+                    response.setRenderParameter("returi", returi);
+                }
+
             }
         }
         else if(accion!=null && accion.equals("recover"))
@@ -512,6 +559,7 @@ public class SWBATrash extends GenericResource {
             String[] sval=request.getParameterValues("sval");
             if(null!=sval&&sval.length>0)
             {
+                String returi = "";
                 for(int i=0;i<sval.length;i++)
                 {
                     //System.out.println("recover... "+sval[i]);
@@ -520,6 +568,12 @@ public class SWBATrash extends GenericResource {
                     {
                         sorec.setBooleanProperty(Trashable.swb_deleted, false);
                     }
+                    returi = returi + sval[i];
+                    if(i<sval.length) returi = returi +",";
+                }
+                if(returi.length()>0) {
+                    response.setRenderParameter("reload", "true");
+                    response.setRenderParameter("returi", returi);
                 }
             }
         }
