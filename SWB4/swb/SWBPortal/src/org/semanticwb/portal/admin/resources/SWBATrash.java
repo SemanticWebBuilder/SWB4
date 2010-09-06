@@ -125,6 +125,7 @@ public class SWBATrash extends GenericResource {
         base=getResourceBase();
         String  trashtype = base.getAttribute("trash","site");
         String id = request.getParameter("suri");
+        if(null==id) id="";
         String page = request.getParameter("page");
 
         //System.out.println("filterselect="+request.getParameter("filtersel"));
@@ -150,7 +151,7 @@ public class SWBATrash extends GenericResource {
             while(stoken.hasMoreElements())
             {
                 String token = stoken.nextToken();
-                //System.out.println("returi:"+token);
+                System.out.println("returi:"+token);
                 SemanticObject obj = ont.getSemanticObject(token);
                 if(retreload&&null!=obj)
                 {
@@ -158,16 +159,19 @@ public class SWBATrash extends GenericResource {
                     if(parent==null)parent=obj.getModel().getModelObject();
                     if(obj.instanceOf(WebSite.sclass))
                     {
+                        System.out.println("addItemByURI");
                         out.println("addItemByURI(mtreeStore, null, '" + obj.getURI() + "');");
                     }
                     else
                     {
+                        System.out.println("reloadTreeNodeByURI");
                         out.println("reloadTreeNodeByURI('"+parent.getURI()+"');");
                     }
                     out.println("reloadTab('"+obj.getURI()+"');");
                 }
                 else if (retclose)
                 {
+                    System.out.println("cerrando tab...");
                     out.println("   closeTab('" + token + "');");
                 }
             }
@@ -200,7 +204,7 @@ public class SWBATrash extends GenericResource {
             Iterator<SemanticClass> itsc = scls.listSubClasses(true);
             while (itsc.hasNext()) {
                 SemanticClass semClass = itsc.next();
-                if(!semClass.getClassId().equals(WebSite.swb_WebSite))
+                if(!semClass.equals(WebSite.swb_WebSite))
                 {
                     out.println("<option value=\""+semClass.getClassId()+"\" "+(pfilter.equals(semClass.getClassId())?"selected=\"selected\" ":"")+">"+semClass.getDisplayName(user.getLanguage())+"</option>");
                 }
@@ -282,17 +286,21 @@ public class SWBATrash extends GenericResource {
 
         //Muestra los elementos borrados
         // Para listar elementos borrados
-        Iterator<SemanticObject> itso = so.getModel().listSubjects(Trashable.swb_deleted, Boolean.TRUE);
+        Iterator<SemanticObject> itso = null;
 
+        if(trashtype.equals("elements"))
+        {
+            itso = so.getModel().listSubjects(Trashable.swb_deleted, Boolean.TRUE);
+        }
         //Si son sitios, para mostrar los sitios eliminados
-        if(trashtype.equals("site"))
+        else if(trashtype.equals("site"))
         {
             HashMap<String, SemanticObject> hmdelsite = new HashMap();
             Iterator<SemanticModel> itsmodel = ont.listSubModels();
             while (itsmodel.hasNext()) {
                 SemanticModel sm = itsmodel.next();
                 SemanticObject smso = sm.getModelObject();
-                if(smso.instanceOf(Trashable.swb_Trashable))
+                if(smso!=null&&smso.instanceOf(Trashable.swb_Trashable))
                 {
                     if(smso.getBooleanProperty(Trashable.swb_deleted))
                     {
@@ -409,12 +417,19 @@ public class SWBATrash extends GenericResource {
             out.println("<td>");
             if (semObj.getProperty(Activeable.swb_active) != null)
             {
-                boolean activo = semObj.getBooleanProperty(Activeable.swb_active);
-                SWBResourceURL urlu = paramRequest.getActionUrl();
-                urlu.setParameter("suri", id);
-                urlu.setParameter("sval", semObj.getURI());
-                urlu.setAction("updstatus");
-                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" disabled=\"true\"  " + (activo ? "checked='checked'" : "") + "/>");
+                boolean activo = false;
+                String bactive = Boolean.toString(semObj.getBooleanProperty(Activeable.swb_active));
+                if(null!=bactive&&bactive.equals("true"))
+                {
+                    activo=true;
+                }
+                System.out.println("activo: "+bactive);
+//                SWBResourceURL urlu = paramRequest.getActionUrl();
+//                urlu.setParameter("suri", id);
+//                urlu.setParameter("sval", semObj.getURI());
+//                urlu.setAction("updstatus");
+                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" disabled=\"true\"  " + (activo ? "checked" : "") + "/>");
+
             }
             else out.println(" --- ");
             out.println("</td>");
