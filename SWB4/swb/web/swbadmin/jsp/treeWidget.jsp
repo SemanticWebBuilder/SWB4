@@ -105,9 +105,9 @@
         }
         */
     </script>
-<!--
+<%--
     <script type="dojo/method" event="onDndDrop" args="source,nodes,copy">
-        alert("onDndDrop:"+source+" "+nodes+" "+copy);
+        //alert("onDndDrop:"+source+" "+nodes+" "+copy);
         //alert(source+" "+nodes+" "+copy+" "+this.containerState);
 		// summary:
 		//		Topic event processor for /dnd/drop, called to finish the DnD operation..
@@ -181,7 +181,7 @@
     </script>
 
     <script type="dojo/method" event="checkItemAcceptance" args="node,source">
-        alert("checkItemAcceptance"+node+" "+source);
+        //alert("checkItemAcceptance"+node+" "+source);
         //if(source.tree && source.tree.id == "collectionsTree"){
         //    return true;
         //}
@@ -208,12 +208,12 @@
             //alert("("+dragItem.type.toString()+")("+dropItem.type.toString()+")");
         }
         //alert(this.current);
-        //self.status="checkItemAcceptance - - >ret:"+ret;
+        //self.status="checkItemAcceptance-->ret:"+ret;
         return ret;
     </script>
 
     <script type="dojo/method" event="checkAcceptance" args="source,nodes">
-        alert("checkAcceptance"+source+" "+nodes);
+        //alert("checkAcceptance"+source+" "+nodes);
         if(true)return false;
         printObjProp(source,false);
         
@@ -229,12 +229,12 @@
         //m.canDrop(false);
         if(act_treeNode!=null)
         {
-            //self.status="checkAcceptance -- >act_treeNode:"+act_treeNode.item.id+" drag:"+act_treeNode.item.dragSupport;
+            //self.status="checkAcceptance-->act_treeNode:"+act_treeNode.item.id+" drag:"+act_treeNode.item.dragSupport;
             //alert(act_treeNode.item.id);
             if(act_treeNode.item.dragSupport=="true")return true;
         }else
         {
-            self.status="checkAcceptance-- >act_treeNode:"+act_treeNode;
+            //self.status="checkAcceptance-->act_treeNode:"+act_treeNode;
             act_treeNode=null;
         }
 
@@ -242,7 +242,7 @@
     </script>
 
     <script type="dojo/method" event="onDndStart" args="source,nodes,copy">
-        alert("onDndStart:"+source+" "+nodes+" "+copy);
+        //alert("onDndStart:"+source+" "+nodes+" "+copy);
         /*
             if(this.isSource){
                 this._changeState("Source", this == source ? (copy ? "Copied" : "Moved") : "");
@@ -255,7 +255,8 @@
             this.isDragging = true;
         */
     </script>
--->
+--%>
+
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
         {
@@ -307,6 +308,8 @@
             var treeNode = dijit.getEnclosingWidget(e.target);
             act_treeNode=treeNode;
 
+            //printObjProp(menuEmpty,false);
+
             var ch = menuEmpty.getChildren();
             //console.log("menu children is "+ch);
             if (ch && ch != "undefined")
@@ -318,12 +321,21 @@
                 });
             }
 
-            if(treeNode.item.menus)
+            var menus=treeNode.item.menus;
+            if(!menus)
+            {
+                var jsonNode=getJSON(context+<%=store%>.controllerURL+"?type=Menu&suri="+encodeURIComponent(treeNode.item.id))[0];
+                //printObjProp(jsonNode.menus);
+                menus=jsonNode.menus;
+            }
+
+            if(menus)
             {
                 //console.log("Adding new submenus");
-                for (var m in treeNode.item.menus)
+                for (var m in menus)
                 {
-                    var menu = treeNode.item.menus[m];
+                    var menu = menus[m];
+                    //printObjProp(menus,true);
                     //console.log("Adding submenu " + mstr);
                     var mi = document.createElement('div')
                     var sm;
