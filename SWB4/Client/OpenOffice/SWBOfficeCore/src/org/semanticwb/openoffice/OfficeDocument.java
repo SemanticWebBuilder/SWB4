@@ -989,18 +989,27 @@ public abstract class OfficeDocument
             char letra = letras[i];
             if (Character.isWhitespace(letra))
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-                return false;
+                if(letra!='_')
+                {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
             }
             else if (!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-                return false;
+                if(letra!='_')
+                {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
             }
             else if (letra > 123)
             {
-                JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
-                return false;
+                if(letra!='_')
+                {
+                    JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:") + letra, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("VALIDACIÓN_DE_NOMBRE_DE_ARCHIVO"), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
             }
         }
         return true;
