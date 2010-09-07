@@ -339,6 +339,16 @@ public class SWBAWebPageContents extends GenericResource {
             if (!busqueda.equals("")) {
                 while (itso.hasNext()) {
                     semO = itso.next();
+                    boolean del=false;
+                    if(semO.instanceOf(Trashable.swb_Trashable))
+                    {
+                        del=semO.getBooleanProperty(Trashable.swb_deleted);
+                    }
+                    if(del)
+                    {
+                        continue;
+                    }
+
                     itcol = hmprop.keySet().iterator();
                     String occ = "";
                     while (itcol.hasNext()) {
@@ -366,7 +376,19 @@ public class SWBAWebPageContents extends GenericResource {
             int x=0;
             itso=setso.iterator();
             while (itso.hasNext()) {
+
                 SemanticObject sobj = itso.next();
+
+                boolean del=false;
+                if(sobj.instanceOf(Trashable.swb_Trashable))
+                {
+                    del=sobj.getBooleanProperty(Trashable.swb_deleted);
+                }
+                if(del)
+                {
+                    continue;
+                }
+
                 if(x<p*ps)
                 {
                     x++;
@@ -1258,11 +1280,33 @@ public class SWBAWebPageContents extends GenericResource {
                 if (value != null && value.equals(sprop)) { //se tiene que validar el valor por si es mÃ¡s de una
                     if (sval != null) {
                         SemanticObject so = ont.getSemanticObject(sval);
-                        obj.removeObjectProperty(prop, so);
+                        //obj.removeObjectProperty(prop, so);
                         if (prop.getName().equalsIgnoreCase("userrepository")) {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
-                        so.remove();
+
+                        boolean trash=false;
+                        if(so.instanceOf(Trashable.swb_Trashable))
+                        {
+                            boolean del=so.getBooleanProperty(Trashable.swb_deleted);
+                            if(!del)trash=true;
+                        }
+                        if(!trash)
+                        {
+                            so.remove();
+                        }else
+                        {
+                            so.setBooleanProperty(Trashable.swb_deleted, true);
+                        }
+//                        if(so.getSemanticClass().isSubClass(Trashable.swb_Trashable))
+//                        {
+//                            System.out.println("es trashable");
+//                            so.setIntProperty(Trashable.swb_deleted, 1);
+//                        }
+//                        else
+//                        {
+//                            so.remove();
+//                        }
                     }
                     break;
                 }
@@ -1299,13 +1343,38 @@ public class SWBAWebPageContents extends GenericResource {
                     SemanticProperty prop = it.next();
                     //System.out.println("revisando (ListProperties("+sprop+")) "+ prop.getName());
                     String value = prop.getName();
-                    log.debug(sem_p.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
+                    //System.out.println(sem_p.getURI() + ":" + sprop + "----" + (prop.getURI().equals(sprop) ? "true" : "false"));
                     if (value != null && value.equals(sem_p.getName())) { //se tiene que validar el valor por si es más de una
-                        obj.removeObjectProperty(prop, soc);
+                        //obj.removeObjectProperty(prop, soc);
                         if (sem_p.getName().equalsIgnoreCase("userrepository")) {
                             obj.setObjectProperty(prop, ont.getSemanticObject("urswb"));
                         }
-                        soc.remove();
+
+                        boolean trash=false;
+                        if(soc.instanceOf(Trashable.swb_Trashable))
+                        {
+                            boolean del=soc.getBooleanProperty(Trashable.swb_deleted);
+                            if(!del)trash=true;
+                        }
+                        if(!trash)
+                        {
+                            soc.remove();
+                        }else
+                        {
+                            soc.setBooleanProperty(Trashable.swb_deleted, true);
+                        }
+
+
+//                        if(soc.getSemanticClass().isSubClass(Trashable.swb_Trashable))
+//                        {
+//                            System.out.println("Es trashable.. delAll.."+soc.getURI());
+//                            soc.setIntProperty(Trashable.swb_deleted, 1);
+//                        }
+//                        else
+//                        {
+//                            soc.remove();
+//                        }
+
                         break;
                     }
                 }

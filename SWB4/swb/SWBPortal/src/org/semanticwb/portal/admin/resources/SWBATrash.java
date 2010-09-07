@@ -151,7 +151,7 @@ public class SWBATrash extends GenericResource {
             while(stoken.hasMoreElements())
             {
                 String token = stoken.nextToken();
-                System.out.println("returi:"+token);
+                //System.out.println("returi:"+token);
                 SemanticObject obj = ont.getSemanticObject(token);
                 if(retreload&&null!=obj)
                 {
@@ -159,19 +159,19 @@ public class SWBATrash extends GenericResource {
                     if(parent==null)parent=obj.getModel().getModelObject();
                     if(obj.instanceOf(WebSite.sclass))
                     {
-                        System.out.println("addItemByURI");
+                        //System.out.println("addItemByURI");
                         out.println("addItemByURI(mtreeStore, null, '" + obj.getURI() + "');");
                     }
                     else
                     {
-                        System.out.println("reloadTreeNodeByURI");
+                        //System.out.println("reloadTreeNodeByURI");
                         out.println("reloadTreeNodeByURI('"+parent.getURI()+"');");
                     }
                     out.println("reloadTab('"+obj.getURI()+"');");
                 }
                 else if (retclose)
                 {
-                    System.out.println("cerrando tab...");
+                    //System.out.println("cerrando tab...");
                     out.println("   closeTab('" + token + "');");
                 }
             }
@@ -423,7 +423,7 @@ public class SWBATrash extends GenericResource {
                 {
                     activo=true;
                 }
-                System.out.println("activo: "+bactive);
+                //System.out.println("activo: "+bactive);
 //                SWBResourceURL urlu = paramRequest.getActionUrl();
 //                urlu.setParameter("suri", id);
 //                urlu.setParameter("sval", semObj.getURI());
