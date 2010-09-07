@@ -400,15 +400,16 @@ public class SWBATrash extends GenericResource {
             else out.println(" --- ");
             out.println("</td>");
             out.println("<td>");
+            SemanticObject soTmp =null;
             if (semObj.getObjectProperty(Traceable.swb_modifiedBy) != null)
             {
                 sptemp = Traceable.swb_modifiedBy;
-                semObj = semObj.getObjectProperty(sptemp);
+                soTmp = semObj.getObjectProperty(sptemp);
 
-                if (null != semObj) {
-                    log.debug("MODIFIEDBY-------" + semObj.getURI());
-                    out.println("<a href=\"#\"  onclick=\"addNewTab('" + semObj.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + semObj.getDisplayName() + "');return false;\" >");
-                    out.println(semObj.getProperty(User.swb_usrLogin));
+                if (null != soTmp) {
+                    log.debug("MODIFIEDBY-------" + soTmp.getURI());
+                    out.println("<a href=\"#\"  onclick=\"addNewTab('" + soTmp.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + soTmp.getDisplayName() + "');return false;\" >");
+                    out.println(soTmp.getProperty(User.swb_usrLogin));
                     out.println("</a>");
                 }
             }
@@ -417,28 +418,18 @@ public class SWBATrash extends GenericResource {
             out.println("<td>");
             if (semObj.getProperty(Activeable.swb_active) != null)
             {
-                boolean activo = false;
-                String bactive = Boolean.toString(semObj.getBooleanProperty(Activeable.swb_active));
-                if(null!=bactive&&bactive.equals("true"))
-                {
-                    activo=true;
-                }
-                //System.out.println("activo: "+bactive);
-//                SWBResourceURL urlu = paramRequest.getActionUrl();
-//                urlu.setParameter("suri", id);
-//                urlu.setParameter("sval", semObj.getURI());
-//                urlu.setAction("updstatus");
-                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" disabled=\"true\"  " + (activo ? "checked" : "") + "/>");
-
+                boolean activo = semObj.getBooleanProperty(Activeable.swb_active);
+                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" onclick=\"return false;\" _disabled=\"true\"  " + (activo ? "checked" : "") + "/>");
             }
-            else out.println(" --- ");
+            else
+            {
+                out.println("<input name=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" type=\"checkbox\" value=\"1\" id=\"" + Activeable.swb_active.getName() + semObj.getURI() + "\" onclick=\"return false;\" _disabled=\"true\"  />");
+            }
             out.println("</td>");
             out.println("</tr>");
         }
 
         out.println("</tbody>");
-//        out.println("<tfooter>");
-//        out.println("</tfooter>");
         out.println("</table>");
         out.println("</fieldset>");
         
@@ -453,8 +444,6 @@ public class SWBATrash extends GenericResource {
                 urlNew.setParameter("suri", id);
                 urlNew.setParameter("page", ""+z);
                 urlNew.setParameter("act", "stpBusqueda");
-//                urlNew.setParameter("search",busqueda);
-//                urlNew.setParameter("clsuri", sccol.getURI());
 
                 if(z!=p)
                 {
@@ -483,8 +472,6 @@ public class SWBATrash extends GenericResource {
         out.println("</script>");
 
         out.println("</button>"); //
-
-
 
         out.println("<button dojoType=\"dijit.form.Button\" name=\""+id+"/btnrecover\" id=\""+id+"/btnrecover\">" + paramRequest.getLocaleString("btnRecoverAll")); //onclick=\"if(confirm('"+paramRequest.getLocaleString("msgConfirmRecoverAll")+"')){submitForm('" + id + "/trash');}return false;\"
 
