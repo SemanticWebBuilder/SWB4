@@ -252,7 +252,7 @@ public class SemanticMgr implements SWBInstanceObject
     public void initializeDB() {
 
         useCache=Boolean.parseBoolean(SWBPlatform.getEnv("swb/tripleFullCache","false"));
-        log.event("tipleFullCache:"+useCache);
+        log.event("TripleFullCache:"+useCache);
 
         //System.out.println("initializeDB");
         DBConnectionPool pool = SWBUtils.DB.getDefaultPool();
@@ -261,7 +261,7 @@ public class SemanticMgr implements SWBInstanceObject
 //        String M_DB_PASSWD      = pool.getPassword();
         String M_DB = SWBUtils.DB.getDatabaseType(pool.getName());
 
-        if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_SDB)) {
+        if (SWBPlatform.isSDB()) {
             try
             {
                 //StoreDesc sd = new StoreDesc(LayoutType.LayoutTripleNodesHash, DatabaseType.fetch(M_DB));
@@ -283,7 +283,7 @@ public class SemanticMgr implements SWBInstanceObject
                     store.getTableFormatter().create();
                 }
             }catch(Throwable e){log.error(e);}
-        } else if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB)) {
+        } else if (SWBPlatform.isTDB()) {
             log.info("TDB Detected...," + SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -529,9 +529,9 @@ public class SemanticMgr implements SWBInstanceObject
     private Model loadRDFDBModel(String name) {
         Model ret = null;
         // create or open the default model
-        if (SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_SDB)) {
+        if (SWBPlatform.isSDB()) {
             ret = SDBFactory.connectNamedModel(store, name);
-        } else if (SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB)) {
+        } else if (SWBPlatform.isTDB()) {
             ret = TDBFactory.createNamedModel(name, SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             //System.out.println("loadRDFDBModel:"+name);
         } else {
@@ -652,7 +652,7 @@ public class SemanticMgr implements SWBInstanceObject
 
         log.debug("loadDBModels");
         //LoadModels
-        if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_SDB)) {
+        if (SWBPlatform.isSDB()) {
             Dataset set = SDBFactory.connectDataset(store);
             Iterator<String> it = set.listNames();
             while (it.hasNext()) {
@@ -661,7 +661,7 @@ public class SemanticMgr implements SWBInstanceObject
                 SemanticModel model = loadDBModel(name);
             }
             //set.close();
-        } else if (SWBPlatform.createInstance().getPersistenceType().equalsIgnoreCase(SWBPlatform.PRESIST_TYPE_TDB)) {
+        } else if (SWBPlatform.isTDB()) {
             Dataset set = TDBFactory.createDataset(SWBPlatform.createInstance().getPlatformWorkPath() + "/data");
             Iterator<String> it = set.listNames();
             while (it.hasNext()) {
@@ -918,9 +918,9 @@ public class SemanticMgr implements SWBInstanceObject
         m_nsmodels.remove(model.getNameSpace());
         m_imodels.remove(model.getRDFModel());
         m_ontology.removeSubModel(model, true);
-        if (SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_SDB)) {
+        if (SWBPlatform.isSDB()) {
             model.getRDFModel().removeAll();
-        } else if (SWBPlatform.createInstance().getPersistenceType().equals(SWBPlatform.PRESIST_TYPE_TDB)) {
+        } else if (SWBPlatform.isTDB()) {
             model.getRDFModel().removeAll();
         } else {
             maker.removeModel(name);
