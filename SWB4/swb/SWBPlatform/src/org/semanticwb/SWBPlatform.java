@@ -294,8 +294,21 @@ public class SWBPlatform
      * 
      * @param persistenceType the new persistence type
      */
-    public void setPersistenceType(String persistenceType) {
-        SWBPlatform.persistenceType = persistenceType;
+    public void setPersistenceType(String persistenceType) 
+    {
+        if(PRESIST_TYPE_DEFAULT.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_DEFAULT;
+        }else if(PRESIST_TYPE_SDB.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_SDB;
+        }else if(PRESIST_TYPE_TDB.equalsIgnoreCase(persistenceType))
+        {
+            SWBPlatform.persistenceType = PRESIST_TYPE_TDB;
+        }else
+        {
+            SWBPlatform.persistenceType=persistenceType;
+        }
     }
 
     /**
@@ -769,6 +782,21 @@ public class SWBPlatform
             }
             return res;
         }
+    }
+
+    public static boolean isTDB()
+    {
+        return persistenceType==PRESIST_TYPE_TDB;
+    }
+
+    public static boolean isSDB()
+    {
+        return persistenceType==PRESIST_TYPE_SDB;
+    }
+
+    public static boolean isRDB()
+    {
+        return persistenceType==PRESIST_TYPE_DEFAULT;
     }
 
 }
