@@ -4,6 +4,7 @@
     - Se agregó búsqueda por página, al abrir un contenido (Victor L)
     - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, los estilos en un CSS y no dentro de tags (Victor L)
     - En word, al momento de guardar, mantenine la opción de guardar las imagenes en formato PNG y que no genere vml (Victor L)
+    - En el plug-in de Open Office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
 
   4.0.1.7
     - Correccion de modos de despliegue, Cambio de modo de estrategia a sistema, validacion de envio de correo del recurso comment (CarlosR)
@@ -11,7 +12,7 @@
     - Se implemento compatibilidad a recursos de version 2 de WB (Jei)
     - Se mejoró la carga del applet de filtros de administración (victorl)
     - Mejoras en el applet de edición de plantillas, para soporte a MAC OS (victorl)
-    - En el plug-in de office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
+    - En el plug-in de MS Office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
     - Mejora en la apertura de documentos (victorl).
   4.0.1.6
     - Soporte a paginas de Error multilenguaje (Jei)
