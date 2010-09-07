@@ -190,5 +190,11 @@ namespace WBOffice4.Steps
                 }
             }
         }
+
+        private void buttonDeleteWebPage_Click(object sender, EventArgs e)
+        {
+            this.textBox_WebPage.Text = "";
+            this.textBox_WebPage.Tag = null;
+        }
     }
 }

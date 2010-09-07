@@ -75,6 +75,7 @@
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonDeleteWebPage = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -97,6 +98,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.buttonDeleteWebPage);
             this.tabPage1.Controls.Add(this.buttonSelectWebPage);
             this.tabPage1.Controls.Add(this.textBox_WebPage);
             this.tabPage1.Controls.Add(this.label6);
@@ -121,7 +123,7 @@
             // 
             // buttonSelectWebPage
             // 
-            this.buttonSelectWebPage.Location = new System.Drawing.Point(413, 149);
+            this.buttonSelectWebPage.Location = new System.Drawing.Point(377, 149);
             this.buttonSelectWebPage.Name = "buttonSelectWebPage";
             this.buttonSelectWebPage.Size = new System.Drawing.Size(30, 23);
             this.buttonSelectWebPage.TabIndex = 13;
@@ -132,9 +134,9 @@
             // textBox_WebPage
             // 
             this.textBox_WebPage.Enabled = false;
-            this.textBox_WebPage.Location = new System.Drawing.Point(161, 151);
+            this.textBox_WebPage.Location = new System.Drawing.Point(161, 149);
             this.textBox_WebPage.Name = "textBox_WebPage";
-            this.textBox_WebPage.Size = new System.Drawing.Size(246, 20);
+            this.textBox_WebPage.Size = new System.Drawing.Size(210, 20);
             this.textBox_WebPage.TabIndex = 12;
             // 
             // label6
@@ -297,6 +299,16 @@
             this.columnHeader4.Text = "Categoria";
             this.columnHeader4.Width = 90;
             // 
+            // buttonDeleteWebPage
+            // 
+            this.buttonDeleteWebPage.Location = new System.Drawing.Point(413, 149);
+            this.buttonDeleteWebPage.Name = "buttonDeleteWebPage";
+            this.buttonDeleteWebPage.Size = new System.Drawing.Size(30, 23);
+            this.buttonDeleteWebPage.TabIndex = 14;
+            this.buttonDeleteWebPage.Text = "X";
+            this.buttonDeleteWebPage.UseVisualStyleBackColor = true;
+            this.buttonDeleteWebPage.Click += new System.EventHandler(this.buttonDeleteWebPage_Click);
+            // 
             // Search
             // 
             this.Controls.Add(this.tabControl1);
@@ -341,6 +353,7 @@
         private System.Windows.Forms.TextBox textBox_WebPage;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button buttonSelectWebPage;
+        private System.Windows.Forms.Button buttonDeleteWebPage;
 
 
 
