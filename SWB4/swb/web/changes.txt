@@ -1,4 +1,9 @@
   (En desarrollo)
+    - Mejora cuando limpia estilos el recurso de Word (Victor L)
+    - Se cambió el modelo de programación para selección de sitios en OpenOffice y MS Office (Victor L)
+    - Se agregó búsqueda por página, al abrir un contenido (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, los estilos en un CSS y no dentro de tags (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar las imagenes en formato PNG y que no genere vml (Victor L)
 
   4.0.1.7
     - Correccion de modos de despliegue, Cambio de modo de estrategia a sistema, validacion de envio de correo del recurso comment (CarlosR)
