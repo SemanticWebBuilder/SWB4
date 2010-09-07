@@ -33,9 +33,9 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.openoffice.components.WebPage;
 import org.semanticwb.openoffice.ui.dialogs.DialogEditResource;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
-import org.semanticwb.openoffice.ui.wizard.SelectPage.WebPage;
 
 /**
  *
@@ -56,10 +56,8 @@ public class MoveContentResultProducer implements WizardResultProducer
         try
         {
             dialogEditResource.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-            WebPage webpage = (SelectPage.WebPage) map.get(SelectPage.WEBPAGE);
-            WebPageInfo webPageInfo=new WebPageInfo();
-            webPageInfo.id=webpage.getID();
-            webPageInfo.siteID=webpage.getSite();
+            WebPage webpage = (WebPage) map.get(SelectPage.WEBPAGE);
+            WebPageInfo webPageInfo=webpage.getWebPageInfo();
             OfficeApplication.getOfficeDocumentProxy().changeResourceOfWebPage(dialogEditResource.pageInformation, webPageInfo);            
             for (ResourceInfo resourceInfo : OfficeApplication.getOfficeDocumentProxy().listResources(dialogEditResource.repositoryName, dialogEditResource.contentID))
             {

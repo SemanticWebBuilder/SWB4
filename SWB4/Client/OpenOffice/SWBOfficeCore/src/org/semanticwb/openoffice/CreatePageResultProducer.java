@@ -35,6 +35,7 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.openoffice.components.WebPage;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectWebPageID;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
@@ -76,10 +77,8 @@ public class CreatePageResultProducer implements WizardResultProducer
                 String description = wizardData.get(TitleAndDescription.DESCRIPTION).toString();
                 if (parent == null)
                 {
-                    SelectPage.WebPage pageSelected = (SelectPage.WebPage) wizardData.get(SelectPage.WEBPAGE);
-                    parent = new WebPageInfo();
-                    parent.siteID = pageSelected.getSite();
-                    parent.id = pageSelected.getID();
+                    WebPage pageSelected = (WebPage) wizardData.get(SelectPage.WEBPAGE);
+                    parent = pageSelected.getWebPageInfo();
                 }
                 openOfficeApplication.createPage(parent, pageid, title, description);
                 JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/CreatePageResultProducer").getString("SE_HA_CREADO_LA_PÁGINA_") + " " + title + "!", java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/CreatePageResultProducer").getString("ASISTENTE_DE_CREACIÓN_DE_PÁGINA"), JOptionPane.OK_OPTION | JOptionPane.INFORMATION_MESSAGE);

@@ -39,6 +39,7 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.semanticwb.office.interfaces.ResourceInfo;
 import org.semanticwb.office.interfaces.PropertyInfo;
 import org.semanticwb.office.interfaces.WebPageInfo;
+import org.semanticwb.openoffice.components.WebPage;
 import org.semanticwb.openoffice.interfaces.IOpenOfficeDocument;
 import org.semanticwb.openoffice.ui.dialogs.DialogSelectFlow;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
@@ -87,10 +88,8 @@ public class PublishContentToWebPageResultProducer implements WizardResultProduc
             try
             {
                 IOpenOfficeDocument openOfficeDocument = OfficeApplication.getOfficeDocumentProxy();
-                SelectPage.WebPage page = (SelectPage.WebPage) wizardData.get(SelectPage.WEBPAGE);
-                WebPageInfo webpage = new WebPageInfo();
-                webpage.id = page.getID();
-                webpage.siteID = page.getSite();
+                WebPage page = (WebPage) wizardData.get(SelectPage.WEBPAGE);
+                WebPageInfo webpage = page.getWebPageInfo();
                 String version = wizardData.get(PublishVersion.VERSION).toString();
                 HashMap<PropertyInfo, String> properties = (HashMap<PropertyInfo, String>) wizardData.get(ViewProperties.VIEW_PROPERTIES);
                 PropertyInfo[] propertiesToSend = new PropertyInfo[0];
