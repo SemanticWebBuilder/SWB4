@@ -1002,6 +1002,11 @@ public Document getDomProperty(SemanticProperty prop)
                     m_res.removeAll(prop.getRDFProperty());
                 }else
                 {
+                    ArrayList arr=null;
+                    if(SWBPlatform.isTDB())
+                    {
+                        arr=new ArrayList();
+                    }
                     StmtIterator stit = m_res.listProperties(prop.getRDFProperty());
                     while (stit.hasNext())
                     {
@@ -1010,10 +1015,24 @@ public Document getDomProperty(SemanticProperty prop)
                         if(lg!=null && lg.length()==0)lg=null;
                         if ((lang==null && lg==null) || (lg != null && lg.equals(lang)))
                         {
-                            stit.remove();
+                            if(SWBPlatform.isTDB())
+                            {
+                                arr.add(staux);
+                            }else
+                            {
+                                stit.remove();
+                            }
                         }
                     }
                     stit.close();
+                    if(arr!=null)
+                    {
+                        Iterator<Statement> it=arr.iterator();
+                        while (it.hasNext()) {
+                            Statement statement = it.next();
+                            statement.remove();
+                        }
+                    }
                     //stm=getLocaleStatement(prop,lang);
                 }
             }
@@ -1267,16 +1286,39 @@ public Document getDomProperty(SemanticProperty prop)
             return this;
         }
         listObjectProperties(prop);
+
+        ArrayList arr=null;
+        if(SWBPlatform.isTDB())
+        {
+            arr=new ArrayList();
+        }
+
         StmtIterator it = m_res.listProperties(prop.getRDFProperty());
         while (it.hasNext())
         {
             Statement stmt = it.nextStatement();
             if (object.getRDFResource().equals(stmt.getResource()))
             {
-                stmt.remove();
+                if(SWBPlatform.isTDB())
+                {
+                    arr.add(stmt);
+                }else
+                {
+                    it.remove();
+                }
             }
         }
         it.close();
+
+        if(arr!=null)
+        {
+            Iterator<Statement> it2=arr.iterator();
+            while (it2.hasNext()) {
+                Statement statement = it2.next();
+                statement.remove();
+            }
+        }
+
         removePropertyValueCache(prop, "list");
         return this;
     }
