@@ -1027,6 +1027,7 @@
               //if(icon)aux="<span><span style='position:fixed; margin:0px -3px; ' class='"+icon+"'></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+aux+"</span>";
               if(icon)aux="<span style_='height:18px;' class='dijitReset dijitInline "+icon+"'></span><span class='dijitReset dijitInline dijitButtonText'>"+aux+"</span>";
               tab.title=aux;
+              //if(tab.controlButton)
               tab.controlButton.containerNode.innerHTML = aux || "";
               //alert(tab.title);
           }
