@@ -153,15 +153,24 @@ public class DialogDocumentDetail extends javax.swing.JDialog {
             char letra=letras[i];
             if(Character.isWhitespace(letra))
             {
-                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS");
+                if(letra!='_')
+                {
+                    return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_ESPACIOS");
+                }
             }
             else if(!(Character.isDigit(letra) || Character.isLetter(letra)))
             {
-                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
+                if(letra!='_')
+                {
+                    return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
+                }
             }
             else if(letra>123)
             {
-                return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
+                if(letra!='_')
+                {
+                    return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_TIENE_CARACTERES_NO_VÁLIDOS:")+letra;
+                }
             }
         }
         return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/dialogs/DialogDocumentDetail").getString("EL_NOMBRE_DEL_ARCHIVO_ES_CORRECTO");
