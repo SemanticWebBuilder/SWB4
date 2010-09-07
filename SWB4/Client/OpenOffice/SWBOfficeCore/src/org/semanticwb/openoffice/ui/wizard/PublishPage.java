@@ -7,11 +7,13 @@ package org.semanticwb.openoffice.ui.wizard;
 
 import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.OfficeApplication;
 import org.semanticwb.openoffice.OfficeDocument;
+import org.semanticwb.openoffice.components.WebPage;
 
 /**
  *
@@ -19,10 +21,11 @@ import org.semanticwb.openoffice.OfficeDocument;
  */
 public class PublishPage extends SelectPage {
 
-    
+    private OfficeDocument document;
     public PublishPage(String siteid,OfficeDocument document)
     {
-        super(siteid,document);
+        super(siteid,true);
+        this.document=document;
     
     }
     public static String getDescription()
@@ -32,7 +35,13 @@ public class PublishPage extends SelectPage {
     @Override
     public WizardPanelNavResult allowNext(String stepName, Map map, Wizard wizardData)
     {
-        
+        WizardPanelNavResult res = WizardPanelNavResult.PROCEED;
+        if(selectWebPageComponent.getSelectedWebPage()==null)
+        {
+            res = WizardPanelNavResult.REMAIN_ON_PAGE;
+            JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectPage").getString("¡DEBE_INDICAR_UNA_PÁGINA_WEB!"), getDescription(), JOptionPane.OK_OPTION | JOptionPane.ERROR_MESSAGE);
+            return res;
+        }
         try
         {
             WebPage page=(WebPage)map.get(WEBPAGE);
@@ -51,26 +60,26 @@ public class PublishPage extends SelectPage {
             e.printStackTrace();
         }
         return super.allowNext(stepName, map, wizardData);
-    }
-    @Override
-    protected void onAdd(WebPage page)
+    }    
+    public void addNode(DefaultMutableTreeNode node)
     {
-        WebPageInfo info=new WebPageInfo();
-        info.siteID=page.getSite();
-        info.id=page.getID();
-        String type=document.getDocumentType().toString().toUpperCase();
-        page.setEnabled(false);
-        try
+        if(node instanceof  WebPage)
         {
-            if (OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type,info))
+            WebPage page=(WebPage)node;
+            String type=document.getDocumentType().toString().toUpperCase();
+            page.setEnabled(false);
+            try
             {
-                page.setEnabled(true);
+                if (OfficeApplication.getOfficeDocumentProxy().canPublishToResourceContent(type,page.getWebPageInfo()))
+                {
+                    page.setEnabled(true);
 
+                }
             }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.semanticwb.openoffice.components.WebPage;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
 import org.semanticwb.openoffice.ui.wizard.SelectTitle;
 
@@ -56,7 +57,7 @@ public class AddLinkProducer implements WizardResultProducer
 
     public Object finish(Map map) throws WizardException
     {
-        SelectPage.WebPage page = (SelectPage.WebPage) map.get(SelectPage.WEBPAGE);
+        WebPage page = (WebPage) map.get(SelectPage.WEBPAGE);
         try
         {
             URI uri = document.getOfficeDocumentProxy().getWebAddress();

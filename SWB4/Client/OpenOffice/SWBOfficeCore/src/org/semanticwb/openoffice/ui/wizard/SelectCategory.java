@@ -61,11 +61,14 @@ public class SelectCategory extends WizardPage
     public static final String CATEGORY_ID = "categoryID";
     public static final String REPOSITORY_ID = "repositoryID";
     private String repositoryID;
+    private boolean showDefault;
 
     /** Creates new form SelectCategory */
-    public SelectCategory()
+    public SelectCategory(boolean showDefault)
     {
+
         initComponents();
+        this.showDefault=showDefault;
         this.getWizardDataMap().remove(CATEGORY_ID);
         this.getWizardDataMap().remove(REPOSITORY_ID);
         loadTree();
@@ -84,76 +87,94 @@ public class SelectCategory extends WizardPage
 
     private void addCategory(RepositoryInfo repository, CategoryNode parent)
     {
-        try
-        {
-            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository.name, parent.getID()))
-            {
+        try {
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(repository.name, parent.getID())) {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, repository);
                 parent.add(categoryNode);
-                if (category.childs > 0)
-                {
+                if (category.childs > 0) {
                     categoryNode.add(new DefaultMutableTreeNode(EMPTY_STRING));
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
     private void addCategory(RepositoryNode parent)
     {
-        try
-        {
-            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(parent.getName()))
-            {
+        try {
+            for (CategoryInfo category : OfficeApplication.getOfficeApplicationProxy().getCategories(parent.getName())) {
                 CategoryNode categoryNode = new CategoryNode(category.UDDI, category.title, category.description, parent.repositoryInfo);
                 parent.add(categoryNode);
-                if (category.childs > 0)
-                {
+                if (category.childs > 0) {
                     categoryNode.add(new DefaultMutableTreeNode(EMPTY_STRING));
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace(System.out);
         }
     }
 
     private void addRepositories(RepositoryNode root)
     {
-        try
-        {
-            for (RepositoryInfo repository : OfficeApplication.getOfficeApplicationProxy().getRepositories())
-            {
-                boolean showRepository = false;
-                if (this.repositoryID == null || repositoryID.equals(repository.name))
-                {
-                    showRepository = true;
-                }
-                if (showRepository)
-                {
-                    RepositoryNode repositoryNode = new RepositoryNode(repository);
-                    root.add(repositoryNode);
-                    addCategory(repositoryNode);
-                    jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
+        if (showDefault) {
+            try {
+                for (RepositoryInfo repository : OfficeApplication.getOfficeApplicationProxy().getRepositories()) {
+                    boolean showRepository = false;
+                    if (this.repositoryID == null || repositoryID.equals(repository.name)) {
+                        showRepository = true;
+                    }
+                    if (showRepository) {
+                        RepositoryNode repositoryNode = new RepositoryNode(repository);
+                        root.add(repositoryNode);
+                        addCategory(repositoryNode);
+                        jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
+                    }
                 }
             }
-        }
-        catch (Exception wbe)
-        {
-            String message = wbe.getLocalizedMessage();
-            if (wbe.getCause() != null)
-            {
-                Throwable cause = wbe.getCause();
-                message += NL + cause.getMessage();
+            catch (Exception wbe) {
+                String message = wbe.getLocalizedMessage();
+                if (wbe.getCause() != null) {
+                    Throwable cause = wbe.getCause();
+                    message += NL + cause.getMessage();
+                }
+                JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
+                this.setProblem(message);
+                return;
             }
-            JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
-            this.setProblem(message);
-            return;
         }
+        else {
+            try {
+                for (RepositoryInfo repository : OfficeApplication.getOfficeApplicationProxy().getRepositories()) {
+                    if(!repository.name.equals("defaultWorkspace@swb"))
+                    {
+                        boolean showRepository = false;
+                        if (this.repositoryID == null || repositoryID.equals(repository.name)) {
+                            showRepository = true;
+                        }
+                        if (showRepository) {
+                            RepositoryNode repositoryNode = new RepositoryNode(repository);
+                            root.add(repositoryNode);
+                            addCategory(repositoryNode);
+                            jTreeCategory.expandPath(new TreePath(repositoryNode.getPath()));
+                        }
+                    }
+                }
+            }
+            catch (Exception wbe) {
+                String message = wbe.getLocalizedMessage();
+                if (wbe.getCause() != null) {
+                    Throwable cause = wbe.getCause();
+                    message += NL + cause.getMessage();
+                }
+                JOptionPane.showMessageDialog(this, message, getDescription(), JOptionPane.OK_OPTION);
+                this.setProblem(message);
+                return;
+            }
+        }
+
     }
 
     private void loadTree()
@@ -179,27 +200,22 @@ public class SelectCategory extends WizardPage
     public WizardPanelNavResult allowNext(String arg, Map map, Wizard wizard)
     {
         WizardPanelNavResult result = WizardPanelNavResult.PROCEED;
-        if (this.getWizardDataMap().get(CATEGORY_ID) == null || this.getWizardDataMap().get(REPOSITORY_ID) == null)
-        {
+        if (this.getWizardDataMap().get(CATEGORY_ID) == null || this.getWizardDataMap().get(REPOSITORY_ID) == null) {
             javax.swing.JOptionPane.showMessageDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡DEBE_SELECCIONAR_UNA_CATEGORIA!"), getDescription(), JOptionPane.ERROR_MESSAGE);
             this.jTreeCategory.requestFocus();
             result = WizardPanelNavResult.REMAIN_ON_PAGE;
         }
         RepositoryInfo rep = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
-        if (rep.exclusive)
-        {
+        if (rep.exclusive) {
             int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_SÓLO_PUEDE_PUBLICAR_CONTENIDOS_EN_EL_SITIO_") + " " + rep.siteInfo.title + "!" + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (res == JOptionPane.NO_OPTION)
-            {
+            if (res == JOptionPane.NO_OPTION) {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
             }
 
         }
-        else
-        {
+        else {
             int res = JOptionPane.showConfirmDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡EL_REPOSITORIO_SELECIONADO_PERMITE_PUBLICAR_EN_CUALQUIER_SITIO!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¿DESEA_CONTINUAR?"), getDescription(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (res == JOptionPane.NO_OPTION)
-            {
+            if (res == JOptionPane.NO_OPTION) {
                 result = WizardPanelNavResult.REMAIN_ON_PAGE;
             }
         }
@@ -292,24 +308,20 @@ public class SelectCategory extends WizardPage
 private void jButtonAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCategoryActionPerformed
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
-    if (selected != null && selected instanceof CategoryNode)
-    {
+    if (selected != null && selected instanceof CategoryNode) {
         CategoryNode categoryNode = (CategoryNode) selected;
         DialogAddCategory addCategory = new DialogAddCategory(categoryNode.getRepository().name, categoryNode.getID());
         addCategory.setVisible(true);
-        if (!addCategory.isCancel())
-        {
+        if (!addCategory.isCancel()) {
             categoryNode.removeAllChildren();
             addCategory(categoryNode.getRepository(), categoryNode);
         }
     }
-    if (selected != null && selected instanceof RepositoryNode)
-    {
+    if (selected != null && selected instanceof RepositoryNode) {
         RepositoryNode repositoryNode = (RepositoryNode) selected;
         DialogAddCategory addCategory = new DialogAddCategory(repositoryNode.getName());
         addCategory.setVisible(true);
-        if (!addCategory.isCancel())
-        {
+        if (!addCategory.isCancel()) {
             repositoryNode.removeAllChildren();
             addCategory(repositoryNode);
             jTreeCategory.updateUI();
@@ -324,67 +336,53 @@ private void jTreeCategoryValueChanged(javax.swing.event.TreeSelectionEvent evt)
     Object selected = this.jTreeCategory.getLastSelectedPathComponent();
     this.getWizardDataMap().remove(CATEGORY_ID);
     this.getWizardDataMap().remove(REPOSITORY_ID);
-    if (selected != null && selected instanceof RepositoryNode)
-    {
-        if (selected instanceof RepositoryRootNode)
-        {
+    if (selected != null && selected instanceof RepositoryNode) {
+        if (selected instanceof RepositoryRootNode) {
             this.jButtonAddCategory.setEnabled(false);
         }
-        else
-        {
+        else {
 
             RepositoryNode rep = (RepositoryNode) selected;
-            if (rep.getChildCount() == 0)
-            {
+            if (rep.getChildCount() == 0) {
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("¡NO_EXISTEN_CATEGORIAS_EN_ESTE_REPOSITORIO!") + NL + java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("DEBE_CREAR_UNA_PARA_PODER_PUBLICAR_EL_CONTENIDO"), getDescription(), JOptionPane.ERROR_MESSAGE);
             }
-            try
-            {
-                if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(rep.getName()))
-                {
+            try {
+                if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(rep.getName())) {
                     this.jButtonAddCategory.setEnabled(true);
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    if (selected != null && selected instanceof CategoryNode)
-    {
-        CategoryNode catNode=(CategoryNode)selected;
+    if (selected != null && selected instanceof CategoryNode) {
+        CategoryNode catNode = (CategoryNode) selected;
 
-        try
+        try {
+            if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(catNode.getRepository().name, catNode.getID()));
             {
-                if (OfficeApplication.getOfficeApplicationProxy().canCreateCategory(catNode.getRepository().name, catNode.getID()));
-                {
-                    this.jButtonAddCategory.setEnabled(true);
-                }
+                this.jButtonAddCategory.setEnabled(true);
             }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     this.jButtonDeletCategory.setEnabled(false);
-    if (selected != null && selected instanceof CategoryNode)
-    {
+    if (selected != null && selected instanceof CategoryNode) {
         CategoryNode categoryNode = (CategoryNode) selected;
         String categoryId = categoryNode.getID();
 
         RepositoryInfo repository = categoryNode.getRepository();
         this.getWizardDataMap().put(CATEGORY_ID, categoryId);
         this.getWizardDataMap().put(REPOSITORY_ID, repository);
-        try
-        {
-            if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId))
-            {
+        try {
+            if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId)) {
                 this.jButtonDeletCategory.setEnabled(true);
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -395,38 +393,30 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
     this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
     String categoryId = (String) this.getWizardDataMap().get(CATEGORY_ID);
     RepositoryInfo repository = (RepositoryInfo) this.getWizardDataMap().get(REPOSITORY_ID);
-    try
-    {
-        if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId))
-        {
+    try {
+        if (OfficeApplication.getOfficeApplicationProxy().canDeleteCategory(repository.name, categoryId)) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTreeCategory.getLastSelectedPathComponent();
-            if (node == null)
-            {
+            if (node == null) {
                 return;
             }
             DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (node.getParent());
-            if (parentNode == null)
-            {
+            if (parentNode == null) {
                 return;//-- remove node --
             }
-            if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository.name, categoryId))
-            {
+            if (OfficeApplication.getOfficeApplicationProxy().deleteCategory(repository.name, categoryId)) {
                 parentNode.remove(node);
                 ((DefaultTreeModel) jTreeCategory.getModel()).reload(parentNode);
             }
-            else
-            {
+            else {
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.OK_OPTION);
             }
 
         }
-        else
-        {
+        else {
             JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("NO_SE_PUEDE_BORRAR_LA_CATEGORIA_POR_QUE_TIENE_CONTENIDOS"), getDescription(), JOptionPane.ERROR | JOptionPane.OK_OPTION);
         }
     }
-    catch (Exception e)
-    {
+    catch (Exception e) {
         e.printStackTrace();
     }
     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -435,8 +425,7 @@ private void jButtonDeletCategoryActionPerformed(java.awt.event.ActionEvent evt)
 private void jTreeCategoryTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException//GEN-FIRST:event_jTreeCategoryTreeWillExpand
 {//GEN-HEADEREND:event_jTreeCategoryTreeWillExpand
     DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) evt.getPath().getLastPathComponent();
-    if (treeNode instanceof CategoryNode && treeNode.getChildCount() == 1 && !(treeNode.getChildAt(0) instanceof CategoryNode))
-    {
+    if (treeNode instanceof CategoryNode && treeNode.getChildCount() == 1 && !(treeNode.getChildAt(0) instanceof CategoryNode)) {
         CategoryNode categoryNode = (CategoryNode) treeNode;
         categoryNode.removeAllChildren();
         addCategory(categoryNode.getRepository(), categoryNode);
@@ -486,8 +475,8 @@ class RepositoryRootNode extends RepositoryNode
 class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 {
 
-    protected JLabel component = new JLabel();
-    protected RepositoryInfo repositoryInfo;
+    protected final JLabel component = new JLabel();
+    protected final RepositoryInfo repositoryInfo;
 
     public RepositoryNode(RepositoryInfo repositoryInfo)
     {
@@ -505,12 +494,10 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
 
     public String getToolTipText()
     {
-        if (repositoryInfo.exclusive)
-        {
+        if (repositoryInfo.exclusive) {
             return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_EXCLUSIVO_PARA_EL_SITIO_") + " " + repositoryInfo.siteInfo.title;
         }
-        else
-        {
+        else {
             return java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/SelectCategory").getString("REPOSITORIO_COMPARTIDO,_PUEDE_PUBLICAR_EN_CUALQUIER_SITIO");
         }
     }
@@ -537,8 +524,7 @@ class RepositoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     public boolean equals(Object obj)
     {
         boolean equals = false;
-        if (obj instanceof RepositoryNode)
-        {
+        if (obj instanceof RepositoryNode) {
             equals = ((RepositoryNode) obj).repositoryInfo.name.equals(this.repositoryInfo.name);
         }
         return equals;
@@ -603,8 +589,7 @@ class CategoryNode extends DefaultMutableTreeNode implements ToolTipTreeNode
     public boolean equals(Object obj)
     {
         boolean equals = false;
-        if (obj instanceof CategoryNode)
-        {
+        if (obj instanceof CategoryNode) {
             equals = ((CategoryNode) obj).title.equals(this.title);
         }
         return equals;
@@ -635,42 +620,34 @@ class TreeRender extends JPanel implements TreeCellRenderer
     {
         Component component = this;
         tree.setToolTipText(EMPTY_STRING);
-        if (object instanceof CategoryNode)
-        {
+        if (object instanceof CategoryNode) {
             component = ((CategoryNode) object).getComponent();
-            if (hasFocus)
-            {
+            if (hasFocus) {
                 tree.setToolTipText(((CategoryNode) object).getDescription());
             }
         }
-        if (object instanceof RepositoryNode)
-        {
+        if (object instanceof RepositoryNode) {
             component = ((RepositoryNode) object).getComponent();
             //component.setFont(tree.getFont());
         }
-        if (component != null && component instanceof JLabel)
-        {
+        if (component != null && component instanceof JLabel) {
             JLabel label = (JLabel) component;
 
             label.setFont(tree.getFont());
-            if (expanded)
-            {
+            if (expanded) {
                 label.setIcon(ImageLoader.images.get("open"));
             }
-            else
-            {
+            else {
                 /*URL imageURL=getClass().getResource("/org/semanticwb/openoffice/ui/icons/close.png");
                 System.out.println(imageURL.toString());
                 javax.swing.ImageIcon icon=new javax.swing.ImageIcon(imageURL);*/
                 label.setIcon(ImageLoader.images.get("close"));
             }
-            if (selected)
-            {
+            if (selected) {
                 label.setBackground(Color.BLUE);
                 label.setForeground(Color.WHITE);
             }
-            else
-            {
+            else {
                 label.setBackground(tree.getBackground());
                 label.setForeground(tree.getForeground());
             }

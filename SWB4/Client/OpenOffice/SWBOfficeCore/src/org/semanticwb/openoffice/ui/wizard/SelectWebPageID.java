@@ -41,6 +41,7 @@ import org.netbeans.spi.wizard.WizardPanelNavResult;
 import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.office.interfaces.WebSiteInfo;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.components.WebPage;
 
 /**
  *
@@ -259,7 +260,7 @@ public class SelectWebPageID extends WizardPage
             map.put(WEBPAGEID, jTextFieldWebPageID.getText());
             result = WizardPanelNavResult.PROCEED;
         }
-        SelectPage.WebPage pageSelected = (SelectPage.WebPage) this.getWizardDataMap().get(SelectPage.WEBPAGE);
+        WebPage pageSelected = (WebPage) this.getWizardDataMap().get(SelectPage.WEBPAGE);
         WebSiteInfo site = new WebSiteInfo();
         if(pageSelected==null && this.parent!=null)
         {

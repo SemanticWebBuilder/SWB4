@@ -93,6 +93,7 @@ public class PublishResultProducer implements WizardResultProducer
                 int res = JOptionPane.showConfirmDialog(null, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishResultProducer").getString("¿DESEA_PUBLICAR_ESTE_CONTENIDO_EN_UNA_PÁGINA_WEB?"), java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/PublishResultProducer").getString("PUBLICACIÓN_DE_CONTENIDO"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (res == JOptionPane.YES_OPTION)
                 {
+                    
                     if (info.exclusive && info.siteInfo != null)
                     {
                         document.publish(title, description, info.siteInfo.id);

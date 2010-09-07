@@ -63,6 +63,7 @@ import org.semanticwb.openoffice.ui.wizard.PublishPage;
 import org.semanticwb.openoffice.ui.wizard.PublishVersion;
 import org.semanticwb.openoffice.ui.wizard.SelectCategory;
 import org.semanticwb.openoffice.ui.wizard.SelectPage;
+import org.semanticwb.openoffice.ui.wizard.SelectSiteInsertLink;
 import org.semanticwb.openoffice.ui.wizard.SelectTitle;
 import org.semanticwb.openoffice.ui.wizard.TitleAndDescription;
 import org.semanticwb.openoffice.ui.wizard.ViewProperties;
@@ -941,17 +942,14 @@ public abstract class OfficeDocument
                         else
                         {
                             PublishResultProducer resultProducer = new PublishResultProducer(this);
-                            /*WizardPage[] pages = new WizardPage[]
+                            WizardPage[] pages = new WizardPage[]
                             {
-                                new SelectCategory(), new TitleAndDescription(true), new ContentProperties()
-                            };
-                            Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);*/
-
-                            Class[] pages = new Class[]
-                            {
-                                SelectCategory.class, TitleAndDescription.class, ContentProperties.class
+                                new SelectCategory(false), new TitleAndDescription(true), new ContentProperties()
                             };
                             Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);
+
+                            
+                            //Wizard wiz = WizardPage.createWizard(TITLE_SAVE_CONTENT_SITE, pages, resultProducer);
                             wiz.show();
 
                         }
@@ -1102,7 +1100,7 @@ public abstract class OfficeDocument
             {
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(null,this), new SelectTitle()
+                    new SelectSiteInsertLink(), new SelectTitle()
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
                 wiz.show();
@@ -1111,7 +1109,7 @@ public abstract class OfficeDocument
             {
                 WizardPage[] clazz = new WizardPage[]
                 {
-                    new SelectPage(null,this), new SelectTitle(selectedText)
+                    new SelectSiteInsertLink(), new SelectTitle(selectedText)
                 };
                 Wizard wiz = WizardPage.createWizard(java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/OfficeDocument").getString("ASISTENTE_DE_INSERCIÓN_DE_LIGA_DE_PÁGINA"), clazz, resultProducer);
                 wiz.show();

@@ -40,8 +40,11 @@ import org.semanticwb.office.interfaces.CategoryInfo;
 import org.semanticwb.office.interfaces.ContentInfo;
 import org.semanticwb.office.interfaces.ContentType;
 import org.semanticwb.office.interfaces.RepositoryInfo;
+import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.openoffice.DocumentType;
 import org.semanticwb.openoffice.OfficeApplication;
+import org.semanticwb.openoffice.components.WebPage;
+import org.semanticwb.openoffice.ui.dialogs.DialogSelectWebPageToOpen;
 
 /**
  *
@@ -49,7 +52,7 @@ import org.semanticwb.openoffice.OfficeApplication;
  */
 public class Search extends WizardPage
 {
-
+    private WebPageInfo selectedWebPageInfo;
     public static final String CONTENT = "CONTENT";
     public static final String WORKSPACE = "WORKSPACE";
     public static Map map;
@@ -88,7 +91,16 @@ public class Search extends WizardPage
         try
         {
 
-            ContentInfo[] contens = OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type, officeType.toString());
+            ContentInfo[] contens=null;
+            if(this.selectedWebPageInfo==null)
+            {
+                contens = OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type, officeType.toString());
+            }
+            else
+            {
+                contens = OfficeApplication.getOfficeApplicationProxy().search(repositoryName, title, description, category, type, officeType.toString(),this.selectedWebPageInfo);
+                
+            }
             if (contens.length == 0)
             {
                 JOptionPane.showMessageDialog(this, java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search").getString("¡NO_SE_ENCONTRARÓN_COINCIDENCIAS_PARA_LA_BUSQUEDA!"), Search.getDescription(), JOptionPane.INFORMATION_MESSAGE);
@@ -141,6 +153,10 @@ public class Search extends WizardPage
         jComboBoxRepositorio = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jComboBoxType = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        jTextWebPage = new javax.swing.JTextField();
+        jButtonSelectWebPage = new javax.swing.JButton();
+        jButtonSelectWebPageDelete = new javax.swing.JButton();
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("org/semanticwb/openoffice/ui/wizard/Search"); // NOI18N
         jLabel1.setText(bundle.getString("TÍTULO:")); // NOI18N
@@ -187,14 +203,14 @@ public class Search extends WizardPage
             }
         });
         jTableContents.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTableContents.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTableContentsKeyPressed(evt);
-            }
-        });
         jTableContents.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTableContentsMouseClicked(evt);
+            }
+        });
+        jTableContents.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTableContentsKeyPressed(evt);
             }
         });
         jScrollPane1.setViewportView(jTableContents);
@@ -213,35 +229,58 @@ public class Search extends WizardPage
 
         jLabel5.setText(bundle.getString("TIPO_DE_CONTENIDO:")); // NOI18N
 
+        jLabel6.setText(bundle.getString("PAGINA_WEB:")); // NOI18N
+
+        jTextWebPage.setEditable(false);
+        jTextWebPage.setToolTipText(bundle.getString("DEBE_INDICAR_UNA_PALABRA_O_DESCRIPCIÓN_COMPLETA_A_BUSCAR")); // NOI18N
+
+        jButtonSelectWebPage.setText("...");
+        jButtonSelectWebPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSelectWebPageActionPerformed(evt);
+            }
+        });
+
+        jButtonSelectWebPageDelete.setText("X");
+        jButtonSelectWebPageDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSelectWebPageDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxRepositorio, javax.swing.GroupLayout.Alignment.TRAILING, 0, 356, Short.MAX_VALUE)
-                            .addComponent(jComboBoxCategory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                            .addComponent(jTextFieldDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
-                            .addComponent(jComboBoxType, javax.swing.GroupLayout.Alignment.TRAILING, 0, 356, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(107, 107, 107)
-                        .addComponent(jButtonView)
-                        .addGap(49, 49, 49)
-                        .addComponent(jButtonSearch)))
+                            .addComponent(jTextFieldDescription, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                            .addComponent(jComboBoxRepositorio, javax.swing.GroupLayout.Alignment.TRAILING, 0, 358, Short.MAX_VALUE)
+                            .addComponent(jComboBoxCategory, javax.swing.GroupLayout.Alignment.TRAILING, 0, 358, Short.MAX_VALUE)
+                            .addComponent(jTextFieldTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                            .addComponent(jComboBoxType, javax.swing.GroupLayout.Alignment.TRAILING, 0, 358, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jTextWebPage, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButtonSelectWebPage)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonSelectWebPageDelete))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonView)
+                                .addGap(50, 50, 50)
+                                .addComponent(jButtonSearch)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -267,12 +306,18 @@ public class Search extends WizardPage
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBoxType)
                     .addComponent(jLabel5))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonSearch)
-                    .addComponent(jButtonView))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextWebPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jButtonSelectWebPageDelete)
+                    .addComponent(jButtonSelectWebPage))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonView)
+                    .addComponent(jButtonSearch))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -321,6 +366,8 @@ private void jComboBoxRepositorioActionPerformed(java.awt.event.ActionEvent evt)
         String rep = this.jComboBoxRepositorio.getSelectedItem().toString();
         try
         {
+            selectedWebPageInfo=null;
+            this.jTextWebPage.setText("");
             for (ContentType type : OfficeApplication.getOfficeApplicationProxy().getContentTypes(rep))
             {
                 this.jComboBoxType.addItem(type);
@@ -359,8 +406,51 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
     }
 }//GEN-LAST:event_jTableContentsKeyPressed
 
+private void jButtonSelectWebPageActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSelectWebPageActionPerformed
+{//GEN-HEADEREND:event_jButtonSelectWebPageActionPerformed
+    String siteid=null;
+    if(this.jComboBoxRepositorio.getSelectedItem()!=null)
+    {
+        RepositoryInfo rep=(RepositoryInfo)this.jComboBoxRepositorio.getSelectedItem();
+        if(rep.siteInfo!=null && rep.siteInfo.id!=null)
+        {
+            siteid=rep.siteInfo.id;
+        }
+        try
+        {
+            this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            DialogSelectWebPageToOpen dialogSelectWebPageToOpen=new DialogSelectWebPageToOpen(siteid);
+            dialogSelectWebPageToOpen.setVisible(true);
+            if(!dialogSelectWebPageToOpen.isCancel())
+            {
+                WebPage selected=dialogSelectWebPageToOpen.getSelectedWebPage();
+                if(selected!=null)
+                {
+                    this.jTextWebPage.setText(selected.getWebPageInfo().title);
+                    selectedWebPageInfo=selected.getWebPageInfo();
+                }
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
+    }
+}//GEN-LAST:event_jButtonSelectWebPageActionPerformed
+
+private void jButtonSelectWebPageDeleteActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonSelectWebPageDeleteActionPerformed
+{//GEN-HEADEREND:event_jButtonSelectWebPageDeleteActionPerformed
+    this.selectedWebPageInfo=null;
+    this.jTextWebPage.setText("");
+}//GEN-LAST:event_jButtonSelectWebPageDeleteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonSearch;
+    private javax.swing.JButton jButtonSelectWebPage;
+    private javax.swing.JButton jButtonSelectWebPageDelete;
     private javax.swing.JButton jButtonView;
     private javax.swing.JComboBox jComboBoxCategory;
     private javax.swing.JComboBox jComboBoxRepositorio;
@@ -370,10 +460,12 @@ private void jTableContentsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableContents;
     private javax.swing.JTextField jTextFieldDescription;
     private javax.swing.JTextField jTextFieldTitle;
+    private javax.swing.JTextField jTextWebPage;
     // End of variables declaration//GEN-END:variables
 
     @Override
