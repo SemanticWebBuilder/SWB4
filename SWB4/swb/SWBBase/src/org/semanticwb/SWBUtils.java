@@ -2702,6 +2702,48 @@ public class SWBUtils {
             }
         }
 
+        public static boolean isUTF8(File file)
+        {
+            int c3=-61;
+            byte[] buffer=new byte[8192];
+            FileInputStream fin=null;
+            try
+            {
+                    fin=new FileInputStream(file);
+                    int read=fin.read(buffer);
+                    while(read!=-1)
+                    {
+                        for(int i=0;i<read;i++)
+                        {
+                            if(buffer[i]==c3)
+                            {
+                                return true;
+                            }
+                        }
+                        read=fin.read(buffer);
+                    }
+
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                if(fin!=null)
+                {
+                    try
+                    {
+                        fin.close();
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return false;
+        }
         /**
          * Adds the files received to the specified zip file.
          * <p>Agrega los archivos recibidos al archivo comprimido especificado.</p>
