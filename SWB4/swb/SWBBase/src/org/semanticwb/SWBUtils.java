@@ -2702,7 +2702,7 @@ public class SWBUtils {
             }
         }
 
-        public static boolean isUTF8(File file)
+        public static boolean isUTF8(File file) throws IOException
         {
             int c3=-61;
             byte[] buffer=new byte[8192];
@@ -2723,23 +2723,12 @@ public class SWBUtils {
                         read=fin.read(buffer);
                     }
 
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+            }           
             finally
             {
                 if(fin!=null)
-                {
-                    try
-                    {
-                        fin.close();
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                    }
+                {                    
+                    fin.close();                    
                 }
             }
             return false;
