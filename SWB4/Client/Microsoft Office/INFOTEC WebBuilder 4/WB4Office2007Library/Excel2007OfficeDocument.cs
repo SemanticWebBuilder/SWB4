@@ -147,6 +147,13 @@ namespace WB4Office2007Library
             {
                 HTMLFile.Delete();
             }
+            workbook.WebOptions.AllowPNG = true;
+            workbook.WebOptions.Encoding = Office.MsoEncoding.msoEncodingISO88591Latin1;
+            workbook.WebOptions.OrganizeInFolder = true;
+            workbook.WebOptions.RelyOnCSS = true;
+            workbook.WebOptions.RelyOnVML = false;
+            workbook.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserIE6;
+            workbook.WebOptions.UseLongFileNames = true;            
             workbook.SaveAs(fileName, Excel.XlFileFormat.xlHtml, missing, missing, missing, missing, Excel.XlSaveAsAccessMode.xlNoChange, missing, missing, missing, missing, missing);
             workbook.Close(objtrue, missing, missing);
             workbook = (Excel.Workbook)application.Workbooks.Open(xlsX.FullName, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
