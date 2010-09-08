@@ -766,7 +766,7 @@ public class ContentUtils {
        * @return the html content pages number
        */
     private int getHtmlContentPagesNumber(String content) {
-        Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always;\">");
+        Iterator <String>itStr=SWBUtils.TEXT.findInterStr(content, "div style=\"","always");
         int size = 1;
         while (itStr.hasNext()) {
             String str=itStr.next();
@@ -774,6 +774,8 @@ public class ContentUtils {
                     size++;
             }
         }
+
+
         return size;
     }
 
@@ -784,10 +786,13 @@ public class ContentUtils {
      * @param page the page
      * @return the html content by page
      */
+    /*
     private String getHtmlContentByPage(String datos, int page){
         int off = 0;
         int cont = 0;
-        String matchPatron="<div style=\"page-break-after: always;\">";
+        String matchPatron="<div style=\"page-break-after: always\">";
+        if(datos.indexOf(matchPatron)==-1) matchPatron="<div style=\"page-break-after: always;\">";
+
         int f = -1;
         String data="";
         do {
@@ -806,5 +811,33 @@ public class ContentUtils {
         } while (f > -1);
         return data;
     }
+    */
 
+    private String getHtmlContentByPage(String datos, int page){
+        int off = 0;
+        int cont = 0;
+        String matchPatron="<div style=\"page-break-after: always\">";
+        if(datos.indexOf(matchPatron)==-1) matchPatron="<div style=\"page-break-after: always;\">";
+
+        int f = -1;
+        String data="";
+        do {
+            f = datos.indexOf(matchPatron, off);
+            if (f >-1) {
+                cont++;
+                data=datos.substring(off, f);
+                if(page==cont) break;
+                int divFin=datos.indexOf("</div>", f);
+                if(divFin>-1){
+                    off = divFin+6;
+                }else off = f + matchPatron.length();
+            }else if(off>0){
+                data=datos.substring(off);
+            }
+            else { //Solo hay una pagina
+                data=datos;
+            }
+        } while (f > -1);
+        return data;
+    }
 }
