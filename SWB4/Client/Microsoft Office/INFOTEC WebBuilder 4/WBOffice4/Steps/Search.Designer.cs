@@ -54,6 +54,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.buttonDeleteWebPage = new System.Windows.Forms.Button();
             this.buttonSelectWebPage = new System.Windows.Forms.Button();
             this.textBox_WebPage = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -75,7 +76,6 @@
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonDeleteWebPage = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -121,6 +121,16 @@
             this.tabPage1.Text = "Criterios de búsqueda";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // buttonDeleteWebPage
+            // 
+            this.buttonDeleteWebPage.Location = new System.Drawing.Point(413, 149);
+            this.buttonDeleteWebPage.Name = "buttonDeleteWebPage";
+            this.buttonDeleteWebPage.Size = new System.Drawing.Size(30, 23);
+            this.buttonDeleteWebPage.TabIndex = 14;
+            this.buttonDeleteWebPage.Text = "X";
+            this.buttonDeleteWebPage.UseVisualStyleBackColor = true;
+            this.buttonDeleteWebPage.Click += new System.EventHandler(this.buttonDeleteWebPage_Click);
+            // 
             // buttonSelectWebPage
             // 
             this.buttonSelectWebPage.Location = new System.Drawing.Point(377, 149);
@@ -142,7 +152,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 153);
+            this.label6.Location = new System.Drawing.Point(45, 154);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(69, 13);
             this.label6.TabIndex = 11;
@@ -275,9 +285,10 @@
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(458, 204);
-            this.listView1.TabIndex = 0;
+            this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            
             // 
             // columnHeader1
             // 
@@ -298,16 +309,6 @@
             // 
             this.columnHeader4.Text = "Categoria";
             this.columnHeader4.Width = 90;
-            // 
-            // buttonDeleteWebPage
-            // 
-            this.buttonDeleteWebPage.Location = new System.Drawing.Point(413, 149);
-            this.buttonDeleteWebPage.Name = "buttonDeleteWebPage";
-            this.buttonDeleteWebPage.Size = new System.Drawing.Size(30, 23);
-            this.buttonDeleteWebPage.TabIndex = 14;
-            this.buttonDeleteWebPage.Text = "X";
-            this.buttonDeleteWebPage.UseVisualStyleBackColor = true;
-            this.buttonDeleteWebPage.Click += new System.EventHandler(this.buttonDeleteWebPage_Click);
             // 
             // Search
             // 
@@ -336,11 +337,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.ComboBox comboBoxType;
         private System.Windows.Forms.Label label5;
@@ -354,6 +350,11 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button buttonSelectWebPage;
         private System.Windows.Forms.Button buttonDeleteWebPage;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
 
 
 
