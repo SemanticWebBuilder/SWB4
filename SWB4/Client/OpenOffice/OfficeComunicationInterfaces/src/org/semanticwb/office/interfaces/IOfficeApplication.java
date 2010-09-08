@@ -36,7 +36,7 @@ import org.semanticwb.xmlrpc.XmlRpcMethod;
 public interface IOfficeApplication
 {
 
-    public static double version = 4.009;
+    public static double version = 4.100;
 
     @XmlRpcMethod(methodName = "OfficeApplication.isValidVersion")
     public boolean isValidVersion(double version) throws Exception;
