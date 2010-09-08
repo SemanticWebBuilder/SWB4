@@ -1,9 +1,17 @@
   (En desarrollo)
     - Mejora cuando limpia estilos el recurso de Word (Victor L)
     - Se cambió el modelo de programación para selección de sitios en OpenOffice y MS Office (Victor L)
-    - Se agregó búsqueda por página, al abrir un contenido (Victor L)
-    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, los estilos en un CSS y no dentro de tags (Victor L)
-    - En word, al momento de guardar, mantenine la opción de guardar las imagenes en formato PNG y que no genere vml (Victor L)
+    - Se agregó búsqueda por página, al abrir un contenido (Victor L)    
+    - En word, al momento de guardar, mantenine la opción de guardar las imagenes en formato PNG(AllowPNG). (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar sin formato VML (RelyOnVML). (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, los estilos en un CSS y no dentro de tags(RelyOnCSS) (Victor L)    
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, compatible con Intenret Explorer 6.0 ó superior (BrowserLevel) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, en codificación ISO88591 Latin 1 (Encoding) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, desabilitando caracteristicas no soportadas por el explorador (Encoding) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, desabilitando caracteristicas no soportadas por el explorador (OptimizeForBrowser) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, organizando todos los archivos en una carpeta (OrganizeInFolder) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, guarde los archivos con nombres largos (UseLongFileNames) (Victor L)
+    - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, desabilite las funciones no soportadas por el navegador (DisableFeatures) (Victor L)
     - En el plug-in de Open Office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
 
   4.0.1.7
