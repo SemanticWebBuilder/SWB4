@@ -12,7 +12,10 @@
     - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, organizando todos los archivos en una carpeta (OrganizeInFolder) (Victor L)
     - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, guarde los archivos con nombres largos (UseLongFileNames) (Victor L)
     - En word, al momento de guardar, mantenine la opción de guardar en formato HTML, desabilite las funciones no soportadas por el navegador (DisableFeatures) (Victor L)
+    - Corrección en las presentaciones preliminares de un contenido en word, excel y ppt (victorl).
+    - Mejora en el rendimiento al procesar contenidos de Word,Excel y PPT.(victorl)
     - En el plug-in de Open Office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
+
 
   4.0.1.7
     - Correccion de modos de despliegue, Cambio de modo de estrategia a sistema, validacion de envio de correo del recurso comment (CarlosR)
