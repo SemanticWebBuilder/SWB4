@@ -114,6 +114,8 @@ import org.w3c.dom.NodeList;
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
+    public static final String FILE_HTML = "filehtmlCache";
+    private static final DecimalFormat format = new DecimalFormat("#.0");
     private SWBRepositoryManager manager;
     private OfficeApplication officeApplication = new OfficeApplication();
     private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
@@ -702,11 +704,10 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                         {
                             OfficeResource officeResource = OfficeResource.getOfficeResource(obj.getId(), site);
                             if (officeResource.getRepositoryName() != null && officeResource.getRepositoryName().equals(repositoryName) && officeResource.getVersionToShow().equals("*"))
-                            {
+                            {                                                                
                                 InputStream in = getContent(repositoryName, contentId, officeResource.getVersionToShow());
                                 final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
-                                officeResource.loadContent(in,wbuser);
-                                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
+                                officeResource.loadContent(in,wbuser);                                                               
                             }
                         }
                     }
@@ -859,8 +860,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                                     {
                                         InputStream in = getContent(repositoryName, contentId, versionToShow);
                                         final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
-                                        officeResource.loadContent(in,wbuser);
-                                        SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
+                                        officeResource.loadContent(in,wbuser);                                        
                                     }
                                 }
                             }
@@ -999,35 +999,44 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         {
             Node nodeContent = session.getNodeByUUID(contentId);
             Node resContent = nodeContent.getNode(JCR_CONTENT);
-            VersionIterator it = resContent.getVersionHistory().getAllVersions();
-            while (it.hasNext())
+            try
             {
-                Version version = it.nextVersion();
-                if (!version.getName().equals("jcr:rootVersion"))
-                {
-                    versions.add(version);
-                }
+                Version version=resContent.getBaseVersion();
+                getLastVersionOfcontent = version.getName();
             }
-            for (Version version : versions)
+            catch(Exception ue)
             {
-                if (getLastVersionOfcontent == null)
+                log.error(ue);
+                VersionIterator it = resContent.getVersionHistory().getAllVersions();
+                while (it.hasNext())
                 {
-                    getLastVersionOfcontent = version.getName();
-                }
-                else
-                {
-                    try
+                    Version version = it.nextVersion();
+                    if (!version.getName().equals("jcr:rootVersion"))
                     {
-                        DecimalFormat format = new DecimalFormat("#.0");
-                        float currentVersion = format.parse(version.getName()).floatValue();
-                        if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
-                        {
-                            getLastVersionOfcontent = version.getName();
-                        }
+                        versions.add(version);
                     }
-                    catch (Exception e)
+                }
+                for (Version version : versions)
+                {
+                    if (getLastVersionOfcontent == null)
                     {
-                        log.error(e);
+                        getLastVersionOfcontent = version.getName();
+                    }
+                    else
+                    {
+                        try
+                        {
+
+                            float currentVersion = format.parse(version.getName()).floatValue();
+                            if (Float.parseFloat(getLastVersionOfcontent) < currentVersion)
+                            {
+                                getLastVersionOfcontent = version.getName();
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
                     }
                 }
             }
@@ -1543,7 +1552,6 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
                 InputStream in = getContent(repositoryName, contentId, version);
                 final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
                 officeResource.loadContent(in,wbuser);
-                SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
                 ResourceInfo info = getResourceInfo(officeResource);
                 return info;
             }
@@ -1959,12 +1967,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     public String getContentFile(Session session, String repositoryName, String contentId, String version) throws Exception
     {
         try
-        {
+        {            
             Node nodeContent = session.getNodeByUUID(contentId);
             String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
             Node resContent = nodeContent.getNode(JCR_CONTENT);
             if (version.equals("*"))
-            {
+            {                
                 String lastVersion = getLastVersionOfcontent(session, repositoryName, contentId);
                 Version versionNode = resContent.getVersionHistory().getVersion(lastVersion);
                 if (versionNode != null)
@@ -2004,6 +2012,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+    public Session getSession(String repositoryName,org.semanticwb.model.User user) throws Exception
+    {
+        Session session = null;
+        session = loader.openSession(repositoryName, user);
+        return session;
+    }
+
 
     public String getContentFile(String repositoryName, String contentId, String version, org.semanticwb.model.User user) throws Exception
     {
@@ -2053,7 +2068,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         String dir = "/" + name;
         InputStream in = getContent(repositoryName, contentId, version);
         final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
-        OfficeResource.loadContent(in, dir, type,wbuser);
+        OfficeResource.loadContentPreview(in, dir, type,wbuser);
         in.close();
         return name;
     }
@@ -2146,9 +2161,7 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         officeResource.setVersionToShow(newVersion);
         InputStream in = getContent(officeResource.getRepositoryName(), officeResource.getContent(), newVersion);
         final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
-        officeResource.loadContent(in,wbuser);
-        SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(officeResource.getResourceBase());
-
+        officeResource.loadContent(in,wbuser);        
     }
 
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception

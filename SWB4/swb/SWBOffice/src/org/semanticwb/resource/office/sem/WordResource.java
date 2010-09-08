@@ -27,8 +27,10 @@ import com.arthurdo.parser.HtmlTag;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -48,15 +50,14 @@ import org.semanticwb.portal.util.ContentUtils;
  */
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
-
-    private static final OfficeDocument document = new OfficeDocument();
+    private static Logger log = SWBUtils.getLogger(WordResource.class);
     private static final ContentUtils contentUtils = new ContentUtils();
     int snpages = 15;
     String stxtant = "Anterior";
     String stxtsig = "Siguiente";
     String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
     int position = 1;
-
+    
     public WordResource()
     {
         super();
@@ -66,7 +67,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     {
         super(obj);
     }
-    private static Logger log = SWBUtils.getLogger(WordResource.class);
+    
 
     protected void beforePrintDocument(PrintWriter out)
     {
@@ -75,7 +76,48 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     protected void afterPrintDocument(PrintWriter out)
     {
     }
+    public static String getHTML(File file)
+    {
+        String name=file.getName();
+        name = name.replace(".doc", ".html");
+        StringBuilder html=new StringBuilder();
+        try
+        {
+            name = java.net.URLDecoder.decode(name, "utf-8");
+            file=new File(file.getParent()+"/"+name);
+            FileInputStream in = new FileInputStream(file);
+            byte[] buffer = new byte[2048];
+            int read = in.read(buffer);
+            while (read != -1)
+            {
+                html.append(new String(buffer, 0, read));
+                read = in.read(buffer);
+            }
+            String workpath=file.getAbsolutePath().replace('\\', '/');
+            String applicationpath=SWBUtils.getApplicationPath();
+            if(workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+            {
+                workpath=workpath.substring(0,applicationpath.length());
+                workpath=SWBPortal.getContextPath()+workpath;
+            }
+            return SWBPortal.UTIL.parseHTML(html.toString(), workpath);
 
+        }
+        catch(UnsupportedEncodingException uee)
+        {
+            log.error(uee);
+        }
+        catch(FileNotFoundException uee)
+        {
+            log.error(uee);
+        }
+        catch(IOException uee)
+        {
+            log.error(uee);
+        }
+        return html.toString();
+
+    }
     protected void printDocument(PrintWriter out, String path, String workpath, String html)
     {
         out.write(html);
@@ -91,15 +133,20 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     {
 
         Resource base = paramRequest.getResourceBase();
-        WebPage page = paramRequest.getWebPage();
-        String version = getVersionToShow();
-        String contentId = getContent();
-        String repositoryName = getRepositoryName();
-
+        WebPage page = paramRequest.getWebPage();        
         try
-        {
-            User user = paramRequest.getUser();
-            String file = document.getContentFile(repositoryName, contentId, version, user);
+        {            
+            
+            User user=paramRequest.getUser();
+            String file=null;
+            if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
+            {
+                updateFileCache(user);
+            }
+            else
+            {
+                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+            }
             if (file != null)
             {
                 file = file.replace(".doc", ".html");
@@ -116,8 +163,13 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 }
 
                 File filecontent = new File(path);
+                if(!filecontent.exists())
+                {
+                    updateFileCache(user);
+                }
                 if (filecontent.exists())
                 {
+
                     String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                     StringBuilder html = new StringBuilder();
                     try
@@ -130,16 +182,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             html.append(new String(buffer, 0, read));
                             read = in.read(buffer);
                         }
-                        String htmlOut = null;
-                        boolean deletestyles = false;
-                        try
-                        {
-                            deletestyles = this.isDeletestyles();
-                        }
-                        catch (Exception e)
-                        {
-                            log.error(e);
-                        }
+                        String htmlOut = null;                        
                         if (isPages() && getNpages() > 0)
                         {
                             htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath, getNpages());
@@ -203,9 +246,16 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                         //Termina Agregado por Jorge Jiménez (5/07/2009)
                         // eliminar <head><body>, etc
 
-
-
-                        htmlOut = cleanHTML(htmlOut, deletestyles);
+                        boolean deletestyles = false;
+                        try
+                        {
+                            deletestyles = this.isDeletestyles();
+                        }
+                        catch (Exception e)
+                        {
+                            log.error(e);
+                        }
+                        htmlOut = cleanHTML(htmlOut, deletestyles);                        
                         printDocument(out, path, workpath, htmlOut);
                         afterPrintDocument(out);
                         out.close();

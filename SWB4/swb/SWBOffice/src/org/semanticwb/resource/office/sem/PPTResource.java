@@ -23,6 +23,7 @@
  
 package org.semanticwb.resource.office.sem;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.*;
@@ -35,8 +36,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
 public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTResourceBase
-{
-    private static final OfficeDocument document = new OfficeDocument();
+{    
     public PPTResource()
     {
         super();
@@ -54,7 +54,28 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
     protected void afterPrintDocument(PrintWriter out)
     {
     }
-
+    public static String getHTML(File file)
+    {
+        StringBuilder html=new StringBuilder();
+        String workpath=file.getAbsolutePath().replace('\\', '/');
+        file=new File(file.getParentFile().getPath()+"/"+"frame.html");
+        String applicationpath=SWBUtils.getApplicationPath();
+        if(workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+        {
+            workpath=workpath.substring(0,applicationpath.length());
+            workpath=SWBPortal.getContextPath()+workpath;
+        }
+        try
+        {
+            html.append("<div id=\""+  PPTResource.class.getName() +"\"><iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\"></iframe><br>");
+            
+        }
+        catch (Exception e)
+        {
+            html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\">This navigator does not support iframe</iframe></div>");
+        }
+        return html.toString();
+    }
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq,String resourcewebworkpath,String fileppt)
     {
         try
@@ -74,18 +95,25 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
-
-        String version = getVersionToShow();
-        String contentId = getContent();
-        String repositoryName = getRepositoryName();        
+    {       
         try
         {
+            String file=null;
             User user = paramRequest.getUser();
-            String file = document.getContentFile(repositoryName, contentId, version, user);
+            if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
+            {
+                updateFileCache(user);
+            }
+            else
+            {
+                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+            }
+            
             String resourceWebWorkpath=SWBPortal.getWebWorkPath();
             if (file != null)
             {
+
+
                 String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
@@ -97,7 +125,7 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
                 {
                     path += getResourceBase().getWorkPath() + "/" + "frame.html";
                     resourceWebWorkpath+=getResourceBase().getWorkPath();
-                }
+                }                
                 PrintWriter out = response.getWriter();
                 beforePrintDocument(out);
                 String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";

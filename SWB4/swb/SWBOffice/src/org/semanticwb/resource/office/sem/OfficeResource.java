@@ -36,13 +36,14 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.User;
+import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
 public class OfficeResource extends org.semanticwb.resource.office.sem.base.OfficeResourceBase
 {
-
+    protected static final OfficeDocument document=new OfficeDocument();
     public OfficeResource()
     {
         super();
@@ -117,6 +118,24 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
         }
     }
+    protected void updateFileCache(User user)
+    {
+        try
+        {
+            document.setUser(user.getLogin());
+            document.setPassword(user.getLogin());
+            String fileHTML=document.getContentFile(this.getRepositoryName(), this.getContent(), this.getVersionToShow(),user);
+            this.getResourceBase().setAttribute( OfficeDocument.FILE_HTML, fileHTML);
+            this.getResourceBase().updateAttributesToDB();
+            SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
+        }
+        catch(Exception ex)
+        {
+            log.error(ex);
+        }
+    }
+
+
 
     public void loadContent(InputStream in,User user)
     {
@@ -168,11 +187,11 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                 zipFile.delete();
             }
         }
-
+        updateFileCache(user);
     }
 
     
-    public static void loadContent(InputStream in, String dir, String type,User user)
+    public static void loadContentPreview(InputStream in, String dir, String type,User user)
     {
         File zipFile = null;
         try
@@ -202,8 +221,7 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
                         SWBPortal.writeFileToWorkPath(dir + "/" + file, inEntry, user);
                     }
                 }
-                zip.close();
-                //SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(this.getResourceBase());
+                zip.close();                
             }
         }
         catch (Exception e)

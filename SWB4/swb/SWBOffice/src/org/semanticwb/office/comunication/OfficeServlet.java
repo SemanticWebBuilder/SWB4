@@ -36,7 +36,10 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.repository.RepositoryManagerLoader;
+import org.semanticwb.resource.office.sem.ExcelResource;
 import org.semanticwb.resource.office.sem.OfficeResource;
+import org.semanticwb.resource.office.sem.PPTResource;
+import org.semanticwb.resource.office.sem.WordResource;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
 
@@ -186,39 +189,25 @@ public abstract class OfficeServlet extends XMLRPCServlet
                 final String name=UUID.randomUUID().toString();
                 final String dir=SWBPortal.getWorkPath()+"/"+name;
                 final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(pUserName);
-                OfficeResource.loadContent(in, dir,type,wbuser);
+                OfficeResource.loadContentPreview(in, dir,type,wbuser);
                 String file = doc.getContentFile(repositoryName, contentId, versionName);
                 if (file != null)
                 {
-
-                    file = file.replace(".doc", ".html");
-                    file = file.replace(".odt", ".html");
-                    final String path = dir+ "\\" + file;
-                    final StringBuffer html = new StringBuffer();
-                    final File filecontent = new File(path);
-                    if (filecontent.exists())
+                    PrintWriter out = response.getWriter();
+                    File content=new File(dir+"/"+file);
+                    if(type.equals("word"))
                     {
-                        final FileInputStream inFile = new FileInputStream(path);
-                        final byte[] buffer = new byte[2048];
-                        int read = inFile.read(buffer);
-                        while (read != -1)
-                        {
-                            html.append(new String(buffer, 0, read));
-                            read = inFile.read(buffer);
-                        }
-                        inFile.close();
-                        String workpath = dir + "/";
-                        //String htmlOut = SWBPortal.UTIL.parseHTML(html.toString(), workpath);
-                        //PrintWriter out = response.getWriter();
-                        //out.write(htmlOut);
-                        //out.close();
+                        out.println(WordResource.getHTML(content));
+                    }
+                    else if(type.equals("excel"))
+                    {
+                        out.println(ExcelResource.getHTML(content));
                     }
                     else
                     {
-                        //log.error("Contenido no encontrado en ruta: " + filecontent.getAbsolutePath() + ": " + resource.getContent() + "@" + resource.getRepositoryName());
-                    }
+                        out.println(PPTResource.getHTML(content));
+                    }                    
                 }
-
                 in.close();
             }
             catch (Exception e)
