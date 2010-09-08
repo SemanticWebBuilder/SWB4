@@ -241,6 +241,15 @@ namespace WB4Office2007Library
             {
                 htmlFile.Delete();
             }
+            presentation.WebOptions.AllowPNG = Office.MsoTriState.msoTrue;
+            presentation.WebOptions.OrganizeInFolder = Office.MsoTriState.msoTrue;
+            presentation.WebOptions.RelyOnVML = Office.MsoTriState.msoFalse;            
+            presentation.WebOptions.UseLongFileNames = Office.MsoTriState.msoTrue;
+            presentation.WebOptions.IncludeNavigation = Office.MsoTriState.msoTrue;
+            presentation.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserIE6;
+            presentation.WebOptions.HTMLVersion = PowerPoint.PpHTMLVersion.ppHTMLAutodetect;
+            presentation.WebOptions.ResizeGraphics = Office.MsoTriState.msoTrue;
+            presentation.WebOptions.Encoding = Office.MsoEncoding.msoEncodingISO88591Latin1;
             presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTMLDual, Office.MsoTriState.msoFalse);            
             presentation.Close();
             presentation = (PowerPoint.Presentation)application.Presentations.Open(docX.FullName, Office.MsoTriState.msoFalse, Office.MsoTriState.msoFalse, Office.MsoTriState.msoTrue);
