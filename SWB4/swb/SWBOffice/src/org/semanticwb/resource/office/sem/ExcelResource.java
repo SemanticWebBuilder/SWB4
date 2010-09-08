@@ -43,8 +43,7 @@ import org.semanticwb.portal.api.*;
 
 
 public class ExcelResource extends org.semanticwb.resource.office.sem.base.ExcelResourceBase
-{
-    private static final OfficeDocument document = new OfficeDocument();
+{    
     public ExcelResource()
     {
         super();
@@ -62,7 +61,38 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     protected void afterPrintDocument(PrintWriter out)
     {
     }
-
+    public static String getHTML(File file)
+    {
+        StringBuilder html=new StringBuilder();
+        String name = file.getName().replace(".xls", ".html");
+        try
+        {
+            name = java.net.URLDecoder.decode(name, "utf-8");
+            file=new File(file.getParentFile().getAbsolutePath()+"/"+name);
+            String workpath=file.getAbsolutePath().replace('\\', '/');
+            String applicationpath=SWBUtils.getApplicationPath();
+            if(workpath.toLowerCase().startsWith(applicationpath.toLowerCase()))
+            {
+                workpath=workpath.substring(0,applicationpath.length());
+                workpath=SWBPortal.getContextPath()+workpath;
+            }            
+            html.append("<div id=\""+ ExcelResource.class.getName() +"\">");
+            try
+            {
+                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\"></iframe>");
+            }
+            catch (Exception e)
+            {
+                html.append("<iframe width='100%' height='500' frameborder=\"0\" scrolling=\"auto\" src=\"" + workpath + "\">This navigator does not support iframe</iframe>");
+            }
+            html.append("</div>");
+        }
+        catch(Exception ue)
+        {
+            log.error(ue);
+        }
+        return html.toString();
+    }
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq)
     {
         out.write("<div id=\""+ ExcelResource.class.getName() +"\">");
@@ -98,12 +128,7 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                     if (!entry.isDirectory())
                     {
                         InputStream inEntry = zip.getInputStream(entry);
-                        String file=entry.getName();
-                        /*int pos=file.lastIndexOf("/");
-                        if(pos!=-1)
-                        {
-                            file=file.substring(pos+1);
-                        }*/
+                        String file=entry.getName();                        
                         SWBPortal.writeFileToWorkPath(getResourceBase().getWorkPath() + "/" + file, inEntry, user);
                     }
                 }
@@ -121,26 +146,29 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
                 zipFile.delete();
             }
         }
-
+        updateFileCache(user);
     }
 
-
+    
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {        
-        String version = getVersionToShow();
-        String contentId = getContent();
-        String repositoryName = getRepositoryName();
-        
-        try
+    {   try
         {
             User user = paramRequest.getUser();
-            String file = document.getContentFile(repositoryName, contentId, version, user);
+            String file=null;
+            if(this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML)==null)
+            {
+                updateFileCache(user);
+            }
+            else
+            {
+                file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+            }
             if (file != null)
             {
-
                 file = file.replace(".xls", ".html");
+                file = java.net.URLDecoder.decode(file, "utf-8");
                 String path = SWBPortal.getWebWorkPath();
                 if (path.endsWith("/"))
                 {
