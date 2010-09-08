@@ -168,15 +168,28 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 if(!filecontent.exists())
                 {
                     updateFileCache(user);
+                    file=this.getResourceBase().getAttribute(OfficeDocument.FILE_HTML);
+                    file = file.replace(".doc", ".html");
+                    file = java.net.URLDecoder.decode(file, "utf-8");
+                    path = SWBPortal.getWorkPath();
+                    if (path.endsWith("/"))
+                    {
+                        path = path.substring(0, path.length() - 1);
+                        path += getResourceBase().getWorkPath() + "/" + file;
+                    }
+                    else
+                    {
+                        path += getResourceBase().getWorkPath() + "/" + file;
+                    }
+                    filecontent = new File(path);
                 }
                 if (filecontent.exists())
                 {
-                    
-                    File fileHTML=new File(path);
+                                        
                     boolean isutf8=false;
                     try
                     {
-                        isutf8=SWBUtils.IO.isUTF8(fileHTML);
+                        isutf8=SWBUtils.IO.isUTF8(filecontent);
                     }
                     catch(IOException ioe)
                     {
@@ -191,7 +204,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             FileReader reader=null;
                             try
                             {
-                                reader=new FileReader(fileHTML);
+                                reader=new FileReader(filecontent);
                                 BufferedReader br=new BufferedReader(reader);
                                 String line=br.readLine();
                                 while(line!=null)
@@ -230,7 +243,7 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                             FileInputStream in=null;
                             try
                             {
-                                in = new FileInputStream(file);
+                                in = new FileInputStream(filecontent);
                                 byte[] buffer = new byte[2048];
                                 int read = in.read(buffer);
                                 while (read != -1)
