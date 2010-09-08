@@ -24,10 +24,12 @@ package org.semanticwb.resource.office.sem;
 
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -169,18 +171,92 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
                 }
                 if (filecontent.exists())
                 {
-
+                    
+                    File fileHTML=new File(path);
+                    boolean isutf8=false;
+                    try
+                    {
+                        isutf8=SWBUtils.IO.isUTF8(fileHTML);
+                    }
+                    catch(IOException ioe)
+                    {
+                        log.error(ioe);
+                    }
                     String workpath = SWBPortal.getWebWorkPath() + getResourceBase().getWorkPath() + "/";
                     StringBuilder html = new StringBuilder();
                     try
                     {
-                        FileInputStream in = new FileInputStream(path);
-                        byte[] buffer = new byte[2048];
-                        int read = in.read(buffer);
-                        while (read != -1)
+                        if(isutf8)
                         {
-                            html.append(new String(buffer, 0, read));
-                            read = in.read(buffer);
+                            FileReader reader=null;
+                            try
+                            {
+                                reader=new FileReader(fileHTML);
+                                BufferedReader br=new BufferedReader(reader);
+                                String line=br.readLine();
+                                while(line!=null)
+                                {
+                                    if(isutf8)
+                                    {
+                                        line=new String(line.getBytes(reader.getEncoding()),"utf-8");
+                                    }
+                                    html.append(line);
+                                    html.append("\r\n");
+                                    line=br.readLine();
+                                }
+                            }
+                            catch(Exception ioe)
+                            {
+                                log.error(ioe);
+                            }
+                            finally
+                            {
+                                if(reader!=null)
+                                {
+                                    try
+                                    {
+                                        reader.close();
+                                    }
+                                    catch(IOException ioe)
+                                    {
+                                        log.error(ioe);
+                                    }
+                                }
+                            }
+                            
+                        }
+                        else
+                        {
+                            FileInputStream in=null;
+                            try
+                            {
+                                in = new FileInputStream(file);
+                                byte[] buffer = new byte[2048];
+                                int read = in.read(buffer);
+                                while (read != -1)
+                                {
+                                    html.append(new String(buffer, 0, read));
+                                    read = in.read(buffer);
+                                }
+                            }
+                            catch(Exception ioe)
+                            {
+                                log.error(ioe);
+                            }
+                            finally
+                            {
+                                if(in!=null)
+                                {
+                                    try
+                                    {
+                                        in.close();
+                                    }
+                                    catch(IOException ioe)
+                                    {
+                                        log.error(ioe);
+                                    }
+                                }
+                            }
                         }
                         String htmlOut = null;                        
                         if (isPages() && getNpages() > 0)
