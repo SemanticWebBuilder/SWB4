@@ -336,6 +336,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String workingDirectory = SWBPortal.getWebWorkPath()
                                   + resource.getWorkPath();
         String message = null;
+        System.out.println("request.getParameter(\"operation\"): " + request.getParameter("operation"));
 
         if (textToSave != null) {
             try {
@@ -358,6 +359,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 FileWriter writer = new FileWriter(file);
                 //System.out.println("workingDirectory:"+workingDirectory);
 
+                if (deleteTmp) {
+                    //modifica las rutas de los archivos asociados si se acaba de cargar un archivo HTML antes de guardar
+                    String directorioSinTmp = SWBPortal.getWebWorkPath()
+                            + resource.getWorkPath() + "/"
+                            + (versionToDelete > 1 ? versionToDelete : 1) + "/";
+                    String directorioConTmp = directorioSinTmp + "tmp/";
+                    textToSave = SWBUtils.TEXT.replaceAll(textToSave, directorioConTmp, directorioSinTmp);
+                }
                 //Replace WorkPath
                 textToSave = SWBUtils.TEXT.replaceAll(textToSave, workingDirectory+"/"+versionNumber+"/", "<workpath/>");
 
