@@ -24,9 +24,12 @@
 package org.semanticwb.portal.resources.sem;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -336,7 +339,6 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String workingDirectory = SWBPortal.getWebWorkPath()
                                   + resource.getWorkPath();
         String message = null;
-        System.out.println("request.getParameter(\"operation\"): " + request.getParameter("operation"));
 
         if (textToSave != null) {
             try {
@@ -516,6 +518,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                             localRelativePath,
                             SWBPortal.getWebWorkPath() + resource.getWorkPath()
                                 + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
+                    checkPathsInFile(SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + numversion + "/tmp/index.html",
+                            filesAttached, SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
                 } else {
                     SWBUtils.IO.copy(portletWorkPath + filename,
                             portletWorkPath + "index.html", false, "", "");
@@ -575,6 +579,74 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             bs.append("\n</html>");
         }
         out.println(bs.toString());
+    }
+
+    private void checkPathsInFile(String filePath, String[] filesAttached, String pathToAdd) {
+        File file = new File(filePath);
+        StringBuilder sb = null;
+        boolean failure = false;
+        if (file.exists() && filesAttached != null && filesAttached.length > 0) {
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(filePath));
+                sb = new StringBuilder(1024);
+                String lineRead = in.readLine();
+                while (lineRead != null) {
+                    sb.append(lineRead);
+                    sb.append("\n");
+                    lineRead = in.readLine();
+                }
+                in.close();
+                in = null;
+            } catch (FileNotFoundException fnfe) {
+                failure = true;
+                log.error("File not found after uploading HTML file.", fnfe);
+            } catch (IOException ioe) {
+                failure = true;
+                log.error("I/O error after uploading HTML file", ioe);
+            }
+            if (failure) {
+                return;
+            }
+            String fileContent = sb.toString();
+            sb = new StringBuilder(1024);
+            //Se busca cada archivo asociado en el contenido del HTML
+            for (int i = 0; i < filesAttached.length; i++) {
+                String attachment = filesAttached[i];
+                int index = 0;
+                if (attachment.indexOf('/') == -1) {
+                    while (fileContent.indexOf(attachment, index) > -1) {
+                        int indexFound = fileContent.indexOf(attachment, index);
+                        char charBefore = fileContent.charAt(indexFound - 1);
+
+                        //Se agrega la ruta de la carpeta tmp si el archivo asociado estaba almacenado en la misma carpeta que el HTML
+                        if (charBefore == '\"' || charBefore == '=' || charBefore == '\'') {
+                            sb.append(fileContent.substring(index, indexFound));
+                            sb.append(pathToAdd);
+                            sb.append("/");
+                            sb.append(attachment);
+                            sb.append(fileContent.substring(indexFound + attachment.length(), fileContent.length() - 1));
+                        }
+                        index = indexFound + attachment.length();
+                    }
+                    fileContent = sb.toString();
+                    sb = new StringBuilder(1024);
+                }
+                if (i == filesAttached.length - 1) {
+                    sb = new StringBuilder(1024);
+                    sb.append(fileContent);
+                }
+            }
+
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filePath)));
+                out.print(sb.toString());
+                out.flush();
+                out.close();
+                out = null;
+            } catch (IOException ioe) {
+                log.error("Error writing HTMLContent file's content, after uploading a HTML file.", ioe);
+            }
+        }
     }
 
     /**
@@ -736,6 +808,10 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n            <br />");
         output.append("\n            <input id=\"btnUpload\" type=\"button\" value=\"Send it to the Server\" fcklang=\"DlgLnkBtnUpload\" onclick=\"isOk();\"/>");
         output.append("\n        </form>");
+        output.append("\n    </div>");
+        output.append("\n    <div>");
+        output.append("\n        Se recomienda que todos los archivos asociados al que se va a cargar, se encuentren almacenados en la misma carpeta.");
+        output.append("\n        Adem&aacute;s de que los nombres y rutas de todos los archivos no contengan espacios en blanco.");
         output.append("\n    </div>");
         output.append("\n</body>");
         output.append("\n</html>");
