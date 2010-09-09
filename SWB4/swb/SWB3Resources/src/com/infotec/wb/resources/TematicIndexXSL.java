@@ -170,12 +170,12 @@ public class TematicIndexXSL extends GenericAdmResource
                     
                     if(usrlanguage!=null)
                     {
-                        father.setAttribute("hassondescription","1");
+                        son.setAttribute("hassondescription","1");
                         Element fatherdescription = dom.createElement("sondescription");
                         String sonDescr = hijo.getDescription(usrlanguage);
                         if(null==sonDescr) sonDescr="";
                         fatherdescription.appendChild(dom.createTextNode(sonDescr));
-                        father.appendChild(fatherdescription);
+                        son.appendChild(fatherdescription);
                     }else{
                         Iterator <org.semanticwb.model.Language> itLang=paramRequest.getWebPage().getWebSite().listLanguages();
                         while(itLang.hasNext())
