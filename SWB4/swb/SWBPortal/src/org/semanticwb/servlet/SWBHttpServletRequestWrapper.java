@@ -219,6 +219,7 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
      */
     public void addParameter(String name, String value)
     {
+        if(name==null)return;
         //System.out.println("addParameter:"+name+"="+value);
         if(removeParameters || mergeParameters)
         {
