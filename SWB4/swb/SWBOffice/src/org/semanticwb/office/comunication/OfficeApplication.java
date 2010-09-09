@@ -1297,8 +1297,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
-        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
-        return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, parent.getSemanticObject());
+        if(parent!=null)
+        {
+            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+            return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, parent.getSemanticObject());
+        }
+        return false;
     }
 
     public boolean canCreateCategory(String repositoryName) throws Exception
