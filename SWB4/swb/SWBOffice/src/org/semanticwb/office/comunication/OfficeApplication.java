@@ -1297,9 +1297,9 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
         WebPage parent = site.getWebPage(webpage.id);
-        if(parent!=null)
-        {
-            User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
+        if(parent!=null && user!=null)
+        {            
             return SWBPortal.getAdminFilterMgr().haveClassAction(ouser, parent.getSemanticObject().getSemanticClass(), AdminFilter.ACTION_ADD) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(ouser, parent.getSemanticObject());
         }
         return false;
