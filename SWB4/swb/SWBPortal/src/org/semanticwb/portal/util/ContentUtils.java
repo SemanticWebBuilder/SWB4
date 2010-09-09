@@ -245,7 +245,7 @@ public class ContentUtils {
         int totPages = getMsContentPagesNumber(htmlOut);
         if (totPages > 1) {
             int ipage = 1;
-            if (npage != null) {
+            if (npage != null && npage.length()>0) {
                 ipage = Integer.parseInt(npage);
             } else {
                 ipage = 1;
