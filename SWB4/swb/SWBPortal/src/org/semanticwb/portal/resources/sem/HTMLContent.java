@@ -502,6 +502,8 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             if (filesAttached.length > 0 && filesAttached[0].indexOf("/") != -1) {
                 localRelativePath = filesAttached[0].substring(0,
                         filesAttached[0].lastIndexOf("/"));
+            } else if (filesAttached.length > 0 && filesAttached[0].indexOf("/") == -1) {
+                localRelativePath = "";
             }
             file = new File(portletWorkPath + HTMLContent.FOLDER);
             if (!file.exists()) {
@@ -513,11 +515,16 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 //Se cambian las rutas a los archivos asociados.
                 if (strAttaches != null && strAttaches.length() > 0 &&
                         localRelativePath != null) {
-                    SWBUtils.IO.copy(portletWorkPath + filename,
-                            portletWorkPath + "index.html", true,
-                            localRelativePath,
-                            SWBPortal.getWebWorkPath() + resource.getWorkPath()
-                                + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
+                    if (localRelativePath.length() > 0) {
+                        SWBUtils.IO.copy(portletWorkPath + filename,
+                                portletWorkPath + "index.html", true,
+                                localRelativePath,
+                                SWBPortal.getWebWorkPath() + resource.getWorkPath()
+                                    + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
+                    } else {
+                        SWBUtils.IO.copy(portletWorkPath + filename,
+                                portletWorkPath + "index.html", false, "", "");
+                    }
                     checkPathsInFile(SWBPortal.getWorkPath() + resource.getWorkPath() + "/" + numversion + "/tmp/index.html",
                             filesAttached, SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + numversion + "/tmp/" + HTMLContent.FOLDER);
                 } else {
@@ -583,16 +590,18 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
     private void checkPathsInFile(String filePath, String[] filesAttached, String pathToAdd) {
         File file = new File(filePath);
-        StringBuilder sb = null;
+        StringBuilder contentRead = null;
         boolean failure = false;
         if (file.exists() && filesAttached != null && filesAttached.length > 0) {
+
+            //Lectura del contenido del archivo index.html en el directorio tmp
             try {
                 BufferedReader in = new BufferedReader(new FileReader(filePath));
-                sb = new StringBuilder(1024);
+                contentRead = new StringBuilder(1024);
                 String lineRead = in.readLine();
                 while (lineRead != null) {
-                    sb.append(lineRead);
-                    sb.append("\n");
+                    contentRead.append(lineRead);
+                    contentRead.append("\n");
                     lineRead = in.readLine();
                 }
                 in.close();
@@ -607,12 +616,18 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
             if (failure) {
                 return;
             }
-            String fileContent = sb.toString();
-            sb = new StringBuilder(1024);
+
+            String fileContent = contentRead.toString();
+            StringBuilder sbMod = null;
+
             //Se busca cada archivo asociado en el contenido del HTML
             for (int i = 0; i < filesAttached.length; i++) {
+                sbMod = new StringBuilder(1024);
                 String attachment = filesAttached[i];
                 int index = 0;
+
+                //Solo se modifican las rutas de los archivos que se encontraban
+                //en la misma carpeta que el archivo HTML
                 if (attachment.indexOf('/') == -1) {
                     while (fileContent.indexOf(attachment, index) > -1) {
                         int indexFound = fileContent.indexOf(attachment, index);
@@ -620,26 +635,29 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
                         //Se agrega la ruta de la carpeta tmp si el archivo asociado estaba almacenado en la misma carpeta que el HTML
                         if (charBefore == '\"' || charBefore == '=' || charBefore == '\'') {
-                            sb.append(fileContent.substring(index, indexFound));
-                            sb.append(pathToAdd);
-                            sb.append("/");
-                            sb.append(attachment);
-                            sb.append(fileContent.substring(indexFound + attachment.length(), fileContent.length() - 1));
+                            sbMod.append(fileContent.substring(index, indexFound));
+                            sbMod.append(pathToAdd);
+                            sbMod.append("/");
+                            sbMod.append(attachment);
+                            sbMod.append(fileContent.substring(indexFound + attachment.length(), fileContent.length()));
                         }
                         index = indexFound + attachment.length();
                     }
-                    fileContent = sb.toString();
-                    sb = new StringBuilder(1024);
-                }
-                if (i == filesAttached.length - 1) {
-                    sb = new StringBuilder(1024);
-                    sb.append(fileContent);
+                    if (sbMod.length() > 0) {
+                        fileContent = sbMod.toString();
+                    }
                 }
             }
 
+            //Si se modifico el contenido del archivo, los cambios están en sbMod:
+            if (sbMod.length() > 1) {
+                contentRead = sbMod;
+            }
+
+            //Se escribe el nuevo contenido del archivo index.html en la carpeta tmp
             try {
                 PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filePath)));
-                out.print(sb.toString());
+                out.print(contentRead.toString());
                 out.flush();
                 out.close();
                 out = null;
