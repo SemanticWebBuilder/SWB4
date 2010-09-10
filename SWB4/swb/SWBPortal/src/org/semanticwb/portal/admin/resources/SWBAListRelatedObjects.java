@@ -113,6 +113,9 @@ public class SWBAListRelatedObjects extends GenericResource {
             out.println("<thead>");
             out.println("<tr>");
             out.println("<th>");
+            out.println("Id");
+            out.println("</th>");
+            out.println("<th>");
             out.println(paramRequest.getLocaleString("th_title"));
             out.println("</th>");
             out.println("<th>");
@@ -180,6 +183,10 @@ public class SWBAListRelatedObjects extends GenericResource {
 //                urlr.setAction("remove");
 //                out.println("<a href=\"#\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + " " + semobj.getDisplayName(user.getLanguage()) + "?')){submitUrl('" + urlr + "',this);} else { return false;}\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=0></a>");
 //                out.println("</td>");
+
+                out.println("<td>");
+                out.println(sobj.getId());
+                out.println("</td>");
 
                 // Titulo, para abrir en un nuevo tab
 
