@@ -59,8 +59,13 @@ public class MigrateOfficeContents
         String workpath = WBUtils.getInstance().getWorkPath() + resource.getResourceBase().getResourceWorkPath();
         String className = resource.getResourceBase().getResourceType().getObjclass();
         String contentid = String.valueOf(resource.getResourceBase().getId());
-        String file = resource.getResourceBase().getAttribute("url1");
         String version = String.valueOf(resource.getResourceBase().getActualversion());
+
+        String file = resource.getResourceBase().getAttribute("url"+version);
+        if(file==null || file.trim().equals(""))
+        {
+            file = resource.getResourceBase().getAttribute("url1");
+        }
         if (!document.isOfficeDocument(className, workpath, contentid, file, version))
         {
             return null;
