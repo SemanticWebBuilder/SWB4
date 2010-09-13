@@ -1,33 +1,81 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
+   // TODO: Auto-generated Javadoc
+/**
+    * Objeto utilizado para identificar una version de algun componente.
+    */
 public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
+   
+   /** Objeto utilizado para identificar una version de algun componente. */
     public static final org.semanticwb.platform.SemanticClass swb_VersionInfo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
+    
+    /** The Constant swb_previousVersion. */
     public static final org.semanticwb.platform.SemanticProperty swb_previousVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#previousVersion");
+    
+    /** The Constant swb_versionComment. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionComment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionComment");
+    
+    /** The Constant swb_nextVersion. */
     public static final org.semanticwb.platform.SemanticProperty swb_nextVersion=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#nextVersion");
+    
+    /** The Constant swb_versionAuthorized. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionAuthorized=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionAuthorized");
+    
+    /** The Constant swb_versionNumber. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionNumber");
+    
+    /** The Constant swb_versionValue. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionValue");
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
    */
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
+    
+    /** The Constant swb_versionLockedBy. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionLockedBy=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionLockedBy");
+    
+    /** The Constant swb_versionFile. */
     public static final org.semanticwb.platform.SemanticProperty swb_versionFile=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#versionFile");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#VersionInfo");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of VersionInfo for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.VersionInfo
-       */
+        * Returns a list of VersionInfo for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.VersionInfo
+        */
 
         public static java.util.Iterator<org.semanticwb.model.VersionInfo> listVersionInfos(org.semanticwb.model.SWBModel model)
         {
@@ -45,6 +93,12 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.VersionInfo>(it, true);
         }
 
+        /**
+         * Creates the version info.
+         * 
+         * @param model the model
+         * @return the org.semanticwb.model. version info
+         */
         public static org.semanticwb.model.VersionInfo createVersionInfo(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
@@ -208,17 +262,20 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Constructs a VersionInfoBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the VersionInfo
-   */
+    * Constructs a VersionInfoBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the VersionInfo
+    */
     public VersionInfoBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+   
    /**
-   * Sets the value for the property PreviousVersion
-   * @param value PreviousVersion to set
-   */
+    * Sets the value for the property PreviousVersion.
+    * 
+    * @param value PreviousVersion to set
+    */
 
     public void setPreviousVersion(org.semanticwb.model.VersionInfo value)
     {
@@ -230,9 +287,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             removePreviousVersion();
         }
     }
+   
    /**
-   * Remove the value for PreviousVersion property
-   */
+    * Remove the value for PreviousVersion property.
+    */
 
     public void removePreviousVersion()
     {
@@ -240,9 +298,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the PreviousVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
+    * Gets the PreviousVersion.
+    * 
+    * @return a org.semanticwb.model.VersionInfo
+    */
     public org.semanticwb.model.VersionInfo getPreviousVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -255,26 +314,30 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the VersionComment property
-* @return String with the VersionComment
-*/
+ * Gets the VersionComment property.
+ * 
+ * @return String with the VersionComment
+ */
     public String getVersionComment()
     {
         return getSemanticObject().getProperty(swb_versionComment);
     }
 
 /**
-* Sets the VersionComment property
-* @param value long with the VersionComment
-*/
+ * Sets the VersionComment property.
+ * 
+ * @param value long with the VersionComment
+ */
     public void setVersionComment(String value)
     {
         getSemanticObject().setProperty(swb_versionComment, value);
     }
+   
    /**
-   * Sets the value for the property NextVersion
-   * @param value NextVersion to set
-   */
+    * Sets the value for the property NextVersion.
+    * 
+    * @param value NextVersion to set
+    */
 
     public void setNextVersion(org.semanticwb.model.VersionInfo value)
     {
@@ -286,9 +349,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             removeNextVersion();
         }
     }
+   
    /**
-   * Remove the value for NextVersion property
-   */
+    * Remove the value for NextVersion property.
+    */
 
     public void removeNextVersion()
     {
@@ -296,9 +360,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the NextVersion
-   * @return a org.semanticwb.model.VersionInfo
-   */
+    * Gets the NextVersion.
+    * 
+    * @return a org.semanticwb.model.VersionInfo
+    */
     public org.semanticwb.model.VersionInfo getNextVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -311,62 +376,70 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the VersionAuthorized property
-* @return boolean with the VersionAuthorized
-*/
+ * Gets the VersionAuthorized property.
+ * 
+ * @return boolean with the VersionAuthorized
+ */
     public boolean isVersionAuthorized()
     {
         return getSemanticObject().getBooleanProperty(swb_versionAuthorized);
     }
 
 /**
-* Sets the VersionAuthorized property
-* @param value long with the VersionAuthorized
-*/
+ * Sets the VersionAuthorized property.
+ * 
+ * @param value long with the VersionAuthorized
+ */
     public void setVersionAuthorized(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_versionAuthorized, value);
     }
 
 /**
-* Gets the VersionNumber property
-* @return int with the VersionNumber
-*/
+ * Gets the VersionNumber property.
+ * 
+ * @return int with the VersionNumber
+ */
     public int getVersionNumber()
     {
         return getSemanticObject().getIntProperty(swb_versionNumber);
     }
 
 /**
-* Sets the VersionNumber property
-* @param value long with the VersionNumber
-*/
+ * Sets the VersionNumber property.
+ * 
+ * @param value long with the VersionNumber
+ */
     public void setVersionNumber(int value)
     {
         getSemanticObject().setIntProperty(swb_versionNumber, value);
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
+ * Gets the Created property.
+ * 
+ * @return java.util.Date with the Created
+ */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Created property
-* @param value long with the Created
-*/
+ * Sets the Created property.
+ * 
+ * @param value long with the Created
+ */
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
+   
    /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
+    * Sets the value for the property ModifiedBy.
+    * 
+    * @param value ModifiedBy to set
+    */
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
@@ -378,9 +451,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             removeModifiedBy();
         }
     }
+   
    /**
-   * Remove the value for ModifiedBy property
-   */
+    * Remove the value for ModifiedBy property.
+    */
 
     public void removeModifiedBy()
     {
@@ -388,9 +462,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
+    * Gets the ModifiedBy.
+    * 
+    * @return a org.semanticwb.model.User
+    */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -403,44 +478,50 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the VersionValue property
-* @return String with the VersionValue
-*/
+ * Gets the VersionValue property.
+ * 
+ * @return String with the VersionValue
+ */
     public String getVersionValue()
     {
         return getSemanticObject().getProperty(swb_versionValue);
     }
 
 /**
-* Sets the VersionValue property
-* @param value long with the VersionValue
-*/
+ * Sets the VersionValue property.
+ * 
+ * @param value long with the VersionValue
+ */
     public void setVersionValue(String value)
     {
         getSemanticObject().setProperty(swb_versionValue, value);
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
+ * Gets the Updated property.
+ * 
+ * @return java.util.Date with the Updated
+ */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
 /**
-* Sets the Updated property
-* @param value long with the Updated
-*/
+ * Sets the Updated property.
+ * 
+ * @param value long with the Updated
+ */
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
     }
+   
    /**
-   * Sets the value for the property VersionLockedBy
-   * @param value VersionLockedBy to set
-   */
+    * Sets the value for the property VersionLockedBy.
+    * 
+    * @param value VersionLockedBy to set
+    */
 
     public void setVersionLockedBy(org.semanticwb.model.User value)
     {
@@ -452,9 +533,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             removeVersionLockedBy();
         }
     }
+   
    /**
-   * Remove the value for VersionLockedBy property
-   */
+    * Remove the value for VersionLockedBy property.
+    */
 
     public void removeVersionLockedBy()
     {
@@ -462,9 +544,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the VersionLockedBy
-   * @return a org.semanticwb.model.User
-   */
+    * Gets the VersionLockedBy.
+    * 
+    * @return a org.semanticwb.model.User
+    */
     public org.semanticwb.model.User getVersionLockedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -477,26 +560,30 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
 /**
-* Gets the VersionFile property
-* @return String with the VersionFile
-*/
+ * Gets the VersionFile property.
+ * 
+ * @return String with the VersionFile
+ */
     public String getVersionFile()
     {
         return getSemanticObject().getProperty(swb_versionFile);
     }
 
 /**
-* Sets the VersionFile property
-* @param value long with the VersionFile
-*/
+ * Sets the VersionFile property.
+ * 
+ * @param value long with the VersionFile
+ */
     public void setVersionFile(String value)
     {
         getSemanticObject().setProperty(swb_versionFile, value);
     }
+   
    /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
+    * Sets the value for the property Creator.
+    * 
+    * @param value Creator to set
+    */
 
     public void setCreator(org.semanticwb.model.User value)
     {
@@ -508,9 +595,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
             removeCreator();
         }
     }
+   
    /**
-   * Remove the value for Creator property
-   */
+    * Remove the value for Creator property.
+    */
 
     public void removeCreator()
     {
@@ -518,9 +606,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
+    * Gets the Creator.
+    * 
+    * @return a org.semanticwb.model.User
+    */
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
@@ -533,9 +622,10 @@ public abstract class VersionInfoBase extends org.semanticwb.model.SWBClass impl
     }
 
    /**
-   * Gets the WebSite
-   * @return a instance of org.semanticwb.model.WebSite
-   */
+    * Gets the WebSite.
+    * 
+    * @return a instance of org.semanticwb.model.WebSite
+    */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

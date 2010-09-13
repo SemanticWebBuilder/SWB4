@@ -808,6 +808,11 @@ public class WebPage extends WebPageBase
     }
 
 
+    /**
+     * Gets the last content.
+     * 
+     * @return the last content
+     */
     private Resource getLastContent(){
         Resource ret = null;
         Date auxt = null;

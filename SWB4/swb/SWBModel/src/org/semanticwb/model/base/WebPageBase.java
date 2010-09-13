@@ -1,37 +1,84 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
-   /**
+   // TODO: Auto-generated Javadoc
+/**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal. 
    */
 public abstract class WebPageBase extends org.semanticwb.model.Topic implements org.semanticwb.model.Searchable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable
 {
+    
+    /** The Constant swb_webPageSortName. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageSortName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageSortName");
+    
+    /** The Constant swb_webPageURLType. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageURLType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURLType");
    /**
    * Una Página Web es el elemento de SemanticWebBuilder a través del cual se estructura la información del portal.
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
+    
+    /** The Constant swb_hasWebPageVirtualParent. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualParent");
+    
+    /** The Constant swb_webPageTarget. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageTarget=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageTarget");
+    
+    /** The Constant swb_hasWebPageVirtualChild. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageVirtualChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageVirtualChild");
+    
+    /** The Constant swb_webPageIconClass. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageIconClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageIconClass");
+    
+    /** The Constant swb_hasWebPageChild. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasWebPageChild=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild");
+    
+    /** The Constant swb_webPageParent. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageParent=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageParent");
+    
+    /** The Constant swb_webPageDiskUsage. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageDiskUsage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageDiskUsage");
+    
+    /** The Constant swb_webPageURL. */
     public static final org.semanticwb.platform.SemanticProperty swb_webPageURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#webPageURL");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebPage");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of WebPage for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.WebPage
-       */
+        * Returns a list of WebPage for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.WebPage
+        */
 
         public static java.util.Iterator<org.semanticwb.model.WebPage> listWebPages(org.semanticwb.model.SWBModel model)
         {
@@ -482,9 +529,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Constructs a WebPageBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the WebPage
-   */
+    * Constructs a WebPageBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the WebPage
+    */
     public WebPageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -500,10 +548,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to verify
-   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
-   */
+    * Gets true if has a UserGroupRef.
+    * 
+    * @param value org.semanticwb.model.UserGroupRef to verify
+    * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
+    */
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
         boolean ret=false;
@@ -515,34 +564,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets all the UserGroupRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
-   */
+    * Gets all the UserGroupRefs inherits.
+    * 
+    * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+    */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
     }
+   
    /**
-   * Adds a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to add
-   */
+    * Adds a UserGroupRef.
+    * 
+    * @param value org.semanticwb.model.UserGroupRef to add
+    */
 
     public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the UserGroupRef
-   */
+    * Removes all the UserGroupRef.
+    */
 
     public void removeAllUserGroupRef()
     {
         getSemanticObject().removeProperty(swb_hasUserGroupRef);
     }
+   
    /**
-   * Removes a UserGroupRef
-   * @param value org.semanticwb.model.UserGroupRef to remove
-   */
+    * Removes a UserGroupRef.
+    * 
+    * @param value org.semanticwb.model.UserGroupRef to remove
+    */
 
     public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
@@ -550,9 +605,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the UserGroupRef
-   * @return a org.semanticwb.model.UserGroupRef
-   */
+    * Gets the UserGroupRef.
+    * 
+    * @return a org.semanticwb.model.UserGroupRef
+    */
     public org.semanticwb.model.UserGroupRef getUserGroupRef()
     {
          org.semanticwb.model.UserGroupRef ret=null;
@@ -565,90 +621,100 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the Reviews property
-* @return long with the Reviews
-*/
+ * Gets the Reviews property.
+ * 
+ * @return long with the Reviews
+ */
     public long getReviews()
     {
         return getSemanticObject().getLongProperty(swb_reviews);
     }
 
 /**
-* Sets the Reviews property
-* @param value long with the Reviews
-*/
+ * Sets the Reviews property.
+ * 
+ * @param value long with the Reviews
+ */
     public void setReviews(long value)
     {
         getSemanticObject().setLongProperty(swb_reviews, value);
     }
 
 /**
-* Gets the Rank property
-* @return double with the Rank
-*/
+ * Gets the Rank property.
+ * 
+ * @return double with the Rank
+ */
     public double getRank()
     {
         return getSemanticObject().getDoubleProperty(swb_rank);
     }
 
 /**
-* Sets the Rank property
-* @param value long with the Rank
-*/
+ * Sets the Rank property.
+ * 
+ * @param value long with the Rank
+ */
     public void setRank(double value)
     {
         getSemanticObject().setDoubleProperty(swb_rank, value);
     }
 
 /**
-* Gets the SortName property
-* @return String with the SortName
-*/
+ * Gets the SortName property.
+ * 
+ * @return String with the SortName
+ */
     public String getSortName()
     {
         return getSemanticObject().getProperty(swb_webPageSortName);
     }
 
 /**
-* Sets the SortName property
-* @param value long with the SortName
-*/
+ * Sets the SortName property.
+ * 
+ * @param value long with the SortName
+ */
     public void setSortName(String value)
     {
         getSemanticObject().setProperty(swb_webPageSortName, value);
     }
 
 /**
-* Gets the WebPageURLType property
-* @return int with the WebPageURLType
-*/
+ * Gets the WebPageURLType property.
+ * 
+ * @return int with the WebPageURLType
+ */
     public int getWebPageURLType()
     {
         return getSemanticObject().getIntProperty(swb_webPageURLType);
     }
 
 /**
-* Sets the WebPageURLType property
-* @param value long with the WebPageURLType
-*/
+ * Sets the WebPageURLType property.
+ * 
+ * @param value long with the WebPageURLType
+ */
     public void setWebPageURLType(int value)
     {
         getSemanticObject().setIntProperty(swb_webPageURLType, value);
     }
 
 /**
-* Gets the Active property
-* @return boolean with the Active
-*/
+ * Gets the Active property.
+ * 
+ * @return boolean with the Active
+ */
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(swb_active);
     }
 
 /**
-* Sets the Active property
-* @param value long with the Active
-*/
+ * Sets the Active property.
+ * 
+ * @param value long with the Active
+ */
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
@@ -664,10 +730,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a VirtualParent
-   * @param value org.semanticwb.model.WebPage to verify
-   * @return true if the org.semanticwb.model.WebPage exists, false otherwise
-   */
+    * Gets true if has a VirtualParent.
+    * 
+    * @param value org.semanticwb.model.WebPage to verify
+    * @return true if the org.semanticwb.model.WebPage exists, false otherwise
+    */
     public boolean hasVirtualParent(org.semanticwb.model.WebPage value)
     {
         boolean ret=false;
@@ -677,27 +744,32 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         }
         return ret;
     }
+   
    /**
-   * Adds a VirtualParent
-   * @param value org.semanticwb.model.WebPage to add
-   */
+    * Adds a VirtualParent.
+    * 
+    * @param value org.semanticwb.model.WebPage to add
+    */
 
     public void addVirtualParent(org.semanticwb.model.WebPage value)
     {
         getSemanticObject().addObjectProperty(swb_hasWebPageVirtualParent, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the VirtualParent
-   */
+    * Removes all the VirtualParent.
+    */
 
     public void removeAllVirtualParent()
     {
         getSemanticObject().removeProperty(swb_hasWebPageVirtualParent);
     }
+   
    /**
-   * Removes a VirtualParent
-   * @param value org.semanticwb.model.WebPage to remove
-   */
+    * Removes a VirtualParent.
+    * 
+    * @param value org.semanticwb.model.WebPage to remove
+    */
 
     public void removeVirtualParent(org.semanticwb.model.WebPage value)
     {
@@ -705,9 +777,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the VirtualParent
-   * @return a org.semanticwb.model.WebPage
-   */
+    * Gets the VirtualParent.
+    * 
+    * @return a org.semanticwb.model.WebPage
+    */
     public org.semanticwb.model.WebPage getVirtualParent()
     {
          org.semanticwb.model.WebPage ret=null;
@@ -720,36 +793,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the Deleted property
-* @return boolean with the Deleted
-*/
+ * Gets the Deleted property.
+ * 
+ * @return boolean with the Deleted
+ */
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
 /**
-* Sets the Deleted property
-* @param value long with the Deleted
-*/
+ * Sets the Deleted property.
+ * 
+ * @param value long with the Deleted
+ */
     public void setDeleted(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
 /**
-* Gets the Target property
-* @return String with the Target
-*/
+ * Gets the Target property.
+ * 
+ * @return String with the Target
+ */
     public String getTarget()
     {
         return getSemanticObject().getProperty(swb_webPageTarget);
     }
 
 /**
-* Sets the Target property
-* @param value long with the Target
-*/
+ * Sets the Target property.
+ * 
+ * @param value long with the Target
+ */
     public void setTarget(String value)
     {
         getSemanticObject().setProperty(swb_webPageTarget, value);
@@ -765,10 +842,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a WebPageVirtualChild
-   * @param value org.semanticwb.model.WebPage to verify
-   * @return true if the org.semanticwb.model.WebPage exists, false otherwise
-   */
+    * Gets true if has a WebPageVirtualChild.
+    * 
+    * @param value org.semanticwb.model.WebPage to verify
+    * @return true if the org.semanticwb.model.WebPage exists, false otherwise
+    */
     public boolean hasWebPageVirtualChild(org.semanticwb.model.WebPage value)
     {
         boolean ret=false;
@@ -780,9 +858,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the WebPageVirtualChild
-   * @return a org.semanticwb.model.WebPage
-   */
+    * Gets the WebPageVirtualChild.
+    * 
+    * @return a org.semanticwb.model.WebPage
+    */
     public org.semanticwb.model.WebPage getWebPageVirtualChild()
     {
          org.semanticwb.model.WebPage ret=null;
@@ -795,26 +874,30 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the IconClass property
-* @return String with the IconClass
-*/
+ * Gets the IconClass property.
+ * 
+ * @return String with the IconClass
+ */
     public String getIconClass()
     {
         return getSemanticObject().getProperty(swb_webPageIconClass);
     }
 
 /**
-* Sets the IconClass property
-* @param value long with the IconClass
-*/
+ * Sets the IconClass property.
+ * 
+ * @param value long with the IconClass
+ */
     public void setIconClass(String value)
     {
         getSemanticObject().setProperty(swb_webPageIconClass, value);
     }
+   
    /**
-   * Sets the value for the property Language
-   * @param value Language to set
-   */
+    * Sets the value for the property Language.
+    * 
+    * @param value Language to set
+    */
 
     public void setLanguage(org.semanticwb.model.Language value)
     {
@@ -826,9 +909,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
             removeLanguage();
         }
     }
+   
    /**
-   * Remove the value for Language property
-   */
+    * Remove the value for Language property.
+    */
 
     public void removeLanguage()
     {
@@ -836,9 +920,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the Language
-   * @return a org.semanticwb.model.Language
-   */
+    * Gets the Language.
+    * 
+    * @return a org.semanticwb.model.Language
+    */
     public org.semanticwb.model.Language getLanguage()
     {
          org.semanticwb.model.Language ret=null;
@@ -860,10 +945,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to verify
-   * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
-   */
+    * Gets true if has a TemplateRef.
+    * 
+    * @param value org.semanticwb.model.TemplateRef to verify
+    * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
+    */
     public boolean hasTemplateRef(org.semanticwb.model.TemplateRef value)
     {
         boolean ret=false;
@@ -875,34 +961,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets all the TemplateRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
-   */
+    * Gets all the TemplateRefs inherits.
+    * 
+    * @return A GenericIterator with all the org.semanticwb.model.TemplateRef
+    */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef> listInheritTemplateRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.TemplateRef>(getSemanticObject().listInheritProperties(swb_hasTemplateRef));
     }
+   
    /**
-   * Adds a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to add
-   */
+    * Adds a TemplateRef.
+    * 
+    * @param value org.semanticwb.model.TemplateRef to add
+    */
 
     public void addTemplateRef(org.semanticwb.model.TemplateRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasTemplateRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the TemplateRef
-   */
+    * Removes all the TemplateRef.
+    */
 
     public void removeAllTemplateRef()
     {
         getSemanticObject().removeProperty(swb_hasTemplateRef);
     }
+   
    /**
-   * Removes a TemplateRef
-   * @param value org.semanticwb.model.TemplateRef to remove
-   */
+    * Removes a TemplateRef.
+    * 
+    * @param value org.semanticwb.model.TemplateRef to remove
+    */
 
     public void removeTemplateRef(org.semanticwb.model.TemplateRef value)
     {
@@ -910,9 +1002,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the TemplateRef
-   * @return a org.semanticwb.model.TemplateRef
-   */
+    * Gets the TemplateRef.
+    * 
+    * @return a org.semanticwb.model.TemplateRef
+    */
     public org.semanticwb.model.TemplateRef getTemplateRef()
     {
          org.semanticwb.model.TemplateRef ret=null;
@@ -934,10 +1027,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a PFlowRef
-   * @param value org.semanticwb.model.PFlowRef to verify
-   * @return true if the org.semanticwb.model.PFlowRef exists, false otherwise
-   */
+    * Gets true if has a PFlowRef.
+    * 
+    * @param value org.semanticwb.model.PFlowRef to verify
+    * @return true if the org.semanticwb.model.PFlowRef exists, false otherwise
+    */
     public boolean hasPFlowRef(org.semanticwb.model.PFlowRef value)
     {
         boolean ret=false;
@@ -949,34 +1043,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets all the PFlowRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.PFlowRef
-   */
+    * Gets all the PFlowRefs inherits.
+    * 
+    * @return A GenericIterator with all the org.semanticwb.model.PFlowRef
+    */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef> listInheritPFlowRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.PFlowRef>(getSemanticObject().listInheritProperties(swb_hasPFlowRef));
     }
+   
    /**
-   * Adds a PFlowRef
-   * @param value org.semanticwb.model.PFlowRef to add
-   */
+    * Adds a PFlowRef.
+    * 
+    * @param value org.semanticwb.model.PFlowRef to add
+    */
 
     public void addPFlowRef(org.semanticwb.model.PFlowRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasPFlowRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the PFlowRef
-   */
+    * Removes all the PFlowRef.
+    */
 
     public void removeAllPFlowRef()
     {
         getSemanticObject().removeProperty(swb_hasPFlowRef);
     }
+   
    /**
-   * Removes a PFlowRef
-   * @param value org.semanticwb.model.PFlowRef to remove
-   */
+    * Removes a PFlowRef.
+    * 
+    * @param value org.semanticwb.model.PFlowRef to remove
+    */
 
     public void removePFlowRef(org.semanticwb.model.PFlowRef value)
     {
@@ -984,9 +1084,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the PFlowRef
-   * @return a org.semanticwb.model.PFlowRef
-   */
+    * Gets the PFlowRef.
+    * 
+    * @return a org.semanticwb.model.PFlowRef
+    */
     public org.semanticwb.model.PFlowRef getPFlowRef()
     {
          org.semanticwb.model.PFlowRef ret=null;
@@ -1008,10 +1109,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a Child
-   * @param value org.semanticwb.model.WebPage to verify
-   * @return true if the org.semanticwb.model.WebPage exists, false otherwise
-   */
+    * Gets true if has a Child.
+    * 
+    * @param value org.semanticwb.model.WebPage to verify
+    * @return true if the org.semanticwb.model.WebPage exists, false otherwise
+    */
     public boolean hasChild(org.semanticwb.model.WebPage value)
     {
         boolean ret=false;
@@ -1023,9 +1125,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the Child
-   * @return a org.semanticwb.model.WebPage
-   */
+    * Gets the Child.
+    * 
+    * @return a org.semanticwb.model.WebPage
+    */
     public org.semanticwb.model.WebPage getChild()
     {
          org.semanticwb.model.WebPage ret=null;
@@ -1047,10 +1150,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to verify
-   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
-   */
+    * Gets true if has a CalendarRef.
+    * 
+    * @param value org.semanticwb.model.CalendarRef to verify
+    * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
+    */
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
     {
         boolean ret=false;
@@ -1060,27 +1164,32 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         }
         return ret;
     }
+   
    /**
-   * Adds a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to add
-   */
+    * Adds a CalendarRef.
+    * 
+    * @param value org.semanticwb.model.CalendarRef to add
+    */
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the CalendarRef
-   */
+    * Removes all the CalendarRef.
+    */
 
     public void removeAllCalendarRef()
     {
         getSemanticObject().removeProperty(swb_hasCalendarRef);
     }
+   
    /**
-   * Removes a CalendarRef
-   * @param value org.semanticwb.model.CalendarRef to remove
-   */
+    * Removes a CalendarRef.
+    * 
+    * @param value org.semanticwb.model.CalendarRef to remove
+    */
 
     public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
     {
@@ -1088,9 +1197,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the CalendarRef
-   * @return a org.semanticwb.model.CalendarRef
-   */
+    * Gets the CalendarRef.
+    * 
+    * @return a org.semanticwb.model.CalendarRef
+    */
     public org.semanticwb.model.CalendarRef getCalendarRef()
     {
          org.semanticwb.model.CalendarRef ret=null;
@@ -1101,10 +1211,12 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
          }
          return ret;
     }
+   
    /**
-   * Sets the value for the property Parent
-   * @param value Parent to set
-   */
+    * Sets the value for the property Parent.
+    * 
+    * @param value Parent to set
+    */
 
     public void setParent(org.semanticwb.model.WebPage value)
     {
@@ -1116,9 +1228,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
             removeParent();
         }
     }
+   
    /**
-   * Remove the value for Parent property
-   */
+    * Remove the value for Parent property.
+    */
 
     public void removeParent()
     {
@@ -1126,9 +1239,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the Parent
-   * @return a org.semanticwb.model.WebPage
-   */
+    * Gets the Parent.
+    * 
+    * @return a org.semanticwb.model.WebPage
+    */
     public org.semanticwb.model.WebPage getParent()
     {
          org.semanticwb.model.WebPage ret=null;
@@ -1141,54 +1255,60 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the Undeleteable property
-* @return boolean with the Undeleteable
-*/
+ * Gets the Undeleteable property.
+ * 
+ * @return boolean with the Undeleteable
+ */
     public boolean isUndeleteable()
     {
         return getSemanticObject().getBooleanProperty(swb_undeleteable);
     }
 
 /**
-* Sets the Undeleteable property
-* @param value long with the Undeleteable
-*/
+ * Sets the Undeleteable property.
+ * 
+ * @param value long with the Undeleteable
+ */
     public void setUndeleteable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_undeleteable, value);
     }
 
 /**
-* Gets the MaxViews property
-* @return long with the MaxViews
-*/
+ * Gets the MaxViews property.
+ * 
+ * @return long with the MaxViews
+ */
     public long getMaxViews()
     {
         return getSemanticObject().getLongProperty(swb_maxViews);
     }
 
 /**
-* Sets the MaxViews property
-* @param value long with the MaxViews
-*/
+ * Sets the MaxViews property.
+ * 
+ * @param value long with the MaxViews
+ */
     public void setMaxViews(long value)
     {
         getSemanticObject().setLongProperty(swb_maxViews, value);
     }
 
 /**
-* Gets the Expiration property
-* @return java.util.Date with the Expiration
-*/
+ * Gets the Expiration property.
+ * 
+ * @return java.util.Date with the Expiration
+ */
     public java.util.Date getExpiration()
     {
         return getSemanticObject().getDateProperty(swb_expiration);
     }
 
 /**
-* Sets the Expiration property
-* @param value long with the Expiration
-*/
+ * Sets the Expiration property.
+ * 
+ * @param value long with the Expiration
+ */
     public void setExpiration(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_expiration, value);
@@ -1204,10 +1324,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a Resource
-   * @param value org.semanticwb.model.Resource to verify
-   * @return true if the org.semanticwb.model.Resource exists, false otherwise
-   */
+    * Gets true if has a Resource.
+    * 
+    * @param value org.semanticwb.model.Resource to verify
+    * @return true if the org.semanticwb.model.Resource exists, false otherwise
+    */
     public boolean hasResource(org.semanticwb.model.Resource value)
     {
         boolean ret=false;
@@ -1217,27 +1338,32 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
         }
         return ret;
     }
+   
    /**
-   * Adds a Resource
-   * @param value org.semanticwb.model.Resource to add
-   */
+    * Adds a Resource.
+    * 
+    * @param value org.semanticwb.model.Resource to add
+    */
 
     public void addResource(org.semanticwb.model.Resource value)
     {
         getSemanticObject().addObjectProperty(swb_hasResource, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the Resource
-   */
+    * Removes all the Resource.
+    */
 
     public void removeAllResource()
     {
         getSemanticObject().removeProperty(swb_hasResource);
     }
+   
    /**
-   * Removes a Resource
-   * @param value org.semanticwb.model.Resource to remove
-   */
+    * Removes a Resource.
+    * 
+    * @param value org.semanticwb.model.Resource to remove
+    */
 
     public void removeResource(org.semanticwb.model.Resource value)
     {
@@ -1245,9 +1371,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the Resource
-   * @return a org.semanticwb.model.Resource
-   */
+    * Gets the Resource.
+    * 
+    * @return a org.semanticwb.model.Resource
+    */
     public org.semanticwb.model.Resource getResource()
     {
          org.semanticwb.model.Resource ret=null;
@@ -1260,45 +1387,50 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the Hidden property
-* @return boolean with the Hidden
-*/
+ * Gets the Hidden property.
+ * 
+ * @return boolean with the Hidden
+ */
     public boolean isHidden()
     {
         return getSemanticObject().getBooleanProperty(swb_hidden);
     }
 
 /**
-* Sets the Hidden property
-* @param value long with the Hidden
-*/
+ * Sets the Hidden property.
+ * 
+ * @param value long with the Hidden
+ */
     public void setHidden(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_hidden, value);
     }
 
 /**
-* Gets the Indexable property
-* @return boolean with the Indexable
-*/
+ * Gets the Indexable property.
+ * 
+ * @return boolean with the Indexable
+ */
     public boolean isIndexable()
     {
         return getSemanticObject().getBooleanProperty(swb_indexable);
     }
 
 /**
-* Sets the Indexable property
-* @param value long with the Indexable
-*/
+ * Sets the Indexable property.
+ * 
+ * @param value long with the Indexable
+ */
     public void setIndexable(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_indexable, value);
     }
 
 /**
-* Gets the DiskUsage property
-* @return long with the DiskUsage
-*/
+ * Gets the DiskUsage property.
+ * 
+ * @return long with the DiskUsage
+ */
     public long getDiskUsage()
     {
         //Override this method in WebPage object
@@ -1306,9 +1438,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Sets the DiskUsage property
-* @param value long with the DiskUsage
-*/
+ * Sets the DiskUsage property.
+ * 
+ * @param value long with the DiskUsage
+ */
     public void setDiskUsage(long value)
     {
         //Override this method in WebPage object
@@ -1325,10 +1458,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a RoleRef
-   * @param value org.semanticwb.model.RoleRef to verify
-   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
-   */
+    * Gets true if has a RoleRef.
+    * 
+    * @param value org.semanticwb.model.RoleRef to verify
+    * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
+    */
     public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
     {
         boolean ret=false;
@@ -1340,34 +1474,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets all the RoleRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
-   */
+    * Gets all the RoleRefs inherits.
+    * 
+    * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+    */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
     }
+   
    /**
-   * Adds a RoleRef
-   * @param value org.semanticwb.model.RoleRef to add
-   */
+    * Adds a RoleRef.
+    * 
+    * @param value org.semanticwb.model.RoleRef to add
+    */
 
     public void addRoleRef(org.semanticwb.model.RoleRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasRoleRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the RoleRef
-   */
+    * Removes all the RoleRef.
+    */
 
     public void removeAllRoleRef()
     {
         getSemanticObject().removeProperty(swb_hasRoleRef);
     }
+   
    /**
-   * Removes a RoleRef
-   * @param value org.semanticwb.model.RoleRef to remove
-   */
+    * Removes a RoleRef.
+    * 
+    * @param value org.semanticwb.model.RoleRef to remove
+    */
 
     public void removeRoleRef(org.semanticwb.model.RoleRef value)
     {
@@ -1375,9 +1515,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the RoleRef
-   * @return a org.semanticwb.model.RoleRef
-   */
+    * Gets the RoleRef.
+    * 
+    * @return a org.semanticwb.model.RoleRef
+    */
     public org.semanticwb.model.RoleRef getRoleRef()
     {
          org.semanticwb.model.RoleRef ret=null;
@@ -1390,9 +1531,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the Views property
-* @return long with the Views
-*/
+ * Gets the Views property.
+ * 
+ * @return long with the Views
+ */
     public long getViews()
     {
         //Override this method in WebPage object
@@ -1400,9 +1542,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Sets the Views property
-* @param value long with the Views
-*/
+ * Sets the Views property.
+ * 
+ * @param value long with the Views
+ */
     public void setViews(long value)
     {
         //Override this method in WebPage object
@@ -1419,10 +1562,11 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets true if has a RuleRef
-   * @param value org.semanticwb.model.RuleRef to verify
-   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
-   */
+    * Gets true if has a RuleRef.
+    * 
+    * @param value org.semanticwb.model.RuleRef to verify
+    * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
+    */
     public boolean hasRuleRef(org.semanticwb.model.RuleRef value)
     {
         boolean ret=false;
@@ -1434,34 +1578,40 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets all the RuleRefs inherits
-   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
-   */
+    * Gets all the RuleRefs inherits.
+    * 
+    * @return A GenericIterator with all the org.semanticwb.model.RuleRef
+    */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listInheritProperties(swb_hasRuleRef));
     }
+   
    /**
-   * Adds a RuleRef
-   * @param value org.semanticwb.model.RuleRef to add
-   */
+    * Adds a RuleRef.
+    * 
+    * @param value org.semanticwb.model.RuleRef to add
+    */
 
     public void addRuleRef(org.semanticwb.model.RuleRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasRuleRef, value.getSemanticObject());
     }
+   
    /**
-   * Removes all the RuleRef
-   */
+    * Removes all the RuleRef.
+    */
 
     public void removeAllRuleRef()
     {
         getSemanticObject().removeProperty(swb_hasRuleRef);
     }
+   
    /**
-   * Removes a RuleRef
-   * @param value org.semanticwb.model.RuleRef to remove
-   */
+    * Removes a RuleRef.
+    * 
+    * @param value org.semanticwb.model.RuleRef to remove
+    */
 
     public void removeRuleRef(org.semanticwb.model.RuleRef value)
     {
@@ -1469,9 +1619,10 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
    /**
-   * Gets the RuleRef
-   * @return a org.semanticwb.model.RuleRef
-   */
+    * Gets the RuleRef.
+    * 
+    * @return a org.semanticwb.model.RuleRef
+    */
     public org.semanticwb.model.RuleRef getRuleRef()
     {
          org.semanticwb.model.RuleRef ret=null;
@@ -1484,27 +1635,30 @@ public abstract class WebPageBase extends org.semanticwb.model.Topic implements 
     }
 
 /**
-* Gets the WebPageURL property
-* @return String with the WebPageURL
-*/
+ * Gets the WebPageURL property.
+ * 
+ * @return String with the WebPageURL
+ */
     public String getWebPageURL()
     {
         return getSemanticObject().getProperty(swb_webPageURL);
     }
 
 /**
-* Sets the WebPageURL property
-* @param value long with the WebPageURL
-*/
+ * Sets the WebPageURL property.
+ * 
+ * @param value long with the WebPageURL
+ */
     public void setWebPageURL(String value)
     {
         getSemanticObject().setProperty(swb_webPageURL, value);
     }
 
    /**
-   * Gets the WebSite
-   * @return a instance of org.semanticwb.model.WebSite
-   */
+    * Gets the WebSite.
+    * 
+    * @return a instance of org.semanticwb.model.WebSite
+    */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
