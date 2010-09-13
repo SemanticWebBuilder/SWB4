@@ -52,6 +52,14 @@ public class Driver_MySQL_SWB extends Driver_MySQL {
     }
 
     // Valida Inconsistencia de Long Literals
+    /**
+     * I dto string.
+     * 
+     * @param dbID the db id
+     * @param table the table
+     * @param RDBcode the rD bcode
+     * @return the string
+     */
     @Override
     protected String IDtoString ( int dbID, String table, String RDBcode )
     {
@@ -92,6 +100,12 @@ public class Driver_MySQL_SWB extends Driver_MySQL {
         }
     }
 
+    /**
+     * Gets the tbl params.
+     * 
+     * @param param the param
+     * @return the tbl params
+     */
     @Override
     protected void getTblParams ( String [] param ){
         super.getTblParams(param);

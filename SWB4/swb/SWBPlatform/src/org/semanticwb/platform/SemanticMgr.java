@@ -89,8 +89,11 @@ import org.semanticwb.rdf.RemoteGraph;
  */
 public class SemanticMgr implements SWBInstanceObject
 {
+    
+    /** The NULL. */
     private static String NULL="__NULL__";
 
+    /** The use cache. */
     private boolean useCache=false;
 
     /**
@@ -98,7 +101,7 @@ public class SemanticMgr implements SWBInstanceObject
      */
     public enum ModelSchema {
 
-        /** The OW l_ me m_ */
+        /** The OW l_ me m_. */
         OWL_MEM,
         /** The OW l_ me m_ tran s_ inf. */
         OWL_MEM_TRANS_INF,
@@ -112,6 +115,8 @@ public class SemanticMgr implements SWBInstanceObject
         DAML_MEM_RDFS_INF,
         /** The OW l_ d l_ me m_ rdf s_ inf. */
         OWL_DL_MEM_RDFS_INF,
+        
+        /** The OW l_ me m_ rdf s_ inf. */
         OWL_MEM_RDFS_INF;
     }
     /** The model schema. */
@@ -139,13 +144,15 @@ public class SemanticMgr implements SWBInstanceObject
     //private HashMap<String,SemanticModel> m_schemas;
     /** The m_schema. */
     private SemanticOntology m_schema;
-    /** The models */
+    
+    /** The models. */
     private HashMap<String, SemanticModel> m_models = null;
     /** The namespace related models. */
     private HashMap<String, SemanticModel> m_nsmodels = null;
     /** The interenal related models. */
     private HashMap<Model, SemanticModel> m_imodels = null;
-    /** The Base Models */
+    
+    /** The Base Models. */
     private HashMap<String, SemanticModel> m_bmodels = null;
 
     /** The conn. */
@@ -167,6 +174,11 @@ public class SemanticMgr implements SWBInstanceObject
      * @see org.semanticwb.platform.SWBInstanceObject#init()
      */
 
+    /**
+     * Gets the model spec.
+     * 
+     * @return the model spec
+     */
     public OntModelSpec getModelSpec()
     {
         OntModelSpec modelSpec = OntModelSpec.OWL_MEM_TRANS_INF;
@@ -211,6 +223,9 @@ public class SemanticMgr implements SWBInstanceObject
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.platform.SWBInstanceObject#init()
+     */
     public void init() {
         log.event("Initializing SemanticMgr...");
 
@@ -640,6 +655,11 @@ public class SemanticMgr implements SWBInstanceObject
         return m_imodels.get(model);
     }
 
+    /**
+     * List base models.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticModel> listBaseModels()
     {
         return m_bmodels.values().iterator();
@@ -696,6 +716,7 @@ public class SemanticMgr implements SWBInstanceObject
      * Load a Model, if the model don't exist, it will be created.
      * 
      * @param name the name
+     * @param cached the cached
      * @return the semantic model
      * @return
      */
@@ -841,6 +862,7 @@ public class SemanticMgr implements SWBInstanceObject
      * 
      * @param name the name
      * @param nameSpace the name space
+     * @param cached the cached
      * @return the semantic model
      */
     public SemanticModel createDBModel(String name, String nameSpace, boolean cached) {
@@ -989,6 +1011,7 @@ public class SemanticMgr implements SWBInstanceObject
      * 
      * @param obj the obj
      * @param prop the prop
+     * @param lang the lang
      * @param action the action
      */
     public void notifyChange(SemanticObject obj, Object prop, String lang, String action) {
@@ -1013,9 +1036,10 @@ public class SemanticMgr implements SWBInstanceObject
 
     /**
      * Notify external change.
-     *
-     * @param obj the obj
-     * @param prop the prop
+     * 
+     * @param uri the uri
+     * @param puri the puri
+     * @param lang the lang
      * @param action the action
      */
     public void processExternalChange(String uri, String puri, String lang, String action)

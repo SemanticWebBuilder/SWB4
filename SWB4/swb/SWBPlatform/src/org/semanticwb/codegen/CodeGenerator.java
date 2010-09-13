@@ -48,20 +48,47 @@ import static org.semanticwb.SWBUtils.TEXT.*;
  */
 public class CodeGenerator
 {
+    
+    /** The Constant SEMANTIC_ITERATOR_FULL_NAME. */
     private static final String SEMANTIC_ITERATOR_FULL_NAME="org.semanticwb.platform.SemanticIterator";
+    
+    /** The Constant MODEL_FULL_NAME. */
     private static final String MODEL_FULL_NAME = "org.semanticwb.platform.SemanticModel";
+    
+    /** The Constant SEMANTIC_MANANGER_FULL_NAME. */
     private static final String SEMANTIC_MANANGER_FULL_NAME = "org.semanticwb.platform.SemanticMgr";
+    
+    /** The Constant SEMANTIC_MODEL_FULL_NAME. */
     private static final String SEMANTIC_MODEL_FULL_NAME = "org.semanticwb.model.SWBModel";
+    
+    /** The Constant SEMANTIC_PROPERTY_FULL_NAME. */
     private static final String SEMANTIC_PROPERTY_FULL_NAME = "org.semanticwb.platform.SemanticProperty";
+    
+    /** The Constant GET_SEMANTIC_CLASS. */
     private static final String GET_SEMANTIC_CLASS = ".getSemanticMgr().getVocabulary().getSemanticClass(\"";
+    
+    /** The Constant SEMANTIC_PLATFORM_FULL_NAME. */
     private static final String SEMANTIC_PLATFORM_FULL_NAME="org.semanticwb.SWBPlatform";
+    
+    /** The Constant GENERIC_ITERATOR_FULL_NAME. */
     private static final String GENERIC_ITERATOR_FULL_NAME="org.semanticwb.model.GenericIterator";
+    
+    /** The Constant SEMANTIC_LITERAL_FULL_NAME. */
     private static final String SEMANTIC_LITERAL_FULL_NAME="org.semanticwb.platform.SemanticLiteral";
 
+    /** The Constant UTIL_ITERATOR_FULL_NAME. */
     private static final String UTIL_ITERATOR_FULL_NAME="java.util.Iterator";
+    
+    /** The Constant GENERIC_OBJECT_FULL_NAME. */
     private static final String GENERIC_OBJECT_FULL_NAME="org.semanticwb.model.GenericObject";
+    
+    /** The Constant JENA_ITERATOR_FULL_NAME. */
     private static final String JENA_ITERATOR_FULL_NAME="com.hp.hpl.jena.rdf.model.StmtIterator";
+    
+    /** The Constant SEMANTIC_OBJECT_FULL_NAME. */
     private static final String SEMANTIC_OBJECT_FULL_NAME="org.semanticwb.platform.SemanticObject";
+    
+    /** The Constant SEMANTIC_CLASS_FULL_NAME. */
     private static final String SEMANTIC_CLASS_FULL_NAME="org.semanticwb.platform.SemanticClass";
 
     /** The Constant GLOBAL_CLASS_NAME. */
@@ -302,6 +329,12 @@ public class CodeGenerator
     createSWBContext("", pDirectory);
     }
     }*/
+    /**
+     * Check class.
+     * 
+     * @param clazz the clazz
+     * @throws CodeGeneratorException the code generator exception
+     */
     private void checkClass(SemanticClass clazz) throws CodeGeneratorException
     {
         if(clazz.getCodePackage()==null)
@@ -813,6 +846,14 @@ public class CodeGenerator
         createSemanticResource(tpc, pDirectory);
     }
 
+    /**
+     * Creates the class base.
+     * 
+     * @param tpc the tpc
+     * @param usesufix the usesufix
+     * @return the string
+     * @throws CodeGeneratorException the code generator exception
+     */
     public String createClassBase(SemanticClass tpc,boolean usesufix) throws CodeGeneratorException
     {
         String exts = "org.semanticwb.model.base.GenericObjectBase";

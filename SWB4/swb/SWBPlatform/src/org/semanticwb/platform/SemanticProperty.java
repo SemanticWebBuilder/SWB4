@@ -148,6 +148,9 @@ public class SemanticProperty
         }
     }
 
+    /**
+     * Load restrictions.
+     */
     private void loadRestrictions()
     {
         restrictions = new HashMap();
@@ -1103,8 +1106,8 @@ public class SemanticProperty
     }
 
     /**
-     * Gets restriction from the property an the class or null if don´t have
-     *
+     * Gets restriction from the property an the class or null if don´t have.
+     * 
      * @param cls the cls
      * @return SemanticRestrictions
      */

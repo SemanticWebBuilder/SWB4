@@ -35,6 +35,8 @@ import org.semanticwb.SWBUtils;
  */
 public class JarFile
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(JarFile.class);
 
     /** The path. */
@@ -100,6 +102,9 @@ public class JarFile
         }            
     }
 
+    /**
+     * Load cache.
+     */
     private void loadCache()
     {
         try
@@ -137,6 +142,11 @@ public class JarFile
     }
 
 
+    /**
+     * Gets the cache.
+     * 
+     * @return the cache
+     */
     public byte[] getCache()
     {
         return cache;
@@ -216,6 +226,11 @@ public class JarFile
         }
     }
 
+    /**
+     * Checks for cache.
+     * 
+     * @return true, if successful
+     */
     public boolean hasCache()
     {
         return cache!=null;

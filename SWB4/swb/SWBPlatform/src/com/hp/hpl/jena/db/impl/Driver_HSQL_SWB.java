@@ -50,6 +50,14 @@ public class Driver_HSQL_SWB extends Driver_HSQL {
     }
 
     // Valida Inconsistencia de Long Literals
+    /**
+     * I dto string.
+     * 
+     * @param dbID the db id
+     * @param table the table
+     * @param RDBcode the rD bcode
+     * @return the string
+     */
     @Override
     protected String IDtoString ( int dbID, String table, String RDBcode )
     {

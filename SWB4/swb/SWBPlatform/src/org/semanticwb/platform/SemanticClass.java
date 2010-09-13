@@ -277,8 +277,7 @@ public class SemanticClass
 
     /**
      * Gets the name in plural.
-     *
-     * @param name the name
+     * 
      * @return the name in plural
      */
     public String getNameInPlural()
@@ -290,6 +289,11 @@ public class SemanticClass
     
     
     
+    /**
+     * Gets the canonical name.
+     * 
+     * @return the canonical name
+     */
     public String getCanonicalName()
     {
        String spackage=getCodePackage();
@@ -311,6 +315,12 @@ public class SemanticClass
        }
        return spackage;
     }
+    
+    /**
+     * Gets the upper class name.
+     * 
+     * @return the upper class name
+     */
     public String getUpperClassName()
     {
         if(getClassCodeName()!=null)
@@ -732,7 +742,7 @@ public class SemanticClass
     }
 
     /**
-     * Regresa el valor de la propiedad rdf:label de la clase
+     * Regresa el valor de la propiedad rdf:label de la clase.
      * 
      * @param lang the lang
      * @return the label
@@ -741,8 +751,10 @@ public class SemanticClass
     {
         return m_class.getLabel(lang);
     }
+    
     /**
-     * Regresa el valor de la propiedad rdf:comment de la clase
+     * Regresa el valor de la propiedad rdf:comment de la clase.
+     * 
      * @param lang Language of the comment
      * @return The comment in the ontology
      */
@@ -753,7 +765,8 @@ public class SemanticClass
     }
 
     /**
-     * Regresa el valor de la propiedad rdf:comment de la clase
+     * Regresa el valor de la propiedad rdf:comment de la clase.
+     * 
      * @return The comment in the ontology
      */
 
@@ -939,6 +952,11 @@ public class SemanticClass
         return m_props.values().iterator();
     }
 
+    /**
+     * List sort properties.
+     * 
+     * @return the iterator
+     */
     public Iterator<SemanticProperty> listSortProperties()
     {
         final SemanticProperty swb_index=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#index");
@@ -1316,8 +1334,10 @@ public class SemanticClass
     }
 
     /**
-     * Regresa nivel de subclase o -1 si no es subclase
-     * @param cls
+     * Regresa nivel de subclase o -1 si no es subclase.
+     * 
+     * @param cls the cls
+     * @return the sub class level
      * @return
      */
     public int getSubClassLevel(SemanticClass cls)
@@ -1326,6 +1346,13 @@ public class SemanticClass
     }
 
    
+    /**
+     * Gets the sub class level.
+     * 
+     * @param cls the cls
+     * @param l the l
+     * @return the sub class level
+     */
     private int getSubClassLevel(SemanticClass cls, int l)
     {
         //System.out.println("ini:"+l+" root:"+this+" cls:"+cls);
