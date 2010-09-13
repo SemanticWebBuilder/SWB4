@@ -172,6 +172,11 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#hasSQLConnection()
      */
+    /**
+     * Checks for sql connection.
+     * 
+     * @return true, if successful
+     */
     @Override
     public boolean hasSQLConnection() 
     {
@@ -182,11 +187,23 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getTransactionHandler()
      */
+    /**
+     * Gets the transaction handler.
+     * 
+     * @return the transaction handler
+     */
     @Override
     public TransactionHandler getTransactionHandler() { return transactionHandler ; } 
     
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execQuery(java.lang.String)
+     */
+    /**
+     * Exec query.
+     * 
+     * @param sqlString the sql string
+     * @return the result set jdbc
+     * @throws SQLException the sQL exception
      */
     @Override
     public ResultSetJDBC execQuery(String sqlString) throws SQLException
@@ -194,6 +211,14 @@ public class SDBConnection_SWB extends SDBConnection
     
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execQuery(java.lang.String, int)
+     */
+    /**
+     * Exec query.
+     * 
+     * @param sqlString the sql string
+     * @param fetchSize the fetch size
+     * @return the result set jdbc
+     * @throws SQLException the sQL exception
      */
     @Override
     public ResultSetJDBC execQuery(String sqlString, int fetchSize) throws SQLException
@@ -242,11 +267,23 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#executeInTransaction(com.hp.hpl.jena.shared.Command)
      */
+    /**
+     * Execute in transaction.
+     * 
+     * @param c the c
+     * @return the object
+     */
     @Override
     public Object executeInTransaction(Command c) { return getTransactionHandler().executeInTransaction(c) ; }
     
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#executeSQL(com.hp.hpl.jena.sdb.sql.SQLCommand)
+     */
+    /**
+     * Execute sql.
+     * 
+     * @param c the c
+     * @return the object
      */
     @Override
     public Object executeSQL(final SQLCommand c)
@@ -275,6 +312,13 @@ public class SDBConnection_SWB extends SDBConnection
     
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#execUpdate(java.lang.String)
+     */
+    /**
+     * Exec update.
+     * 
+     * @param sqlString the sql string
+     * @return the int
+     * @throws SQLException the sQL exception
      */
     @Override
     public int execUpdate(String sqlString) throws SQLException
@@ -469,6 +513,11 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
  * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getSqlConnection()
  */
+/**
+ * Gets the sql connection.
+ * 
+ * @return the sql connection
+ */
 @Override
     public Connection getSqlConnection()
     {
@@ -490,6 +539,9 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#close()
      */
+    /**
+     * Close.
+     */
     @Override
     public void close()
     {
@@ -506,11 +558,21 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#toString()
      */
+    /**
+     * To string.
+     * 
+     * @return the string
+     */
     @Override
     public String toString() { return getLabel() ; }
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLExceptions()
+     */
+    /**
+     * Logging sql exceptions.
+     * 
+     * @return true, if successful
      */
     @Override
     public boolean loggingSQLExceptions() { return thisLogSQLExceptions ;
@@ -518,6 +580,11 @@ public class SDBConnection_SWB extends SDBConnection
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLExceptions(boolean)
+     */
+    /**
+     * Sets the log sql exceptions.
+     * 
+     * @param thisLogSQLExceptions the new log sql exceptions
      */
     @Override
     public void setLogSQLExceptions(boolean thisLogSQLExceptions)
@@ -528,11 +595,21 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLQueries()
      */
+    /**
+     * Logging sql queries.
+     * 
+     * @return true, if successful
+     */
     @Override
     public boolean loggingSQLQueries() { return thisLogSQLQueries ; }
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLQueries(boolean)
+     */
+    /**
+     * Sets the log sql queries.
+     * 
+     * @param thisLogSQLQueries the new log sql queries
      */
     @Override
     public void setLogSQLQueries(boolean thisLogSQLQueries)
@@ -543,11 +620,21 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#loggingSQLStatements()
      */
+    /**
+     * Logging sql statements.
+     * 
+     * @return true, if successful
+     */
     @Override
     public boolean loggingSQLStatements() { return thisLogSQLStatements ; }
     
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLogSQLStatements(boolean)
+     */
+    /**
+     * Sets the log sql statements.
+     * 
+     * @param thisLogSQLStatements the new log sql statements
      */
     @Override
     public void setLogSQLStatements(boolean thisLogSQLStatements)
@@ -558,6 +645,11 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getLabel()
      */
+    /**
+     * Gets the label.
+     * 
+     * @return the label
+     */
     @Override
     public String getLabel()
     {
@@ -566,6 +658,11 @@ public class SDBConnection_SWB extends SDBConnection
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setLabel(java.lang.String)
+     */
+    /**
+     * Sets the label.
+     * 
+     * @param label the new label
      */
     @Override
     public void setLabel(String label)
@@ -576,6 +673,11 @@ public class SDBConnection_SWB extends SDBConnection
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#getJdbcURL()
      */
+    /**
+     * Gets the jdbc url.
+     * 
+     * @return the jdbc url
+     */
     @Override
     public String getJdbcURL()
     {
@@ -584,6 +686,11 @@ public class SDBConnection_SWB extends SDBConnection
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.sdb.sql.SDBConnection#setJdbcURL(java.lang.String)
+     */
+    /**
+     * Sets the jdbc url.
+     * 
+     * @param jdbcURL the new jdbc url
      */
     @Override
     public void setJdbcURL(String jdbcURL)

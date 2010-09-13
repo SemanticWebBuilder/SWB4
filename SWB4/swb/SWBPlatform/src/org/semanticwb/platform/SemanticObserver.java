@@ -45,6 +45,7 @@ public interface SemanticObserver
      * 
      * @param obj the obj
      * @param prop the prop
+     * @param lang the lang
      * @param action the action
      */
     public void notify(SemanticObject obj, Object prop, String lang, String action);

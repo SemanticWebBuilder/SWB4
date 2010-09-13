@@ -59,10 +59,19 @@ public class SemanticObject
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SemanticObject.class);
 
+    /** The Constant ACT_CREATE. */
     public static final String ACT_CREATE="CREATE";
+    
+    /** The Constant ACT_REMOVE. */
     public static final String ACT_REMOVE="REMOVE";
+    
+    /** The Constant ACT_ADD. */
     public static final String ACT_ADD="ADD";
+    
+    /** The Constant ACT_SET. */
     public static final String ACT_SET="SET";
+    
+    /** The Constant ACT_CLONE. */
     public static final String ACT_CLONE="CLONE";
 
     /** The m_objs. */
@@ -3188,7 +3197,8 @@ public Document getDomProperty(SemanticProperty prop)
 
 
     /**
-     * Regresa el valor de la propiedad rdfs:label del objeto
+     * Regresa el valor de la propiedad rdfs:label del objeto.
+     * 
      * @return the label
      */
     public String getLabel()
@@ -3197,7 +3207,8 @@ public Document getDomProperty(SemanticProperty prop)
     }
     
     /**
-     * Regresa el valor de la propiedad rdfs:label del objeto
+     * Regresa el valor de la propiedad rdfs:label del objeto.
+     * 
      * @param lang the lang
      * @return the label
      */
@@ -3207,7 +3218,8 @@ public Document getDomProperty(SemanticProperty prop)
     }
 
     /**
-     * Regresa el valor de la propiedad rdfs:comment del objeto
+     * Regresa el valor de la propiedad rdfs:comment del objeto.
+     * 
      * @return the label
      */
     public String getComment()
@@ -3216,7 +3228,8 @@ public Document getDomProperty(SemanticProperty prop)
     }
 
     /**
-     * Regresa el valor de la propiedad rdfs:comment del objeto
+     * Regresa el valor de la propiedad rdfs:comment del objeto.
+     * 
      * @param lang the lang
      * @return the label
      */

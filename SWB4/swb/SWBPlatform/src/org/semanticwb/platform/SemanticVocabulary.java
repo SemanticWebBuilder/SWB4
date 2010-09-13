@@ -63,6 +63,7 @@ public class SemanticVocabulary
     /** The Constant RDFS_URI. */
     public static final String RDFS_URI = "http://www.w3.org/2000/01/rdf-schema#";
 
+    /** The Constant RDFS_RESOURCE. */
     public static final String RDFS_RESOURCE = RDFS_URI+"Resource";
     
     /** The Constant RDFS_LABEL. */
@@ -137,8 +138,10 @@ public class SemanticVocabulary
     /** The Constant URI. */
     public static final String URI = "http://www.semanticwebbuilder.org/swb4/ontology#";
 
+    /** The Constant PROCESS_URI. */
     public static final String PROCESS_URI = "http://www.semanticwebbuilder.org/swb4/process#";
 
+    /** The Constant PROCESS_CLASS. */
     public static final String PROCESS_CLASS = PROCESS_URI + "ProcessClass";
     
     /** The Constant SWBXF_URI. */
@@ -274,8 +277,7 @@ public static final String SWB_ANNOT_PROPERTYCODENAME = URI + "propertyCodeName"
 
     /**
      * Filter properties.
-     *
-     * @param tpc the tpc
+     * 
      */
     private void filterProperties()
     {

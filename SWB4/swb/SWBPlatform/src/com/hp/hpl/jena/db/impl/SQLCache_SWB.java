@@ -53,7 +53,15 @@ public class SQLCache_SWB extends SQLCache
     /** The log. */
     private static Logger log=SWBUtils.getLogger(SQLCache_SWB.class);
 
-    /** The arr. */
+    /**
+     * The arr.
+     * 
+     * @param sqlFile the sql file
+     * @param defaultOps the default ops
+     * @param connection the connection
+     * @param idType the id type
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     //private ArrayList arr=new ArrayList();
 
     /**
@@ -74,6 +82,11 @@ public class SQLCache_SWB extends SQLCache
         setCachePreparedStatements(false);
     }
 
+    /**
+     * Gets the stack trace.
+     * 
+     * @return the stack trace
+     */
     String getStackTrace()
     {
         StringBuffer ret=new StringBuffer();
@@ -129,6 +142,14 @@ public class SQLCache_SWB extends SQLCache
 
     /* (non-Javadoc)
      * @see com.hp.hpl.jena.db.impl.SQLCache#getPreparedSQLStatement(java.lang.String, java.lang.String[])
+     */
+    /**
+     * Gets the prepared sql statement.
+     * 
+     * @param opname the opname
+     * @param attr the attr
+     * @return the prepared sql statement
+     * @throws SQLException the sQL exception
      */
     @Override
 	public synchronized PreparedStatement getPreparedSQLStatement(String opname, String [] attr) throws SQLException {
