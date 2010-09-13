@@ -39,14 +39,22 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.jcr170.implementation.SWBCredentials;
 import org.semanticwb.model.User;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBRepositoryManager.
+ * 
  * @author victor.lorenzana
  */
 public final class SWBRepositoryManager implements RepositoryManager
 {    
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRepositoryManager.class);
+    
+    /** The repository. */
     private static SWBRepository repository;
+    
+    /** The office manager. */
     private OfficeManager officeManager;
     static
     {
@@ -59,19 +67,41 @@ public final class SWBRepositoryManager implements RepositoryManager
             log.error(e);
         }
     }
+    
+    /**
+     * Instantiates a new sWB repository manager.
+     * 
+     * @throws SWBException the sWB exception
+     * @throws RepositoryException the repository exception
+     */
     public SWBRepositoryManager() throws SWBException,RepositoryException
     {        
         officeManager=new SWBOfficeManager(this);
     }
 
+    /**
+     * Inits the.
+     */
     public void init()
     {
        log.event("Initilizing SWBRepositoryManager with repository "+ repository.getDescriptor(Repository.REP_NAME_DESC) +" ...");
     }
+    
+    /**
+     * Gets the repository.
+     * 
+     * @return the repository
+     */
     public Repository getRepository()
     {
         return repository;
     }
+    
+    /**
+     * Gets the workspaces.
+     * 
+     * @return the workspaces
+     */
     public ArrayList<String> getWorkspaces()
     {
         ArrayList<String> workspaces=new ArrayList<String>();
@@ -81,31 +111,73 @@ public final class SWBRepositoryManager implements RepositoryManager
         }
         return workspaces;
     }
+    
+    /**
+     * Open session.
+     * 
+     * @param workspace the workspace
+     * @param id the id
+     * @param password the password
+     * @return the session
+     * @throws Exception the exception
+     */
     public Session openSession(String workspace,String id,String password) throws Exception
     {
         return repository.login(new SimpleCredentials(id, password.toCharArray()), workspace);
     }
 
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return "swb";
     }
 
+    /**
+     * Gets the office manager.
+     * 
+     * @return the office manager
+     */
     public OfficeManager getOfficeManager()
     {
         return officeManager;
     }
 
+    /**
+     * Open session.
+     * 
+     * @param workspace the workspace
+     * @param principal the principal
+     * @return the session
+     * @throws Exception the exception
+     */
     public Session openSession(String workspace, User principal) throws Exception
     {
         return repository.login(new SWBCredentials(principal), workspace);
     }
 
+    /**
+     * Creates the workspace.
+     * 
+     * @param workspace the workspace
+     * @param title the title
+     * @param desciption the desciption
+     * @throws Exception the exception
+     */
     public void createWorkspace(String workspace,String title,String desciption) throws Exception
     {
         SWBRepository.createWorkspace(workspace,title,desciption);
     }
 
+    /**
+     * Delete workspace.
+     * 
+     * @param workspace the workspace
+     * @throws Exception the exception
+     */
     public void deleteWorkspace(String workspace) throws Exception
     {
         SWBRepository.deleteWorkspace(workspace);
