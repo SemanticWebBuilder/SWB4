@@ -510,8 +510,9 @@ public class SWBPlatform
 
         /**
          * Gets the id.
-         *
-         * @param res the res
+         * 
+         * @param model the model
+         * @param id the id
          * @return the id
          */
         public static Resource getResourceFromId(Model model, String id)
@@ -784,16 +785,31 @@ public class SWBPlatform
         }
     }
 
+    /**
+     * Checks if is tDB.
+     * 
+     * @return true, if is tDB
+     */
     public static boolean isTDB()
     {
         return persistenceType==PRESIST_TYPE_TDB;
     }
 
+    /**
+     * Checks if is sDB.
+     * 
+     * @return true, if is sDB
+     */
     public static boolean isSDB()
     {
         return persistenceType==PRESIST_TYPE_SDB;
     }
 
+    /**
+     * Checks if is rDB.
+     * 
+     * @return true, if is rDB
+     */
     public static boolean isRDB()
     {
         return persistenceType==PRESIST_TYPE_DEFAULT;
