@@ -98,11 +98,23 @@ public class Dns extends DnsBase {
         return names.get(serverName);
     }
 
+    /**
+     * Cache dns.
+     * 
+     * @param serverName the server name
+     * @param dns the dns
+     */
     public static void cacheDns(String serverName, Dns dns)
     {
         names.put(serverName, dns);
     }
 
+    /**
+     * Contains dns.
+     * 
+     * @param serverName the server name
+     * @return true, if successful
+     */
     public static boolean containsDns(String serverName)
     {
         return names.containsKey(serverName);
