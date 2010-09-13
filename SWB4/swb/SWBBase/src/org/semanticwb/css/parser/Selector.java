@@ -8,34 +8,64 @@ package org.semanticwb.css.parser;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Selector.
+ * 
  * @author victor.lorenzana
  */
 public class Selector {
 
+    /** The name. */
     private String name;
+    
+    /** The atts. */
     private Set<Attribute> atts=new HashSet<Attribute>();
+    
+    /**
+     * Instantiates a new selector.
+     * 
+     * @param name the name
+     * @param atts the atts
+     */
     Selector(String name,Set<Attribute> atts)
     {
         this.name=name;
         this.atts=atts;
     }
+    
+    /**
+     * Gets the attributes.
+     * 
+     * @return the attributes
+     */
     public Attribute[] getAttributes()
     {
         return atts.toArray(new Attribute[atts.size()]);
     }
+    
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
         return name;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -49,6 +79,9 @@ public class Selector {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {

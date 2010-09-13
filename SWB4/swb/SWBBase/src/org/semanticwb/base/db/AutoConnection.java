@@ -60,6 +60,7 @@ public class AutoConnection implements Connection
     /** The isclosed. */
     private boolean isclosed=false;
 
+    /** The debug. */
     private boolean debug=false;
 
     /**

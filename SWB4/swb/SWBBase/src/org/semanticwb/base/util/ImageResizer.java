@@ -50,6 +50,17 @@ public class ImageResizer
         ImageIO.write(createResizedCopy(bi, calcWeight, calcHeight, centered, topsize), type, destfile);
     }
 
+    /**
+     * Shrink to.
+     * 
+     * @param origFile the orig file
+     * @param thresholdWidth the threshold width
+     * @param thresholdHeight the threshold height
+     * @param destfile the destfile
+     * @param type the type
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static boolean shrinkTo(File origFile, int thresholdWidth, int thresholdHeight, File destfile, String type) throws IOException{
         int newWidth=0;
         int newHeight=0;
@@ -86,9 +97,10 @@ public class ImageResizer
 
     /**
      * Resize.
-     *
+     * 
      * @param origFile the orig file
-     * @param topsize the topsize
+     * @param maxWidth the max width
+     * @param maxHeight the max height
      * @param centered the centered
      * @param destfile the destfile
      * @param type the type
@@ -120,12 +132,13 @@ public class ImageResizer
 
     /**
      * Creates the resized copy.
-     *
+     * 
      * @param originalImage the original image
      * @param scaledWidth the scaled width
      * @param scaledHeight the scaled height
      * @param centered the centered
-     * @param topsize the topsize
+     * @param topWidth the top width
+     * @param topHeight the top height
      * @return the buffered image
      */
     private static BufferedImage createResizedCopy(Image originalImage, int scaledWidth, int scaledHeight, boolean centered, int topWidth, int topHeight)
@@ -198,7 +211,8 @@ public class ImageResizer
      * Resize crop.
      * 
      * @param origFile the orig file
-     * @param topsize the topsize
+     * @param maxWidth the max width
+     * @param maxHeight the max height
      * @param destfile the destfile
      * @param type the type
      * @throws IOException Signals that an I/O exception has occurred.
@@ -305,12 +319,13 @@ public class ImageResizer
 
     /**
      * Creates the resized crop copy.
-     *
+     * 
      * @param originalImage the original image
      * @param scaledWidth the scaled width
      * @param scaledHeight the scaled height
-     * @param centered the centered
-     * @param topsize the topsize
+     * @param topWidth the top width
+     * @param topHeight the top height
+     * @param factor the factor
      * @return the buffered image
      */
     private static BufferedImage createResizedCropCopy(Image originalImage, int scaledWidth, int scaledHeight, int topWidth, int topHeight, float factor)

@@ -8,13 +8,26 @@ package org.semanticwb.css.parser;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class Attribute.
+ * 
  * @author victor.lorenzana
  */
 public class Attribute {
+    
+    /** The name. */
     private String name;
+    
+    /** The values. */
     private HashSet<String> values=new HashSet<String>();
+    
+    /**
+     * Instantiates a new attribute.
+     * 
+     * @param name the name
+     * @param value the value
+     */
     public Attribute(String name,String value)
     {
         this.name=name;
@@ -25,21 +38,39 @@ public class Attribute {
             values.add(nvalue);
         }
     }
+    
+    /**
+     * Gets the name.
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return name;
     }
+    
+    /**
+     * Gets the values.
+     * 
+     * @return the values
+     */
     public String[] getValues()
     {
         return values.toArray(new String[values.size()]);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString()
     {
         return name;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj)
     {
@@ -53,6 +84,9 @@ public class Attribute {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode()
     {
