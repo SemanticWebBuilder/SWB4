@@ -43,19 +43,35 @@ import org.semanticwb.resource.office.sem.WordResource;
 import org.semanticwb.xmlrpc.XMLRPCServlet;
 import static org.semanticwb.office.comunication.Base64.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class OfficeServlet.
+ * 
  * @author victor.lorenzana
  */
 public abstract class OfficeServlet extends XMLRPCServlet
 {
 
+    /** The Constant title. */
     private static final String title = "Gateway de Comunicacion con Office INFOTEC Semantic WebBuilder 4";
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(OfficeServlet.class);
+    
+    /** The REALM. */
     private static String REALM = "Secure Area";
+    
+    /** The PREFI x_ basic. */
     private static String PREFIX_BASIC = "Basic ";
+    
+    /** The Constant loader. */
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
+    /**
+     * Inits the.
+     * 
+     * @throws ServletException the servlet exception
+     */
     @Override
     public void init() throws ServletException
     {
@@ -67,6 +83,13 @@ public abstract class OfficeServlet extends XMLRPCServlet
         OfficeDocument.registerContents();
     }
 
+    /**
+     * Gets the password.
+     * 
+     * @param userpassDecoded the userpass decoded
+     * @return the password
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private static String getPassword(String userpassDecoded) throws IOException
     {
         String password = "";
@@ -75,6 +98,13 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return password;
     }
 
+    /**
+     * Gets the user name.
+     * 
+     * @param userpassDecoded the userpass decoded
+     * @return the user name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private static String getUserName(String userpassDecoded) throws IOException
     {
         String userName = "";
@@ -83,6 +113,14 @@ public abstract class OfficeServlet extends XMLRPCServlet
         return userName;
     }
 
+    /**
+     * Check security.
+     * 
+     * @param request the request
+     * @param response the response
+     * @return true, if successful
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean  checkSecurity(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         boolean checkSecurity=false;
@@ -132,6 +170,14 @@ public abstract class OfficeServlet extends XMLRPCServlet
 
     }
 
+    /**
+     * Do post.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws ServletException the servlet exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -142,6 +188,14 @@ public abstract class OfficeServlet extends XMLRPCServlet
 
     }
 
+    /**
+     * Do get.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws ServletException the servlet exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -227,5 +281,12 @@ public abstract class OfficeServlet extends XMLRPCServlet
 
     }
 
+    /**
+     * Checks if is authenticate.
+     * 
+     * @param pUserName the user name
+     * @param pPassword the password
+     * @return true, if is authenticate
+     */
     public abstract boolean isAuthenticate(String pUserName, String pPassword);
 }

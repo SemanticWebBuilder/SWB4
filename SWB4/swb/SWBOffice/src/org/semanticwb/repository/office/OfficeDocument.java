@@ -24,8 +24,18 @@
 package org.semanticwb.repository.office;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OfficeDocument.
+ */
 public class OfficeDocument extends org.semanticwb.repository.office.base.OfficeDocumentBase 
 {
+    
+    /**
+     * Instantiates a new office document.
+     * 
+     * @param base the base
+     */
     public OfficeDocument(org.semanticwb.platform.SemanticObject base)
     {
         super(base);

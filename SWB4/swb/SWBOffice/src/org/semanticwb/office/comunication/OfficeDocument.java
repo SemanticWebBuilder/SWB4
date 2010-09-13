@@ -108,46 +108,117 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class OfficeDocument.
+ * 
  * @author victor.lorenzana
  */
 public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 {
+    
+    /** The Constant FILE_HTML. */
     public static final String FILE_HTML = "filehtmlCache";
+    
+    /** The Constant format. */
     private static final DecimalFormat format = new DecimalFormat("#.0");
+    
+    /** The manager. */
     private SWBRepositoryManager manager;
+    
+    /** The office application. */
     private OfficeApplication officeApplication = new OfficeApplication();
+    
+    /** The Constant MIGRATE_WBRESOURCESCONTENT. */
     private static final String MIGRATE_WBRESOURCESCONTENT = "com.infotec.wb.resources.Content";
+    
+    /** The Constant MIGRATE_WBRESOURCESEXCELCONTENT. */
     private static final String MIGRATE_WBRESOURCESEXCELCONTENT = "com.infotec.wb.resources.ExcelContent";
+    
+    /** The Constant MIGRATE_WBRESOURCESPPTCONTENT. */
     private static final String MIGRATE_WBRESOURCESPPTCONTENT = "com.infotec.wb.resources.PPTContent";
+    
+    /** The Constant categoryBydefault. */
     private static final String categoryBydefault = "Contenidos migrados";
+    
+    /** The Constant descriptionByDefault. */
     private static final String descriptionByDefault = "Contenidos migrados de versión 3.2";
+    
+    /** The cm_content. */
     private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
+    
+    /** The Constant prop_content. */
     private static final SemanticProperty prop_content = OfficeResource.swboffice_content;
+    
+    /** The Constant swb_office. */
     private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
+    
+    /** The Constant PROP_JCR_DATA. */
     private static final SemanticProperty PROP_JCR_DATA = org.semanticwb.repository.office.OfficeDocument.jcr_data;
+    
+    /** The Constant JCR_DATA. */
     private static final String JCR_DATA = PROP_JCR_DATA.getPrefix() + ":" + PROP_JCR_DATA.getName();
+    
+    /** The Constant PROP_JCR_LASTMODIFIED. */
     private static final SemanticProperty PROP_JCR_LASTMODIFIED = org.semanticwb.repository.office.OfficeDocument.jcr_lastModified;
+    
+    /** The Constant JCR_LASTMODIFIED. */
     private static final String JCR_LASTMODIFIED = PROP_JCR_LASTMODIFIED.getPrefix() + ":" + PROP_JCR_LASTMODIFIED.getName();
+    
+    /** The Constant PROP_LASTMODIFIED. */
     private static final SemanticProperty PROP_LASTMODIFIED = org.semanticwb.repository.office.OfficeContent.swboffice_lastModified;
+    
+    /** The Constant LASTMODIFIED. */
     private static final String LASTMODIFIED = PROP_LASTMODIFIED.getPrefix() + ":" + PROP_LASTMODIFIED.getName();
+    
+    /** The Constant JCR_CONTENT. */
     public static final String JCR_CONTENT = "jcr:content";
+    
+    /** The Constant JCR_FROZEN_NODE. */
     private static final String JCR_FROZEN_NODE = "jcr:frozenNode";
+    
+    /** The Constant WORD_RESOURCE_TYPE. */
     private static final String WORD_RESOURCE_TYPE = "WordContent";
+    
+    /** The Constant WORD_RESOURCE_DESCRIPTION. */
     private static final String WORD_RESOURCE_DESCRIPTION = "WordContent";
+    
+    /** The Constant WORD_RESOURCE_TITLE. */
     private static final String WORD_RESOURCE_TITLE = WORD_RESOURCE_DESCRIPTION;
+    
+    /** The Constant PPT_RESOURCE_TYPE. */
     private static final String PPT_RESOURCE_TYPE = "PPTContent";
+    
+    /** The Constant PPT_RESOURCE_DESCRIPTION. */
     private static final String PPT_RESOURCE_DESCRIPTION = "PPTContent";
+    
+    /** The Constant PPT_RESOURCE_TITLE. */
     private static final String PPT_RESOURCE_TITLE = PPT_RESOURCE_DESCRIPTION;
+    
+    /** The Constant EXCEL_RESOURCE_TYPE. */
     private static final String EXCEL_RESOURCE_TYPE = "ExcelContent";
+    
+    /** The Constant EXCEL_RESOURCE_DESCRIPTION. */
     private static final String EXCEL_RESOURCE_DESCRIPTION = "ExcelContent";
+    
+    /** The Constant EXCEL_RESOURCE_TITLE. */
     private static final String EXCEL_RESOURCE_TITLE = EXCEL_RESOURCE_DESCRIPTION;
+    
+    /** The Constant CONTENT_NOT_FOUND. */
     private static final String CONTENT_NOT_FOUND = "El contenido no se encontró en el repositorio.";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(OfficeDocument.class);
+    
+    /** The Constant DEFAULT_MIME_TYPE. */
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+    
+    /** The Constant loader. */
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
+    /**
+     * Instantiates a new office document.
+     */
     public OfficeDocument()
     {
         try
@@ -160,6 +231,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Instantiates a new office document.
+     * 
+     * @param user the user
+     * @param password the password
+     */
     public OfficeDocument(String user, String password)
     {
         this();
@@ -167,6 +244,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         this.password = password;
     }
 
+    /**
+     * Gets the office types.
+     * 
+     * @return the office types
+     */
     public static String[] getOfficeTypes()
     {
         String[] getOfficeTypes = new String[3];
@@ -176,6 +258,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getOfficeTypes;
     }
 
+    /**
+     * Migrate resource.
+     * 
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param xml the xml
+     * @param className the class name
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
+     */
     public Resource migrateResource(String webworkpath, File workpath, String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String file) throws Exception
     {
         if (!workpath.exists())
@@ -210,24 +309,85 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Migrate word resource.
+     * 
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param viewProperties the view properties
+     * @param viewValues the view values
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
+     */
     private Resource migrateWordResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file = file.replaceAll(".html", ".doc");
         return migrateResource(webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
     }
 
+    /**
+     * Migrate excel resource.
+     * 
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param viewProperties the view properties
+     * @param viewValues the view values
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
+     */
     private Resource migrateExcelResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file = file.replaceAll(".html", ".xls");
         return migrateResource(webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, "EXCEL", viewProperties, viewValues, file);
     }
 
+    /**
+     * Migrate ppt resource.
+     * 
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param viewProperties the view properties
+     * @param viewValues the view values
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
+     */
     private Resource migratePPTResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         file = file.replaceAll(".html", ".ppt");
         return migrateResource(webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
     }
 
+    /**
+     * Checks if is office document.
+     * 
+     * @param className the class name
+     * @param workpath the workpath
+     * @param contentid the contentid
+     * @param file the file
+     * @param version the version
+     * @return true, if is office document
+     */
     public boolean isOfficeDocument(String className, String workpath, String contentid, String file, String version)
     {
         if (className.equals(MIGRATE_WBRESOURCESEXCELCONTENT))
@@ -264,6 +424,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
+    /**
+     * Adds the values from old version.
+     * 
+     * @param name the name
+     * @param doc the doc
+     * @param prop the prop
+     * @param values the values
+     */
     private void addValuesFromOldVersion(String name, Document doc, SemanticProperty prop, ArrayList<String> values)
     {
         NodeList nodes = doc.getElementsByTagName(name);
@@ -283,6 +451,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Adds the property info from old version.
+     * 
+     * @param name the name
+     * @param doc the doc
+     * @param prop the prop
+     * @param props the props
+     */
     private void addPropertyInfoFromOldVersion(String name, Document doc, SemanticProperty prop, ArrayList<PropertyInfo> props)
     {
         NodeList nodes = doc.getElementsByTagName(name);
@@ -318,6 +494,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the view properties word.
+     * 
+     * @param xml the xml
+     * @return the view properties word
+     */
     private PropertyInfo[] getViewPropertiesWord(String xml)
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
@@ -333,6 +515,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return props.toArray(new PropertyInfo[props.size()]);
     }
 
+    /**
+     * Gets the string view properties word.
+     * 
+     * @param xml the xml
+     * @return the string view properties word
+     */
     private String[] getStringViewPropertiesWord(String xml)
     {
         ArrayList<String> props = new ArrayList<String>();
@@ -348,6 +536,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return props.toArray(new String[props.size()]);
     }
 
+    /**
+     * Gets the string view properties ppt.
+     * 
+     * @param xml the xml
+     * @return the string view properties ppt
+     */
     private String[] getStringViewPropertiesPPT(String xml)
     {
         ArrayList<String> props = new ArrayList<String>();
@@ -356,6 +550,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return props.toArray(new String[props.size()]);
     }
 
+    /**
+     * Gets the view properties ppt.
+     * 
+     * @param xml the xml
+     * @return the view properties ppt
+     */
     private PropertyInfo[] getViewPropertiesPPT(String xml)
     {
         ArrayList<PropertyInfo> props = new ArrayList<PropertyInfo>();
@@ -365,23 +565,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     }
 
     /**
+     * Migrate resource.
      * 
-     * @param siteid
-     * @param webpageId
-     * @param resourceid
-     * @param version
-     * @param title
-     * @param description
-     * @param repositoryName
-     * @param categoryID
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
      * @param type  word, excel o ppt
-     * @param viewProperties
-     * @param viewValues
-     * @param user
-     * @param password     
-     * @param file
+     * @param viewProperties the view properties
+     * @param viewValues the view values
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
      * @return
-     * @throws Exception
      */
     private Resource migrateResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
@@ -394,6 +594,26 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return migrateResource(webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, file);
     }
 
+    /**
+     * Migrate resource.
+     * 
+     * @param webworkpath the webworkpath
+     * @param workpath the workpath
+     * @param siteid the siteid
+     * @param webpageId the webpage id
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param repositoryName the repository name
+     * @param categoryID the category id
+     * @param type the type
+     * @param viewProperties the view properties
+     * @param viewValues the view values
+     * @param file the file
+     * @return the resource
+     * @throws Exception the exception
+     */
     private Resource migrateResource(String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
     {
         log.trace("Migrando documento de office con id :"+resourceid);
@@ -428,6 +648,26 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return Resource.ClassMgr.getResource(res.id, site);
     }
 
+    /**
+     * Migrate resource to repository.
+     * 
+     * @param webworkpath the webworkpath
+     * @param siteid the siteid
+     * @param workpath the workpath
+     * @param resourceid the resourceid
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param repositoryName the repository name
+     * @param categoryID the category id
+     * @param type the type
+     * @param nodeType the node type
+     * @param file the file
+     * @param properties the properties
+     * @param values the values
+     * @return the string
+     * @throws Exception the exception
+     */
     private String migrateResourceToRepository(String webworkpath, String siteid, File workpath, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         String sourcepath = webworkpath;
@@ -442,6 +682,17 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return contentid;
     }
 
+    /**
+     * Zip resource directory.
+     * 
+     * @param id the id
+     * @param workpath the workpath
+     * @param version the version
+     * @param sourcePath the source path
+     * @param targetPath the target path
+     * @return the file
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static File zipResourceDirectory(String id, String workpath, String version, String sourcePath, String targetPath) throws IOException
     {
         File directory = new File(workpath + "/" + version);
@@ -466,6 +717,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Zip dir.
+     * 
+     * @param dir2zip the dir2zip
+     * @param zos the zos
+     * @param sourcePath the source path
+     * @param targetPath the target path
+     */
     public static void zipDir(String dir2zip, ZipOutputStream zos, String sourcePath, String targetPath)
     {
         try
@@ -523,6 +782,23 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Save.
+     * 
+     * @param title the title
+     * @param description the description
+     * @param repositoryName the repository name
+     * @param categoryID the category id
+     * @param type the type
+     * @param nodeType the node type
+     * @param file the file
+     * @param properties the properties
+     * @param values the values
+     * @param in the in
+     * @param filename the filename
+     * @return the string
+     * @throws Exception the exception
+     */
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values, InputStream in, String filename) throws Exception
     {
         String encode=System.getProperty("file.encoding","utf-8");        
@@ -629,6 +905,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Save.
+     * 
+     * @param title the title
+     * @param description the description
+     * @param repositoryName the repository name
+     * @param categoryID the category id
+     * @param type the type
+     * @param nodeType the node type
+     * @param file the file
+     * @param properties the properties
+     * @param values the values
+     * @return the string
+     * @throws Exception the exception
+     */
     public String save(String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
     {
         for (Part part : requestParts)
@@ -639,6 +930,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return null;
     }
 
+    /**
+     * Gets the number of versions.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return the number of versions
+     * @throws Exception the exception
+     */
     public int getNumberOfVersions(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -664,6 +963,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * All versions are published.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean allVersionsArePublished(String repositoryName, String contentId) throws Exception
     {
         for (VersionInfo version : getVersions(repositoryName, contentId))
@@ -676,6 +983,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return true;
     }
 
+    /**
+     * Delete version of content.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param versionName the version name
+     * @throws Exception the exception
+     */
     public void deleteVersionOfContent(String repositoryName, String contentId, String versionName) throws Exception
     {
         Session session = null;
@@ -729,10 +1044,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     }
 
     /**
-     * Update a Content
+     * Update a Content.
+     * 
+     * @param repositoryName the repository name
      * @param contentId ID of the content, the id is a UUID
+     * @param file the file
+     * @param resources the resources
+     * @param flows the flows
+     * @param msg the msg
      * @return The version name created
-     * @throws java.lang.Exception
+     * @throws Exception the exception
      */
     public String updateContent(String repositoryName, String contentId, String file, ResourceInfo[] resources, PFlow[] flows, String[] msg) throws Exception
     {
@@ -884,11 +1205,25 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
+    /**
+     * Gets the path.
+     * 
+     * @param contentID the content id
+     * @return the path
+     */
     public String getPath(String contentID)
     {
         return "/";
     }
 
+    /**
+     * Exists.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean exists(String repositoryName, String contentId) throws Exception
     {
         boolean exists = false;
@@ -929,12 +1264,26 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return exists;
 
     }
+    
+    /**
+     * Checks if is su.
+     * 
+     * @return true, if is su
+     */
     private boolean isSu()
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         org.semanticwb.model.User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
         return ((su!=null && ouser.hasUserGroup(su)));
     }
+    
+    /**
+     * Delete.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @throws Exception the exception
+     */
     public void delete(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -991,6 +1340,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the last version ofcontent.
+     * 
+     * @param session the session
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return the last version ofcontent
+     * @throws Exception the exception
+     */
     public String getLastVersionOfcontent(Session session, String repositoryName, String contentId) throws Exception
     {
         String getLastVersionOfcontent = null;
@@ -1056,6 +1414,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getLastVersionOfcontent;
     }
 
+    /**
+     * Gets the last version ofcontent.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return the last version ofcontent
+     * @throws Exception the exception
+     */
     public String getLastVersionOfcontent(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -1077,6 +1443,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the versions.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return the versions
+     * @throws Exception the exception
+     */
     public VersionInfo[] getVersions(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -1159,6 +1533,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return versions.toArray(new VersionInfo[versions.size()]);
     }
 
+    /**
+     * Sets the title.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @param title the title
+     * @throws Exception the exception
+     */
     public void setTitle(String repositoryName, String contentID, String title) throws Exception
     {
         Session session = null;
@@ -1188,6 +1570,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the title.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the title
+     * @throws Exception the exception
+     */
     public String getTitle(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -1211,6 +1601,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the description.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the description
+     * @throws Exception the exception
+     */
     public String getDescription(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -1234,6 +1632,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Sets the description.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @param description the description
+     * @throws Exception the exception
+     */
     public void setDescription(String repositoryName, String contentID, String description) throws Exception
     {
         Session session = null;
@@ -1264,6 +1670,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the last update.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the last update
+     * @throws Exception the exception
+     */
     public Date getLastUpdate(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -1287,6 +1701,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the resource info.
+     * 
+     * @param officeResource the office resource
+     * @return the resource info
+     */
     public static ResourceInfo getResourceInfo(OfficeResource officeResource)
     {
         ResourceInfo info = null;
@@ -1318,6 +1738,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return info;
     }
 
+    /**
+     * List resources.
+     * 
+     * @param repositoryName the repository name
+     * @param contentid the contentid
+     * @return the resource info[]
+     * @throws Exception the exception
+     */
     public ResourceInfo[] listResources(String repositoryName, String contentid) throws Exception
     {
         ArrayList<ResourceInfo> listResources = new ArrayList<ResourceInfo>();
@@ -1351,6 +1779,11 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return listResources.toArray(new ResourceInfo[listResources.size()]);
     }
 
+    /**
+     * Register contents.
+     * 
+     * @param site the site
+     */
     public static void registerContents(WebSite site)
     {
         ResourceType resourceType = site.getResourceType(EXCEL_RESOURCE_TYPE);
@@ -1394,6 +1827,9 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Register contents.
+     */
     public static void registerContents()
     {
         Iterator<WebSite> sites = SWBContext.listWebSites();
@@ -1407,6 +1843,21 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Publish to resource content.
+     * 
+     * @param id the id
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param webpage the webpage
+     * @param properties the properties
+     * @param values the values
+     * @return the resource info
+     * @throws Exception the exception
+     */
     public ResourceInfo publishToResourceContent(String id, String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
@@ -1578,6 +2029,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Can publish to resource content.
+     * 
+     * @param type the type
+     * @param info the info
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canPublishToResourceContent(String type,WebPageInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.siteID);
@@ -1601,12 +2060,34 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Publish to resource content.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @param title the title
+     * @param description the description
+     * @param webpage the webpage
+     * @param properties the properties
+     * @param values the values
+     * @return the resource info
+     * @throws Exception the exception
+     */
     public ResourceInfo publishToResourceContent(String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
     {
         String id = UUID.randomUUID().toString();
         return publishToResourceContent(id, repositoryName, contentId, version, title, description, webpage, properties, values);
     }
 
+    /**
+     * Sets the resource properties.
+     * 
+     * @param resourceInfo the resource info
+     * @param propertyInfo the property info
+     * @param value the value
+     * @throws Exception the exception
+     */
     public void setResourceProperties(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -1653,6 +2134,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Sets the view property value.
+     * 
+     * @param resourceInfo the resource info
+     * @param propertyInfo the property info
+     * @param value the value
+     * @throws Exception the exception
+     */
     public void setViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo, String value) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -1699,6 +2188,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the calendars of resource.
+     * 
+     * @param resourceInfo the resource info
+     * @return the calendars of resource
+     * @throws Exception the exception
+     */
     public CalendarInfo[] getCalendarsOfResource(ResourceInfo resourceInfo) throws Exception
     {
         HashSet<CalendarInfo> getCalendarInfo = new HashSet<CalendarInfo>();
@@ -1719,6 +2215,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
     }
 
+    /**
+     * Gets the catalog calendars.
+     * 
+     * @param siteInfo the site info
+     * @return the catalog calendars
+     * @throws Exception the exception
+     */
     public CalendarInfo[] getCatalogCalendars(SiteInfo siteInfo) throws Exception
     {
         HashSet<CalendarInfo> getCalendarInfo = new HashSet<CalendarInfo>();
@@ -1740,6 +2243,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return getCalendarInfo.toArray(new CalendarInfo[getCalendarInfo.size()]);
     }
 
+    /**
+     * Gets the view property value.
+     * 
+     * @param resourceInfo the resource info
+     * @param propertyInfo the property info
+     * @return the view property value
+     * @throws Exception the exception
+     */
     public String getViewPropertyValue(ResourceInfo resourceInfo, PropertyInfo propertyInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -1748,6 +2259,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return resource.getSemanticObject().getProperty(prop);
     }
 
+    /**
+     * Validate view values.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @param properties the properties
+     * @param values the values
+     * @throws Exception the exception
+     */
     public void validateViewValues(String repositoryName, String contentID, PropertyInfo[] properties, Object[] values) throws Exception
     {
         String contentType = getContentType(repositoryName, contentID);
@@ -1794,6 +2314,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Checks if is super property.
+     * 
+     * @param prop the prop
+     * @param clazz the clazz
+     * @return true, if is super property
+     */
     private boolean isSuperProperty(SemanticProperty prop, SemanticClass clazz)
     {
         Iterator<SemanticClass> classes = clazz.listSuperClasses();
@@ -1824,11 +2351,27 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return false;
     }
 
+    /**
+     * Gets the content properties.
+     * 
+     * @param repositoryName the repository name
+     * @param type the type
+     * @return the content properties
+     * @throws Exception the exception
+     */
     public PropertyInfo[] getContentProperties(String repositoryName, String type) throws Exception
     {
         return loader.getOfficeManager(repositoryName).getContentProperties(type);
     }
 
+    /**
+     * Gets the resource properties.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the resource properties
+     * @throws Exception the exception
+     */
     public PropertyInfo[] getResourceProperties(String repositoryName, String contentID) throws Exception
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -1908,12 +2451,27 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return properties.toArray(new PropertyInfo[properties.size()]);
     }
 
+    /**
+     * Delete content of page.
+     * 
+     * @param info the info
+     * @throws Exception the exception
+     */
     public void deleteContentOfPage(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.id);
         site.removeResource(info.id);
     }
 
+    /**
+     * Gets the content.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @return the content
+     * @throws Exception the exception
+     */
     public InputStream getContent(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
@@ -1964,6 +2522,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the content file.
+     * 
+     * @param session the session
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @return the content file
+     * @throws Exception the exception
+     */
     public String getContentFile(Session session, String repositoryName, String contentId, String version) throws Exception
     {
         try
@@ -2012,6 +2580,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
             }
         }
     }
+    
+    /**
+     * Gets the session.
+     * 
+     * @param repositoryName the repository name
+     * @param user the user
+     * @return the session
+     * @throws Exception the exception
+     */
     public Session getSession(String repositoryName,org.semanticwb.model.User user) throws Exception
     {
         Session session = null;
@@ -2020,6 +2597,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     }
 
 
+    /**
+     * Gets the content file.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @param user the user
+     * @return the content file
+     * @throws Exception the exception
+     */
     public String getContentFile(String repositoryName, String contentId, String version, org.semanticwb.model.User user) throws Exception
     {
         Session session = null;
@@ -2041,6 +2628,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the content file.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @return the content file
+     * @throws Exception the exception
+     */
     public String getContentFile(String repositoryName, String contentId, String version) throws Exception
     {
         Session session = null;
@@ -2062,6 +2658,16 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Creates the preview.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param version the version
+     * @param type the type
+     * @return the string
+     * @throws Exception the exception
+     */
     public String createPreview(String repositoryName, String contentId, String version, String type) throws Exception
     {
         String name = UUID.randomUUID().toString();
@@ -2073,6 +2679,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return name;
     }
 
+    /**
+     * Gets the content type.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @return the content type
+     * @throws Exception the exception
+     */
     public String getContentType(String repositoryName, String contentId) throws Exception
     {
         Session session = null;
@@ -2096,6 +2710,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Activate resource.
+     * 
+     * @param info the info
+     * @param active the active
+     * @throws Exception the exception
+     */
     public void activateResource(ResourceInfo info, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2103,6 +2724,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         resource.setActive(active);
     }
 
+    /**
+     * Gets the category.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the category
+     * @throws Exception the exception
+     */
     public String getCategory(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -2127,6 +2756,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Change category.
+     * 
+     * @param repositoryName the repository name
+     * @param contentId the content id
+     * @param newCategoryId the new category id
+     * @throws Exception the exception
+     */
     public void changeCategory(String repositoryName, String contentId, String newCategoryId) throws Exception
     {
         Session session = null;
@@ -2152,6 +2789,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Change version porlet.
+     * 
+     * @param info the info
+     * @param newVersion the new version
+     * @throws Exception the exception
+     */
     public void changeVersionPorlet(ResourceInfo info, String newVersion) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2164,6 +2808,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         officeResource.loadContent(in,wbuser);        
     }
 
+    /**
+     * Gets the category info.
+     * 
+     * @param repositoryName the repository name
+     * @param contentid the contentid
+     * @return the category info
+     * @throws Exception the exception
+     */
     public CategoryInfo getCategoryInfo(String repositoryName, String contentid) throws Exception
     {
         Session session = null;
@@ -2194,6 +2846,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Delete resource.
+     * 
+     * @param info the info
+     * @throws Exception the exception
+     */
     public void deleteResource(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2214,6 +2872,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the version to show.
+     * 
+     * @param info the info
+     * @return the version to show
+     * @throws Exception the exception
+     */
     public String getVersionToShow(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2223,6 +2888,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return officeResource.getVersionToShow();
     }
 
+    /**
+     * Delete preview.
+     * 
+     * @param dir the dir
+     * @throws Exception the exception
+     */
     public void deletePreview(String dir) throws Exception
     {
         if (!dir.startsWith("/"))
@@ -2232,6 +2903,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         OfficeResource.clean(dir);
     }
 
+    /**
+     * Update calendar.
+     * 
+     * @param siteInfo the site info
+     * @param calendarInfo the calendar info
+     * @throws Exception the exception
+     */
     public void updateCalendar(SiteInfo siteInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -2240,6 +2918,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         cal.setUpdated(new Date(System.currentTimeMillis()));
     }
 
+    /**
+     * Insert calendarto resource.
+     * 
+     * @param resourceInfo the resource info
+     * @param calendar the calendar
+     * @throws Exception the exception
+     */
     public void insertCalendartoResource(ResourceInfo resourceInfo, CalendarInfo calendar) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2265,6 +2950,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Delete calendar.
+     * 
+     * @param resourceInfo the resource info
+     * @param calendarInfo the calendar info
+     * @throws Exception the exception
+     */
     public void deleteCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2280,6 +2972,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Active calendar.
+     * 
+     * @param resourceInfo the resource info
+     * @param calendarInfo the calendar info
+     * @param active the active
+     * @throws Exception the exception
+     */
     public void activeCalendar(ResourceInfo resourceInfo, CalendarInfo calendarInfo, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2295,6 +2995,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Update porlet.
+     * 
+     * @param resourceInfo the resource info
+     * @throws Exception the exception
+     */
     public void updatePorlet(ResourceInfo resourceInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(resourceInfo.page.site.id);
@@ -2307,12 +3013,30 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         officeResource.setVersionToShow(resourceInfo.version);
     }
 
+    /**
+     * Validate content values.
+     * 
+     * @param repositoryName the repository name
+     * @param properties the properties
+     * @param values the values
+     * @param type the type
+     * @throws Exception the exception
+     */
     public void validateContentValues(String repositoryName, PropertyInfo[] properties, Object[] values, String type) throws Exception
     {
         OfficeManager officemanager = loader.getOfficeManager(repositoryName);
         officemanager.validateContentValues(properties, values, type);
     }
 
+    /**
+     * Sets the content property value.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @param propertyInfo the property info
+     * @param value the value
+     * @throws Exception the exception
+     */
     public void setContentPropertyValue(String repositoryName, String contentID, PropertyInfo propertyInfo, String value) throws Exception
     {
         Session session = null;
@@ -2338,6 +3062,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Sets the content properties.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @param properties the properties
+     * @param values the values
+     * @throws Exception the exception
+     */
     public void setContentProperties(String repositoryName, String contentID, PropertyInfo[] properties, String[] values) throws Exception
     {
         Session session = null;
@@ -2369,6 +3102,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the name of content.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the name of content
+     * @throws Exception the exception
+     */
     public String getNameOfContent(String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -2391,6 +3132,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Gets the content property.
+     * 
+     * @param prop the prop
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return the content property
+     * @throws Exception the exception
+     */
     public String getContentProperty(PropertyInfo prop, String repositoryName, String contentID) throws Exception
     {
         Session session = null;
@@ -2413,6 +3163,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Needs send to publish.
+     * 
+     * @param info the info
+     * @return true, if successful
+     */
     public boolean needsSendToPublish(ResourceInfo info)
     {
         boolean needsSendToPublish = false;
@@ -2430,6 +3186,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return needsSendToPublish;
     }
 
+    /**
+     * Gets the flows.
+     * 
+     * @param info the info
+     * @return the flows
+     */
     public PFlow[] getFlows(ResourceInfo info)
     {
         HashSet<PFlow> flows = new HashSet<PFlow>();
@@ -2445,6 +3207,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return flows.toArray(new PFlow[flows.size()]);
     }
 
+    /**
+     * Send to authorize.
+     * 
+     * @param info the info
+     * @param flow the flow
+     * @param message the message
+     * @throws Exception the exception
+     */
     public void sendToAuthorize(ResourceInfo info, org.semanticwb.office.interfaces.PFlow flow, String message) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2465,6 +3235,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         SWBPortal.getPFlowManager().sendResourceToAuthorize(resource, pflow, message, wbuser);
     }
 
+    /**
+     * Checks if is in flow.
+     * 
+     * @param info the info
+     * @return true, if is in flow
+     */
     public boolean isInFlow(ResourceInfo info)
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2473,6 +3249,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
+    /**
+     * Checks if is authorized.
+     * 
+     * @param info the info
+     * @return true, if is authorized
+     */
     public boolean isAuthorized(ResourceInfo info)
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2480,6 +3262,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return SWBPortal.getPFlowManager().isAuthorized(resource);
     }
 
+    /**
+     * Sets the end date.
+     * 
+     * @param info the info
+     * @param date the date
+     * @throws Exception the exception
+     */
     public void setEndDate(ResourceInfo info, Date date) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2487,6 +3276,12 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         resource.setExpiration(date);
     }
 
+    /**
+     * Delete end date.
+     * 
+     * @param info the info
+     * @throws Exception the exception
+     */
     public void deleteEndDate(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2494,6 +3289,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         resource.setExpiration(null);
     }
 
+    /**
+     * Gets the end date.
+     * 
+     * @param info the info
+     * @return the end date
+     * @throws Exception the exception
+     */
     public Date getEndDate(ResourceInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2501,6 +3303,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return resource.getExpiration();
     }
 
+    /**
+     * Delete calendar from catalog.
+     * 
+     * @param siteInfo the site info
+     * @param calendarIndo the calendar indo
+     * @throws Exception the exception
+     */
     public void deleteCalendarFromCatalog(SiteInfo siteInfo, CalendarInfo calendarIndo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -2508,6 +3317,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         site.removeCalendar(calendarIndo.id);
     }
 
+    /**
+     * Gets the elements of resource.
+     * 
+     * @param info the info
+     * @return the elements of resource
+     * @throws Exception the exception
+     */
     public ElementInfo[] getElementsOfResource(ResourceInfo info) throws Exception
     {
         HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
@@ -2558,6 +3374,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return rules.toArray(new ElementInfo[rules.size()]);
     }
 
+    /**
+     * Adds the element to resource.
+     * 
+     * @param info the info
+     * @param ruleInfo the rule info
+     * @throws Exception the exception
+     */
     public void addElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2634,6 +3457,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
 
     }
 
+    /**
+     * Delete element to resource.
+     * 
+     * @param info the info
+     * @param ruleInfo the rule info
+     * @throws Exception the exception
+     */
     public void deleteElementToResource(ResourceInfo info, ElementInfo ruleInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2682,6 +3512,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Change resource of web page.
+     * 
+     * @param info the info
+     * @param webPageInfo the web page info
+     * @throws Exception the exception
+     */
     public void changeResourceOfWebPage(ResourceInfo info, WebPageInfo webPageInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.page.site.id);
@@ -2692,6 +3529,13 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         oldWebPage.removeResource(resource);
     }
 
+    /**
+     * Gets the languages.
+     * 
+     * @param site the site
+     * @return the languages
+     * @throws Exception the exception
+     */
     public LanguageInfo[] getLanguages(SiteInfo site) throws Exception
     {
         ArrayList<LanguageInfo> languages = new ArrayList<LanguageInfo>();
@@ -2708,6 +3552,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return languages.toArray(new LanguageInfo[languages.size()]);
     }
 
+    /**
+     * Gets the title of web page.
+     * 
+     * @param webPageInfo the web page info
+     * @param laguage the laguage
+     * @return the title of web page
+     * @throws Exception the exception
+     */
     public String getTitleOfWebPage(PageInfo webPageInfo, LanguageInfo laguage) throws Exception
     {
         WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
@@ -2715,6 +3567,14 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         return page.getTitle(laguage.id);
     }
 
+    /**
+     * Sets the titles of web page.
+     * 
+     * @param webPageInfo the web page info
+     * @param languages the languages
+     * @param values the values
+     * @throws Exception the exception
+     */
     public void setTitlesOfWebPage(PageInfo webPageInfo, LanguageInfo[] languages, String[] values) throws Exception
     {
         WebSite osite = WebSite.ClassMgr.getWebSite(webPageInfo.site.id);
@@ -2732,6 +3592,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
     }
 
+    /**
+     * Exist content old version.
+     * 
+     * @param contentid the contentid
+     * @param topicmap the topicmap
+     * @param topicid the topicid
+     * @return the content info
+     * @throws Exception the exception
+     */
     public ContentInfo existContentOldVersion(String contentid, String topicmap, String topicid) throws Exception
     {
         WebSite site = WebSite.ClassMgr.getWebSite(topicmap);
@@ -2760,6 +3629,15 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
         }
         return null;
     }    
+    
+    /**
+     * Can modify.
+     * 
+     * @param repositoryName the repository name
+     * @param contentID the content id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canModify(String repositoryName, String contentID) throws Exception
     {
         Session session = null;

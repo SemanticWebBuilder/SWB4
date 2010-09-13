@@ -48,17 +48,28 @@ import org.semanticwb.office.interfaces.IOfficeApplication;
 import org.semanticwb.security.auth.SWB4CallbackHandlerGateWayOffice;
 import static org.semanticwb.office.comunication.Base64.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class GateWayOffice.
+ * 
  * @author victor.lorenzana
  */
 public class GateWayOffice implements InternalServlet
 {
 
+    /** The REALM. */
     private static String REALM = "Secure Area";
+    
+    /** The PREFI x_ basic. */
     private static String PREFIX_BASIC = "Basic ";
+    
+    /** The Constant title. */
     private static final String title = "Gateway de Comunicación con Office INFOTEC Semantic WebBuilder 4";
+    
+    /** The log. */
     static Logger log = SWBUtils.getLogger(GateWayOffice.class);
+    
+    /** The office servlet. */
     private OfficeServlet officeServlet = new OfficeServlet()
     {
 
@@ -85,12 +96,28 @@ public class GateWayOffice implements InternalServlet
         }
     };
 
+    /**
+     * Inits the.
+     * 
+     * @param config the config
+     * @throws ServletException the servlet exception
+     */
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing GatewayOffice...");
         officeServlet.init();
     }
 
+    /**
+     * Show excel content.
+     * 
+     * @param out the out
+     * @param file the file
+     * @param dir the dir
+     * @param contentId the content id
+     * @param repositoryName the repository name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void showExcelContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         file = file.replace(".xls", ".html");
@@ -117,6 +144,16 @@ public class GateWayOffice implements InternalServlet
 
     }
 
+    /**
+     * Show ppt content.
+     * 
+     * @param out the out
+     * @param file the file
+     * @param dir the dir
+     * @param contentId the content id
+     * @param repositoryName the repository name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void showPPTContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         String path = SWBPortal.getWebWorkPath();
@@ -141,6 +178,16 @@ public class GateWayOffice implements InternalServlet
         out.close();
     }
 
+    /**
+     * Show word content.
+     * 
+     * @param out the out
+     * @param file the file
+     * @param dir the dir
+     * @param contentId the content id
+     * @param repositoryName the repository name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void showWordContent(PrintWriter out, String file, String dir, String contentId, String repositoryName) throws IOException
     {
         file = file.replace(".doc", ".html");
@@ -177,6 +224,13 @@ public class GateWayOffice implements InternalServlet
 
     }
 
+    /**
+     * Gets the password.
+     * 
+     * @param userpassDecoded the userpass decoded
+     * @return the password
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private static String getPassword(String userpassDecoded) throws IOException
     {
         String password = "";
@@ -186,6 +240,13 @@ public class GateWayOffice implements InternalServlet
         return password;
     }
 
+    /**
+     * Gets the user name.
+     * 
+     * @param userpassDecoded the userpass decoded
+     * @return the user name
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private static String getUserName(String userpassDecoded) throws IOException
     {
         String userName = "";
@@ -195,6 +256,15 @@ public class GateWayOffice implements InternalServlet
         return userName;
     }
 
+    /**
+     * Do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param dparams the dparams
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ServletException the servlet exception
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         if (request.getMethod().toLowerCase().equals("post"))
