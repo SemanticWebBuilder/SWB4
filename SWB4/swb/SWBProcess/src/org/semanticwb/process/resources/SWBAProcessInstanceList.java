@@ -83,19 +83,31 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<thead>");
                 out.println("<tr>");
                 out.println("<th>");
-                out.println("Acción");
+                out.println("&nbsp;");
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Identificador");
+                out.println("Id");
                 out.println("</th>");
                 out.println("<th>");
                 out.println("Titulo");
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Artefactos");
+                out.println("Estatus");
                 out.println("</th>");
                 out.println("<th>");
-                out.println("Detalle proceso");
+                out.println("Creador");
+                out.println("</th>");
+                out.println("<th>");
+                out.println("Asignado");
+                out.println("</th>");
+                out.println("<th>");
+                out.println("Inicio");
+                out.println("</th>");
+                out.println("<th>");
+                out.println("Finalizo");
+                out.println("</th>");
+                out.println("<th>");
+                out.println("Artefactos");
                 out.println("</th>");
                 out.println("</tr>");
                 out.println("</thead>");
@@ -118,7 +130,32 @@ public class SWBAProcessInstanceList extends GenericResource {
                     out.println(pi.getId());
                     out.println("</td>");
                     out.println("<td>");
-                    out.println(pi.getProcessType().getTitle());
+
+                    //liga para ver el detalle de esta instancia del proceso.
+                    SWBResourceURL urlpd = paramRequest.getRenderUrl();
+                    urlpd.setParameter("suri", id);
+                    urlpd.setParameter("suripi", pi.getURI());
+                    urlpd.setParameter("act", "pidetail");
+
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("procInstDetail") + "\" onclick=\"submitUrl('" + urlpd + "',this); return false;\">" + pi.getProcessType().getTitle() + "</a>");
+                    //out.println(pi.getProcessType().getTitle());
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(getStatusName(pi.getStatus())); 
+                    out.println("</td>");
+                    User usrtmp = pi.getCreator().getCreator();
+                    out.println("<td>");
+                    out.println(usrtmp.getFullName());
+                    out.println("</td>");
+                    out.println("<td>");
+                    usrtmp = pi.getAssignedto();
+                    out.println((usrtmp!=null?usrtmp.getFullName():"No asignado"));
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(pi.getCreated());
+                    out.println("</td>");
+                    out.println("<td>");
+                    out.println(pi.getEnded()!=null?pi.getEnded().toString():"---");
                     out.println("</td>");
 
                     //liga para ver artefactos asociados a esta instancia de proceso.
@@ -130,17 +167,6 @@ public class SWBAProcessInstanceList extends GenericResource {
                     out.println("<td>");
                     out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("showartifacts") + "\" onclick=\"submitUrl('" + urlart + "',this); return false;\">" + paramRequest.getLocaleString("msgview") + "</a>");
                     out.println("</td>");
-
-                    //liga para ver el detalle de esta instancia del proceso.
-                    SWBResourceURL urlpd = paramRequest.getRenderUrl();
-                    urlpd.setParameter("suri", id);
-                    urlpd.setParameter("suripi", pi.getId());
-                    urlpd.setParameter("act", "pidetail");
-
-                    out.println("<td>");
-                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("procInstDetail") + "\" onclick=\"submitUrl('" + urlpd + "',this); return false;\">" + paramRequest.getLocaleString("msgview") + "</a>");
-                    //out.println("Detalle proceso");
-                    out.println("</td>");
                     out.println("</tr>");
 
                 }
@@ -148,13 +174,16 @@ public class SWBAProcessInstanceList extends GenericResource {
 
                 out.println("</tbody>");
                 out.println("<tfoot>");
-                out.println("<tr>");
-                out.println("<td colspan=\"5\">");
-                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlnpi + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnNewProcessInst") + "</button>"); //
-                out.println("</td>");
-                out.println("</tr>");
-                out.println("</tfoot>");
+//                out.println("<tr>");
+//                out.println("<td colspan=\"5\">");
+//                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlnpi + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnNewProcessInst") + "</button>"); //
+//                out.println("</td>");
+//                out.println("</tr>");
+//                out.println("</tfoot>");
                 out.println("</table>");
+                out.println("</fieldset>");
+                out.println("<fieldset>");
+                out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlnpi + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnNewProcessInst") + "</button>"); //
                 out.println("</fieldset>");
                 out.println("</div>");
             } else if ("artifacts".equals(action)) {
@@ -178,17 +207,30 @@ public class SWBAProcessInstanceList extends GenericResource {
                     out.println("</li>");
                 }
                 out.println("</ul>");
+                out.println("</fieldset>");
+                out.println("<fieldset>");
                 SWBResourceURL urlbck = paramRequest.getRenderUrl();
                 urlbck.setParameter("suri", id);
                 urlbck.setParameter("act", "");
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlbck + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnBack") + "</button>"); //
-
+                out.println("</fieldset>");
                 out.println("</div>");
             } else if ("pidetail".equals(action)) {
 
                 String pinsturi = request.getParameter("suripi");
 
-                ProcessInstance pi = ProcessInstance.ClassMgr.getProcessInstance(pinsturi, site);
+                GenericObject pigobj = ont.getGenericObject(pinsturi);
+
+                ProcessInstance pi = null;
+
+                if(pigobj instanceof ProcessInstance)
+                {
+                    pi = (ProcessInstance) pigobj;
+                }
+                if(null==pi)
+                {
+                    pi = ProcessInstance.ClassMgr.getProcessInstance(pinsturi, site);
+                }
 
                 out.println("<div class=\"swbform\">");
                 out.println("<fieldset>");
@@ -203,10 +245,13 @@ public class SWBAProcessInstanceList extends GenericResource {
                     printActivityInstance(obj, out);
                 }
                 out.println("</ul>");
+                out.println("</fieldset>");
+                out.println("<fieldset>");
                 SWBResourceURL urlbck = paramRequest.getRenderUrl();
                 urlbck.setParameter("suri", id);
                 urlbck.setParameter("act", "");
                 out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlbck + "',this.domNode); return false;\">" + paramRequest.getLocaleString("btnBack") + "</button>"); //
+                out.println("</fieldset>");
                 out.println("</div>");
             }
 
@@ -265,6 +310,39 @@ public class SWBAProcessInstanceList extends GenericResource {
 
         }
     }
+
+    public String getStatusName(int status)
+    {
+        String ret = "estatus incorrecto";
+        if(status==ProcessInstance.STATUS_INIT)
+        {
+            ret="Iniciado";
+        }
+        else if(status==ProcessInstance.STATUS_ABORTED)
+        {
+            ret="Abortado";
+        }
+        else if(status==ProcessInstance.STATUS_CLOSED)
+        {
+            ret="Cerrado";
+        }
+        else if(status==ProcessInstance.STATUS_OPEN)
+        {
+            ret="Abierto";
+        }
+        else if(status==ProcessInstance.STATUS_PROCESSING)
+        {
+            ret="En proceso";
+        }
+        else if(status==ProcessInstance.STATUS_STOPED)
+        {
+            ret="Detenido";
+        }
+
+
+        return ret;
+    }
+
 
     public void printActivityInstance(FlowNodeInstance ai, PrintWriter out) throws IOException {
         out.println("<li>");
