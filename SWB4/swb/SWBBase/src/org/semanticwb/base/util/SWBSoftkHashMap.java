@@ -13,10 +13,13 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBSoftkHashMap.
+ * 
+ * @param <K> the key type
+ * @param <V> the value type
  * @author Dr. Heinz M. Kabutz, Sydney (what's up doc?) Redelinghuys, adjusted by Serch
- *
  */
 public class SWBSoftkHashMap<K,V> extends AbstractMap<K,V> {
   /** The internal HashMap that will hold the SoftReference. */
@@ -28,9 +31,21 @@ public class SWBSoftkHashMap<K,V> extends AbstractMap<K,V> {
   /** Reference queue for cleared SoftReference objects. */
   private final ReferenceQueue queue = new ReferenceQueue();
 
+  /**
+   * Instantiates a new sWB softk hash map.
+   */
   public SWBSoftkHashMap() { this(100); }
+  
+  /**
+   * Instantiates a new sWB softk hash map.
+   * 
+   * @param hardSize the hard size
+   */
   public SWBSoftkHashMap(int hardSize) { HARD_SIZE = hardSize; }
 
+  /* (non-Javadoc)
+   * @see java.util.AbstractMap#get(java.lang.Object)
+   */
   public V get(Object key) {
     V result = null;
     // We get the SoftReference represented by that key
@@ -64,13 +79,22 @@ public class SWBSoftkHashMap<K,V> extends AbstractMap<K,V> {
    not only the value but also the key to make it easier to find
    the entry in the HashMap after it's been garbage collected. */
   private static class SoftValue extends SoftReference {
+    
+    /** The key. */
     private final Object key; // always make data member final
-    /** Did you know that an outer class can access private data
-     members and methods of an inner class?  I didn't know that!
-     I thought it was only the inner class who could access the
-     outer class's private information.  An outer class can also
-     access private members of an inner class inside its inner
-     class. */
+    
+    /**
+     * Did you know that an outer class can access private data
+     * members and methods of an inner class?  I didn't know that!
+     * I thought it was only the inner class who could access the
+     * outer class's private information.  An outer class can also
+     * access private members of an inner class inside its inner
+     * class.
+     * 
+     * @param k the k
+     * @param key the key
+     * @param q the q
+     */
     private SoftValue(Object k, Object key, ReferenceQueue q) {
       super(k, q);
       this.key = key;
@@ -86,26 +110,49 @@ public class SWBSoftkHashMap<K,V> extends AbstractMap<K,V> {
       hash.remove(sv.key); // we can access private data!
     }
   }
-  /** Here we put the key, value pair into the HashMap using
-   a SoftValue object. */
+  
+  /**
+   * Here we put the key, value pair into the HashMap using
+   * a SoftValue object.
+   * 
+   * @param key the key
+   * @param value the value
+   * @return the v
+   */
   public V put(K key, V value) {
     processQueue(); // throw out garbage collected values first
     return (V)hash.put(key, new SoftValue(value, key, queue));
   }
+  
+  /* (non-Javadoc)
+   * @see java.util.AbstractMap#remove(java.lang.Object)
+   */
   public V remove(Object key) {
     processQueue(); // throw out garbage collected values first
     SoftReference<V> value = hash.remove(key);
     return (null==value)?null:value.get();
   }
+  
+  /* (non-Javadoc)
+   * @see java.util.AbstractMap#clear()
+   */
   public void clear() {
     hardCache.clear();
     processQueue(); // throw out garbage collected values
     hash.clear();
   }
+  
+  /* (non-Javadoc)
+   * @see java.util.AbstractMap#size()
+   */
   public int size() {
     processQueue(); // throw out garbage collected values first
     return hash.size();
   }
+  
+  /* (non-Javadoc)
+   * @see java.util.AbstractMap#entrySet()
+   */
   public Set entrySet() {
     // no, no, you may NOT do that!!! GRRR
     throw new UnsupportedOperationException();

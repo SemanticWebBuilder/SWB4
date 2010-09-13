@@ -460,6 +460,12 @@ public class SWBUtils {
             return ret;
         }
 
+        /**
+         * Gets the plural.
+         * 
+         * @param name the name
+         * @return the plural
+         */
         public static String getPlural(String name)
         {
             if (name.endsWith("y") && !(name.endsWith("ay") || name.endsWith("ey") || name.endsWith("iy") || name.endsWith("oy") || name.endsWith("uy")))
@@ -493,6 +499,12 @@ public class SWBUtils {
             return name;
         }
 
+        /**
+         * To upper case.
+         * 
+         * @param data the data
+         * @return the string
+         */
         public static String toUpperCase(String data)
         {
             String letter = data.substring(0, 1);
@@ -981,6 +993,12 @@ public class SWBUtils {
             return aux;
         }
 
+        /**
+         * Scape4 script.
+         * 
+         * @param txt the txt
+         * @return the string
+         */
         public static String scape4Script(String txt)
         {
             String aux = txt;
@@ -992,6 +1010,13 @@ public class SWBUtils {
             return aux;
         }
 
+        /**
+         * Crop text.
+         * 
+         * @param txt the txt
+         * @param size the size
+         * @return the string
+         */
         public static String cropText(String txt, int size)
         {
             if(txt!=null && txt.length()>size)txt=txt.substring(0,size)+"...";
@@ -2702,6 +2727,13 @@ public class SWBUtils {
             }
         }
 
+        /**
+         * Checks if is uT f8.
+         * 
+         * @param file the file
+         * @return true, if is uT f8
+         * @throws IOException Signals that an I/O exception has occurred.
+         */
         public static boolean isUTF8(File file) throws IOException
         {
             int c3=-61;
@@ -2994,6 +3026,7 @@ public class SWBUtils {
      */
     public static class EMAIL {
 
+        /** The smtpssl. */
         private static boolean smtpssl = false;
         /**
          * Represents the domain name or IP addres for the SMTP server to use.
@@ -3007,8 +3040,8 @@ public class SWBUtils {
          * SMTP a usar.</p>
          */
         private static int smtpport = 0;
-        /**
-         */
+        
+        /** The smtptls. */
         private static boolean smtptls = false;
         /**
          * Represents the user name registered in the SMTP server for sending messages.
@@ -3029,6 +3062,11 @@ public class SWBUtils {
          */
         private static String adminEmail = null;
 
+        /**
+         * Sets the sMTP ssl.
+         * 
+         * @param ssl the new sMTP ssl
+         */
         public static void setSMTPSsl(boolean ssl)
         {
             SWBUtils.EMAIL.smtpssl = ssl;
@@ -3049,11 +3087,21 @@ public class SWBUtils {
             SWBUtils.EMAIL.smtpserver = smtpserver;
         }
 
+        /**
+         * Sets the sMTP port.
+         * 
+         * @param port the new sMTP port
+         */
         public static void setSMTPPort(int port)
         {
             SWBUtils.EMAIL.smtpport = port;
         }
 
+        /**
+         * Sets the sMTP tls.
+         * 
+         * @param tls the new sMTP tls
+         */
         public static void setSMTPTls(boolean tls)
         {
             SWBUtils.EMAIL.smtptls = smtptls;
@@ -3486,6 +3534,12 @@ public class SWBUtils {
             SWBUtils.EMAIL.smtppassword = smtppassword;
         }
 
+        /**
+         * Checks if is valid email address.
+         * 
+         * @param emailAddress the email address
+         * @return true, if is valid email address
+         */
         public static boolean isValidEmailAddress(String emailAddress) {
             String  expression="^[\\w\\-]([\\.\\w])+[\\w]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
             CharSequence inputStr = emailAddress;
@@ -3717,8 +3771,10 @@ public class SWBUtils {
 
         /**
          * Test:Jorge Jiménez
-         * Method that transforms Node to String
-         * @param node
+         * Method that transforms Node to String.
+         * 
+         * @param node the node
+         * @return the string
          * @return
          */
         public static String nodeToString(Node node) {
@@ -4618,6 +4674,8 @@ public class SWBUtils {
          * <p>Identificador para la base de datos de Microsoft SQL Server.</p>
          */
         public static final String DBTYPE_MsSQL = "MsSQL";
+        
+        /** The Constant DBTYPE_MsSQL2008. */
         public static final String DBTYPE_MsSQL2008 = "Microsoft SQL Server";
         /**
          * Identifier for the Oracle database.
