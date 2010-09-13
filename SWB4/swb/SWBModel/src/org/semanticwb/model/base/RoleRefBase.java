@@ -1,29 +1,60 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
-   /**
-   * Referencia a un objeto de tipo Role 
-   */
+   // TODO: Auto-generated Javadoc
+/**
+    * Referencia a un objeto de tipo Role.
+    */
 public abstract class RoleRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
+   /**
+   * Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.
+   */
     public static final org.semanticwb.platform.SemanticClass swb_Role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Role");
+    
+    /** The Constant swb_role. */
     public static final org.semanticwb.platform.SemanticProperty swb_role=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#role");
-   /**
-   * Referencia a un objeto de tipo Role
-   */
+   
+   /** Referencia a un objeto de tipo Role. */
     public static final org.semanticwb.platform.SemanticClass swb_RoleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RoleRef");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of RoleRef for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.RoleRef
-       */
+        * Returns a list of RoleRef for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.RoleRef
+        */
 
         public static java.util.Iterator<org.semanticwb.model.RoleRef> listRoleRefs(org.semanticwb.model.SWBModel model)
         {
@@ -41,6 +72,12 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(it, true);
         }
 
+        /**
+         * Creates the role ref.
+         * 
+         * @param model the model
+         * @return the org.semanticwb.model. role ref
+         */
         public static org.semanticwb.model.RoleRef createRoleRef(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
@@ -112,17 +149,20 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
     }
 
    /**
-   * Constructs a RoleRefBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the RoleRef
-   */
+    * Constructs a RoleRefBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the RoleRef
+    */
     public RoleRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+   
    /**
-   * Sets the value for the property Role
-   * @param value Role to set
-   */
+    * Sets the value for the property Role.
+    * 
+    * @param value Role to set
+    */
 
     public void setRole(org.semanticwb.model.Role value)
     {
@@ -134,9 +174,10 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
             removeRole();
         }
     }
+   
    /**
-   * Remove the value for Role property
-   */
+    * Remove the value for Role property.
+    */
 
     public void removeRole()
     {
@@ -144,9 +185,10 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
     }
 
    /**
-   * Gets the Role
-   * @return a org.semanticwb.model.Role
-   */
+    * Gets the Role.
+    * 
+    * @return a org.semanticwb.model.Role
+    */
     public org.semanticwb.model.Role getRole()
     {
          org.semanticwb.model.Role ret=null;
@@ -159,9 +201,10 @@ public abstract class RoleRefBase extends org.semanticwb.model.Reference impleme
     }
 
    /**
-   * Gets the WebSite
-   * @return a instance of org.semanticwb.model.WebSite
-   */
+    * Gets the WebSite.
+    * 
+    * @return a instance of org.semanticwb.model.WebSite
+    */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

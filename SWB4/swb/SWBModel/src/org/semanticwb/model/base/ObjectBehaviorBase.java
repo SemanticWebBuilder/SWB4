@@ -1,30 +1,71 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
+   // TODO: Auto-generated Javadoc
+/**
+    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB.
+    */
 public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Searchable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable
 {
+    
+    /** The Constant owl_Class. */
     public static final org.semanticwb.platform.SemanticClass owl_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.w3.org/2002/07/owl#Class");
+    
+    /** The Constant swbxf_interface. */
     public static final org.semanticwb.platform.SemanticProperty swbxf_interface=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#interface");
+    
+    /** The Constant swbxf_behaviorURL. */
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorURL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorURL");
-   /**
-   * Muetra el comportamiento si cumple con la interface definida y con el filtro de propiedades especificado
-   */
+   
+   /** Muetra el comportamiento si cumple con la interface definida y con el filtro de propiedades especificado. */
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorPropertyFilter=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorPropertyFilter");
+    
+    /** The Constant swbxf_behaviorRefreshOnShow. */
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorRefreshOnShow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorRefreshOnShow");
+    
+    /** The Constant swbxf_behaviorParams. */
     public static final org.semanticwb.platform.SemanticProperty swbxf_behaviorParams=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/xforms/ontology#behaviorParams");
+   
+   /** Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB. */
     public static final org.semanticwb.platform.SemanticClass swbxf_ObjectBehavior=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#ObjectBehavior");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of ObjectBehavior for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.ObjectBehavior
-       */
+        * Returns a list of ObjectBehavior for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.ObjectBehavior
+        */
 
         public static java.util.Iterator<org.semanticwb.model.ObjectBehavior> listObjectBehaviors(org.semanticwb.model.SWBModel model)
         {
@@ -475,28 +516,38 @@ public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage im
     }
 
    /**
-   * Constructs a ObjectBehaviorBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the ObjectBehavior
-   */
+    * Constructs a ObjectBehaviorBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the ObjectBehavior
+    */
     public ObjectBehaviorBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /**
+     * Sets the interface.
+     * 
+     * @param value the new interface
+     */
     public void setInterface(org.semanticwb.platform.SemanticObject value)
     {
         getSemanticObject().setObjectProperty(swbxf_interface, value);
     }
 
+    /**
+     * Removes the interface.
+     */
     public void removeInterface()
     {
         getSemanticObject().removeProperty(swbxf_interface);
     }
 
 /**
-* Gets the Interface property
-* @return the value for the property as org.semanticwb.platform.SemanticObject
-*/
+ * Gets the Interface property.
+ * 
+ * @return the value for the property as org.semanticwb.platform.SemanticObject
+ */
     public org.semanticwb.platform.SemanticObject getInterface()
     {
          org.semanticwb.platform.SemanticObject ret=null;
@@ -505,81 +556,90 @@ public abstract class ObjectBehaviorBase extends org.semanticwb.model.WebPage im
     }
 
 /**
-* Gets the BehaviorURL property
-* @return String with the BehaviorURL
-*/
+ * Gets the BehaviorURL property.
+ * 
+ * @return String with the BehaviorURL
+ */
     public String getBehaviorURL()
     {
         return getSemanticObject().getProperty(swbxf_behaviorURL);
     }
 
 /**
-* Sets the BehaviorURL property
-* @param value long with the BehaviorURL
-*/
+ * Sets the BehaviorURL property.
+ * 
+ * @param value long with the BehaviorURL
+ */
     public void setBehaviorURL(String value)
     {
         getSemanticObject().setProperty(swbxf_behaviorURL, value);
     }
 
 /**
-* Gets the PropertyFilter property
-* @return String with the PropertyFilter
-*/
+ * Gets the PropertyFilter property.
+ * 
+ * @return String with the PropertyFilter
+ */
     public String getPropertyFilter()
     {
         return getSemanticObject().getProperty(swbxf_behaviorPropertyFilter);
     }
 
 /**
-* Sets the PropertyFilter property
-* @param value long with the PropertyFilter
-*/
+ * Sets the PropertyFilter property.
+ * 
+ * @param value long with the PropertyFilter
+ */
     public void setPropertyFilter(String value)
     {
         getSemanticObject().setProperty(swbxf_behaviorPropertyFilter, value);
     }
 
 /**
-* Gets the RefreshOnShow property
-* @return boolean with the RefreshOnShow
-*/
+ * Gets the RefreshOnShow property.
+ * 
+ * @return boolean with the RefreshOnShow
+ */
     public boolean isRefreshOnShow()
     {
         return getSemanticObject().getBooleanProperty(swbxf_behaviorRefreshOnShow);
     }
 
 /**
-* Sets the RefreshOnShow property
-* @param value long with the RefreshOnShow
-*/
+ * Sets the RefreshOnShow property.
+ * 
+ * @param value long with the RefreshOnShow
+ */
     public void setRefreshOnShow(boolean value)
     {
         getSemanticObject().setBooleanProperty(swbxf_behaviorRefreshOnShow, value);
     }
 
 /**
-* Gets the BehaviorParams property
-* @return String with the BehaviorParams
-*/
+ * Gets the BehaviorParams property.
+ * 
+ * @return String with the BehaviorParams
+ */
     public String getBehaviorParams()
     {
         return getSemanticObject().getProperty(swbxf_behaviorParams);
     }
 
 /**
-* Sets the BehaviorParams property
-* @param value long with the BehaviorParams
-*/
+ * Sets the BehaviorParams property.
+ * 
+ * @param value long with the BehaviorParams
+ */
     public void setBehaviorParams(String value)
     {
         getSemanticObject().setProperty(swbxf_behaviorParams, value);
     }
 
    /**
-   * Gets the AdminWebSite
-   * @return a instance of org.semanticwb.model.AdminWebSite
-   */
+    * Gets the AdminWebSite.
+    * 
+    * @return a instance of org.semanticwb.model.AdminWebSite
+    */
     public org.semanticwb.model.AdminWebSite getAdminWebSite()
     {
         return (org.semanticwb.model.AdminWebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
