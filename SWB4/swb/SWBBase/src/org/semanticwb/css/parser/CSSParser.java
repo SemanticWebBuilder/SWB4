@@ -13,15 +13,23 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CSSParser.
+ * 
  * @author victor.lorenzana
  */
 public class CSSParser
 {
 
+    /** The selectors. */
     private ArrayList<Selector> selectors = new ArrayList<Selector>();
 
+    /**
+     * Instantiates a new cSS parser.
+     * 
+     * @param data the data
+     */
     public CSSParser(String data)
     {
         data = cleanComments(data);
@@ -86,6 +94,13 @@ public class CSSParser
             pos = data.indexOf('{');
         }
     }
+    
+    /**
+     * Gets the selectors.
+     * 
+     * @param selector the selector
+     * @return the selectors
+     */
     private String[] getSelectors(String selector)
     {
         HashSet<String> getSelectors=new HashSet<String>();
@@ -103,11 +118,22 @@ public class CSSParser
         
     }
 
+    /**
+     * Gets the selectors.
+     * 
+     * @return the selectors
+     */
     public Selector[] getSelectors()
     {
         return selectors.toArray(new Selector[selectors.size()]);
     }
 
+    /**
+     * Clean comments.
+     * 
+     * @param data the data
+     * @return the string
+     */
     private String cleanComments(String data)
     {
         StringBuilder cssclean = new StringBuilder();
@@ -128,6 +154,12 @@ public class CSSParser
         return cssclean.toString().trim();
     }
 
+    /**
+     * Removes the new lines.
+     * 
+     * @param data the data
+     * @return the string
+     */
     private String removeNewLines(String data)
     {
         StringBuilder cs = new StringBuilder();
@@ -142,6 +174,11 @@ public class CSSParser
         return cs.toString();
     }
 
+    /**
+     * The main method.
+     * 
+     * @param args the arguments
+     */
     public static void main(String[] args)
     {
         //String path = "C:\\Documents and Settings\\victor.lorenzana\\Escritorio\\estilos.css";
