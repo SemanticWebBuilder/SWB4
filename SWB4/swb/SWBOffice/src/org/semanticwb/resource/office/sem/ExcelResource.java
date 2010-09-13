@@ -42,25 +42,58 @@ import org.semanticwb.portal.api.*;
 
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ExcelResource.
+ */
 public class ExcelResource extends org.semanticwb.resource.office.sem.base.ExcelResourceBase
 {    
+    
+    /**
+     * Instantiates a new excel resource.
+     */
     public ExcelResource()
     {
         super();
     }
+    
+    /**
+     * Instantiates a new excel resource.
+     * 
+     * @param obj the obj
+     */
     public ExcelResource(SemanticObject obj)
     {
         super(obj);
     }
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(ExcelResource.class);
 
+    /**
+     * Before print document.
+     * 
+     * @param out the out
+     */
     protected void beforePrintDocument(PrintWriter out)
     {
     }
 
+    /**
+     * After print document.
+     * 
+     * @param out the out
+     */
     protected void afterPrintDocument(PrintWriter out)
     {
     }
+    
+    /**
+     * Gets the hTML.
+     * 
+     * @param file the file
+     * @return the hTML
+     */
     public static String getHTML(File file)
     {
         StringBuilder html=new StringBuilder();
@@ -93,6 +126,16 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
         }
         return html.toString();
     }
+    
+    /**
+     * Prints the document.
+     * 
+     * @param out the out
+     * @param path the path
+     * @param workpath the workpath
+     * @param html the html
+     * @param paramReq the param req
+     */
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq)
     {
         out.write("<div id=\""+ ExcelResource.class.getName() +"\">");
@@ -108,6 +151,9 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
     }
 
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.resource.office.sem.OfficeResource#loadContent(InputStream, User)
+     */
     @Override
     public void loadContent(InputStream in,User user)
     {
@@ -151,6 +197,9 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
 
     
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {   try
@@ -192,6 +241,14 @@ public class ExcelResource extends org.semanticwb.resource.office.sem.base.Excel
             log.error(e);
         }
     }
+    
+    /**
+     * Creates the excel resource.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.resource.office.sem. excel resource
+     */
     public static org.semanticwb.resource.office.sem.ExcelResource createExcelResource(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.resource.office.sem.ExcelResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);

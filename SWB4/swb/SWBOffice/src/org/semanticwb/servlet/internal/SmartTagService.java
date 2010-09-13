@@ -15,15 +15,22 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.office.comunication.OfficeSmartTagServlet;
 import org.semanticwb.office.interfaces.IOfficeApplication;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SmartTagService.
+ * 
  * @author victor.lorenzana
  */
 public class SmartTagService implements InternalServlet
 {
 
+    /** The Constant title. */
     private static final String title = "Gateway de Comunicación para etiquetas inteligentes";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SmartTagService.class);
+    
+    /** The office servlet. */
     private OfficeSmartTagServlet officeServlet = new OfficeSmartTagServlet()
     {
 
@@ -33,12 +40,27 @@ public class SmartTagService implements InternalServlet
         }
     };
 
+    /**
+     * Inits the.
+     * 
+     * @param config the config
+     * @throws ServletException the servlet exception
+     */
     public void init(ServletContext config) throws ServletException
     {
         log.event("Initializing SmartTagService...");
         officeServlet.init();
     }
 
+    /**
+     * Do process.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param dparams the dparams
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ServletException the servlet exception
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         if (request.getMethod().toLowerCase().equals("post"))

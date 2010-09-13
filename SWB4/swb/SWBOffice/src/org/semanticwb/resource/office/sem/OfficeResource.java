@@ -41,29 +41,66 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OfficeResource.
+ */
 public class OfficeResource extends org.semanticwb.resource.office.sem.base.OfficeResourceBase
 {
+    
+    /** The Constant document. */
     protected static final OfficeDocument document=new OfficeDocument();
+    
+    /**
+     * Instantiates a new office resource.
+     */
     public OfficeResource()
     {
         super();
     }
 
+    /**
+     * Instantiates a new office resource.
+     * 
+     * @param obj the obj
+     */
     public OfficeResource(SemanticObject obj)
     {
         super(obj);
     }
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(OfficeResource.class);
 
+    /**
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
     }
 
+    /**
+     * Validate view property values.
+     * 
+     * @param valuesToValidate the values to validate
+     * @throws Exception the exception
+     */
     public void validateViewPropertyValues(HashMap<SemanticProperty, Object> valuesToValidate) throws Exception
     {
     }
 
+    /**
+     * Clean.
+     * 
+     * @param dir the dir
+     */
     public static void clean(String dir)
     {
         File fdir = new File(SWBPortal.getWorkPath() + dir);
@@ -84,6 +121,11 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
         }
     }
 
+    /**
+     * Clean.
+     * 
+     * @param dir the dir
+     */
     private void clean(File dir)
     {
         if (dir.exists() && dir.listFiles() != null)
@@ -102,6 +144,9 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
         }
     }
 
+    /**
+     * Clean.
+     */
     public void clean()
     {
         try
@@ -118,6 +163,12 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
         }
     }
+    
+    /**
+     * Update file cache.
+     * 
+     * @param user the user
+     */
     protected void updateFileCache(User user)
     {
         try
@@ -137,6 +188,12 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
 
 
+    /**
+     * Load content.
+     * 
+     * @param in the in
+     * @param user the user
+     */
     public void loadContent(InputStream in,User user)
     {
         clean();
@@ -191,6 +248,14 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
     }
 
     
+    /**
+     * Load content preview.
+     * 
+     * @param in the in
+     * @param dir the dir
+     * @param type the type
+     * @param user the user
+     */
     public static void loadContentPreview(InputStream in, String dir, String type,User user)
     {
         File zipFile = null;
@@ -238,6 +303,13 @@ public class OfficeResource extends org.semanticwb.resource.office.sem.base.Offi
 
     }
 
+    /**
+     * Gets the office resource.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the office resource
+     */
     public static org.semanticwb.resource.office.sem.OfficeResource getOfficeResource(String id, org.semanticwb.model.SWBModel model)
     {
         GenericObject obj = model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);

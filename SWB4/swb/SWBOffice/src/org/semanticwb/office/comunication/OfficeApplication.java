@@ -94,19 +94,37 @@ import org.semanticwb.resource.office.sem.ExcelResource;
 import org.semanticwb.resource.office.sem.PPTResource;
 import org.semanticwb.resource.office.sem.WordResource;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class OfficeApplication.
+ * 
  * @author victor.lorenzana
  */
 public class OfficeApplication extends XmlRpcObject implements IOfficeApplication, FlowNotification
 {
+    
+    /** The Constant swb_office. */
     private static final SemanticClass swb_office = org.semanticwb.repository.office.OfficeDocument.swboffice_OfficeDocument;
+    
+    /** The Constant SWB_FILEREP_DELETED. */
     private static final String SWB_FILEREP_DELETED = "swbfilerep:deleted";
+    
+    /** The Constant REP_FILE. */
     private static final String REP_FILE = "swbfilerep:RepositoryFile";
+    
+    /** The Constant REP_FOLDER. */
     private static final String REP_FOLDER = "swbfilerep:RepositoryFolder";
+    
+    /** The rep. */
     private static SWBRepository rep = null;
+    
+    /** The Constant JCR_CONTENT. */
     public static final String JCR_CONTENT = "jcr:content";
+    
+    /** The Constant log. */
     private static final Logger log = SWBUtils.getLogger(OfficeApplication.class);
+    
+    /** The Constant loader. */
     private static final RepositoryManagerLoader loader = RepositoryManagerLoader.getInstance();
 
     static {
@@ -117,11 +135,26 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
     //private Session session;
+    /**
+     * Checks if is valid version.
+     * 
+     * @param version the version
+     * @return true, if is valid version
+     */
     public boolean isValidVersion(double version)
     {
         return IOfficeApplication.version == version;
     }
 
+    /**
+     * Creates the page.
+     * 
+     * @param page the page
+     * @param pageid the pageid
+     * @param title the title
+     * @param description the description
+     * @throws Exception the exception
+     */
     public void createPage(WebPageInfo page, String pageid, String title, String description) throws Exception
     {
         WebSite website = SWBContext.getWebSite(page.siteID);
@@ -138,6 +171,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         newpage.setParent(parent);
     }
 
+    /**
+     * Change password.
+     * 
+     * @param newPassword the new password
+     * @throws Exception the exception
+     */
     public void changePassword(String newPassword) throws Exception
     {
         org.semanticwb.model.User userModel = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(this.user);
@@ -145,6 +184,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         userModel.setUpdated(new Date(System.currentTimeMillis()));
     }
 
+    /**
+     * Exists page.
+     * 
+     * @param site the site
+     * @param pageid the pageid
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean existsPage(WebSiteInfo site, String pageid) throws Exception
     {
         WebSite website = SWBContext.getWebSite(site.id);
@@ -159,6 +206,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the contents.
+     * 
+     * @param repositoryName the repository name
+     * @param categoryID the category id
+     * @return the contents
+     * @throws Exception the exception
+     */
     public String[] getContents(String repositoryName, String categoryID) throws Exception
     {
         Session session = null;
@@ -201,12 +256,25 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the repositories.
+     * 
+     * @return the repositories
+     * @throws Exception the exception
+     */
     public RepositoryInfo[] getRepositories() throws Exception
     {
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
         return loader.getWorkspacesForOffice(ouser);
     }
 
+    /**
+     * Gets the categories.
+     * 
+     * @param repositoryName the repository name
+     * @return the categories
+     * @throws Exception the exception
+     */
     public CategoryInfo[] getCategories(String repositoryName) throws Exception
     {
         Session session = null;
@@ -249,6 +317,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Creates the category.
+     * 
+     * @param repositoryName the repository name
+     * @param title the title
+     * @param description the description
+     * @return the string
+     * @throws Exception the exception
+     */
     public String createCategory(String repositoryName, String title, String description) throws Exception
     {
 
@@ -305,6 +382,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return UUID;
     }
 
+    /**
+     * Can delete category.
+     * 
+     * @param repositoryName the repository name
+     * @param id the id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canDeleteCategory(String repositoryName, String id) throws Exception
     {
         boolean canDeleteCategory = false;
@@ -325,6 +410,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return canDeleteCategory;
     }
 
+    /**
+     * Delete category.
+     * 
+     * @param repositoryName the repository name
+     * @param id the id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean deleteCategory(String repositoryName, String id) throws Exception
     {
         boolean deleteCategory = false;
@@ -356,6 +449,16 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return deleteCategory;
     }
 
+    /**
+     * Creates the category.
+     * 
+     * @param repositoryName the repository name
+     * @param categoryId the category id
+     * @param title the title
+     * @param description the description
+     * @return the string
+     * @throws Exception the exception
+     */
     public String createCategory(String repositoryName, String categoryId, String title, String description) throws Exception
     {
         String UUID = "";
@@ -411,6 +514,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return UUID;
     }
 
+    /**
+     * Gets the all categories.
+     * 
+     * @param repositoryName the repository name
+     * @return the all categories
+     * @throws Exception the exception
+     */
     public CategoryInfo[] getAllCategories(String repositoryName) throws Exception
     {
         Session session = null;
@@ -455,6 +565,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the categories.
+     * 
+     * @param repositoryName the repository name
+     * @param categoryId the category id
+     * @return the categories
+     * @throws Exception the exception
+     */
     public CategoryInfo[] getCategories(String repositoryName, String categoryId) throws Exception
     {
         Session session = null;
@@ -496,6 +614,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the content types.
+     * 
+     * @param repositoryName the repository name
+     * @return the content types
+     * @throws Exception the exception
+     */
     public ContentType[] getContentTypes(String repositoryName) throws Exception
     {
         ArrayList<ContentType> types = new ArrayList<ContentType>();
@@ -509,12 +634,32 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return types.toArray(new ContentType[types.size()]);
     }
+    
+    /**
+     * Checks if is su.
+     * 
+     * @return true, if is su
+     */
     private boolean isSu()
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
         User ouser = SWBContext.getAdminWebSite().getUserRepository().getUserByLogin(user);
         return ((su!=null && ouser.hasUserGroup(su)));
     }
+    
+    /**
+     * Search.
+     * 
+     * @param repositoryName the repository name
+     * @param title the title
+     * @param description the description
+     * @param category the category
+     * @param type the type
+     * @param officeType the office type
+     * @param webPageInfo the web page info
+     * @return the content info[]
+     * @throws Exception the exception
+     */
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType,WebPageInfo webPageInfo) throws Exception
     {
         if(webPageInfo==null)
@@ -567,6 +712,20 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return contents.toArray(new ContentInfo[contents.size()]);
     }
+    
+    /**
+     * Search.
+     * 
+     * @param repositoryName the repository name
+     * @param title the title
+     * @param description the description
+     * @param category the category
+     * @param type the type
+     * @param officeType the office type
+     * @param uuid the uuid
+     * @return the list
+     * @throws Exception the exception
+     */
     private List<ContentInfo> search(String repositoryName, String title, String description, String category, String type, String officeType,String uuid) throws Exception
     {
         Session session = null;
@@ -763,12 +922,33 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return contents;
     }
+    
+    /**
+     * Search.
+     * 
+     * @param repositoryName the repository name
+     * @param title the title
+     * @param description the description
+     * @param category the category
+     * @param type the type
+     * @param officeType the office type
+     * @return the content info[]
+     * @throws Exception the exception
+     */
     public ContentInfo[] search(String repositoryName, String title, String description, String category, String type, String officeType) throws Exception
     {
         List<ContentInfo> contents=search(repositoryName, title, description, category, type, officeType, "*");
         return contents.toArray(new ContentInfo[contents.size()]);
     }
 
+    /**
+     * Open content.
+     * 
+     * @param repositoryName the repository name
+     * @param versioninfo the versioninfo
+     * @return the string
+     * @throws Exception the exception
+     */
     public String openContent(String repositoryName, VersionInfo versioninfo) throws Exception
     {
         Session session = null;
@@ -822,6 +1002,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the sites.
+     * 
+     * @return the sites
+     * @throws Exception the exception
+     */
     public WebSiteInfo[] getSites() throws Exception
     {
         ArrayList<WebSiteInfo> websites = new ArrayList<WebSiteInfo>();
@@ -846,6 +1032,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return websites.toArray(new WebSiteInfo[websites.size()]);
     }
 
+    /**
+     * Gets the home page.
+     * 
+     * @param website the website
+     * @return the home page
+     * @throws Exception the exception
+     */
     public WebPageInfo getHomePage(WebSiteInfo website) throws Exception
     {
 
@@ -869,6 +1062,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return info;
     }
 
+    /**
+     * Gets the pages.
+     * 
+     * @param webpage the webpage
+     * @return the pages
+     * @throws Exception the exception
+     */
     public WebPageInfo[] getPages(WebPageInfo webpage) throws Exception
     {
         ArrayList<WebPageInfo> pagesToReturn = new ArrayList<WebPageInfo>();
@@ -902,6 +1102,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return pagesToReturn.toArray(new WebPageInfo[pagesToReturn.size()]);
     }
 
+    /**
+     * Gets the limit of versions.
+     * 
+     * @return the limit of versions
+     * @throws Exception the exception
+     */
     public int getLimitOfVersions() throws Exception
     {
         String snumberOfVersions = SWBPlatform.getEnv("swbrep/maxNumberOfVersions");
@@ -928,6 +1134,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getLimitOfVersions;
     }
 
+    /**
+     * Gets the my contents.
+     * 
+     * @param info the info
+     * @return the my contents
+     * @throws Exception the exception
+     */
     public FlowContentInformation[] getMyContents(WebSiteInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.id);
@@ -1002,6 +1215,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return contents.toArray(new FlowContentInformation[contents.size()]);
     }
 
+    /**
+     * Authorize.
+     * 
+     * @param resourceInfo the resource info
+     * @param message the message
+     * @throws Exception the exception
+     */
     public void authorize(ResourceInfo resourceInfo, String message) throws Exception
     {
         Resource resource = SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
@@ -1009,6 +1229,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         SWBPortal.getPFlowManager().approveResource(resource, wbuser, message, this);
     }
 
+    /**
+     * Reject.
+     * 
+     * @param resourceInfo the resource info
+     * @param message the message
+     * @throws Exception the exception
+     */
     public void reject(ResourceInfo resourceInfo, String message) throws Exception
     {
         Resource resource = SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
@@ -1016,6 +1243,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         SWBPortal.getPFlowManager().rejectResource(resource, wbuser, message);
     }
 
+    /**
+     * Gets the all contents.
+     * 
+     * @param info the info
+     * @return the all contents
+     * @throws Exception the exception
+     */
     public FlowContentInformation[] getAllContents(WebSiteInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.id);
@@ -1086,6 +1320,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return contents.toArray(new FlowContentInformation[contents.size()]);
     }
 
+    /**
+     * Gets the contents for authorize.
+     * 
+     * @param info the info
+     * @return the contents for authorize
+     * @throws Exception the exception
+     */
     public FlowContentInformation[] getContentsForAuthorize(WebSiteInfo info) throws Exception
     {
         WebSite site = SWBContext.getWebSite(info.id);
@@ -1159,6 +1400,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return contents.toArray(new FlowContentInformation[contents.size()]);
     }
 
+    /**
+     * Checks if is reviewer.
+     * 
+     * @param resourceInfo the resource info
+     * @return true, if is reviewer
+     * @throws Exception the exception
+     */
     public boolean isReviewer(ResourceInfo resourceInfo) throws Exception
     {
         Resource resource = SWBContext.getWebSite(resourceInfo.page.site.id).getResource(resourceInfo.id);
@@ -1166,6 +1414,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return SWBPortal.getPFlowManager().isReviewer(resource, wbuser);
     }
 
+    /**
+     * Creates the calendar.
+     * 
+     * @param siteInfo the site info
+     * @param title the title
+     * @param xml the xml
+     * @return the calendar info
+     * @throws Exception the exception
+     */
     public CalendarInfo createCalendar(SiteInfo siteInfo, String title, String xml) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -1183,6 +1440,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return info;
     }
 
+    /**
+     * Can delete calendar.
+     * 
+     * @param siteInfo the site info
+     * @param CalendarInfo the calendar info
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canDeleteCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -1198,6 +1463,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Exist calendar.
+     * 
+     * @param siteInfo the site info
+     * @param CalendarInfo the calendar info
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean existCalendar(SiteInfo siteInfo, CalendarInfo CalendarInfo) throws Exception
     {
         WebSite site = SWBContext.getWebSite(siteInfo.id);
@@ -1212,6 +1485,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the elements to add.
+     * 
+     * @param siteInfo the site info
+     * @return the elements to add
+     * @throws Exception the exception
+     */
     public ElementInfo[] getElementsToAdd(SiteInfo siteInfo) throws Exception
     {
         HashSet<ElementInfo> rules = new HashSet<ElementInfo>();
@@ -1257,6 +1537,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return rules.toArray(new ElementInfo[rules.size()]);
     }
 
+    /**
+     * Active page.
+     * 
+     * @param webPageInfo the web page info
+     * @param active the active
+     * @throws Exception the exception
+     */
     public void activePage(PageInfo webPageInfo, boolean active) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webPageInfo.site.id);
@@ -1265,6 +1552,11 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     }
 
+    /**
+     * Autorize.
+     * 
+     * @param resource the resource
+     */
     public void autorize(Resource resource)
     {
         WebSite site = SWBContext.getWebSite(resource.getWebSiteId());
@@ -1285,14 +1577,31 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Publish.
+     * 
+     * @param resource the resource
+     */
     public void publish(Resource resource)
     {
     }
 
+    /**
+     * No autorize.
+     * 
+     * @param resource the resource
+     */
     public void noAutorize(Resource resource)
     {
     }
 
+    /**
+     * Can create page.
+     * 
+     * @param webpage the webpage
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canCreatePage(WebPageInfo webpage) throws Exception
     {
         WebSite site = SWBContext.getWebSite(webpage.siteID);
@@ -1305,6 +1614,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return false;
     }
 
+    /**
+     * Can create category.
+     * 
+     * @param repositoryName the repository name
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canCreateCategory(String repositoryName) throws Exception
     {
         Session session = null;
@@ -1339,6 +1655,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     }
 
+    /**
+     * Can create category.
+     * 
+     * @param repositoryName the repository name
+     * @param categoryId the category id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canCreateCategory(String repositoryName, String categoryId) throws Exception
     {
         Session session = null;
@@ -1373,6 +1697,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
 
     }
 
+    /**
+     * Can remove category.
+     * 
+     * @param repositoryName the repository name
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canRemoveCategory(String repositoryName) throws Exception
     {
         Session session = null;
@@ -1406,6 +1737,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Can remove category.
+     * 
+     * @param repositoryName the repository name
+     * @param categoryId the category id
+     * @return true, if successful
+     * @throws Exception the exception
+     */
     public boolean canRemoveCategory(String repositoryName, String categoryId) throws Exception
     {
         Session session = null;
@@ -1439,6 +1778,13 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
     }
 
+    /**
+     * Gets the semantic repositories.
+     * 
+     * @param siteInfo the site info
+     * @return the semantic repositories
+     * @throws Exception the exception
+     */
     public SemanticRepository[] getSemanticRepositories(SiteInfo siteInfo) throws Exception
     {
 
@@ -1476,6 +1822,14 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
     }
 
 
+    /**
+     * Gets the semantic folder repositories.
+     * 
+     * @param siteInfo the site info
+     * @param semanticRepository the semantic repository
+     * @return the semantic folder repositories
+     * @throws Exception the exception
+     */
     public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
     {
         HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
@@ -1517,6 +1871,12 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
 
+    /**
+     * Doc rep ns.
+     * 
+     * @param site the site
+     * @return the string
+     */
     private String docRepNS(WebSite site) {
         String NS = null;
         WebSite ws = site;
@@ -1535,6 +1895,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return NS;
     }
 
+    /**
+     * Gets the semantic file repositories.
+     * 
+     * @param siteInfo the site info
+     * @param semanticRepository the semantic repository
+     * @param semanticFolder the semantic folder
+     * @return the semantic file repositories
+     * @throws Exception the exception
+     */
     public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository,SemanticFolderRepository semanticFolder) throws Exception
     {
         HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();
@@ -1586,6 +1955,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getSemanticFileRepositories.toArray(new SemanticFileRepository[getSemanticFileRepositories.size()]);
     }
 
+    /**
+     * Gets the semantic folder repositories.
+     * 
+     * @param siteInfo the site info
+     * @param semanticRepository the semantic repository
+     * @param semanticFolderRepository the semantic folder repository
+     * @return the semantic folder repositories
+     * @throws Exception the exception
+     */
     public SemanticFolderRepository[] getSemanticFolderRepositories(SiteInfo siteInfo, SemanticRepository semanticRepository, SemanticFolderRepository semanticFolderRepository) throws Exception
     {
         HashSet<SemanticFolderRepository> getSemanticFolderRepositories=new HashSet<SemanticFolderRepository>();
@@ -1625,6 +2003,15 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         }
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
+    
+    /**
+     * Gets the semantic file repositories.
+     * 
+     * @param siteInfo the site info
+     * @param semanticRepository the semantic repository
+     * @return the semantic file repositories
+     * @throws Exception the exception
+     */
     public SemanticFileRepository[] getSemanticFileRepositories(SiteInfo siteInfo,SemanticRepository semanticRepository) throws Exception
     {
         HashSet<SemanticFileRepository> getSemanticFileRepositories=new HashSet<SemanticFileRepository>();

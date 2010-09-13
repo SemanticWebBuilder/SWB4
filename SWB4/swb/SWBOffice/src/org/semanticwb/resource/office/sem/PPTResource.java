@@ -35,25 +35,58 @@ import org.semanticwb.office.comunication.OfficeDocument;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PPTResource.
+ */
 public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTResourceBase
 {    
+    
+    /**
+     * Instantiates a new pPT resource.
+     */
     public PPTResource()
     {
         super();
     }
+    
+    /**
+     * Instantiates a new pPT resource.
+     * 
+     * @param obj the obj
+     */
     public PPTResource(SemanticObject obj)
     {
         super(obj);
     }
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(PPTResource.class);
 
+    /**
+     * Before print document.
+     * 
+     * @param out the out
+     */
     protected void beforePrintDocument(PrintWriter out)
     {
     }
 
+    /**
+     * After print document.
+     * 
+     * @param out the out
+     */
     protected void afterPrintDocument(PrintWriter out)
     {
     }
+    
+    /**
+     * Gets the hTML.
+     * 
+     * @param file the file
+     * @return the hTML
+     */
     public static String getHTML(File file)
     {
         StringBuilder html=new StringBuilder();
@@ -76,6 +109,18 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
         return html.toString();
     }
+    
+    /**
+     * Prints the document.
+     * 
+     * @param out the out
+     * @param path the path
+     * @param workpath the workpath
+     * @param html the html
+     * @param paramReq the param req
+     * @param resourcewebworkpath the resourcewebworkpath
+     * @param fileppt the fileppt
+     */
     protected void printDocument(PrintWriter out, String path, String workpath, String html, SWBParamRequest paramReq,String resourcewebworkpath,String fileppt)
     {
         try
@@ -93,6 +138,9 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {       
@@ -139,6 +187,14 @@ public class PPTResource extends org.semanticwb.resource.office.sem.base.PPTReso
             log.error(e);
         }
     }
+    
+    /**
+     * Creates the ppt resource.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.resource.office.sem. ppt resource
+     */
     public static org.semanticwb.resource.office.sem.PPTResource createPPTResource(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.resource.office.sem.PPTResource)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);

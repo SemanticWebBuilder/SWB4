@@ -28,12 +28,18 @@
 
 package org.semanticwb.office.comunication;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class ComunicationException.
+ * 
  * @author victor.lorenzana
  */
 public class ComunicationException extends Exception
 {
+    
+    /**
+     * Instantiates a new comunication exception.
+     */
     public ComunicationException()
     {
         

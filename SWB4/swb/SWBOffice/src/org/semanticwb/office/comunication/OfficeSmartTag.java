@@ -27,16 +27,25 @@ import org.semanticwb.portal.indexer.searcher.SearchResults;
 import org.semanticwb.portal.indexer.searcher.SearchTerm;
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class OfficeSmartTag.
+ * 
  * @author victor.lorenzana
  */
 public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(OfficeSmartTag.class);
+    
+    /** The prefix statement. */
     private StringBuilder prefixStatement = new StringBuilder("");
+    
+    /** The Constant NL. */
     private static final String NL = System.getProperty("line.separator");
+    
+    /** The Constant preps. */
     private static final String[] preps;//= {"a", "ante", "bajo", "con", "contra", "de", "desde", "para", "sin", "sobre", "tras"};
 
     static {
@@ -60,6 +69,13 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
         preps = norelevant.toArray(new String[norelevant.size()]);
     }
 
+    /**
+     * Search.
+     * 
+     * @param text the text
+     * @return the objec info[]
+     * @throws Exception the exception
+     */
     public ObjecInfo[] search(String text) throws Exception
     {
         ArrayList<ObjecInfo> search = new ArrayList<ObjecInfo>();
@@ -111,6 +127,12 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
         return search.toArray(new ObjecInfo[search.size()]);
     }
 
+    /**
+     * Search object.
+     * 
+     * @param text the text
+     * @return the iterator
+     */
     private Iterator<SemanticObject> searchObject(String text)
     {
         ArrayList<SemanticObject> searchObject = new ArrayList<SemanticObject>();
@@ -138,6 +160,13 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
         return searchObject.iterator();
     }
 
+    /**
+     * Checks if is smart tag.
+     * 
+     * @param text the text
+     * @return true, if is smart tag
+     * @throws Exception the exception
+     */
     public boolean isSmartTag(String text) throws Exception
     {
         if (isRelevantWord(text)) {
@@ -150,6 +179,12 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
 
     }
 
+    /**
+     * Checks if is relevant word.
+     * 
+     * @param token the token
+     * @return true, if is relevant word
+     */
     private boolean isRelevantWord(String token)
     {
         if (token == null) {
@@ -180,6 +215,12 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
 
     }
 
+    /**
+     * Pre proccess token.
+     * 
+     * @param token the token
+     * @return the string
+     */
     private String preProccessToken(String token)
     {
         return token;
@@ -187,6 +228,13 @@ public class OfficeSmartTag extends XmlRpcObject implements IOfficeSmartTag
 
     }
 
+    /**
+     * Gets the tokens.
+     * 
+     * @param text the text
+     * @return the tokens
+     * @throws Exception the exception
+     */
     public String[] getTokens(String text) throws Exception
     {
         ArrayList<String> getTokens = new ArrayList<String>();

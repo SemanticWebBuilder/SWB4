@@ -24,8 +24,18 @@
 package org.semanticwb.repository.office;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OfficeCategory.
+ */
 public class OfficeCategory extends org.semanticwb.repository.office.base.OfficeCategoryBase 
 {
+    
+    /**
+     * Instantiates a new office category.
+     * 
+     * @param base the base
+     */
     public OfficeCategory(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
