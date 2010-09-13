@@ -1871,6 +1871,61 @@ public class OfficeApplication extends XmlRpcObject implements IOfficeApplicatio
         return getSemanticFolderRepositories.toArray(new SemanticFolderRepository[getSemanticFolderRepositories.size()]);
     }
 
+    public String createCategory(User user,String repositoryName, String title, String description) throws Exception
+    {
+        String UUID = "";
+        Session session = null;
+        Node root = null;
+        try
+        {
+            session = loader.openSession(repositoryName,user);
+            root = session.getRootNode();
+            String cm_category = loader.getOfficeManager(repositoryName).getCategoryType();
+            String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+            Query query;
+            if (session.getRepository().getDescriptor(Repository.REP_NAME_DESC).toLowerCase().indexOf("webbuilder") != -1)
+            {
+                String statement = "SELECT DISTINCT ?x WHERE {?x " + cm_title + " ?title FILTER (?title=\"" + title + "\")  }";
+                query = session.getWorkspace().getQueryManager().createQuery(statement, "SPARQL");
+            }
+            else
+            {
+                query = session.getWorkspace().getQueryManager().createQuery("//" + cm_category + "[@" + cm_title + "='" + title + "']", Query.XPATH);
+            }
+            QueryResult result = query.execute();
+            NodeIterator nodeIterator = result.getNodes();
+            if (nodeIterator.hasNext())
+            {
+                UUID = nodeIterator.nextNode().getUUID();
+            }
+            else
+            {
+                Node newNode = root.addNode(cm_category, cm_category);
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                newNode.setProperty(cm_user, this.user);
+                newNode.setProperty(cm_title, title);
+                newNode.setProperty(cm_description, description);
+                root.save();
+                UUID = newNode.getUUID();
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+
+        return UUID;
+    }
+
     /**
      * Doc rep ns.
      * 
