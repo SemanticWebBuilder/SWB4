@@ -61,6 +61,7 @@ import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceType;
@@ -93,6 +94,7 @@ import org.semanticwb.office.interfaces.WebPageInfo;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
+import org.semanticwb.portal.resources.sem.HTMLContent;
 import org.semanticwb.repository.OfficeManager;
 import org.semanticwb.repository.RepositoryManagerLoader;
 import org.semanticwb.repository.SWBRepositoryManager;
@@ -376,6 +378,584 @@ public class OfficeDocument extends XmlRpcObject implements IOfficeDocument
     {
         file = file.replaceAll(".html", ".ppt");
         return migrateResource(webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, "PPT", viewProperties, viewValues, file);
+    }
+
+
+    public boolean convertResource(Resource resource,org.semanticwb.model.User user)
+    {
+        boolean convertResource=false;
+        if(resource.getResourceType().getResourceClassName().equals(HTMLContent.class.getCanonicalName()))
+        {
+            if(resource.getResourceData()!=null)
+            {
+                GenericObject go=resource.getResourceData().createGenericInstance();
+                if(go instanceof HTMLContent)
+                {
+                    String siteid=null;
+                    String webpageid=null;
+                    GenericIterator<Resourceable> resourceables=resource.listResourceables();
+                    while(resourceables.hasNext())
+                    {
+                        Resourceable resourceable=resourceables.next();
+                        if(resourceable instanceof WebPage)
+                        {
+                            WebPage page=(WebPage)resourceable;
+                            webpageid=page.getId();
+                            siteid=page.getWebSiteId();
+                        }
+                    }
+                    if(siteid!=null && webpageid!=null)
+                    {
+
+                        HTMLContent content=(HTMLContent)go;
+                        String xml=content.getResourceBase().getXml();
+                        int numversion=content.getActualVersion().getVersionNumber();
+                        String id=content.getId();
+                        String title=resource.getTitle();
+                        String description=resource.getDescription();
+                        String file=content.getActualVersion().getVersionFile();
+                        String sourcepath=SWBPortal.getWorkPath();//SWBPortal.getWorkPath() +content.getWorkPath();
+                        sourcepath=sourcepath.replace("//", "/");
+                        sourcepath=sourcepath.replace("\\", "\\");
+                        File destpath=new File(SWBPortal.getWorkPath() +content.getWorkPath());
+                        String workpath=SWBPortal.getWorkPath();
+
+                        if(!resource.isDeleted() && isOfficeDocument(MIGRATE_WBRESOURCESCONTENT, destpath.getAbsolutePath(), id, file, String.valueOf(numversion)))
+                        {
+                            log.event("Converting resource "+resource.getId());
+                            try
+                            {
+                                if(description==null)
+                                {
+                                    description="";
+                                }
+                                Resource newResource=migrateResource(user,workpath, destpath, xml, MIGRATE_WBRESOURCESCONTENT, siteid, webpageid, id, String.valueOf(numversion), title, description, file);
+                                newResource.setActive(resource.isActive());
+                                newResource.setHits(resource.getHits());
+                                newResource.setPriority(resource.getPriority());
+                                if(resource.getCreator()!=null)
+                                {
+                                    newResource.setCreator(resource.getCreator());
+                                }
+                                if(resource.getCreated()!=null)
+                                {
+                                    newResource.setCreated(resource.getCreated());
+                                }
+                                if(resource.getUpdated()!=null)
+                                {
+                                    newResource.setUpdated(resource.getUpdated());
+                                }
+
+                                if(resource.getLanguage()!=null)
+                                {
+                                    newResource.setLanguage(resource.getLanguage());
+                                }
+
+                                if(resource.getModifiedBy()!=null)
+                                {
+                                    newResource.setModifiedBy(resource.getModifiedBy());
+                                }
+
+                                if(resource.getTags()!=null)
+                                {
+                                    newResource.setTags(resource.getTags());
+                                }
+                                newResource.setIndex(resource.getIndex());
+
+                                if(resource.getExpiration()!=null)
+                                {
+                                    newResource.setExpiration(resource.getExpiration());
+                                }
+                                if(resource.getDevice()!=null)
+                                {
+                                    newResource.setDevice(resource.getDevice());
+                                }
+
+                                GenericIterator<CalendarRef> cals=resource.listCalendarRefs();
+                                while(cals.hasNext())
+                                {
+                                    CalendarRef ref=cals.next();
+                                    newResource.addCalendarRef(ref);
+                                }
+
+                                GenericIterator<RoleRef> gi=resource.listRoleRefs();
+                                while(gi.hasNext())
+                                {
+                                    RoleRef ref=gi.next();
+                                    newResource.addRoleRef(ref);
+                                }
+
+                                GenericIterator<RuleRef> gi2=resource.listRuleRefs();
+                                while(gi2.hasNext())
+                                {
+                                    RuleRef ref=gi2.next();
+                                    newResource.addRuleRef(ref);
+                                }
+
+                                GenericIterator<UserGroupRef> gi3=resource.listUserGroupRefs();
+                                while(gi3.hasNext())
+                                {
+                                    UserGroupRef ref=gi3.next();
+                                    newResource.addUserGroupRef(ref);
+                                }
+
+                                resource.remove();
+                                return true;
+                            }
+                            catch(Exception e)
+                            {
+                                log.error(e);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return convertResource;
+    }
+
+    public Resource migrateResource(org.semanticwb.model.User user,String sourcepath, File workpath, String xml, String className, String siteid, String webpageId, String resourceid, String version, String title, String description, String file) throws Exception
+    {
+        if (!workpath.exists())
+        {
+            throw new Exception("The workpath " + workpath.getAbsolutePath() + " does not exist");
+        }
+        if (!workpath.isDirectory())
+        {
+            throw new Exception("The workpath " + workpath.getAbsolutePath() + " is not a directory");
+        }
+        if (className.equals(MIGRATE_WBRESOURCESEXCELCONTENT))
+        {
+            PropertyInfo[] viewProperties = new PropertyInfo[0];
+            String[] viewValues = new String[0];
+            return migrateExcelResource(sourcepath, workpath, siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
+        }
+        else if (className.equals(MIGRATE_WBRESOURCESPPTCONTENT))
+        {
+            PropertyInfo[] viewProperties = getViewPropertiesPPT(xml);
+            String[] viewValues = getStringViewPropertiesPPT(xml);
+            return migratePPTResource(sourcepath, workpath, siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
+        }
+        else if (className.equals(MIGRATE_WBRESOURCESCONTENT))
+        {
+            PropertyInfo[] viewProperties = getViewPropertiesWord(xml);
+            String[] viewValues = getStringViewPropertiesWord(xml);
+            return migrateWordResource(user,sourcepath, workpath, siteid, webpageId, resourceid, version, title, description, viewProperties, viewValues, file);
+        }
+        else
+        {
+            throw new Exception("The resource is not a office resource");
+        }
+    }
+
+    private Resource migrateWordResource(org.semanticwb.model.User user,String webworkpath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    {
+        file = file.replaceAll(".html", ".doc");
+        return migrateResource(user,webworkpath, workpath, siteid, webpageId, resourceid, version, title, description, "WORD", viewProperties, viewValues, file);
+    }
+
+    private Resource migrateResource(org.semanticwb.model.User user, String sourcepath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    {
+
+        String repositoryName = siteid + "_rep@" + manager.getName(); // se almacena en el repositorio del sitio
+
+        officeApplication.setUser(this.user);
+        officeApplication.setPassword(this.password);
+        String categoryId = officeApplication.createCategory(user,repositoryName, categoryBydefault, descriptionByDefault);
+        return migrateResource(user, sourcepath, workpath, siteid, webpageId, resourceid, version, title, description, repositoryName, categoryId, type, viewProperties, viewValues, file);
+    }
+
+    private Resource migrateResource(org.semanticwb.model.User user,String sourcepath, File workpath, String siteid, String webpageId, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, PropertyInfo[] viewProperties, String[] viewValues, String file) throws Exception
+    {
+        log.trace("Migrando documento de office con id :"+resourceid);
+        String nodeType = cm_content.getPrefix() + ":" + cm_content.getName();
+        // guarda en repositorio y publica
+        WebSite site = WebSite.ClassMgr.getWebSite(siteid);
+        if (site == null)
+        {
+            throw new Exception("The site " + siteid + " was not found");
+        }
+        WebPage page = site.getWebPage(webpageId);
+        if (page == null)
+        {
+            throw new Exception("The page " + webpageId + " was not found");
+        }
+        PropertyInfo[] contentProperties = new PropertyInfo[0];
+        String[] contentValues = new String[0];
+        String contentid = migrateResourceToRepository(user,sourcepath, siteid, workpath, resourceid, version, title, description, repositoryName, categoryID, type, nodeType, file, contentProperties, contentValues);
+        WebPageInfo info = new WebPageInfo();
+        info.id = page.getId();
+        info.active = page.isActive();
+        info.title = page.getTitle();
+        info.siteID = site.getId();
+        info.description = page.getDescription();
+        info.url = page.getUrl();
+        int childs = 0;
+        info.childs = childs;
+        // mantiene el id original
+        // ciudado el contenido original ya no se puede publicar igual, pero se agrega funcionlidad para modalidad restauración
+        log.trace("Publicando documento con id :"+contentid);
+        ResourceInfo res = this.publishToResourceContent(user,resourceid, repositoryName, contentid, "*", title, description, info, viewProperties, viewValues);
+        return Resource.ClassMgr.getResource(res.id, site);
+    }
+
+    private ResourceInfo publishToResourceContent(org.semanticwb.model.User adminuser, String id, String repositoryName, String contentId, String version, String title, String description, WebPageInfo webpage, PropertyInfo[] properties, String[] values) throws Exception
+    {
+        WebSite site = SWBContext.getWebSite(webpage.siteID);
+        WebPage page = site.getWebPage(webpage.id);
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, adminuser);
+            Node contentNode = session.getNodeByUUID(contentId);
+            String cm_officeType = loader.getOfficeManager(repositoryName).getPropertyType();
+            String type = contentNode.getProperty(cm_officeType).getString();
+            ResourceType resourceType = null;
+            id=contentId;
+            Resource resource = site.createResource(id);
+            OfficeResource officeResource = null;
+            if (type.equalsIgnoreCase("EXCEL"))
+            {
+                officeResource = ExcelResource.createExcelResource(id, site);
+                resourceType = site.getResourceType(EXCEL_RESOURCE_TYPE);
+                if (resourceType == null)
+                {
+                    resourceType = site.createResourceType(EXCEL_RESOURCE_TYPE);
+                    resourceType.setCreated(new Date(System.currentTimeMillis()));
+                    resourceType.setDescription(EXCEL_RESOURCE_DESCRIPTION);
+                    resourceType.setResourceBundle(ExcelResource.class.getSimpleName());
+                    resourceType.setTitle(EXCEL_RESOURCE_TITLE);
+                    resourceType.setResourceMode(1);
+                    resourceType.setResourceClassName(ExcelResource.class.getCanonicalName());
+                    resourceType.setUpdated(new Date(System.currentTimeMillis()));
+                }
+            }
+            else if (type.equalsIgnoreCase("PPT"))
+            {
+                officeResource = PPTResource.createPPTResource(id, site);
+                resourceType = site.getResourceType(PPT_RESOURCE_TYPE);
+                if (resourceType == null)
+                {
+                    resourceType = site.createResourceType(PPT_RESOURCE_TYPE);
+                    resourceType.setCreated(new Date(System.currentTimeMillis()));
+                    resourceType.setDescription(PPT_RESOURCE_DESCRIPTION);
+                    resourceType.setResourceBundle(PPTResource.class.getSimpleName());
+                    resourceType.setTitle(PPT_RESOURCE_TITLE);
+                    resourceType.setResourceMode(1);
+                    resourceType.setResourceClassName(PPTResource.class.getCanonicalName());
+                    resourceType.setUpdated(new Date(System.currentTimeMillis()));
+                }
+            }
+            else
+            {
+                officeResource = WordResource.createWordResource(id, site);
+
+                resourceType = site.getResourceType(WORD_RESOURCE_TYPE);
+                if (resourceType == null)
+                {
+                    resourceType = site.createResourceType(WORD_RESOURCE_TYPE);
+                    resourceType.setCreated(new Date(System.currentTimeMillis()));
+                    resourceType.setDescription(WORD_RESOURCE_DESCRIPTION);
+                    resourceType.setTitle(WORD_RESOURCE_TITLE);
+                    resourceType.setResourceBundle(WordResource.class.getSimpleName());
+                    resourceType.setResourceMode(1);
+                    resourceType.setResourceClassName(WordResource.class.getCanonicalName());
+                    resourceType.setUpdated(new Date(System.currentTimeMillis()));
+                }
+            }
+            officeResource.setResourceBase(resource);
+            resource.setResourceType(resourceType);
+            officeResource.setContent(contentId);
+            resource.setResourceType(resourceType);
+            org.semanticwb.model.User creator = SWBContext.getAdminRepository().getUserByLogin(user);
+            if (creator != null)
+            {
+                resource.setCreator(creator);
+            }
+            officeResource.setRepositoryName(repositoryName);
+            resource.setTitle(title);
+            resource.setPriority(1);
+            resource.setDescription(description);
+            officeResource.setVersionToShow(version);
+            resource.setCreated(new Date(System.currentTimeMillis()));
+            resource.setUpdated(new Date(System.currentTimeMillis()));
+            int i = 0;
+            for (PropertyInfo prop : properties)
+            {
+                String value = values[i];
+                Iterator<SemanticProperty> semanticProperties = officeResource.getSemanticObject().getSemanticClass().listProperties();
+                while (semanticProperties.hasNext())
+                {
+                    SemanticProperty semanticProperty = semanticProperties.next();
+                    if (semanticProperty.getURI().equals(prop.id))
+                    {
+                        if (semanticProperty.isBoolean())
+                        {
+                            boolean bvalue = Boolean.parseBoolean(value);
+                            officeResource.getSemanticObject().setBooleanProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isInt())
+                        {
+                            int bvalue = Integer.parseInt(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isByte())
+                        {
+                            byte bvalue = Byte.parseByte(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isDouble())
+                        {
+                            double bvalue = Double.parseDouble(value);
+                            officeResource.getSemanticObject().setDoubleProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isFloat())
+                        {
+                            float bvalue = Float.parseFloat(value);
+                            officeResource.getSemanticObject().setFloatProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isLong())
+                        {
+                            long bvalue = Long.parseLong(value);
+                            officeResource.getSemanticObject().setLongProperty(semanticProperty, bvalue);
+                        }
+                        else if (semanticProperty.isShort())
+                        {
+                            short bvalue = Short.parseShort(value);
+                            officeResource.getSemanticObject().setIntProperty(semanticProperty, bvalue);
+                        }
+                        else
+                        {
+                            officeResource.getSemanticObject().setProperty(semanticProperty, value);
+                        }
+                    }
+                }
+                i++;
+            }
+            try
+            {
+                page.addResource(resource);
+            }
+            catch (Exception e)
+            {
+                log.error(e);
+            }
+            try
+            {
+                InputStream in = getContent(adminuser,repositoryName, contentId, version);
+                final org.semanticwb.model.User wbuser=SWBContext.getAdminRepository().getUserByLogin(user);
+                officeResource.loadContent(in,wbuser);
+                ResourceInfo info = getResourceInfo(officeResource);
+                return info;
+            }
+            catch (Exception e)
+            {
+                officeResource.getResourceBase().remove();
+                officeResource.getSemanticObject().remove();
+                throw e;
+            }
+
+
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+    private InputStream getContent(org.semanticwb.model.User user,String repositoryName, String contentId, String version) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName, user);
+            Node nodeContent = session.getNodeByUUID(contentId);
+            Node resContent = nodeContent.getNode(JCR_CONTENT);
+            if (version.equals("*"))
+            {
+                String lastVersion = getLastVersionOfcontent(user,repositoryName, contentId);
+                Version versionNode = resContent.getVersionHistory().getVersion(lastVersion);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(JCR_DATA).getStream();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                Version versionNode = resContent.getVersionHistory().getVersion(version);
+                if (versionNode != null)
+                {
+                    Node frozenNode = versionNode.getNode(JCR_FROZEN_NODE);
+                    return frozenNode.getProperty(JCR_DATA).getStream();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+    private String getLastVersionOfcontent(org.semanticwb.model.User user,String repositoryName, String contentId) throws Exception
+    {
+        Session session = null;
+        try
+        {
+            session = loader.openSession(repositoryName,user);
+            return getLastVersionOfcontent(session, repositoryName, contentId);
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception(CONTENT_NOT_FOUND, infe);
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
+    }
+    private String migrateResourceToRepository(org.semanticwb.model.User user,String sourcepath, String siteid, File workpath, String resourceid, String version, String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values) throws Exception
+    {
+        String targetpath = "";
+        File fileZip = zipResourceDirectory(resourceid, workpath.getAbsolutePath(), version, sourcepath, targetpath);
+        FileInputStream in = new FileInputStream(fileZip);
+        String contentid = save(user,title, description, repositoryName, categoryID, type, nodeType, file, properties, values, in, fileZip.getName());
+        if (fileZip.exists())
+        {
+            fileZip.delete();
+        }
+        return contentid;
+    }
+    public String save(org.semanticwb.model.User user,String title, String description, String repositoryName, String categoryID, String type, String nodeType, String file, PropertyInfo[] properties, String[] values, InputStream in, String filename) throws Exception
+    {
+        String encode=System.getProperty("file.encoding","utf-8");
+        if (encode == null || encode.equals(""))
+        {
+            encode = "utf-8";
+        }
+        file = java.net.URLDecoder.decode(file, encode);
+        Session session = null;
+        Node categoryNode = null;
+        try
+        {
+            session = loader.openSession(repositoryName, user);
+            categoryNode = session.getNodeByUUID(categoryID);
+            try
+            {
+                String cm_title = loader.getOfficeManager(repositoryName).getPropertyTitleType();
+                String cm_description = loader.getOfficeManager(repositoryName).getPropertyDescriptionType();
+                Node contentNode = categoryNode.addNode(nodeType, nodeType);
+                contentNode.setProperty(cm_title, title);
+                String cm_type = loader.getOfficeManager(repositoryName).getPropertyType();
+                String cm_file = loader.getOfficeManager(repositoryName).getPropertyFileType();
+                contentNode.setProperty(cm_type, type);
+                contentNode.setProperty(cm_description, description);
+                Calendar lastModified = Calendar.getInstance();
+                lastModified.setTimeInMillis(System.currentTimeMillis());
+                contentNode.setProperty(LASTMODIFIED, lastModified);
+                if (properties != null)
+                {
+                    int i = 0;
+                    for (PropertyInfo prop : properties)
+                    {
+                        String value = values[i];
+                        contentNode.setProperty(prop.id, value);
+                        i++;
+                    }
+                }
+
+                String mimeType = DEFAULT_MIME_TYPE;
+                if (config != null && config.getServletContext() != null)
+                {
+                    mimeType = config.getServletContext().getMimeType(filename);
+                    if (mimeType == null)
+                    {
+                        mimeType = DEFAULT_MIME_TYPE;
+                    }
+                }
+                Node resNode = contentNode.addNode(JCR_CONTENT, swb_office.getPrefix() + ":" + swb_office.getName());
+                resNode.addMixin("mix:versionable");
+                resNode.setProperty("jcr:mimeType", mimeType);
+                resNode.setProperty("jcr:encoding", "");
+                resNode.setProperty(cm_file, file);
+                String cm_user = loader.getOfficeManager(repositoryName).getUserType();
+                resNode.setProperty(cm_user, this.user);
+                resNode.setProperty(JCR_DATA, in);
+                in.close();
+                resNode.setProperty(JCR_LASTMODIFIED, lastModified);
+                categoryNode.save();
+                Version version = resNode.checkin();
+                log.trace("Version created with number " + version.getName());
+
+
+                return contentNode.getUUID();
+            }
+            catch (ItemExistsException e)
+            {
+                throw new Exception("Ya existe un contenido con ese nombre", e);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                throw e;
+            }
+            finally
+            {
+                //categoryNode.unlock();
+            }
+
+        }
+        catch (ItemNotFoundException infe)
+        {
+            throw new Exception("La categoria indica no existe", infe);
+        }
+        catch (LockException e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        catch (Exception e)
+        {
+            if (categoryNode != null)
+            {
+                //categoryNode.unlock();
+            }
+            e.printStackTrace();
+            throw e;
+        }
+        finally
+        {
+            if (session != null)
+            {
+                session.logout();
+            }
+        }
     }
 
     /**
