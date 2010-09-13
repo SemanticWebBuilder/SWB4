@@ -180,7 +180,7 @@ public class SWBContext extends SWBContextBase {
     /**
      * List web sites.
      * 
-     * @param direct the direct
+     * @param admin the admin
      * @return the java.util. iterator
      */
     public static java.util.Iterator<org.semanticwb.model.WebSite> listWebSites(boolean admin)

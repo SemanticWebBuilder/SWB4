@@ -1,29 +1,60 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
-   /**
-   * Referencia a un objeto de tipo UserGroup 
-   */
+   // TODO: Auto-generated Javadoc
+/**
+    * Referencia a un objeto de tipo UserGroup.
+    */
 public abstract class UserGroupRefBase extends org.semanticwb.model.Reference implements org.semanticwb.model.Activeable
 {
+   /**
+   * Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.
+   */
     public static final org.semanticwb.platform.SemanticClass swb_UserGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroup");
+    
+    /** The Constant swb_userGroup. */
     public static final org.semanticwb.platform.SemanticProperty swb_userGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#userGroup");
-   /**
-   * Referencia a un objeto de tipo UserGroup
-   */
+   
+   /** Referencia a un objeto de tipo UserGroup. */
     public static final org.semanticwb.platform.SemanticClass swb_UserGroupRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#UserGroupRef");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of UserGroupRef for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.UserGroupRef
-       */
+        * Returns a list of UserGroupRef for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.UserGroupRef
+        */
 
         public static java.util.Iterator<org.semanticwb.model.UserGroupRef> listUserGroupRefs(org.semanticwb.model.SWBModel model)
         {
@@ -41,6 +72,12 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(it, true);
         }
 
+        /**
+         * Creates the user group ref.
+         * 
+         * @param model the model
+         * @return the org.semanticwb.model. user group ref
+         */
         public static org.semanticwb.model.UserGroupRef createUserGroupRef(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
@@ -112,17 +149,20 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
     }
 
    /**
-   * Constructs a UserGroupRefBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the UserGroupRef
-   */
+    * Constructs a UserGroupRefBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the UserGroupRef
+    */
     public UserGroupRefBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
+   
    /**
-   * Sets the value for the property UserGroup
-   * @param value UserGroup to set
-   */
+    * Sets the value for the property UserGroup.
+    * 
+    * @param value UserGroup to set
+    */
 
     public void setUserGroup(org.semanticwb.model.UserGroup value)
     {
@@ -134,9 +174,10 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
             removeUserGroup();
         }
     }
+   
    /**
-   * Remove the value for UserGroup property
-   */
+    * Remove the value for UserGroup property.
+    */
 
     public void removeUserGroup()
     {
@@ -144,9 +185,10 @@ public abstract class UserGroupRefBase extends org.semanticwb.model.Reference im
     }
 
    /**
-   * Gets the UserGroup
-   * @return a org.semanticwb.model.UserGroup
-   */
+    * Gets the UserGroup.
+    * 
+    * @return a org.semanticwb.model.UserGroup
+    */
     public org.semanticwb.model.UserGroup getUserGroup()
     {
          org.semanticwb.model.UserGroup ret=null;
