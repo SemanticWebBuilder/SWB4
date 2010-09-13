@@ -46,38 +46,79 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.ContentUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WordResource.
+ * 
  * @author Jorge Jiménez
  */
 public class WordResource extends org.semanticwb.resource.office.sem.base.WordResourceBase
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(WordResource.class);
+    
+    /** The Constant contentUtils. */
     private static final ContentUtils contentUtils = new ContentUtils();
+    
+    /** The snpages. */
     int snpages = 15;
+    
+    /** The stxtant. */
     String stxtant = "Anterior";
+    
+    /** The stxtsig. */
     String stxtsig = "Siguiente";
+    
+    /** The stfont. */
     String stfont = "font face=\"Verdana, Arial, Helvetica, sans-serif\" size=\"2\" color=\"#000000\"";
+    
+    /** The position. */
     int position = 1;
     
+    /**
+     * Instantiates a new word resource.
+     */
     public WordResource()
     {
         super();
     }
 
+    /**
+     * Instantiates a new word resource.
+     * 
+     * @param obj the obj
+     */
     public WordResource(SemanticObject obj)
     {
         super(obj);
     }
     
 
+    /**
+     * Before print document.
+     * 
+     * @param out the out
+     */
     protected void beforePrintDocument(PrintWriter out)
     {
     }
 
+    /**
+     * After print document.
+     * 
+     * @param out the out
+     */
     protected void afterPrintDocument(PrintWriter out)
     {
     }
+    
+    /**
+     * Gets the hTML.
+     * 
+     * @param file the file
+     * @return the hTML
+     */
     public static String getHTML(File file)
     {
         String name=file.getName();
@@ -120,16 +161,35 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         return html.toString();
 
     }
+    
+    /**
+     * Prints the document.
+     * 
+     * @param out the out
+     * @param path the path
+     * @param workpath the workpath
+     * @param html the html
+     */
     protected void printDocument(PrintWriter out, String path, String workpath, String html)
     {
         out.write(html);
     }
 
+    /**
+     * Creates the word resource.
+     * 
+     * @param id the id
+     * @param model the model
+     * @return the org.semanticwb.resource.office.sem. word resource
+     */
     public static org.semanticwb.resource.office.sem.WordResource createWordResource(String id, org.semanticwb.model.SWBModel model)
     {
         return (org.semanticwb.resource.office.sem.WordResource) model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id, sclass), sclass);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.resource.office.sem.OfficeResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -367,6 +427,13 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
         }
     }
 
+    /**
+     * Clean html.
+     * 
+     * @param datos the datos
+     * @param deletesytyles the deletesytyles
+     * @return the string
+     */
     public static String cleanHTML(String datos, boolean deletesytyles)
     {
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
@@ -544,7 +611,9 @@ public class WordResource extends org.semanticwb.resource.office.sem.base.WordRe
     }
 
     /**
-     * Inicializa la clase creando objetos de configuración del recurso
+     * Inicializa la clase creando objetos de configuración del recurso.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base)

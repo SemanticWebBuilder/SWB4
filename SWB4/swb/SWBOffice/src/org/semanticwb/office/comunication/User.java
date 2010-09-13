@@ -30,12 +30,20 @@ package org.semanticwb.office.comunication;
 
 import org.semanticwb.xmlrpc.XmlRpcObject;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class User.
+ * 
  * @author victor.lorenzana
  */
 public class User extends XmlRpcObject
 {
+    
+    /**
+     * Change password.
+     * 
+     * @param newPassword the new password
+     */
     public void changePassword(String newPassword)
     {
         

@@ -49,19 +49,35 @@ import org.semanticwb.repository.office.OfficeCategory;
 import org.semanticwb.repository.office.OfficeContent;
 import org.semanticwb.repository.office.OfficeDocument;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBOfficeManager.
+ * 
  * @author victor.lorenzana
  */
 public class SWBOfficeManager implements OfficeManager
 {
 
+    /** The manager. */
     private final SWBRepositoryManager manager;
+    
+    /** The Constant DESCRIPTION_BY_DEFAULT. */
     private static final String DESCRIPTION_BY_DEFAULT = "Sin descripción";
+    
+    /** The Constant LANGUAGE_BY_DEFAULT. */
     private static final String LANGUAGE_BY_DEFAULT = "es";
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBOfficeManager.class);
+    
+    /** The cm_content. */
     private final SemanticClass cm_content = OfficeContent.swboffice_OfficeContent;
 
+    /**
+     * Instantiates a new sWB office manager.
+     * 
+     * @param manager the manager
+     */
     public SWBOfficeManager(SWBRepositoryManager manager)
     {
         log.event("Initializing SWBOfficeManager ...");
@@ -73,6 +89,11 @@ public class SWBOfficeManager implements OfficeManager
         }
     }
 
+    /**
+     * Gets the content types.
+     * 
+     * @return the content types
+     */
     public HashMap<String, String> getContentTypes()
     {
         HashMap<String, String> types = new HashMap<String, String>();
@@ -99,36 +120,72 @@ public class SWBOfficeManager implements OfficeManager
         return types;
     }
 
+    /**
+     * Gets the category type.
+     * 
+     * @return the category type
+     */
     public String getCategoryType()
     {
         return OfficeCategory.swboffice_OfficeCategory.getPrefix() + ":" + OfficeCategory.swboffice_OfficeCategory.getName();
     }
 
+    /**
+     * Gets the property title type.
+     * 
+     * @return the property title type
+     */
     public String getPropertyTitleType()
     {
         return OfficeCategory.swboffice_title.getPrefix() + ":" + OfficeCategory.swboffice_title.getName();
     }
 
+    /**
+     * Gets the property description type.
+     * 
+     * @return the property description type
+     */
     public String getPropertyDescriptionType()
     {
         return OfficeCategory.swboffice_description.getPrefix() + ":" + OfficeCategory.swboffice_description.getName();
     }
 
+    /**
+     * Gets the property file type.
+     * 
+     * @return the property file type
+     */
     public String getPropertyFileType()
     {
         return OfficeDocument.swboffice_file.getPrefix() + ":" + OfficeDocument.swboffice_file.getName();
     }
 
+    /**
+     * Gets the property type.
+     * 
+     * @return the property type
+     */
     public String getPropertyType()
     {
         return OfficeContent.swboffice_officetype.getPrefix() + ":" + OfficeContent.swboffice_officetype.getName();
     }
 
+    /**
+     * Gets the user type.
+     * 
+     * @return the user type
+     */
     public String getUserType()
     {
         return OfficeDocument.swboffice_user.getPrefix() + ":" + OfficeDocument.swboffice_user.getName();
     }
 
+    /**
+     * Gets the workspaces.
+     * 
+     * @param user the user
+     * @return the workspaces
+     */
     public Collection<RepositoryInfo> getWorkspaces(User user)
     {
         HashMap<String, RepositoryInfo> workspaces = new HashMap<String, RepositoryInfo>();
@@ -170,6 +227,12 @@ public class SWBOfficeManager implements OfficeManager
         return workspaces.values();
     }
 
+    /**
+     * Gets the semantic class.
+     * 
+     * @param type the type
+     * @return the semantic class
+     */
     private SemanticClass getSemanticClass(String type)
     {
         SemanticClass getSemanticClass = null;
@@ -195,6 +258,13 @@ public class SWBOfficeManager implements OfficeManager
         return null;
     }
 
+    /**
+     * Checks if is super property.
+     * 
+     * @param prop the prop
+     * @param clazz the clazz
+     * @return true, if is super property
+     */
     private boolean isSuperProperty(SemanticProperty prop, SemanticClass clazz)
     {
         Iterator<SemanticClass> classes = clazz.listSuperClasses();
@@ -225,6 +295,12 @@ public class SWBOfficeManager implements OfficeManager
         return false;
     }
 
+    /**
+     * Gets the content properties.
+     * 
+     * @param type the type
+     * @return the content properties
+     */
     public PropertyInfo[] getContentProperties(String type)
     {
         ArrayList<PropertyInfo> properties = new ArrayList<PropertyInfo>();
@@ -274,6 +350,14 @@ public class SWBOfficeManager implements OfficeManager
         return properties.toArray(new PropertyInfo[properties.size()]);
     }
 
+    /**
+     * Validate content values.
+     * 
+     * @param properties the properties
+     * @param values the values
+     * @param type the type
+     * @throws Exception the exception
+     */
     public void validateContentValues(PropertyInfo[] properties, Object[] values, String type) throws Exception
     {
         SemanticClass clazz = getSemanticClass(type);
