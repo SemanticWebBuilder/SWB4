@@ -50,6 +50,13 @@ public class RichText extends org.semanticwb.model.base.RichTextBase {
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
+    /**
+     * Process.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
         if (isFilterHTMLTags()) {

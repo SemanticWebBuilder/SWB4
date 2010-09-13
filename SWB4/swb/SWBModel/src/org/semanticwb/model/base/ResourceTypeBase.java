@@ -1,38 +1,86 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.model.base;
 
 
+   // TODO: Auto-generated Javadoc
+/**
+    * Objeto por medio del cual se define un tipo de componente o recurso.
+    */
 public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    
+    /** The Constant swb_resourceBundle. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceBundle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceBundle");
-   /**
-   * Define una agrupacion de objetos de tipo resource
-   */
+   
+   /** Define una agrupacion de objetos de tipo resource. */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection");
+    
+    /** The Constant swb_resourceCollectionInv. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCollectionInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCollectionInv");
+    
+    /** The Constant swb_resourceOWL. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceOWL=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceOWL");
+   
+   /** Objeto que define una agripacion de componentes o recursos de un mismo tipo. */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
+    
+    /** The Constant swb_hasPTSubType. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasPTSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTSubType");
+    
+    /** The Constant swb_resourceMode. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceMode");
-   /**
-   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
-   */
+   
+   /** Un recurso es un componente en una Página Web con el cual el usuario tiene interacción. */
     public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    
+    /** The Constant swb_hasPTResource. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTResource");
+    
+    /** The Constant swb_resourceCache. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCache=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCache");
+    
+    /** The Constant swb_resourceClassName. */
     public static final org.semanticwb.platform.SemanticProperty swb_resourceClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceClassName");
+   
+   /** Objeto por medio del cual se define un tipo de componente o recurso. */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
-   /**
-   * The semantic class that represents the currentObject
-   */
+   
+   /** The semantic class that represents the currentObject. */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
 
+    /**
+     * The Class ClassMgr.
+     */
     public static class ClassMgr
     {
+       
        /**
-       * Returns a list of ResourceType for a model
-       * @param model Model to find
-       * @return Iterator of org.semanticwb.model.ResourceType
-       */
+        * Returns a list of ResourceType for a model.
+        * 
+        * @param model Model to find
+        * @return Iterator of org.semanticwb.model.ResourceType
+        */
 
         public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypes(org.semanticwb.model.SWBModel model)
         {
@@ -207,35 +255,40 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Constructs a ResourceTypeBase with a SemanticObject
-   * @param base The SemanticObject with the properties for the ResourceType
-   */
+    * Constructs a ResourceTypeBase with a SemanticObject.
+    * 
+    * @param base The SemanticObject with the properties for the ResourceType
+    */
     public ResourceTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
 /**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
+ * Gets the Created property.
+ * 
+ * @return java.util.Date with the Created
+ */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
-* Sets the Created property
-* @param value long with the Created
-*/
+ * Sets the Created property.
+ * 
+ * @param value long with the Created
+ */
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
+   
    /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
+    * Sets the value for the property ModifiedBy.
+    * 
+    * @param value ModifiedBy to set
+    */
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
@@ -247,9 +300,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             removeModifiedBy();
         }
     }
+   
    /**
-   * Remove the value for ModifiedBy property
-   */
+    * Remove the value for ModifiedBy property.
+    */
 
     public void removeModifiedBy()
     {
@@ -257,9 +311,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
+    * Gets the ModifiedBy.
+    * 
+    * @return a org.semanticwb.model.User
+    */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -272,59 +327,74 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the Title property
-* @return String with the Title
-*/
+ * Gets the Title property.
+ * 
+ * @return String with the Title
+ */
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
     }
 
 /**
-* Sets the Title property
-* @param value long with the Title
-*/
+ * Sets the Title property.
+ * 
+ * @param value long with the Title
+ */
     public void setTitle(String value)
     {
         getSemanticObject().setProperty(swb_title, value);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getTitle(java.lang.String)
+     */
     public String getTitle(String lang)
     {
         return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayTitle(java.lang.String)
+     */
     public String getDisplayTitle(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String, java.lang.String)
+     */
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
 
 /**
-* Gets the ResourceBundle property
-* @return String with the ResourceBundle
-*/
+ * Gets the ResourceBundle property.
+ * 
+ * @return String with the ResourceBundle
+ */
     public String getResourceBundle()
     {
         return getSemanticObject().getProperty(swb_resourceBundle);
     }
 
 /**
-* Sets the ResourceBundle property
-* @param value long with the ResourceBundle
-*/
+ * Sets the ResourceBundle property.
+ * 
+ * @param value long with the ResourceBundle
+ */
     public void setResourceBundle(String value)
     {
         getSemanticObject().setProperty(swb_resourceBundle, value);
     }
+   
    /**
-   * Sets the value for the property ResourceCollection
-   * @param value ResourceCollection to set
-   */
+    * Sets the value for the property ResourceCollection.
+    * 
+    * @param value ResourceCollection to set
+    */
 
     public void setResourceCollection(org.semanticwb.model.ResourceCollection value)
     {
@@ -336,9 +406,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             removeResourceCollection();
         }
     }
+   
    /**
-   * Remove the value for ResourceCollection property
-   */
+    * Remove the value for ResourceCollection property.
+    */
 
     public void removeResourceCollection()
     {
@@ -346,9 +417,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets the ResourceCollection
-   * @return a org.semanticwb.model.ResourceCollection
-   */
+    * Gets the ResourceCollection.
+    * 
+    * @return a org.semanticwb.model.ResourceCollection
+    */
     public org.semanticwb.model.ResourceCollection getResourceCollection()
     {
          org.semanticwb.model.ResourceCollection ret=null;
@@ -361,36 +433,40 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
+ * Gets the Updated property.
+ * 
+ * @return java.util.Date with the Updated
+ */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
 /**
-* Sets the Updated property
-* @param value long with the Updated
-*/
+ * Sets the Updated property.
+ * 
+ * @param value long with the Updated
+ */
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
-* Gets the ResourceOWL property
-* @return String with the ResourceOWL
-*/
+ * Gets the ResourceOWL property.
+ * 
+ * @return String with the ResourceOWL
+ */
     public String getResourceOWL()
     {
         return getSemanticObject().getProperty(swb_resourceOWL);
     }
 
 /**
-* Sets the ResourceOWL property
-* @param value long with the ResourceOWL
-*/
+ * Sets the ResourceOWL property.
+ * 
+ * @param value long with the ResourceOWL
+ */
     public void setResourceOWL(String value)
     {
         getSemanticObject().setProperty(swb_resourceOWL, value);
@@ -406,10 +482,11 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets true if has a SubType
-   * @param value org.semanticwb.model.ResourceSubType to verify
-   * @return true if the org.semanticwb.model.ResourceSubType exists, false otherwise
-   */
+    * Gets true if has a SubType.
+    * 
+    * @param value org.semanticwb.model.ResourceSubType to verify
+    * @return true if the org.semanticwb.model.ResourceSubType exists, false otherwise
+    */
     public boolean hasSubType(org.semanticwb.model.ResourceSubType value)
     {
         boolean ret=false;
@@ -421,9 +498,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets the SubType
-   * @return a org.semanticwb.model.ResourceSubType
-   */
+    * Gets the SubType.
+    * 
+    * @return a org.semanticwb.model.ResourceSubType
+    */
     public org.semanticwb.model.ResourceSubType getSubType()
     {
          org.semanticwb.model.ResourceSubType ret=null;
@@ -436,18 +514,20 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the ResourceMode property
-* @return int with the ResourceMode
-*/
+ * Gets the ResourceMode property.
+ * 
+ * @return int with the ResourceMode
+ */
     public int getResourceMode()
     {
         return getSemanticObject().getIntProperty(swb_resourceMode);
     }
 
 /**
-* Sets the ResourceMode property
-* @param value long with the ResourceMode
-*/
+ * Sets the ResourceMode property.
+ * 
+ * @param value long with the ResourceMode
+ */
     public void setResourceMode(int value)
     {
         getSemanticObject().setIntProperty(swb_resourceMode, value);
@@ -463,10 +543,11 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets true if has a Resource
-   * @param value org.semanticwb.model.Resource to verify
-   * @return true if the org.semanticwb.model.Resource exists, false otherwise
-   */
+    * Gets true if has a Resource.
+    * 
+    * @param value org.semanticwb.model.Resource to verify
+    * @return true if the org.semanticwb.model.Resource exists, false otherwise
+    */
     public boolean hasResource(org.semanticwb.model.Resource value)
     {
         boolean ret=false;
@@ -478,9 +559,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets the Resource
-   * @return a org.semanticwb.model.Resource
-   */
+    * Gets the Resource.
+    * 
+    * @return a org.semanticwb.model.Resource
+    */
     public org.semanticwb.model.Resource getResource()
     {
          org.semanticwb.model.Resource ret=null;
@@ -493,44 +575,50 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the ResourceCache property
-* @return int with the ResourceCache
-*/
+ * Gets the ResourceCache property.
+ * 
+ * @return int with the ResourceCache
+ */
     public int getResourceCache()
     {
         return getSemanticObject().getIntProperty(swb_resourceCache);
     }
 
 /**
-* Sets the ResourceCache property
-* @param value long with the ResourceCache
-*/
+ * Sets the ResourceCache property.
+ * 
+ * @param value long with the ResourceCache
+ */
     public void setResourceCache(int value)
     {
         getSemanticObject().setIntProperty(swb_resourceCache, value);
     }
 
 /**
-* Gets the ResourceClassName property
-* @return String with the ResourceClassName
-*/
+ * Gets the ResourceClassName property.
+ * 
+ * @return String with the ResourceClassName
+ */
     public String getResourceClassName()
     {
         return getSemanticObject().getProperty(swb_resourceClassName);
     }
 
 /**
-* Sets the ResourceClassName property
-* @param value long with the ResourceClassName
-*/
+ * Sets the ResourceClassName property.
+ * 
+ * @param value long with the ResourceClassName
+ */
     public void setResourceClassName(String value)
     {
         getSemanticObject().setProperty(swb_resourceClassName, value);
     }
+   
    /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
+    * Sets the value for the property Creator.
+    * 
+    * @param value Creator to set
+    */
 
     public void setCreator(org.semanticwb.model.User value)
     {
@@ -542,9 +630,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             removeCreator();
         }
     }
+   
    /**
-   * Remove the value for Creator property
-   */
+    * Remove the value for Creator property.
+    */
 
     public void removeCreator()
     {
@@ -552,9 +641,10 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
    /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
+    * Gets the Creator.
+    * 
+    * @return a org.semanticwb.model.User
+    */
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
@@ -567,42 +657,54 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     }
 
 /**
-* Gets the Description property
-* @return String with the Description
-*/
+ * Gets the Description property.
+ * 
+ * @return String with the Description
+ */
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
     }
 
 /**
-* Sets the Description property
-* @param value long with the Description
-*/
+ * Sets the Description property.
+ * 
+ * @param value long with the Description
+ */
     public void setDescription(String value)
     {
         getSemanticObject().setProperty(swb_description, value);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDescription(java.lang.String)
+     */
     public String getDescription(String lang)
     {
         return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayDescription(java.lang.String)
+     */
     public String getDisplayDescription(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String, java.lang.String)
+     */
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
    /**
-   * Gets the WebSite
-   * @return a instance of org.semanticwb.model.WebSite
-   */
+    * Gets the WebSite.
+    * 
+    * @return a instance of org.semanticwb.model.WebSite
+    */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

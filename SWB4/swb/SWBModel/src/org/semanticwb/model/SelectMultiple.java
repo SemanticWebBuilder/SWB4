@@ -57,6 +57,13 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.FormElementBase#process(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
+    /**
+     * Process.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     */
     @Override
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
 
@@ -87,6 +94,17 @@ public class SelectMultiple extends org.semanticwb.model.base.SelectMultipleBase
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.FormElementBase#renderElement(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty, java.lang.String, java.lang.String, java.lang.String)
+     */
+    /**
+     * Render element.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @param type the type
+     * @param mode the mode
+     * @param lang the lang
+     * @return the string
      */
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
