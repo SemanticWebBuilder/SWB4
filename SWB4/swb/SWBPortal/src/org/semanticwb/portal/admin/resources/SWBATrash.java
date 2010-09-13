@@ -437,7 +437,9 @@ public class SWBATrash extends GenericResource {
         {
             out.println("<fieldset>");
             out.println("<center>");
-            int pages=(int)(l+ps/2)/ps;
+            //int pages=(int)(l+ps/2)/ps;
+            int pages=(int)(l/ps);
+            if((l%ps)>0) pages++;
             for(int z=0;z<pages;z++)
             {
                 SWBResourceURL urlNew = paramRequest.getRenderUrl();

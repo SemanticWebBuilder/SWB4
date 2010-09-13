@@ -331,7 +331,7 @@ public class SWBAWebPageContents extends GenericResource {
 
 
             busqueda = busqueda.trim();
-            HashMap<String, String> hmbus = new HashMap();
+            HashMap<String, SemanticObject> hmbus = new HashMap();
             HashMap<String, SemanticObject> hmfiltro = new HashMap();
             SemanticObject semO = null;
             Iterator<SemanticProperty> itcol = null;
@@ -342,13 +342,14 @@ public class SWBAWebPageContents extends GenericResource {
                     boolean del=false;
                     if(semO.instanceOf(Trashable.swb_Trashable))
                     {
-                        del=semO.getBooleanProperty(Trashable.swb_deleted);
+                        del=semO.getBooleanProperty(Trashable.swb_deleted,false);
                     }
                     if(del)
                     {
                         continue;
                     }
 
+                    hmbus.put(semO.getURI(), semO);
                     itcol = hmprop.keySet().iterator();
                     String occ = "";
                     while (itcol.hasNext()) {
@@ -361,9 +362,26 @@ public class SWBAWebPageContents extends GenericResource {
                     }
                 }
             }
+            else
+            {
+                while (itso.hasNext()) {
+                    semO = itso.next();
+                    boolean del=false;
+                    if(semO.instanceOf(Trashable.swb_Trashable))
+                    {
+                        del=semO.getBooleanProperty(Trashable.swb_deleted,false);
+                    }
+                    if(del)
+                    {
+                        continue;
+                    }
+
+                    hmbus.put(semO.getURI(), semO);
+                }
+            }
 
             if(hmfiltro.isEmpty())
-                itso = obj.listObjectProperties(prop);
+                itso =  hmbus.values().iterator(); //obj.listObjectProperties(prop);
             else
                 itso = hmfiltro.values().iterator();
 
@@ -371,6 +389,9 @@ public class SWBAWebPageContents extends GenericResource {
             itso=null;
             int ps=20;
             int l=setso.size();
+
+            //System.out.println("num cont: "+l);
+
             int p=0;
             if(page!=null)p=Integer.parseInt(page);
             int x=0;
@@ -382,7 +403,7 @@ public class SWBAWebPageContents extends GenericResource {
                 boolean del=false;
                 if(sobj.instanceOf(Trashable.swb_Trashable))
                 {
-                    del=sobj.getBooleanProperty(Trashable.swb_deleted);
+                    del=sobj.getBooleanProperty(Trashable.swb_deleted,false);
                 }
                 if(del)
                 {
@@ -588,7 +609,12 @@ public class SWBAWebPageContents extends GenericResource {
             {
                 out.println("<fieldset>");
                 out.println("<center>");
-                int pages=(int)(l+ps/2)/ps;
+
+                //int pages=(int)(l+ps/2)/ps;
+
+                int pages=(int)(l/ps);
+                if((l%ps)>0) pages++;
+
                 for(int z=0;z<pages;z++)
                 {
                     SWBResourceURL urlNew = paramRequest.getRenderUrl();
