@@ -66,6 +66,14 @@ public class ClassElement extends org.semanticwb.model.base.ClassElementBase
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.FormElementBase#validate(javax.servlet.http.HttpServletRequest, org.semanticwb.platform.SemanticObject, org.semanticwb.platform.SemanticProperty)
      */
+    /**
+     * Validate.
+     * 
+     * @param request the request
+     * @param obj the obj
+     * @param prop the prop
+     * @throws FormValidateException the form validate exception
+     */
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop)
             throws FormValidateException {

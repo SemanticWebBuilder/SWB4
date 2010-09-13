@@ -2575,6 +2575,11 @@ public class BaseNode extends BaseNodeBase
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.GenericObjectBase#toString()
      */
+    /**
+     * To string.
+     * 
+     * @return the string
+     */
     @Override
     public String toString()
     {
@@ -2583,6 +2588,12 @@ public class BaseNode extends BaseNodeBase
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.GenericObjectBase#equals(java.lang.Object)
+     */
+    /**
+     * Equals.
+     * 
+     * @param obj the obj
+     * @return true, if successful
      */
     @Override
     public boolean equals(Object obj)
@@ -2597,6 +2608,11 @@ public class BaseNode extends BaseNodeBase
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.GenericObjectBase#hashCode()
+     */
+    /**
+     * Hash code.
+     * 
+     * @return the int
      */
     @Override
     public int hashCode()
