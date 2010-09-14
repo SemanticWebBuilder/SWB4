@@ -82,7 +82,7 @@ public class PDFContent extends GenericAdmResource {
      * 
      * @param request the request
      * @param response the response
-     * @param paramReq the param req
+     * @param paramRequest the param request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */        

@@ -39,6 +39,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
+// TODO: Auto-generated Javadoc
 /**
  * IFrameContent se encarga de desplegar y administrar un contenido de tipo remoto en un frame independiente
  * bajo ciertos criterios (configuraci�n de recurso).
@@ -52,19 +53,24 @@ import org.semanticwb.portal.api.SWBResourceException;
 
 public class IFrameContent extends GenericAdmResource 
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(IFrameContent.class);
-    /** 
-     * Creates a new instance of IFrameContent 
+    
+    /**
+     * Creates a new instance of IFrameContent.
      */
     public IFrameContent() {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */    
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {

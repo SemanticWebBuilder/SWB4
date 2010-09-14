@@ -42,23 +42,31 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.platform.SemanticClass;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class JSPResourceType.
+ * 
  * @author Javier Solis Gonzalez
  */
 public class JSPResourceType extends GenericResource
 {
     //Subcalse de ResourceType
+    /** The class type. */
     public static SemanticClass classType =  org.semanticwb.model.JSPResourceType.sclass;
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(JSPResourceType.class);
+    
     /**
-     * Creates a new instance of JSPResourceType
+     * Creates a new instance of JSPResourceType.
      */
     public JSPResourceType()
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {
@@ -84,6 +92,9 @@ public class JSPResourceType extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException
     {

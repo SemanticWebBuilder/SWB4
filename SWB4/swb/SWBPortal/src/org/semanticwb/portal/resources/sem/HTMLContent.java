@@ -588,6 +588,13 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         out.println(bs.toString());
     }
 
+    /**
+     * Check paths in file.
+     * 
+     * @param filePath the file path
+     * @param filesAttached the files attached
+     * @param pathToAdd the path to add
+     */
     private void checkPathsInFile(String filePath, String[] filesAttached, String pathToAdd) {
         File file = new File(filePath);
         StringBuilder contentRead = null;

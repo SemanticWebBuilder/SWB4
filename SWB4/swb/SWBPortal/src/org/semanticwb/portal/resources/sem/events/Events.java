@@ -51,8 +51,11 @@ import org.semanticwb.portal.api.*;
  * @author jorge.jimenez
  */
 public class Events extends org.semanticwb.portal.resources.sem.events.base.EventsBase {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Events.class);
 
+    /** The Constant Action_ENROLL. */
     private static final String Action_ENROLL = "enroll";
 
 //    private LinkedHashSet<Date> setDates;
@@ -71,6 +74,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(Resource)
+     */
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
@@ -90,6 +96,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
     }
 
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -252,6 +261,14 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 //        event.getSemanticObject().getSemanticClass().getURI();
     }
 
+    /**
+     * Render calendar events.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String renderCalendarEvents(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base = getResourceBase();
         StringBuilder html = new StringBuilder();
@@ -372,6 +389,13 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         return html.toString();
     }
 
+    /**
+     * Render list events.
+     * 
+     * @param paramRequest the param request
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String renderListEvents(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
         final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
@@ -438,6 +462,15 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         return html.toString();
     }
 
+    /**
+     * Render list events.
+     * 
+     * @param paramRequest the param request
+     * @param dateBefore the date before
+     * @param dateAfter the date after
+     * @return the string
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String renderListEvents(SWBParamRequest paramRequest, final Date dateBefore, final Date dateAfter) throws SWBResourceException {
         StringBuilder html = new StringBuilder();
         final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy | HH:mm");
@@ -508,6 +541,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         return html.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -609,6 +645,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
         out.println("</div>");
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericSemResource#processAction(HttpServletRequest, SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         User user = response.getUser();
@@ -766,6 +805,9 @@ public class Events extends org.semanticwb.portal.resources.sem.events.base.Even
 //        response.setMode(response.Mode_VIEW);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doHelp(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");

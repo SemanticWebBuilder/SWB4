@@ -104,6 +104,14 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
 	/* (non-Javadoc)
 	 * @see info.bliki.wiki.tags.HTMLTag#renderHTML(info.bliki.wiki.filter.ITextConverter, java.lang.Appendable, info.bliki.wiki.model.IWikiModel)
 	 */
+	/**
+	 * Render html.
+	 * 
+	 * @param converter the converter
+	 * @param writer the writer
+	 * @param model the model
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Override
 	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException 
         {
@@ -193,6 +201,11 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
 	/* (non-Javadoc)
 	 * @see org.htmlcleaner.TagToken#isReduceTokenStack()
 	 */
+	/**
+	 * Checks if is reduce token stack.
+	 * 
+	 * @return true, if is reduce token stack
+	 */
 	@Override
 	public boolean isReduceTokenStack() {
 		return true;
@@ -200,6 +213,11 @@ public class ResourceTag extends HTMLTag implements INoBodyParsingTag
 
 	/* (non-Javadoc)
 	 * @see org.htmlcleaner.TagNode#getParents()
+	 */
+	/**
+	 * Gets the parents.
+	 * 
+	 * @return the parents
 	 */
 	@Override
 	public String getParents() {

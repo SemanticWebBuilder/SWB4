@@ -147,6 +147,11 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     /* (non-Javadoc)
      * @see org.semanticwb.model.GenericObject#getURI()
      */
+    /**
+     * Gets the uRI.
+     * 
+     * @return the uRI
+     */
     public String getURI() {
         return getSemanticObject().getURI();
     }
@@ -154,12 +159,22 @@ public class GenericSemResource extends GenericResource implements org.semanticw
     /* (non-Javadoc)
      * @see org.semanticwb.model.GenericObject#getId()
      */
+    /**
+     * Gets the id.
+     * 
+     * @return the id
+     */
     public String getId() {
         return getSemanticObject().getId();
     }
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.GenericObject#getSemanticObject()
+     */
+    /**
+     * Gets the semantic object.
+     * 
+     * @return the semantic object
      */
     public SemanticObject getSemanticObject()
     {
@@ -202,6 +217,12 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.GenericObject#removeProperty(java.lang.String)
+     */
+    /**
+     * Removes the property.
+     * 
+     * @param prop the prop
+     * @return the generic object
      */
     public GenericObject removeProperty(String prop)
     {
@@ -256,6 +277,9 @@ public class GenericSemResource extends GenericResource implements org.semanticw
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.GenericObject#dispose()
+     */
+    /**
+     * Dispose.
      */
     public void dispose() {
         

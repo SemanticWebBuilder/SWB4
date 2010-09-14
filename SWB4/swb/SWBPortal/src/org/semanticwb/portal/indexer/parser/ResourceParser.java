@@ -91,12 +91,12 @@ public class ResourceParser extends GenericParser {
      * <p>
      * Obtiene un objeto Map con los términos de indexación ({@link IndexTerm})
      * para un objeto {@link Searchable}.
-     *
+     * 
      * @param gen   the {@link Searchable} object to get {@link IndexTerm}s from.
-     *              El objeto {@link Searchable} del cual se obtienen los
-     *              {@link IndexTerm}s.
+     * El objeto {@link Searchable} del cual se obtienen los
      * @return      Map of {@link IndexTerm}s for the {@link Searchable} object.
-     *              Objeto Map con los {@link IndexTerm}s del objeto {@link Searchable}.
+     * Objeto Map con los {@link IndexTerm}s del objeto {@link Searchable}.
+     * {@link IndexTerm}s.
      * @see         org.semanticwb.portal.indexer.parser.GenericParser#getIndexTerms(org.semanticwb.model.Searchable)
      */
     @Override
@@ -115,10 +115,10 @@ public class ResourceParser extends GenericParser {
      * Gets the navigation path to the {@link Searchable} object.
      * <p>
      * Obtiene la ruta de navegación hacia el objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object.
+     * 
+     * @param gen the gen
      * @return  Navigation path to the given {@link Searchable} object.
-     *          Ruta de navegación hacia el objeto {@link Searchable}.
+     * Ruta de navegación hacia el objeto {@link Searchable}.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getIndexCategory(org.semanticwb.model.Searchable)
      */
     @Override
@@ -133,14 +133,14 @@ public class ResourceParser extends GenericParser {
 
     /**
      * Extracts the resource's rendered information. This value is stored in the
+     * 
+     * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
+     * @return      Rendered data of the {@link Searchable} object. Datos
+     * desplegados por el objeto {@link Searchable}.
      * {@link ATT_DATA} term of the index.
      * <p>
      * Extrae la información que un recurso despliega. Este valor se almacena en
      * el término {@link ATT_DATA} del índice.
-     *
-     * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
-     * @return      Rendered data of the {@link Searchable} object. Datos
-     *              desplegados por el objeto {@link Searchable}.
      * @see         org.semanticwb.portal.indexer.parser.GenericParser#getIndexData(org.semanticwb.model.Searchable)
      */
     @Override
@@ -189,11 +189,11 @@ public class ResourceParser extends GenericParser {
      * Gets the date of the last change done to the {@link Searchable} object.
      * <p>
      * Obtiene la fecha de la última modificación hecha al objeto
-     * {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object.
+     * 
+     * @param gen the gen
      * @return  Last {@link Searchable} object's update date.
-     *          Fecha de última actualización del objeto {@link Searchable}.
+     * Fecha de última actualización del objeto {@link Searchable}.
+     * {@link Searchable}.
      */
     @Override
     public String getIndexLastUpdated(Searchable gen) {
@@ -203,16 +203,16 @@ public class ResourceParser extends GenericParser {
 //************ Métodos que no afectan la información del índice ************
 
     /**
-     * Gets the {@link WebPage} asociated to the {@link Resource} to be indexed.
-     * <p>
-     * Obtiene la página web ({@link WebPage}) asociada al recurso ({@link Resource})
-     * que se indexará.
-     *
-     * @param   res the {@link Resource} (it must be a sub-class of
-     *              {@link Searchable}). El objeto {@link Resource} (debe ser una
-     *              sub-clase de {@link Searchable}).
-     * @return  the {@link WebPage}. La página web asociada al objeto {@link Resource}.
-     */
+ * Gets the {@link WebPage} asociated to the {@link Resource} to be indexed.
+ * <p>
+ * Obtiene la página web ({@link WebPage}) asociada al recurso ({@link Resource})
+ * que se indexará.
+ * 
+ * @param res the res
+ * @return  the {@link WebPage}. La página web asociada al objeto {@link Resource}.
+ * {@link Searchable}). El objeto {@link Resource} (debe ser una
+ * sub-clase de {@link Searchable}).
+ */
     private WebPage getWebPage(Resource res) {
         WebPage ret = null;
         if (res.getResourceType() != null && res.getResourceType().getResourceMode() == ResourceType.MODE_CONTENT) {
@@ -233,11 +233,11 @@ public class ResourceParser extends GenericParser {
      * object.
      * <p>
      * Obtiene la URL de la página web ({@link WebPage}) relacionada con el objeto
-     * {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * 
+     * @param gen the gen
      * @return  URL of the associated {@link Searchable} object's {@link WebPage}.
-     *          URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
+     * URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
+     * {@link Searchable}.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getUrl(org.semanticwb.model.Searchable)
      */
     @Override
@@ -257,12 +257,12 @@ public class ResourceParser extends GenericParser {
      * Gets the navigation path to the {@link Searchable} object.
      * <p>
      * Obtiene la ruta de navegación hacia el objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
+     * 
+     * @param gen the gen
+     * @param lang the lang
      * @return  Navigation path to the {@link Searchable} object in the given
-     *          language. Ruta de navegación hacia el objeto {@link Searchable}
-     *          en el idioma especificado.
+     * language. Ruta de navegación hacia el objeto {@link Searchable}
+     * en el idioma especificado.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getPath(org.semanticwb.model.Searchable, java.lang.String)
      */
     @Override
@@ -279,10 +279,10 @@ public class ResourceParser extends GenericParser {
      * Gets the String type of the {@link Searchable} object.
      * <p>
      * Obtiene la cadena del tipo de objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * 
+     * @param gen the gen
      * @return  String type of the {@link Searchable} object. String con el tipo
-     *          del objeto {@link Searchable}.
+     * del objeto {@link Searchable}.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
      */
     @Override

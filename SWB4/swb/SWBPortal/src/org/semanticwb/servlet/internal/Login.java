@@ -44,6 +44,7 @@ import org.semanticwb.model.UserRepository;
 import org.semanticwb.security.limiter.FailedAttempt;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Internal Servlet Login.
  * 
@@ -66,6 +67,7 @@ public class Login implements InternalServlet
     private boolean handleError = false;
     //Constantes para primer implementación
 
+    /** The blocked list. */
     private static SWBSoftkHashMap<String, FailedAttempt> blockedList = new SWBSoftkHashMap<String, FailedAttempt>();
     
 
@@ -589,6 +591,16 @@ public class Login implements InternalServlet
         }
     }
 
+    /**
+     * Do login.
+     * 
+     * @param callbackHandler the callback handler
+     * @param context the context
+     * @param subject the subject
+     * @param request the request
+     * @param matchKey the match key
+     * @throws LoginException the login exception
+     */
     public static void doLogin(CallbackHandler callbackHandler, String context, Subject subject, HttpServletRequest request, String matchKey) throws LoginException
     {
         if (isblocked(matchKey)){
@@ -612,6 +624,11 @@ public class Login implements InternalServlet
         sendLoginLog(request, user);
     }
 
+    /**
+     * Mark failed attepmt.
+     * 
+     * @param matchKey the match key
+     */
     public static void markFailedAttepmt(String matchKey)
     {
         FailedAttempt failedAttempt = blockedList.get(matchKey);
@@ -623,6 +640,12 @@ public class Login implements InternalServlet
         failedAttempt.failedAttempt();
     }
 
+    /**
+     * Checks if is blocked.
+     * 
+     * @param matchKey the match key
+     * @return true, if is blocked
+     */
     public static boolean isblocked(String matchKey)
     {
         boolean ret=false;
@@ -637,6 +660,11 @@ public class Login implements InternalServlet
         return ret;
     }
 
+    /**
+     * Clean blocked entry.
+     * 
+     * @param matchKey the match key
+     */
     private static void cleanBlockedEntry(String matchKey)
     {
         FailedAttempt current = blockedList.get(matchKey);

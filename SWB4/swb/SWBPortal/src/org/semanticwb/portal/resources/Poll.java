@@ -49,6 +49,7 @@ import org.semanticwb.portal.util.SWBCookieMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.FileUpload;
 
+// TODO: Auto-generated Javadoc
 /**
  * Poll se encarga de desplegar y administrar una encuesta de opinion bajo
  * ciertos criterios(configuraci?n de recurso).
@@ -60,47 +61,102 @@ import org.semanticwb.portal.util.FileUpload;
  */
 
 public class Poll extends GenericResource {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(Poll.class);
+    
+    /** The Constant PREF. */
     private static final String PREF = "poll_";
 
+    /** The hash prim. */
     HashMap hashPrim=new HashMap();
 
 
+    /** The tpl. */
     private Templates tpl;
 
     /** The work path. */
     private String workPath;
+    
+    /** The web work path. */
     private String webWorkPath;
 
+    /** The path. */
     private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/Poll/";
+    
+    /** The restype. */
     private static String restype;
+    
+    /** The Mng cookie. */
     private SWBCookieMgr MngCookie;
+    
+    /** The adm res utils. */
     private WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
 
+    /**
+     * The Enum Display.
+     */
     public enum Display {
-        SLIDE, POPUP, SIMPLE;
+        
+        /** The SLIDE. */
+        SLIDE, 
+ /** The POPUP. */
+ POPUP, 
+ /** The SIMPLE. */
+ SIMPLE;
+        
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
         @Override
         public String toString() {
             return Integer.toString(this.ordinal());
         }
     }
 
+    /**
+     * The Enum VMode.
+     */
     public enum VMode {
-        IP, COOKIE;
+        
+        /** The IP. */
+        IP, 
+ /** The COOKIE. */
+ COOKIE;
+        
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
         @Override
         public String toString() {
             return Integer.toString(this.ordinal());
         }
     }
 
+    /**
+     * The Enum LocLnks.
+     */
     public enum LocLnks {
-        INPOLL, INRESULTS, INBOTH;
+        
+        /** The INPOLL. */
+        INPOLL, 
+ /** The INRESULTS. */
+ INRESULTS, 
+ /** The INBOTH. */
+ INBOTH;
+        
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
         @Override
         public String toString() {
             return Integer.toString(this.ordinal());
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#setResourceBase(Resource)
+     */
     @Override
     public void setResourceBase(Resource base) {
         try {
@@ -129,11 +185,13 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * @param request
-     * @param response
-     * @param paramRequest
-     * @throws SWBResourceException
-     * @throws IOException
+     * Process request.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -145,6 +203,15 @@ public class Poll extends GenericResource {
             super.processRequest(request, response, paramRequest);
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws SWBResourceException the sWB resource exception
+     */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base=paramRequest.getResourceBase();
 
@@ -263,6 +330,9 @@ public class Poll extends GenericResource {
         return dom;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doXML(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Document dom=getDom(request, response, paramRequest);
@@ -270,6 +340,9 @@ public class Poll extends GenericResource {
             response.getWriter().println(SWBUtils.XML.domToXml(dom));
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = paramRequest.getResourceBase();
@@ -298,6 +371,15 @@ public class Poll extends GenericResource {
         }
     }
 
+    /**
+     * Do accesible.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAccesible(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache"); //HTTP 1.1
@@ -318,12 +400,13 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Muestra el html al usuario final
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Muestra el html al usuario final.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     /*
     @Override
@@ -525,8 +608,10 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo que valida si se encuentra la cookie de la encuensta registrada en la maquina del usuario
-     * @param request
+     * Metodo que valida si se encuentra la cookie de la encuensta registrada en la maquina del usuario.
+     * 
+     * @param request the request
+     * @return true, if successful
      */
     private boolean validateCookie(javax.servlet.http.HttpServletRequest request) {
         for(int i=0;i<request.getCookies().length;i++){
@@ -539,8 +624,10 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo que valida si la ip del usuario final ya voto
-     * @param request
+     * Metodo que valida si la ip del usuario final ya voto.
+     * 
+     * @param request the request
+     * @return true, if successful
      */
     private boolean validateIPAddress(javax.servlet.http.HttpServletRequest request) {
         boolean flag = false;
@@ -576,6 +663,15 @@ public class Poll extends GenericResource {
         return flag;
     }
 
+    /**
+     * Vote.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     private void vote(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = null;
         String data = null;
@@ -656,12 +752,14 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Muestra los resultados de la encuesta
-     * @param request
-     * @param reqParams
-     * @param data
-     * @throws AFException
-     * @throws IOException
+     * Muestra los resultados de la encuesta.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @param data the data
+     * @return the poll results
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     private String getPollResults(HttpServletRequest request, SWBParamRequest paramRequest, Document data) throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder();
@@ -789,6 +887,13 @@ public class Poll extends GenericResource {
         return ret.toString();
     }
 
+    /**
+     * Gets the links.
+     * 
+     * @param links the links
+     * @param genDesc the gen desc
+     * @return the links
+     */
     private String getLinks(NodeList links, final String genDesc) {
         StringBuffer ret = new StringBuffer("");
         if( links==null )
@@ -812,12 +917,13 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo que despliega la administraci?n del recurso
-     * @param request
-     * @param response
-     * @param paramsRequest
-     * @throws AFException
-     * @throws IOException
+     * Metodo que despliega la administraci?n del recurso.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -1047,9 +1153,11 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * @param base
-     * @param fup
-     * @param att
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
      */
     protected void setAttribute(Resource base, FileUpload fup, String att) {
         try
@@ -1065,10 +1173,12 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * @param base
-     * @param fup
-     * @param att
-     * @param value
+     * Sets the attribute.
+     * 
+     * @param base the base
+     * @param fup the fup
+     * @param att the att
+     * @param value the value
      */
     protected void setAttribute(Resource base, FileUpload fup, String att, String value) {
         try
@@ -1084,9 +1194,11 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * @param dom
-     * @param nodeType
-     * @param name
+     * Removes the all nodes.
+     * 
+     * @param dom the dom
+     * @param nodeType the node type
+     * @param name the name
      */
     private void removeAllNodes(Document dom, short nodeType, String name) {
         NodeList list = dom.getElementsByTagName(name);
@@ -1104,9 +1216,11 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo que muestra la forma de la encuesta de opini?n en html
-     * @param request
-     * @param paramsRequest
+     * Metodo que muestra la forma de la encuesta de opini?n en html.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the form
      */
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
         StringBuilder ret=new StringBuilder();
@@ -1492,9 +1606,11 @@ public class Poll extends GenericResource {
     }
 
     /**
-     * Metodo de validaci?n en javascript para la encuesta
-     * @param request
-     * @param paramsRequest
+     * Metodo de validaci?n en javascript para la encuesta.
+     * 
+     * @param paramRequest the param request
+     * @return the admin script
+     * @throws SWBResourceException the sWB resource exception
      */
     private String getAdminScript(SWBParamRequest paramRequest) throws SWBResourceException {
         StringBuilder script = new StringBuilder();
@@ -1562,6 +1678,13 @@ public class Poll extends GenericResource {
         return script.toString();
     }
 
+    /**
+     * Gets the render script.
+     * 
+     * @param paramRequest the param request
+     * @return the render script
+     * @throws SWBResourceException the sWB resource exception
+     */
     private String getRenderScript(SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base = paramRequest.getResourceBase();
         StringBuilder script = new StringBuilder();

@@ -22,12 +22,21 @@ import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import java.sql.Timestamp;
 import java.util.Date;
+// TODO: Auto-generated Javadoc
+
 /**
- *
+ * The Class ProjectDriverTools.
+ * 
  * @author martha.jimenez
  */
 public class ProjectDriverTools {
        //Agrupa en arreglos los tipos de WebPage y regresa un hashmap
+       /**
+        * Calculate array pages.
+        * 
+        * @param it the it
+        * @return the hash map
+        */
        public HashMap calculateArrayPages(Iterator it)
        {
            ArrayList actPageCon=new ArrayList();
@@ -56,6 +65,15 @@ public class ProjectDriverTools {
            return container;
        }
        //Calcula la barra de progreso de avance general, la barra de avance esperado, los dias laborables disponibles y los dias restantes
+       /**
+        * Calculate progress project.
+        * 
+        * @param wp the wp
+        * @param user the user
+        * @param msg1 the msg1
+        * @param msg2 the msg2
+        * @return the string[]
+        */
        public String[] calculateProgressProject(WebPage wp,User user,String msg1, String msg2)
        {
            Project wpPro = (Project)wp;
@@ -87,6 +105,13 @@ public class ProjectDriverTools {
            return progress;
        }
 
+       /**
+        * Calcute laborable days.
+        * 
+        * @param a1 the a1
+        * @param a2 the a2
+        * @return the long
+        */
        private long calcuteLaborableDays(long a1, long a2) {
             long numdays = 0;
             long oneday = 24 * 60 * 60 * 1000;
@@ -110,6 +135,12 @@ public class ProjectDriverTools {
             return numdays;
         }
         //Obtiene los usuarios validos que esten asociados a las paginas de usuario de un sitio web.
+        /**
+         * Gets the user valid.
+         * 
+         * @param wpUs the wp us
+         * @return the user valid
+         */
         public ArrayList getUserValid(WebPage wpUs){
               ArrayList listUser=new ArrayList();
               Iterator<UserWebPage> itU = UserWebPage.ClassMgr.listUserWebPageByParent(wpUs, wpUs.getWebSite());
@@ -120,6 +151,14 @@ public class ProjectDriverTools {
               }
               return listUser;
         }
+        
+        /**
+         * Acts by status.
+         * 
+         * @param userwp the userwp
+         * @param user the user
+         * @return the hash map
+         */
         public HashMap actsByStatus(UserWebPage userwp, User user){
             HashMap contStatus=new HashMap();
             ArrayList assig=new ArrayList();
@@ -158,6 +197,15 @@ public class ProjectDriverTools {
             }
             return contStatus;
         }
+        
+        /**
+         * Acts by responsible.
+         * 
+         * @param uwp the uwp
+         * @param user the user
+         * @param project the project
+         * @return the array list
+         */
         private ArrayList actsByResponsible(UserWebPage uwp, User user,WebPage project){
             ArrayList listActs=new ArrayList();
               Iterator itA=Activity.ClassMgr.listActivityByResponsible(uwp.getUserWP(),uwp.getWebSite());
@@ -175,6 +223,14 @@ public class ProjectDriverTools {
               return listActs;
         }
         //Obtiene un hashmap con los usuarios y sus actividades asociadas de un sitio web
+        /**
+         * Gets the map users.
+         * 
+         * @param listUser the list user
+         * @param project the project
+         * @param user the user
+         * @return the map users
+         */
         public HashMap getMapUsers(ArrayList listUser,WebPage project, User user){
               Iterator<UserWebPage> itU = listUser.iterator();
               HashMap users = new HashMap();
@@ -189,6 +245,15 @@ public class ProjectDriverTools {
               return users;
         }
         //Obtiene en codigo html la lista de usuario asociados a un sitio web
+        /**
+         * View list users.
+         * 
+         * @param users the users
+         * @param itU the it u
+         * @param titleLan the title lan
+         * @param label the label
+         * @return the string
+         */
         public String viewListUsers(HashMap users,Iterator<UserWebPage> itU, String titleLan,String label)
         {
             StringBuffer buff=new StringBuffer();
@@ -210,6 +275,16 @@ public class ProjectDriverTools {
             return buff.toString();
         }
 
+        /**
+         * Prints the page.
+         * 
+         * @param mpag the mpag
+         * @param title the title
+         * @param user the user
+         * @param progressBar the progress bar
+         * @param titleLan the title lan
+         * @return the string
+         */
         public String printPage(ArrayList mpag, String title,User user,boolean progressBar,String titleLan)
         {
             Iterator itpr=mpag.iterator();
@@ -231,6 +306,13 @@ public class ProjectDriverTools {
             return strb.toString();
         }
 
+        /**
+         * Gets the progress bar.
+         * 
+         * @param info the info
+         * @param titleLan the title lan
+         * @return the progress bar
+         */
         public String getProgressBar(ArrayList info, String titleLan)
         {
             String porcentaje = "", horas = "";
@@ -286,6 +368,12 @@ public class ProjectDriverTools {
                 return null;
         }
 
+        /**
+         * Gets the progress html.
+         * 
+         * @param porcentajeTotal the porcentaje total
+         * @return the progress html
+         */
         private String getProgressHtml(float porcentajeTotal){
             StringBuffer bf = new StringBuffer();
             DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -303,6 +391,13 @@ public class ProjectDriverTools {
             return bf.toString();
         }
 
+        /**
+         * Checks for child.
+         * 
+         * @param webpage the webpage
+         * @param user the user
+         * @return true, if successful
+         */
         public boolean hasChild(WebPage webpage,User user)
         {
             boolean result = false;
@@ -320,6 +415,13 @@ public class ProjectDriverTools {
            return result;
         }
         //Obtiene los nodos finales
+        /**
+         * Gets the list leaf activities.
+         * 
+         * @param wp the wp
+         * @param user the user
+         * @return the list leaf activities
+         */
         public ArrayList getListLeafActivities(WebPage wp, User user){
             Iterator<Activity> it = Activity.ClassMgr.listActivities(wp.getWebSite());
             ArrayList result = new ArrayList();
@@ -332,6 +434,13 @@ public class ProjectDriverTools {
             }
             return result;
         }
+        
+        /**
+         * Parent active.
+         * 
+         * @param wp the wp
+         * @return true, if successful
+         */
         public boolean parentActive(WebPage wp){
             WebPage parent=wp.getParent();
             boolean haveParent=true;
@@ -342,6 +451,18 @@ public class ProjectDriverTools {
             }
             return haveParent;
         }
+        
+        /**
+         * Gets the web page list level.
+         * 
+         * @param wp1 the wp1
+         * @param user the user
+         * @param level the level
+         * @param title the title
+         * @param indentation the indentation
+         * @param titleLan the title lan
+         * @return the web page list level
+         */
         public String getWebPageListLevel(WebPage wp1,User user, int level, String title, String indentation,String titleLan)
         {
             level=level+wp1.getLevel();
@@ -386,6 +507,18 @@ public class ProjectDriverTools {
             }
             return st.toString();
         }
+        
+        /**
+         * Gets the web page list level1.
+         * 
+         * @param act the act
+         * @param user the user
+         * @param level the level
+         * @param st1 the st1
+         * @param indentation the indentation
+         * @param titleLan the title lan
+         * @return the web page list level1
+         */
         private String getWebPageListLevel1(Activity act, User user, int level,StringBuffer st1, String indentation,String titleLan)
         {
             Iterator<Activity> it = Activity.ClassMgr.listActivityByParent(act,act.getWebSite());
@@ -420,6 +553,13 @@ public class ProjectDriverTools {
             }
             return st1.toString();
         }
+        
+        /**
+         * Gets the project.
+         * 
+         * @param wp the wp
+         * @return the project
+         */
         public WebPage getProject(WebPage wp){
            boolean p;p=false;
            WebPage parent=wp;
@@ -431,6 +571,13 @@ public class ProjectDriverTools {
             }
             return parent;
         }
+        
+        /**
+         * Calc progress user gral.
+         * 
+         * @param users the users
+         * @return the array list
+         */
         public ArrayList calcProgressUserGral(HashMap users)
         {
             Iterator it = users.entrySet().iterator();
@@ -446,6 +593,14 @@ public class ProjectDriverTools {
             actValid=getArrayforProgress(it);
             return actValid;
         }
+        
+        /**
+         * Gets the acts prede.
+         * 
+         * @param act the act
+         * @param user the user
+         * @return the acts prede
+         */
         public ArrayList getActsPrede(Activity act,User user){
             //Obtiene las actividades predecesoras relacionadas a la actividad y que sean validas
             Iterator listobj=act.listPredecessors();
@@ -457,6 +612,14 @@ public class ProjectDriverTools {
             }
             return result;
         }
+        
+        /**
+         * Gets the acts for prec.
+         * 
+         * @param act the act
+         * @param parent the parent
+         * @return the acts for prec
+         */
         public ArrayList getActsForPrec(Activity act, WebPage parent){
             //Obtiene las actividades relacionadas al modelo o sitio web y que sean validas
             Iterator it= Activity.ClassMgr.listActivities(act.getWebSite());
@@ -468,6 +631,14 @@ public class ProjectDriverTools {
             }
             return result;
         }
+        
+        /**
+         * Gets the label status.
+         * 
+         * @param act the act
+         * @param user the user
+         * @return the label status
+         */
         public ArrayList getLabelStatus(Activity act, User user){
             String value1=act.getStatus().toString();
             ArrayList labels = new ArrayList();
@@ -493,6 +664,13 @@ public class ProjectDriverTools {
             }
             return labels;
         }
+        
+        /**
+         * Check predecesor.
+         * 
+         * @param act the act
+         * @return true, if successful
+         */
         public boolean checkPredecesor(Activity act){
             boolean check=false;
             Iterator prede = act.listPredecessors();
@@ -506,6 +684,13 @@ public class ProjectDriverTools {
             }
             return check;
         }
+        
+        /**
+         * List user repository.
+         * 
+         * @param wp the wp
+         * @return the array list
+         */
         public ArrayList listUserRepository(WebSite wp){
             ArrayList usrs =new ArrayList();
             UserRepository urep=wp.getUserRepository();
@@ -516,6 +701,12 @@ public class ProjectDriverTools {
             }
             return usrs;
         }
+        
+        /**
+         * Valid act.
+         * 
+         * @param act the act
+         */
         public void validAct(Activity act){
              if(act.getStatus()==null){
                 if(act.getResponsible()==null)
@@ -540,6 +731,14 @@ public class ProjectDriverTools {
             if(act.getPlannedHour()==0)
               act.setPlannedHour(0);
         }
+        
+        /**
+         * Prints the status activity.
+         * 
+         * @param listActs the list acts
+         * @param titleLan the title lan
+         * @return the string
+         */
         public String printStatusActivity(ArrayList listActs,String titleLan){
             StringBuffer buf = new StringBuffer();
             Iterator list = listActs.iterator();
@@ -558,6 +757,13 @@ public class ProjectDriverTools {
             }
             return buf.toString();
         }
+        
+        /**
+         * Gets the arrayfor progress.
+         * 
+         * @param it the it
+         * @return the arrayfor progress
+         */
         public ArrayList getArrayforProgress(Iterator<Activity> it){
             ArrayList progress = new ArrayList();
             while(it.hasNext()){

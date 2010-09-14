@@ -64,6 +64,7 @@ public class Promo extends GenericAdmResource {
     /** The log. */
     private static Logger log = SWBUtils.getLogger(Promo.class);
 
+    /** The tpl. */
     private Templates tpl;
     
     /** The work path. */
@@ -72,6 +73,7 @@ public class Promo extends GenericAdmResource {
     /** The web work path. */
     private String webWorkPath;
 
+    /** The path. */
     private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/Poll/";
 
     /** The restype. */
@@ -109,6 +111,15 @@ public class Promo extends GenericAdmResource {
         }
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws SWBResourceException the sWB resource exception
+     */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException {
         Resource base=paramRequest.getResourceBase();
 
@@ -153,6 +164,9 @@ public class Promo extends GenericAdmResource {
         return dom;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doXML(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/xml; charset=ISO-8859-1");

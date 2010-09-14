@@ -1,3 +1,25 @@
+/**  
+ * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
+ * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
+ * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
+ * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
+ * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
+ * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
+ *
+ * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
+ * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
+ * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
+ * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
+ * del SemanticWebBuilder 4.0.
+ *
+ * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
+ * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
+ * de la misma.
+ *
+ * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
+ * dirección electrónica:
+ *  http://www.semanticwebbuilder.org
+ **/
 package org.semanticwb.portal.resources.projectdriver;
 
 import java.sql.Timestamp;
@@ -11,13 +33,26 @@ import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Activity.
+ */
 public class Activity extends org.semanticwb.portal.resources.projectdriver.base.ActivityBase 
 {
+    
+    /**
+     * Instantiates a new activity.
+     * 
+     * @param base the base
+     */
     public Activity(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.projectdriver.base.ActivityBase#getStartDate()
+     */
     @Override
     public Date getStartDate() {
         Activity act=(Activity)getSemanticObject().createGenericInstance();
@@ -31,6 +66,9 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
             return startDate;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.projectdriver.base.ActivityBase#getEndDate()
+     */
     @Override
     public Date getEndDate() {
         Activity act=(Activity)getSemanticObject().createGenericInstance();
@@ -44,6 +82,9 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
             return endDate;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.projectdriver.base.ActivityBase#getCurrentPercentage()
+     */
     @Override
     public float getCurrentPercentage() {
         Activity act=(Activity)getSemanticObject().createGenericInstance();
@@ -72,6 +113,9 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
             return currentPercentage;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.projectdriver.base.ActivityBase#getCurrentHour()
+     */
     @Override
     public int getCurrentHour() {
         boolean valid = true;
@@ -91,6 +135,9 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
             return currentHour;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.resources.projectdriver.base.ActivityBase#getPlannedHour()
+     */
     @Override
     public int getPlannedHour() {
         boolean valid=true;
@@ -112,6 +159,12 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
         }
     }
 
+    /**
+     * List activities.
+     * 
+     * @param act the act
+     * @return the array list
+     */
     private ArrayList listActivities(Activity act){
         ArrayList listActs=getActivitiesByPage(act, act.getWebSite());
         Iterator it = listActs.iterator();
@@ -126,6 +179,13 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
         return listActs;
     }
 
+    /**
+     * Gets the activities by page.
+     * 
+     * @param act the act
+     * @param model the model
+     * @return the activities by page
+     */
     private ArrayList getActivitiesByPage(Activity act,WebSite model){
           ArrayList containActs = new ArrayList();
           Iterator contAct= Activity.ClassMgr.listActivities(model);
@@ -136,6 +196,13 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
            }
           return containActs;
     }
+    
+    /**
+     * Parent active.
+     * 
+     * @param wp the wp
+     * @return true, if successful
+     */
     private boolean parentActive(WebPage wp){
         WebPage parent=wp.getParent();
         boolean haveParent=true;
@@ -147,6 +214,12 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
         return haveParent;
     }
 
+    /**
+     * Checks for child page.
+     * 
+     * @param webpage the webpage
+     * @return true, if successful
+     */
     private boolean hasChildPage(WebPage webpage)
     {
         boolean result = false;
@@ -164,6 +237,14 @@ public class Activity extends org.semanticwb.portal.resources.projectdriver.base
             result = true;
        return result;
     }
+    
+    /**
+     * Calculate dates.
+     * 
+     * @param act the act
+     * @param valueDate the value date
+     * @return the date
+     */
     private Date calculateDates(Activity act,String valueDate){
             ArrayList validAct = listActivities(act);
             Iterator it;

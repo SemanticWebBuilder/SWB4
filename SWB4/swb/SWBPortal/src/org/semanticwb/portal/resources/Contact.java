@@ -61,8 +61,10 @@ public class Contact extends GenericAdmResource {
 
     //private String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBMenu/";
 
+    /** The Constant _FAIL. */
     private static final String _FAIL = "failure";
 
+    /** The tpl. */
     private javax.xml.transform.Templates tpl;
 
     /**
@@ -107,6 +109,14 @@ public class Contact extends GenericAdmResource {
         }
     }
 
+    /**
+     * Process emails.
+     * 
+     * @param request the request
+     * @param paramRequest the param request
+     * @return the string
+     * @throws Exception the exception
+     */
     private String processEmails(HttpServletRequest request, SWBParamRequest paramRequest) throws Exception {
         Resource base = getResourceBase();
         String ret;
@@ -176,6 +186,14 @@ public class Contact extends GenericAdmResource {
         return ret;
     }
 
+    /**
+     * Process emails.
+     * 
+     * @param request the request
+     * @param response the response
+     * @throws SWBResourceException the sWB resource exception
+     * @throws Exception the exception
+     */
     private void  processEmails(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, Exception {
         Resource base = getResourceBase();
 
@@ -234,10 +252,10 @@ public class Contact extends GenericAdmResource {
 
     /**
      * Do send email.
-     *
+     * 
      * @param request the request
      * @param response the response
-     * @param paramsRequest the params request
+     * @param paramRequest the param request
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */
@@ -253,6 +271,16 @@ public class Contact extends GenericAdmResource {
         out.close();
     }
 
+    /**
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base=paramRequest.getResourceBase();
         User user = paramRequest.getUser();
@@ -321,6 +349,9 @@ public class Contact extends GenericAdmResource {
         return dom;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -502,6 +533,9 @@ public class Contact extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=utf-8");
@@ -514,6 +548,9 @@ public class Contact extends GenericAdmResource {
         out.println("</p></div>");
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(HttpServletRequest, SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException {
         try {
@@ -528,6 +565,12 @@ public class Contact extends GenericAdmResource {
         }
     }
 
+    /**
+     * Checks if is empty.
+     * 
+     * @param param the param
+     * @return true, if is empty
+     */
     private boolean isEmpty(String param) {
         boolean empty = true;
         if( param!=null && param.trim().length()>0 )

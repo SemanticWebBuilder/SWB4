@@ -65,6 +65,11 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#setActualVersion(org.semanticwb.model.VersionInfo)
      */
+    /**
+     * Sets the actual version.
+     * 
+     * @param value the new actual version
+     */
     public void setActualVersion(org.semanticwb.model.VersionInfo value)
     {
         getSemanticObject().setObjectProperty(swb_actualVersion, value.getSemanticObject());
@@ -72,6 +77,9 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#removeActualVersion()
+     */
+    /**
+     * Removes the actual version.
      */
     public void removeActualVersion()
     {
@@ -106,6 +114,11 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#getActualVersion()
      */
+    /**
+     * Gets the actual version.
+     * 
+     * @return the actual version
+     */
     public org.semanticwb.model.VersionInfo getActualVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -120,6 +133,11 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#setLastVersion(org.semanticwb.model.VersionInfo)
      */
+    /**
+     * Sets the last version.
+     * 
+     * @param value the new last version
+     */
     public void setLastVersion(org.semanticwb.model.VersionInfo value)
     {
         getSemanticObject().setObjectProperty(swb_lastVersion, value.getSemanticObject());
@@ -127,6 +145,9 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#removeLastVersion()
+     */
+    /**
+     * Removes the last version.
      */
     public void removeLastVersion()
     {
@@ -160,6 +181,11 @@ public class HTMLContentBase extends org.semanticwb.portal.resources.sem.Content
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.VersionableBase#getLastVersion()
+     */
+    /**
+     * Gets the last version.
+     * 
+     * @return the last version
      */
     public org.semanticwb.model.VersionInfo getLastVersion()
     {

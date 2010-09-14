@@ -83,9 +83,10 @@ public class RecommendSwf extends Recommend {
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
-     * @return 
+     * @return the dom
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws SWBResourceException the sWB resource exception
+     * @return
      */       
     @Override
     public Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -423,9 +424,10 @@ public class RecommendSwf extends Recommend {
      * 
      * @param request the request
      * @param paramRequest the param request
-     * @return 
+     * @return the form
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
+     * @return
      */
     private String getForm(HttpServletRequest request,
                            SWBParamRequest paramRequest) 
@@ -680,9 +682,10 @@ public class RecommendSwf extends Recommend {
      * 
      * @param request the request
      * @param paramRequest the param request
-     * @return 
+     * @return the script
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
+     * @return
      */     
     private String getScript(HttpServletRequest request,
             SWBParamRequest paramRequest)
