@@ -71,6 +71,7 @@ public class WBSiteMap extends GenericAdmResource
     /** The path. */
     String path;
 
+    /** The tpl. */
     private javax.xml.transform.Templates tpl;
 
     /**
@@ -299,6 +300,9 @@ public class WBSiteMap extends GenericAdmResource
         return json.toString();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doXML(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doXML(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Document dom=getDom(request, response, paramRequest);
@@ -306,6 +310,9 @@ public class WBSiteMap extends GenericAdmResource
             response.getWriter().println(SWBUtils.XML.domToXml(dom));
     }
     
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -379,6 +386,7 @@ public class WBSiteMap extends GenericAdmResource
         /** The height. */
         private String width, height;
 
+        /** The user. */
         private User user;
 
         /**
@@ -388,7 +396,7 @@ public class WBSiteMap extends GenericAdmResource
          * @param url the url
          * @param openOnClick the open on click
          * @param title the title
-         * @param language the language
+         * @param user the user
          */
         public SelectTree(String website, String url, boolean openOnClick, String title, User user) {
             this(website, url, openOnClick, 0, title, user);
@@ -402,7 +410,7 @@ public class WBSiteMap extends GenericAdmResource
          * @param openOnClick the open on click
          * @param level the level
          * @param title the title
-         * @param language the language
+         * @param user the user
          */
         public SelectTree(String website, String url, boolean openOnClick, int level, String title, User user) {
             this.website = website;
@@ -610,7 +618,7 @@ public class WBSiteMap extends GenericAdmResource
          * @param tpid the tpid
          * @param params the params
          * @param level the level
-         * @param language the language
+         * @param node the node
          * @return the string
          */
         private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, int level, Element node) {
@@ -698,7 +706,7 @@ public class WBSiteMap extends GenericAdmResource
          * @param pageroot the pageroot
          * @param tpid the tpid
          * @param params the params
-         * @param language the language
+         * @param node the node
          * @return the string
          */
         private void addChild(HashMap request, WebSite tmit, WebPage pageroot, WebPage tpid, StringBuilder params, Element node) {

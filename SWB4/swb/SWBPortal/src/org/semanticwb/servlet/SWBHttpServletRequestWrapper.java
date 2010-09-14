@@ -120,6 +120,12 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getParameter(java.lang.String)
      */
+    /**
+     * Gets the parameter.
+     * 
+     * @param str the str
+     * @return the parameter
+     */
     @Override
     public String getParameter(String str)
     {
@@ -140,6 +146,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getParameterMap()
+     */
+    /**
+     * Gets the parameter map.
+     * 
+     * @return the parameter map
      */
     @Override
     public java.util.Map getParameterMap()
@@ -162,6 +173,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getParameterNames()
      */
+    /**
+     * Gets the parameter names.
+     * 
+     * @return the parameter names
+     */
     @Override
     public java.util.Enumeration getParameterNames()
     {
@@ -180,6 +196,12 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getParameterValues(java.lang.String)
+     */
+    /**
+     * Gets the parameter values.
+     * 
+     * @param str the str
+     * @return the parameter values
      */
     @Override
     public String[] getParameterValues(String str)
@@ -245,6 +267,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequestWrapper#getQueryString()
      */
+    /**
+     * Gets the query string.
+     * 
+     * @return the query string
+     */
     @Override
     public String getQueryString()
     {
@@ -257,6 +284,12 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getReader()
+     */
+    /**
+     * Gets the reader.
+     * 
+     * @return the reader
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public java.io.BufferedReader getReader() throws java.io.IOException
@@ -271,6 +304,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getContentLength()
      */
+    /**
+     * Gets the content length.
+     * 
+     * @return the content length
+     */
     @Override
     public int getContentLength()
     {
@@ -282,6 +320,12 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getInputStream()
+     */
+    /**
+     * Gets the input stream.
+     * 
+     * @return the input stream
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public javax.servlet.ServletInputStream getInputStream() throws java.io.IOException
@@ -295,6 +339,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getLocale()
      */
+    /**
+     * Gets the locale.
+     * 
+     * @return the locale
+     */
     @Override
     public java.util.Locale getLocale()
     {
@@ -304,6 +353,11 @@ public class SWBHttpServletRequestWrapper extends HttpServletRequestWrapper
     
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequestWrapper#getLocales()
+     */
+    /**
+     * Gets the locales.
+     * 
+     * @return the locales
      */
     @Override
     public java.util.Enumeration getLocales() 

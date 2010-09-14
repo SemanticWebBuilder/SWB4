@@ -36,17 +36,27 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBNewsLite.
+ * 
  * @author victor.lorenzana
  */
 public class SWBNewsLite extends GenericResource
 {
 
+    /** The Constant NUMMAX. */
     private static final String NUMMAX = "numax";
+    
+    /** The Constant dateFormat. */
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    
+    /** The Constant log. */
     private static final Logger log = SWBUtils.getLogger(SWBNewsLite.class);
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(HttpServletRequest, SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
@@ -257,6 +267,9 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -298,6 +311,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do edit category.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String uri = request.getParameter("uri");
@@ -327,6 +349,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do add category.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAddCategory(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/addCategory.jsp";
@@ -342,6 +373,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do rss.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doRss(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         List<New> news = new ArrayList<New>();
@@ -392,6 +432,15 @@ public class SWBNewsLite extends GenericResource
         
     }
 
+    /**
+     * Do config.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doConfig(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/config.jsp";
@@ -407,6 +456,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do expired.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doExpired(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         List<New> news = new ArrayList<New>();
@@ -463,6 +521,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do edit new.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doEditNew(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String uri = request.getParameter("uri");
@@ -492,6 +559,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do add.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAdd(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/add.jsp";
@@ -507,6 +583,9 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doAdmin(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -576,6 +655,15 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Do detail.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doDetail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         String path = "/swbadmin/jsp/SWBNewsLite/detail.jsp";
@@ -605,6 +693,9 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -705,6 +796,12 @@ public class SWBNewsLite extends GenericResource
         }
     }
 
+    /**
+     * Upload.
+     * 
+     * @param request the request
+     * @return the hash map
+     */
     private HashMap<String, String> upload(HttpServletRequest request)
     {
         final String realpath = SWBPortal.getWorkPath() + getResourceBase().getWorkPath() + "/";

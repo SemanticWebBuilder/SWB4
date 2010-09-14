@@ -58,6 +58,8 @@ import org.semanticwb.servlet.internal.Monitor;
  * @author Javier Solis Gonzalez
  */
 public class SWBAMMemory extends GenericResource {
+    
+    /** The swb summary. */
     private SWBSummary swbSummary = null;
     
     /**

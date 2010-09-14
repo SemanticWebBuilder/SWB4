@@ -55,12 +55,12 @@ public class UserParser extends GenericParser {
      * <p>
      * Obtiene un objeto Map con los términos de indexación ({@link IndexTerm})
      * para un objeto {@link Searchable}.
-     *
+     * 
      * @param gen   the {@link Searchable} object to get {@link IndexTerm}s from.
-     *              El objeto {@link Searchable} del cual se obtienen los
-     *              {@link IndexTerm}s.
+     * El objeto {@link Searchable} del cual se obtienen los
      * @return      Map of {@link IndexTerm}s for the {@link Searchable} object.
-     *              Objeto Map con los {@link IndexTerm}s del objeto {@link Searchable}.
+     * Objeto Map con los {@link IndexTerm}s del objeto {@link Searchable}.
+     * {@link IndexTerm}s.
      * @see         org.semanticwb.portal.indexer.parser.GenericParser#getIndexTerms(org.semanticwb.model.Searchable)
      */
     @Override
@@ -78,11 +78,11 @@ public class UserParser extends GenericParser {
      * Gets the date of the last change done to the {@link Searchable} object.
      * <p>
      * Obtiene la fecha de la última modificación hecha al objeto
-     * {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object.
+     * 
+     * @param gen the gen
      * @return  Last {@link Searchable} object's update date.
-     *          Fecha de última actualización del objeto {@link Searchable}.
+     * Fecha de última actualización del objeto {@link Searchable}.
+     * {@link Searchable}.
      */
     @Override
     public String getIndexLastUpdated(Searchable gen) {
@@ -96,8 +96,7 @@ public class UserParser extends GenericParser {
      * <p>
      * Obtiene el nombre del usuario ({@link User}).
      * 
-     * @param   user the {@link User} to get the name from. Usuario del cual se
-     *          obtendrá el nombre.
+     * @param user the user
      * @return  the name of the {@link User}. Nombre del usuario.
      */
     public String getName(User user) {
@@ -109,8 +108,7 @@ public class UserParser extends GenericParser {
      * <p>
      * Obtiene el e-mail del usuario.
      * 
-     * @param   user the {@link User} to get e-mail from. Usuario del cual se
-     *          obtendrá el e-mail.
+     * @param user the user
      * @return  the e-mail of the {@link User}. E-mail del usuario.
      */
     public String getEmail (User user) {

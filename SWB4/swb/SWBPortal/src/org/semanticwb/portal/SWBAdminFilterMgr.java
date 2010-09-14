@@ -115,8 +115,8 @@ public class SWBAdminFilterMgr
     }
 
     /**
-     * Alguno de los hijos de este nodo tiene acceso
-     *
+     * Alguno de los hijos de este nodo tiene acceso.
+     * 
      * @param user the user
      * @param obj the obj
      * @return true, if successful
@@ -136,7 +136,7 @@ public class SWBAdminFilterMgr
     }
 
     /**
-     * Tiene acceso este nodo o algun padre o algun hijo
+     * Tiene acceso este nodo o algun padre o algun hijo.
      * 
      * @param user the user
      * @param obj the obj
@@ -157,8 +157,8 @@ public class SWBAdminFilterMgr
     }
 
     /**
-     * Tiene acceso este nodo o algun padre
-     *
+     * Tiene acceso este nodo o algun padre.
+     * 
      * @param user the user
      * @param obj the obj
      * @return true, if successful

@@ -197,6 +197,13 @@ public class SWBCommentToElement extends org.semanticwb.portal.resources.sem.bas
         out.close();
     }
 
+    /**
+     * Render list comments.
+     * 
+     * @param paramRequest the param request
+     * @param uri the uri
+     * @return the string
+     */
     private String renderListComments(SWBParamRequest paramRequest, final String uri) {
         StringBuilder html = new StringBuilder();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy | HH:mm");

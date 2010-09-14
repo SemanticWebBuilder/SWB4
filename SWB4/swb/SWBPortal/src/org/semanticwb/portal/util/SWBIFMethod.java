@@ -56,8 +56,10 @@ public class SWBIFMethod
     /** The tag. */
     private HtmlTag tag;
     
+    /** The base parts. */
     private ArrayList baseParts;
 
+    /** The parts. */
     private ArrayList parts;
     
     /** The type. */
@@ -91,7 +93,7 @@ public class SWBIFMethod
      * Instantiates a new sWBIF method.
      * 
      * @param tag the tag
-     * @param txt the txt
+     * @param baseParts the base parts
      * @param tpl the tpl
      */
     public SWBIFMethod(HtmlTag tag, ArrayList baseParts, Template tpl)
@@ -300,11 +302,21 @@ public class SWBIFMethod
         return ret;
     }
 
+    /**
+     * Gets the base parts.
+     * 
+     * @return the base parts
+     */
     public ArrayList getBaseParts()
     {
         return baseParts;
     }
 
+    /**
+     * Gets the parts.
+     * 
+     * @return the parts
+     */
     public ArrayList getParts()
     {
         return parts;

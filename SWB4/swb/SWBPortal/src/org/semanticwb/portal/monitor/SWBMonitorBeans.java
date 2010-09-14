@@ -41,6 +41,8 @@ import org.semanticwb.SWBUtils;
  */
 public class SWBMonitorBeans
 {
+    
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBMonitorBeans.class);
 
     /** The class loading m bean. */

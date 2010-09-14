@@ -238,6 +238,14 @@ public class SWBAFilters extends SWBATree {
     }
 
 
+    /**
+     * Adds the herarquical node filter.
+     * 
+     * @param user the user
+     * @param node the node
+     * @param obj the obj
+     * @param ele the ele
+     */
     public void addHerarquicalNodeFilter(User user, HerarquicalNode node, SemanticObject obj, Element ele)
     {        
         SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(node.getHClass().getURI());
@@ -574,6 +582,13 @@ public class SWBAFilters extends SWBATree {
         }
         return dom;
     }
+    
+    /**
+     * Gets the all nodes.
+     * 
+     * @param nodesFilter the nodes filter
+     * @return the all nodes
+     */
     private Set<String> getAllNodes(Set<SemanticObject> nodesFilter)
     {
         Set<String> getAllNodes=new HashSet<String>();
@@ -597,6 +612,13 @@ public class SWBAFilters extends SWBATree {
         return getAllNodes;
     }
     
+    /**
+     * Gets the nodes in filter.
+     * 
+     * @param id the id
+     * @param map the map
+     * @return the nodes in filter
+     */
     private Set<SemanticObject> getNodesInFilter(String id,UserRepository map)
     {
         Set<SemanticObject> getNodesInFilter=new HashSet<SemanticObject>();
@@ -901,6 +923,13 @@ public class SWBAFilters extends SWBATree {
         }
         return doc;
     }
+    
+    /**
+     * Gets the path.
+     * 
+     * @param obj the obj
+     * @return the path
+     */
     private String getPath(SemanticObject obj)
     {
         String getPath="";
@@ -1251,6 +1280,14 @@ public class SWBAFilters extends SWBATree {
         return ret;
     }
 
+    /**
+     * Gets the directories.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param src the src
+     * @return the directories
+     */
     public void getDirectories(User user, Element res,Document src)
     {
         String path=SWBUtils.getApplicationPath();
@@ -1273,6 +1310,12 @@ public class SWBAFilters extends SWBATree {
         }
     }
 
+    /**
+     * Checks for subdirectories.
+     * 
+     * @param fdir the fdir
+     * @return true, if successful
+     */
     public boolean hasSubdirectories(File fdir)
     {
         File[] dirs=fdir.listFiles();
@@ -1314,6 +1357,14 @@ public class SWBAFilters extends SWBATree {
 
 
 
+    /**
+     * Adds the server filter.
+     * 
+     * @param user the user
+     * @param res the res
+     * @param isFilter the is filter
+     * @param objfilters the objfilters
+     */
     protected void addServerFilter(User user, Element res, boolean isFilter,Set<String> objfilters)
     {
 
@@ -1454,6 +1505,14 @@ public class SWBAFilters extends SWBATree {
             }
         }
     }
+    
+    /**
+     * Gets the path.
+     * 
+     * @param child the child
+     * @param parent the parent
+     * @return the path
+     */
     private List<SemanticObject> getPath(SemanticObject child,SemanticObject parent)
     {        
         ArrayList<SemanticObject> getPath=new ArrayList<SemanticObject>();        
@@ -1484,6 +1543,16 @@ public class SWBAFilters extends SWBATree {
         
         return getPath;
     }   
+    
+    /**
+     * Adds the semantic object filter.
+     * 
+     * @param user the user
+     * @param obj the obj
+     * @param node the node
+     * @param nodesInFilter the nodes in filter
+     * @return the element
+     */
     protected Element addSemanticObjectFilter(User user, SemanticObject obj, Element node,Set<String> nodesInFilter)
     {
 

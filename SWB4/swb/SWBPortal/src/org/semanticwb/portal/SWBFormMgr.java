@@ -149,7 +149,7 @@ public class SWBFormMgr
     /** The submit by ajax. */
     private boolean submitByAjax=false;
 
-    /** The use captcha */
+    /** The use captcha. */
     private boolean useCaptcha=false;
 
     /** The removed. */
@@ -240,6 +240,13 @@ public class SWBFormMgr
         }
     }
 
+    /**
+     * Gets the locale string.
+     * 
+     * @param key the key
+     * @param lang the lang
+     * @return the locale string
+     */
     public String getLocaleString(String key, String lang)
     {
         return SWBUtils.TEXT.getLocaleString("locale_swb_admin", key, new Locale(lang));
@@ -1150,6 +1157,12 @@ public class SWBFormMgr
         this.filterHTMLTags = filterHTMLTags;
     }
 
+    /**
+     * Gets the captcha field.
+     * 
+     * @param isdojo the isdojo
+     * @return the captcha field
+     */
     private String getCaptchaField(boolean isdojo){
         StringBuilder ret = new StringBuilder();
         ret.append("<tr><td align=\"right\"><label for=\"frmCaptchaValue\">Verificaci&oacute;n <em>*</em></label></td><td>\n");

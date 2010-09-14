@@ -54,6 +54,8 @@ public class SWBATrash extends GenericResource {
     
     /** The debugvar. */
     private boolean debugvar=true;
+    
+    /** The base. */
     private Resource base=null;
     
     /**

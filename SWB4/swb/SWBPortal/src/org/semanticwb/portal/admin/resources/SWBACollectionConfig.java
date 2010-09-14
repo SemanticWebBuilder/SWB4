@@ -41,14 +41,21 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBACollectionConfig.
+ * 
  * @author juan.fernandez
  */
 public class SWBACollectionConfig extends GenericAdmResource {
 
+    /** The log. */
     private Logger log = SWBUtils.getLogger(SWBACollectionConfig.class);
+    
+    /** The MOD e_ form. */
     private String MODE_FORM = "FORM";
+    
+    /** The hm form ele. */
     private HashMap<String,SemanticObject> hmFormEle = null;
     private Resource base = null;
 
@@ -74,6 +81,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericAdmResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -83,6 +93,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
         doEdit(request, response, paramRequest);
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doEdit(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
@@ -1034,6 +1047,14 @@ public class SWBACollectionConfig extends GenericAdmResource {
     }
 
 
+    /**
+     * Gets the fE select.
+     * 
+     * @param hmFE the hm fe
+     * @param FEsel the f esel
+     * @param user the user
+     * @return the fE select
+     */
     public String getFESelect(HashMap<String,SemanticObject> hmFE, String FEsel, User user)
     {
         StringBuilder ret = new StringBuilder();
@@ -1053,6 +1074,15 @@ public class SWBACollectionConfig extends GenericAdmResource {
     }
 
 
+    /**
+     * Do form.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doForm(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -1100,6 +1130,14 @@ public class SWBACollectionConfig extends GenericAdmResource {
         out.println(fmgr.renderForm(request));
     }
 
+    /**
+     * Review sem prop.
+     * 
+     * @param prop the prop
+     * @param obj the obj
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String reviewSemProp(SemanticProperty prop, SemanticObject obj, SWBParamRequest paramsRequest) {
         String ret = null;
 
@@ -1143,6 +1181,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(HttpServletRequest, SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
 

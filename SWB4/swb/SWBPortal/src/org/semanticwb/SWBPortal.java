@@ -112,8 +112,13 @@ public class SWBPortal
     /** Stores the work directory's web path value <p>Almacena el valor de la ruta web del directorio de trabajo</p>. */
     private static String webWorkPath = "";
 
+    /** The WORKPAT h_ relative. */
     public static String WORKPATH_RELATIVE="relative";
+    
+    /** The WORKPAT h_ absolute. */
     public static String WORKPATH_ABSOLUTE="absolute";
+    
+    /** The WORKPAT h_ remote. */
     public static String WORKPATH_REMOTE="remote";
 
     /**
@@ -122,10 +127,7 @@ public class SWBPortal
      */
     private static String workPath = "";
 
-    /**
-     * Store the work path type
-     * Almcaena el tipo de ruta de trabajo
-     */
+    /** Store the work path type Almcaena el tipo de ruta de trabajo. */
     private static String workPathType = WORKPATH_RELATIVE;
 
     /**
@@ -737,6 +739,9 @@ public class SWBPortal
         Rule.getRuleMgr();
     }
 
+    /**
+     * Load admin files.
+     */
     public void loadAdminFiles()
     {
         admFiles = new ConcurrentHashMap();
@@ -941,6 +946,11 @@ public class SWBPortal
         return workPath;
     }
 
+    /**
+     * Gets the work path type.
+     * 
+     * @return the work path type
+     */
     public static String getWorkPathType()
     {
         return workPathType;
@@ -1148,7 +1158,7 @@ public class SWBPortal
      * 
      * @param path a string representing the path within the work directory to create the file
      * @param in   an input stream with the new file's content
-     * @param userid a string with the user id, wich is used if the file repository is shared among several clients
+     * @param user the user
      * @throws org.semanticwb.SWBException if the path specified cannot be created or is {@code null}
      * @throws SWBException the sWB exception
      */
@@ -2185,6 +2195,13 @@ public class SWBPortal
             }
             return ret.toString();
         }
+        
+        /**
+         * Find attaches from css.
+         * 
+         * @param cssbody the cssbody
+         * @return the string[]
+         */
         public static String[] findAttachesFromCss(String cssbody)
         {
             HashSet<String> findAttachesFromCss=new HashSet<String>();

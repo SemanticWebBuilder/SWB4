@@ -943,7 +943,7 @@ public class TemplateImp extends Template
 
     /**
      * Builds the.
-     *
+     * 
      * @param request the request
      * @param response the response
      * @param out the out
@@ -952,6 +952,8 @@ public class TemplateImp extends Template
      * @param savelog the savelog
      * @param content the content
      * @param distparams the distparams
+     * @param parts the parts
+     * @param resbuf the resbuf
      */
     public void build(HttpServletRequest request, HttpServletResponse response, PrintWriter out, User user, WebPage topic, boolean savelog, String content, DistributorParams distparams, ArrayList parts, StringBuffer resbuf)
     {
@@ -1791,6 +1793,9 @@ public class TemplateImp extends Template
     
     /* (non-Javadoc)
      * @see org.semanticwb.model.Template#reload()
+     */
+    /**
+     * Reload.
      */
     @Override
     public void reload()

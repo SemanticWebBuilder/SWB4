@@ -87,6 +87,13 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
     /* (non-Javadoc)
      * @see info.bliki.wiki.model.WikiModel#appendInternalLink(java.lang.String, java.lang.String, java.lang.String)
      */
+    /**
+     * Append internal link.
+     * 
+     * @param link the link
+     * @param hashSection the hash section
+     * @param linkText the link text
+     */
     @Override
     public void appendInternalLink(String link, String hashSection, String linkText) 
     {
@@ -128,6 +135,13 @@ public class WikiModel extends info.bliki.wiki.model.WikiModel
     
     /* (non-Javadoc)
      * @see info.bliki.wiki.model.AbstractWikiModel#appendInternalImageLink(java.lang.String, java.lang.String, info.bliki.wiki.model.ImageFormat)
+     */
+    /**
+     * Append internal image link.
+     * 
+     * @param hrefImageLink the href image link
+     * @param srcImageLink the src image link
+     * @param imageFormat the image format
      */
     @Override
     public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat)

@@ -55,6 +55,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBRankWebPage.class);
 
+    /** The Constant PREFIX. */
     private static final String PREFIX = "_voted";
 
     /** The full star path. */
@@ -112,6 +113,9 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if( paramRequest.getMode().equals("vote") )
@@ -124,6 +128,15 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
             super.processRequest(request, response, paramRequest);
     }
 
+    /**
+     * Do on.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doOn(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache");
@@ -166,6 +179,15 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         out.close();
     }
 
+    /**
+     * Do off.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doOff(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache");
@@ -205,6 +227,15 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
     }
 
 
+    /**
+     * Do vote.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doVote(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
         response.setHeader("Cache-Control","no-cache");
@@ -260,6 +291,9 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
         out.close();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=iso-8859-1");
@@ -373,11 +407,10 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
 
     /**
      * Prints the star.
-     *
+     * 
      * @param current the current
      * @param rank the rank
-     * @param out the out
-     * @param paramRequest the param request
+     * @return the star
      * @throws SWBResourceException the sWB resource exception
      */
     private String getStar(int current, double rank)

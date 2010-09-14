@@ -63,11 +63,13 @@ import org.semanticwb.portal.api.GenericResource;
  */
 public class SWBAFTP extends GenericResource{
 
+    /** The Constant df. */
     private static final SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBAFTP.class);
 
 
+    /** The Constant prohibitedPaths. */
     public static final String[] prohibitedPaths={"/work",
         "/swbadmin","/work/models","/work/logs","/work/logs/*",
         "/WEB-INF","/work/config","/work/sitetemplates","/META-INF",
@@ -109,6 +111,12 @@ public class SWBAFTP extends GenericResource{
         
     }
 
+    /**
+     * Log.
+     * 
+     * @param msg the msg
+     * @param ip the ip
+     */
     public static void log(String msg,String ip)
     {
         SimpleDateFormat dfFile=new SimpleDateFormat("yyyy-MM");
@@ -437,6 +445,7 @@ public class SWBAFTP extends GenericResource{
      * 
      * @param edir the edir
      * @param fdir the fdir
+     * @param user the user
      * @return the directories
      */    
     public static void getDirectories(Element edir,File fdir,User user)
@@ -455,6 +464,13 @@ public class SWBAFTP extends GenericResource{
         }
     }
 
+    /**
+     * Checks for permission file.
+     * 
+     * @param edir the edir
+     * @param src the src
+     * @param user the user
+     */
     public static void hasPermissionFile(Element edir,Document src,User user)
     {       
         String path=SWBUtils.getApplicationPath();
@@ -475,6 +491,7 @@ public class SWBAFTP extends GenericResource{
      * 
      * @param res the res
      * @param src the src
+     * @param user the user
      * @return the directories
      */    
     public static void getDirectories(Element res,Document src,User user)
@@ -514,6 +531,8 @@ public class SWBAFTP extends GenericResource{
      * 
      * @param res the res
      * @param src the src
+     * @param user the user
+     * @param ip the ip
      */    
     public static void createDir(Element res,Document src,User user,String ip)
     {
@@ -556,6 +575,8 @@ public class SWBAFTP extends GenericResource{
      * 
      * @param res the res
      * @param src the src
+     * @param user the user
+     * @param ip the ip
      */    
     public static void rename(Element res,Document src,User user,String ip)
     {
@@ -678,6 +699,8 @@ public class SWBAFTP extends GenericResource{
      * 
      * @param res the res
      * @param src the src
+     * @param user the user
+     * @param ip the ip
      */    
     public static void delete(Element res,Document src,User user,String ip)
     {
@@ -721,6 +744,14 @@ public class SWBAFTP extends GenericResource{
         }
         addElement("delete", "false", res);
     }
+    
+    /**
+     * Checks for permission.
+     * 
+     * @param user the user
+     * @param directory the directory
+     * @return true, if successful
+     */
     public static boolean hasPermission(User user, File directory)
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
@@ -770,6 +801,13 @@ public class SWBAFTP extends GenericResource{
         return permision;
     }
 
+    /**
+     * Show directory.
+     * 
+     * @param user the user
+     * @param directory the directory
+     * @return true, if successful
+     */
     public static boolean showDirectory(User user, File directory)
     {
         UserGroup su=UserGroup.ClassMgr.getUserGroup("su", SWBContext.getAdminRepository());
@@ -818,11 +856,13 @@ public class SWBAFTP extends GenericResource{
         }
         return permision;
     }
+    
     /**
      * Gets the files.
      * 
      * @param res the res
      * @param src the src
+     * @param user the user
      * @return the files
      */    
     public static void getFiles(Element res,Document src,User user)
@@ -872,6 +912,7 @@ public class SWBAFTP extends GenericResource{
      * @param user the user
      * @param src the src
      * @param cmd the cmd
+     * @param ip the ip
      * @return the document
      * @return
      */    

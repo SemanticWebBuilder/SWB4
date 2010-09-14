@@ -1702,6 +1702,14 @@ public class SWBAWebPageContents extends GenericResource {
     }
 
 
+    /**
+     * Review sem prop.
+     * 
+     * @param prop the prop
+     * @param obj the obj
+     * @param paramsRequest the params request
+     * @return the string
+     */
     public String reviewSemProp(SemanticProperty prop, SemanticObject obj, SWBParamRequest paramsRequest) {
         String ret = null;
 
