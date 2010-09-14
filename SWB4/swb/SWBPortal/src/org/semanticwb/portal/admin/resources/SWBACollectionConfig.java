@@ -21,9 +21,9 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Collection;
-import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
@@ -50,6 +50,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
     private Logger log = SWBUtils.getLogger(SWBACollectionConfig.class);
     private String MODE_FORM = "FORM";
     private HashMap<String,SemanticObject> hmFormEle = null;
+    private Resource base = null;
+
 
     /**
      * Process the mode request by the session user.
@@ -84,6 +86,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
 
+        base = getResourceBase();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -92,6 +95,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
         User user = paramsRequest.getUser();
         String id = request.getParameter("suri");
         String page = request.getParameter("page");
+
+        // Para filtrar el tipo de funcionamiento del despliegue.
+        String  collectiontype = base.getAttribute("collectype","display");
 
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject gobj = ont.getGenericObject(id);
@@ -143,7 +149,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
         out.println("</script>");
 
         Collection col = null;
-        if (action.equals("config")) {
+        if (collectiontype.equals("config")) { //action.equals("config")) {
             if (gobj instanceof Collection) {
                 col = (Collection) gobj;
 
@@ -208,13 +214,13 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<label for=\"" + id + "_classname\">" + "Clase asociada" + "</label>");
                     out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
 
-                    SWBResourceURL urln = paramsRequest.getRenderUrl();
-                    urln.setParameter("act", "");
-                    urln.setParameter("suri", id);
-                    urln.setParameter("clsuri", sccol.getURI());
-                    urln.setMode(MODE_FORM);
-
-                    out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urln + "',this.domNode); return false;\" >" + paramsRequest.getLocaleString("Add_Instance") + "</button>");
+//                    SWBResourceURL urln = paramsRequest.getRenderUrl();
+//                    urln.setParameter("act", "");
+//                    urln.setParameter("suri", id);
+//                    urln.setParameter("clsuri", sccol.getURI());
+//                    urln.setMode(MODE_FORM);
+//
+//                    out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urln + "',this.domNode); return false;\" >" + paramsRequest.getLocaleString("Add_Instance") + "</button>");
 
                     out.println("</li>");
 
@@ -467,13 +473,13 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</fieldset>");
                     out.println("</div>");
 
-                    SWBResourceURL url = paramsRequest.getRenderUrl();
-                    url.setParameter("act", "stpBusqueda");
-                    url.setParameter("suri", id);
-                    out.println("<fieldset>");
-                    //out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramsRequest.getLocaleString("Save_config") + "</button>");
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("frmBusqueda") + "</button>"); //
-                    out.println("</fieldset>");
+//                    SWBResourceURL url = paramsRequest.getRenderUrl();
+//                    url.setParameter("act", "stpBusqueda");
+//                    url.setParameter("suri", id);
+//                    out.println("<fieldset>");
+//                    //out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\"  >" + paramsRequest.getLocaleString("Save_config") + "</button>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("frmBusqueda") + "</button>"); //
+//                    out.println("</fieldset>");
                     out.println("</form >");
                     out.println("</div >");
                 } else {
@@ -499,7 +505,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 }
             }
 
-        } else if ("stpBusqueda".equals(action) || "".equals(action)) {
+        } else if (collectiontype.equals("display")) { //("stpBusqueda".equals(action) || "".equals(action)) {
 
             //System.out.println("ID: "+id);
             String busqueda = request.getParameter("search");
@@ -995,12 +1001,12 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         url.setParameter("suri", id);
                         url.setParameter("clsuri", sccol.getURI());
                         url.setMode(MODE_FORM);
-                        SWBResourceURL urlback = paramsRequest.getRenderUrl();
-                        urlback.setParameter("act", "config");
-                        urlback.setParameter("suri", id);
+//                        SWBResourceURL urlback = paramsRequest.getRenderUrl();
+//                        urlback.setParameter("act", "config");
+//                        urlback.setParameter("suri", id);
                         out.println("<fieldset>");
                         out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + url + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("Add_Instance") + "</button>"); //
-                        out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlback + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnConfig") + "</button>"); //
+                        //out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlback + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnConfig") + "</button>"); //
                         out.println("</fieldset>");
                         out.println("</div>");
                     } else {
@@ -1154,6 +1160,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
             action = "";
         }
 
+        //System.out.println("Accion:"+action);
+
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject obj = ont.getGenericObject(id);
 
@@ -1290,6 +1298,18 @@ public class SWBACollectionConfig extends GenericAdmResource {
             response.setRenderParameter("statmsg", response.getLocaleString("statmsg2"));
             response.setMode(SWBActionResponse.Mode_EDIT);
         }
+        else if(action.equals("updcfg")){
+
+            try{
+                String bhtype = request.getParameter("collectype");
+                //System.out.println("Config resource:"+bhtype);
+                if(bhtype!=null){
+                    base.setAttribute("collectype", bhtype);
+                    base.updateAttributesToDB();
+                }
+            }
+            catch(Exception e){log.error(e);}
+        }
 
         if (ract != null) {
             response.setRenderParameter("act", ract);
@@ -1302,5 +1322,43 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
         log.debug("remove-closetab:" + sval);
         response.setMode(response.Mode_EDIT);
+    }
+
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        base=getResourceBase();
+        String  collectiontype = base.getAttribute("collectype","display");
+
+        //System.out.println("base(collectype):"+collectiontype);
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        String id = request.getParameter("suri");
+        PrintWriter out = response.getWriter();
+        SWBResourceURL urlact = paramRequest.getActionUrl();
+        urlact.setAction("updcfg");
+        out.println("<div class=\"swbform\">");
+        out.println("<form id=\"" + id + "/collectionAdmin\" action=\""+urlact+"\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionAdmin'); return false;\">");
+        out.println("<input type=\"hidden\" name=\"suri\" value=\""+id+"\">");
+        out.println("<fieldset>");
+        out.println("<legend>");
+        out.println(paramRequest.getLocaleString("msgResourceConfig"));
+        out.println("</legend>");
+        out.println("<ul style=\"list-style:none;\">");
+        out.println("<li>");
+        out.println("<input type=\"radio\" id=\""+id+"/configtype\" name=\"collectype\" value=\"config\" "+(collectiontype.equals("config")?"checked":"")+"><label for=\""+id+"/configtype\">Configuración de colección.</label>");
+        out.println("</li>");
+        out.println("<li>");
+        out.println("<input type=\"radio\" id=\""+id+"/displaytype\" name=\"collectype\" value=\"display\" "+(collectiontype.equals("display")?"checked":"")+"><label for=\""+id+"/displaytype\">Despliegue de la colección.</label>");
+        out.println("</li>");
+        out.println("</ul>");
+        out.println("</fieldset>");
+
+        out.println("<fieldset>");
+        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\" >" + paramRequest.getLocaleString("btnSave") + "</button>"); //
+        out.println("</fieldset>");
+        out.println("</form>");
     }
 }
