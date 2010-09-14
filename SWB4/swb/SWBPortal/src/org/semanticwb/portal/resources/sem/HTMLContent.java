@@ -24,8 +24,11 @@
 package org.semanticwb.portal.resources.sem;
 
 
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,6 +37,7 @@ import java.io.IOException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.Enumeration;
 import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -99,6 +103,188 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
     public HTMLContent(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+    /**
+     * Limpia estilos en el documento
+     * @param datos HTML
+     * @param deletesytyles Si borra estilos
+     * @return HTML limpio
+     */
+    public static String cleanHTML(String datos, boolean deletesytyles)
+    {
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(new ByteArrayInputStream(datos.getBytes()));
+        StringBuilder ret = new StringBuilder();
+        HtmlTag tag = new HtmlTag();
+        boolean omit = false;
+        try
+        {
+            while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF)
+            {
+                int ttype = tok.getTokenType();
+                if (ttype == HtmlStreamTokenizer.TT_TAG || ttype == HtmlStreamTokenizer.TT_COMMENT)
+                {
+                    if (ttype == HtmlStreamTokenizer.TT_COMMENT && tok.getRawString().equals("<!-- -->"))
+                    {
+                        continue;
+                    }
+                    tok.parseTag(tok.getStringValue(), tag);
+
+                    if (tok.getRawString().toLowerCase().startsWith("<!--[if"))
+                    {
+                        continue;
+                    }
+                    else if (deletesytyles && tag.getTagString().toLowerCase().equals("style") && !tag.isEndTag())
+                    {
+                        omit = true;
+                    }
+                    else if (deletesytyles && tag.getTagString().toLowerCase().equals("style") && tag.isEndTag())
+                    {
+                        omit = false;
+                    }
+                    else if (deletesytyles && (tag.getTagString().toLowerCase().equals("font") || tag.getTagString().toLowerCase().equals("o:p")))
+                    {
+                    }
+                    else if (deletesytyles && (tag.getTagString().toLowerCase().equals("b") || tag.getTagString().toLowerCase().equals("br") || tag.getTagString().toLowerCase().equals("div") || tag.getTagString().toLowerCase().equals("td") || tag.getTagString().toLowerCase().equals("tr") || tag.getTagString().toLowerCase().equals("table") || tag.getTagString().toLowerCase().equals("p") || tag.getTagString().toLowerCase().equals("span")) && !tag.isEndTag() && !tag.isEmpty())
+                    {
+                        boolean exists = false;
+                        int params = tag.getParamCount();
+                        for (int i = 0; i < params; i++)
+                        {
+                            String name = tag.getParamName(i);
+                            if (name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class"))
+                            {
+                                exists = true;
+                            }
+                        }
+                        if (!exists)
+                        {
+                            ret.append(tok.getRawString());
+                        }
+                        else
+                        {
+                            ret.append("<");
+                            ret.append(tag.getTagString());
+                            Enumeration names = tag.getParamNames();
+                            while (names.hasMoreElements())
+                            {
+                                String name = names.nextElement().toString();
+                                String svalue = tag.getParam(name);
+                                if (!(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class")))
+                                {
+                                    ret.append(" ");
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    ret.append(svalue);
+                                    ret.append("\"");
+                                }
+                            }
+                            ret.append(">");
+                        }
+                    }
+                    else if (tag.getTagString().toLowerCase().equals("body") || tag.getTagString().toLowerCase().equals("head") || tag.getTagString().toLowerCase().equals("title") || tag.getTagString().toLowerCase().equals("meta") || tag.getTagString().toLowerCase().equals("html") || tag.getTagString().toLowerCase().equals("link"))
+                    {
+                        if (tag.getTagString().toLowerCase().equals("title") && !tag.isEndTag())
+                        {
+                            tok.nextToken();
+                            tok.parseTag(tok.getStringValue(), tag);
+                            ttype = tok.getTokenType();
+                            if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                            {
+                                tok.nextToken();
+                                tok.parseTag(tok.getStringValue(), tag);
+                                ttype = tok.getTokenType();
+                                if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                                {
+                                    continue;
+                                }
+                            }
+                            else if (ttype == HtmlStreamTokenizer.TT_TAG && tag.isEndTag() && tag.getTagString().toLowerCase().equals("title"))
+                            {
+                                continue;
+
+                            }
+
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (tag.getTagString().toLowerCase().equals("a"))
+                    {
+                        String value = tag.getParam("href");
+                        if (value != null && value.startsWith("docrep://")) // liga al repositorio
+                        {
+                            value = value.substring(8);
+                            if (value.startsWith("//"))
+                            {
+                                value = value.substring(1);
+                            }
+                            String path = SWBPortal.getDistributorPath() + value;
+                            ret.append("<a");
+                            Enumeration names = tag.getParamNames();
+                            while (names.hasMoreElements())
+                            {
+                                String name = names.nextElement().toString();
+                                String svalue = tag.getParam(name);
+                                if (!name.toLowerCase().equals("href"))
+                                {
+                                    if (deletesytyles && !(name.toLowerCase().equals("style") || name.toLowerCase().equals("lang") || name.toLowerCase().equals("class")))
+                                    {
+                                        ret.append(" ");
+                                        ret.append(name);
+                                        ret.append("=\"");
+                                        ret.append(svalue);
+                                        ret.append("\"");
+                                    }
+                                    else
+                                    {
+                                        ret.append(" ");
+                                        ret.append(name);
+                                        ret.append("=\"");
+                                        ret.append(svalue);
+                                        ret.append("\"");
+                                    }
+                                }
+                                else
+                                {
+                                    ret.append(" ");
+                                    ret.append(name);
+                                    ret.append("=\"");
+                                    ret.append(path);
+                                    ret.append("\"");
+                                }
+
+
+                            }
+                            ret.append(">");
+                        }
+                        else
+                        {
+                            if (!omit)
+                                ret.append(tok.getRawString());
+                        }
+                    }
+                    else
+                    {
+                        if (!omit)
+                            ret.append(tok.getRawString());
+                    }
+                }
+                else if (ttype == HtmlStreamTokenizer.TT_TEXT)
+                {
+                    if (!omit)
+                        ret.append(tok.getRawString());
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(e);
+        }
+        return ret.toString().replace("<span></span>", "").replace("<span> </span>", "");
     }
 
     /**
@@ -185,6 +371,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
                 //if (isPages())
                 {
                     fileContent = contentUtils.paginationMsWord(fileContent, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
+                    fileContent=cleanHTML(fileContent, true);
                 } //Paginación
             }else
             {
