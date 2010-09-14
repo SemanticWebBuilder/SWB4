@@ -26,8 +26,10 @@ import org.semanticwb.util.UploadFileRequest;
 import org.semanticwb.util.UploadedFile;
 import org.semanticwb.util.UploaderFileCacheUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class MultipleFileUploader.
+ * 
  * @author serch
  */
 public class MultipleFileUploader implements InternalServlet
@@ -47,10 +49,16 @@ public class MultipleFileUploader implements InternalServlet
         UploaderFileCacheUtils.setHomepath(org.semanticwb.SWBPortal.getWorkPath());
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#init(ServletContext)
+     */
     public void init(ServletContext config) throws ServletException
     {
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.servlet.internal.InternalServlet#doProcess(HttpServletRequest, HttpServletResponse, DistributorParams)
+     */
     public void doProcess(HttpServletRequest request, HttpServletResponse response, DistributorParams dparams) throws IOException, ServletException
     {
         //System.out.println("********************** MulpleFileUploades.doProcess**********************");
@@ -189,6 +197,13 @@ public class MultipleFileUploader implements InternalServlet
 
     }
 
+    /**
+     * Gets the page.
+     * 
+     * @param ruta the ruta
+     * @param cad the cad
+     * @return the page
+     */
     private String getPage(String ruta, String cad)
     {
         //System.out.println("********************** MulpleFileUploades.getPage**********************");

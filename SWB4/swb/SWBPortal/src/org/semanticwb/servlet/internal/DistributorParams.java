@@ -502,6 +502,12 @@ public class DistributorParams
         return user;        
     }
 
+    /**
+     * Gets the default webpage.
+     * 
+     * @param request the request
+     * @return the default webpage
+     */
     private WebPage getDefaultWebpage(HttpServletRequest request)
     {
         Dns dns=Dns.getDns(request.getServerName());
@@ -1082,6 +1088,11 @@ public class DistributorParams
         return req;
     }
 
+    /**
+     * Gets the model id.
+     * 
+     * @return the model id
+     */
     public String getModelId()
     {
         return smodel;

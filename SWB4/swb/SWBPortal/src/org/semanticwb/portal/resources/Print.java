@@ -350,7 +350,8 @@ public class Print extends GenericResource
     /**
      * Gets the window conf.
      * 
-     * @return 
+     * @return the window conf
+     * @return
      */
     private String getWindowConf()
     {
@@ -502,7 +503,8 @@ public class Print extends GenericResource
      * 
      * @param request the request
      * @param paramsRequest the params request
-     * @return 
+     * @return the form
+     * @return
      */
     private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {
@@ -616,7 +618,8 @@ public class Print extends GenericResource
      * 
      * @param request the request
      * @param paramsRequest the params request
-     * @return 
+     * @return the script
+     * @return
      */
     private String getScript(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramsRequest)
     {

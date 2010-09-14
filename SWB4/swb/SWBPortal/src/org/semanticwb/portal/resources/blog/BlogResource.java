@@ -92,6 +92,12 @@ public class BlogResource extends GenericResource
     Resource base = null;
 
 
+    /**
+     * Checktables.
+     * 
+     * @param type the type
+     * @throws SWBResourceException the sWB resource exception
+     */
     private void checktables(ResourceType type) throws SWBResourceException
     {
         Connection con = SWBUtils.DB.getDefaultConnection();

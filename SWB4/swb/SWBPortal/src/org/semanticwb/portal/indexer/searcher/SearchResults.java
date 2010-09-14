@@ -171,9 +171,8 @@ public class SearchResults {
      * <p>
      * Establece el número de documentos por página cuando los resultados están
      * paginados.
-     *
-     * @param   pageLength number of {@link SearchDocument}s per page, número de
-     *          resultados ({@link SearchDocument}s) por página.
+     * 
+     * @param pageLength the new page length
      */
     public void setPageLength(int pageLength) {
         this.pageLength = pageLength;

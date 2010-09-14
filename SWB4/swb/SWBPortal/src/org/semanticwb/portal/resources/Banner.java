@@ -163,6 +163,9 @@ public class Banner extends GenericAdmResource {
         out.close();
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#doHelp(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();

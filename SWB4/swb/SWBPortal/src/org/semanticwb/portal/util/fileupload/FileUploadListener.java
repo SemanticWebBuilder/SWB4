@@ -47,12 +47,20 @@ public class FileUploadListener implements OutputStreamListener {
     /* (non-Javadoc)
      * @see com.missiondata.fileupload.OutputStreamListener#start()
      */
+    /**
+     * Start.
+     */
     public void start() {
         fileUploadStats.setCurrentStatus("start");
     }
 
     /* (non-Javadoc)
      * @see com.missiondata.fileupload.OutputStreamListener#bytesRead(int)
+     */
+    /**
+     * Bytes read.
+     * 
+     * @param byteCount the byte count
      */
     public void bytesRead(int byteCount) {
         fileUploadStats.incrementBytesRead(byteCount);
@@ -62,12 +70,20 @@ public class FileUploadListener implements OutputStreamListener {
     /* (non-Javadoc)
      * @see com.missiondata.fileupload.OutputStreamListener#error(java.lang.String)
      */
+    /**
+     * Error.
+     * 
+     * @param s the s
+     */
     public void error(String s) {
         fileUploadStats.setCurrentStatus("error");
     }
 
     /* (non-Javadoc)
      * @see com.missiondata.fileupload.OutputStreamListener#done()
+     */
+    /**
+     * Done.
      */
     public void done() {
         fileUploadStats.setBytesRead(fileUploadStats.getTotalSize());

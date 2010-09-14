@@ -277,6 +277,9 @@ public class Login extends GenericAdmResource
         return str;
     }
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processAction(HttpServletRequest, SWBActionResponse)
+     */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {

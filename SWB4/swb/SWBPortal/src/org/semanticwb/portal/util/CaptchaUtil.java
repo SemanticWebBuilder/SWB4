@@ -22,17 +22,31 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.util.Random;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class CaptchaUtil.
+ * 
  * @author serch
  */
 public class CaptchaUtil
 {
 
+    /** The Constant width. */
     private static final int width = 150;
+    
+    /** The Constant height. */
     private static final int height = 50;
+    
+    /** The Constant _gen. */
     private static final Random _gen = new SecureRandom();
 
+    /**
+     * Write captcha.
+     * 
+     * @param cadena the cadena
+     * @param out the out
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public static void writeCaptcha(String cadena, OutputStream out) throws IOException
     {
         Font font = new Font("SansSerif", Font.BOLD, 30); //|Font.ITALIC
@@ -81,6 +95,11 @@ public class CaptchaUtil
 
     }
 
+    /**
+     * Gimp.
+     * 
+     * @param bi the bi
+     */
     static private void gimp(BufferedImage bi)
     {
         Graphics2D g = bi.createGraphics();
@@ -89,6 +108,13 @@ public class CaptchaUtil
         g.dispose();
     }
 
+    /**
+     * Shear x.
+     * 
+     * @param g the g
+     * @param w1 the w1
+     * @param h1 the h1
+     */
     private static void shearX(Graphics2D g, int w1, int h1)
     {
         int period = _gen.nextInt(10) + 5;
@@ -110,6 +136,13 @@ public class CaptchaUtil
         }
     }
 
+    /**
+     * Shear y.
+     * 
+     * @param g the g
+     * @param w1 the w1
+     * @param h1 the h1
+     */
     private static void shearY(Graphics2D g, int w1, int h1)
     {
         int period = _gen.nextInt(25) + 7; // 50;

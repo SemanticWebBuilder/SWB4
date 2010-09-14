@@ -42,6 +42,7 @@ public class PasswordManager extends GenericResource {
     /** The generator. */
     static SecureRandom generator = new SecureRandom();
 
+    /** The priv. */
     static private String priv=null;
 
     {

@@ -159,6 +159,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getCreated()
      */
+    /**
+     * Gets the created.
+     * 
+     * @return the created
+     */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
@@ -166,6 +171,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setCreated(java.util.Date)
+     */
+    /**
+     * Sets the created.
+     * 
+     * @param created the new created
      */
     public void setCreated(java.util.Date created)
     {
@@ -175,6 +185,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setModifiedBy(org.semanticwb.model.User)
      */
+    /**
+     * Sets the modified by.
+     * 
+     * @param user the new modified by
+     */
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
@@ -183,6 +198,9 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#removeModifiedBy()
      */
+    /**
+     * Removes the modified by.
+     */
     public void removeModifiedBy()
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
@@ -190,6 +208,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getModifiedBy()
+     */
+    /**
+     * Gets the modified by.
+     * 
+     * @return the modified by
      */
     public org.semanticwb.model.User getModifiedBy()
     {
@@ -205,6 +228,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getTitle()
      */
+    /**
+     * Gets the title.
+     * 
+     * @return the title
+     */
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
@@ -212,6 +240,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String)
+     */
+    /**
+     * Sets the title.
+     * 
+     * @param title the new title
      */
     public void setTitle(String title)
     {
@@ -221,6 +254,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getTitle(java.lang.String)
      */
+    /**
+     * Gets the title.
+     * 
+     * @param lang the lang
+     * @return the title
+     */
     public String getTitle(String lang)
     {
         return getSemanticObject().getProperty(swb_title, null, lang);
@@ -228,6 +267,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayTitle(java.lang.String)
+     */
+    /**
+     * Gets the display title.
+     * 
+     * @param lang the lang
+     * @return the display title
      */
     public String getDisplayTitle(String lang)
     {
@@ -237,6 +282,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String, java.lang.String)
      */
+    /**
+     * Sets the title.
+     * 
+     * @param title the title
+     * @param lang the lang
+     */
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
@@ -245,6 +296,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getUpdated()
      */
+    /**
+     * Gets the updated.
+     * 
+     * @return the updated
+     */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -252,6 +308,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setUpdated(java.util.Date)
+     */
+    /**
+     * Sets the updated.
+     * 
+     * @param updated the new updated
      */
     public void setUpdated(java.util.Date updated)
     {
@@ -301,6 +362,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setCreator(org.semanticwb.model.User)
      */
+    /**
+     * Sets the creator.
+     * 
+     * @param user the new creator
+     */
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
@@ -309,6 +375,9 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#removeCreator()
      */
+    /**
+     * Removes the creator.
+     */
     public void removeCreator()
     {
         getSemanticObject().removeProperty(swb_creator);
@@ -316,6 +385,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getCreator()
+     */
+    /**
+     * Gets the creator.
+     * 
+     * @return the creator
      */
     public org.semanticwb.model.User getCreator()
     {
@@ -331,6 +405,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getDescription()
      */
+    /**
+     * Gets the description.
+     * 
+     * @return the description
+     */
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
@@ -338,6 +417,11 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String)
+     */
+    /**
+     * Sets the description.
+     * 
+     * @param description the new description
      */
     public void setDescription(String description)
     {
@@ -347,6 +431,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getDescription(java.lang.String)
      */
+    /**
+     * Gets the description.
+     * 
+     * @param lang the lang
+     * @return the description
+     */
     public String getDescription(String lang)
     {
         return getSemanticObject().getProperty(swb_description, null, lang);
@@ -355,6 +445,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayDescription(java.lang.String)
      */
+    /**
+     * Gets the display description.
+     * 
+     * @param lang the lang
+     * @return the display description
+     */
     public String getDisplayDescription(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_description, lang);
@@ -362,6 +458,12 @@ public class BookmarkEntryBase extends org.semanticwb.model.SWBClass implements 
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String, java.lang.String)
+     */
+    /**
+     * Sets the description.
+     * 
+     * @param description the description
+     * @param lang the lang
      */
     public void setDescription(String description, String lang)
     {

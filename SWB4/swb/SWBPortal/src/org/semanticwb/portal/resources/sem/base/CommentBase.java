@@ -156,6 +156,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getCreated()
      */
+    /**
+     * Gets the created.
+     * 
+     * @return the created
+     */
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
@@ -163,6 +168,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setCreated(java.util.Date)
+     */
+    /**
+     * Sets the created.
+     * 
+     * @param created the new created
      */
     public void setCreated(java.util.Date created)
     {
@@ -172,6 +182,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setModifiedBy(org.semanticwb.model.User)
      */
+    /**
+     * Sets the modified by.
+     * 
+     * @param user the new modified by
+     */
     public void setModifiedBy(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_modifiedBy, user.getSemanticObject());
@@ -180,6 +195,9 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#removeModifiedBy()
      */
+    /**
+     * Removes the modified by.
+     */
     public void removeModifiedBy()
     {
         getSemanticObject().removeProperty(swb_modifiedBy);
@@ -187,6 +205,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getModifiedBy()
+     */
+    /**
+     * Gets the modified by.
+     * 
+     * @return the modified by
      */
     public org.semanticwb.model.User getModifiedBy()
     {
@@ -222,6 +245,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getUpdated()
      */
+    /**
+     * Gets the updated.
+     * 
+     * @return the updated
+     */
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
@@ -229,6 +257,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setUpdated(java.util.Date)
+     */
+    /**
+     * Sets the updated.
+     * 
+     * @param updated the new updated
      */
     public void setUpdated(java.util.Date updated)
     {
@@ -278,6 +311,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#setCreator(org.semanticwb.model.User)
      */
+    /**
+     * Sets the creator.
+     * 
+     * @param user the new creator
+     */
     public void setCreator(org.semanticwb.model.User user)
     {
         getSemanticObject().setObjectProperty(swb_creator, user.getSemanticObject());
@@ -286,6 +324,9 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#removeCreator()
      */
+    /**
+     * Removes the creator.
+     */
     public void removeCreator()
     {
         getSemanticObject().removeProperty(swb_creator);
@@ -293,6 +334,11 @@ public class CommentBase extends org.semanticwb.model.SWBClass implements org.se
 
     /* (non-Javadoc)
      * @see org.semanticwb.model.base.TraceableBase#getCreator()
+     */
+    /**
+     * Gets the creator.
+     * 
+     * @return the creator
      */
     public org.semanticwb.model.User getCreator()
     {

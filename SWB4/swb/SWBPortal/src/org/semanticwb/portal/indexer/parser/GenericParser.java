@@ -40,6 +40,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.indexer.IndexTerm;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
+// TODO: Auto-generated Javadoc
 /**
  * Generic parser for {@link Searchable} objects. A parser extracts all the
  * needed information from a {@link Searchable} object for indexing purposes.
@@ -53,6 +54,8 @@ import org.semanticwb.portal.indexer.SWBIndexer;
  */
 public class GenericParser
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(GenericParser.class);
     
     /**
@@ -76,11 +79,11 @@ public class GenericParser
      * 
      * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
      * @param user  the {@link User} for whom acces is being checked. El usuario
-     *              {@link User} para el cual se verifica el acceso.
      * @return      {@code true} if the user has access to the given
-     *              {@link Searchable} object, {@code false} otherwise.
-     *              {@code true} si el usuario tiene acceso al objeto
-     *              {@link Searchable}, {@code false} de otro modo.
+     * {@link User} para el cual se verifica el acceso.
+     * {@link Searchable} object, {@code false} otherwise.
+     * {@code true} si el usuario tiene acceso al objeto
+     * {@link Searchable}, {@code false} de otro modo.
      */
     public boolean canUserView(Searchable gen, User user) {
         return  gen.isValid() && user.haveAccess(gen);
@@ -96,10 +99,10 @@ public class GenericParser
      * deben sobreescribir este método para agregar términos adicionales al índice.
      * 
      * @param gen   the {@link Searchable} object to get {@link IndexTerm}s from.
-     *              El objeto {@link Searchable} del cual se obtienen los
-     *              {@link IndexTerm}s.
+     * El objeto {@link Searchable} del cual se obtienen los
      * @return      Map of {@link IndexTerm}s for the {@link Searchable} object.
-     *              Objeto Map con los {@link IndexTerm}s del objeto.
+     * Objeto Map con los {@link IndexTerm}s del objeto.
+     * {@link IndexTerm}s.
      */
     public Map<String,IndexTerm> getIndexTerms(Searchable gen) {
         HashMap<String,IndexTerm> map=new HashMap();
@@ -211,13 +214,13 @@ public class GenericParser
      * value is stored in the {@link ATT_DATA} term of the index.
      * <p>
      * Obtiene los datos de despliegue de un objeto {@link Searchable}. La clase
-     * {@link ResourceParser} sobreescribe este método para extraer la información
-     * que un recurso despliega. Este valor se almacena en el término
-     * {@link ATT_DATA} del índice.
      * 
      * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
      * @return      Rendered data of the {@link Searchable} object. Datos
-     *              desplegados por el objeto {@link Searchable}.
+     * desplegados por el objeto {@link Searchable}.
+     * {@link ResourceParser} sobreescribe este método para extraer la información
+     * que un recurso despliega. Este valor se almacena en el término
+     * {@link ATT_DATA} del índice.
      */
     public String getIndexData(Searchable gen) {
         return "";
@@ -231,16 +234,16 @@ public class GenericParser
      * objects by a given class name.
      * <p>
      * Obtiene el nombre de la clase (tal y como aparece en la ontología) del objeto
-     * {@link Searchable} proporcionado y de todas sus superclases (precedidos por
-     * el prefijo de la ontología y separados por espacios). Estos nombres se 
-     * almacenan en el término {@link ATT_CLASS} del índice y permiten al motor
-     * de búsqueda filtrar objetos de tipo {@link Searchable} de acuerdo a un
-     * nombre de clase dado.
      * 
      * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
      * @return      Name of all {@link Searchable} object's superclases
-     *              (including the name of the searchable's class). Nombre de las
-     *              superclases del objeto (incluyendo el nombre de clase del mismo).
+     * (including the name of the searchable's class). Nombre de las
+     * superclases del objeto (incluyendo el nombre de clase del mismo).
+     * {@link Searchable} proporcionado y de todas sus superclases (precedidos por
+     * el prefijo de la ontología y separados por espacios). Estos nombres se
+     * almacenan en el término {@link ATT_CLASS} del índice y permiten al motor
+     * de búsqueda filtrar objetos de tipo {@link Searchable} de acuerdo a un
+     * nombre de clase dado.
      */
     public String getIndexClass(Searchable gen) {
         String ret = "";
@@ -261,6 +264,11 @@ public class GenericParser
      * hierarchically related to the {@link Searchable} object's {@link WebPage}.
      * In other words, gets a space-separated String with the navigation path to
      * the given {@link Searchable} object. This value is stored in the
+     * 
+     * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param list  Lista para validar referencia ciclicas
+     * @return      Navigation path to the {@link Searchable} object. Ruta de
+     * navegación hacia el objeto {@link Searchable}.
      * {@link ATT_CATEGORY} term in the index and allows the search engine to
      * filter results by category (channel).
      * <p>
@@ -270,11 +278,6 @@ public class GenericParser
      * navegación hacia el objeto {@link Searchable}. Este valor se almacena en
      * el término {@link ATT_CATEGORY} del índice y permite al motor de búsqueda
      * filtrar resultados por categoría (canal).
-     * 
-     * @param gen   the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param list  Lista para validar referencia ciclicas
-     * @return      Navigation path to the {@link Searchable} object. Ruta de
-     *              navegación hacia el objeto {@link Searchable}.
      */
     private String _getIndexCategory(Searchable gen, ArrayList list) {
         String ret = gen.getId();
@@ -298,15 +301,15 @@ public class GenericParser
     }
 
     /**
-     * Calls the recursive method to get the navigation path of the
+     * Calls the recursive method to get the navigation path of the.
+     * 
+     * @param gen the gen
+     * @return  Navigation path to the given {@link Searchable} object.
+     * Ruta de navegación hacia el objeto {@link Searchable}.
      * {@link Searchable} object.
      * <p>
      * Llama al método recursivo para obtener la ruta de navegación hacia el
      * objeto {@link Searchable}.
-     * 
-     * @param   gen the {@link Searchable} object.
-     * @return  Navigation path to the given {@link Searchable} object.
-     *          Ruta de navegación hacia el objeto {@link Searchable}.
      */
     public String getIndexCategory(Searchable gen) {
         return _getIndexCategory(gen, new ArrayList());
@@ -318,12 +321,12 @@ public class GenericParser
      * updated date.
      * <p>
      * Obtiene la fecha de la última modificación hecha al objeto
+     * 
+     * @param gen the gen
+     * @return  Last {@link Searchable} object's update date.
+     * Fecha de última actualización del objeto {@link Searchable}.
      * {@link Searchable}. Este método DEBE sobreescribirse en los parsers
      * genéricos para obtener de manera correcta la fecha de actualización.
-     *
-     * @param   gen the {@link Searchable} object.
-     * @return  Last {@link Searchable} object's update date.
-     *          Fecha de última actualización del objeto {@link Searchable}.
      */
     public String getIndexLastUpdated(Searchable gen) {
         return "";
@@ -338,11 +341,11 @@ public class GenericParser
      * Obtiene el título o {@code displayName} del objeto {@link Searchable} para
      * mostrar el resultado de la búsqueda.
      * 
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
+     * @param gen the gen
+     * @param lang the lang
      * @return  Title or {@code displayName} of the {@link Searchable} object in
-     *          the given language. Título o {@code displayName} del objeto
-     *          {@link Searchable} en el idioma especificado.
+     * the given language. Título o {@code displayName} del objeto
+     * {@link Searchable} en el idioma especificado.
      */
     public String getTitle(Searchable gen, String lang) {
         return gen.getSemanticObject().getDisplayName(lang);
@@ -355,11 +358,11 @@ public class GenericParser
      * Obtiene la ruta de navegación del objeto {@link Searchable} para mostrar
      * el resultado de la búsqueda.
      * 
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
+     * @param gen the gen
+     * @param lang the lang
      * @return  Navigation path to the {@link Searchable} object in the given
-     *          language. Ruta de navegación hacia el objeto {@link Searchable}
-     *          en el idioma especificado.
+     * language. Ruta de navegación hacia el objeto {@link Searchable}
+     * en el idioma especificado.
      */
     public String getPath(Searchable gen, String lang) {
         String ret = null;
@@ -382,10 +385,10 @@ public class GenericParser
      * Obtiene el resúmen del objeto {@link Searchable} para mostrar el
      * resultado de la búsqueda.
      * 
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
+     * @param gen the gen
+     * @param lang the lang
      * @return  Summary of the {@link Searchable} object in the given language.
-     *          Resumen del objeto {@link Searchable} en el idioma del usuario.
+     * Resumen del objeto {@link Searchable} en el idioma del usuario.
      */
     public String getSummary(Searchable gen, String lang) {
         return null;
@@ -398,26 +401,25 @@ public class GenericParser
      * Ruta de la imagen del objeto {@link Searchable} (si ésta existe) para
      * mostrar el resultado de la búsqueda.
      * 
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param gen the gen
      * @return  Path to the image of the {@link Searchable} object if it was
-     *          defined, null otherwise. Ruta al archivo de imagen del objeto
-     *          {@link Searchable} (si fue definida) o null.
+     * defined, null otherwise. Ruta al archivo de imagen del objeto
+     * {@link Searchable} (si fue definida) o null.
      */
     public String getImage(Searchable gen) {
         return null;
     }
 
     /**
-     * Gets the URL of the {@link WebPage} associated to the given
+     * Gets the URL of the {@link WebPage} associated to the given.
+     * 
+     * @param gen the gen
+     * @return  URL of the associated {@link Searchable} object's {@link WebPage}.
+     * URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
      * {@link Searchable} object for the search result snippet.
      * <p>
-     * Obtiene la URL de la página web ({@link WebPage}) relacionada con el 
+     * Obtiene la URL de la página web ({@link WebPage}) relacionada con el
      * objeto {@link Searchable} para desplegar el resultado de la búsqueda.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @return  URL of the associated {@link Searchable} object's {@link WebPage}.
-     *          URL del objeto {@link WebPage} asociado al objeto {@link Searchable}.
-     * 
      */
     public String getUrl(Searchable gen) {
         String ret = null;
@@ -435,9 +437,9 @@ public class GenericParser
      * Obtiene la cadena del tipo de objeto {@link Searchable} para mostrar el
      * resultado de la búsqueda.
      * 
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * @param gen the gen
      * @return  String type of the {@link Searchable} object. String con el tipo
-     *          del objeto {@link Searchable}.
+     * del objeto {@link Searchable}.
      */
     public String getType(Searchable gen) {
         return "Generic";
@@ -449,10 +451,10 @@ public class GenericParser
      * <p>
      * Obtiene la etiqueta de despliegue del tipo de objeto {@link Searchable}
      * para mostrar en el resultado de la búsqueda.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * 
+     * @param gen the gen
      * @return  String type label of the {@link Searchable} object. String con
-     *          la etiqueta para el tipo del objeto {@link Searchable}.
+     * la etiqueta para el tipo del objeto {@link Searchable}.
      */
     public String getTypeDisplayLabel(Searchable gen) {
         return "Genérico";
