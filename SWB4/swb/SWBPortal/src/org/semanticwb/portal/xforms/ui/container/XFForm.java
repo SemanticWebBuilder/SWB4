@@ -43,6 +43,11 @@ public class XFForm extends WBXformsContainer
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.WBXformsContainer#show()
      */
+    /**
+     * Show.
+     * 
+     * @return the string
+     */
     @Override
     public String show(){
         return getXform();
@@ -50,6 +55,11 @@ public class XFForm extends WBXformsContainer
     
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.WBXformsContainer#add(java.lang.Object)
+     */
+    /**
+     * Adds the.
+     * 
+     * @param obj the obj
      */
     @Override
     public void add(Object obj){
@@ -60,6 +70,11 @@ public class XFForm extends WBXformsContainer
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
      */
+    /**
+     * Gets the xml.
+     * 
+     * @return the xml
+     */
     @Override
     public String getXml() {
         StringBuffer strb=new StringBuffer();
@@ -69,6 +84,11 @@ public class XFForm extends WBXformsContainer
     
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
+     */
+    /**
+     * Gets the xml bind.
+     * 
+     * @return the xml bind
      */
     public String getXmlBind() {
         return showBinds();

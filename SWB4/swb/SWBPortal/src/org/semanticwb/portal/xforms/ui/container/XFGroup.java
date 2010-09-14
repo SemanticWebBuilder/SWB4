@@ -174,6 +174,11 @@ public class XFGroup extends WBXformsContainer
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.XformsBaseImp#getXml()
      */
+    /**
+     * Gets the xml.
+     * 
+     * @return the xml
+     */
     @Override
     public String getXml() {
         StringBuffer strbXml=new StringBuffer();
@@ -207,6 +212,11 @@ public class XFGroup extends WBXformsContainer
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.XformsBaseImp#getXmlBind()
      */
+    /**
+     * Gets the xml bind.
+     * 
+     * @return the xml bind
+     */
     @Override
     public String getXmlBind() {
         return showBinds();
@@ -214,6 +224,11 @@ public class XFGroup extends WBXformsContainer
     
     /* (non-Javadoc)
      * @see org.semanticwb.xforms.lib.XformsBaseImp#setXml(java.lang.String)
+     */
+    /**
+     * Sets the xml.
+     * 
+     * @param xml the new xml
      */
     @Override
     public void setXml(String xml) {

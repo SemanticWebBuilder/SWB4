@@ -224,6 +224,9 @@ public class SWBAccessLog implements SWBAppObject
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#destroy()
      */
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         log.info("Stoping SWBAccessLog...");
@@ -234,6 +237,9 @@ public class SWBAccessLog implements SWBAppObject
 
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#init()
+     */
+    /**
+     * Inits the.
      */
     public void init()
     {
@@ -261,6 +267,9 @@ public class SWBAccessLog implements SWBAppObject
 
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#refresh()
+     */
+    /**
+     * Refresh.
      */
     public void refresh()
     {

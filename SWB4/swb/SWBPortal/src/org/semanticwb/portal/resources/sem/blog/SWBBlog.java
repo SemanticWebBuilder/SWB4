@@ -39,8 +39,10 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.util.WBFileUpload;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBBlog.
+ * 
  * @author victor.lorenzana
  */
 public class SWBBlog extends GenericResource
@@ -57,6 +59,9 @@ public class SWBBlog extends GenericResource
     /** The Constant EDIT_FILE. */
     private static final String EDIT_FILE = "editpost.bmp";
 
+    /* (non-Javadoc)
+     * @see org.semanticwb.portal.api.GenericResource#processRequest(HttpServletRequest, HttpServletResponse, SWBParamRequest)
+     */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -660,9 +665,10 @@ public class SWBBlog extends GenericResource
 
     /**
      * Gets the level.
-     *
+     * 
      * @param userid the userid
      * @param isrool the isrool
+     * @param site the site
      * @return the level
      */
     public int getLevel(String userid, boolean isrool, WebSite site)
@@ -1144,8 +1150,9 @@ public class SWBBlog extends GenericResource
 
     /**
      * Delete post.
-     *
+     * 
      * @param request the request
+     * @param response the response
      * @param postid the postid
      * @param blogid the blogid
      * @throws SWBResourceException the sWB resource exception
@@ -1391,10 +1398,11 @@ public class SWBBlog extends GenericResource
 
     /**
      * Asign role.
-     *
+     * 
      * @param name the name
      * @param level the level
      * @param blogid the blogid
+     * @param site the site
      * @throws SWBResourceException the sWB resource exception
      * @throws IOException Signals that an I/O exception has occurred.
      */

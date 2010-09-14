@@ -48,6 +48,12 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getAttribute(java.lang.String)
      */
+    /**
+     * Gets the attribute.
+     * 
+     * @param str the str
+     * @return the attribute
+     */
     public Object getAttribute(String str)
     {
         return null;
@@ -55,6 +61,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getAttributeNames()
+     */
+    /**
+     * Gets the attribute names.
+     * 
+     * @return the attribute names
      */
     public java.util.Enumeration getAttributeNames()
     {
@@ -64,6 +75,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getCreationTime()
      */
+    /**
+     * Gets the creation time.
+     * 
+     * @return the creation time
+     */
     public long getCreationTime()
     {
         return new java.util.Date().getTime();
@@ -71,6 +87,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getId()
+     */
+    /**
+     * Gets the id.
+     * 
+     * @return the id
      */
     public String getId()
     {
@@ -80,6 +101,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getLastAccessedTime()
      */
+    /**
+     * Gets the last accessed time.
+     * 
+     * @return the last accessed time
+     */
     public long getLastAccessedTime()
     {
         return 0;
@@ -87,6 +113,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getMaxInactiveInterval()
+     */
+    /**
+     * Gets the max inactive interval.
+     * 
+     * @return the max inactive interval
      */
     public int getMaxInactiveInterval()
     {
@@ -96,6 +127,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getServletContext()
      */
+    /**
+     * Gets the servlet context.
+     * 
+     * @return the servlet context
+     */
     public javax.servlet.ServletContext getServletContext()
     {
         return null;
@@ -103,6 +139,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getSessionContext()
+     */
+    /**
+     * Gets the session context.
+     * 
+     * @return the session context
      */
     public javax.servlet.http.HttpSessionContext getSessionContext()
     {
@@ -112,6 +153,12 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getValue(java.lang.String)
      */
+    /**
+     * Gets the value.
+     * 
+     * @param str the str
+     * @return the value
+     */
     public Object getValue(String str)
     {
         return null;
@@ -119,6 +166,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#getValueNames()
+     */
+    /**
+     * Gets the value names.
+     * 
+     * @return the value names
      */
     public String[] getValueNames()
     {
@@ -128,12 +180,20 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#invalidate()
      */
+    /**
+     * Invalidate.
+     */
     public void invalidate()
     {
     }
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#isNew()
+     */
+    /**
+     * Checks if is new.
+     * 
+     * @return true, if is new
      */
     public boolean isNew()
     {
@@ -143,12 +203,23 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#putValue(java.lang.String, java.lang.Object)
      */
+    /**
+     * Put value.
+     * 
+     * @param str the str
+     * @param obj the obj
+     */
     public void putValue(String str, Object obj)
     {
     }
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#removeAttribute(java.lang.String)
+     */
+    /**
+     * Removes the attribute.
+     * 
+     * @param str the str
      */
     public void removeAttribute(String str)
     {
@@ -157,6 +228,11 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#removeValue(java.lang.String)
      */
+    /**
+     * Removes the value.
+     * 
+     * @param str the str
+     */
     public void removeValue(String str)
     {
     }
@@ -164,12 +240,23 @@ public class SWBSession implements javax.servlet.http.HttpSession
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#setAttribute(java.lang.String, java.lang.Object)
      */
+    /**
+     * Sets the attribute.
+     * 
+     * @param str the str
+     * @param obj the obj
+     */
     public void setAttribute(String str, Object obj)
     {
     }
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSession#setMaxInactiveInterval(int)
+     */
+    /**
+     * Sets the max inactive interval.
+     * 
+     * @param param the new max inactive interval
      */
     public void setMaxInactiveInterval(int param)
     {

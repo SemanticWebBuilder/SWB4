@@ -41,6 +41,7 @@ import org.semanticwb.SWBUtils;
 public class SWBSummary
 {
 
+    /** The log. */
     private static Logger log = SWBUtils.getLogger(SWBSummary.class);
 
     /** The class loading m bean. */

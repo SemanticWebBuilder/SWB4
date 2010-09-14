@@ -73,6 +73,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getAttribute(java.lang.String)
      */
+    /**
+     * Gets the attribute.
+     * 
+     * @param str the str
+     * @return the attribute
+     */
     public Object getAttribute(String str)
     {
         if(request==null)
@@ -84,6 +90,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getAttributeNames()
+     */
+    /**
+     * Gets the attribute names.
+     * 
+     * @return the attribute names
      */
     public java.util.Enumeration getAttributeNames()
     {
@@ -97,6 +108,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getAuthType()
      */
+    /**
+     * Gets the auth type.
+     * 
+     * @return the auth type
+     */
     public String getAuthType()
     {
         if(request==null)return null;
@@ -105,6 +121,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getCharacterEncoding()
+     */
+    /**
+     * Gets the character encoding.
+     * 
+     * @return the character encoding
      */
     public String getCharacterEncoding()
     {
@@ -115,6 +136,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getContentLength()
      */
+    /**
+     * Gets the content length.
+     * 
+     * @return the content length
+     */
     public int getContentLength()
     {
         return 0;
@@ -122,6 +148,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getContentType()
+     */
+    /**
+     * Gets the content type.
+     * 
+     * @return the content type
      */
     public String getContentType()
     {
@@ -132,6 +163,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getContextPath()
      */
+    /**
+     * Gets the context path.
+     * 
+     * @return the context path
+     */
     public String getContextPath()
     {
         if(request==null)return null;
@@ -140,6 +176,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getCookies()
+     */
+    /**
+     * Gets the cookies.
+     * 
+     * @return the cookies
      */
     public javax.servlet.http.Cookie[] getCookies()
     {
@@ -150,6 +191,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getDateHeader(java.lang.String)
      */
+    /**
+     * Gets the date header.
+     * 
+     * @param str the str
+     * @return the date header
+     */
     public long getDateHeader(String str)
     {
         return new Date().getTime();//request.getDateHeader(str);
@@ -157,6 +204,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getHeader(java.lang.String)
+     */
+    /**
+     * Gets the header.
+     * 
+     * @param str the str
+     * @return the header
      */
     public String getHeader(String str)
     {
@@ -166,6 +219,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getHeaderNames()
      */
+    /**
+     * Gets the header names.
+     * 
+     * @return the header names
+     */
     public java.util.Enumeration getHeaderNames()
     {
         return new Vector().elements();
@@ -173,6 +231,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getHeaders(java.lang.String)
+     */
+    /**
+     * Gets the headers.
+     * 
+     * @param str the str
+     * @return the headers
      */
     public java.util.Enumeration getHeaders(String str)
     {
@@ -182,6 +246,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getInputStream()
      */
+    /**
+     * Gets the input stream.
+     * 
+     * @return the input stream
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public javax.servlet.ServletInputStream getInputStream() throws java.io.IOException
     {
         return null;
@@ -189,6 +259,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getIntHeader(java.lang.String)
+     */
+    /**
+     * Gets the int header.
+     * 
+     * @param str the str
+     * @return the int header
      */
     public int getIntHeader(String str)
     {
@@ -201,6 +277,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getLocale()
      */
+    /**
+     * Gets the locale.
+     * 
+     * @return the locale
+     */
     public java.util.Locale getLocale()
     {
         if(request==null)return Locale.getDefault();
@@ -209,6 +290,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getLocales()
+     */
+    /**
+     * Gets the locales.
+     * 
+     * @return the locales
      */
     public java.util.Enumeration getLocales()
     {
@@ -219,6 +305,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getMethod()
      */
+    /**
+     * Gets the method.
+     * 
+     * @return the method
+     */
     public String getMethod()
     {
         if(request==null)return "GET";
@@ -227,6 +318,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getParameter(java.lang.String)
+     */
+    /**
+     * Gets the parameter.
+     * 
+     * @param str the str
+     * @return the parameter
      */
     public String getParameter(String str)
     {
@@ -239,6 +336,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getParameterMap()
      */
+    /**
+     * Gets the parameter map.
+     * 
+     * @return the parameter map
+     */
     public java.util.Map getParameterMap()
     {
         return parms;
@@ -246,6 +348,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getParameterNames()
+     */
+    /**
+     * Gets the parameter names.
+     * 
+     * @return the parameter names
      */
     public java.util.Enumeration getParameterNames()
     {
@@ -255,6 +362,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getParameterValues(java.lang.String)
      */
+    /**
+     * Gets the parameter values.
+     * 
+     * @param str the str
+     * @return the parameter values
+     */
     public String[] getParameterValues(String str)
     {
         return (String[])parms.get(str);
@@ -262,6 +375,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getPathInfo()
+     */
+    /**
+     * Gets the path info.
+     * 
+     * @return the path info
      */
     public String getPathInfo()
     {
@@ -272,6 +390,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getPathTranslated()
      */
+    /**
+     * Gets the path translated.
+     * 
+     * @return the path translated
+     */
     public String getPathTranslated()
     {
         if(request==null)return null;
@@ -280,6 +403,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getProtocol()
+     */
+    /**
+     * Gets the protocol.
+     * 
+     * @return the protocol
      */
     public String getProtocol()
     {
@@ -290,6 +418,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getQueryString()
      */
+    /**
+     * Gets the query string.
+     * 
+     * @return the query string
+     */
     public String getQueryString()
     {
         return null;
@@ -298,6 +431,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getReader()
      */
+    /**
+     * Gets the reader.
+     * 
+     * @return the reader
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public java.io.BufferedReader getReader() throws java.io.IOException
     {
         return null;
@@ -305,6 +444,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getRealPath(java.lang.String)
+     */
+    /**
+     * Gets the real path.
+     * 
+     * @param str the str
+     * @return the real path
      */
     public String getRealPath(String str)
     {
@@ -315,6 +460,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getRemoteAddr()
      */
+    /**
+     * Gets the remote addr.
+     * 
+     * @return the remote addr
+     */
     public String getRemoteAddr()
     {
         if(request==null)return null;
@@ -323,6 +473,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getRemoteHost()
+     */
+    /**
+     * Gets the remote host.
+     * 
+     * @return the remote host
      */
     public String getRemoteHost()
     {
@@ -333,6 +488,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getRemoteUser()
      */
+    /**
+     * Gets the remote user.
+     * 
+     * @return the remote user
+     */
     public String getRemoteUser()
     {
         if(request==null)return null;
@@ -341,6 +501,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getRequestDispatcher(java.lang.String)
+     */
+    /**
+     * Gets the request dispatcher.
+     * 
+     * @param str the str
+     * @return the request dispatcher
      */
     public javax.servlet.RequestDispatcher getRequestDispatcher(String str)
     {
@@ -351,6 +517,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getRequestURI()
      */
+    /**
+     * Gets the request uri.
+     * 
+     * @return the request uri
+     */
     public String getRequestURI()
     {
         if(request==null)return null;
@@ -359,6 +530,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getRequestURL()
+     */
+    /**
+     * Gets the request url.
+     * 
+     * @return the request url
      */
     public StringBuffer getRequestURL()
     {
@@ -369,6 +545,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getRequestedSessionId()
      */
+    /**
+     * Gets the requested session id.
+     * 
+     * @return the requested session id
+     */
     public String getRequestedSessionId()
     {
         if(request==null)sess.getId();
@@ -377,6 +558,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getScheme()
+     */
+    /**
+     * Gets the scheme.
+     * 
+     * @return the scheme
      */
     public String getScheme()
     {
@@ -387,6 +573,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getServerName()
      */
+    /**
+     * Gets the server name.
+     * 
+     * @return the server name
+     */
     public String getServerName()
     {
         if(request==null)return null;
@@ -395,6 +586,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#getServerPort()
+     */
+    /**
+     * Gets the server port.
+     * 
+     * @return the server port
      */
     public int getServerPort()
     {
@@ -405,6 +601,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getServletPath()
      */
+    /**
+     * Gets the servlet path.
+     * 
+     * @return the servlet path
+     */
     public String getServletPath()
     {
         if(request==null)return null;
@@ -413,6 +614,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getSession()
+     */
+    /**
+     * Gets the session.
+     * 
+     * @return the session
      */
     public javax.servlet.http.HttpSession getSession()
     {
@@ -423,6 +629,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getSession(boolean)
      */
+    /**
+     * Gets the session.
+     * 
+     * @param param the param
+     * @return the session
+     */
     public javax.servlet.http.HttpSession getSession(boolean param)
     {
         if(request==null)return sess;
@@ -431,6 +643,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#getUserPrincipal()
+     */
+    /**
+     * Gets the user principal.
+     * 
+     * @return the user principal
      */
     public java.security.Principal getUserPrincipal()
     {
@@ -441,6 +658,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()
      */
+    /**
+     * Checks if is requested session id from cookie.
+     * 
+     * @return true, if is requested session id from cookie
+     */
     public boolean isRequestedSessionIdFromCookie()
     {
         if(request==null)return false;
@@ -449,6 +671,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromURL()
+     */
+    /**
+     * Checks if is requested session id from url.
+     * 
+     * @return true, if is requested session id from url
      */
     public boolean isRequestedSessionIdFromURL()
     {
@@ -459,6 +686,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromUrl()
      */
+    /**
+     * Checks if is requested session id from url.
+     * 
+     * @return true, if is requested session id from url
+     */
     public boolean isRequestedSessionIdFromUrl()
     {
         if(request==null)return false;
@@ -467,6 +699,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isRequestedSessionIdValid()
+     */
+    /**
+     * Checks if is requested session id valid.
+     * 
+     * @return true, if is requested session id valid
      */
     public boolean isRequestedSessionIdValid()
     {
@@ -477,6 +714,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#isSecure()
      */
+    /**
+     * Checks if is secure.
+     * 
+     * @return true, if is secure
+     */
     public boolean isSecure()
     {
         if(request==null)return false;
@@ -486,6 +728,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletRequest#isUserInRole(java.lang.String)
      */
+    /**
+     * Checks if is user in role.
+     * 
+     * @param str the str
+     * @return true, if is user in role
+     */
     public boolean isUserInRole(String str)
     {
         if(request==null)return false;
@@ -494,6 +742,11 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#removeAttribute(java.lang.String)
+     */
+    /**
+     * Removes the attribute.
+     * 
+     * @param str the str
      */
     public void removeAttribute(String str)
     {
@@ -509,6 +762,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#setAttribute(java.lang.String, java.lang.Object)
      */
+    /**
+     * Sets the attribute.
+     * 
+     * @param str the str
+     * @param obj the obj
+     */
     public void setAttribute(String str, Object obj)
     {
         if(request==null)
@@ -522,6 +781,12 @@ public class SWBRequest implements javax.servlet.http.HttpServletRequest
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletRequest#setCharacterEncoding(java.lang.String)
+     */
+    /**
+     * Sets the character encoding.
+     * 
+     * @param str the new character encoding
+     * @throws UnsupportedEncodingException the unsupported encoding exception
      */
     public void setCharacterEncoding(String str) throws java.io.UnsupportedEncodingException
     {

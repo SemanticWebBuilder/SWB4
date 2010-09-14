@@ -95,7 +95,8 @@ public class SWBUserMgr
      * 
      * @param request <PRE>Recibe <I>requets</I> para buscar cookie de Usuario y de languaje</PRE>
      * @param website the website
-     * @return 
+     * @return the subject
+     * @return
      */
     public Subject getSubject(HttpServletRequest request, String website)
     {

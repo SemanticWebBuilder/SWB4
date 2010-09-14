@@ -139,7 +139,7 @@ public class SWBResourceCachedMgr
     }
 
     /**
-     * Removes the resource from cache
+     * Removes the resource from cache.
      * 
      * @param base the base
      */
@@ -223,6 +223,9 @@ public class SWBResourceCachedMgr
         this.cacheLoadHits++;;
     }
 
+    /**
+     * Clear cache.
+     */
     public synchronized void clearCache(){
         cache.clear();
         mrulist.clear();

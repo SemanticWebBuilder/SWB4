@@ -43,8 +43,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+// TODO: Auto-generated Javadoc
 /**
- * Clase que exporta e importa elementos que se escojan de un sitio
+ * Clase que exporta e importa elementos que se escojan de un sitio.
+ * 
  * @author jorge.jimenez
  * creación:Agosto 2010
  */
@@ -77,6 +79,15 @@ public class SWBIntelliTransfer extends GenericResource {
         }
     }
 
+    /**
+     * Do advanced mode.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @throws SWBResourceException the sWB resource exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void doAdvancedMode(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
         String uri = request.getParameter("wsid");
@@ -155,6 +166,12 @@ public class SWBIntelliTransfer extends GenericResource {
 
     }
 
+    /**
+     * Parses the file.
+     * 
+     * @param file the file
+     * @return the linked list
+     */
     private LinkedList parseFile(File file) {
         LinkedList<String> lListObjts = new LinkedList();
         try {
@@ -472,9 +489,10 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
     /**
-     * Metodo de instalación de un zip con partes de un sitio
-     * @param wsite
-     * @param zipFile
+     * Metodo de instalación de un zip con partes de un sitio.
+     * 
+     * @param wsite the wsite
+     * @param zipFile the zip file
      */
     private void installAdvZip(WebSite wsite, File zipFile)
     {
@@ -701,6 +719,12 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
 
+    /**
+     * Giveme uri2 create.
+     * 
+     * @param sobj the sobj
+     * @return the string
+     */
     private String givemeUri2Create(String sobj)
     {
         String uriPart1=null;
@@ -713,6 +737,13 @@ public class SWBIntelliTransfer extends GenericResource {
         return null;
     }
 
+    /**
+     * Creates the sem obj.
+     * 
+     * @param uriPart1 the uri part1
+     * @param uriPart2 the uri part2
+     * @return the string
+     */
     private String createSemObj(String uriPart1, String uriPart2){
         String uriaCrear=null;
         try{
@@ -725,6 +756,14 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
 
+    /**
+     * Gets the numeric sem obj uri.
+     * 
+     * @param uriPart1 the uri part1
+     * @param uriPart2 the uri part2
+     * @param cont the cont
+     * @return the numeric sem obj uri
+     */
     private String getNumericSemObjUri(String uriPart1, String uriPart2, int cont){
         int tmpCont=cont+1;
         String uriaCrear=uriPart1+":i"+cont+"_"+uriPart2;
@@ -736,6 +775,14 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
 
+    /**
+     * Gets the string sem obj uri.
+     * 
+     * @param uriPart1 the uri part1
+     * @param uriPart2 the uri part2
+     * @param cont the cont
+     * @return the string sem obj uri
+     */
     private String getStringSemObjUri(String uriPart1, String uriPart2, int cont){
         String uriaCrear=null;
         if(cont<1) uriaCrear=uriPart1+":"+uriPart2 ;
@@ -752,10 +799,11 @@ public class SWBIntelliTransfer extends GenericResource {
 
 
     /**
-     * Crea archivo filtrado y genera zip con el mismo y con todo el filesystem de sus objetos
-     * @param file
-     * @param wsid
-     * @param aSWBObjs
+     * Crea archivo filtrado y genera zip con el mismo y con todo el filesystem de sus objetos.
+     * 
+     * @param file the file
+     * @param wsite the wsite
+     * @param aSWBObjs the a swb objs
      */
     private void createNewFile(File file, WebSite wsite, ArrayList aSWBObjs) {
         try {
@@ -901,8 +949,11 @@ public class SWBIntelliTransfer extends GenericResource {
     }
 
     /**
-     * Grabado de WorkPath de objeto semantico al zip en la exportación
-     * @param sObjUri
+     * Grabado de WorkPath de objeto semantico al zip en la exportación.
+     * 
+     * @param itLinkedList the it linked list
+     * @param zos the zos
+     * @param fBase the f base
      */
     private void addObjWorkPath2Zip(Iterator<String> itLinkedList, ZipOutputStream zos, File fBase)
     {

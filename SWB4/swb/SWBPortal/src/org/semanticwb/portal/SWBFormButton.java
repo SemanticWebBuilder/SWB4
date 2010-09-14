@@ -50,6 +50,8 @@ public class SWBFormButton
     
     /** The busy button. */
     private boolean busyButton=false;
+    
+    /** The busy time out. */
     private int busyTimeOut=0;
 
     /**
@@ -251,10 +253,21 @@ public class SWBFormButton
     }
 
 
+    /**
+     * Gets the busy time out.
+     * 
+     * @return the busy time out
+     */
     public int getBusyTimeOut() {
         return busyTimeOut;
     }
 
+    /**
+     * Sets the busy time out.
+     * 
+     * @param busyTimeOut the busy time out
+     * @return the sWB form button
+     */
     public SWBFormButton setBusyTimeOut(int busyTimeOut)
     {
         this.busyTimeOut = busyTimeOut;

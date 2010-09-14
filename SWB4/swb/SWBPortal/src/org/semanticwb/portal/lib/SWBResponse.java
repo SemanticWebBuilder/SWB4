@@ -87,6 +87,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#addCookie(javax.servlet.http.Cookie)
      */
+    /**
+     * Adds the cookie.
+     * 
+     * @param cookie the cookie
+     */
     public void addCookie(javax.servlet.http.Cookie cookie)
     {
         log.debug("WBResponse:addCookie");
@@ -96,6 +101,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#addDateHeader(java.lang.String, long)
+     */
+    /**
+     * Adds the date header.
+     * 
+     * @param str the str
+     * @param param the param
      */
     public void addDateHeader(String str, long param)
     {
@@ -107,6 +118,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#addHeader(java.lang.String, java.lang.String)
      */
+    /**
+     * Adds the header.
+     * 
+     * @param str the str
+     * @param str1 the str1
+     */
     public void addHeader(String str, String str1)
     {
         log.debug("WBResponse:addHeader");
@@ -117,6 +134,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#addIntHeader(java.lang.String, int)
      */
+    /**
+     * Adds the int header.
+     * 
+     * @param str the str
+     * @param param the param
+     */
     public void addIntHeader(String str, int param)
     {
         log.debug("WBResponse:setStatus");
@@ -126,6 +149,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#containsHeader(java.lang.String)
+     */
+    /**
+     * Contains header.
+     * 
+     * @param str the str
+     * @return true, if successful
      */
     public boolean containsHeader(String str)
     {
@@ -139,6 +168,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeRedirectURL(java.lang.String)
      */
+    /**
+     * Encode redirect url.
+     * 
+     * @param str the str
+     * @return the string
+     */
     public String encodeRedirectURL(String str)
     {
         log.debug("WBResponse:encodeRedirectURL");
@@ -149,6 +184,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeRedirectUrl(java.lang.String)
+     */
+    /**
+     * Encode redirect url.
+     * 
+     * @param str the str
+     * @return the string
      */
     public String encodeRedirectUrl(String str)
     {
@@ -161,6 +202,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeURL(java.lang.String)
      */
+    /**
+     * Encode url.
+     * 
+     * @param str the str
+     * @return the string
+     */
     public String encodeURL(String str)
     {
         log.debug("WBResponse:encodeURL");
@@ -171,6 +218,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#encodeUrl(java.lang.String)
+     */
+    /**
+     * Encode url.
+     * 
+     * @param str the str
+     * @return the string
      */
     public String encodeUrl(String str)
     {
@@ -183,6 +236,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#flushBuffer()
      */
+    /**
+     * Flush buffer.
+     * 
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void flushBuffer() throws java.io.IOException
     {
         log.debug("WBResponse:flushBuffer");
@@ -192,6 +250,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#getBufferSize()
      */
+    /**
+     * Gets the buffer size.
+     * 
+     * @return the buffer size
+     */
     public int getBufferSize()
     {
         log.debug("WBResponse:getBufferSize");
@@ -200,6 +263,11 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#getCharacterEncoding()
+     */
+    /**
+     * Gets the character encoding.
+     * 
+     * @return the character encoding
      */
     public String getCharacterEncoding()
     {
@@ -212,6 +280,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#getLocale()
      */
+    /**
+     * Gets the locale.
+     * 
+     * @return the locale
+     */
     public java.util.Locale getLocale()
     {
         log.debug("WBResponse:getLocale");
@@ -223,6 +296,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#getOutputStream()
      */
+    /**
+     * Gets the output stream.
+     * 
+     * @return the output stream
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
         log.debug("WBResponse:getOutputStream");
@@ -233,6 +312,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#getWriter()
      */
+    /**
+     * Gets the writer.
+     * 
+     * @return the writer
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public java.io.PrintWriter getWriter() throws java.io.IOException
     {
         log.debug("WBResponse:getWriter");
@@ -241,6 +326,11 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#isCommitted()
+     */
+    /**
+     * Checks if is committed.
+     * 
+     * @return true, if is committed
      */
     public boolean isCommitted()
     {
@@ -251,6 +341,9 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#reset()
      */
+    /**
+     * Reset.
+     */
     public void reset()
     {
         log.debug("WBResponse:reset");
@@ -260,6 +353,9 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#resetBuffer()
      */
+    /**
+     * Reset buffer.
+     */
     public void resetBuffer()
     {
         log.debug("WBResponse:resetBuffer");
@@ -268,6 +364,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#sendError(int)
+     */
+    /**
+     * Send error.
+     * 
+     * @param param the param
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void sendError(int param) throws java.io.IOException
     {
@@ -279,6 +381,13 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#sendError(int, java.lang.String)
      */
+    /**
+     * Send error.
+     * 
+     * @param param the param
+     * @param str the str
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void sendError(int param, String str) throws java.io.IOException
     {
         log.debug("WBResponse:sendError");
@@ -288,6 +397,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#sendRedirect(java.lang.String)
+     */
+    /**
+     * Send redirect.
+     * 
+     * @param str the str
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     public void sendRedirect(String str) throws java.io.IOException
     {
@@ -320,6 +435,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#setBufferSize(int)
      */
+    /**
+     * Sets the buffer size.
+     * 
+     * @param param the new buffer size
+     */
     public void setBufferSize(int param)
     {
         log.debug("WBResponse:setBufferSize:" + param);
@@ -327,6 +447,11 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#setContentLength(int)
+     */
+    /**
+     * Sets the content length.
+     * 
+     * @param param the new content length
      */
     public void setContentLength(int param)
     {
@@ -338,6 +463,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#setContentType(java.lang.String)
      */
+    /**
+     * Sets the content type.
+     * 
+     * @param str the new content type
+     */
     public void setContentType(String str)
     {
         log.debug("WBResponse:setContentType");
@@ -347,6 +477,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setDateHeader(java.lang.String, long)
+     */
+    /**
+     * Sets the date header.
+     * 
+     * @param str the str
+     * @param param the param
      */
     public void setDateHeader(String str, long param)
     {
@@ -358,6 +494,12 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setHeader(java.lang.String, java.lang.String)
      */
+    /**
+     * Sets the header.
+     * 
+     * @param str the str
+     * @param str1 the str1
+     */
     public void setHeader(String str, String str1)
     {
         log.debug("WBResponse:setHeader");
@@ -367,6 +509,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setIntHeader(java.lang.String, int)
+     */
+    /**
+     * Sets the int header.
+     * 
+     * @param str the str
+     * @param param the param
      */
     public void setIntHeader(String str, int param)
     {
@@ -378,6 +526,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponse#setLocale(java.util.Locale)
      */
+    /**
+     * Sets the locale.
+     * 
+     * @param locale the new locale
+     */
     public void setLocale(java.util.Locale locale)
     {
         log.debug("WBResponse:setLocale");
@@ -388,6 +541,11 @@ public class SWBResponse implements HttpServletResponse
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setStatus(int)
      */
+    /**
+     * Sets the status.
+     * 
+     * @param param the new status
+     */
     public void setStatus(int param)
     {
         log.debug("WBResponse:setStatus");
@@ -397,6 +555,12 @@ public class SWBResponse implements HttpServletResponse
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponse#setStatus(int, java.lang.String)
+     */
+    /**
+     * Sets the status.
+     * 
+     * @param param the param
+     * @param str the str
      */
     public void setStatus(int param, String str)
     {

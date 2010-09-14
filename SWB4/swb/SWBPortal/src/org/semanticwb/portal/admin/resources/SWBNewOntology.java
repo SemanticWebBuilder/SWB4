@@ -22,8 +22,10 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBNewOntology.
+ * 
  * @author jorge.jimenez
  */
 public class SWBNewOntology extends GenericResource {

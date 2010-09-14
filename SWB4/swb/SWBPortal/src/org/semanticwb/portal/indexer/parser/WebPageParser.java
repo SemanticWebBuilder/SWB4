@@ -29,6 +29,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Searchable;
 import org.semanticwb.model.WebPage;
 
+// TODO: Auto-generated Javadoc
 /**
  * Parser for {@link Searchable} web pages.
  * <p>
@@ -69,11 +70,11 @@ public class WebPageParser extends GenericParser {
      * Gets the date of the last change done to the {@link Searchable} object.
      * <p>
      * Obtiene la fecha de la última modificación hecha al objeto
-     * {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object.
+     * 
+     * @param gen the gen
      * @return  Last {@link Searchable} object's update date.
-     *          Fecha de última actualización del objeto {@link Searchable}.
+     * Fecha de última actualización del objeto {@link Searchable}.
+     * {@link Searchable}.
      */
     @Override
     public String getIndexLastUpdated(Searchable gen) {
@@ -86,11 +87,11 @@ public class WebPageParser extends GenericParser {
      * Gets the summary of the {@link Searchable} object.
      * <p>
      * Obtiene el resúmen del objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
-     * @param   lang the user's language. El idioma del usuario.
+     * 
+     * @param gen the gen
+     * @param lang the lang
      * @return  Summary of the {@link Searchable} object in the given language.
-     *          Resumen del objeto {@link Searchable} en el idioma del usuario.
+     * Resumen del objeto {@link Searchable} en el idioma del usuario.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getSummary(org.semanticwb.model.Searchable, java.lang.String)
      */
     @Override
@@ -111,10 +112,10 @@ public class WebPageParser extends GenericParser {
      * Gets the String type of the {@link Searchable} object.
      * <p>
      * Obtiene la cadena del tipo de objeto {@link Searchable}.
-     *
-     * @param   gen the {@link Searchable} object. El objeto {@link Searchable}.
+     * 
+     * @param gen the gen
      * @return  String type of the {@link Searchable} object. String con el tipo
-     *          del objeto {@link Searchable}.
+     * del objeto {@link Searchable}.
      * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
      */
     @Override

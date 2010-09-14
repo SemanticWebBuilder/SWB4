@@ -94,6 +94,9 @@ public class SWBIndexMgr implements SWBAppObject
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#destroy()
      */
+    /**
+     * Destroy.
+     */
     public void destroy()
     {
         timer.cancel();
@@ -102,6 +105,9 @@ public class SWBIndexMgr implements SWBAppObject
     
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#init()
+     */
+    /**
+     * Inits the.
      */
     public void init()
     {
@@ -293,6 +299,9 @@ public class SWBIndexMgr implements SWBAppObject
     /* (non-Javadoc)
      * @see org.semanticwb.base.SWBAppObject#refresh()
      */
+    /**
+     * Refresh.
+     */
     public void refresh()
     {
     }
@@ -316,8 +325,8 @@ public class SWBIndexMgr implements SWBAppObject
      * Obtiene un {@link SWBIndexer} con el nombre especificado.
      * 
      * @param name  the name of the requested {@link SWBIndexer}. Nombre del
-     *              {@link SWBIndexer} requerido.
      * @return      the {@link SWBIndexer}.
+     * {@link SWBIndexer} requerido.
      */
     public SWBIndexer getIndexer(String name)
     {
@@ -329,7 +338,7 @@ public class SWBIndexMgr implements SWBAppObject
      * <p>
      * Obtiene el {@link SWBIndexer} para el modelo especificado.
      * 
-     * @param   model the model.
+     * @param model the model
      * @return  the model indexer.
      */
     public SWBIndexer getModelIndexer(SWBModel model)

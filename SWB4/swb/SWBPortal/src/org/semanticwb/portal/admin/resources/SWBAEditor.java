@@ -1319,6 +1319,7 @@ public class SWBAEditor extends GenericResource
      * @param templateid the templateid
      * @param version the version
      * @param user the user
+     * @param session the session
      * @return the template applet
      */
     public static void getTemplateApplet(PrintWriter out, String topicmapid, String templateid, int version, User user, String session)

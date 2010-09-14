@@ -90,6 +90,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#getOutputStream()
      */
+    /**
+     * Gets the output stream.
+     * 
+     * @return the output stream
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public javax.servlet.ServletOutputStream getOutputStream() throws java.io.IOException
     {
@@ -108,6 +114,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#getWriter()
+     */
+    /**
+     * Gets the writer.
+     * 
+     * @return the writer
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public java.io.PrintWriter getWriter() throws java.io.IOException
@@ -128,6 +140,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#flushBuffer()
      */
+    /**
+     * Flush buffer.
+     * 
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void flushBuffer() throws java.io.IOException
     {
@@ -138,6 +155,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#getBufferSize()
+     */
+    /**
+     * Gets the buffer size.
+     * 
+     * @return the buffer size
      */
     @Override
     public int getBufferSize()
@@ -150,6 +172,9 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#resetBuffer()
      */
+    /**
+     * Reset buffer.
+     */
     @Override
     public void resetBuffer()
     {
@@ -160,6 +185,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#setBufferSize(int)
      */
+    /**
+     * Sets the buffer size.
+     * 
+     * @param param the new buffer size
+     */
     @Override
     public void setBufferSize(int param)
     {
@@ -169,6 +199,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
+     */
+    /**
+     * To string.
+     * 
+     * @return the string
      */
     @Override
     public String toString()
@@ -236,6 +271,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponseWrapper#sendRedirect(java.lang.String)
      */
+    /**
+     * Send redirect.
+     * 
+     * @param location the location
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void sendRedirect(String location) throws java.io.IOException
     {
@@ -268,6 +309,12 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponseWrapper#sendError(int)
      */
+    /**
+     * Send error.
+     * 
+     * @param err the err
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     @Override
     public void sendError(int err) throws IOException
     {
@@ -282,6 +329,13 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServletResponseWrapper#sendError(int, java.lang.String)
+     */
+    /**
+     * Send error.
+     * 
+     * @param err the err
+     * @param msg the msg
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void sendError(int err, String msg) throws IOException
@@ -340,6 +394,11 @@ public class SWBHttpServletResponseWrapper extends HttpServletResponseWrapper
 
     /* (non-Javadoc)
      * @see javax.servlet.ServletResponseWrapper#setContentType(java.lang.String)
+     */
+    /**
+     * Sets the content type.
+     * 
+     * @param type the new content type
      */
     @Override
     public void setContentType(String type) 

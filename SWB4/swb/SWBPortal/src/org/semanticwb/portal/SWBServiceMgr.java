@@ -78,10 +78,19 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
     /** The lasttime. */
     private long lasttime;            //ultimo time utilizado
 
+    /** The instanceid. */
     private String instanceid=null;
 
     /* (non-Javadoc)
      * @see org.semanticwb.platform.SemanticObserver#notify(org.semanticwb.platform.SemanticObject, java.lang.Object, java.lang.String)
+     */
+    /**
+     * Notify.
+     * 
+     * @param obj the obj
+     * @param prop the prop
+     * @param lang the lang
+     * @param action the action
      */
     public void notify(SemanticObject obj, Object prop, String lang, String action)
     {
@@ -387,6 +396,12 @@ public class SWBServiceMgr implements SemanticObserver, SWBObserver {
         }
     }
 
+    /**
+     * Send db notify.
+     * 
+     * @param s the s
+     * @param obj the obj
+     */
     public void sendDBNotify(String s, Object obj) {
         //Remove cache
         StringTokenizer st=new StringTokenizer(obj.toString(),"|");

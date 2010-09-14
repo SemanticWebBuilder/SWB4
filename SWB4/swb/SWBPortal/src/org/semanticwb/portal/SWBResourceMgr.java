@@ -89,6 +89,7 @@ private SWBResourceCachedMgr cache;
     /** The tracer. */
     private SWBResourceTraceMgr tracer;
 
+    /** The resource owls. */
     private Set resourceOWLS;               //hash de ontologias de recursos
 
     /**

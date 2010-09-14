@@ -82,6 +82,11 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSessionBindingListener#valueBound(javax.servlet.http.HttpSessionBindingEvent)
      */
+    /**
+     * Value bound.
+     * 
+     * @param arg0 the arg0
+     */
     public void valueBound(HttpSessionBindingEvent arg0)
     {
         //System.out.println("SWBSessionObject.valueBound:"+arg0+" "+subject);
@@ -89,6 +94,11 @@ public class SWBSessionObject implements HttpSessionBindingListener, Serializabl
 
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpSessionBindingListener#valueUnbound(javax.servlet.http.HttpSessionBindingEvent)
+     */
+    /**
+     * Value unbound.
+     * 
+     * @param arg0 the arg0
      */
     public void valueUnbound(HttpSessionBindingEvent arg0)
     {

@@ -95,6 +95,9 @@ public class SWB4FacebookBridge extends ExtUserRepInt
     /* (non-Javadoc)
      * @see org.semanticwb.security.auth.ExtUserRepInt#syncUsers()
      */
+    /**
+     * Sync users.
+     */
     @Override
     public void syncUsers()
     {
@@ -104,6 +107,13 @@ public class SWB4FacebookBridge extends ExtUserRepInt
     /* (non-Javadoc)
      * @see org.semanticwb.security.auth.ExtUserRepInt#validateCredential(java.lang.String, java.lang.Object)
      */
+    /**
+     * Validate credential.
+     * 
+     * @param login the login
+     * @param credential the credential
+     * @return true, if successful
+     */
     @Override
     public boolean validateCredential(String login, Object credential)
     {
@@ -112,6 +122,13 @@ public class SWB4FacebookBridge extends ExtUserRepInt
 
     /* (non-Javadoc)
      * @see org.semanticwb.security.auth.ExtUserRepInt#syncUser(java.lang.String, org.semanticwb.model.User)
+     */
+    /**
+     * Sync user.
+     * 
+     * @param login the login
+     * @param user the user
+     * @return true, if successful
      */
     @Override
     public boolean syncUser(String login, User user)
