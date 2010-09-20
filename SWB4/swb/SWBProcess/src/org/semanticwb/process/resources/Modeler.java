@@ -503,7 +503,12 @@ public class Modeler extends GenericResource {
 
                 if (semclass.isSubClass(GraphicalElement.swp_GraphicalElement)) {
                     title = json.getString(PROP_TITLE);
-                    description = json.getString(PROP_DESCRIPTION);
+                    try {
+                        description = json.getString(PROP_DESCRIPTION);
+                    } catch (Exception e) {
+                        description=null;
+                    }
+                        
                     x = json.getInt(PROP_X);
                     y = json.getInt(PROP_Y);
                     w = json.getInt(PROP_W);
@@ -519,7 +524,7 @@ public class Modeler extends GenericResource {
                             ge = (GraphicalElement) go;
                             if(!ge.getTitle().equals(title))
                                 ge.setTitle(title);
-                            if(!ge.getDescription().equals(description))
+                            if(null!=description&&!ge.getDescription().equals(description))
                                 ge.setDescription(description);
                             if(ge.getX()!=x)
                                 ge.setX(x);
@@ -538,7 +543,7 @@ public class Modeler extends GenericResource {
                         GenericObject gi = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                         ge = (GraphicalElement) gi;
                         ge.setTitle(title);
-                        ge.setDescription(description);
+                        if(null!=description) ge.setDescription(description);
                         ge.setX(x);
                         ge.setY(y);
                         ge.setHeight(h);
@@ -620,8 +625,11 @@ public class Modeler extends GenericResource {
                     start = json.getString(PROP_START);
                     end = json.getString(PROP_END);
                     title = json.getString(PROP_TITLE);
-                    description = json.getString(PROP_DESCRIPTION);
-
+                    try {
+                        description = json.getString(PROP_DESCRIPTION);
+                    } catch (Exception e) {
+                        description=null;
+                    }
                     if (hmori.get(uri) != null) 
                     {    
                         go = ont.getGenericObject(hmori.get(uri));
@@ -629,7 +637,7 @@ public class Modeler extends GenericResource {
                         if(!co.getTitle().equals(title))
                             co.setTitle(title);
 
-                        if(!co.getDescription().equals(description))
+                        if(null!=description&&!co.getDescription().equals(description))
                             co.setDescription(description);
                         
                         if(!co.getSource().getURI().equals(start))
@@ -658,7 +666,7 @@ public class Modeler extends GenericResource {
                             go = model.createGenericObject(model.getObjectUri(String.valueOf(id), semclass), semclass);
                             co = (ConnectionObject) go;
                             co.setTitle(title);
-                            co.setDescription(description);
+                            if(null!=description)co.setDescription(description);
                             gostart = ont.getGenericObject(hmnew.get(start));
                             goend = ont.getGenericObject(hmnew.get(end));
                             co.setSource((GraphicalElement)gostart);
