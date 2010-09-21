@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.*;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
@@ -360,6 +359,7 @@ public class SWBARuleProcess extends GenericResource {
         HashMap hmAttr = null;
         HashMap hmOper = null;
         HashMap hmValues = null;
+        HashMap<String,String> hmAttrLabel = new HashMap();
         int numero = 0;
 
         log.debug("Propiedades clases....");
@@ -373,11 +373,14 @@ public class SWBARuleProcess extends GenericResource {
         while (it.hasNext()) {
             SemanticObject semanticObject = it.next();
             SemanticClass cls=semanticObject.transformToSemanticClass();
-            System.out.println("trans2semClass:"+cls);
+            //System.out.println("trans2semClass:"+cls);
             Iterator<SemanticProperty> itsp = cls.listProperties();
             while (itsp.hasNext()) {
                 SemanticProperty semProp = itsp.next();
-                if(null!=semProp)log.debug("SemProp:"+semProp.getName());
+                if(null!=semProp){
+                    log.debug("SemProp:"+semProp.getName());
+                    //System.out.println("SemProp:"+semProp.getName());
+                }
                 // Agreando valores al HashMap 
                 hmAttr = new HashMap();
                 hmOper = new HashMap();
@@ -436,11 +439,17 @@ public class SWBARuleProcess extends GenericResource {
                         SemanticObject semanticObject1 = itsemobj.next();
                         hmValues.put(semanticObject1.getId(), semanticObject1.getDisplayName(user.getLanguage()));
                     }
+                    if(hmValues.isEmpty()) hmValues.put("","No hay disponibles");
                     hmAttr.put("Valor", hmValues);
                 }
 
-                comboAtt.put(semProp.getPrefix()+"_"+semProp.getName(), hmAttr);
-                vecOrderAtt.add(numero++, semProp.getPrefix()+"_"+semProp.getName());
+                //System.out.println(">>>>"+cls.getName()+"."+semProp.getName()+"<<<<"+hmAttrLabel.get(cls.getName()+"."+semProp.getName()));
+                if(hmAttrLabel.get(cls.getName()+"."+semProp.getName())==null)
+                {
+                    hmAttrLabel.put(cls.getURI()+"."+semProp.getName(), cls.getName()+"."+semProp.getName());
+                    comboAtt.put(cls.getName()+"_"+semProp.getPrefix()+"_"+semProp.getName(), hmAttr);
+                    vecOrderAtt.add(numero++, cls.getName()+"_"+semProp.getPrefix()+"_"+semProp.getName());
+                }
             }
         }
 
@@ -832,11 +841,17 @@ public class SWBARuleProcess extends GenericResource {
 */
         // HABILITAR PARA DEBUG
 
-        Iterator<String> itkeys = comboAtt.keySet().iterator();
-        while(itkeys.hasNext())
-        {
-            log.debug("---- "+itkeys.next());
-        }
+//        Iterator<String> itkeys = comboAtt.keySet().iterator();
+//        while(itkeys.hasNext())
+//        {
+//            //log.debug("---- "+itkeys.next());
+//            System.out.println("---- "+itkeys.next());
+//        }
+//
+//        System.out.println("Vector: "+vecOrderAtt.size());
+//        for(int i =0; i<vecOrderAtt.size(); i++) {
+//            System.out.println("vector("+i+") :"+vecOrderAtt.get(i));
+//        }
 
     }
 
