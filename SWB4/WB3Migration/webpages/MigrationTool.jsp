@@ -4,14 +4,13 @@
     Author     : juan.fernandez
 --%>
 
-<%@page import="org.semanticwb.resource.office.sem.WordResource"%>
 <%@page contentType="text/html"%>
 <%@page pageEncoding="UTF-8"%>
 <%@page import="org.semanticwb.*,org.semanticwb.portal.api.*,org.semanticwb.platform.*,org.semanticwb.model.*,org.semanticwb.model.base.*,com.infotec.topicmaps.bean.*,com.infotec.topicmaps.*,java.util.*,com.infotec.wb.core.db.*,org.semanticwb.repository.Workspace" %>
 <%@page import="com.infotec.wb.core.*, com.infotec.wb.core.db.*,com.infotec.wb.util.*,com.infotec.topicmaps.*,com.infotec.topicmaps.db.*,com.infotec.topicmaps.bean.*"%>
 <%@page import="com.infotec.appfw.util.*,com.infotec.appfw.lib.DBPool.*,com.infotec.wb.lib.*, com.infotec.wb.services.*, com.infotec.wb.services.util.*"%>
 <%@page import="java.io.*, java.net.*, java.util.Collection, java.util.*, java.sql.*, org.w3c.dom.*"%>
-<%@page import="org.semanticwb.migration.office.*"%>
+<%@page import="org.semanticwb.migration.office.*,org.semanticwb.resource.office.sem.WordResource"%>
 <%!
    boolean loaded=false;
 %>
@@ -2113,37 +2112,41 @@
                                         SemanticObject so = resource.getResourceData();
                                         if(null!=resource.getResourceData())
                                         {
-                                            String pages = wbresource.getResourceBase().getAttribute("pages",null);
-                                            String position = wbresource.getResourceBase().getAttribute("position",null);
-                                            String txtant = wbresource.getResourceBase().getAttribute("txtant",null);
-                                            String txtsig = wbresource.getResourceBase().getAttribute("txtsig",null);
-                                            String tfont = wbresource.getResourceBase().getAttribute("tfont",null);
-                                            String npages = wbresource.getResourceBase().getAttribute("npages",null);
-                                            String tpred = wbresource.getResourceBase().getAttribute("tpred",null);
-                                            if(pages!=null && pages.equals("1")) so.setBooleanProperty(WordResource.swboffice_pages, Boolean.TRUE);
-                                            if(position!=null) so.setIntProperty(WordResource.swboffice_position, Integer.parseInt(position));
-                                            if(txtant!=null) so.setProperty(WordResource.swboffice_txtant, txtant);
-                                            if(txtsig!=null) so.setProperty(WordResource.swboffice_txtsig, txtsig);
-                                            if(tfont!=null) so.setProperty(WordResource.swboffice_tfont, tfont);
-                                            if(npages!=null) so.setIntProperty(WordResource.swboffice_npages, Integer.parseInt(npages));
-                                            if(tpred!=null) so.setProperty(WordResource.swboffice_tpred, tpred);
+                                            com.infotec.wb.core.Resource wb3resbase = wbresource.getResourceBase();
+                                            if(wb3resbase!=null)
+                                            {
+                                                String pages = wb3resbase.getAttribute("pages","");
+                                                String position = wb3resbase.getAttribute("position","");
+                                                String txtant = wb3resbase.getAttribute("txtant","");
+                                                String txtsig = wb3resbase.getAttribute("txtsig","");
+                                                String tfont = wb3resbase.getAttribute("tfont","");
+                                                String npages = wb3resbase.getAttribute("npages","");
+                                                String tpred = wb3resbase.getAttribute("tpred","");
+                                                if(pages!=null && pages.trim().length()>0 && pages.equals("1")) so.setBooleanProperty(WordResource.swboffice_pages, Boolean.TRUE);
+                                                if(position!=null && position.trim().length()>0) so.setIntProperty(WordResource.swboffice_position, Integer.parseInt(position));
+                                                if(txtant!=null && txtant.trim().length()>0) so.setProperty(WordResource.swboffice_txtant, txtant);
+                                                if(txtsig!=null && txtsig.trim().length()>0) so.setProperty(WordResource.swboffice_txtsig, txtsig);
+                                                if(tfont!=null && tfont.trim().length()>0) so.setProperty(WordResource.swboffice_tfont, tfont);
+                                                if(npages!=null && npages.trim().length()>0) so.setIntProperty(WordResource.swboffice_npages, Integer.parseInt(npages));
+                                                if(tpred!=null && tpred.trim().length()>0) so.setProperty(WordResource.swboffice_tpred, tpred);
+                                            }
                                         }
                                         System.out.println("Paginacion de Contenido corregida: "+wbresource.getResourceBase().getId() );
                                     }
                                     catch(Exception e){System.out.println("Error al revisar la paginacion del contenido.");}
                                 }
-                                //////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////                            
+                                try {
+                                    if(occ.isActive())
+                                    {
+                                        resource.setActive(Boolean.TRUE);
+                                    }
+                                    else
+                                    {
+                                        resource.setActive(Boolean.FALSE);
+                                    }
+                                } catch (Exception e) { System.out.println("Error al activar el recurso..."+resource.getId()); }
                             }
-                            try {
-                                if(occ.isActive())
-                                {
-                                    resource.setActive(Boolean.TRUE);
-                                }
-                                else
-                                {
-                                    resource.setActive(Boolean.FALSE);
-                                }
-                            } catch (Exception e) { System.out.println("Error al activar el recurso..."+resource.getId()); }
                         }
                     }
                     catch(Exception execp){System.out.println("Error al obtener el recurso y revisar occurrencias de tipo contenido.");}
