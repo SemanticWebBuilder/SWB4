@@ -21,6 +21,10 @@ public class Ajax {
         if (null!=parameter) return parameter; else return "";
     }
 
+    public static Object notNull(Object parameter, Object omission) {
+        if (null!=parameter) return parameter; else return omission;
+    }
+
     public static String notNull(String parameter) {
         if (null!=parameter) return parameter; else return "";
     }
@@ -78,5 +82,16 @@ public class Ajax {
             default: operatorLabel = "";
         }
         return operatorLabel;
+    }
+
+    public static String getChartScript() {
+        StringBuilder script = new StringBuilder();
+        script.append("<script src=\"/swbadmin/jsp/charts/prototype.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/charts/raphael-min.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/charts/grafico.base.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/charts/grafico.line.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/charts/grafico.bar.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/charts/grafico.spark.js\" type=\"text/javascript\"></script>\n");
+        return script.toString();
     }
 }
