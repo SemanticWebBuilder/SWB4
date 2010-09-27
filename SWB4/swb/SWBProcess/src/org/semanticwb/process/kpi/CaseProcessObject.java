@@ -92,15 +92,15 @@ public class CaseProcessObject {
         return distincts;
     }
 
-    private static void distinctProcessObjects(ProcessInstance pinst, String processObjectURI, String propertyName, ArrayList distincts) {
+    private static void distinctProcessObjects(ProcessInstance pinst, String processObject, String property, ArrayList distincts) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         distinctObjects(obj.getSemanticObject(), sp, distincts);
                 }
             }
@@ -109,19 +109,19 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                distinctProcessObjects((SubProcessInstance)flobin, processObjectURI, propertyName, distincts);
+                distinctProcessObjects((SubProcessInstance)flobin, processObject, property, distincts);
         }
     }
 
-    private static void distinctProcessObjects(SubProcessInstance spinst, String processObjectURI, String propertyName, ArrayList distincts) {
+    private static void distinctProcessObjects(SubProcessInstance spinst, String processObject, String property, ArrayList distincts) {
         Iterator<ProcessObject> objit = spinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         distinctObjects(obj.getSemanticObject(), sp, distincts);
                 }
             }
@@ -130,19 +130,19 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                distinctProcessObjects((SubProcessInstance)flobin, processObjectURI, propertyName, distincts);
+                distinctProcessObjects((SubProcessInstance)flobin, processObject, property, distincts);
         }
     }
 
-    private static Object getMinimumProcessObject(ProcessInstance pinst, String processObjectURI, String propertyName, Object minimum) {
+    private static Object getMinimumProcessObject(ProcessInstance pinst, String processObject, String property, Object minimum) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         minimum = minimumObject(obj.getSemanticObject(), sp, minimum);
                 }
             }
@@ -151,20 +151,20 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                minimum = getMinimumProcessObject((SubProcessInstance)flobin, processObjectURI, propertyName, minimum);
+                minimum = getMinimumProcessObject((SubProcessInstance)flobin, processObject, property, minimum);
         }
         return minimum;
     }
 
-    private static Object getMinimumProcessObject(SubProcessInstance pinst, String processObjectURI, String propertyName, Object minimum) {
+    private static Object getMinimumProcessObject(SubProcessInstance pinst, String processObject, String property, Object minimum) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         minimum = minimumObject(obj.getSemanticObject(), sp, minimum);
                 }
             }
@@ -173,20 +173,20 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                minimum = getMinimumProcessObject((SubProcessInstance)flobin, processObjectURI, propertyName, minimum);
+                minimum = getMinimumProcessObject((SubProcessInstance)flobin, processObject, property, minimum);
         }
         return minimum;
     }
 
-    private static Object getMaximumProcessObject(ProcessInstance pinst, String processObjectURI, String propertyName, Object maximum) {
+    private static Object getMaximumProcessObject(ProcessInstance pinst, String processObject, String property, Object maximum) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         maximum = maximumObject(obj.getSemanticObject(), sp, maximum);
                 }
             }
@@ -195,20 +195,20 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                maximum = getMaximumProcessObject((SubProcessInstance)flobin, processObjectURI, propertyName, maximum);
+                maximum = getMaximumProcessObject((SubProcessInstance)flobin, processObject, property, maximum);
         }
         return maximum;
     }
 
-    private static Object getMaximumProcessObject(SubProcessInstance spinst, String processObjectURI, String propertyName, Object maximum) {
+    private static Object getMaximumProcessObject(SubProcessInstance spinst, String processObject, String property, Object maximum) {
         Iterator<ProcessObject> objit = spinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if(obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         maximum = maximumObject(obj.getSemanticObject(), sp, maximum);
                 }
             }
@@ -217,20 +217,20 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                maximum = getMaximumProcessObject((SubProcessInstance)flobin, processObjectURI, propertyName, maximum);
+                maximum = getMaximumProcessObject((SubProcessInstance)flobin, processObject, property, maximum);
         }
         return maximum;
     }
 
-    private static Object getProcessObjects(ProcessInstance pinst, String processObjectURI, String propertyName, Object sum) {
+    private static Object getProcessObjects(ProcessInstance pinst, String processObject, String property, Object sum) {
         Iterator<ProcessObject> objit = pinst.listProcessObjects();
         while(objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if (obj.getURI().indexOf(processObjectURI) > -1) {
+            if(obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if (property.equals(sp.getPropId()))
                         sum = sumatoryObject(obj.getSemanticObject(), sp, sum);
                 }
             }
@@ -239,20 +239,20 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                sum = getProcessObjects((SubProcessInstance)flobin, processObjectURI, propertyName, sum);
+                sum = getProcessObjects((SubProcessInstance)flobin, processObject, property, sum);
         }
         return sum;
     }
 
-    private static Object getProcessObjects(SubProcessInstance spinst, String processObjectURI, String propertyName, Object sum) {
+    private static Object getProcessObjects(SubProcessInstance spinst, String processObject, String property, Object sum) {
         Iterator<ProcessObject> objit = spinst.listProcessObjects();
         while (objit.hasNext()) {
             ProcessObject obj =  objit.next();
-            if(obj.getURI().indexOf(processObjectURI) > -1) {
+            if (obj.getSemanticObject().getSemanticClass().getName().equalsIgnoreCase(processObject)) {
                 Iterator<SemanticProperty> spit = obj.getSemanticObject().listProperties();
                 while(spit.hasNext()) {
                     SemanticProperty sp = spit.next();
-                    if(propertyName.equals(sp.getName()))
+                    if(property.equals(sp.getPropId()))
                         sum = sumatoryObject(obj.getSemanticObject(), sp, sum);
                 }
             }
@@ -261,7 +261,7 @@ public class CaseProcessObject {
         while(foit.hasNext()) {
             FlowNodeInstance flobin = foit.next();
             if (flobin instanceof SubProcessInstance)
-                 sum = getProcessObjects((SubProcessInstance)flobin, processObjectURI, propertyName, sum);
+                 sum = getProcessObjects((SubProcessInstance)flobin, processObject, property, sum);
         }
         return sum;
     }
