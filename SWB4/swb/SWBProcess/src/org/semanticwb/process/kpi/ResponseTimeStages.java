@@ -24,9 +24,12 @@
 package org.semanticwb.process.kpi;
 
 import java.util.Iterator;
+import java.util.ArrayList;
 import org.semanticwb.process.model.Process;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.FlowNodeInstance;
+import org.semanticwb.process.model.SubProcessInstance;
+
 /**
  *
  * @author Sergio Téllez
@@ -82,14 +85,35 @@ public class ResponseTimeStages {
         FlowNodeInstance fodestiny = null;
         Iterator<FlowNodeInstance> fnit = pinst.listFlowNodeInstances();
         while (fnit.hasNext()) {
+            ArrayList<FlowNodeInstance> container = new ArrayList();
             FlowNodeInstance fni = fnit.next();
-            if (origin.equalsIgnoreCase(fni.getFlowNodeType().getTitle()))
-                forigin = fni;
-            else if (destiny.equalsIgnoreCase(fni.getFlowNodeType().getTitle()))
-                fodestiny = fni;
+            getStage(fni, origin, container);
+            if (!container.isEmpty())
+                forigin = container.get(0);
+            else {
+                container = new ArrayList();
+                getStage(fni, destiny, container);
+                if (!container.isEmpty())
+                    fodestiny = container.get(0);
+            }
         }
         if (null != forigin && null != fodestiny)
             processtime = fodestiny.getEnded().getTime() - forigin.getCreated().getTime();
         return processtime;
+    }
+
+    private static void getStage(FlowNodeInstance fni, String stage, ArrayList<FlowNodeInstance> container) {
+        if (stage.equalsIgnoreCase("" + fni.getFlowNodeType().hashCode()))
+            container.add(fni);
+        if (fni instanceof SubProcessInstance) {
+            SubProcessInstance spi = (SubProcessInstance)fni;
+            Iterator<FlowNodeInstance> acit = spi.listFlowNodeInstances();
+            if (acit.hasNext()) {
+                while(acit.hasNext()) {
+                    FlowNodeInstance actinst =  acit.next();
+                    getStage(actinst, stage, container);
+                }
+            }
+        }
     }
 }
