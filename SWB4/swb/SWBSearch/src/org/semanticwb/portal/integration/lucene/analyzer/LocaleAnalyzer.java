@@ -33,10 +33,13 @@ import java.util.Set;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.portal.indexer.SWBIndexer;
 
+// TODO: Auto-generated Javadoc
 /** Filters {@link StandardTokenizer} with {@link StandardFilter}, {@link
  * LowerCaseFilter} and {@link StopFilter}. */
 public class LocaleAnalyzer extends Analyzer
 {
+    
+    /** The stop table. */
     private Set stopTable;
 
     /** An array containing some common English words that are usually not
@@ -53,6 +56,7 @@ public class LocaleAnalyzer extends Analyzer
         "esos"
     };
 
+    /** The name. */
     private String name = "Spanish";
 
     /** Builds an analyzer. */
@@ -61,12 +65,23 @@ public class LocaleAnalyzer extends Analyzer
         this(STOP_WORDS);
     }
 
+    /**
+     * Instantiates a new locale analyzer.
+     * 
+     * @param name the name
+     */
     public LocaleAnalyzer(String name)
     {
         this(STOP_WORDS);
         this.name = name;
     }
 
+    /**
+     * Instantiates a new locale analyzer.
+     * 
+     * @param name the name
+     * @param stopWords the stop words
+     */
     public LocaleAnalyzer(String name, String[] stopWords)
     {
         this.name = name;
@@ -74,14 +89,24 @@ public class LocaleAnalyzer extends Analyzer
     }
 
 
-    /** Builds an analyzer with the given stop words. */
+    /**
+     * Builds an analyzer with the given stop words.
+     * 
+     * @param stopWords the stop words
+     */
     public LocaleAnalyzer(String[] stopWords)
     {
         stopTable = StopFilter.makeStopSet(stopWords);
     }
 
-    /** Constructs a {@link StandardTokenizer} filtered by a {@link
-     StandardFilter}, a {@link LowerCaseFilter} and a {@link StopFilter}. */
+    /**
+     * Constructs a {@link StandardTokenizer} filtered by a {@link
+     * StandardFilter}, a {@link LowerCaseFilter} and a {@link StopFilter}.
+     * 
+     * @param fieldName the field name
+     * @param reader the reader
+     * @return the token stream
+     */
     public final TokenStream tokenStream(String fieldName, Reader reader)
     {
         TokenStream result = null;
