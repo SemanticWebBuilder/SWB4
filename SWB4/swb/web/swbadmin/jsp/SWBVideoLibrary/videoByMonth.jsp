@@ -12,12 +12,21 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-
+<%!
+    class VideoContentComparator implements Comparator<VideoContent>
+    {
+        public int compare(VideoContent o1,VideoContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+        }
+    }
+%>
 <%
     String usrlanguage = paramRequest.getUser().getLanguage();    
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
     List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
+    Collections.sort(contents, new VideoContentComparator());
     if(contents!=null && contents.size()>0)
     {        
         for(VideoContent content : contents)
@@ -120,7 +129,7 @@
         urlall.setMode(urlall.Mode_VIEW);
         urlall.setCallMethod(urlall.Call_CONTENT);
         String viewAll="[Ver todos los videos]";
-        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
+        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
         {
             viewAll="[View all videos]";
         }

@@ -17,6 +17,13 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
     String idPage="Videos";
+    class VideoContentComparator implements Comparator<VideoContent>
+    {
+        public int compare(VideoContent o1,VideoContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+        }
+    }
 %>
 <%
     String usrlanguage = paramRequest.getUser().getLanguage();
@@ -57,6 +64,7 @@
         int limit = 5;
         ArrayList<VideoContent> contentsToShow=new ArrayList<VideoContent>();
         List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
+        Collections.sort(contents, new VideoContentComparator());
         if(urldetail!=null)
         {
             int i=0;

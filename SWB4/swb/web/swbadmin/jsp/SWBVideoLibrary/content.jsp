@@ -14,6 +14,15 @@
 <%@page import="org.semanticwb.model.User"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
+    class VideoContentComparator implements Comparator<VideoContent>
+    {
+        public int compare(VideoContent o1,VideoContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+        }
+    }
+%>
+<%!
     static String[] meses =
     {
         "Enero", "Febrero", "Marzo", "Abril", "Mayo",
@@ -27,11 +36,7 @@
 
     private String getMonth(int month,User user)
     {
-        String getMonth=months[month];
-        if(user.getLanguage()!=null && user.getLanguage().equalsIgnoreCase("es"))
-        {
-            getMonth=meses[month];
-        }
+        String getMonth=meses[month];        
         return getMonth;
     }
 
@@ -51,6 +56,7 @@
     int limit = 15;
 
     List<VideoContent> contents=(List<VideoContent>)request.getAttribute("list");
+    Collections.sort(contents, new VideoContentComparator());
     if(contents!=null && contents.size()>0)
     {
        
