@@ -17,43 +17,26 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%!
     String idNoticias="Noticias";
+
+    class SWBNewContentComparator implements Comparator<SWBNewContent>
+    {
+        public int compare(SWBNewContent o1,SWBNewContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;            
+        }
+    }
 %>
 <%
     WebPage noticias= paramRequest.getWebPage().getWebSite().getWebPage(idNoticias);
     if(noticias!=null && noticias.isActive())
     {
-        //SWBResourceURL urldetail=null;
-        SWBResourceURL urlrss=null;
-        /*GenericIterator<Resource> resources=noticias.listResources();
-        while(resources.hasNext())
-        {
-            Resource resource=resources.next();
-            if(resource.getResourceData()!=null)
-            {
-
-               GenericObject obj=resource.getResourceData().createGenericInstance();
-               if(obj instanceof SWBNews && paramRequest.getUser().haveAccess(obj))
-               {
-                   SWBNews semResource=(SWBNews)obj;
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setResourceBase(resource);
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setVirtualResource(resource);
-                   ((org.semanticwb.portal.api.SWBParamRequestImp)paramRequest).setTopic(noticias);
-                    urldetail=paramRequest.getRenderUrl();
-                    urlrss=paramRequest.getRenderUrl();
-                    urlrss.setMode("rss");
-                    urlrss.setCallMethod(urlrss.Call_DIRECT);
-                    urldetail.setMode(paramRequest.Mode_VIEW);
-                    break;
-               }
-            }
-        }*/
         String usrlanguage = paramRequest.getUser().getLanguage();
         DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
         int limit = 8;
         List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
+        Collections.sort(contents, new SWBNewContentComparator());
         ArrayList<SWBNewContent> contentstoshow= new ArrayList<SWBNewContent>();
-        //if(urldetail!=null)
-        //{
+        
             int i=0;            
             for(SWBNewContent content : contents)
             {
@@ -67,8 +50,10 @@
                     }
                 }                
             }
+            
             if(contentstoshow.size()>0 && contents.get(0).getImage()!=null)
             {
+
                 SWBNewContent content=contentstoshow.get(0);
                 String title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle(usrlanguage));
                 if(title!=null && title.trim().equals(""))
@@ -123,9 +108,7 @@
                     {
                         title=SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getTitle());
                     }
-                    String url="#";
-                    //urldetail.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    //url=urldetail.toString();
+                    String url="#";                    
                     url=noticias.getUrl()+"?uri="+content.getResourceBase().getSemanticObject().getEncodedURI();
                     %>
                             <li><a href="<%=url%>"><%=title%></a></li>
@@ -136,15 +119,11 @@
                 <%
             }
             String urlNews=noticias.getUrl();
-            String titleviewoldNews="Ver más";
-            /*if(usrlanguage!=null && !usrlanguage.equals("es"))
-            {
-                titleviewoldNews="View old news";
-            }*/
+            String titleviewoldNews="Ver más";            
             %>
                 <p class="vermas"><a href="<%=urlNews%>"><%=titleviewoldNews%></a></p>
             <%
-        //}
+        
     }
 
 %>
