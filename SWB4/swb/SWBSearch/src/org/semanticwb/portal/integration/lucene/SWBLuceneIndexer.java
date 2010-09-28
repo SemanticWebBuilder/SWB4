@@ -66,41 +66,70 @@ import org.semanticwb.portal.indexer.searcher.SearchResults;
 import org.semanticwb.portal.indexer.searcher.SearchTerm;
 import org.semanticwb.portal.integration.lucene.analyzer.LocaleAnalyzer;
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class SWBLuceneIndexer.
+ * 
  * @author Javier Solis Gonzalez
  * @modified by Hasdai Pacheco {haxdai@gmail.com}
  */
 public class SWBLuceneIndexer extends SWBIndexer
 {
 
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(SWBLuceneIndexer.class);
+    
+    /** The df. */
     private SimpleDateFormat df=new SimpleDateFormat("yyyyMMddHHmmss");
     
+    /** The index path. */
     private String indexPath;
 
+    /** The writer. */
     private IndexWriter writer;
+    
+    /** The reader. */
     private IndexReader reader;
 
+    /** The larq builder. */
     private IndexBuilderString larqBuilder;
 
+    /** The searcher. */
     private Searcher searcher;
+    
+    /** The analyzer. */
     private Analyzer analyzer;
 
+    /** The remove model. */
     private String removeModel=null;
+    
+    /** The optimize. */
     private boolean optimize=false;
+    
+    /** The create index. */
     private boolean createIndex=false;
     
-    /** Creates a new instance of WBLuceneIndexer */
+    /**
+     * Creates a new instance of WBLuceneIndexer.
+     */
     public SWBLuceneIndexer() {
         
     }
 
+    /**
+     * Gets the date.
+     * 
+     * @param date the date
+     * @return the date
+     */
     private String getDate(Date date)
     {
         return df.format(date);
     }
     
+    /**
+     * Inits the.
+     */
     public void init()
     {
         //analyzer=new SimpleAnalyzer();
@@ -115,6 +144,9 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
     
+    /**
+     * Init_writer.
+     */
     private void init_writer()
     {
         //System.out.println("init_writer");
@@ -130,6 +162,9 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
     
+    /**
+     * Close_writer.
+     */
     private void close_writer() {
         //System.out.println("close_writer");
         if(writer!=null) {
@@ -144,6 +179,9 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    /**
+     * Init_reader.
+     */
     private void init_reader()
     {
         //System.out.println("init_reader");
@@ -155,6 +193,9 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    /**
+     * Close_reader.
+     */
     private void close_reader()
     {
         //System.out.println("close_reader");
@@ -171,6 +212,9 @@ public class SWBLuceneIndexer extends SWBIndexer
     }
 
 
+    /**
+     * _run.
+     */
     @Override
     protected void _run() 
     {
@@ -220,6 +264,9 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    /**
+     * Reset_searcher.
+     */
     private void reset_searcher()
     {
         if(searcher!=null)
@@ -235,6 +282,11 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    /**
+     * Removes the searchable obj.
+     * 
+     * @param uri the uri
+     */
     @Override
     protected void removeSearchableObj(String uri)
     {
@@ -245,6 +297,11 @@ public class SWBLuceneIndexer extends SWBIndexer
         }catch(Exception ex) {log.error(ex);}
     }
 
+    /**
+     * Write searchable obj.
+     * 
+     * @param obj the obj
+     */
     @Override
     protected void writeSearchableObj(Searchable obj)
     {
@@ -280,42 +337,78 @@ public class SWBLuceneIndexer extends SWBIndexer
         }
     }
 
+    /**
+     * Removes the.
+     */
     public void remove()
     {
         //TODO:
     }
     
+    /**
+     * Reset.
+     */
     public void reset() 
     {
         createIndex();
     }
     
+    /**
+     * Un lock.
+     * 
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public void unLock() throws IOException {
         IndexReader.unlock(org.apache.lucene.store.FSDirectory.getDirectory(indexPath, true));
     }
     
+    /**
+     * Checks if is locked.
+     * 
+     * @return true, if is locked
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
     public boolean isLocked() throws IOException {
         return IndexReader.isLocked(indexPath);
     }
     
     
+    /**
+     * Optimize.
+     */
     public void optimize() 
     {
         optimize=true;
     }
 
+    /**
+     * Gets the index path.
+     * 
+     * @return the index path
+     */
     @Override
     public String getIndexPath()
     {
         return indexPath;
     }
 
+    /**
+     * Removes the model.
+     * 
+     * @param modelid the modelid
+     */
     @Override
     public void removeModel(String modelid) 
     {
         removeModel=modelid;
     }
 
+    /**
+     * Gets the query.
+     * 
+     * @param query the query
+     * @return the query
+     */
     private Query getQuery(SearchQuery query)
     {
         BooleanQuery bq = new BooleanQuery();
@@ -357,6 +450,14 @@ public class SWBLuceneIndexer extends SWBIndexer
         return bq;
     }
 
+    /**
+     * Search.
+     * 
+     * @param query the query
+     * @param user the user
+     * @param sortFields the sort fields
+     * @return the search results
+     */
     @Override
     public SearchResults search(SearchQuery query, User user, String[] sortFields) {
         SearchResults ret = new SearchResults(user);
@@ -409,12 +510,22 @@ public class SWBLuceneIndexer extends SWBIndexer
         return ret;
     }
 
+    /**
+     * Search.
+     * 
+     * @param query the query
+     * @param user the user
+     * @return the search results
+     */
     @Override
     public SearchResults search(SearchQuery query, User user) 
     {
         return search(query, user, null);
     }
 
+    /**
+     * Creates the index.
+     */
     @Override
     protected void createIndex() 
     {

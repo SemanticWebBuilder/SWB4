@@ -54,21 +54,32 @@ import org.semanticwb.portal.indexer.searcher.SearchResults;
 import org.semanticwb.portal.indexer.searcher.SearchTerm;
 
 
+// TODO: Auto-generated Javadoc
 /**
- *
+ * The Class WBSearch.
+ * 
  * @author Javier Solis Gonzalez,
  * @modified by Jorge A. Jiménez
  * @modified by Hasdai Pacheco {haxdai@gmail.com}
  */
 public class WBSearch extends GenericAdmResource
 {
+    
+    /** The log. */
     private static Logger log=SWBUtils.getLogger(WBSearch.class);
     
+    /** The tpl. */
     javax.xml.transform.Templates tpl;
+    
+    /** The path. */
     String path = SWBPlatform.getContextPath() +"/swbadmin/xsl/WBSearch/";
+    
+    /** The client. */
     private boolean client = false;
     
-    /** Creates a new instance of FullTextSearch */
+    /**
+     * Creates a new instance of FullTextSearch.
+     */
     public WBSearch() 
     {
         client=SWBPortal.isClient();
@@ -77,8 +88,8 @@ public class WBSearch extends GenericAdmResource
     
     /**
      * Asigna la información de la base de datos al recurso.
-     *
-     * @param     base  La información del recurso en memoria.
+     * 
+     * @param base the new resource base
      */
     @Override
     public void setResourceBase(Resource base) {
@@ -114,11 +125,14 @@ public class WBSearch extends GenericAdmResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Gets the dom.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramRequest the param request
+     * @return the dom
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public org.w3c.dom.Document getDom(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
@@ -293,11 +307,13 @@ public class WBSearch extends GenericAdmResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do xml.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param paramsRequest the params request
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     @Override
     public void doXML(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, java.io.IOException
@@ -310,11 +326,13 @@ public class WBSearch extends GenericAdmResource
     }
     
     /**
-     * @param request
-     * @param response
-     * @param reqParams
-     * @throws AFException
-     * @throws IOException
+     * Do view.
+     * 
+     * @param request the request
+     * @param response the response
+     * @param reqParams the req params
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws SWBResourceException the sWB resource exception
      */
     public void doView(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response, SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException
     {
@@ -364,10 +382,12 @@ public class WBSearch extends GenericAdmResource
     
     
     /**
-     * @param doc
-     * @param parent
-     * @param elemName
-     * @param elemValue
+     * Adds the elem.
+     * 
+     * @param doc the doc
+     * @param parent the parent
+     * @param elemName the elem name
+     * @param elemValue the elem value
      */
     private void addElem(Document doc, Element parent, String elemName, String elemValue) {
         if(elemValue!=null)

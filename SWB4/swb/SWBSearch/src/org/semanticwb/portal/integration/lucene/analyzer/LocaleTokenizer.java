@@ -82,6 +82,7 @@ import java.io.Reader;
 import org.apache.lucene.analysis.*;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * LowerCaseTokenizer performs the function of LetterTokenizer
  * and LowerCaseFilter together.  It divides text at non-letters and converts
@@ -94,14 +95,24 @@ import org.apache.lucene.analysis.*;
  */
 public final class LocaleTokenizer extends LetterTokenizer
 {
-    /** Construct a new LowerCaseTokenizer. */
+    
+    /**
+     * Construct a new LowerCaseTokenizer.
+     * 
+     * @param in the in
+     */
     public LocaleTokenizer(Reader in)
     {
         super(in);
     }
     
-    /** Collects only characters which satisfy
-     * {@link Character#isLetter(char)}.*/
+    /**
+     * Collects only characters which satisfy.
+     * 
+     * @param c the c
+     * @return the char
+     * {@link Character#isLetter(char)}.
+     */
     @Override
     protected char normalize(char c)
     {
