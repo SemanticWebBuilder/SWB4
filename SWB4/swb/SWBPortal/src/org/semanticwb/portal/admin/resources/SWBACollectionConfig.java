@@ -25,6 +25,7 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
@@ -224,23 +225,89 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<legend>" + "Configuración de colección" + " " + col.getDisplayTitle(user.getLanguage()) + "</legend>");
                     out.println("<ul style=\"list-style:none;\">");
                     out.println("<li>");
-                    out.println("<label for=\"" + id + "_classname\">" + "Clase asociada" + "</label>");
-                    out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
+                    out.println("<label for=\"" + id + "_collclass\">" + "Clase asociada" + "</label>");
+                    out.println("<select id=\""+id+"_collclass\" name=\"collclass\">");
+                    //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
+                    Iterator<SemanticClass> itsemcls = col.getSemanticObject().getModel().listModelClasses();
+                    while (itsemcls.hasNext()) {
+                        SemanticClass semClass = itsemcls.next();
+                        out.println("<option value=\""+semClass.getURI()+"\" ");
+                        if(sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
+                        out.println(">");
+                        out.println(semClass.getDisplayName(user.getLanguage()));
+                        out.println("</option>");
+                    }
+                    out.println("</select>");
+                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
 
-//                    SWBResourceURL urln = paramsRequest.getRenderUrl();
-//                    urln.setParameter("act", "");
-//                    urln.setParameter("suri", id);
-//                    urln.setParameter("clsuri", sccol.getURI());
-//                    urln.setMode(MODE_FORM);
-//
-//                    out.println("<button dojoType=\"dijit.form.Button\" type=\"button\" onclick=\"submitUrl('" + urln + "',this.domNode); return false;\" >" + paramsRequest.getLocaleString("Add_Instance") + "</button>");
+                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+                    out.println(" actbut.value='updtclass'; ");
+                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+                    out.println(" return false; ");
+                    out.println("</script>");
+                    out.println("</button>");
 
                     out.println("</li>");
 
                     out.println("</ul>");
                     out.println("</fieldset>");
+//                    out.println("<fieldset>");
+//                    out.println("<legend>Seleccionar propiedad a desplegar y el tipo de control a utilizar.</legend>");
+//                    out.println("<ul style=\"list-style:none;\">");
+//                    out.println("<li><label for=\""+id+"_semprop\">");
+//                    out.println("Propiedad/FormElement:");
+//                    out.println("</label>");
+//                    out.println("<select id=\""+id+"_semprop\" name=\"semprop\">");
+//                    out.println("<option value=\"\">");
+//                    out.println("");
+//                    out.println("</option>");
+//                    Iterator<SemanticProperty> itsemprop = sccol.listProperties();
+//                    while (itsemprop.hasNext()) {
+//                        SemanticProperty semProp = itsemprop.next();
+//                        out.println("<option value=\""+semProp.getURI()+"\">");
+//                        out.println(semProp.getDisplayName(user.getLanguage()));
+//                        out.println("</option>");
+//                    }
+//                    out.println("</select>");
+//                    out.println("<select id=\"" + id + "_sempropFE\" name=\"sempropFE\" >");
+//                    out.println(getFESelect(hmFormEle,"",user));
+//                    out.println("</select>");
+//                    out.println("</li>");
+//                    out.println("</ul>");
+//                    out.println("</fieldset>");
+//                    out.println("<fieldset>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
+//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+//                    out.println(" actbut.value='display'; ");
+//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+//                    out.println(" return false; ");
+//                    out.println("</script>");
+//                    out.println("</button>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
+//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+//                    out.println(" actbut.value='search';");
+//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+//                    out.println(" return false; ");
+//                    out.println("</script>");
+//                    out.println("</button>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
+//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+//                    out.println(" actbut.value='both';");
+//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+//                    out.println(" return false; ");
+//                    out.println("</script>");
+//                    out.println("</button>");
+//                    out.println("</fieldset>");
+
+                    out.println("<div id=\"configcol/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración despliegue\" class=\"admViewProperties\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
                     out.println("<fieldset>");
-                    out.println("<legend>Seleccionar propiedad a desplegar y el tipo de control a utilizar.</legend>");
+                    out.println("<legend>Seleccionar propiedad a utilizar para el despliegue.</legend>");
                     out.println("<ul style=\"list-style:none;\">");
                     out.println("<li><label for=\""+id+"_semprop\">");
                     out.println("Propiedad/FormElement:");
@@ -257,13 +324,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("</option>");
                     }
                     out.println("</select>");
-                    out.println("<select id=\"" + id + "_sempropFE\" name=\"sempropFE\" >");
-                    out.println(getFESelect(hmFormEle,"",user));
-                    out.println("</select>");
-                    out.println("</li>");
-                    out.println("</ul>");
-                    out.println("</fieldset>");
-                    out.println("<fieldset>");
+//                    out.println("<select id=\"" + id + "_sempropFE\" name=\"sempropFE\" >");
+//                    out.println(getFESelect(hmFormEle,"",user));
+//                    out.println("</select>");
                     out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
                     //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
@@ -273,26 +336,40 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println(" return false; ");
                     out.println("</script>");
                     out.println("</button>");
-                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
-                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-                    out.println(" actbut.value='search';");
-                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-                    out.println(" return false; ");
-                    out.println("</script>");
-                    out.println("</button>");
-                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
-                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-                    out.println(" actbut.value='both';");
-                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-                    out.println(" return false; ");
-                    out.println("</script>");
-                    out.println("</button>");
+                    out.println("</li>");
+                    out.println("</ul>");
                     out.println("</fieldset>");
 
-                    out.println("<div id=\"configcol/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración despliegue\" class=\"admViewProperties\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+//                    out.println("<fieldset>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
+//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+//                    out.println(" actbut.value='display'; ");
+//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+//                    out.println(" return false; ");
+//                    out.println("</script>");
+//                    out.println("</button>");
+////                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
+////                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+////                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+////                    out.println(" actbut.value='search';");
+////                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+////                    out.println(" return false; ");
+////                    out.println("</script>");
+////                    out.println("</button>");
+////                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
+////                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+////                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+////                    out.println(" actbut.value='both';");
+////                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+////                    out.println(" return false; ");
+////                    out.println("</script>");
+////                    out.println("</button>");
+//                    out.println("</fieldset>");
+
                     out.println("<fieldset>");
+
 
                     out.println("<table width=\"100%\">");
                     out.println("<thead>");
@@ -303,9 +380,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<th>");
                     out.println(paramsRequest.getLocaleString("th_property"));
                     out.println("</th>");
-                    out.println("<th>");
-                    out.println(paramsRequest.getLocaleString("th_formelement"));
-                    out.println("</th>");
+//                    out.println("<th>");
+//                    out.println(paramsRequest.getLocaleString("th_formelement"));
+//                    out.println("</th>");
                     out.println("</tr>");
                     out.println("</thead>");
 
@@ -333,7 +410,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             continue;
                         }
                         out.println("<tr>");
-                        out.println("<td align=\"center\">");
+                        out.println("<td>");
                         SWBResourceURL urlrem = paramsRequest.getActionUrl();
                         urlrem.setAction("remove");
                         urlrem.setParameter("suri", id);
@@ -345,9 +422,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("<td>");
                         out.println(ont.getSemanticProperty(semprop).getDisplayName(user.getLanguage()));
                         out.println("</td>");
-                        out.println("<td>");
-                        out.println(ont.getSemanticProperty(sempropFE).getDisplayName(user.getLanguage()));
-                        out.println("</td>");
+//                        out.println("<td>");
+//                        out.println(ont.getSemanticProperty(sempropFE).getDisplayName(user.getLanguage()));
+//                        out.println("</td>");
                         out.println("</tr>");
                     }
 
@@ -390,7 +467,50 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</div>");
 
                     
-                    out.println("<div id=\"configbus/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración busqueda\" class=\"admViewProperties\" open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+                    out.println("<div id=\"configbus/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración busqueda\" class=\"admViewProperties\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
+                    out.println("<fieldset>");
+                    out.println("<legend>Seleccionar propiedad y el tipo de control a utilizar para la búsqueda y filtrado.</legend>");
+                    out.println("<ul style=\"list-style:none;\">");
+                    out.println("<li><label for=\""+id+"_semprop2\">");
+                    out.println("Propiedad/FormElement:");
+                    out.println("</label>");
+                    out.println("<select id=\""+id+"_semprop2\" name=\"semprop2\">");
+                    out.println("<option value=\"\">");
+                    out.println("");
+                    out.println("</option>");
+                    itsemprop = sccol.listProperties();
+                    while (itsemprop.hasNext()) {
+                        SemanticProperty semProp = itsemprop.next();
+                        out.println("<option value=\""+semProp.getURI()+"\">");
+                        out.println(semProp.getDisplayName(user.getLanguage()));
+                        out.println("</option>");
+                    }
+                    out.println("</select>");
+                    out.println("<select id=\"" + id + "_sempropFE2\" name=\"sempropFE2\" >");
+                    out.println(getFESelect(hmFormEle,"",user));
+                    out.println("</select>");
+                    
+                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
+                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+                    out.println(" actbut.value='search';");
+                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+                    out.println(" return false; ");
+                    out.println("</script>");
+                    out.println("</button>");
+                    out.println("</li>");
+                    out.println("</ul>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
+//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+//                    out.println(" actbut.value='both';");
+//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+//                    out.println(" return false; ");
+//                    out.println("</script>");
+//                    out.println("</button>");
+
+                    out.println("</fieldset>");
+
                     out.println("<fieldset>");
 
                     out.println("<table width=\"100%\">");
@@ -1244,9 +1364,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     }
                     max++;
 
-                    if(!existe&&semprop!=null&&sempropFE!=null)
+                    if(!existe&&semprop!=null)
                     {
-                        col.addListProperties(semprop+"|"+sempropFE+"|"+max);
+                        col.addListProperties(semprop+"| |"+max); //col.addListProperties(semprop+"|"+sempropFE+"|"+max);
                     }
                 }
 
@@ -1254,6 +1374,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 //agregando propiedades de búsqueda
                 if(actbutton.equals("search") || actbutton.equals("both"))
                 {
+                    semprop = request.getParameter("semprop2");
+                    sempropFE = request.getParameter("sempropFE2");
                     semproporder=0;
                     max=0;
                     Iterator<String> itorder = col.listSearchPropertieses();
@@ -1279,6 +1401,18 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     {
                         col.addSearchProperties(semprop+"|"+sempropFE+"|"+max);
                     }
+                }
+
+                if(actbutton.equals("updtclass")){
+
+                    String collclass = request.getParameter("collclass");
+
+                    SemanticObject so = ont.getSemanticObject(collclass);
+
+                    System.out.println("collclass:"+collclass+", "+so);
+                    if(null!=so) col.setCollectionClass(so);
+
+
                 }
             }
 
@@ -1350,7 +1484,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 }
             }
             catch(Exception e){log.error(e);}
-        }
+        } 
+
 
         if (ract != null) {
             response.setRenderParameter("act", ract);
