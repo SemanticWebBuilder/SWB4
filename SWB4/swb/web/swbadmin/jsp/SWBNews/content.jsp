@@ -30,12 +30,15 @@
     };
     private String getMonth(int month,User user)
     {
-        String getMonth=months[month];
-        if(user.getLanguage()!=null && user.getLanguage().equalsIgnoreCase("es"))
-        {
-            getMonth=meses[month];
-        }
+        String getMonth=meses[month];        
         return getMonth;
+    }
+    class SWBNewContentComparator implements Comparator<SWBNewContent>
+    {
+        public int compare(SWBNewContent o1,SWBNewContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+        }
     }
 %>
 <%
@@ -50,7 +53,7 @@
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
     int limit = 15;
     List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
-   
+    Collections.sort(contents, new SWBNewContentComparator());
     if(contents!=null && contents.size()>0)
     {
                

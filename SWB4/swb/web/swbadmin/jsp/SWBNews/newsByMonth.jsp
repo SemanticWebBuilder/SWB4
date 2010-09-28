@@ -12,14 +12,22 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="java.util.*"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
-
+<%!
+    class SWBNewContentComparator implements Comparator<SWBNewContent>
+    {
+        public int compare(SWBNewContent o1,SWBNewContent o2)
+        {
+            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+        }
+    }
+%>
 <%
     String usrlanguage = paramRequest.getUser().getLanguage();
-    Locale locale=new Locale(usrlanguage);
-    Calendar calendar = Calendar.getInstance(locale);   
+    Locale locale=new Locale(usrlanguage);    
     DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
     
     List<SWBNewContent> contents=(List<SWBNewContent>)request.getAttribute("news");
+    Collections.sort(contents, new SWBNewContentComparator());
     if(contents!=null && contents.size()>0)
     {
         
@@ -168,7 +176,7 @@
         urlall.setMode(urlall.Mode_VIEW);
         urlall.setCallMethod(urlall.Call_CONTENT);
         String viewAll="[Ver todas las noticias]";
-        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("es"))
+        if(paramRequest.getUser().getLanguage()!=null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
         {
             viewAll="[View all news]";
         }
