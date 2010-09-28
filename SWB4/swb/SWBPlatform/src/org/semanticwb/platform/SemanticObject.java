@@ -1294,7 +1294,7 @@ public Document getDomProperty(SemanticProperty prop)
             }
             return this;
         }
-        listObjectProperties(prop);
+        //listObjectProperties(prop);
 
         ArrayList arr=null;
         if(SWBPlatform.isTDB())
@@ -1346,6 +1346,63 @@ public Document getDomProperty(SemanticProperty prop)
             return new ArrayList().iterator();
         }
         return new SemanticLiteralIterator(m_res.listProperties(prop.getRDFProperty()));
+    }
+
+    /**
+     * Removes the object property.
+     *
+     * @param prop the prop
+     * @param object the object
+     * @return the semantic object
+     */
+    public SemanticObject removeLiteralProperty(SemanticProperty prop, SemanticLiteral lit)
+    {
+        SWBPlatform.getSemanticMgr().notifyChange(this, prop, lit.getLanguage(), ACT_REMOVE);
+        if (m_virtual)
+        {
+            ArrayList list = (ArrayList) m_virtprops.get(prop.getURI());
+            if (list != null)
+            {
+                list.remove(lit);
+            }
+            return this;
+        }
+        //listObjectProperties(prop);
+
+        ArrayList arr=null;
+        if(SWBPlatform.isTDB())
+        {
+            arr=new ArrayList();
+        }
+
+        StmtIterator it = m_res.listProperties(prop.getRDFProperty());
+        while (it.hasNext())
+        {
+            Statement stmt = it.nextStatement();
+            if (lit.getValue().equals(stmt.getLiteral().getValue()))
+            {
+                if(SWBPlatform.isTDB())
+                {
+                    arr.add(stmt);
+                }else
+                {
+                    it.remove();
+                }
+            }
+        }
+        it.close();
+
+        if(arr!=null)
+        {
+            Iterator<Statement> it2=arr.iterator();
+            while (it2.hasNext()) {
+                Statement statement = it2.next();
+                statement.remove();
+            }
+        }
+
+        removePropertyValueCache(prop, lit.getLanguage());
+        return this;
     }
 
     /**
