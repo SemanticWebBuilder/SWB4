@@ -22,6 +22,8 @@
  **/
 package org.semanticwb.model.base;
 
+import org.semanticwb.platform.SemanticLiteral;
+
 
    // TODO: Auto-generated Javadoc
 /**
@@ -384,7 +386,7 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
      */
     public void removeListProperties(String value)
     {
-        getSemanticObject().removeProperty(swb_hasCollectionListProperties,value);
+        getSemanticObject().removeLiteralProperty(swb_hasCollectionListProperties, new SemanticLiteral(value));
     }
 
     /**
@@ -429,7 +431,8 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
      */
     public void removeSearchProperties(String value)
     {
-        getSemanticObject().removeProperty(swb_hasCollectionSearchProperties,value);
+        getSemanticObject().removeLiteralProperty(swb_hasCollectionSearchProperties, new SemanticLiteral(value));
+        //getSemanticObject().removeProperty(swb_hasCollectionSearchProperties,value);
     }
    
    /**
