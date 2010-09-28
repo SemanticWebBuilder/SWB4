@@ -11,519 +11,1875 @@
     xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
   xml:base="http://www.semanticwebbuilder.org/swb4/pymestur">
   <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/community"/>
     <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Created with TopBraid Composer</owl:versionInfo>
-    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/community"/>
   </owl:Ontology>
-  <owl:Class rdf:ID="Activity">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+  <rdfs:Class rdf:ID="RateType">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+    <rdfs:comment>Clase en la que se agregan instancias de tipo Rate, para que alguna  sea asignada a un giro especifico por parte de un administrador.</rdfs:comment>
+  </rdfs:Class>
+  <owl:Class rdf:ID="InteresLink">
+    <rdfs:label xml:lang="en">Interest Link</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:label xml:lang="es">Actividad</rdfs:label>
-    <rdfs:label xml:lang="en">Activity</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Event">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:comment>Clase que se encarga de administrar Ligas de interes para los micrositios (premier-páginas web)</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <rdfs:label xml:lang="es">Evento</rdfs:label>
-    <rdfs:label xml:lang="en">Event</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="SPCategory">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="SPType"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Giro</rdfs:label>
-    <rdfs:label xml:lang="en">Category</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Region">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="State"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Región</rdfs:label>
-    <rdfs:label xml:lang="en">Region</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="DirectoryResource">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryResource"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
-  </owl:Class>
-  <owl:Class rdf:ID="Service">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:label xml:lang="es">Liga de Interes</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Bank">
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:label xml:lang="es">Banco</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="en">Bank</rdfs:label>
+    <rdfs:comment>Clase que se encarga de administrar el catalogo de bancos</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AlimentosRate">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Rate"/>
+    </rdfs:subClassOf>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:label xml:lang="en">Service</rdfs:label>
-    <rdfs:label xml:lang="es">Servicio</rdfs:label>
+    <rdfs:comment>Clase que se encarga de administrar las tarifas para el giro de Alimentos. En este momento no se utiliza dado que solo se utiliza por definición el giro de hospedaje.Esta clase se asigna en algún giro especifico para que de esta manera las mipymes adscritas a dicho giro manejen dicha clase.</rdfs:comment>
+    <rdf:type rdf:resource="#RateType"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MicroSitePyme">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:comment>Clase que extiende de swbcomm:MicroSite, la cual extiende a su vez de Webpage. Cada que una pyme contrata un paquete de tipo "Micrositio" o "Premier-Página web" se crea una instancia de esta clase para albergar el microsito de dicha pyme.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#State">
+  <owl:Class rdf:ID="Experience">
+    <rdfs:label xml:lang="es">Experiencia</rdfs:label>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="Destination"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom rdf:resource="#Region"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ExperienceType"/>
+        </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Estado</rdfs:label>
-    <rdfs:label xml:lang="en">State</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:ID="MiPymeSitePlus">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:label xml:lang="en">Experience</rdfs:label>
+    <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de experiencias.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Promotion">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment>Clase que se encarga de administrar promociones</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Parameter">
+    <rdfs:label xml:lang="es">Parametro</rdfs:label>
+    <rdfs:comment>Clase que se encarga de administrar parametros en general que puedan ser utilizados en el desarrollo del sistema.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="en">Parameter</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+  </owl:Class>
+  <owl:Class rdf:ID="HospedajeRate">
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="MiPymeSite"/>
+      <owl:Class rdf:about="#Rate"/>
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment>Clase que se encarga de administrar las tarifas para el giro de Hospedaje. En este momento es la única que se utiliza.Esta clase se asigna en algún giro especifico para que de esta manera las mipymes adscritas a dicho giro manejen dicha clase.</rdfs:comment>
+    <rdf:type rdf:resource="#RateType"/>
   </owl:Class>
-  <owl:Class rdf:about="#Destination">
+  <owl:Class rdf:ID="Paquete">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="es">Paquete</rdfs:label>
+    <rdfs:label xml:lang="en">Paquete</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:comment>Clase que se encarga de administrar parametros para los diferentes tipos de paquetes (En este momento los que existen que son:3.Fichas y 4.Premier/Páginas web)</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Cupon">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment>Clase que se encarga de administrar cupones</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ServiceProvider">
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryObject"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#Contactable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#Addressable"/>
+    <rdfs:comment>Clase principal del sistema de pymes turisticas. Una instancia de esta clase es en donde se almacena toda la información de una mipyme especifica.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ActivityType">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
     <rdfs:subClassOf>
       <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom rdf:resource="#State"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom>
+          <swb:Class rdf:ID="Activity">
+            <rdfs:label xml:lang="en">Activity</rdfs:label>
+            <rdfs:label xml:lang="es">Actividad</rdfs:label>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+            <rdfs:subClassOf>
+              <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                <owl:allValuesFrom rdf:resource="#ActivityType"/>
+              </owl:Restriction>
+            </rdfs:subClassOf>
+            <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de Actividades.</rdfs:comment>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Destino</rdfs:label>
-    <rdfs:label xml:lang="en">Destination</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de Actividad</rdfs:label>
+    <rdfs:label xml:lang="en">Activity type</rdfs:label>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de tipos de actividades.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#MiPymeSite">
+  <owl:Class rdf:ID="RemoveReason">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:label xml:lang="en">Remove Reason</rdfs:label>
+    <rdfs:label xml:lang="es">Razón de Baja</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass"/>
+    <rdfs:comment>Clase que se encarga de administrar razones para eliminar una mipyme, utilizada por el administrador de mipymes</rdfs:comment>
   </owl:Class>
-  <owl:Class rdf:ID="MiPymesResource">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SemanticResource"/>
+  <owl:Class rdf:ID="pymeExtendedAttributes">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserTypeDef"/>
+    <rdfs:comment>Clase de definición de atributos extendidos para los usuarios de pymes turisticas.</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:ID="TourismType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:comment>Clase que se encarga de administrar tipos de turismo</rdfs:comment>
+    <rdfs:label xml:lang="es">Tipo de Turismo</rdfs:label>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:label xml:lang="en">Tourism Type</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="EventType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:label xml:lang="es">Tipo de Evento</rdfs:label>
+    <rdfs:label xml:lang="en">Event Type</rdfs:label>
+    <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de tipos de eventos.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:ID="RateSeason">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:comment>Clase que se encarga de administrar temporadas (altas y bajas para las tarifas)</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="PyMesWebSite">
     <swb:hasClass>
-      <owl:Class rdf:ID="Nearest"/>
-    </swb:hasClass>
-    <swb:hasClass rdf:resource="#SPCategory"/>
-    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#do_AdminWebSite"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_CommUtils"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
-    <swb:hasClass>
-      <swbcomm:DirectoryClass rdf:ID="Hospedaje">
+      <swb:Class rdf:ID="EmailText">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:label xml:lang="en">Email Text</rdfs:label>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-        <rdfs:subClassOf>
-          <swbcomm:DirectoryClass rdf:ID="ServiceProvider">
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#Contactable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#Addressable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryObject"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swb:autogenId>
-            <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-          </swbcomm:DirectoryClass>
-        </rdfs:subClassOf>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swb:autogenId>
-        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-      </swbcomm:DirectoryClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:comment>Clase que se encarga de administrar textos para correos electrónicos</rdfs:comment>
+        <rdfs:label xml:lang="es">Texto de Email</rdfs:label>
+      </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#Destination"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
-    <swb:hasClass rdf:resource="#Region"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_RemoveReasons">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+        <swb:title xml:lang="es">Razones de Baja</swb:title>
+        <swb:title xml:lang="en">Remove Reasons</swb:title>
+        <swbxf:heClass rdf:resource="#RemoveReason"/>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
     <swb:hasClass>
-      <owl:Class rdf:ID="Instalation"/>
-    </swb:hasClass>
-    <swb:hasClass>
-      <owl:Class rdf:about="#SPType"/>
-    </swb:hasClass>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
-    <swb:hasClass rdf:resource="#MiPymeSitePlus"/>
-    <rdfs:label>Sitio Pymes</rdfs:label>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
-    <swb:hasClass>
-      <swb:Class rdf:ID="ActivityRef">
+      <swb:Class rdf:ID="InterestPortalLink">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:comment>Clase que se encarga de administrar Ligas de interes para el portal concentrador de pymes turisticas</rdfs:comment>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:label xml:lang="en">Interest Portal Link</rdfs:label>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:label xml:lang="es">Liga de interes del portal concentrador</rdfs:label>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTContents"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="State">
+        <rdfs:label xml:lang="en">State</rdfs:label>
+        <rdfs:label xml:lang="es">Estado</rdfs:label>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="Region">
+                <rdfs:label xml:lang="en">Region</rdfs:label>
+                <rdfs:label xml:lang="es">Región</rdfs:label>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#State"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Regiones.</rdfs:comment>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="Destination">
+                <rdfs:label xml:lang="en">Destination</rdfs:label>
+                <rdfs:label xml:lang="es">Destino</rdfs:label>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#State"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Destinos.</rdfs:comment>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de Estados de la república.</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </swb:hasClass>
-    <swb:hasClass rdf:resource="#ServiceProvider"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
-    <swb:hasClass rdf:resource="#Event"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
-    <swb:hasClass rdf:resource="#State"/>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <swb:hasClass rdf:resource="#Experience"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="PaqTemplate">
+        <rdfs:label xml:lang="es">Diseño de Plantilla</rdfs:label>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:label xml:lang="en">Package Template</rdfs:label>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="VariantPaqTemplate">
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#PaqTemplate"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdfs:label xml:lang="en">Variant Template</rdfs:label>
+                <rdfs:label xml:lang="es">Variante de Plantilla</rdfs:label>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administran las variantes en cuanto a diseño (CSS) que tiene cada tipo de plantilla (PaqTemplate).</rdfs:comment>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administran los tipos de templates para su selección en algún paquete (En este momento solo para "Premier" - "Página web".</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <owl:Class rdf:about="#ExperienceType"/>
+    </swb:hasClass>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="UnActivationReason">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:label xml:lang="en">Unactivation Reason</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment>Clase que se encarga de administrar razones por las cuales podría ser desactivada una mipyme, utilizado por los administradores de mipymes</rdfs:comment>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:label xml:lang="es">Razón de Desactivación</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#HospedajeRate"/>
+    <swb:hasClass rdf:resource="#EventType"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
     <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Intalations">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >97</swb:index>
-        <swb:title xml:lang="es">Instalaciones</swb:title>
-        <swb:title xml:lang="en">Instalations</swb:title>
-        <swbxf:heClass>
-          <owl:Class rdf:about="#Instalation"/>
-        </swbxf:heClass>
+      <swbxf:HerarquicalNode rdf:ID="hn_InterestLinks">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconTemplates</swb:iconClass>
+        <swb:title xml:lang="es">Ligas de Interes</swb:title>
+        <swb:title xml:lang="en">Interest Links</swb:title>
+        <swbxf:heClass rdf:resource="#InteresLink"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PFlows"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_InterestPortalLinks">
+        <swbxf:heClass rdf:resource="#InterestPortalLink"/>
+        <swb:title xml:lang="en">Interest portal links</swb:title>
+        <swb:title xml:lang="es">Ligas de interes del portal concentrador</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >125</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass rdf:resource="#Destination"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Paquetes">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+        <swbxf:heClass rdf:resource="#Paquete"/>
+        <swb:title xml:lang="es">Paquetes</swb:title>
+        <swb:title xml:lang="en">Paquetes</swb:title>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass rdf:resource="#Bank"/>
+    <swb:hasClass>
+      <swbcomm:MicroSiteClass rdf:ID="MiPymeSite">
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment>Tipo de comunidad. Se asignan webpageutils a un micrositio de acuerdo al tipo de comunidad. Este tipo especifico es el de:paquete 3.Microsite</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swbcomm:MicroSiteClass>
+    </swb:hasClass>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Services">
+        <swb:title xml:lang="en">Services</swb:title>
+        <swb:title xml:lang="es">Servicios</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swbxf:heClass>
+          <swb:Class rdf:ID="Service">
+            <rdfs:label xml:lang="es">Servicio</rdfs:label>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+            <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+            <rdfs:label xml:lang="en">Service</rdfs:label>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+            <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swb:autogenId>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+            <rdfs:comment>Clase que se encarga de administrar servicios del catalogo</rdfs:comment>
+          </swb:Class>
+        </swbxf:heClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >95</swb:index>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_MicroSiteTypes"/>
-    <swb:hasHerarquicalNode>
-      <swbxf:HerarquicalNode rdf:ID="hn_Services">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >95</swb:index>
-        <swbxf:heClass rdf:resource="#Service"/>
-        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >swbIconTemplates</swb:iconClass>
-        <swb:title xml:lang="es">Servicios</swb:title>
-        <swb:title xml:lang="en">Services</swb:title>
-      </swbxf:HerarquicalNode>
-    </swb:hasHerarquicalNode>
-    <swb:hasClass rdf:resource="#Service"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Nearests">
+        <swbxf:heClass>
+          <owl:Class rdf:ID="Nearest"/>
+        </swbxf:heClass>
+        <swb:title xml:lang="en">Nearest Places</swb:title>
+        <swb:title xml:lang="es">Lugares Cercanos</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >98</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
+    <swb:hasClass rdf:resource="#Service"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <swb:hasClass rdf:resource="#Paquete"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
+    <swb:hasClass rdf:resource="#Region"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_UnActivationReasons">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbIconTemplates</swb:iconClass>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >98</swb:index>
-        <swb:title xml:lang="es">Lugares Cercanos</swb:title>
-        <swb:title xml:lang="en">Nearest Places</swb:title>
-        <swbxf:heClass>
-          <owl:Class rdf:about="#Nearest"/>
-        </swbxf:heClass>
+        >150</swb:index>
+        <swb:title xml:lang="es">Razones de Desactivación</swb:title>
+        <swb:title xml:lang="en">Unactivation Reasons</swb:title>
+        <swbxf:heClass rdf:resource="#UnActivationReason"/>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
-    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Countries"/>
-    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
-    <swb:hasClass rdf:resource="#MiPymeSite"/>
-    <swb:hasClass rdf:resource="#Activity"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Instalation">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:label xml:lang="es">Instalación</rdfs:label>
-    <rdfs:label xml:lang="en">Instalation</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#Nearest">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdfs:label xml:lang="es">Lugares Cercanos</rdfs:label>
-    <rdfs:label xml:lang="en">Nearest Places</rdfs:label>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:Class rdf:about="#SPType">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
-    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom rdf:resource="#SPCategory"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:label xml:lang="es">Tipo de Proveedor</rdfs:label>
-    <rdfs:label xml:lang="en">Provider Type</rdfs:label>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
-  <owl:ObjectProperty rdf:ID="hasPromotion">
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="promoServiceProviderInv"/>
-    </owl:inverseOf>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <rdfs:range>
-      <swb:Class rdf:ID="Promotion">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasCupon">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="cuponServiceProviderInv"/>
-    </owl:inverseOf>
-    <rdfs:range>
-      <swb:Class rdf:ID="Cupon">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasActivityRefInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasActivityRef</swb:propertyCodeName>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasNearest">
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-    <rdfs:range rdf:resource="#Nearest"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="microSitePymeInv"/>
-  <owl:ObjectProperty rdf:ID="hasCategoryService">
-    <rdfs:domain rdf:resource="#SPCategory"/>
-    <rdfs:range rdf:resource="#Service"/>
-    <rdfs:label xml:lang="es">Servicios</rdfs:label>
-    <rdfs:label xml:lang="en">Services</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryService">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >20</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
-        <swbxf:propGroup>
-          <swbxf:PropertyGroup rdf:ID="others">
-            <rdfs:label xml:lang="es">Otros</rdfs:label>
-            <rdfs:label xml:lang="en">Others</rdfs:label>
-            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >100</swb:index>
-          </swbxf:PropertyGroup>
-        </swbxf:propGroup>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasService">
-    <rdfs:label xml:lang="en">Services</rdfs:label>
-    <rdfs:label xml:lang="es">Servicios Ofrecidos</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasService">
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Parameters">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >100</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:heClass rdf:resource="#Parameter"/>
+        <swb:title xml:lang="es">Parametros</swb:title>
+        <swb:title xml:lang="en">Parameters</swb:title>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass>
+      <swb:Class rdf:ID="SPCategory">
+        <rdfs:label xml:lang="en">Category</rdfs:label>
+        <rdfs:label xml:lang="es">Giro</rdfs:label>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="SPType">
+                <rdfs:label xml:lang="en">Provider Type</rdfs:label>
+                <rdfs:label xml:lang="es">Tipo de Proveedor</rdfs:label>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#SPCategory"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de "Tipos de Empresas" en cada giro.</rdfs:comment>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante esta se administra el catálogo de Giros.</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="RejectReason">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:label xml:lang="es">Razón de Rechazo</rdfs:label>
+        <rdfs:comment>Clase que se encarga de administrar razones de rechazo para el administrador de las mipymes</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:label xml:lang="en">Reject Reason</rdfs:label>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#do_AdminWebSite"/>
+    <swb:hasClass rdf:resource="#RemoveReason"/>
+    <swb:hasClass rdf:resource="#VariantPaqTemplate"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_EmailTexts">
+        <swbxf:heClass rdf:resource="#EmailText"/>
+        <swb:title xml:lang="en">Emails Texts</swb:title>
+        <swb:title xml:lang="es">Texto de emails</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass rdf:resource="#SPType"/>
+    <swb:hasClass rdf:resource="#ActivityType"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Banks">
+        <swbxf:heClass rdf:resource="#Bank"/>
+        <swb:title xml:lang="es">Bancos</swb:title>
+        <swb:title xml:lang="en">Banks</swb:title>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
+    <swb:hasClass>
+      <owl:Class rdf:about="#Nearest"/>
+    </swb:hasClass>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_RejectReasons">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+        <swbxf:heClass rdf:resource="#RejectReason"/>
+        <swb:title xml:lang="es">Razones de Rechazo</swb:title>
+        <swb:title xml:lang="en">Reject Reasons</swb:title>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <rdfs:comment>Clase que hereda de swb:WebSite. Es un tipo de website para pymesturisticas. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para pymes turisticas.</rdfs:comment>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSiteWebPageUtil"/>
+    <swb:hasClass rdf:resource="#ServiceProvider"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/community#hn_CommUtils"/>
+    <swb:hasClass>
+      <swb:Class rdf:ID="CategoryCuponType">
+        <rdfs:label xml:lang="en">Category cupon type</rdfs:label>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="CuponType">
+                <rdfs:comment>Clase que se encarga de administrar tipos de cupones</rdfs:comment>
+                <rdfs:label xml:lang="en">Cupon type</rdfs:label>
+                <rdfs:label xml:lang="es">Tipo de cupon</rdfs:label>
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#CategoryCuponType"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:comment>Clase que se encarga de administrar tipos de cupones (catálogo)  de acuerdo a cierta categoría</rdfs:comment>
+        <rdfs:label xml:lang="es">Tipo de Cupon por Categoría</rdfs:label>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swbcomm:MicroSiteClass rdf:ID="MiPymeSitePlus">
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+        <rdfs:subClassOf rdf:resource="#MiPymeSite"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:comment>Tipo de comunidad. Se asignan webpageutils a un micrositio de acuerdo al tipo de comunidad. Este tipo especifico es el de:paquete 4.Premier/Página web</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swbcomm:MicroSiteClass>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="CategoryPromotionType">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom>
+              <swb:Class rdf:ID="PromotionType">
+                <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+                <rdfs:subClassOf>
+                  <owl:Restriction>
+                    <owl:allValuesFrom rdf:resource="#CategoryPromotionType"/>
+                    <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+                  </owl:Restriction>
+                </rdfs:subClassOf>
+                <rdfs:label xml:lang="es">Tipo de promoción</rdfs:label>
+                <rdfs:label xml:lang="en">Promotion type</rdfs:label>
+                <rdfs:comment>Clase que se encarga de administrar tipos de promociones</rdfs:comment>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Class>
+            </owl:allValuesFrom>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:label xml:lang="en">Category promotion type</rdfs:label>
+        <rdfs:label xml:lang="es">Tipo de Promoción por Categoría</rdfs:label>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <rdfs:comment>Clase que se encarga de administrar tipos de promociones de acuerdo a cierta categoría</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass>
+      <swb:Class rdf:ID="Event">
+        <rdfs:label xml:lang="en">Event</rdfs:label>
+        <rdfs:label xml:lang="es">Evento</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+            <owl:allValuesFrom rdf:resource="#EventType"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+        <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+        <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo de Eventos.</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="#Parameter"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_Intalations">
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swbxf:heClass>
+          <owl:Class rdf:ID="Instalation"/>
+        </swbxf:heClass>
+        <swb:title xml:lang="en">Instalations</swb:title>
+        <swb:title xml:lang="es">Instalaciones</swb:title>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >97</swb:index>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass rdf:resource="#Activity"/>
+    <swb:hasClass>
+      <owl:Class rdf:about="#Instalation"/>
+    </swb:hasClass>
+    <swb:hasClass rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
+    <swb:hasClass rdf:resource="#TourismType"/>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Dnss"/>
+    <rdfs:label>Sitio Pymes</rdfs:label>
+    <swb:hasClass>
+      <swbcomm:DirectoryClass rdf:ID="Hospedaje">
+        <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="#ServiceProvider"/>
+        <rdfs:comment>Tipo de serviceprovider. En este momento solo existe hoteleria, cuando existan mas tipos de giros pueden heredar de serviceprovider y tener sus propias propiedades aparte.</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swbcomm:DirectoryClass>
+    </swb:hasClass>
+    <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Rules"/>
+    <swb:hasHerarquicalNode>
+      <swbxf:HerarquicalNode rdf:ID="hn_TourismType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >98</swb:index>
+        <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >swbIconTemplates</swb:iconClass>
+        <swb:title xml:lang="en">Tourism Types</swb:title>
+        <swb:title xml:lang="es">Tipos de Turismo</swb:title>
+        <swbxf:heClass rdf:resource="#TourismType"/>
+      </swbxf:HerarquicalNode>
+    </swb:hasHerarquicalNode>
+    <swb:hasClass rdf:resource="#InteresLink"/>
+  </owl:Class>
+  <owl:Class rdf:about="#ExperienceType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebPage"/>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:label xml:lang="es">Tipo de Experiencia</rdfs:label>
+    <rdfs:label xml:lang="en">Experience type</rdfs:label>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/community#do_WebPage"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:allValuesFrom rdf:resource="#Experience"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment>Clase que hereda de WebPage.Mediante estas se administra el catálogo detipos de  experiencias.</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Instalation">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+    <rdfs:label xml:lang="en">Instalation</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:label xml:lang="es">Instalación</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdfs:comment>Clase que que encarga de administrar instalaciones</rdfs:comment>
+  </owl:Class>
+  <owl:Class rdf:about="#Nearest">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+    <rdfs:comment>Clase que se encarga de administrar lugares cercanos (cernanias)</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:label xml:lang="es">Lugares Cercanos</rdfs:label>
+    <rdfs:label xml:lang="en">Nearest Places</rdfs:label>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <swb:displayObject rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_WebPage"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Rate">
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+    <rdfs:comment>Clase que se encarga de administrar tarifas</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="categoryPromotion">
+    <rdfs:domain rdf:resource="#CategoryPromotionType"/>
+    <rdfs:label xml:lang="en">Category target</rdfs:label>
+    <rdfs:label xml:lang="es">Giro al que va dirigido</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_categoryPromotion">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#SPCategory"/>
+    <rdfs:comment>Selección del giro al que va dirigido un determinado tipo de promoción</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivityRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasActivityRef</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSPCategoryPymePhoto">
+    <rdfs:label xml:lang="es">Fotos de habitaciones</rdfs:label>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range>
+      <swb:Class rdf:ID="PymePhoto">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:comment>Clase que se encarga de administrar fotos</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:label xml:lang="en">Room photos</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCategoryService">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryService">
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="others">
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</swb:index>
+            <rdfs:label xml:lang="en">Others</rdfs:label>
+            <rdfs:label xml:lang="es">Otros</rdfs:label>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Services</rdfs:label>
+    <rdfs:label xml:lang="es">Servicios</rdfs:label>
     <rdfs:range rdf:resource="#Service"/>
+    <rdfs:domain rdf:resource="#SPCategory"/>
+    <rdfs:comment>Servicios que estan asignados a un cierto Giro, se asignan en la administración</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasService">
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasSrvServiceProviderInv"/>
     </owl:inverseOf>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="destinationSec">
+    <rdfs:range rdf:resource="#Service"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
-    <rdfs:range rdf:resource="#Destination"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasService">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Servicios Ofrecidos</rdfs:label>
+    <rdfs:label xml:lang="en">Services</rdfs:label>
+    <rdfs:comment>(Opcional) : Servicios que presta la mypyme, registrados por la misma en base a las que se encuentran registradas para su giro y a su vez estas con base al catalogo general de servicios.</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="destination">
-    <rdfs:label xml:lang="es">Destino</rdfs:label>
-    <rdfs:label xml:lang="en">Destination</rdfs:label>
+  <owl:ObjectProperty rdf:ID="categoryCupon">
+    <rdfs:label xml:lang="en">Category target</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_categoryCupon">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Giro al que va dirigido</rdfs:label>
+    <rdfs:comment>Selección del giro al que va dirigido un determinado tipo de cupon</rdfs:comment>
+    <rdfs:range rdf:resource="#SPCategory"/>
+    <rdfs:domain rdf:resource="#CategoryCuponType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spProviderLogInv"/>
+  <owl:ObjectProperty rdf:ID="pymeDomain">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pymeDomain">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >260</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Dns"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
-    <rdfs:range rdf:resource="#Destination"/>
+    <rdfs:comment>(Opcional) : Dominio registrado para la mipyme, mediante este se genera un objeto DNS, teoricamente este es un dominio con el que cuenta  la emprasa en algún servidor de dominios (ej. Nick)</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDestinationExperience">
+    <rdfs:label xml:lang="en">Experiences</rdfs:label>
     <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasDestServiceProviderInv"/>
+      <owl:ObjectProperty rdf:ID="hasDestinationExperienceInv"/>
     </owl:inverseOf>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="microsite">
-    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Experiencias</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasExperience">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Experience"/>
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:comment>Experiencias que estan asignadas a un cierto destino, se asignan en la administración</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasSrvServiceProviderInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasServiceProvider</swb:propertyCodeName>
+    <rdfs:comment>Inversa. Mediante esta se puede determinar que mipymes cuentan con cada servicio en especifico</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasPhotoPyme">
+  <owl:ObjectProperty rdf:ID="hasRateLowSeason">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#RateSeason"/>
+    <rdfs:comment>(Opcional) : Registro de fechas de temporadas baja que considere la mipyme, sirve como aclaración al registro de tarifas con las que cuente</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:range>
-      <swb:Class rdf:ID="PhotoPyme">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="arServiceProviderInv">
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >serviceProvider</swb:propertyCodeName>
+  <owl:ObjectProperty rdf:ID="hasTourismType">
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:range rdf:resource="#TourismType"/>
+    <rdfs:label xml:lang="es">Tipos de Turismo</rdfs:label>
+    <rdfs:label xml:lang="en">Tourism Types</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasTourismType">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swbxf:propGroup rdf:resource="#others"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDestinationTourismTypeInv"/>
+    </owl:inverseOf>
+    <rdfs:comment>Tipos de turismo que estan asignados a un cierto destino, se asignan en la administración</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasInstServiceProviderInv">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasServiceProvider</swb:propertyCodeName>
+    <rdfs:comment>Inversa. Mediante esta se puede saber en que mipymes se encuentra cada instalación</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="arActivity">
-    <rdfs:domain rdf:resource="#ActivityRef"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >activity</swb:propertyCodeName>
-    <rdfs:range rdf:resource="#Activity"/>
-    <owl:inverseOf rdf:resource="#hasActivityRefInv"/>
+  <owl:ObjectProperty rdf:ID="hasInstalationsPymePhoto">
+    <rdfs:label xml:lang="es">Fotos de servicios</rdfs:label>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range rdf:resource="#PymePhoto"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="en">Instalations Photos</rdfs:label>
+    <rdfs:comment>(Opcional) : Fotos de las instalaciones que registre la mipyme</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasMorePymePhoto">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#PymePhoto"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:label xml:lang="en">More Photos</rdfs:label>
+    <rdfs:label xml:lang="es">Más fotos</rdfs:label>
+    <rdfs:comment>(Opcional) : Fotos adicionales que registre la mipyme</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasInstalation">
+    <owl:inverseOf rdf:resource="#hasInstServiceProviderInv"/>
+    <rdfs:range rdf:resource="#Instalation"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasInstalation">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >110</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Instalaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Instalations</rdfs:label>
+    <rdfs:comment>(Opcional) : Instalaciones con las que cuenta la mipyme, las cuales son registradas por la misma en base al catalogo de instalaciones por giro</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spProvider">
+    <rdfs:label xml:lang="en">Service provider</rdfs:label>
+    <rdfs:label xml:lang="es">Proveedor de servicios</rdfs:label>
+    <rdfs:comment>Propiedad que guarda cual es la mipyme que se esta logeando</rdfs:comment>
+    <rdfs:range rdf:resource="#ServiceProvider"/>
+    <owl:inverseOf rdf:resource="#spProviderLogInv"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="experienceRefInv"/>
+  <owl:ObjectProperty rdf:ID="expRefExperience"/>
+  <owl:ObjectProperty rdf:ID="cuponServiceProviderInv">
+    <rdfs:comment>Inversa.Mediante esta se puede saber a que mipyme pertenece cada cupon</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDestServiceProviderInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasServiceProvider</swb:propertyCodeName>
+    <rdfs:comment>Inversa.Mediante esta se puede saber que mipymes se encuentran en un destino</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spCategory">
+    <rdfs:range rdf:resource="#SPCategory"/>
+    <rdfs:label xml:lang="en">Category</rdfs:label>
+    <rdfs:label xml:lang="es">Giro</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCategoryInstalation">
     <rdfs:label xml:lang="en">Instalations</rdfs:label>
     <rdfs:label xml:lang="es">Instalaciones</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasInstalation">
+      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryInstalation">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >110</swb:index>
+        >10</swb:index>
+        <swbxf:propGroup rdf:resource="#others"/>
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
     <rdfs:range rdf:resource="#Instalation"/>
-    <owl:inverseOf rdf:resource="#hasInstServiceProviderInv"/>
+    <rdfs:domain rdf:resource="#SPCategory"/>
+    <rdfs:comment>Instalaciones que estan asignadas a un cierto Giro, se asignan en la administración</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasActivityRef">
+  <owl:ObjectProperty rdf:ID="hasDestinationActivity">
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:range rdf:resource="#Activity"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasDestinationActivity">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Activities</rdfs:label>
+    <rdfs:label xml:lang="es">Actividades</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDestinationActivityInv"/>
+    </owl:inverseOf>
+    <rdfs:comment>Actividades con las que cuenta un destino, estas se asignan desde el administrador</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="CommentUser">
+    <rdfs:label xml:lang="es">Usuario</rdfs:label>
+    <rdfs:comment>Propiedad que contiene el usuario que realizó el comentario (Si hubó una persona que lo haya hecho)</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:label xml:lang="en">User</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasDestinationEventInv">
+    <rdfs:comment>Inversa.Mediante esta se puede saber en que destinos se encuentra asignado un cierto evento.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPromotion">
     <rdfs:domain rdf:resource="#ServiceProvider"/>
-    <owl:inverseOf rdf:resource="#arServiceProviderInv"/>
+    <rdfs:range rdf:resource="#Promotion"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
-    <rdfs:range rdf:resource="#ActivityRef"/>
-    <swb:cloneDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:cloneDependency>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="promoServiceProviderInv"/>
+    </owl:inverseOf>
+    <rdfs:comment>(Opcional) : Promociones que registre la mipyme y que quiera dar a conocer a los usuarios de su página</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="serviceProvider">
-    <owl:inverseOf rdf:resource="#microSitePymeInv"/>
-    <rdfs:range rdf:resource="#ServiceProvider"/>
-    <rdfs:domain>
-      <swb:Class rdf:ID="MicroSitePyme">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#MicroSite"/>
+  <owl:ObjectProperty rdf:ID="hasCupon">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#Cupon"/>
+    <owl:inverseOf rdf:resource="#cuponServiceProviderInv"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:comment>(Opcional) : Lista de cupones que puede registrar la mipyme</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spCreator">
+    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:notCodeGeneration>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasServiceProviderInv"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Usuario creador de la mipyme</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasNearest">
+    <rdfs:label xml:lang="en">Nearest</rdfs:label>
+    <rdfs:label xml:lang="es">Cercanias</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasNearest">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >115</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="#Nearest"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Lugares cercanos con las que cuenta la mypyme, registrados por la misma en base al catalogo de carcanias</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="spVideoYouTube">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="en">YouTube video</rdfs:label>
+    <rdfs:label xml:lang="es">Video de youtube</rdfs:label>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range>
+      <swb:Class rdf:ID="VideoYouTube">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdfs:comment>Clase que se encarga de administrar el código de videos hospedados en youtube</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
-    </rdfs:domain>
+    </rdfs:range>
+    <rdfs:comment>(Opcional) : Propiedad para que la miPyme pueda agregar un video de youtube a su página, solo para paquetes Premier (página web) de acuerdo a definición</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasDestServiceProviderInv">
+  <owl:ObjectProperty rdf:ID="microSitePymeInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Inversa de micrositePyme, mediante esta inversa se puede saber cual es la página de webbuilder (WebPage) de tipo micrositepyme es la que tiene todos los datos de la mipyme (micrositio de la mipyme). Esto solo aplica para las que tienen un micrositio (en este momento solo para el paquete Premier o también conocido como Página web)</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="variantPaqTemplate">
+    <rdfs:range rdf:resource="#VariantPaqTemplate"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal) : Variante de estilo para la presentación de la plantilla de la mipyme</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="destinationSec">
+    <rdfs:range rdf:resource="#Destination"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Destino secundario al cual se puede registrar la mipyme, se definio por si acaso en lo futuro se requería</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEstablishmentPymePhoto">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#PymePhoto"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:label xml:lang="en">Establishment photos</rdfs:label>
+    <rdfs:label xml:lang="es">Fotos del establecimiento</rdfs:label>
+    <rdfs:comment>(Opcional) : Fotos  registradas del establecimiento de la mipyme</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="destination">
+    <owl:inverseOf rdf:resource="#hasDestServiceProviderInv"/>
+    <rdfs:range rdf:resource="#Destination"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="en">Destination</rdfs:label>
+    <rdfs:label xml:lang="es">Destino</rdfs:label>
+    <rdfs:comment>(Requerido para funcionamiento adecuado) : Destino en el que se registra la mipyme, es util para el buscador por destinos</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#promoServiceProviderInv">
+    <rdfs:comment>Inversa. Mediante esta se puede saber que mipyme tiene registrado cada promocion</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRate">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#Rate"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:comment>(Opcional) : Tarifas que registre la mipyme, esto con la finalidad de que las de a conocer a los usuarios de su página</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDestinationActivityInv">
+    <rdfs:comment>Inversa.Mediante esta se puede saber en que destinos se encuentra esta actividad</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSpCategoryPymePhoto">
+    <rdfs:range rdf:resource="#PymePhoto"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Fotos registradas por la mipyme para su giro especifico (ej. Hospedaje)</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDestinationTourismTypeInv">
+    <rdfs:comment>Inversa. Mediante esta se puede determinar en que destinos se encuentra un tipo de turismo especifico</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasEvent">
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:range rdf:resource="#Event"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasEvent">
+        <swbxf:propGroup rdf:resource="#others"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <owl:inverseOf rdf:resource="#hasDestinationEventInv"/>
+    <rdfs:label xml:lang="en">Events</rdfs:label>
+    <rdfs:label xml:lang="es">Eventos</rdfs:label>
+    <rdfs:comment>Eventos que estan asignados a un cierto destino, se asignan en la administración</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="pymeSubDomainWildCard">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pymeSubDomainWildCard">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >261</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Dns"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Subdominio generado para la mipyme, en webbuilder se genera un objeto tipo DNS., se acordó que se hiba a configuarar el servidor para porder usar subdominios en base a wildcards. (ej. mihotelito.pymestur.infotec.com.mx)</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="serviceProvider">
+    <rdfs:domain rdf:resource="#MicroSitePyme"/>
+    <rdfs:range rdf:resource="#ServiceProvider"/>
+    <owl:inverseOf rdf:resource="#microSitePymeInv"/>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
+    <rdfs:comment>Objeto serviceprovider que esta asociado al micrositio.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSPActivity">
+    <rdfs:range rdf:resource="#Activity"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasSPActivityInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasSPActivity">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Activities</rdfs:label>
+    <rdfs:label xml:lang="es">Actividades</rdfs:label>
+    <rdfs:comment>(Opcional) : Actividades que se realicen en la mypyme, registrados por la misma en base a las que se encuentran registradas para su destino y a su vez estas con base al catalogo general de Actividades.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasDestinationExperienceInv">
+    <rdfs:comment>Inversa.Mediante esta se puede saber en que destinos se encuentra asignado una cierta experiencia.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRateHighSeason">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="#RateSeason"/>
+    <rdfs:comment>(Opcional) :  Registro de fechas de temporadas alta que considere la mipyme, sirve como aclaración al registro de tarifas con las que cuente</rdfs:comment>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="microSitePyme"/>
+  <owl:ObjectProperty rdf:about="#hasSPActivityInv">
+    <rdfs:comment>Inversa.Mediante esta inversa se puede saber que mipymes cuentas con esta actividad</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="serviceProviderInv"/>
+  <owl:ObjectProperty rdf:about="#hasServiceProviderInv">
+    <swb:notCodeGeneration rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:notCodeGeneration>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasServiceProvider</swb:propertyCodeName>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="spCategory">
-    <rdfs:label xml:lang="es">Giro</rdfs:label>
-    <rdfs:label xml:lang="en">Category</rdfs:label>
-    <rdfs:range rdf:resource="#SPCategory"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="microSitePyme"/>
-  <owl:ObjectProperty rdf:ID="serviceProviderInv"/>
-  <owl:ObjectProperty rdf:ID="hasCategoryInstalation">
+  <owl:ObjectProperty rdf:ID="spCategoryRateType">
     <rdfs:domain rdf:resource="#SPCategory"/>
-    <rdfs:range rdf:resource="#Instalation"/>
+    <rdfs:range rdf:resource="#RateType"/>
+    <rdfs:label xml:lang="es">Clase de Tarifas</rdfs:label>
+    <rdfs:label xml:lang="en">Rate type</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_hasCategoryInstalation">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectMultipleModel"/>
-        <swbxf:propGroup rdf:resource="#others"/>
+      <swbxf:DisplayProperty rdf:ID="dp_spCategoryRateType">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
+        >50</swb:index>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="dp_group_pymesSPCat_Conf">
+            <rdfs:label xml:lang="es">Configuración</rdfs:label>
+            <rdfs:label xml:lang="en">Configuration</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >150</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="es">Instalaciones</rdfs:label>
-    <rdfs:label xml:lang="en">Instalations</rdfs:label>
+    <rdfs:comment>Tipo de clase de tarifas (ej. Hospedaje, Alimentos) que esta asignada al Giro, se asigna en la administración</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="spType">
-    <rdfs:label xml:lang="en">Type</rdfs:label>
-    <rdfs:label xml:lang="es">Tipo</rdfs:label>
     <rdfs:range rdf:resource="#SPType"/>
+    <rdfs:label xml:lang="es">Tipo</rdfs:label>
+    <rdfs:label xml:lang="en">Type</rdfs:label>
   </owl:ObjectProperty>
   <rdf:Property rdf:ID="pymeImage">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >pymeImage</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_PhotoPyme">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:required>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >pymeImage</swb:propertyCodeName>
-  </rdf:Property>
-  <rdf:Property rdf:ID="pymeRfc">
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </rdf:Property>
   <rdf:Property rdf:ID="photoLogo"/>
-  <owl:DatatypeProperty rdf:ID="MinRate">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdf:Property rdf:ID="spContractPeiod">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Periodo de contrato</rdfs:label>
+    <rdfs:label xml:lang="en">Contract period</rdfs:label>
+    <rdfs:comment>(Requerido si se desea desabilitar el anuncio despues de cierta fecha Enddate,establecido por el sistema) : Periodo contratado por la mipyme (Se definio que por defecto fuera 12 meses)</rdfs:comment>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:ID="rateComment">
+    <rdfs:label xml:lang="en">General comments to rates</rdfs:label>
+    <rdfs:label xml:lang="es">Comentarios generales de tarifas</rdfs:label>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_MinRate">
+      <swbxf:DisplayProperty rdf:ID="dp_rateCommComment">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >200</swb:index>
-        <rdfs:label xml:lang="es">Tarifa Mínima</rdfs:label>
-        <rdfs:label xml:lang="en">Min Rate</rdfs:label>
+        >30</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="spDomain">
-    <rdfs:label xml:lang="en">Domain</rdfs:label>
-    <rdfs:label xml:lang="es">Dominio</rdfs:label>
+  <owl:DatatypeProperty rdf:ID="paq_NumMaxPromotions">
+    <rdfs:domain rdf:resource="#Paquete"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="en">Max Number of Promotions</rdfs:label>
+    <rdfs:label xml:lang="es">Número maximo de promociones</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_paq_NumMaxPromotions">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Número máximo de promociones que la mipyme podría registrar</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="WithMicroSite">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lowEndDate">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_lowEndDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spMorePymePhotosComments">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spMorePymePhotosComments">
+        <rdfs:label xml:lang="en">More photos comments</rdfs:label>
+        <rdfs:label xml:lang="es">Comentarios para más fotos</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>(Opcional) : Cometarios registrados por la mipyme referente a sus fotos agregadas (mas fotos)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rateCommHighSeason">
+    <rdfs:label xml:lang="en">High seasson comment</rdfs:label>
+    <rdfs:label xml:lang="es">Comentario a temporada alta</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rateCommHighSeason">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasDestPhotos">
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasDestPhotos">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
+        <swbxf:formElement>
+          <swb:FlashImageUpload rdf:ID="destinationFlahPhotos">
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >89</swbxf:imgMaxWidth>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgCrop>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >67</swbxf:imgMaxHeight>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+          </swb:FlashImageUpload>
+        </swbxf:formElement>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="Fotos">
+            <rdfs:label xml:lang="en">Photos</rdfs:label>
+            <rdfs:label xml:lang="es">Fotos</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >500</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Fotos para mostrar del destino</rdfs:comment>
+    <rdfs:label xml:lang="es">Fotos para mostrar del destino</rdfs:label>
+    <rdfs:label xml:lang="en">Detination photos to show</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="contactFirstName">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Primer apellido</rdfs:label>
+    <rdfs:label xml:lang="en">First name</rdfs:label>
+    <rdfs:comment>Primer apellido del usuario de contacto para la mipyme</rdfs:comment>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_contactFirstName"/>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="emailText">
+    <rdfs:domain rdf:resource="#EmailText"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_emailText">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement>
+          <swbxf:TextArea rdf:ID="TextArea_pymtur">
+            <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >40</swbxf:textAreaCols>
+            <swbxf:textAreaRows rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >20</swbxf:textAreaRows>
+          </swbxf:TextArea>
+        </swbxf:formElement>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Texto para email</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pymeWebSite">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pymeWebSite">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >220</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Página web</rdfs:label>
+    <rdfs:label xml:lang="en">Website</rdfs:label>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal) : Página web externa con la que ya cuente la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="howArrive">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_HowArrive">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="sp_zipcode">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Código postal de la mipyme</rdfs:comment>
+    <rdfs:label xml:lang="es">Código postal</rdfs:label>
+    <rdfs:label xml:lang="en">Zipcode</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_sp_zipcode"/>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="PhotoLogo">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_photoLogo">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >140</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Foto para logo</rdfs:label>
+    <rdfs:label xml:lang="en">Logo Photo</rdfs:label>
+    <rdfs:comment>(Opcional) : Foto que se usa como logo de la miPyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcState">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Estado de la republica en el que se encuentra el domicilio fiscal de la mipyme</rdfs:comment>
+    <rdfs:label xml:lang="es">Estado</rdfs:label>
+    <rdfs:label xml:lang="en">State</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcState"/>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="tableNumber">
+    <rdfs:domain rdf:resource="#AlimentosRate"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Número de mesas</rdfs:label>
+    <rdfs:label xml:lang="en">Tables number</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_tableNumber">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cuponConditions">
+    <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>(Opcional) : Condiciones que aplican para el cupon</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcCity">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="es">City</rdfs:label>
+    <rdfs:label xml:lang="es">Ciudad</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcCity"/>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Ciudad del rfc de la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Capacity">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_Capacity">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Capacity</rdfs:label>
+    <rdfs:label xml:lang="es">Capacidad</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="numMaxItemsbyPage">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_numMaxItemsbyPage">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >120</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Max number of items by page</rdfs:label>
+    <rdfs:label xml:lang="es">Número maximo de elementos por página</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain>
+      <swb:SemanticResource rdf:ID="DirectoryResource">
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/community#DirectoryResource"/>
+        <rdfs:comment>Clase de tipo recurso de webbuilder que se encarga de administrar los directorios de serviceproviders.</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:SemanticResource>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="PrincipalPhoto">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_principalPhoto">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >141</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="date">
+    <rdfs:label xml:lang="es">Fecha</rdfs:label>
+    <rdfs:comment>fecha de registro</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="en">Date</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spStatusComment">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spStatusComment">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Status Comment</rdfs:label>
+    <rdfs:label xml:lang="es">Comentario de Estatus</rdfs:label>
+    <rdfs:comment>(Establecido por el sistema y por el administrador de pymes) : ultimo comentario registrado por un administrador en los cambios de estatus (ej. el porque fue rechazada una mipyme)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="SpCategoryPymePhotoCommens">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_SpCategoryPymePhotoCommens">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Comentarios a las fotos del giro especifico de la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="seasonEndDate">
+    <rdfs:domain rdf:resource="#RateSeason"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="es">Fecha fin</rdfs:label>
+    <rdfs:label xml:lang="en">End date</rdfs:label>
+    <rdfs:comment>Fecha final de la temporada</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="youtubePreview">
+    <rdfs:label xml:lang="en">Video preview</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Vista previa del video</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spStatus">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Estatus en el que se encuentra la mipyme, por el momento solo existen los sig: 1.Registrado . 4.Activado  6.Rechazado, Falta definición del resto (Modulo de administración)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spAcceptedDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>Fecha en la que fue aceptada a la miPyme para ser publicada en el portal concentrador, fecha registrada en automatico por el sistema</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spCuponsComment">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spCuponsComment">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Cupons Comments</rdfs:label>
+    <rdfs:label xml:lang="es">Comentarios para los cupones</rdfs:label>
+    <rdfs:comment>(Opcional) : Comentarios para los cupones generados por la mipyme</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dirMicrositeAddJsp">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >addMicroSiteJsp</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_addMicrositeJsp"/>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >addMicroSiteJsp</swb:propertyCodeName>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pymePaqueteType">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  <owl:DatatypeProperty rdf:ID="cuponAddress">
+    <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Dirección (domicilio) de la empresa dónde se puede hacer efectivo el cupón</rdfs:comment>
+    <rdfs:label xml:lang="es">Dirección para hacer efectivo el cupón</rdfs:label>
+    <rdfs:label xml:lang="en">Address to do the cupon effective</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cuponAddress">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spSuburb">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Colonia</rdfs:label>
+    <rdfs:label xml:lang="en">Suburb</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spSuburb"/>
+    </swb:displayProperty>
+    <rdfs:comment>Colonia a la que pertenece la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="status">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>Estatus colocado a una mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="PhotoImage">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PymePhoto"/>
+    <rdfs:comment>Imagen de la foto</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcInternalNumber">
+    <rdfs:label xml:lang="en">Internal Number</rdfs:label>
+    <rdfs:label xml:lang="es">Número interior</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcInternalNumber"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Número interior del rfc de la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spInstalationsPymePhotosComments">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spInstalationsPymePhotosComments">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Instalations photos comments</rdfs:label>
+    <rdfs:label xml:lang="es">Comentarios de las fotos de las instalaciones</rdfs:label>
+    <rdfs:comment>(Opcional) : Cometarios registrados por la mipyme referente a sus fotos de sus instalaciones</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcCityCouncil">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="en">City Council</rdfs:label>
+    <rdfs:label xml:lang="es">Municipio / Delegación</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcCityCouncil"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Municipio o delegación del rfc de la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cuponPeriodFin">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:comment>(Opcional) : Fecha de terminación de la promoción (ofrecido) del cupon</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paramValue">
+    <rdfs:domain rdf:resource="#Parameter"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_paramValue">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Valor de Parametro</rdfs:label>
+    <rdfs:label xml:lang="en">Param value</rdfs:label>
+    <rdfs:comment>Valor del parametro dado</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="withFicha">
+    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spSlogan">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Slogan</rdfs:label>
+    <rdfs:label xml:lang="es">Slogan</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_slogan">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>(Opcional) : Eslogan registrado por la mipyme.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcZipCode">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="en">Zip Code</rdfs:label>
+    <rdfs:label xml:lang="es">Código Postal</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcZipCode"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Código postal en el que se encuentra hubicada  la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spTotCupones">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Contador, número de cupones que se lleven registrados para una mipyme (Dado que se determino que tendrían hasta cierta cantidad por tipo de paquete y esta cantidad sería parametrizable)</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="dirFichaAddJsp">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >addFichaJsp</swb:propertyCodeName>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_dirFichaAdd"/>
     </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spTotPhotos">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Contador, número de fotos que se lleven registrados para una mipyme (Dado que se determino que tendrían hasta cierta cantidad por tipo de paquete y esta cantidad sería parametrizable). El número de fotos en esta propiedad es la suma de todas las fotos que haya subido la mipyme en las secciones de: a)Fotos de instalaciones, b)Fotos del establecimiento, c)Fotos del Giro,  d)Mas fotos</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lowSeason">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_lowseason">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Low season</rdfs:label>
+    <rdfs:label xml:lang="es">Temporada baja</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spCategoryPhotosComments">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >addFichaJsp</swb:propertyCodeName>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spRoomPymePhotosComments">
+        <rdfs:label xml:lang="es">Comentarios para las fotos de las habitaciones</rdfs:label>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spEndAnnuncePeriod">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="es">Fecha fin del anuncio</rdfs:label>
+    <rdfs:comment>(Requerido si se desea tener una fecha de finalización de anunciol,establecido por el sistema) : Fecha fin de publicación de anuncio de la mipyme, fecha registrada automaticamente por el sistema en base a la fecha de activación mas el periodo del contrato contratado por la mipyme (por defecto 12 meses)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="termsOfUse">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_termsOfUse">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Terminos de uso</rdfs:label>
+    <rdfs:label xml:lang="en">Terms of use</rdfs:label>
+    <rdfs:domain rdf:resource="#Paquete"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Terminos de uso para cada paquete</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="bankAccount">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_bankAccount">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Cuenta de Banco</rdfs:label>
+    <rdfs:domain rdf:resource="#Bank"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Bank Account</rdfs:label>
+    <rdfs:comment>Número de cuenta de banco, aun no se define que tipo de cuenta va ha ir aqui (si la referencia, o como tal un número de cuenta), forma parte del modulo de administración aun no definido.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="varianStyle">
+    <rdfs:label xml:lang="es">Estilo de variante</rdfs:label>
+    <rdfs:label xml:lang="en">Variant Style</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_varianStyle">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VariantPaqTemplate"/>
+    <rdfs:comment>Estilo (CSS , ej. Calido, neutro, frio) asignado al tipo de plantilla.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="portalLink">
+    <rdfs:domain rdf:resource="#InterestPortalLink"/>
+    <rdfs:label xml:lang="es">Url de liga</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_portalLink">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="en">Link urlJ</rdfs:label>
+    <rdfs:comment>Hipervinculo requerido</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spTotPromotions">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema) : Número de promociones que se lleven registradas para una mipyme (Dado que se determino que tendrían hasta cierta cantidad por tipo de paquete y esta cantidad sería parametrizable)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="planType">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_planType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >20</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Tipo de plan</rdfs:label>
+    <rdfs:label xml:lang="en">Plan type</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="youtubeVideoCode">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_youtubeVideoCode">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Video code</rdfs:label>
+    <rdfs:label xml:lang="es">Código del video</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#VideoYouTube"/>
+    <rdfs:comment>Código del video hospedado en los servidores de youtube</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="MaxRate">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_MaxRate">
+        <rdfs:label xml:lang="en">Max Rate</rdfs:label>
+        <rdfs:label xml:lang="es">Tarifa Maxima</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >210</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>(Opcional) : Cantidad maxima de sus cuotas para los servicios que presta</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spServicesDescr">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Descripción de Servicios y equipamiento</rdfs:label>
+    <rdfs:label xml:lang="en">Services and equipment description</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spServicesDescr">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>(Opcional) : Cometarios registrados por la mipyme referente al apartado de  sus servicios y equipamiento.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="roomsNumber">
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_roomsNumber">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Número de habitaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Rooms number</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcPersonType">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcPersonType">
+        <swbxf:propSelectValues>pselect:Selecione Uno|pfisica:Persona Física|pmoral:Persona Moral</swbxf:propSelectValues>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Régimen Fiscal</rdfs:label>
+    <rdfs:comment>(Opcional) : Régimen fiscal de la mypyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spReservationPhone">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spReservationPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Reservation phone number</rdfs:label>
+    <rdfs:label xml:lang="es">Teléfono para reservaciones</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Teléfono para reservaciones registrado por la mipyme para sus servicios.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paqTemplate">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_paqTemplate"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="es">Número de paquete</rdfs:label>
+    <rdfs:label xml:lang="en">Paquete type</rdfs:label>
+    <rdfs:domain rdf:resource="#PaqTemplate"/>
+    <rdfs:comment>Paquete para el que aplica el tipo de plantilla</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="nombre_o_razon">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Nombre o Razón Social</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pymeArrive">
-    <rdfs:label xml:lang="es">Entorno</rdfs:label>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_environment">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -531,163 +1887,704 @@
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="es">Como llegar</rdfs:label>
+    <rdfs:label xml:lang="en">How to arrive</rdfs:label>
+    <rdfs:comment>(Opcional) : Propiedad en la que se almacena una descripción detallada de como  llegar a la mipyme - (Opcional)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="contactSecondName">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Segundo apellido del usuario de contacto para la mipyme</rdfs:comment>
+    <rdfs:label xml:lang="es">Segundo apellido</rdfs:label>
+    <rdfs:label xml:lang="en">Second name</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_contactSecondName"/>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="promoPeriod">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_promoPeriod">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Vigency</rdfs:label>
+    <rdfs:label xml:lang="es">Vigencia</rdfs:label>
+    <rdfs:domain rdf:resource="#Promotion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Vigencia del promocional</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcExternalNumber">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcExternalNumber"/>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Número Exterior</rdfs:label>
+    <rdfs:label xml:lang="en">External Number</rdfs:label>
+    <rdfs:comment>(Opcional) : Número exterior del rfc de la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="ladaNacional">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_ladaNacional"/>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="en">Area Code</rdfs:label>
+    <rdfs:label xml:lang="es">Lada Nacional</rdfs:label>
+    <rdfs:comment>(Opcional) : Lada nacional para el marcado télefonico a la mipyme</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="WithMicroSite">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PhotoLogo">
-    <rdfs:label xml:lang="en">Logo Photo</rdfs:label>
-    <rdfs:label xml:lang="es">Foto para logo</rdfs:label>
+  <owl:DatatypeProperty rdf:ID="spRatesComment">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_photoLogo">
+      <swbxf:DisplayProperty rdf:ID="dp_spRatesComment">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Rates Comments</rdfs:label>
+    <rdfs:label xml:lang="es">Comentarios para las tarifas</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spCelularPhone">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Número celular</rdfs:label>
+    <rdfs:label xml:lang="en">Celular phone</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spCelularPhone">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Número celular registrado por la mipyme y por el cual se podran poner en contacto los usurios del portal con la misma mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="promoType">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_promoType">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >140</swb:index>
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Promotion type</rdfs:label>
+    <rdfs:label xml:lang="es">Tipo de promoción</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Promotion"/>
+    <rdfs:comment>Tipo de promoción</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cuponPartnerImage">
+    <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cuponPartnerImage">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+    <rdfs:label xml:lang="en">Partner photo</rdfs:label>
+    <rdfs:label xml:lang="es">Foto de aliado</rdfs:label>
+    <rdfs:comment>(Opcinal) : Imagen de algíun aliado de la mipyme con el que comparta la responsabilidad de lo ofrecido en el  cupon</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cuponImg">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:label xml:lang="es">Foto para cupón</rdfs:label>
+    <rdfs:label xml:lang="en">Cupon Photo</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cuponImg">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>(Opcional) : Imagen para el cupon</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcSuburb">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcSuburb"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Suburb</rdfs:label>
+    <rdfs:label xml:lang="es">Colonia</rdfs:label>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Colonia en la que se encuentra hubicada  la mipyme, forma parte de su dirección fiscal</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PhotoImage">
+  <owl:DatatypeProperty rdf:ID="rateCommLowSeasson">
+    <rdfs:label xml:lang="en">Low seasson comment</rdfs:label>
+    <rdfs:label xml:lang="es">Comentario a Temporada baja</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rateCommLowSeasson">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PhotoPyme"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="promoPeriod">
+  <owl:DatatypeProperty rdf:ID="comment">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#Promotion"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="arPriority">
-    <rdfs:domain rdf:resource="#ActivityRef"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >priority</swb:propertyCodeName>
+    <rdfs:comment>Comentario ya sea del sistema por algun estatus registrado o por algun usuario creador de la mipyme o algun administrador del sistema</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="morePhotos"/>
-  <owl:DatatypeProperty rdf:ID="cuponConditions">
+  <owl:DatatypeProperty rdf:ID="spEstablishmentPymePhotosComments">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spEstablishmentPymePhotosComments">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Establishment Photos Comments</rdfs:label>
+    <rdfs:label xml:lang="es">Comentarios de las fotos del establecimiento</rdfs:label>
+    <rdfs:comment>(Opcional) : Comentarios registrador por la mipyme para sus fotos de sus establecimiento</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasCuponPhotos">
+    <rdfs:domain rdf:resource="#CuponType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_hasCuponPhotos">
+        <swbxf:formElement>
+          <swb:FlashImageUpload rdf:ID="photosFlah">
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgCrop>
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >100</swbxf:imgMaxWidth>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >80</swbxf:imgMaxHeight>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+          </swb:FlashImageUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Opcional : Propiedad con la que hace que se guarden las imagenes del cupon</rdfs:comment>
+    <rdfs:label xml:lang="en">Cupon type photos</rdfs:label>
+    <rdfs:label xml:lang="es">Fotos para el tipo de  cupón</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="cuponPeriodIni">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#Cupon"/>
+    <rdfs:comment>(Opcional) : Fecha de inicio de la promoción (ofrecido) del cupon</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="callCenter">
+  <owl:DatatypeProperty rdf:ID="rfcStreet">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="en">Street</rdfs:label>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_callCenter">
+      <swbxf:DisplayProperty rdf:ID="dp_rfcCalle"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Calle</rdfs:label>
+    <rdfs:comment>(Opcional) : Calle o avenida en la que se encuentra hubicada  la mipyme, forma parte de su dirección fiscal</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="Surroundings">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_Surroundings">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >190</swb:index>
+        >147</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:label xml:lang="en">Call Center</rdfs:label>
-    <rdfs:label xml:lang="es">Centro de atención</rdfs:label>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Alrededores</rdfs:label>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="pymeWebSite">
-    <rdfs:label xml:lang="en">Website</rdfs:label>
-    <rdfs:label xml:lang="es">Página web</rdfs:label>
+  <owl:DatatypeProperty rdf:ID="spPromotionsComment">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_pymeWebSite">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >220</swb:index>
+      <swbxf:DisplayProperty rdf:ID="dp_spPromotionsComment">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Comentarios para las promociones</rdfs:label>
+    <rdfs:label xml:lang="en">Promotions Comments</rdfs:label>
+    <rdfs:comment>(Opcional) : Cometarios registrados por la mipyme referente a sus promociones registradas</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paq_NumMaxCupones">
+    <rdfs:domain rdf:resource="#Paquete"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="en">Max Number of Cupones</rdfs:label>
+    <rdfs:label xml:lang="es">Número maximo de cupones</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_paq_NumMaxCupones">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Número máximo de cupones que la mipyme podría registrar</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="MinRate">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_MinRate">
+        <rdfs:label xml:lang="en">Min Rate</rdfs:label>
+        <rdfs:label xml:lang="es">Tarifa Mínima</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:comment>(Opcional) : Cantidad minima de sus cuotas para los servicios que presta</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spActivitiesDescr">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spActivitiesDescr">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Descripción de Actividades</rdfs:label>
+    <rdfs:label xml:lang="en">Activities description</rdfs:label>
+    <rdfs:comment>Comentarios referentes a las actividades registradas para la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasPromotionPhotos">
+    <rdfs:domain rdf:resource="#PromotionType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_promotionPhotos">
+        <swbxf:formElement rdf:resource="#photosFlah"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Promotion type photos</rdfs:label>
+    <rdfs:comment>Opcional : Propiedad con la que hace que se guarden las imagenes de la promoción</rdfs:comment>
+    <rdfs:label xml:lang="es">Fotos para el tipo de  promoción</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pymePaqueteType">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:comment>(Requerido para funcionamiento adecuado del portal,establecido por el sistema de acuerdo a paquete contratado por la mipyme) : Este es el tipo de paquete con el que se registre o contrate la mipyme (1.Directorio, 2.Ficha, 3. Micrositio, 4.Premier o Página Web). Se definió que solo iban a operar el 2.Ficha y 4.Premier.</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="serviceType">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_serviceType">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">lodging type</rdfs:label>
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Tipo de hospedaje</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="perfilType">
+    <rdfs:domain rdf:resource="#pymeExtendedAttributes"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_perfilType">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+        <swbxf:propSelectValues xml:lang="en">tourist:Tourist|Entrepreneur:Entrepreneur</swbxf:propSelectValues>
+        <swbxf:propSelectValues xml:lang="es">tourims:Turista|Entrepreneur:Empresario</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Perfil de usuario</rdfs:label>
+    <rdfs:label xml:lang="en">User profile</rdfs:label>
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spTwitterUser">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spTwitterUser"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Twitter user</rdfs:label>
+    <rdfs:label xml:lang="es">Usuario en twitter</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Usuario de twitter de la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="highStartDate">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_highStartDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spInstalationsDescr">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spInstalationsDescr">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Descripción de instalaciones</rdfs:label>
+    <rdfs:label xml:lang="en">Instalations description</rdfs:label>
+    <rdfs:comment>(Opcional) : Descripción registrada por la mipyme referente a sus instalaciones</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="seasonStartDate">
+    <rdfs:domain rdf:resource="#RateSeason"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:label xml:lang="es">Fecha de inicio</rdfs:label>
+    <rdfs:label xml:lang="en">Start date</rdfs:label>
+    <rdfs:comment>Fecha inicial de la temporada</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paq_Price">
+    <rdfs:domain rdf:resource="#Paquete"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_paq_Price">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:label xml:lang="es">Precio</rdfs:label>
+    <rdfs:label xml:lang="en">Price</rdfs:label>
+    <rdfs:comment>Precio especificado por un administrador para el paquete especifico</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="destPrincipalPhoto">
+    <rdfs:domain rdf:resource="#Destination"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_destPrincipalPhoto">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+        <swbxf:formElement>
+          <swb:FlashImageUpload rdf:ID="destinationPrincipalFlahPhoto">
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >5000000</swbxf:fileMaxSize>
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</swbxf:imgCrop>
+            <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >130</swbxf:imgMaxHeight>
+            <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >173</swbxf:imgMaxWidth>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+          </swb:FlashImageUpload>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#Fotos"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Foto principal para el destino</rdfs:comment>
+    <rdfs:label xml:lang="es">Foto principal para el destino</rdfs:label>
+    <rdfs:label xml:lang="en">Destination principal photo</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="domiciliofis">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label>Domicilio Fiscal</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoThumbnail">
+    <rdfs:domain rdf:resource="#PymePhoto"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Thumbnail de la imagen</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="photoMimeType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#PymePhoto"/>
+    <rdfs:comment>MimeType de la foto</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="setStatus">
+    <rdfs:label xml:lang="es">Estatus</rdfs:label>
+    <rdfs:comment>Propiedad que dice si se esta colocando un estatus para la mipyme o no (1:Si, 0:No). Si no quiere decir que es un comentario de un usuario creador de una mipyme o de un usuario administrador del sistema</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:label xml:lang="en">Status</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="NearestDescr">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_NearestDescr">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Descripción de cercanias</rdfs:label>
+    <rdfs:label xml:lang="en">Nearest description</rdfs:label>
+    <rdfs:comment>(Opcional) : Descripción de sus cercanias</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spYouTubeChannel">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spYouTubeChannel"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Youtube channel</rdfs:label>
+    <rdfs:label xml:lang="es">Canal en youtube</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Canal de youtube que la mipyme registre</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="highEndDate">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_highEndDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="pymeAddress">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_pymeAddress">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+        <rdfs:label xml:lang="en">Address</rdfs:label>
+        <rdfs:label xml:lang="es">Dirección</rdfs:label>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="NumMaxPageToDisplay">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_NumMaxPageToDisplay">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Max number of pages to display</rdfs:label>
+    <rdfs:label xml:lang="es">Número maximo de páginas para desplegar</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#DirectoryResource"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfc">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfc"/>
+    </swb:displayProperty>
+    <rdfs:label>RFC</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Rfc de la mipyme</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="HighSeason">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_HighSeason">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >40</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="es">Temporada alta</rdfs:label>
+    <rdfs:label xml:lang="en">High season</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    <rdfs:domain rdf:resource="#HospedajeRate"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="promoImg">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label xml:lang="en">Promotion Photo</rdfs:label>
+    <rdfs:label xml:lang="es">Imagen para promoción</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_promoImg">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >50</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Promotion"/>
+    <rdfs:comment>Imagen de la promoción</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="rfcRazonSocial">
+    <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:required>
+    <rdfs:label>Razón Social</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_rfcRazonSocial"/>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Razón social de la mipyme (Campo de RFC)</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spRatesComments">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label xml:lang="es">Comenatarios a tarifas</rdfs:label>
+    <rdfs:label xml:lang="en">Rates comments</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spRatesComments">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>(Opcional) : Cometarios registrados por la mipyme referente a sus tarifas registradas</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="paq_NumMaxPhotos">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_NumMaxPhotos">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#Paquete"/>
+    <rdfs:label xml:lang="es">Maximo Número de Fotos</rdfs:label>
+    <rdfs:label xml:lang="en">Max Number of Photos</rdfs:label>
+    <rdfs:comment>Número máximo de fotos que la mipyme podría registrar</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="spFacebookUser">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_spFacebookUser"/>
+    </swb:displayProperty>
+    <rdfs:label xml:lang="en">Facebook user</rdfs:label>
+    <rdfs:label xml:lang="es">Usuario en facebook</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:comment>(Opcional) : Usuario de facebook de la mipyme</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="photoSize">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_photoImage">
         <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#PhotoPyme"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+    <rdfs:domain rdf:resource="#PymePhoto"/>
+    <rdfs:comment>Tamaño de la imagen</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="withFicha">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="howArrive">
+  <owl:DatatypeProperty rdf:ID="spSkypeAccount">
+    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_HowArrive">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+      <swbxf:DisplayProperty rdf:ID="dp_spSkypeAccount">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayProperty"/>
+    <rdfs:label xml:lang="es">Cuenta de Skype</rdfs:label>
+    <rdfs:label xml:lang="en">Skype account</rdfs:label>
+    <rdfs:comment>(Opcional) : Cuenta de skype registrada por la mipyme como manera de que los usuarios la contacten.</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="PrincipalPhoto">
+  <owl:DatatypeProperty rdf:ID="link">
+    <rdfs:label xml:lang="en">Link url</rdfs:label>
+    <rdfs:label xml:lang="es">Url de liga</rdfs:label>
+    <rdfs:domain rdf:resource="#InteresLink"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_principalPhoto">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+      <swbxf:DisplayProperty rdf:ID="dp_link">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >141</swb:index>
+        >30</swb:index>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Hipervinculo requerido</rdfs:comment>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="lowStartDate">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_lowStartDate">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DateElement_1"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="cuponPeriod">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  <owl:DatatypeProperty rdf:ID="cuponType">
     <rdfs:domain rdf:resource="#Cupon"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="Surroundings">
-    <rdfs:label xml:lang="es">Alrededores</rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_Surroundings">
+      <swbxf:DisplayProperty rdf:ID="dp_cuponType">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >147</swb:index>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
+        >40</swb:index>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
+    <rdfs:label xml:lang="es">Tipo de cupón</rdfs:label>
+    <rdfs:label xml:lang="en">cupon type</rdfs:label>
+    <rdfs:comment>Para guardar el tipo de cupon del catalogo (CuponType), en este momento no se guarda, pero podria guardarse para algún fin fururo.</rdfs:comment>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="MaxRate">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/community#state">
     <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_MaxRate">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >210</swb:index>
-        <rdfs:label xml:lang="es">Tarifa Maxima</rdfs:label>
-        <rdfs:label xml:lang="en">Max Rate</rdfs:label>
+      <swbxf:DisplayProperty rdf:ID="dp_state">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:domain rdf:resource="#ServiceProvider"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="photoMimeType">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:domain rdf:resource="#PhotoPyme"/>
-  </owl:DatatypeProperty>
+  </rdf:Description>
   <swbxf:DisplayProperty rdf:ID="dp_spCategory">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
   </swbxf:DisplayProperty>
-  <swb:CodePackage rdf:ID="pkg">
-    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >pymtur</swb:prefix>
-    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.pymtur</swb:package>
-  </swb:CodePackage>
-  <swbxf:DisplayProperty rdf:ID="dp_dirFichaEdit"/>
-  <swbxf:DisplayProperty rdf:ID="dp_destination">
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+  <swbxf:DisplayProperty rdf:ID="dp_dirEmailTxt">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextArea_Description"/>
   </swbxf:DisplayProperty>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/community#cityCouncil">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_cityCouncil">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
+  <swbxf:DisplayProperty rdf:ID="dp_photoThumbnail">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+  </swbxf:DisplayProperty>
+  <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/community#city">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_city">
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </rdf:Description>
   <swbxf:DisplayProperty rdf:ID="dp_PhotoLogo">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+    <rdfs:label xml:lang="es">Foto para Logo</rdfs:label>
+    <rdfs:label xml:lang="en">Logo Photo</rdfs:label>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >140</swb:index>
-    <rdfs:label xml:lang="en">Logo Photo</rdfs:label>
-    <rdfs:label xml:lang="es">Foto para Logo</rdfs:label>
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
   </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_rateComment"/>
   <swbxf:DisplayProperty rdf:ID="dp_spType">
     <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
   </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_paramvalue">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >30</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_paqMaxPhotos">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >30</swb:index>
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TextBox"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_rfcType">
+    <swbxf:propSelectValues xml:lang="es">pfisica:Persona Física|pmoral:Persona Moral</swbxf:propSelectValues>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_spCategoryClass">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobal"/>
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >50</swb:index>
+    <swbxf:propGroup rdf:resource="#others"/>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_dirFichaEdit"/>
   <swbxf:DisplayProperty rdf:ID="dp_dirFichaDetail"/>
+  <swbxf:DisplayProperty rdf:ID="dp_callCenter">
+    <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >190</swb:index>
+  </swbxf:DisplayProperty>
+  <swbxf:DisplayProperty rdf:ID="dp_destination">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModel"/>
+  </swbxf:DisplayProperty>
   <swbxf:DisplayProperty rdf:ID="dp_PrincipalPhoto">
+    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
+    <rdfs:label xml:lang="en">Princiapl photo</rdfs:label>
+    <rdfs:label xml:lang="es">Foto principal</rdfs:label>
     <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >141</swb:index>
-    <rdfs:label xml:lang="es">Foto principal</rdfs:label>
-    <rdfs:label xml:lang="en">Princiapl photo</rdfs:label>
-    <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUploadHTML"/>
   </swbxf:DisplayProperty>
+  <swb:SemanticResource rdf:ID="MiPymesResource">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </swb:SemanticResource>
+  <swb:CodePackage rdf:ID="pkg">
+    <swb:package rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.pymtur</swb:package>
+    <swb:prefix rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >pymtur</swb:prefix>
+  </swb:CodePackage>
+  <swbxf:DisplayProperty rdf:ID="dp_rfcDomicilioFiscal"/>
 </rdf:RDF>
 
 <!-- Created with TopBraid Composer -->
