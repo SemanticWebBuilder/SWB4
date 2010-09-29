@@ -25,7 +25,6 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticClass;
@@ -253,57 +252,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                     out.println("</ul>");
                     out.println("</fieldset>");
-//                    out.println("<fieldset>");
-//                    out.println("<legend>Seleccionar propiedad a desplegar y el tipo de control a utilizar.</legend>");
-//                    out.println("<ul style=\"list-style:none;\">");
-//                    out.println("<li><label for=\""+id+"_semprop\">");
-//                    out.println("Propiedad/FormElement:");
-//                    out.println("</label>");
-//                    out.println("<select id=\""+id+"_semprop\" name=\"semprop\">");
-//                    out.println("<option value=\"\">");
-//                    out.println("");
-//                    out.println("</option>");
-//                    Iterator<SemanticProperty> itsemprop = sccol.listProperties();
-//                    while (itsemprop.hasNext()) {
-//                        SemanticProperty semProp = itsemprop.next();
-//                        out.println("<option value=\""+semProp.getURI()+"\">");
-//                        out.println(semProp.getDisplayName(user.getLanguage()));
-//                        out.println("</option>");
-//                    }
-//                    out.println("</select>");
-//                    out.println("<select id=\"" + id + "_sempropFE\" name=\"sempropFE\" >");
-//                    out.println(getFESelect(hmFormEle,"",user));
-//                    out.println("</select>");
-//                    out.println("</li>");
-//                    out.println("</ul>");
-//                    out.println("</fieldset>");
-//                    out.println("<fieldset>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
-//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-//                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
-//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-//                    out.println(" actbut.value='display'; ");
-//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-//                    out.println(" return false; ");
-//                    out.println("</script>");
-//                    out.println("</button>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
-//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-//                    out.println(" actbut.value='search';");
-//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-//                    out.println(" return false; ");
-//                    out.println("</script>");
-//                    out.println("</button>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
-//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-//                    out.println(" actbut.value='both';");
-//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-//                    out.println(" return false; ");
-//                    out.println("</script>");
-//                    out.println("</button>");
-//                    out.println("</fieldset>");
 
                     out.println("<div id=\"configcol/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración despliegue\" class=\"admViewProperties\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
                     out.println("<fieldset>");
@@ -324,9 +272,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("</option>");
                     }
                     out.println("</select>");
-//                    out.println("<select id=\"" + id + "_sempropFE\" name=\"sempropFE\" >");
-//                    out.println(getFESelect(hmFormEle,"",user));
-//                    out.println("</select>");
+
                     out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
                     //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
@@ -340,33 +286,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</ul>");
                     out.println("</fieldset>");
 
-//                    out.println("<fieldset>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnDisp\">" + paramsRequest.getLocaleString("btnAdd2display"));
-//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-//                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
-//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-//                    out.println(" actbut.value='display'; ");
-//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-//                    out.println(" return false; ");
-//                    out.println("</script>");
-//                    out.println("</button>");
-////                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnSear\">" + paramsRequest.getLocaleString("btnAdd2search") );
-////                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-////                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-////                    out.println(" actbut.value='search';");
-////                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-////                    out.println(" return false; ");
-////                    out.println("</script>");
-////                    out.println("</button>");
-////                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
-////                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-////                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-////                    out.println(" actbut.value='both';");
-////                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-////                    out.println(" return false; ");
-////                    out.println("</script>");
-////                    out.println("</button>");
-//                    out.println("</fieldset>");
 
                     out.println("<fieldset>");
 
@@ -374,15 +293,13 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<table width=\"100%\">");
                     out.println("<thead>");
                     out.println("<tr>");
-                    out.println("<th>");
-                    out.println(paramsRequest.getLocaleString("th_action"));
+                    out.println("<th width=\"70\">");
+                    out.println("&nbsp;"); //paramsRequest.getLocaleString("th_action")
                     out.println("</th>");
                     out.println("<th>");
                     out.println(paramsRequest.getLocaleString("th_property"));
                     out.println("</th>");
-//                    out.println("<th>");
-//                    out.println(paramsRequest.getLocaleString("th_formelement"));
-//                    out.println("</th>");
+
                     out.println("</tr>");
                     out.println("</thead>");
 
@@ -391,11 +308,56 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     String semprop = null;
                     String sempropFE = null;
                     String sorder = null;
+                    int min=0, max=0, indice = 0;
 
+                    HashMap<String,String> hmlistprop = new HashMap();
+
+                    int numlistprop = 0;
                     Iterator<String> itdis = col.listListPropertieses();
                     while(itdis.hasNext())
                     {
-                        String lprop = itdis.next();
+                        String slistprop = itdis.next();
+                        numlistprop++;
+                         try
+                        {
+                            StringTokenizer stoken = new StringTokenizer(slistprop,"|");
+                            semprop = stoken.nextToken();
+                            sempropFE = stoken.nextToken();
+                            sorder = stoken.nextToken();
+                            if(sorder!=null)
+                                indice = Integer.parseInt(sorder);
+
+                            if(min==0&&max==0)
+                            {
+                                min=indice;
+                                max=indice;
+                            }
+
+                            if(indice<min) min=indice;
+                            if(indice>max) max=indice;
+                            hmlistprop.put(sorder, slistprop);
+
+                        }
+                        catch(Exception e)
+                        {
+                            log.error("Error in display class property.", e);
+                            continue;
+                        }
+                    }
+                    //System.out.println("rango( "+min+" , "+max+" )");
+
+                    ArrayList list = new ArrayList(hmlistprop.keySet());
+                    Collections.sort(list);
+
+
+                    int countprop = 0;
+                    itdis = list.iterator(); //col.listListPropertieses();
+                    while(itdis.hasNext())
+                    {
+                        String key = itdis.next();
+                        String lprop = hmlistprop.get(key);
+
+                        countprop++;
                         //System.out.println("valor display ..."+lprop);
                         try
                         {
@@ -403,6 +365,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             semprop = stoken.nextToken();
                             sempropFE = stoken.nextToken();
                             sorder = stoken.nextToken();
+                            indice = Integer.parseInt(sorder);
+                            //System.out.println("Indice:"+indice);
                         }
                         catch(Exception e)
                         {
@@ -410,7 +374,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             continue;
                         }
                         out.println("<tr>");
-                        out.println("<td>");
+                        out.println("<td  width=\"70\">");
                         SWBResourceURL urlrem = paramsRequest.getActionUrl();
                         urlrem.setAction("remove");
                         urlrem.setParameter("suri", id);
@@ -418,13 +382,39 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         urlrem.setParameter("prop", "display");
                         urlrem.setParameter("ract", "config");
                         out.println("<a href=\"#\" onclick=\"submitUrl('"+urlrem+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
+                        if(indice!=max)
+                        {
+                            SWBResourceURL urldown = paramsRequest.getActionUrl();
+                            urldown.setAction("swap");
+                            urldown.setParameter("suri", id);
+                            urldown.setParameter("sval", lprop);
+                            urldown.setParameter("sorder", sorder);
+                            urldown.setParameter("prop", "display");
+                            urldown.setParameter("direction","down");
+                            urldown.setParameter("ract", "config");
+                            out.println("<a href=\"#\" onclick=\"submitUrl('"+urldown+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/down.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("down") + "\"></a>");
+                        }
+                        else
+                        {
+                            out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/space.jpg\" border=\"0\" >");
+                        }
+
+                        if(indice!=min) //sorderdown>0
+                        {
+                            SWBResourceURL urlup = paramsRequest.getActionUrl();
+                            urlup.setAction("swap");
+                            urlup.setParameter("suri", id);
+                            urlup.setParameter("sval", lprop);
+                            urlup.setParameter("sorder", sorder);
+                            urlup.setParameter("prop", "display");
+                            urlup.setParameter("direction","up");
+                            urlup.setParameter("ract", "config");
+                            out.println("<a href=\"#\" onclick=\"submitUrl('"+urlup+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/up.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("up") + "\"></a>");
+                        }
                         out.println("</td>");
                         out.println("<td>");
                         out.println(ont.getSemanticProperty(semprop).getDisplayName(user.getLanguage()));
                         out.println("</td>");
-//                        out.println("<td>");
-//                        out.println(ont.getSemanticProperty(sempropFE).getDisplayName(user.getLanguage()));
-//                        out.println("</td>");
                         out.println("</tr>");
                     }
 
@@ -500,14 +490,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</button>");
                     out.println("</li>");
                     out.println("</ul>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"submit\"  id=\""+id+"_btnBoth\">" + paramsRequest.getLocaleString("btnAdd2both") );
-//                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
-//                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
-//                    out.println(" actbut.value='both';");
-//                    out.println(" submitForm('" + id + "/collectionconfig'); ");
-//                    out.println(" return false; ");
-//                    out.println("</script>");
-//                    out.println("</button>");
 
                     out.println("</fieldset>");
 
@@ -516,8 +498,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<table width=\"100%\">");
                     out.println("<thead>");
                     out.println("<tr>");
-                    out.println("<th>");
-                    out.println(paramsRequest.getLocaleString("th_action"));
+                    out.println("<th width=\"70\">");
+                    out.println("&nbsp;"); //paramsRequest.getLocaleString("th_action"));
                     out.println("</th>");
                     out.println("<th>");
                     out.println(paramsRequest.getLocaleString("th_property"));
@@ -534,16 +516,60 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     sempropFE = null;
                     sorder = null;
 
+                    min=0; max=0; indice = 0;;
+
+                    HashMap<String,String> hmSearchprop = new HashMap();
+
+                    int numsearchprop = 0;
                     itdis = col.listSearchPropertieses();
                     while(itdis.hasNext())
                     {
-                        String lprop = itdis.next();
+                        String slistprop = itdis.next();
+                        numsearchprop++;
+                         try
+                        {
+                            StringTokenizer stoken = new StringTokenizer(slistprop,"|");
+                            semprop = stoken.nextToken();
+                            sempropFE = stoken.nextToken();
+                            sorder = stoken.nextToken();
+                            indice = Integer.parseInt(sorder);
+
+                            if(min==0&&max==0)
+                            {
+                                min=indice;
+                                max=indice;
+                            }
+
+                            if(indice<min) min=indice;
+                            if(indice>max) max=indice;
+                            hmSearchprop.put(sorder, slistprop);
+
+                        }
+                        catch(Exception e)
+                        {
+                            log.error("Error in display class property.", e);
+                            continue;
+                        }
+                    }
+                    //System.out.println("rango( "+min+" , "+max+" )");
+
+                    list = new ArrayList(hmSearchprop.keySet());
+                    Collections.sort(list);
+
+                    itdis = list.iterator(); //col.listSearchPropertieses();
+                    while(itdis.hasNext())
+                    {
+                        String key = itdis.next();
+                        String lprop = hmSearchprop.get(key);
                         try
                         {
                             StringTokenizer stoken = new StringTokenizer(lprop,"|");
                             semprop = stoken.nextToken();
                             sempropFE = stoken.nextToken();
                             sorder = stoken.nextToken();
+                            indice = Integer.parseInt(sorder);
+                            //System.out.println("Indice:"+indice);
+
                         }
                         catch(Exception e)
                         {
@@ -551,7 +577,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             continue;
                         }
                         out.println("<tr>");
-                        out.println("<td>");
+                        out.println("<td  width=\"70\">");
                         SWBResourceURL urlrem = paramsRequest.getActionUrl();
                         urlrem.setAction("remove");
                         urlrem.setParameter("suri", id);
@@ -559,6 +585,36 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         urlrem.setParameter("prop", "search");
                         urlrem.setParameter("ract", "config");
                         out.println("<a href=\"#\" onclick=\"submitUrl('"+urlrem+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/delete.gif\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("remove") + "\"></a>");
+                        if(indice!=max)
+                        {
+                            SWBResourceURL urldown = paramsRequest.getActionUrl();
+                            urldown.setAction("swap");
+                            urldown.setParameter("suri", id);
+                            urldown.setParameter("sval", lprop);
+                            urldown.setParameter("sorder", sorder);
+                            urldown.setParameter("prop", "search");
+                            urldown.setParameter("direction","down");
+                            urldown.setParameter("ract", "config");
+
+                            out.println("<a href=\"#\" onclick=\"submitUrl('"+urldown+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/down.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("down") + "\"></a>");
+                        }
+                        else
+                        {
+                            out.println("<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/space.jpg\" border=\"0\" >");
+                        }
+
+                        if(indice!=min) //sorderdown>0
+                        {
+                            SWBResourceURL urlup = paramsRequest.getActionUrl();
+                            urlup.setAction("swap");
+                            urlup.setParameter("suri", id);
+                            urlup.setParameter("sval", lprop);
+                            urlup.setParameter("sorder", sorder);
+                            urlup.setParameter("prop", "search");
+                            urlup.setParameter("direction","up");
+                            urlup.setParameter("ract", "config");
+                            out.println("<a href=\"#\" onclick=\"submitUrl('"+urlup+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/up.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("up") + "\"></a>");
+                        }
                         out.println("</td>");
                         out.println("<td>");
                         out.println(ont.getSemanticProperty(semprop).getDisplayName(user.getLanguage()));
@@ -825,11 +881,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
                                 
                                 if(null!=sofe)
                                 {
-                                    System.out.println("FE.asoc..:---"+sofe.getURI()+"---");
+                                    //System.out.println("FE.asoc..:---"+sofe.getURI()+"---");
                                 }
                                 else
                                 {
-                                    System.out.println("No es form Element");
+                                    //System.out.println("No es form Element");
                                 }
 
                                 if(null!=semanticProp) out.println(fmgr.renderElement(request, semanticProp, SWBFormMgr.MODE_EDIT));
@@ -1366,7 +1422,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                     if(!existe&&semprop!=null)
                     {
-                        col.addListProperties(semprop+"| |"+max); //col.addListProperties(semprop+"|"+sempropFE+"|"+max);
+                        col.addListProperties(semprop+"|Text|"+max); //col.addListProperties(semprop+"|"+sempropFE+"|"+max);
                     }
                 }
 
@@ -1484,7 +1540,148 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 }
             }
             catch(Exception e){log.error(e);}
-        } 
+        }
+        else if(action.equals("swap")){
+
+            String proptype = request.getParameter("prop"); //search, display
+            String sorder1 = request.getParameter("sorder");
+            String sorder = null;
+            String direct = request.getParameter("direction"); //up, down
+            if (obj instanceof Collection) {
+            Collection col = (Collection) obj;              
+
+            HashMap<String,String> hm = new HashMap<String, String>();       
+            Iterator<String> its = null;
+            
+            if(proptype.equals("search")) its = col.listSearchPropertieses();
+            if(proptype.equals("display")) its = col.listListPropertieses();
+            String semprop = null;
+            String sempropnx = null;
+            String sempropFE = null;
+            String sempropFEnx = null;
+            String swaporder = null;
+            
+            while(its.hasNext())
+            {
+                String slistprop = its.next();             
+                try
+                {
+                    StringTokenizer stoken = new StringTokenizer(slistprop,"|");
+                    semprop = stoken.nextToken();
+                    sempropFE = stoken.nextToken();
+                    sorder = stoken.nextToken();
+                    hm.put(sorder, slistprop);
+                }
+                catch(Exception e)
+                {
+                    log.error("Error in processAction.", e);
+                }
+            }
+            
+            ArrayList list = new ArrayList(hm.keySet());
+            Collections.sort(list);
+            
+            String svaltempprev = null;
+
+            its=list.iterator();
+            while(its.hasNext())
+            {
+                String key = its.next();
+                String slistprop = hm.get(key);
+                if(svaltempprev==null) svaltempprev = slistprop;
+                
+                try
+                {
+                    StringTokenizer stoken = new StringTokenizer(slistprop,"|");
+                    semprop = stoken.nextToken();
+                    sempropFE = stoken.nextToken();
+                    sorder = stoken.nextToken();
+
+                }
+                catch(Exception e)
+                {
+                    log.error("Error in processAction.", e);
+                }
+                
+                if(!sorder1.equals(sorder)) svaltempprev = slistprop;
+
+                if(sval.equals(slistprop)&&direct.equals("down"))
+                {
+                    String temp = null;
+                    if(its.hasNext())
+                    {
+                        try{
+                            key = its.next();
+                            temp = hm.get(key);
+                            StringTokenizer stoken = new StringTokenizer(temp,"|");
+                            sempropnx = stoken.nextToken();
+                            sempropFEnx = stoken.nextToken();
+                            swaporder = stoken.nextToken();
+                        }
+                        catch(Exception e){
+                            log.error("Error in processAction.", e);
+                        }
+                    }
+                    
+                    if(proptype.equals("search"))
+                    {
+                         col.removeSearchProperties(sval);
+                         col.removeSearchProperties(temp);
+                         
+                         col.addSearchProperties(semprop+"|"+sempropFE+"|"+swaporder);
+                         col.addSearchProperties(sempropnx+"|"+sempropFEnx+"|"+sorder);
+                    }
+                    if(proptype.equals("display"))
+                    {
+                         col.removeListProperties(sval);
+                         col.removeListProperties(temp);
+
+                         col.addListProperties(semprop+"|"+sempropFE+"|"+swaporder);
+                         col.addListProperties(sempropnx+"|"+sempropFEnx+"|"+sorder);
+                    }
+                    break;
+                    
+                }
+                
+                if(sval.equals(slistprop)&&direct.equals("up"))
+                {
+                    String temp = null;
+                    try{
+                        temp = svaltempprev;
+                        StringTokenizer stoken = new StringTokenizer(temp,"|");
+                        sempropnx = stoken.nextToken();
+                        sempropFEnx = stoken.nextToken();
+                        swaporder = stoken.nextToken();
+                    }
+                    catch(Exception e){
+                        log.error("Error in processAction.", e);
+                    }
+                    
+                    if(proptype.equals("search"))
+                    {
+                         col.removeSearchProperties(sval);
+                         col.removeSearchProperties(temp);
+                         
+                         col.addSearchProperties(semprop+"|"+sempropFE+"|"+swaporder);
+                         col.addSearchProperties(sempropnx+"|"+sempropFEnx+"|"+sorder);
+                    }
+                    if(proptype.equals("display"))
+                    {
+                         col.removeListProperties(sval);
+                         col.removeListProperties(temp);
+
+                         col.addListProperties(semprop+"|"+sempropFE+"|"+swaporder);
+                         col.addListProperties(sempropnx+"|"+sempropFEnx+"|"+sorder);
+                    }
+                    break;
+                    
+                }
+
+            }
+            }
+        }
+
+
 
 
         if (ract != null) {
