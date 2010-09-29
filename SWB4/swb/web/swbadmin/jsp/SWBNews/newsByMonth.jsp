@@ -17,7 +17,7 @@
     {
         public int compare(SWBNewContent o1,SWBNewContent o2)
         {
-            return o1.getResourceBase().getPriority()>=o2.getResourceBase().getPriority()?1:-1;
+            return o1.getResourceBase().getIndex()>=o2.getResourceBase().getIndex()?1:-1;
         }
     }
 %>
