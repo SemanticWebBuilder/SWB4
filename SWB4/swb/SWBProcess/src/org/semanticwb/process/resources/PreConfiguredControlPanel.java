@@ -664,7 +664,7 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
                 sb.append("\n<input type=\"CHECKBOX\" " + "id=\"" + strCtrl + "\"" +
                         " name=\"" + strCtrl + "\" " +
                         " value=\"" + strTempPropName + "\" " + strChecked + " " + strDisabled + " >");
-                sb.append("\n<td>" + tskTemp.getDisplayName() + "</td>");
+                sb.append("\n" + tskTemp.getDisplayName() + "</td>");
                 sb.append("\n<td>" + tskTemp.getType() + "</td>");
                 sb.append("\n<td><input type=\"TEXT\" " +
                         "id=\"" + strOrderCtrl + "|" + strTempPropName + "\""
@@ -1754,7 +1754,7 @@ public class PreConfiguredControlPanel extends GenericAdmResource{
                 }
                 java.util.List lstSelectedProps = stringToTaskPropertyList(displayType, strSelectedProps);
                 //sb.append("\n<div>");
-                sb.append("\n<table >");
+                //sb.append("\n<table >");
                 sb.append(printTypeProperties(displayType,PROPERTY_TYPE_TASK_DEFINITION, selectedProcess, lstTaskDefinitionProperties, lstSelectedProps, strCtrl, strOrderCtrl));
                 sb.append(printTypeProperties(displayType,PROPERTY_TYPE_TASK_INSTANCE, selectedProcess, lstTaskInstanceProperties, lstSelectedProps, strCtrl, strOrderCtrl));
                 java.util.List lstProcessArtifactsProperties = getProcessArtifactDefinitionProperties(selectedProcess,displayType);
