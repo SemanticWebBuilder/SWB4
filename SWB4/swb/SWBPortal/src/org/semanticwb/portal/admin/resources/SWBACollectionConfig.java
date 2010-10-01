@@ -289,8 +289,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                     out.println("<fieldset>");
 
-
-                    out.println("<table width=\"100%\">");
+                    out.println("<p align=\"center\">");
+                    out.println("<table width=\"90%\">");
                     out.println("<thead>");
                     out.println("<tr>");
                     out.println("<th width=\"70\">");
@@ -374,7 +374,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             continue;
                         }
                         out.println("<tr>");
-                        out.println("<td  width=\"70\">");
+                        out.println("<td  width=\"70\" align=\"left\">");
                         SWBResourceURL urlrem = paramsRequest.getActionUrl();
                         urlrem.setAction("remove");
                         urlrem.setParameter("suri", id);
@@ -412,7 +412,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             out.println("<a href=\"#\" onclick=\"submitUrl('"+urlup+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/up.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("up") + "\"></a>");
                         }
                         out.println("</td>");
-                        out.println("<td>");
+                        out.println("<td align=\"left\">");
                         out.println(ont.getSemanticProperty(semprop).getDisplayName(user.getLanguage()));
                         out.println("</td>");
                         out.println("</tr>");
@@ -453,7 +453,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("            });");
                             //this.inherited(arguments);
                     out.println("    </script>");
+                    out.println("</p>");
                     out.println("</fieldset>");
+                    //out.println("</fieldset>");
                     out.println("</div>");
 
                     
@@ -494,8 +496,8 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</fieldset>");
 
                     out.println("<fieldset>");
-
-                    out.println("<table width=\"100%\">");
+                    out.println("<p align=\"center\">");
+                    out.println("<table width=\"90%\">");
                     out.println("<thead>");
                     out.println("<tr>");
                     out.println("<th width=\"70\">");
@@ -577,7 +579,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             continue;
                         }
                         out.println("<tr>");
-                        out.println("<td  width=\"70\">");
+                        out.println("<td  width=\"70\" align=\"left\">");
                         SWBResourceURL urlrem = paramsRequest.getActionUrl();
                         urlrem.setAction("remove");
                         urlrem.setParameter("suri", id);
@@ -616,10 +618,10 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             out.println("<a href=\"#\" onclick=\"submitUrl('"+urlup+"',this); return false;\"><img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/up.jpg\" border=\"0\" alt=\"" + paramsRequest.getLocaleString("up") + "\"></a>");
                         }
                         out.println("</td>");
-                        out.println("<td>");
+                        out.println("<td align=\"left\">");
                         out.println(ont.getSemanticProperty(semprop).getDisplayName(user.getLanguage()));
                         out.println("</td>");
-                        out.println("<td>");
+                        out.println("<td align=\"left\">");
                         out.println(ont.getSemanticProperty(sempropFE).getDisplayName(user.getLanguage()));
                         out.println("</td>");
                         out.println("</tr>");
@@ -659,7 +661,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("            });");
                             //this.inherited(arguments);
                     out.println("    </script>");
+                    out.println("</p>");
                     out.println("</fieldset>");
+                    //out.println("</fieldset>");
                     out.println("</div>");
 
 //                    SWBResourceURL url = paramsRequest.getRenderUrl();
