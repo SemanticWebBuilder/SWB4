@@ -149,8 +149,8 @@ public class WBASessionReport extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html;charset=iso-8859-1");
-        response.setHeader("Cache-Control", "no-cache"); 
-        response.setHeader("Pragma", "no-cache"); 
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
         
@@ -296,14 +296,14 @@ public class WBASessionReport extends GenericResource {
                 out.println("function doPdf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+url.setMode("report_pdf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("pdf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
                 
                 out.println("function doRtf(accion, size) { ");
                 /*out.println("   if(validate(accion)) {");*/
                 out.println("      var params = getParams(accion);");
-                out.println("      window.open(\""+url.setMode("report_rtf")+"\"+params,\"graphWindow\",size);    ");
+                out.println("      window.open(\""+url.setMode("rtf")+"\"+params,\"graphWindow\",size);    ");
                 /*out.println("   }");*/
                 out.println("}");
                 
@@ -578,9 +578,8 @@ public class WBASessionReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else {  // REPORTE MENSUAL
-                String s_year_13 = request.getParameter("wb_year_13");
-                s_year_13 = request.getParameter("wb_year_13");
-                if(!s_year_13.equals(null)) {
+                String s_year_13 = request.getParameter("wb_year13");                
+                if( s_year_13!=null ) {
                     WBAFilterReportBean filter = new WBAFilterReportBean();
                     filter.setSite(repositoryName);
                     filter.setIdaux(S_REPORT_IDAUX);
@@ -636,9 +635,8 @@ public class WBASessionReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else {  // REPORTE MENSUAL
-                String s_year_13 = request.getParameter("wb_year_13");
-                s_year_13 = request.getParameter("wb_year_13");
-                if(!s_year_13.equals(null)){
+                String s_year_13 = request.getParameter("wb_year13");
+                if( s_year_13!=null ){
                     WBAFilterReportBean filter = new WBAFilterReportBean();
                     filter.setSite(repositoryName);
                     filter.setIdaux(S_REPORT_IDAUX);
@@ -767,10 +765,9 @@ public class WBASessionReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else {  // REPORTE MENSUAL
-                String s_year_13 = request.getParameter("wb_year_13");
+                String s_year_13 = request.getParameter("wb_year13");
                 /*if(!s_repository.equals(null)){*/
-                    s_year_13 = request.getParameter("wb_year_13");
-                    if(!s_year_13.equals(null)){
+                    if( s_year_13!=null ){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(repositoryName);
                         filter.setIdaux(S_REPORT_IDAUX);
@@ -827,10 +824,9 @@ public class WBASessionReport extends GenericResource {
                     throw new javax.servlet.ServletException(e);
                 }
             }else {  // REPORTE MENSUAL
-                String s_year_13 = request.getParameter("wb_year_13");
-                /*if(!s_repository.equals(null)){*/
-                    s_year_13 = request.getParameter("wb_year_13");
-                    if(!s_year_13.equals(null)){
+                String s_year_13 = request.getParameter("wb_year13");
+                /*if(!s_repository.equals(null)){*/                    
+                    if( s_year_13!=null ){
                         WBAFilterReportBean filter = new WBAFilterReportBean();
                         filter.setSite(repositoryName);
                         filter.setIdaux(S_REPORT_IDAUX);
@@ -900,7 +896,7 @@ public class WBASessionReport extends GenericResource {
             sb_ret.append("<input type=\"button\" class=\"boton\" onClick=\"window.close()\" value=\""+paramsRequest.getLocaleString("close")+"\" name=\"btnClose\">");
             sb_ret.append("</td>");
             sb_ret.append("</tr>");
-            sb_ret.append("<tr><td colpsan=\"3\" align=\"center\">"+request.getParameter("wb_site")+"</td></tr>");
+            sb_ret.append("<tr><td colpsan=\"3\" align=\"center\">"+request.getParameter("wb_repository")+"</td></tr>");
             sb_ret.append("<tr>");
             sb_ret.append("<td colpsan=\"3\">");
             sb_ret.append(getHistogram(request, response, paramsRequest));

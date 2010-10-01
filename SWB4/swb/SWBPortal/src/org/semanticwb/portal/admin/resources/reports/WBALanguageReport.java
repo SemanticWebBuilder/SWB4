@@ -132,7 +132,7 @@ public class WBALanguageReport extends GenericResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public void doRenderLang(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        response.setContentType("text/json;charset=iso-8859-1");
+        response.setContentType("text/html;charset=iso-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
