@@ -30,6 +30,7 @@
  */
 
 package applets.ftp;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.net.*;
@@ -41,6 +42,11 @@ import java.util.*;
 import java.awt.*;
 
 import applets.commons.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
 /**
  * Formulario que presneta dirtectorios y archivos existentes en el servidor, así
@@ -102,6 +108,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         {
             //e.printStackTrace(System.out);
         }
+
         choices[0]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si");
         choices[1]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("si_todo");
         choices[2]=java.util.ResourceBundle.getBundle("applets/ftp/ftp",locale).getString("no");
@@ -110,6 +117,8 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         jTreeDirs.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("")));
         this.jTableFiles.setDefaultRenderer(JLabel.class, new TableFileRender());
         this.jTableFiles.getSelectionModel().addListSelectionListener(this);
+        jTableFiles.setCellSelectionEnabled(false);
+        jTableFiles.setRowSelectionAllowed(true);
         jsess=this.getParameter(PRM_JSESS);
         cgiPath=this.getParameter(PRM_CGIPATH);
         uploadpath=this.getParameter(PRM_UPLOADPATH);
@@ -118,11 +127,43 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             url=new URL(getCodeBase().getProtocol(),getCodeBase().getHost(),getCodeBase().getPort(),cgiPath);
         }catch(Exception e) {
             e.printStackTrace();
-        }          
+        }      
         this.setJMenuBar(this.jMenuBar1);        
         this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));       
         jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,locale);                
         this.jTableFiles.setModel(filemodel);
+        jTableFiles.setDragEnabled(false);
+        JTableHeader header=jTableFiles.getTableHeader();
+        TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader();
+        tableCellRenderHeader.date.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e)
+            {
+               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
+               model.reorderByDate();
+               jTableFiles.updateUI();
+            }
+        });
+        tableCellRenderHeader.name.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e)
+            {
+               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
+               model.reorderByName();
+               jTableFiles.updateUI();
+            }
+        });
+        tableCellRenderHeader.size.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e)
+            {
+               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
+               model.reorderBySize();
+               jTableFiles.updateUI();
+            }
+        });
+        header.addMouseListener(new ColumnHeaderListener(jTableFiles));
+        //header.setDefaultRenderer(tableCellRenderHeader);
         loadDirectories();        
         
         
@@ -141,6 +182,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         WBTreeNode enode=parser.parse(respxml);
         try
         {
+            ArrayList<Directory> directories=new ArrayList<Directory>();
             if(enode!=null && enode.getFirstNode()!=null && enode.getFirstNode().getFirstNode()!=null)
             {
                 WBTreeNode dir=enode.getFirstNode().getFirstNode();
@@ -152,12 +194,18 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                         dir=(WBTreeNode)it.next();
                         if(dir!=null && dir.getName().equals("dir"))
                         {
-                            Directory child=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
-                            odir.add(child);
-                            if(dir.getAttribute("hasChild").equals("true"))
-                            {
-                                child.add(new DefaultMutableTreeNode(""));
-                            }
+                            Directory child=new Directory(dir.getAttribute("name"),dir.getAttribute("path"),dir.getAttribute("hasChild"));
+                            directories.add(child);
+                        }
+                    }
+                    NameDirectoryCompartor c=new NameDirectoryCompartor();
+                    Collections.sort(directories,c );
+                    for(Directory child : directories)
+                    {
+                        odir.add(child);
+                        if(child.haschilds.equals("true"))
+                        {
+                            child.add(new DefaultMutableTreeNode(""));
                         }
                     }
                 }
@@ -169,19 +217,25 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }
     }
     private void loadDirectories(WBTreeNode dir,Directory root)
-    {        
+    {
+        ArrayList<Directory> directories=new ArrayList<Directory>();
         Iterator it=dir.getNodes().iterator();
         while(it.hasNext())
         {
             WBTreeNode enode=(WBTreeNode)it.next();
             if(enode!=null && enode.getName().equals("dir"))
             {                
-                Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"));                                                
-                root.add(child);                
-                if(enode.getAttribute("hasChild").equals("true"))
-                {
-                    child.add(new DefaultMutableTreeNode(""));
-                }
+                Directory child=new Directory(enode.getAttribute("name"),enode.getAttribute("path"),enode.getAttribute("hasChild"));
+                directories.add(child);
+            }
+        }
+        Collections.sort(directories,new NameDirectoryCompartor());
+        for(Directory child : directories)
+        {
+            root.add(child);
+            if(child.haschilds.equals("true"))
+            {
+                child.add(new DefaultMutableTreeNode(""));
             }
         }
         
@@ -238,10 +292,18 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             model.addFileListener(this);
             this.jTableFiles.setModel(model);
             Iterator files=enode.getFirstNode().getNodes().iterator();
+            ArrayList<applets.ftp.File> lfiles=new ArrayList<applets.ftp.File>();
             while(files.hasNext())
             {
                 WBTreeNode file=(WBTreeNode)files.next();
                 applets.ftp.File ofile=new applets.ftp.File(dir,file.getAttribute("name"), file.getAttribute("path"), file.getAttribute("size"), file.getAttribute("lastupdate"));
+                lfiles.add(ofile);
+            }
+            FileNameCompartor fc=new FileNameCompartor();
+            fc.toogle();
+            Collections.sort(lfiles,fc);
+            for(applets.ftp.File ofile : lfiles)
+            {
                 model.addFile(ofile);
             }
             this.jTableFiles.updateUI();
@@ -261,9 +323,8 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 WBTreeNode dir=enode.getFirstNode().getFirstNode();
                 if(dir.getName().equals("dir"))
                 {
-                    Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"));
+                    Directory root=new Directory(dir.getAttribute("name"),dir.getAttribute("path"),"false");
                     jTreeDirs.setModel(new DefaultTreeModel(root));
-
                     loadDirectories(dir,root);
                     loadFiles(root);
                     this.jTreeDirs.expandRow(0);
@@ -865,7 +926,14 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
     }//GEN-LAST:event_jMenuItemDirRenameActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        this.jTreeDirs.setSelectionRow(0);
+        try
+        {
+            this.jTreeDirs.setSelectionRow(0);
+        }
+        catch(NullPointerException npe)
+        {
+            
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void jMenuItemDirDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDirDeleteActionPerformed
@@ -1224,7 +1292,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                 pathDir=this.jFileChooser1.getCurrentDirectory();
                 if (ret == JFileChooser.APPROVE_OPTION)
                 {       
-                    Vector vfiles=new Vector();                    
+                    Vector<java.io.File> vfiles=new Vector<java.io.File>();
                     applets.ftp.File fileexists=null;
                     java.io.File[] files = this.jFileChooser1.getSelectedFiles();
                     boolean siAll=false;                    
@@ -1286,7 +1354,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
                         vfiles.add(f);                          
                     }                    
                     this.jFileChooser1.updateUI();
-                    final Vector osendfiles=vfiles;
+                    final Vector<java.io.File> osendfiles=vfiles;
                     final Directory odir=dir;
                     final URL urlup=urlupload;
                     
@@ -1552,7 +1620,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
 
         jTableFileModel model=(jTableFileModel)this.jTableFiles.getModel();
         int[] isel=this.jTableFiles.getSelectedRows();
-        Vector files=new Vector();
+        ArrayList<File> files=new ArrayList<File>();
         for(int i=0;i<isel.length;i++)
         {
             int index=isel[i];
@@ -1561,7 +1629,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         boolean siAll=false;
         for(int i=0;i<files.size();i++)
         {
-            File f=(File)files.elementAt(i);
+            File f=(File)files.get(i);
             if(!siAll)
             {
                 int selection = JOptionPane.showOptionDialog(
@@ -1680,7 +1748,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             {
                 if(edir.getFirstNode().getText().equals("true"))
                 {                   
-                    Directory child=new Directory(name, path);
+                    Directory child=new Directory(name, path,"false");
                     dir.add(child);                 
                     TreePath newpath=this.jTreeDirs.getSelectionPath().pathByAddingChild(child);
                     this.jTreeDirs.setSelectionPath(newpath);
