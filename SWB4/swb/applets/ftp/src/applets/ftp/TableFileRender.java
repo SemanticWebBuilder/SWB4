@@ -48,14 +48,13 @@ public class TableFileRender implements TableCellRenderer{
     public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         
         if(value instanceof JLabel)
-        {
-            
+        {            
             JLabel flabel=(JLabel)value;
-            flabel.setFont(table.getFont());
+            flabel.setFont(table.getFont());           
             if(isSelected)
             {
                 flabel.setBackground(table.getSelectionBackground());
-                flabel.setForeground(table.getSelectionForeground());
+                flabel.setForeground(table.getSelectionForeground());                
             }
             else
             {

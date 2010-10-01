@@ -31,8 +31,8 @@
 
 package applets.ftp;
 
+import java.text.DecimalFormat;
 import javax.swing.*;
-import javax.swing.plaf.basic.*;
 /**
  * Clase que representa un archivo existente en el servidor.
  * @author Victor Lorenzana
@@ -43,6 +43,8 @@ public class File {
     String name,path,size,lastupdate;
     Directory dir;
     JLabel label=new JLabel();
+    JLabel labelSize=new JLabel();
+    JLabel labelDate=new JLabel();
     public File(Directory dir,String name,String path,String size,String lastupdate)
     {        
         
@@ -54,11 +56,55 @@ public class File {
         label.setText(name);
         label.setIcon(new javax.swing.ImageIcon(getClass().getResource("/applets/ftp/images/file.gif")));
         label.setOpaque(true);
+        labelSize.setOpaque(true);
+        labelDate.setOpaque(true);
         label.updateUI();
+        initSizeLabel();
+        initDateLabel();
+    }
+    private void initDateLabel()
+    {
+        labelDate.setText(this.getLastUpdate());
+        labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
+    }
+    private void initSizeLabel()
+    {
+        String size=this.getSize();
+                try
+                {
+                    int isize=Integer.parseInt(size);
+                    double sizekb=0;
+                    if(isize>0)
+                    {
+                        sizekb=isize/1024d;
+                        if(sizekb==0)
+                        {
+                            sizekb=1;
+                        }
+                    }
+                    DecimalFormat df=new DecimalFormat("###,###,##0.00");
+                    size="("+df.format(isize)+" bytes)      "+df.format(sizekb)+" KB ";
+                }
+                catch(NumberFormatException nfe)
+                {
+                    nfe.printStackTrace();
+                }
+                DecimalFormat df=new DecimalFormat();
+
+                labelSize.setText(size);
+                labelSize.setHorizontalAlignment(SwingConstants.RIGHT);
     }
     public Directory getDirectory()
     {
         return dir;
+    }
+    public JLabel getSizeLabel()
+    {
+        return labelSize;
+    }
+    public JLabel getDateLabel()
+    {
+        return labelDate;
     }
     public JLabel getLabel()
     {

@@ -31,10 +31,12 @@
 
 package applets.ftp;
 
+import java.awt.Color;
+import java.text.DecimalFormat;
 import javax.swing.table.*;
 import java.util.*;
+import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.event.*;
 /**
  * Clase que representa el modelo de datos necesarios para mostrarlos en una tabla
  * dentro del applet.
@@ -46,16 +48,20 @@ public class jTableFileModel extends AbstractTableModel{
     
     /** Creates a new instance of jTableFileModel */
     private String[] columnNames =new String[3];
-    Vector files=new Vector();    
-    Vector listeners=new Vector();
+    ArrayList<File> files=new ArrayList<File>();
+    ArrayList<FileListener> listeners=new ArrayList<FileListener>();
     JTable table;
     Locale locale;
+    SizeFileComparator sizeFileComparator=new SizeFileComparator();
+    DateTimeFileComparator dateTimeFileComparator=new DateTimeFileComparator();
+    FileNameCompartor fileNameCompartor=new FileNameCompartor();
     public jTableFileModel(JTable table,Locale locale) {
        this.table=table;
        this.locale=locale;
        columnNames[0]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("name");
        columnNames[1]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("size");
        columnNames[2]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("lastupdate");
+       
     }
     public void addFileListener(FileListener listener)
     {
@@ -66,6 +72,7 @@ public class jTableFileModel extends AbstractTableModel{
         this.files.clear();
         firemodificatedlisteners();
     }
+    @Override
     public String getColumnName(int col) {
         return columnNames[col].toString();
     }
@@ -84,10 +91,12 @@ public class jTableFileModel extends AbstractTableModel{
     public int getRowCount() {
         return files.size();
     }
+    @Override
     public boolean isCellEditable(int row, int col)
     {
         return false;
     }
+    @Override
     public Class getColumnClass(int col)
     {       
         switch(col)
@@ -95,9 +104,9 @@ public class jTableFileModel extends AbstractTableModel{
             case 0:                
                 return JLabel.class;                   
             case 1:
-                return String.class; 
+                return JLabel.class;
             case 2:
-                return String.class; 
+                return JLabel.class;
             default:
                 return null;
         }   
@@ -110,17 +119,32 @@ public class jTableFileModel extends AbstractTableModel{
             case 0:
                 return file.getLabel();        
             case 1:
-                return file.getSize();
+                
+                return file.getSizeLabel();
             case 2:
-                return file.getLastUpdate();
+                return file.getDateLabel();
             default:
                 return null;
         }    
     }
     public File getFile(int index)
-    {        
-        
+    {   
         return (File)this.files.toArray()[index];
+    }
+    public void reorderByName()
+    {
+        fileNameCompartor.toogle();
+        Collections.sort(this.files,fileNameCompartor);
+    }
+    public void reorderBySize()
+    {
+        sizeFileComparator.toogle();
+        Collections.sort(this.files,sizeFileComparator);
+    }
+    public void reorderByDate()
+    {
+        dateTimeFileComparator.toogle();
+        Collections.sort(this.files,dateTimeFileComparator);
     }
     public void addFile(File file)
     {        

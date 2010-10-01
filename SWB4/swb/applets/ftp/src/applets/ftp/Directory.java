@@ -44,11 +44,13 @@ public class Directory extends DefaultMutableTreeNode {
     String name, path;
     JLabel component=new JLabel();
     boolean selected=false;
-    public Directory(String name,String path) {
+    String haschilds;
+    public Directory(String name,String path,String haschilds) {
         this.name=name;
         this.path=path;
         component.setText(name);        
         component.setOpaque(true);
+        this.haschilds=haschilds;
     }
     public void setSelected(boolean selected)
     {
