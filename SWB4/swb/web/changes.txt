@@ -16,6 +16,9 @@
     - Corrección en las presentaciones preliminares de un contenido en word, excel y ppt (victorl).
     - Mejora en el rendimiento al procesar contenidos de Word,Excel y PPT.(victorl)
     - En el plug-in de Open Office, se agrego soporte a nombres de archivos con caracter '_' (victorl).
+    - Ordenación alfabetica de directorios y archivos en FTP (victorl).
+    - Mejor lectura en tamaño de archivos y fechas en FTP (victorl).
+    - Ordenación dando click en los headers de archivos de FTP, ascendente y descendente de la tabla de archivos de FTP (victorl).
 
 
   4.0.1.7
