@@ -166,7 +166,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
             if (gobj instanceof Collection) {
                 col = (Collection) gobj;
 
-                if (col.getCollectionClass() != null) {
+               if (col.getCollectionClass() != null) {
                     SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
                     
                     HashMap<String, String> hmcol = new HashMap();
@@ -227,9 +227,12 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("<label for=\"" + id + "_collclass\">" + "Clase asociada" + "</label>");
                     out.println("<select id=\""+id+"_collclass\" name=\"collclass\">");
                     //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
-                    Iterator<SemanticClass> itsemcls = col.getSemanticObject().getModel().listModelClasses();
+
+                    Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
+                    itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
                     while (itsemcls.hasNext()) {
-                        SemanticClass semClass = itsemcls.next();
+                        SemanticObject semobj = itsemcls.next();
+                        SemanticClass semClass = semobj.transformToSemanticClass();
                         out.println("<option value=\""+semClass.getURI()+"\" ");
                         if(sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
                         out.println(">");
@@ -675,26 +678,79 @@ public class SWBACollectionConfig extends GenericAdmResource {
 //                    out.println("</fieldset>");
                     out.println("</form >");
                     out.println("</div >");
-                } else {
+                }
+
+                else {
+
+
+                    SWBResourceURL urlconf = paramsRequest.getActionUrl();
+                    urlconf.setAction("updconfig");
+                    urlconf.setParameter("ract","config");
+
+
                     out.println("<div class=\"swbform\">");
+                    out.println("<form type=\"dijit.form.Form\" id=\"" + id + "/collectionconfig\" name=\"" + id + "/collectionconfig\" action=\"" + urlconf + "\" method=\"post\" onsubmit=\"submitForm('" + id + "/collectionconfig'); return false;\"  >"); //
+                    out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
+                    out.println("<input type=\"hidden\" name=\"act\" value=\"\">");
+                    out.println("<input type=\"hidden\" id=\""+id+"_actbutton\" name=\"actbutton\" value=\"\">");
+
                     out.println("<fieldset>");
-                    out.println("<legend>" + paramsRequest.getLocaleString("erroMsgConfig") + " \"" + col.getDisplayTitle(user.getLanguage()) + "\" </legend>");
+                    out.println("<legend>" + "Configuración de colección" + " " + col.getDisplayTitle(user.getLanguage()) + "</legend>");
                     out.println("<ul style=\"list-style:none;\">");
                     out.println("<li>");
-                    out.println(paramsRequest.getLocaleString("msgMissingConfigClass"));
+                    out.println("<label for=\"" + id + "_collclass\">" + "Clase asociada" + "</label>");
+                    out.println("<select id=\""+id+"_collclass\" name=\"collclass\">");
+                    //out.println("<input type=\"text\" name=\"classname\" value=\"" + col.getCollectionClass().getDisplayName(user.getLanguage()) + "\" readonly >");
+
+                    Iterator<SemanticObject> itsemcls = null; //col.getSemanticObject().getModel().listModelClasses();
+                    itsemcls = SWBPlatform.getSemanticMgr().getOntology().listInstancesOfClass(SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(SWBPlatform.getSemanticMgr().getVocabulary().SWB_CLASS));
+                    while (itsemcls.hasNext()) {
+                        SemanticObject semobj = itsemcls.next();
+                        SemanticClass semClass = semobj.transformToSemanticClass();
+                        out.println("<option value=\""+semClass.getURI()+"\" ");
+                        //if(sccol!=null&&sccol.getURI().equals(semClass.getURI())) out.println(" selected ");
+                        out.println(">");
+                        out.println(semClass.getDisplayName(user.getLanguage()));
+                        out.println("</option>");
+                    }
+                    out.println("</select>");
+                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
+
+                    out.println("<script type=\"dojo/method\" event=\"onClick\" >");
+                    //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
+                    out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
+                    out.println(" actbut.value='updtclass'; ");
+                    out.println(" submitForm('" + id + "/collectionconfig'); ");
+                    out.println(" return false; ");
+                    out.println("</script>");
+                    out.println("</button>");
+
                     out.println("</li>");
-                    out.println("<li>");
-                    out.println(paramsRequest.getLocaleString("msgConfigInstructions"));
-                    out.println("</li>");
+
                     out.println("</ul>");
                     out.println("</fieldset>");
-                    SWBResourceURL urlreload = paramsRequest.getRenderUrl();
-                    urlreload.setParameter("act", "");
-                    urlreload.setParameter("suri", id);
-                    out.println("<fieldset>");
-                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlreload + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnReload") + "</button>"); //
-                    out.println("</fieldset>");
                     out.println("</div>");
+
+
+//                    out.println("<div class=\"swbform\">");
+//                    out.println("<fieldset>");
+//                    out.println("<legend>" + paramsRequest.getLocaleString("erroMsgConfig") + " \"" + col.getDisplayTitle(user.getLanguage()) + "\" </legend>");
+//                    out.println("<ul style=\"list-style:none;\">");
+//                    out.println("<li>");
+//                    out.println(paramsRequest.getLocaleString("msgMissingConfigClass"));
+//                    out.println("</li>");
+//                    out.println("<li>");
+//                    out.println(paramsRequest.getLocaleString("msgConfigInstructions"));
+//                    out.println("</li>");
+//                    out.println("</ul>");
+//                    out.println("</fieldset>");
+//                    SWBResourceURL urlreload = paramsRequest.getRenderUrl();
+//                    urlreload.setParameter("act", "");
+//                    urlreload.setParameter("suri", id);
+//                    out.println("<fieldset>");
+//                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlreload + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnReload") + "</button>"); //
+//                    out.println("</fieldset>");
+//                    out.println("</div>");
                 }
             }
 
