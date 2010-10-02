@@ -21,6 +21,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Collection;
+import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
@@ -938,20 +939,22 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                                 //TODO: Hacer el render de la propiedad y el FormElement configurado
                                 SemanticObject sofe = ont.getSemanticObject(hmhasprop.get(semanticProp.getURI()));
+
+                                FormElement fe = null;
                                 
                                 if(null!=sofe)
                                 {
-                                    //System.out.println("FE.asoc..:---"+sofe.getURI()+"---");
+                                    
+                                    if(sofe.transformToSemanticClass().isSWBFormElement())
+                                    {
+                                        //System.out.println("Antes del FERender");
+                                        fe = fmgr.getFormElement(semanticProp);//FormElement) sofe;
+                                        //out.println(fe.renderElement(request, gobj.getSemanticObject(), semProphm, SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
+                                        out.println(fe.renderElement(request, gobj.getSemanticObject(), semanticProp, SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_EDIT, user.getLanguage()));
+                                    }
                                 }
-                                else
-                                {
-                                    //System.out.println("No es form Element");
-                                }
+                                //if(null!=semanticProp) out.println(fmgr.renderElement(request, semanticProp, SWBFormMgr.MODE_EDIT));
 
-                                if(null!=semanticProp) out.println(fmgr.renderElement(request, semanticProp, SWBFormMgr.MODE_EDIT));
-
-                               
-                                
                                 out.println("</td>");
                                 out.println("</tr>");
                             }
