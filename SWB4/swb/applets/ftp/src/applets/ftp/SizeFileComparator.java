@@ -6,6 +6,7 @@
 package applets.ftp;
 
 import java.util.Comparator;
+import javax.swing.JLabel;
 
 /**
  *
@@ -13,6 +14,7 @@ import java.util.Comparator;
  */
 public class SizeFileComparator implements Comparator<applets.ftp.File> {
 
+   
     boolean asc=false;
     public int compare(File o1, File o2)
     {
@@ -32,9 +34,14 @@ public class SizeFileComparator implements Comparator<applets.ftp.File> {
         }
         return 1;
     }
+    public boolean  isAsc()
+    {
+        return asc;
+    }
     public void toogle()
     {
         asc=!asc;
+        
     }
 
 }

@@ -8,6 +8,7 @@ package applets.ftp;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import javax.swing.JLabel;
 
 /**
  *
@@ -15,7 +16,8 @@ import java.util.Date;
  */
 public class DateTimeFileComparator implements Comparator<applets.ftp.File> {
 
-    boolean asc=false;
+    
+    private boolean asc=false;
     private static final SimpleDateFormat df=new SimpleDateFormat("dd/MM/yyyy HH:mm");
     public int compare(File o1, File o2)
     {
@@ -34,9 +36,13 @@ public class DateTimeFileComparator implements Comparator<applets.ftp.File> {
         }
         return 0;
     }
+    public boolean  isAsc()
+    {
+        return asc;
+    }
     public void toogle()
     {
-        asc=!asc;
+        asc=!asc;        
     }
 
 }

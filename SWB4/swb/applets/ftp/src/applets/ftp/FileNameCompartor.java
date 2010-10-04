@@ -6,6 +6,7 @@
 package applets.ftp;
 
 import java.util.Comparator;
+import javax.swing.JLabel;
 
 /**
  *
@@ -13,7 +14,9 @@ import java.util.Comparator;
  */
 public class FileNameCompartor implements Comparator<applets.ftp.File> {
 
-    boolean asc=false;
+    
+    
+    private boolean asc=false;
     public int compare(applets.ftp.File o1, applets.ftp.File o2)
     {
         if(asc)
@@ -21,9 +24,13 @@ public class FileNameCompartor implements Comparator<applets.ftp.File> {
         else
             return o2.getName().compareToIgnoreCase(o1.getName());
     }
+    public boolean  isAsc()
+    {
+        return asc;
+    }
     public void toogle()
     {
-        asc=!asc;
+        asc=!asc;        
     }
 
 }
