@@ -86,7 +86,7 @@ public class Ajax {
 
     public static String getChartScript() {
         StringBuilder script = new StringBuilder();
-        script.append("<script src=\"/swbadmin/jsp/charts/coregraph.js\" type=\"text/javascript\"></script>\n");
+        script.append("<script src=\"/swbadmin/jsp/process/charts/coregraph.js\" type=\"text/javascript\"></script>\n");
         //script.append("<script src=\"/swbadmin/jsp/charts/raphael-min.js\" type=\"text/javascript\"></script>\n");
         //script.append("<script src=\"/swbadmin/jsp/charts/grafico.base.js\" type=\"text/javascript\"></script>\n");
         //script.append("<script src=\"/swbadmin/jsp/charts/grafico.line.js\" type=\"text/javascript\"></script>\n");
