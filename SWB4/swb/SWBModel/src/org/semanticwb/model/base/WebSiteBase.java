@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Filterable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
