@@ -1,66 +1,37 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 package org.semanticwb.model.base;
 
 
-   // TODO: Auto-generated Javadoc
-/**
+   /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina. 
    */
 public abstract class TemplateBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Versionable,org.semanticwb.model.Deviceable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
 {
-   
-   /** Objeto que define un Grupo de plantillas. */
+   /**
+   * Objeto que define un Grupo de plantillas
+   */
     public static final org.semanticwb.platform.SemanticClass swb_TemplateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateGroup");
-    
-    /** The Constant swb_templateGroup. */
     public static final org.semanticwb.platform.SemanticProperty swb_templateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#templateGroup");
-   
-   /** Referencia a un objeto de tipo Template. */
+   /**
+   * Referencia a un objeto de tipo Template
+   */
     public static final org.semanticwb.platform.SemanticClass swb_TemplateRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#TemplateRef");
-    
-    /** The Constant swb_hasTemplateRefInv. */
     public static final org.semanticwb.platform.SemanticProperty swb_hasTemplateRefInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasTemplateRefInv");
    /**
    * Las Plantillas son documentos HTML que sirven de base a SemanticWebBuilder para poder mostrar el "look & feel" del sitio, así como la distribución de todos los elementos en la pagina.
    */
     public static final org.semanticwb.platform.SemanticClass swb_Template=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
-   
-   /** The semantic class that represents the currentObject. */
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Template");
 
-    /**
-     * The Class ClassMgr.
-     */
     public static class ClassMgr
     {
-       
        /**
-        * Returns a list of Template for a model.
-        * 
-        * @param model Model to find
-        * @return Iterator of org.semanticwb.model.Template
-        */
+       * Returns a list of Template for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.model.Template
+       */
 
         public static java.util.Iterator<org.semanticwb.model.Template> listTemplates(org.semanticwb.model.SWBModel model)
         {
@@ -78,12 +49,6 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Template>(it, true);
         }
 
-        /**
-         * Creates the template.
-         * 
-         * @param model the model
-         * @return the org.semanticwb.model. template
-         */
         public static org.semanticwb.model.Template createTemplate(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
@@ -408,10 +373,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Constructs a TemplateBase with a SemanticObject.
-    * 
-    * @param base The SemanticObject with the properties for the Template
-    */
+   * Constructs a TemplateBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the Template
+   */
     public TemplateBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
@@ -427,11 +391,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets true if has a UserGroupRef.
-    * 
-    * @param value org.semanticwb.model.UserGroupRef to verify
-    * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
-    */
+   * Gets true if has a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to verify
+   * @return true if the org.semanticwb.model.UserGroupRef exists, false otherwise
+   */
     public boolean hasUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
         boolean ret=false;
@@ -443,40 +406,34 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets all the UserGroupRefs inherits.
-    * 
-    * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
-    */
+   * Gets all the UserGroupRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.UserGroupRef
+   */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef> listInheritUserGroupRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.UserGroupRef>(getSemanticObject().listInheritProperties(swb_hasUserGroupRef));
     }
-   
    /**
-    * Adds a UserGroupRef.
-    * 
-    * @param value org.semanticwb.model.UserGroupRef to add
-    */
+   * Adds a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to add
+   */
 
     public void addUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasUserGroupRef, value.getSemanticObject());
     }
-   
    /**
-    * Removes all the UserGroupRef.
-    */
+   * Removes all the UserGroupRef
+   */
 
     public void removeAllUserGroupRef()
     {
         getSemanticObject().removeProperty(swb_hasUserGroupRef);
     }
-   
    /**
-    * Removes a UserGroupRef.
-    * 
-    * @param value org.semanticwb.model.UserGroupRef to remove
-    */
+   * Removes a UserGroupRef
+   * @param value org.semanticwb.model.UserGroupRef to remove
+   */
 
     public void removeUserGroupRef(org.semanticwb.model.UserGroupRef value)
     {
@@ -484,10 +441,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the UserGroupRef.
-    * 
-    * @return a org.semanticwb.model.UserGroupRef
-    */
+   * Gets the UserGroupRef
+   * @return a org.semanticwb.model.UserGroupRef
+   */
     public org.semanticwb.model.UserGroupRef getUserGroupRef()
     {
          org.semanticwb.model.UserGroupRef ret=null;
@@ -498,12 +454,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property Group.
-    * 
-    * @param value Group to set
-    */
+   * Sets the value for the property Group
+   * @param value Group to set
+   */
 
     public void setGroup(org.semanticwb.model.TemplateGroup value)
     {
@@ -515,10 +469,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeGroup();
         }
     }
-   
    /**
-    * Remove the value for Group property.
-    */
+   * Remove the value for Group property
+   */
 
     public void removeGroup()
     {
@@ -526,10 +479,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the Group.
-    * 
-    * @return a org.semanticwb.model.TemplateGroup
-    */
+   * Gets the Group
+   * @return a org.semanticwb.model.TemplateGroup
+   */
     public org.semanticwb.model.TemplateGroup getGroup()
     {
          org.semanticwb.model.TemplateGroup ret=null;
@@ -540,12 +492,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property LastVersion.
-    * 
-    * @param value LastVersion to set
-    */
+   * Sets the value for the property LastVersion
+   * @param value LastVersion to set
+   */
 
     public void setLastVersion(org.semanticwb.model.VersionInfo value)
     {
@@ -557,10 +507,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeLastVersion();
         }
     }
-   
    /**
-    * Remove the value for LastVersion property.
-    */
+   * Remove the value for LastVersion property
+   */
 
     public void removeLastVersion()
     {
@@ -568,10 +517,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the LastVersion.
-    * 
-    * @return a org.semanticwb.model.VersionInfo
-    */
+   * Gets the LastVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
     public org.semanticwb.model.VersionInfo getLastVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -584,50 +532,44 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
- * Gets the Deleted property.
- * 
- * @return boolean with the Deleted
- */
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
     public boolean isDeleted()
     {
         return getSemanticObject().getBooleanProperty(swb_deleted);
     }
 
 /**
- * Sets the Deleted property.
- * 
- * @param value long with the Deleted
- */
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
     public void setDeleted(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
 /**
- * Gets the Active property.
- * 
- * @return boolean with the Active
- */
+* Gets the Active property
+* @return boolean with the Active
+*/
     public boolean isActive()
     {
         return getSemanticObject().getBooleanProperty(swb_active);
     }
 
 /**
- * Sets the Active property.
- * 
- * @param value long with the Active
- */
+* Sets the Active property
+* @param value long with the Active
+*/
     public void setActive(boolean value)
     {
         getSemanticObject().setBooleanProperty(swb_active, value);
     }
-   
    /**
-    * Sets the value for the property Language.
-    * 
-    * @param value Language to set
-    */
+   * Sets the value for the property Language
+   * @param value Language to set
+   */
 
     public void setLanguage(org.semanticwb.model.Language value)
     {
@@ -639,10 +581,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeLanguage();
         }
     }
-   
    /**
-    * Remove the value for Language property.
-    */
+   * Remove the value for Language property
+   */
 
     public void removeLanguage()
     {
@@ -650,10 +591,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the Language.
-    * 
-    * @return a org.semanticwb.model.Language
-    */
+   * Gets the Language
+   * @return a org.semanticwb.model.Language
+   */
     public org.semanticwb.model.Language getLanguage()
     {
          org.semanticwb.model.Language ret=null;
@@ -675,11 +615,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets true if has a CalendarRef.
-    * 
-    * @param value org.semanticwb.model.CalendarRef to verify
-    * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
-    */
+   * Gets true if has a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to verify
+   * @return true if the org.semanticwb.model.CalendarRef exists, false otherwise
+   */
     public boolean hasCalendarRef(org.semanticwb.model.CalendarRef value)
     {
         boolean ret=false;
@@ -689,32 +628,27 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
         }
         return ret;
     }
-   
    /**
-    * Adds a CalendarRef.
-    * 
-    * @param value org.semanticwb.model.CalendarRef to add
-    */
+   * Adds a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to add
+   */
 
     public void addCalendarRef(org.semanticwb.model.CalendarRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasCalendarRef, value.getSemanticObject());
     }
-   
    /**
-    * Removes all the CalendarRef.
-    */
+   * Removes all the CalendarRef
+   */
 
     public void removeAllCalendarRef()
     {
         getSemanticObject().removeProperty(swb_hasCalendarRef);
     }
-   
    /**
-    * Removes a CalendarRef.
-    * 
-    * @param value org.semanticwb.model.CalendarRef to remove
-    */
+   * Removes a CalendarRef
+   * @param value org.semanticwb.model.CalendarRef to remove
+   */
 
     public void removeCalendarRef(org.semanticwb.model.CalendarRef value)
     {
@@ -722,10 +656,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the CalendarRef.
-    * 
-    * @return a org.semanticwb.model.CalendarRef
-    */
+   * Gets the CalendarRef
+   * @return a org.semanticwb.model.CalendarRef
+   */
     public org.semanticwb.model.CalendarRef getCalendarRef()
     {
          org.semanticwb.model.CalendarRef ret=null;
@@ -738,30 +671,26 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
- * Gets the Created property.
- * 
- * @return java.util.Date with the Created
- */
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
     public java.util.Date getCreated()
     {
         return getSemanticObject().getDateProperty(swb_created);
     }
 
 /**
- * Sets the Created property.
- * 
- * @param value long with the Created
- */
+* Sets the Created property
+* @param value long with the Created
+*/
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
     }
-   
    /**
-    * Sets the value for the property ModifiedBy.
-    * 
-    * @param value ModifiedBy to set
-    */
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
 
     public void setModifiedBy(org.semanticwb.model.User value)
     {
@@ -773,10 +702,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeModifiedBy();
         }
     }
-   
    /**
-    * Remove the value for ModifiedBy property.
-    */
+   * Remove the value for ModifiedBy property
+   */
 
     public void removeModifiedBy()
     {
@@ -784,10 +712,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the ModifiedBy.
-    * 
-    * @return a org.semanticwb.model.User
-    */
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
     public org.semanticwb.model.User getModifiedBy()
     {
          org.semanticwb.model.User ret=null;
@@ -800,74 +727,59 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
- * Gets the Expiration property.
- * 
- * @return java.util.Date with the Expiration
- */
+* Gets the Expiration property
+* @return java.util.Date with the Expiration
+*/
     public java.util.Date getExpiration()
     {
         return getSemanticObject().getDateProperty(swb_expiration);
     }
 
 /**
- * Sets the Expiration property.
- * 
- * @param value long with the Expiration
- */
+* Sets the Expiration property
+* @param value long with the Expiration
+*/
     public void setExpiration(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_expiration, value);
     }
 
 /**
- * Gets the Title property.
- * 
- * @return String with the Title
- */
+* Gets the Title property
+* @return String with the Title
+*/
     public String getTitle()
     {
         return getSemanticObject().getProperty(swb_title);
     }
 
 /**
- * Sets the Title property.
- * 
- * @param value long with the Title
- */
+* Sets the Title property
+* @param value long with the Title
+*/
     public void setTitle(String value)
     {
         getSemanticObject().setProperty(swb_title, value);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#getTitle(java.lang.String)
-     */
     public String getTitle(String lang)
     {
         return getSemanticObject().getProperty(swb_title, null, lang);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayTitle(java.lang.String)
-     */
     public String getDisplayTitle(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_title, lang);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#setTitle(java.lang.String, java.lang.String)
-     */
     public void setTitle(String title, String lang)
     {
         getSemanticObject().setProperty(swb_title, title, lang);
     }
-   
    /**
-    * Sets the value for the property ActualVersion.
-    * 
-    * @param value ActualVersion to set
-    */
+   * Sets the value for the property ActualVersion
+   * @param value ActualVersion to set
+   */
 
     public void setActualVersion(org.semanticwb.model.VersionInfo value)
     {
@@ -879,10 +791,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeActualVersion();
         }
     }
-   
    /**
-    * Remove the value for ActualVersion property.
-    */
+   * Remove the value for ActualVersion property
+   */
 
     public void removeActualVersion()
     {
@@ -890,10 +801,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the ActualVersion.
-    * 
-    * @return a org.semanticwb.model.VersionInfo
-    */
+   * Gets the ActualVersion
+   * @return a org.semanticwb.model.VersionInfo
+   */
     public org.semanticwb.model.VersionInfo getActualVersion()
     {
          org.semanticwb.model.VersionInfo ret=null;
@@ -906,20 +816,18 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
- * Gets the Updated property.
- * 
- * @return java.util.Date with the Updated
- */
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
     public java.util.Date getUpdated()
     {
         return getSemanticObject().getDateProperty(swb_updated);
     }
 
 /**
- * Sets the Updated property.
- * 
- * @param value long with the Updated
- */
+* Sets the Updated property
+* @param value long with the Updated
+*/
     public void setUpdated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_updated, value);
@@ -935,11 +843,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets true if has a RoleRef.
-    * 
-    * @param value org.semanticwb.model.RoleRef to verify
-    * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
-    */
+   * Gets true if has a RoleRef
+   * @param value org.semanticwb.model.RoleRef to verify
+   * @return true if the org.semanticwb.model.RoleRef exists, false otherwise
+   */
     public boolean hasRoleRef(org.semanticwb.model.RoleRef value)
     {
         boolean ret=false;
@@ -951,40 +858,34 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets all the RoleRefs inherits.
-    * 
-    * @return A GenericIterator with all the org.semanticwb.model.RoleRef
-    */
+   * Gets all the RoleRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.RoleRef
+   */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef> listInheritRoleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RoleRef>(getSemanticObject().listInheritProperties(swb_hasRoleRef));
     }
-   
    /**
-    * Adds a RoleRef.
-    * 
-    * @param value org.semanticwb.model.RoleRef to add
-    */
+   * Adds a RoleRef
+   * @param value org.semanticwb.model.RoleRef to add
+   */
 
     public void addRoleRef(org.semanticwb.model.RoleRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasRoleRef, value.getSemanticObject());
     }
-   
    /**
-    * Removes all the RoleRef.
-    */
+   * Removes all the RoleRef
+   */
 
     public void removeAllRoleRef()
     {
         getSemanticObject().removeProperty(swb_hasRoleRef);
     }
-   
    /**
-    * Removes a RoleRef.
-    * 
-    * @param value org.semanticwb.model.RoleRef to remove
-    */
+   * Removes a RoleRef
+   * @param value org.semanticwb.model.RoleRef to remove
+   */
 
     public void removeRoleRef(org.semanticwb.model.RoleRef value)
     {
@@ -992,10 +893,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the RoleRef.
-    * 
-    * @return a org.semanticwb.model.RoleRef
-    */
+   * Gets the RoleRef
+   * @return a org.semanticwb.model.RoleRef
+   */
     public org.semanticwb.model.RoleRef getRoleRef()
     {
          org.semanticwb.model.RoleRef ret=null;
@@ -1006,12 +906,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property Device.
-    * 
-    * @param value Device to set
-    */
+   * Sets the value for the property Device
+   * @param value Device to set
+   */
 
     public void setDevice(org.semanticwb.model.Device value)
     {
@@ -1023,10 +921,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeDevice();
         }
     }
-   
    /**
-    * Remove the value for Device property.
-    */
+   * Remove the value for Device property
+   */
 
     public void removeDevice()
     {
@@ -1034,10 +931,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the Device.
-    * 
-    * @return a org.semanticwb.model.Device
-    */
+   * Gets the Device
+   * @return a org.semanticwb.model.Device
+   */
     public org.semanticwb.model.Device getDevice()
     {
          org.semanticwb.model.Device ret=null;
@@ -1059,11 +955,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets true if has a TemplateRefInv.
-    * 
-    * @param value org.semanticwb.model.TemplateRef to verify
-    * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
-    */
+   * Gets true if has a TemplateRefInv
+   * @param value org.semanticwb.model.TemplateRef to verify
+   * @return true if the org.semanticwb.model.TemplateRef exists, false otherwise
+   */
     public boolean hasTemplateRefInv(org.semanticwb.model.TemplateRef value)
     {
         boolean ret=false;
@@ -1075,10 +970,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the TemplateRefInv.
-    * 
-    * @return a org.semanticwb.model.TemplateRef
-    */
+   * Gets the TemplateRefInv
+   * @return a org.semanticwb.model.TemplateRef
+   */
     public org.semanticwb.model.TemplateRef getTemplateRefInv()
     {
          org.semanticwb.model.TemplateRef ret=null;
@@ -1089,12 +983,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property Creator.
-    * 
-    * @param value Creator to set
-    */
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
 
     public void setCreator(org.semanticwb.model.User value)
     {
@@ -1106,10 +998,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
             removeCreator();
         }
     }
-   
    /**
-    * Remove the value for Creator property.
-    */
+   * Remove the value for Creator property
+   */
 
     public void removeCreator()
     {
@@ -1117,10 +1008,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the Creator.
-    * 
-    * @return a org.semanticwb.model.User
-    */
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
     public org.semanticwb.model.User getCreator()
     {
          org.semanticwb.model.User ret=null;
@@ -1142,11 +1032,10 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets true if has a RuleRef.
-    * 
-    * @param value org.semanticwb.model.RuleRef to verify
-    * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
-    */
+   * Gets true if has a RuleRef
+   * @param value org.semanticwb.model.RuleRef to verify
+   * @return true if the org.semanticwb.model.RuleRef exists, false otherwise
+   */
     public boolean hasRuleRef(org.semanticwb.model.RuleRef value)
     {
         boolean ret=false;
@@ -1158,40 +1047,34 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets all the RuleRefs inherits.
-    * 
-    * @return A GenericIterator with all the org.semanticwb.model.RuleRef
-    */
+   * Gets all the RuleRefs inherits
+   * @return A GenericIterator with all the org.semanticwb.model.RuleRef
+   */
     public org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef> listInheritRuleRefs()
     {
         return new org.semanticwb.model.GenericIterator<org.semanticwb.model.RuleRef>(getSemanticObject().listInheritProperties(swb_hasRuleRef));
     }
-   
    /**
-    * Adds a RuleRef.
-    * 
-    * @param value org.semanticwb.model.RuleRef to add
-    */
+   * Adds a RuleRef
+   * @param value org.semanticwb.model.RuleRef to add
+   */
 
     public void addRuleRef(org.semanticwb.model.RuleRef value)
     {
         getSemanticObject().addObjectProperty(swb_hasRuleRef, value.getSemanticObject());
     }
-   
    /**
-    * Removes all the RuleRef.
-    */
+   * Removes all the RuleRef
+   */
 
     public void removeAllRuleRef()
     {
         getSemanticObject().removeProperty(swb_hasRuleRef);
     }
-   
    /**
-    * Removes a RuleRef.
-    * 
-    * @param value org.semanticwb.model.RuleRef to remove
-    */
+   * Removes a RuleRef
+   * @param value org.semanticwb.model.RuleRef to remove
+   */
 
     public void removeRuleRef(org.semanticwb.model.RuleRef value)
     {
@@ -1199,10 +1082,9 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
    /**
-    * Gets the RuleRef.
-    * 
-    * @return a org.semanticwb.model.RuleRef
-    */
+   * Gets the RuleRef
+   * @return a org.semanticwb.model.RuleRef
+   */
     public org.semanticwb.model.RuleRef getRuleRef()
     {
          org.semanticwb.model.RuleRef ret=null;
@@ -1215,54 +1097,42 @@ public abstract class TemplateBase extends org.semanticwb.model.SWBClass impleme
     }
 
 /**
- * Gets the Description property.
- * 
- * @return String with the Description
- */
+* Gets the Description property
+* @return String with the Description
+*/
     public String getDescription()
     {
         return getSemanticObject().getProperty(swb_description);
     }
 
 /**
- * Sets the Description property.
- * 
- * @param value long with the Description
- */
+* Sets the Description property
+* @param value long with the Description
+*/
     public void setDescription(String value)
     {
         getSemanticObject().setProperty(swb_description, value);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#getDescription(java.lang.String)
-     */
     public String getDescription(String lang)
     {
         return getSemanticObject().getProperty(swb_description, null, lang);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#getDisplayDescription(java.lang.String)
-     */
     public String getDisplayDescription(String lang)
     {
         return getSemanticObject().getLocaleProperty(swb_description, lang);
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.model.base.DescriptiveableBase#setDescription(java.lang.String, java.lang.String)
-     */
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
     }
 
    /**
-    * Gets the WebSite.
-    * 
-    * @return a instance of org.semanticwb.model.WebSite
-    */
+   * Gets the WebSite
+   * @return a instance of org.semanticwb.model.WebSite
+   */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
