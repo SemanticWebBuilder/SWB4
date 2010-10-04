@@ -1,68 +1,38 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 package org.semanticwb.model.base;
 
 
-   // TODO: Auto-generated Javadoc
-/**
-    * Miembro participante dentro de una asociacion en la especificacion de TopicMaps.
-    */
+   /**
+   * Miembro participante dentro de una asociacion en la especificacion de TopicMaps 
+   */
 public abstract class AssMemberBase extends org.semanticwb.model.SWBClass 
 {
-   
-   /** Superclase utilizada por compatibilidad con estandar TopicMaps. */
+   /**
+   * Superclase utilizada por compatibilidad con estandar TopicMaps
+   */
     public static final org.semanticwb.platform.SemanticClass swb_Topic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Topic");
-    
-    /** The Constant swb_assMember. */
     public static final org.semanticwb.platform.SemanticProperty swb_assMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assMember");
-    
-    /** The Constant swb_assRole. */
     public static final org.semanticwb.platform.SemanticProperty swb_assRole=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#assRole");
-   
-   /** Define una asociacion entre dos miembros en la especificacion de TopicMaps. */
+   /**
+   * Define una asociacion entre dos miembros en la especificacion de TopicMaps
+   */
     public static final org.semanticwb.platform.SemanticClass swb_Association=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Association");
-    
-    /** The Constant swb_associationInv. */
     public static final org.semanticwb.platform.SemanticProperty swb_associationInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#associationInv");
-   
-   /** Miembro participante dentro de una asociacion en la especificacion de TopicMaps. */
+   /**
+   * Miembro participante dentro de una asociacion en la especificacion de TopicMaps
+   */
     public static final org.semanticwb.platform.SemanticClass swb_AssMember=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
-   
-   /** The semantic class that represents the currentObject. */
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#AssMember");
 
-    /**
-     * The Class ClassMgr.
-     */
     public static class ClassMgr
     {
-       
        /**
-        * Returns a list of AssMember for a model.
-        * 
-        * @param model Model to find
-        * @return Iterator of org.semanticwb.model.AssMember
-        */
+       * Returns a list of AssMember for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.model.AssMember
+       */
 
         public static java.util.Iterator<org.semanticwb.model.AssMember> listAssMembers(org.semanticwb.model.SWBModel model)
         {
@@ -80,12 +50,6 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
             return new org.semanticwb.model.GenericIterator<org.semanticwb.model.AssMember>(it, true);
         }
 
-        /**
-         * Creates the ass member.
-         * 
-         * @param model the model
-         * @return the org.semanticwb.model. ass member
-         */
         public static org.semanticwb.model.AssMember createAssMember(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
@@ -203,20 +167,17 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
     }
 
    /**
-    * Constructs a AssMemberBase with a SemanticObject.
-    * 
-    * @param base The SemanticObject with the properties for the AssMember
-    */
+   * Constructs a AssMemberBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the AssMember
+   */
     public AssMemberBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
-   
    /**
-    * Sets the value for the property Member.
-    * 
-    * @param value Member to set
-    */
+   * Sets the value for the property Member
+   * @param value Member to set
+   */
 
     public void setMember(org.semanticwb.model.Topic value)
     {
@@ -228,10 +189,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
             removeMember();
         }
     }
-   
    /**
-    * Remove the value for Member property.
-    */
+   * Remove the value for Member property
+   */
 
     public void removeMember()
     {
@@ -239,10 +199,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
     }
 
    /**
-    * Gets the Member.
-    * 
-    * @return a org.semanticwb.model.Topic
-    */
+   * Gets the Member
+   * @return a org.semanticwb.model.Topic
+   */
     public org.semanticwb.model.Topic getMember()
     {
          org.semanticwb.model.Topic ret=null;
@@ -253,12 +212,10 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property Role.
-    * 
-    * @param value Role to set
-    */
+   * Sets the value for the property Role
+   * @param value Role to set
+   */
 
     public void setRole(org.semanticwb.model.Topic value)
     {
@@ -270,10 +227,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
             removeRole();
         }
     }
-   
    /**
-    * Remove the value for Role property.
-    */
+   * Remove the value for Role property
+   */
 
     public void removeRole()
     {
@@ -281,10 +237,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
     }
 
    /**
-    * Gets the Role.
-    * 
-    * @return a org.semanticwb.model.Topic
-    */
+   * Gets the Role
+   * @return a org.semanticwb.model.Topic
+   */
     public org.semanticwb.model.Topic getRole()
     {
          org.semanticwb.model.Topic ret=null;
@@ -295,12 +250,10 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
-   
    /**
-    * Sets the value for the property Association.
-    * 
-    * @param value Association to set
-    */
+   * Sets the value for the property Association
+   * @param value Association to set
+   */
 
     public void setAssociation(org.semanticwb.model.Association value)
     {
@@ -312,10 +265,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
             removeAssociation();
         }
     }
-   
    /**
-    * Remove the value for Association property.
-    */
+   * Remove the value for Association property
+   */
 
     public void removeAssociation()
     {
@@ -323,10 +275,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
     }
 
    /**
-    * Gets the Association.
-    * 
-    * @return a org.semanticwb.model.Association
-    */
+   * Gets the Association
+   * @return a org.semanticwb.model.Association
+   */
     public org.semanticwb.model.Association getAssociation()
     {
          org.semanticwb.model.Association ret=null;
@@ -339,10 +290,9 @@ public abstract class AssMemberBase extends org.semanticwb.model.SWBClass
     }
 
    /**
-    * Gets the WebSite.
-    * 
-    * @return a instance of org.semanticwb.model.WebSite
-    */
+   * Gets the WebSite
+   * @return a instance of org.semanticwb.model.WebSite
+   */
     public org.semanticwb.model.WebSite getWebSite()
     {
         return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();

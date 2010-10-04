@@ -1,56 +1,28 @@
-/**  
- * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
- * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
- * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
- * fuentes, donde a la información se le asigna un significado, de forma que pueda ser interpretada y
- * procesada por personas y/o sistemas, es una creación original del Fondo de Información y Documentación
- * para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite.
- *
- * INFOTEC pone a su disposición la herramienta SemanticWebBuilder a través de su licenciamiento abierto al público (‘open source’),
- * en virtud del cual, usted podrá usarlo en las mismas condiciones con que INFOTEC lo ha diseñado y puesto a su disposición;
- * aprender de él; distribuirlo a terceros; acceder a su código fuente y modificarlo, y combinarlo o enlazarlo con otro software,
- * todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización
- * del SemanticWebBuilder 4.0.
- *
- * INFOTEC no otorga garantía sobre SemanticWebBuilder, de ninguna especie y naturaleza, ni implícita ni explícita,
- * siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar
- * de la misma.
- *
- * Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder, INFOTEC pone a su disposición la siguiente
- * dirección electrónica:
- *  http://www.semanticwebbuilder.org
- **/
 package org.semanticwb.model.base;
 
 
-   // TODO: Auto-generated Javadoc
-/**
-    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB.
-    */
-public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Searchable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable
+   /**
+   * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB 
+   */
+public abstract class MenuItemBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Searchable,org.semanticwb.model.Referensable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Viewable,org.semanticwb.model.Resourceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Localeable,org.semanticwb.model.Tagable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable
 {
-    
-    /** The Constant swb_mnuItemShowIFrame. */
     public static final org.semanticwb.platform.SemanticProperty swb_mnuItemShowIFrame=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#mnuItemShowIFrame");
-   
-   /** Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB. */
+   /**
+   * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
+   */
     public static final org.semanticwb.platform.SemanticClass swbxf_MenuItem=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem");
-   
-   /** The semantic class that represents the currentObject. */
+   /**
+   * The semantic class that represents the currentObject
+   */
     public static final org.semanticwb.platform.SemanticClass sclass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem");
 
-    /**
-     * The Class ClassMgr.
-     */
     public static class ClassMgr
     {
-       
        /**
-        * Returns a list of MenuItem for a model.
-        * 
-        * @param model Model to find
-        * @return Iterator of org.semanticwb.model.MenuItem
-        */
+       * Returns a list of MenuItem for a model
+       * @param model Model to find
+       * @return Iterator of org.semanticwb.model.MenuItem
+       */
 
         public static java.util.Iterator<org.semanticwb.model.MenuItem> listMenuItems(org.semanticwb.model.SWBModel model)
         {
@@ -501,40 +473,36 @@ public abstract class MenuItemBase extends org.semanticwb.model.WebPage implemen
     }
 
    /**
-    * Constructs a MenuItemBase with a SemanticObject.
-    * 
-    * @param base The SemanticObject with the properties for the MenuItem
-    */
+   * Constructs a MenuItemBase with a SemanticObject
+   * @param base The SemanticObject with the properties for the MenuItem
+   */
     public MenuItemBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
     }
 
 /**
- * Gets the ShowAs property.
- * 
- * @return String with the ShowAs
- */
+* Gets the ShowAs property
+* @return String with the ShowAs
+*/
     public String getShowAs()
     {
         return getSemanticObject().getProperty(swb_mnuItemShowIFrame);
     }
 
 /**
- * Sets the ShowAs property.
- * 
- * @param value long with the ShowAs
- */
+* Sets the ShowAs property
+* @param value long with the ShowAs
+*/
     public void setShowAs(String value)
     {
         getSemanticObject().setProperty(swb_mnuItemShowIFrame, value);
     }
 
    /**
-    * Gets the AdminWebSite.
-    * 
-    * @return a instance of org.semanticwb.model.AdminWebSite
-    */
+   * Gets the AdminWebSite
+   * @return a instance of org.semanticwb.model.AdminWebSite
+   */
     public org.semanticwb.model.AdminWebSite getAdminWebSite()
     {
         return (org.semanticwb.model.AdminWebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
