@@ -2149,7 +2149,7 @@ public class CodeGenerator
                 javaClassContent.append(ENTER);
                 javaClassContent.append("    public void remove" + objectName + "(" + type + " value)" + ENTER);
                 javaClassContent.append(OPEN_BLOCK + ENTER);
-                javaClassContent.append("        get" + semanticObject + "().removeProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ",value);" + ENTER);
+                javaClassContent.append("        get" + semanticObject + "().removeLiteralProperty(" + tpp.getPrefix() + "_" + tpp.getName() + ",new org.semanticwb.platform.SemanticLiteral(value));" + ENTER);
                 javaClassContent.append(CLOSE_BLOCK + ENTER);
             }
 
