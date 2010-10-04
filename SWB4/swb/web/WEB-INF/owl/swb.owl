@@ -21,6 +21,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:ID="SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener uno o mas objetos HerarquicalNode</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -141,6 +142,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener un campo XML</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="UserGroup">
@@ -162,6 +164,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:comment>Objeto que define un grupo de usuarios dentro de un repositorio de usuarios para filtrar componente, seccion, plantillas, etc.</rdfs:comment>
     <rdfs:label xml:lang="en">User Group</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdfs:subClassOf>
@@ -187,6 +190,7 @@
     <rdfs:subClassOf rdf:resource="#FilterableClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:autogenId>
+    <rdfs:comment>Objeto que define una agripacion de componentes o recursos de un mismo tipo</rdfs:comment>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Descriptiveable"/>
     </rdfs:subClassOf>
@@ -197,6 +201,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:ID="Referensable"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a plantillas</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#SWBClass">
@@ -210,6 +215,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden ser referenciados</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FormView">
@@ -221,6 +227,7 @@
     >true</swb:autogenId>
     <rdfs:label xml:lang="es">Formulario de Vista</rdfs:label>
     <rdfs:label xml:lang="en">Form View</rdfs:label>
+    <rdfs:comment>Objeto utilizado para agrupar propiedades que en su conjunto definen una vista dentro de la administración de SWB</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#DisplayObject">
@@ -230,12 +237,14 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <rdfs:label xml:lang="es">Objeto de Despliegue</rdfs:label>
     <rdfs:label xml:lang="en">Display Object</rdfs:label>
+    <rdfs:comment>Objeto utilizado para definir caracteristicas visuales de una clase dentro de la administracion de SWB</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SecurityQuestion">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdfs:label xml:lang="es">Pregunta de Seguridad</rdfs:label>
     <rdfs:label xml:lang="en">Security Question</rdfs:label>
+    <rdfs:comment>Elemento que muestra un componente grafico para mostrar la pregunta de seguridad del registro del usuarios</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="PFlow">
@@ -310,6 +319,7 @@
         >swbIconOntology</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdfs:comment>Objeto que define una Ontologia</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <swb:hasClass>
       <swb:Class rdf:ID="InfRule">
@@ -363,18 +373,21 @@
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeStamp">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdfs:comment>Elemento que muestra un componente grafico que muestra una fecha y hora especifica</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdfs:label xml:lang="es">Selector</rdfs:label>
     <rdfs:label xml:lang="en">Selector</rdfs:label>
+    <rdfs:comment>Elemento que muestra un componente grafico para seleccionar una opcion</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="WebPageable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener asociado una pagina web</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#Descriptiveable">
@@ -389,6 +402,7 @@
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HtmlElement">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdfs:comment>Elemento que muestra un componente grafico para editar HTML</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="#Iconable">
@@ -428,6 +442,11 @@
     </swb:displayObject>
     <rdfs:subClassOf rdf:resource="#Traceable"/>
   </owl:Class>
+  <owl:Class rdf:ID="DojoFileUpload">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+    </rdfs:subClassOf>
+  </owl:Class>
   <owl:Class rdf:ID="PFlowRef">
     <rdfs:comment>Referencia a un objeto de tipo PFlow</rdfs:comment>
     <rdfs:subClassOf>
@@ -435,6 +454,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para elementos que pueden asociar un flujo de publicacion</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -452,6 +472,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Undeleteable"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Objeto que define un Role dentro de un repositorio de usuarios aplicable a un Usuario para filtrar componente, seccion, plantillas, etc.</rdfs:comment>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#do_Role">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -500,6 +521,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para elementos que dependen de una ontologia</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="User">
@@ -538,6 +560,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener asociado uno grupo de usuarios</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -549,6 +572,7 @@
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="CalendarRefable">
         <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a calendarios</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -569,6 +593,7 @@
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
+    <rdfs:comment>Superclase utilizada por compatibilidad con estandar TopicMaps</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Ruleable">
@@ -583,6 +608,7 @@
   </owl:Class>
   <owl:Class rdf:ID="UserTypeDef">
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:comment>Objeto que define un tipo de usuarios (utilizado para agrupar usuarios en base a sus caracteristicas)</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="WebPage">
@@ -602,6 +628,7 @@
     <rdfs:subClassOf>
       <swb:Interface rdf:ID="PFlowRefable">
         <rdfs:subClassOf rdf:resource="#Referensable"/>
+        <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a flujos de publicacion</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -637,6 +664,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener conteo de apariciones</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -654,6 +682,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para elementos que pueden ser localizables</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -667,22 +696,26 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener asociado una o más plantillas</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdfs:label xml:lang="es">Cargador de Archivos</rdfs:label>
     <rdfs:label xml:lang="en">File Uploader</rdfs:label>
+    <rdfs:comment>Elemento que muestra un componente grafico para subir archivos</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="ResourceRefable">
     <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a recursos</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdfs:label xml:lang="es">Selector de Hora</rdfs:label>
     <rdfs:label xml:lang="en">Time Picker</rdfs:label>
+    <rdfs:comment>Elemento que muestra un componente grafico para seleccionar una hora especifica</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="TemplateGroup">
@@ -690,15 +723,17 @@
     <rdfs:subClassOf rdf:resource="#Traceable"/>
     <rdfs:subClassOf rdf:resource="#FilterableNode"/>
     <rdf:type rdf:resource="#Class"/>
+    <rdfs:comment>Objeto que define un Grupo de plantillas</rdfs:comment>
     <rdfs:label xml:lang="es">Grupo de Plantillas</rdfs:label>
     <rdfs:label xml:lang="en">Template Group</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
-    <rdfs:subClassOf rdf:resource="#FilterableClass"/>
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
+    <rdfs:subClassOf rdf:resource="#FilterableClass"/>
   </owl:Class>
   <owl:Class rdf:about="#RuleRefable">
     <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a reglas</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Dns">
@@ -727,6 +762,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pertenecen a una campaña</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Versionable">
@@ -768,16 +804,19 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que puedenenviados a la papelera de reciclaje</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="Hitable">
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden ser contables</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#UserGroupRefable">
     <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a grupos de usuarios</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="AdminFilter">
@@ -815,6 +854,7 @@
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#Label">
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdfs:comment>Elemento que muestra texto plano</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#LoginElement">
@@ -823,6 +863,7 @@
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
         <rdfs:label xml:lang="es">Caja de Texto</rdfs:label>
         <rdfs:label xml:lang="en">Text Box</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para capturar texto (input type text)</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:subClassOf>
@@ -834,6 +875,7 @@
     <rdfs:subClassOf rdf:resource="#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:comment>Objeto que representa una relacion de favoritos entre un usuario y algun elemento del arbol de navegacion dentro de la administración de SWB</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichText">
@@ -842,6 +884,7 @@
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
         <rdfs:label xml:lang="es">Área de Texto</rdfs:label>
         <rdfs:label xml:lang="en">Text Area</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para editar texto (Textarea)</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:subClassOf>
@@ -856,6 +899,7 @@
         <rdfs:subClassOf>
           <owl:Class rdf:about="#SWBInterface"/>
         </rdfs:subClassOf>
+        <rdfs:comment>Interfaz que define propiedades para elementos que pueden ser heredables</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:subClassOf>
@@ -885,10 +929,12 @@
     <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
     <rdfs:label xml:lang="es">Ubicación en Google Maps</rdfs:label>
     <rdfs:label xml:lang="en">Google Maps Locator</rdfs:label>
+    <rdfs:comment>Elemento que muestra un componente grafico (Google Maps) para geolocalizar un punto</rdfs:comment>
     <rdf:type rdf:resource="#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="#RoleRefable">
     <rdfs:subClassOf rdf:resource="#Referensable"/>
+    <rdfs:comment>Interfaz que define propiedades para elementos que pueden referencia a roles</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#Rankable">
@@ -905,6 +951,7 @@
     <rdfs:subClassOf>
       <owl:Class rdf:about="#SWBInterface"/>
     </rdfs:subClassOf>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden ser no eliminables</rdfs:comment>
     <rdf:type rdf:resource="#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#MenuItem">
@@ -912,6 +959,7 @@
     <rdfs:label xml:lang="en">Menu Item</rdfs:label>
     <rdfs:label xml:lang="es">Elemento de Menu</rdfs:label>
     <rdfs:subClassOf rdf:resource="#WebPage"/>
+    <rdfs:comment>Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
   <owl:Class rdf:about="#SWBInterface">
@@ -955,6 +1003,7 @@
         <rdfs:subClassOf rdf:resource="#Descriptiveable"/>
         <rdfs:subClassOf rdf:resource="#SWBClass"/>
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNodeable"/>
+        <rdfs:comment>Objeto utilizado para definir un node del arbol de navegacion dentro de la administración de SWB, que contiene elemento de una clase definida.</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -970,6 +1019,7 @@
         >false</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#FilterableClass"/>
         <rdfs:subClassOf rdf:resource="#FilterableNode"/>
+        <rdfs:comment>Objeto por medio del cual se define un tipo de componente o recurso</rdfs:comment>
         <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
         <rdfs:label xml:lang="en">Resource Type</rdfs:label>
@@ -1066,6 +1116,7 @@
         <rdfs:subClassOf rdf:resource="#Traceable"/>
         <rdfs:label xml:lang="es">Información de Versión</rdfs:label>
         <rdfs:label xml:lang="en">Version Info</rdfs:label>
+        <rdfs:comment>Objeto utilizado para identificar una version de algun componente</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -1234,6 +1285,7 @@
     <rdfs:domain>
       <swb:Interface rdf:ID="Deviceable">
         <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+        <rdfs:comment>Interfaz que define propiedades para elementos que se les puede asociar un dispositivo</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Interface>
     </rdfs:domain>
@@ -1354,6 +1406,7 @@
         <rdfs:subClassOf>
           <swb:Interface rdf:ID="XMLConfable">
             <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+            <rdfs:comment>Interfaz que define propiedades para los elementos que pueden tener un campo XML</rdfs:comment>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:Interface>
         </rdfs:subClassOf>
@@ -1381,6 +1434,7 @@
         <rdfs:subClassOf rdf:resource="#Traceable"/>
         <rdfs:label xml:lang="es">Filtro de Recurso</rdfs:label>
         <rdfs:label xml:lang="en">Resource Filter</rdfs:label>
+        <rdfs:comment>Objeto por el cual se define un filtro para que un recurso o componente se pueda presentar o no dentro de la estructura del sitio</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
@@ -1613,6 +1667,7 @@
                 <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
                 >true</swb:autogenId>
                 <rdfs:label xml:lang="en">Rule</rdfs:label>
+                <rdfs:comment>Objeto que define una regla de negocio, utilizando los atributos del usuario para filtrar componente, seccion, plantillas, etc.</rdfs:comment>
               </swb:Class>
             </swbxf:heClass>
             <swb:title xml:lang="es">Reglas</swb:title>
@@ -1686,6 +1741,7 @@
             >true</swb:autogenId>
           </swb:Class>
         </swb:hasClass>
+        <rdfs:comment>Objeto que define un Sitio Web</rdfs:comment>
         <swb:hasHerarquicalNode>
           <swbxf:HerarquicalNode rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices">
             <swbxf:heClass rdf:resource="#Device"/>
@@ -2006,6 +2062,7 @@
         <rdfs:subClassOf rdf:resource="#Sortable"/>
         <rdfs:label xml:lang="es">Propiedad de Despliegue</rdfs:label>
         <rdfs:label xml:lang="en">Display Property</rdfs:label>
+        <rdfs:comment>Objeto utilizado para definir caracteristicas visuales de una propiedad dentro de la administracion de SWB</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
@@ -2074,6 +2131,7 @@
         >false</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#OntologyDepable"/>
         <swb:hasClass rdf:resource="#User"/>
+        <rdfs:comment>Objeto que define un Repositorio de Usuarios</rdfs:comment>
       </swb:Model>
     </rdfs:range>
   </owl:ObjectProperty>
@@ -2295,6 +2353,7 @@
         <rdfs:subClassOf rdf:resource="#Sortable"/>
         <rdfs:label xml:lang="es">Grupo de Propiedades</rdfs:label>
         <rdfs:label xml:lang="en">Property Group</rdfs:label>
+        <rdfs:comment>Objeto utiizado para definir un grupo de propiedades dentro de la administración de SWB (fieldset)</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
@@ -2311,6 +2370,14 @@
     >true</swb:herarquicalRelation>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >hasChild</swb:propertyCodeName>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasGroupedTemplate">
+    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:herarquicalRelation>
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasTemplate</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="modifiedBy">
     <swb:displayProperty>
@@ -2330,14 +2397,6 @@
     <rdfs:label xml:lang="es">Modificado por</rdfs:label>
     <rdfs:label xml:lang="en">Modified by</rdfs:label>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasGroupedTemplate">
-    <swb:herarquicalRelation rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:herarquicalRelation>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >hasTemplate</swb:propertyCodeName>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heModel">
     <rdfs:domain rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#HerarquicalNode"/>
     <rdfs:range rdf:resource="#SWBModel"/>
@@ -2355,6 +2414,7 @@
         <rdfs:label xml:lang="en">Behavior</rdfs:label>
         <rdfs:label xml:lang="es">Comportamiento</rdfs:label>
         <rdfs:subClassOf rdf:resource="#WebPage"/>
+        <rdfs:comment>Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -2467,9 +2527,11 @@
         <rdfs:subClassOf>
           <swb:FormElement rdf:ID="FlashFileUpload">
             <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+            <rdfs:comment>Elemento que muestra un componente grafico (en flash) para subir archivos</rdfs:comment>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
           </swb:FormElement>
         </rdfs:subClassOf>
+        <rdfs:label>Elemento que muestra un componente grafico (en flash) para subir imagenes</rdfs:label>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:domain>
@@ -2482,6 +2544,7 @@
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
         <rdfs:label xml:lang="es">Selector Múltiple</rdfs:label>
         <rdfs:label xml:lang="en">Multiple Selector</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para seleccionar multriples opciones</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:domain>
@@ -2753,6 +2816,7 @@
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
         <rdfs:label xml:lang="en">Date Picker</rdfs:label>
         <rdfs:label xml:lang="es">Selector de Fecha</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para seleccionar una fecha</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:domain>
@@ -3005,6 +3069,7 @@
         <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectOne"/>
         <rdfs:label xml:lang="es">Selector en Árbol</rdfs:label>
         <rdfs:label xml:lang="en">Tree Selector</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para seleccionar una opcion dentro de elementos herarquizados</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:domain>
@@ -3172,6 +3237,7 @@
         <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
         <rdfs:label xml:lang="es">Cambiador de Contraseña</rdfs:label>
         <rdfs:label xml:lang="en">Password Updater</rdfs:label>
+        <rdfs:comment>Elemento que muestra un componente grafico para modificar passwords</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:FormElement>
     </rdfs:domain>
@@ -3855,6 +3921,7 @@
         <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
         <rdfs:label xml:lang="en">Resource Type</rdfs:label>
         <rdfs:subClassOf rdf:resource="#ResourceType"/>
+        <rdfs:comment>Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo JSP</rdfs:comment>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:domain>
@@ -3903,6 +3970,7 @@
   </owl:DatatypeProperty>
   <swb:Interface rdf:ID="Validable">
     <rdfs:subClassOf rdf:resource="#SWBInterface"/>
+    <rdfs:comment>Interfaz que define propiedades para los elementos que pueden ser validados</rdfs:comment>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Interface>
   <swb:CodePackage rdf:about="http://www.semanticwebbuilder.org/swb4/resource/ontology#pkg">
@@ -3981,6 +4049,7 @@
   </swbxf:SelectOne>
   <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/resource/ontology#Content">
     <rdfs:subClassOf rdf:resource="#SWBSemanticResource"/>
+    <rdfs:comment>Recurso Content</rdfs:comment>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:SemanticResource>
   <swbxf:TimeElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#TimeElement_1">
@@ -3997,6 +4066,7 @@
     <rdfs:label xml:lang="en">Admin WebSite</rdfs:label>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTSystems"/>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Devices"/>
+    <rdfs:comment>Objeto que define un Sitio Web de Administración</rdfs:comment>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Calendars"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
     <rdfs:subClassOf rdf:resource="#WebSite"/>
@@ -4020,6 +4090,7 @@
     <rdfs:label xml:lang="es">Tipo de Recurso</rdfs:label>
     <rdfs:label xml:lang="en">Resource Type</rdfs:label>
     <rdfs:subClassOf rdf:resource="#ResourceType"/>
+    <rdfs:comment>Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT</rdfs:comment>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
   <swb:SemanticResource rdf:about="http://www.semanticwebbuilder.org/swb4/resource/ontology#HTMLContent">
@@ -4094,6 +4165,7 @@
     <swbxf:sm_userRepository rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swbxf:sm_userRepository>
   </swbxf:SelectMultiple>
+  <swb:DojoFileUpload rdf:ID="fe_DojoFileUpload"/>
   <swbxf:DateElement rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#fei_birthDate">
     <swb:dateConstraints rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >{max:'{today}'}</swb:dateConstraints>
