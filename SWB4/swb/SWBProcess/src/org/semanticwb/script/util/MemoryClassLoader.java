@@ -22,9 +22,7 @@ import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
-/**
- * @author Sergey A. Malenkov
- */
+
 public final class MemoryClassLoader extends ClassLoader {
 
 
