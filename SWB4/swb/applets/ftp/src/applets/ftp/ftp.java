@@ -128,42 +128,15 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         }catch(Exception e) {
             e.printStackTrace();
         }      
-        this.setJMenuBar(this.jMenuBar1);        
+        this.setJMenuBar(this.jMenuBar1);
+        TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader(jTableFiles);
         this.jTreeDirs.setCellRenderer(new DirectoryRenderer(this.jTableFiles));       
-        jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,locale);                
+        jTableFileModel filemodel=new jTableFileModel(this.jTableFiles,locale,tableCellRenderHeader);
         this.jTableFiles.setModel(filemodel);
         jTableFiles.setDragEnabled(false);
         JTableHeader header=jTableFiles.getTableHeader();
-        TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader();
-        tableCellRenderHeader.date.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e)
-            {
-               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
-               model.reorderByDate();
-               jTableFiles.updateUI();
-            }
-        });
-        tableCellRenderHeader.name.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e)
-            {
-               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
-               model.reorderByName();
-               jTableFiles.updateUI();
-            }
-        });
-        tableCellRenderHeader.size.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e)
-            {
-               jTableFileModel model=(jTableFileModel)jTableFiles.getModel();
-               model.reorderBySize();
-               jTableFiles.updateUI();
-            }
-        });
-        header.addMouseListener(new ColumnHeaderListener(jTableFiles));
-        //header.setDefaultRenderer(tableCellRenderHeader);
+        header.setDefaultRenderer(tableCellRenderHeader);
+        header.addMouseListener(new ColumnHeaderListener(jTableFiles));        
         loadDirectories();        
         
         
@@ -288,7 +261,10 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
         WBTreeNode enode=parser.parse(respxml);
         if(enode.getFirstNode()!=null)
         {
-            jTableFileModel model=new jTableFileModel(this.jTableFiles,locale);
+            TableCellRenderHeader tableCellRenderHeader=new TableCellRenderHeader(jTableFiles);
+            jTableFileModel model=new jTableFileModel(this.jTableFiles,locale,tableCellRenderHeader);
+            jTableFiles.getTableHeader().setDefaultRenderer(tableCellRenderHeader);
+            jTableFiles.getTableHeader().addMouseListener(new ColumnHeaderListener(jTableFiles));
             model.addFileListener(this);
             this.jTableFiles.setModel(model);
             Iterator files=enode.getFirstNode().getNodes().iterator();
@@ -302,6 +278,7 @@ public class ftp extends javax.swing.JApplet implements ListSelectionListener,Fi
             FileNameCompartor fc=new FileNameCompartor();
             fc.toogle();
             Collections.sort(lfiles,fc);
+            tableCellRenderHeader.onNewOrder(0,true);
             for(applets.ftp.File ofile : lfiles)
             {
                 model.addFile(ofile);

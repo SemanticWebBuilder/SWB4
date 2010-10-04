@@ -52,16 +52,21 @@ public class jTableFileModel extends AbstractTableModel{
     ArrayList<FileListener> listeners=new ArrayList<FileListener>();
     JTable table;
     Locale locale;
-    SizeFileComparator sizeFileComparator=new SizeFileComparator();
-    DateTimeFileComparator dateTimeFileComparator=new DateTimeFileComparator();
-    FileNameCompartor fileNameCompartor=new FileNameCompartor();
-    public jTableFileModel(JTable table,Locale locale) {
+    private final SizeFileComparator sizeFileComparator;
+    private final DateTimeFileComparator dateTimeFileComparator;
+    private final FileNameCompartor fileNameCompartor;
+    private TableCellRenderHeader tableCellRenderHeader;
+    public jTableFileModel(JTable table,Locale locale,TableCellRenderHeader tableCellRenderHeader) {
        this.table=table;
        this.locale=locale;
        columnNames[0]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("name");
        columnNames[1]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("size");
        columnNames[2]=java.util.ResourceBundle.getBundle("applets/ftp/jTableFileModel",locale).getString("lastupdate");
-       
+       this.tableCellRenderHeader=tableCellRenderHeader;
+
+       sizeFileComparator=new SizeFileComparator();
+       dateTimeFileComparator=new DateTimeFileComparator();
+       fileNameCompartor=new FileNameCompartor();
     }
     public void addFileListener(FileListener listener)
     {
@@ -135,16 +140,20 @@ public class jTableFileModel extends AbstractTableModel{
     {
         fileNameCompartor.toogle();
         Collections.sort(this.files,fileNameCompartor);
+        tableCellRenderHeader.onNewOrder(0, fileNameCompartor.isAsc());
     }
     public void reorderBySize()
     {
         sizeFileComparator.toogle();
         Collections.sort(this.files,sizeFileComparator);
+        tableCellRenderHeader.onNewOrder(1, sizeFileComparator.isAsc());
+
     }
     public void reorderByDate()
     {
         dateTimeFileComparator.toogle();
         Collections.sort(this.files,dateTimeFileComparator);
+        tableCellRenderHeader.onNewOrder(2, dateTimeFileComparator.isAsc());
     }
     public void addFile(File file)
     {        
