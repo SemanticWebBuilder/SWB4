@@ -115,6 +115,8 @@ public class SWBMonitorBeans
             assert (false);
         } catch (java.lang.SecurityException noSecEx) {
             log.event("Alert: No security permission to access Platform MBeanServer, cpuInfo not available");
+        } catch (Error err) {
+            log.event("Error starting the OperatingSystemMXBean", err);
         }
     }
 }
