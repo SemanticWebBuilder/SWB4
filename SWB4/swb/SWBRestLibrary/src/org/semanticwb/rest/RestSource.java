@@ -12,7 +12,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.rest.util.MemoryClassLoader;
 import org.w3c.dom.Attr;
@@ -48,7 +50,28 @@ public class RestSource {
     }
     public Document getDocumentService() throws RestException
     {
-        String urlToGet=url.toString();        
+        return this.getDocumentService(null);
+    }
+    public Document getDocumentService(Map<String,String> parameters) throws RestException
+    {
+        String urlToGet=url.toString();
+        if(parameters!=null)
+        {
+            int pos=urlToGet.indexOf("?");
+            if(pos!=-1)
+            {
+                urlToGet=urlToGet.substring(0,pos);
+            }
+            urlToGet=urlToGet+"?";
+            for(String key : parameters.keySet())
+            {
+
+                String data=URLEncoder.encode(key)+"&"+URLEncoder.encode(parameters.get(key));
+                urlToGet=urlToGet+data;
+
+            }
+
+        }
         try
         {
             HttpURLConnection con=(HttpURLConnection)new URL(urlToGet).openConnection();
@@ -63,6 +86,21 @@ public class RestSource {
                         throw new RestException("The document can not be loaded in url:"+url.toString());
                     }
                     return response;
+                }
+                if(con.getHeaderField("Content-Type")!=null && con.getHeaderField("Content-Type").equalsIgnoreCase("json"))
+                {
+                    StringBuilder sb=new StringBuilder();
+                    InputStream in=con.getInputStream();
+                    byte[] buffer=new byte[8*1024];
+                    int read=in.read(buffer);
+                    while(read!=-1)
+                    {
+                        sb.append(new String(buffer,0,read));
+                        read=in.read(buffer);
+                    }                    
+                    // TODO:
+                    throw new RestException("At this moment the library can not support rest services with json response");
+
                 }
                 else
                 {
@@ -94,7 +132,7 @@ public class RestSource {
     }
     private void createClasses(Element element,HashMap<String,String> classes)
     {        
-        String name=element.getTagName();
+        String name=toUpperCase(element.getTagName());
         NodeList nodes=element.getChildNodes();
         String code=getCode(element);
         System.out.println(code);
@@ -108,10 +146,15 @@ public class RestSource {
         }
         classes.put(name, code);
     }
+    private static String toUpperCase(String data)
+    {
+        String letter = data.substring(0, 1);
+        return letter.toUpperCase() + data.substring(1).toLowerCase();
+    }
     private String getCode(Element element)
     {
         StringBuilder sb=new StringBuilder();
-        String className=element.getTagName();        
+        String className=toUpperCase(element.getTagName());
         sb.append("import java.util.ArrayList;"+NL);
         sb.append("import java.util.List;"+NL);
         sb.append("import org.w3c.dom.Element;"+NL);
@@ -132,7 +175,7 @@ public class RestSource {
             if(node instanceof Attr)
             {
                 Attr att=(Attr)node;
-                String name=att.getName();
+                String name=att.getName().toLowerCase();
                 name=name.replace(':', '_');
                 sb.append("     public String get"+name +"()"+NL);
                 sb.append("     {"+NL);
@@ -146,7 +189,9 @@ public class RestSource {
             Node node=childs.item(i);
             if(node instanceof Element)
             {
-                String name=((Element)node).getTagName();
+                String elementName=((Element)node).getTagName();
+                String name=toUpperCase(elementName);
+                
                 sb.append("     public List<"+name+"> list"+name+"()"+NL);
                 sb.append("     {"+NL);
                 sb.append("         ArrayList<"+name+"> elements=new ArrayList<"+name+">();"+NL);
@@ -157,7 +202,7 @@ public class RestSource {
                 sb.append("             if(node instanceof Element)"+NL);
                 sb.append("             {"+NL);
                 sb.append("                 Element e=(Element)node;"+NL);
-                sb.append("                 if(e.getTagName().equals(\""+name+"\"))");
+                sb.append("                 if(e.getTagName().equals(\""+elementName+"\"))"+NL);
                 sb.append("                     elements.add(new "+name+"(e));"+NL);
                 sb.append("             }"+NL);
                 sb.append("         }"+NL);
@@ -165,7 +210,7 @@ public class RestSource {
                 sb.append("     }"+NL);
 
 
-                sb.append("     public "+name+" $"+name+"()"+NL);
+                sb.append("     public "+name+" get"+name+"()"+NL);
                 sb.append("     {"+NL);                
                 sb.append("         NodeList nodes=element.getChildNodes();"+NL);
                 sb.append("         for(int i=0;i<nodes.getLength();i++)"+NL);
@@ -174,7 +219,7 @@ public class RestSource {
                 sb.append("             if(node instanceof Element)"+NL);
                 sb.append("             {"+NL);
                 sb.append("                 Element e=(Element)node;"+NL);
-                sb.append("                 if(e.getTagName().equals(\""+name+"\"))");
+                sb.append("                 if(e.getTagName().equals(\""+elementName+"\"))"+NL);
                 sb.append("                     return new "+name+"(e);"+NL);
                 sb.append("             }"+NL);
                 sb.append("         }"+NL);
@@ -211,13 +256,18 @@ public class RestSource {
     }
     public Object getResponse() throws bsh.EvalError,RestException
     {
+        return getResponse((Map<String,String>)null);
+
+    }
+    public Object getResponse(Map<String,String> parameters) throws bsh.EvalError,RestException
+    {
         Document response=getDocumentService();
         return getResponse(response);
     }
     private Object getResponse(Document response) throws bsh.EvalError,RestException
     {        
         ClassLoader mcls=getClassLoader(response);
-        String className=getRootName(response);
+        String className=toUpperCase(getRootName(response));
         try
         {
             Class clazz=mcls.loadClass(className);
@@ -248,15 +298,20 @@ public class RestSource {
     }
     public Interpreter getInterpreter() throws bsh.EvalError,RestException
     {
+        return this.getInterpreter(null);
+    }
+    public Interpreter getInterpreter(Map<String,String> parameters) throws bsh.EvalError,RestException
+    {
         Document response=getDocumentService();
         Interpreter i=new Interpreter();
         ClassLoader mcls=getClassLoader(response);
-        String className=getRootName(response);        
+        String className=getRootName(response);
+        className=toUpperCase(className);
         try
         {           
             i.setClassLoader(mcls);
             Object obj=getResponse();
-            i.set(className, obj);
+            i.set(className.toLowerCase(), obj);
             return i;
         }
         catch(Exception e)
@@ -272,9 +327,9 @@ public class RestSource {
         try
         {
             
-            RestSource source=new RestSource(new URL(url));            
+            RestSource source=new RestSource(new URL(url));
             Interpreter i=source.getInterpreter();
-            i.eval("System.out.println(INVOICEList.$INVOICE().toString());");
+            i.eval("System.out.println(invoicelist.getInvoice().toString());");
         }
         catch(Exception e)
         {
