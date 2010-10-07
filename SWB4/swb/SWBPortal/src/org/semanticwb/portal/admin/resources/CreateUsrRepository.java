@@ -71,7 +71,7 @@ public class CreateUsrRepository extends GenericResource {
                 UserRepository newUsrRep = SWBContext.createUserRepository(id + "_usr", "http://user." + id + ".swb#");
                 newUsrRep.setTitle("Repositorio de usuarios(" + id + ")", "es");
                 newUsrRep.setTitle("Users Repository(" + id + ")", "en");
-                newUsrRep.setUndeleteable(true);
+                //newUsrRep.setUndeleteable(true);
 
                 //MAPS74 - Cambiado a semantic prop
                 newUsrRep.setAuthMethod("FORM");
