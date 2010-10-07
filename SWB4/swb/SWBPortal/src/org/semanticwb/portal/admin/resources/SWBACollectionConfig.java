@@ -28,6 +28,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
@@ -915,12 +916,14 @@ public class SWBACollectionConfig extends GenericAdmResource {
 //
 //                                }
                                 Iterator<SemanticObject> sobj = smodel.listInstancesOfClass(sc); //sc.listInstances();
+                                //System.out.println("clase: "+sc.getClassName()+", "+sc.getClassId());
                                 if(sc.equals(User.swb_User))
                                 {
+
                                     sobj = sc.listInstances();
-//                                    if(smodel.getModelObject().getGenericInstance()!=null && smodel.getModelObject().getGenericInstance() instanceof WebSite)
+//                                    if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
 //                                    {
-//                                      sobj =  ((WebSite)smodel.getModelObject().getGenericInstance()).getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sc);
+//                                      sobj =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sc);
 //                                    }
                                 }
 
@@ -1021,6 +1024,15 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("<tbody>");
                         SemanticObject semO = null;
                         Iterator<SemanticObject> itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+                        if(sccol.equals(User.swb_User))
+                        {
+
+                            //itso = sccol.listInstances();
+                            if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
+                            {
+                              itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+                            }
+                        }
                         String urikey = null;
                         SemanticProperty semOProp=null;
                         if (!busqueda.equals("")) {
@@ -1058,6 +1070,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             else if(busqueda.equals("")&&!hmSearchParam.isEmpty())
                             {
                                 itsprop2 = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol);
+                                if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
+                                {
+                                  //itsprop2 =   sccol.listInstances();
+                                  itsprop2 =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+                                }
                             }
 
                             if(!hmSearchParam.isEmpty())
@@ -1140,6 +1157,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                         } else {
                             itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+                            if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
+                            {
+                                //itso = sccol.listInstances();
+                                itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+                            }
                         }
 
                         //PAGINACION
