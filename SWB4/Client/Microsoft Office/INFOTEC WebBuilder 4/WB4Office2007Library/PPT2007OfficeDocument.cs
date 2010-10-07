@@ -247,7 +247,7 @@ namespace WB4Office2007Library
             presentation.WebOptions.UseLongFileNames = Office.MsoTriState.msoTrue;
             presentation.WebOptions.IncludeNavigation = Office.MsoTriState.msoTrue;
             presentation.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserIE6;
-            presentation.WebOptions.HTMLVersion = PowerPoint.PpHTMLVersion.ppHTMLAutodetect;
+            presentation.WebOptions.HTMLVersion = PowerPoint.PpHTMLVersion.ppHTMLDual;
             presentation.WebOptions.ResizeGraphics = Office.MsoTriState.msoTrue;
             presentation.WebOptions.Encoding = Office.MsoEncoding.msoEncodingISO88591Latin1;
             presentation.SaveAs(htmlFile.FullName, PowerPoint.PpSaveAsFileType.ppSaveAsHTMLDual, Office.MsoTriState.msoFalse);            
