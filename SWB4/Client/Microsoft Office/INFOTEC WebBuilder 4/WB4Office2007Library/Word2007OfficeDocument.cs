@@ -169,14 +169,16 @@ namespace WB4Office2007Library
             {
                 HTMLFile.Delete();
             }
+            //document.WebOptions.BrowserLevel = Word.WdBrowserLevel.wdBrowserLevelMicrosoftInternetExplorer6;
+            document.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserIE6;
             document.WebOptions.AllowPNG = true;
             document.WebOptions.RelyOnVML = false;
             document.WebOptions.RelyOnCSS = false;
-            document.WebOptions.BrowserLevel = Word.WdBrowserLevel.wdBrowserLevelMicrosoftInternetExplorer6;
+            
             document.WebOptions.Encoding = Office.MsoEncoding.msoEncodingISO88591Latin1;
             document.WebOptions.OptimizeForBrowser = true;
             document.WebOptions.OrganizeInFolder = true;
-            document.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserIE6;
+            
             document.DisableFeatures = true;
 
             document.SaveAs(ref fileName, ref objformatHTML, ref missing, ref missing, ref objfalse, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing, ref missing);
