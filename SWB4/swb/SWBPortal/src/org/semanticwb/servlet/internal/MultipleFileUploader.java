@@ -111,7 +111,7 @@ public class MultipleFileUploader implements InternalServlet
         //System.out.println("user: " + user.getFullName() + ":" + user.isSigned());
         if (ServletFileUpload.isMultipartContent(request))
         {
-            List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad);
+            List<UploadedFile> archivos = UploaderFileCacheUtils.get(cad); System.out.println("archivos:"+archivos);
             String subcad = "f" + archivos.size() + cad.substring(4); //si no existe archivos, debemos ignorar el request, el NPE nos facilita salir
             if (archivos != null)
             {
@@ -131,6 +131,7 @@ public class MultipleFileUploader implements InternalServlet
                 {
 
                     List<FileItem> items = upload.parseRequest(request);
+                    String lastUploadedFileName = "";
                     for (FileItem item : items)
                     {
                         if (!item.isFormField())
@@ -147,17 +148,20 @@ public class MultipleFileUploader implements InternalServlet
                             File uploadedFile = new File(tmpplace, subcad + "_" + fileName + "_");
                             item.write(uploadedFile);
                             archivos.add(new UploadedFile(fileName, uploadedFile.getCanonicalPath(), cad));
+                            lastUploadedFileName = fileName;
                         }
                     }
-                    response.getWriter().println("ok");
+                    response.getWriter().println("<html><body><textarea>{status:\"success\", detail:\""+lastUploadedFileName+"\"}</textarea></body></html>");
                 } catch (Exception ex)
                 {
+                    response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\""+ex.getMessage()+"\"}</textarea></body></html>");
                     throw new SWBRuntimeException("Uploading file", ex);
                 }
 
             } else
             {
-                response.sendError(500, "UploadService not pre-registered");
+                response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\"UploadService not pre-registered\"}</textarea></body></html>");
+//                response.sendError(500, "UploadService not pre-registered");
             }
         } else if (user.isSigned())
         {
@@ -169,7 +173,8 @@ public class MultipleFileUploader implements InternalServlet
 
         } else
         {
-            response.sendError(403, "Not enough privileges");
+            response.getWriter().println("<html><body><textarea>{status:\"error\", detail:\"Not enough privileges\"}</textarea></body></html>");
+//            response.sendError(403, "Not enough privileges");
         }
 
 
