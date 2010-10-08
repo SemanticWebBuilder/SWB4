@@ -110,6 +110,8 @@ public class SemanticObject
     /** The has property cache. */
     private static boolean hasPropertyCache=true;
 
+    private static boolean hasPropertyCacheOnInit=false;
+
     //No cambian
     /** The ext get methods. */
     private static HashMap<String, Method> extGetMethods=new HashMap();
@@ -352,6 +354,7 @@ public class SemanticObject
      */
     private void setPropertyValueCache(SemanticProperty prop, String lang, Object value)
     {
+        //System.out.println("set:"+this+" "+prop+" "+value);
         if(value==null)value=NULL;
         if(value!=null)
         {
@@ -369,6 +372,7 @@ public class SemanticObject
      */
     private void addPropertyValueCache(SemanticProperty prop, String lang, Object value)
     {
+        //System.out.println("add:"+this+" "+prop+" "+value);
         removePropertyValueCache(prop, lang);
         if(prop.isInverseOf() && value instanceof SemanticObject)
         {
@@ -385,6 +389,7 @@ public class SemanticObject
      */
     public Object getPropertyValueCache(SemanticProperty prop, String lang)
     {
+        //System.out.println("get:"+this+" "+prop);
         Object ret=null;
         if(hasPropertyCache)
         {
@@ -401,6 +406,7 @@ public class SemanticObject
      */
     public void removePropertyValueCache(SemanticProperty prop, String lang)
     {
+        //System.out.println("remove:"+this+" "+prop);
         //System.out.println("removePropertyValueCache:"+this+" "+prop+" "+lang);
         if(prop.isInverseOf())
         {
@@ -449,6 +455,7 @@ public class SemanticObject
      */
     private Iterator<SemanticObject> getListObjectPropertyCache(SemanticProperty prop)
     {
+        //System.out.println("getList:"+this+" "+prop);
         Iterator it=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
         if(arr!=null)it=arr.iterator();
@@ -464,6 +471,7 @@ public class SemanticObject
      */
     private Boolean hasObjectPropertyCache(SemanticProperty prop, SemanticObject obj)
     {
+        //System.out.println("hasObject:"+this+" "+prop+" "+obj);
         if(obj==null)return false;
         Boolean ret=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
@@ -488,6 +496,7 @@ public class SemanticObject
      */
     private Boolean hasObjectPropertyCache(SemanticProperty prop)
     {
+        //System.out.println("hasObject:"+this+" "+prop);
         Boolean ret=null;
         ArrayList arr=(ArrayList)m_cacheprops.get(prop.getURI()+"|list");
         if(arr!=null)
@@ -535,7 +544,6 @@ public class SemanticObject
         if (ns != null &&  m_res.getURI() !=null && !m_res.getURI().startsWith(ns) && !m_res.getURI().equals(SemanticVocabulary.RDFS_RESOURCE))
         {
             //System.out.println("ns:"+ns+" "+m_res.getURI());
-
             Resource aux=SWBPlatform.getSemanticMgr().getOntology().getResource(m_res.getURI());
             if(aux==null)throw new SWBResourceNotFound("Resource not Found:"+m_res.getURI());
             m_res = aux;
@@ -707,21 +715,76 @@ public class SemanticObject
         //System.out.print("getSemanticClass:"+getURI());
         if (m_cls == null)
         {
-            StmtIterator it=m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
-            while(it.hasNext())
+            //Validar si se requiere carga inicial de propiedades
+            if(hasPropertyCacheOnInit)
             {
-                Statement stm=it.next();
-                //Statement stm = m_res.getProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
-                if(stm!=null)
+                //System.out.print("Loading Init Properties:"+getURI());
+                resetCache();
+                boolean classfound=false;
+                StmtIterator it=m_res.listProperties();
+                while (it.hasNext())
                 {
-                    m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
-                    if(m_cls!=null && m_cls.isSWBClass())
+                    Statement st = it.next();
+                    //System.out.println(st);
+                    SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(st.getPredicate());
+                    if(prop.getURI().equals(SemanticVocabulary.RDF_TYPE))
                     {
-                        break;
+                        if(!classfound)
+                        {
+                            m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(st.getResource().getURI());
+                            if(m_cls!=null && m_cls.isSWBClass())
+                            {
+                                classfound=true;
+                                //System.out.println("ClassFound");
+                            }
+                            //System.out.println("Class:"+m_cls);
+                        }
+                    }else
+                    {
+                        if(st.getObject().isLiteral())
+                        {
+                            SemanticLiteral l=new SemanticLiteral((st.getObject().asLiteral()));
+                            //System.out.println("setLiteral:"+l);
+                            if(prop.getCardinality()==1)
+                            {
+                                setPropertyValueCache(prop, l.getLanguage(), l);
+                            }else
+                            {
+                                addPropertyValueCache(prop, l.getLanguage(), l);
+                            }
+                        }else if(st.getObject().isResource())
+                        {
+                            SemanticObject obj=SemanticObject.createSemanticObject(st.getObject().asResource().getURI());
+                            //System.out.println("setObj:"+obj);
+                            if(prop.getCardinality()==1)
+                            {
+                                setPropertyValueCache(prop, null, obj);
+                            }else
+                            {
+                                addPropertyValueCache(prop, "list", obj);
+                            }
+                        }
                     }
                 }
+                it.close();
+            }else
+            {
+                StmtIterator it=m_res.listProperties(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+                while(it.hasNext())
+                {
+                    Statement stm=it.next();
+                    //Statement stm = m_res.getProperty(getModel().getSemanticProperty(SemanticVocabulary.RDF_TYPE).getRDFProperty());
+                    if(stm!=null)
+                    {
+                        m_cls = SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(stm.getResource().getURI());
+                        if(m_cls!=null && m_cls.isSWBClass())
+                        {
+                            break;
+                        }
+                    }
+                }
+                it.close();
             }
-            it.close();
         }
         //System.out.println(" m_cls:"+m_cls);
         return m_cls;
