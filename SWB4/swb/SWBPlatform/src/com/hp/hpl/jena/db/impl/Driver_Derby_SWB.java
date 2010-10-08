@@ -90,7 +90,7 @@ public class Driver_Derby_SWB extends Driver_Derby {
             if (SWBPlatform.createInstance().getStatementsCache()) {
                 m_sql = new SQLCache_SWB(SQL_FILE, null, dbcon, ID_SQL_TYPE);
             } else {
-                m_sql = new SQLCache(SQL_FILE, null, dbcon, ID_SQL_TYPE);
+                m_sql = new SQLCache_SWBBase(SQL_FILE, null, dbcon, ID_SQL_TYPE);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
