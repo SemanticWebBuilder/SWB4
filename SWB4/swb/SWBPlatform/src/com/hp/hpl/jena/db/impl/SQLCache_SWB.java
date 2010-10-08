@@ -34,12 +34,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.base.db.PoolConnection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -47,7 +45,7 @@ import org.semanticwb.base.db.PoolConnection;
  * 
  * @author javier.solis
  */
-public class SQLCache_SWB extends SQLCache
+public class SQLCache_SWB extends SQLCache_SWBBase
 {
     
     /** The log. */
@@ -109,7 +107,7 @@ public class SQLCache_SWB extends SQLCache
 	 * connection.
 	 * @throws SQLException the sQL exception
 	 */
-	private synchronized PreparedStatement doPrepareSQLStatement(String sql) throws SQLException {
+	private PreparedStatement doPrepareSQLStatement(String sql) throws SQLException {
 		if (m_connection == null) return null;
 		//return getConnection().prepareStatement(sql);
         //Connection con=SWBUtils.DB.getNoPoolConnection("swb");
@@ -135,7 +133,7 @@ public class SQLCache_SWB extends SQLCache
 	 * @throws SQLException the sQL exception
 	 */
     @Override
-	public synchronized PreparedStatement prepareSQLStatement(String sql) throws SQLException {
+	public PreparedStatement prepareSQLStatement(String sql) throws SQLException {
 		if (m_connection == null) return null;
 		return doPrepareSQLStatement(sql);
 	}
@@ -152,7 +150,7 @@ public class SQLCache_SWB extends SQLCache
      * @throws SQLException the sQL exception
      */
     @Override
-	public synchronized PreparedStatement getPreparedSQLStatement(String opname, String [] attr) throws SQLException {
+	public PreparedStatement getPreparedSQLStatement(String opname, String [] attr) throws SQLException {
 		/* TODO extended calling format or statement format to support different
 		 * result sets and conconcurrency modes.
 		 */
@@ -254,7 +252,7 @@ public class SQLCache_SWB extends SQLCache
      * @param ps the ps
      */
     @Override
-    public synchronized void returnPreparedSQLStatement(PreparedStatement ps) {
+    public void returnPreparedSQLStatement(PreparedStatement ps) {
 //        if (!CACHE_PREPARED_STATEMENTS) {
             try {
                 ps.close();

@@ -138,7 +138,10 @@ public class SWBAccessIncrement implements SWBAppObject
                 try
                 {
                     WebPage rec=SWBContext.getWebSite(map).getWebPage(topic);
-                    if(rec.incViews() && !SWBPortal.isClient()) rec.updateViews();
+                    synchronized(rec)
+                    {
+                        if(rec.incViews() && !SWBPortal.isClient()) rec.updateViews();
+                    }
                 } catch (Exception e)
                 {
                     log.error("Error to increment views of WebPage:"+topic,e);
@@ -157,7 +160,10 @@ public class SWBAccessIncrement implements SWBAppObject
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
                         }
-                        if (recr!=null && recr.incViews() && !SWBPortal.isClient())recr.updateViews();
+                        synchronized(recr)
+                        {
+                            if (recr!=null && recr.incViews() && !SWBPortal.isClient())recr.updateViews();
+                        }
                     } catch (Exception e)
                     {
                         log.error("Error to increment access of Resource:"+resid,e);
@@ -209,8 +215,11 @@ public class SWBAccessIncrement implements SWBAppObject
                         }else
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
-                        }                        
-                        if (recr!=null && recr.incHits() && !SWBPortal.isClient()) recr.updateViews();
+                        }
+                        synchronized(recr)
+                        {
+                            if (recr!=null && recr.incHits() && !SWBPortal.isClient()) recr.updateViews();
+                        }
                     } catch (Exception e)
                     {
                         log.error("Error to increment Resource Hits:"+resid,e);
