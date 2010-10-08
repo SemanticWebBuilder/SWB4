@@ -64,7 +64,7 @@ private Document m_filter = null;
     private long views = 0;
     
     /** The timer. */
-    private long timer;                     //valores de sincronizacion de views, hits
+    private long timer=System.currentTimeMillis();                     //valores de sincronizacion de views, hits
     
     /** The time. */
     private static long time;               //tiempo en milisegundos por cada actualizacion
@@ -509,15 +509,18 @@ private Document m_filter = null;
      */
     public boolean incHits() {
         boolean ret = false;
-        viewed = true;
-        if (hits == 0) {
-            hits = getHits();
-        }
-        hits += 1;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time) {
-            //TODO: evalDate4Views();
-            ret = true;
+        synchronized(this)
+        {
+            viewed = true;
+            if (hits == 0) {
+                hits = getHits();
+            }
+            hits += 1;
+            long t = System.currentTimeMillis() - timer;
+            if (t > time || t < -time) {
+                //TODO: evalDate4Views();
+                ret = true;
+            }
         }
         return ret;
     }
@@ -547,18 +550,24 @@ private Document m_filter = null;
      * 
      * @return true, if successful
      */
-    public boolean incViews() {
+    public boolean incViews() 
+    {
+
         boolean ret = false;
-        //System.out.println("incViews:"+views);
-        viewed = true;
-        if (views == 0) {
-            views = getViews();
-        }
-        views += 1;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time) {
-            //TODO: evalDate4Views();
-            ret = true;
+        synchronized(this)
+        {
+            //System.out.println("incViews:"+views);
+            viewed = true;
+            if (views == 0) {
+                views = getViews();
+            }
+            views += 1;
+            long t = System.currentTimeMillis() - timer;
+            if (t > time || t < -time) {
+                //TODO: evalDate4Views();
+                //System.out.println("res:"+getId()+" t:"+t+" > " +time+" "+timer+" "+System.currentTimeMillis());
+                ret = true;
+            }
         }
         return ret;
     }
@@ -587,6 +596,8 @@ private Document m_filter = null;
                 setHits(hits);
             }
             viewed = false;
+            //System.out.println("************************************** Update Resource "+ getId() +"-->"+ views +" "+timer+" ************************");
+            //System.out.println((char)7);
         }
     }
 }

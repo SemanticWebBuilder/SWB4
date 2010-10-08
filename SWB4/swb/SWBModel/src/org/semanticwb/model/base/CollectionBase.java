@@ -6,6 +6,11 @@ package org.semanticwb.model.base;
    */
 public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Superclase de todos los tipos de Modelos de SemanticWebBuilder
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_SWBModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#SWBModel");
+    public static final org.semanticwb.platform.SemanticProperty swb_collectionModel=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionModel");
     public static final org.semanticwb.platform.SemanticClass swb_Class=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Class");
     public static final org.semanticwb.platform.SemanticProperty swb_collectionClass=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#collectionClass");
     public static final org.semanticwb.platform.SemanticProperty swb_hasCollectionListProperties=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasCollectionListProperties");
@@ -112,6 +117,29 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
             return it;
         }
        /**
+       * Gets all org.semanticwb.model.Collection with a determined CollectionModel
+       * @param value CollectionModel of the type org.semanticwb.model.SWBModel
+       * @param model Model of the org.semanticwb.model.Collection
+       * @return Iterator with all the org.semanticwb.model.Collection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByCollectionModel(org.semanticwb.model.SWBModel value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_collectionModel, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.Collection with a determined CollectionModel
+       * @param value CollectionModel of the type org.semanticwb.model.SWBModel
+       * @return Iterator with all the org.semanticwb.model.Collection
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.Collection> listCollectionByCollectionModel(org.semanticwb.model.SWBModel value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.Collection> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_collectionModel,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.Collection with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.Collection
@@ -197,6 +225,44 @@ public abstract class CollectionBase extends org.semanticwb.model.SWBClass imple
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property CollectionModel
+   * @param value CollectionModel to set
+   */
+
+    public void setCollectionModel(org.semanticwb.model.SWBModel value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_collectionModel, value.getSemanticObject());
+        }else
+        {
+            removeCollectionModel();
+        }
+    }
+   /**
+   * Remove the value for CollectionModel property
+   */
+
+    public void removeCollectionModel()
+    {
+        getSemanticObject().removeProperty(swb_collectionModel);
+    }
+
+   /**
+   * Gets the CollectionModel
+   * @return a org.semanticwb.model.SWBModel
+   */
+    public org.semanticwb.model.SWBModel getCollectionModel()
+    {
+         org.semanticwb.model.SWBModel ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_collectionModel);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.SWBModel)obj.createGenericInstance();
          }
          return ret;
     }

@@ -738,18 +738,21 @@ public class WebPage extends WebPageBase
      */
     public boolean incViews()
     {
-        viewed = true;
-        if(views==-1)
+        synchronized(this)
         {
-            views=getViews();
+            viewed = true;
+            if(views==-1)
+            {
+                views=getViews();
+            }
+            views+=1;
+            long t = System.currentTimeMillis() - timer;
+            if (t > time || t < -time)
+            {
+                return true;
+            }
+            return false;
         }
-        views+=1;
-        long t = System.currentTimeMillis() - timer;
-        if (t > time || t < -time)
-        {
-            return true;
-        }
-        return false;
     }
     
     /* (non-Javadoc)
@@ -772,6 +775,8 @@ public class WebPage extends WebPageBase
             timer = System.currentTimeMillis();
             setViews(views);
             viewed = false;
+            //System.out.println("******************************** Update WebPage ************************");
+            //System.out.println((char)7);
         }
     }
 
