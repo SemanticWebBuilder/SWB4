@@ -1872,6 +1872,31 @@ public class SWBUtils {
                 }
             }
         }
+
+        /**
+         * Valida si txt es nulo regresa def de lo contrario regresa txt
+         * @param txt
+         * @param def
+         * @return 
+         */
+        public static String nullValidate(String txt, String def)
+        {
+            if(txt==null)return def;
+            return txt;
+        }
+
+        /**
+         * Valida si obj es nulo regresa def de lo contrario regresa txt
+         * @param txt
+         * @param def
+         * @return
+         */
+        public static String nullValidate(Object obj, String txt, String def)
+        {
+            if(obj==null)return def;
+            return txt;
+        }
+
     }
 
     /**
