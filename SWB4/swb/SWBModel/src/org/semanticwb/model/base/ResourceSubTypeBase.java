@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define una agripacion de componentes o recursos de un mismo tipo 
    */
-public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable
+public abstract class ResourceSubTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción

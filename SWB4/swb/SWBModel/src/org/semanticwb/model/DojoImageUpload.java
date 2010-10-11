@@ -121,26 +121,30 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         //TODO: ImageResizer.
         String name = dest.getName();
         File path = dest.getParentFile();
+        File file = new File(path, name);
         File tmpFile = new File(path, "tmping_" + name);
-        dest.renameTo(tmpFile);
-        if (isImgCrop())
+        if(getImgMaxWidth()>0 && getImgMaxHeight()>0)
         {
-            ImageResizer.resizeCrop(tmpFile, getImgMaxWidth(), getImgMaxHeight(), new File(path, name), name.substring(name.lastIndexOf(".") + 1));
-        } else
-        {
-            ImageResizer.resize(tmpFile, getImgMaxWidth(), getImgMaxHeight(), true, new File(path, name), name.substring(name.lastIndexOf(".") + 1));
+            dest.renameTo(tmpFile);
+            if (isImgCrop())
+            {
+                ImageResizer.resizeCrop(tmpFile, getImgMaxWidth(), getImgMaxHeight(), file, name.substring(name.lastIndexOf(".") + 1));
+            } else
+            {
+                ImageResizer.resize(tmpFile, getImgMaxWidth(), getImgMaxHeight(), true, file, name.substring(name.lastIndexOf(".") + 1));
+            }
+            tmpFile.delete();
         }
         if (isImgThumbnail())
         {
             if (isImgCrop())
             {
-                ImageResizer.resizeCrop(tmpFile, getImgThumbnailWidth(), getImgThumbnailHeight(), new File(path, "thmb_"+name), name.substring(name.lastIndexOf(".") + 1));
+                ImageResizer.resizeCrop(file, getImgThumbnailWidth(), getImgThumbnailHeight(), new File(path, "thmb_"+name), name.substring(name.lastIndexOf(".") + 1));
             } else
             {
-                ImageResizer.resize(tmpFile, getImgThumbnailWidth(), getImgThumbnailHeight(), true, new File(path, "thmb_"+name), name.substring(name.lastIndexOf(".") + 1));
+                ImageResizer.resize(file, getImgThumbnailWidth(), getImgThumbnailHeight(), true, new File(path, "thmb_"+name), name.substring(name.lastIndexOf(".") + 1));
             }
         }
-        tmpFile.delete();
     }
 
     /* (non-Javadoc)

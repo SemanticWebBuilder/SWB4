@@ -4,8 +4,14 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso 
    */
-public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable
+public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty swb_resourceMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceMode");
+   /**
+   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTResource");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceBundle=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceBundle");
    /**
    * Define una agrupacion de objetos de tipo resource
@@ -18,12 +24,6 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
    */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceSubType");
     public static final org.semanticwb.platform.SemanticProperty swb_hasPTSubType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTSubType");
-    public static final org.semanticwb.platform.SemanticProperty swb_resourceMode=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceMode");
-   /**
-   * Un recurso es un componente en una Página Web con el cual el usuario tiene interacción
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_Resource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Resource");
-    public static final org.semanticwb.platform.SemanticProperty swb_hasPTResource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasPTResource");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCache=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCache");
     public static final org.semanticwb.platform.SemanticProperty swb_resourceClassName=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceClassName");
    /**
@@ -99,6 +99,29 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             return (getResourceType(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.model.ResourceType with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @param model Model of the org.semanticwb.model.ResourceType
+       * @return Iterator with all the org.semanticwb.model.ResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.ResourceType with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.model.ResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.ResourceType with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.ResourceType
@@ -168,29 +191,6 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.model.ResourceType with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @param model Model of the org.semanticwb.model.ResourceType
-       * @return Iterator with all the org.semanticwb.model.ResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.ResourceType with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @return Iterator with all the org.semanticwb.model.ResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.ResourceType> listResourceTypeByResource(org.semanticwb.model.Resource value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.ResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.model.ResourceType with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.ResourceType
@@ -222,6 +222,63 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     public ResourceTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the ResourceMode property
+* @return int with the ResourceMode
+*/
+    public int getResourceMode()
+    {
+        return getSemanticObject().getIntProperty(swb_resourceMode);
+    }
+
+/**
+* Sets the ResourceMode property
+* @param value long with the ResourceMode
+*/
+    public void setResourceMode(int value)
+    {
+        getSemanticObject().setIntProperty(swb_resourceMode, value);
+    }
+   /**
+   * Gets all the org.semanticwb.model.Resource
+   * @return A GenericIterator with all the org.semanticwb.model.Resource
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasPTResource));
+    }
+
+   /**
+   * Gets true if has a Resource
+   * @param value org.semanticwb.model.Resource to verify
+   * @return true if the org.semanticwb.model.Resource exists, false otherwise
+   */
+    public boolean hasResource(org.semanticwb.model.Resource value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasPTResource,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the Resource
+   * @return a org.semanticwb.model.Resource
+   */
+    public org.semanticwb.model.Resource getResource()
+    {
+         org.semanticwb.model.Resource ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPTResource);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -440,63 +497,6 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
          if(obj!=null)
          {
              ret=(org.semanticwb.model.ResourceSubType)obj.createGenericInstance();
-         }
-         return ret;
-    }
-
-/**
-* Gets the ResourceMode property
-* @return int with the ResourceMode
-*/
-    public int getResourceMode()
-    {
-        return getSemanticObject().getIntProperty(swb_resourceMode);
-    }
-
-/**
-* Sets the ResourceMode property
-* @param value long with the ResourceMode
-*/
-    public void setResourceMode(int value)
-    {
-        getSemanticObject().setIntProperty(swb_resourceMode, value);
-    }
-   /**
-   * Gets all the org.semanticwb.model.Resource
-   * @return A GenericIterator with all the org.semanticwb.model.Resource
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource> listResources()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.Resource>(getSemanticObject().listObjectProperties(swb_hasPTResource));
-    }
-
-   /**
-   * Gets true if has a Resource
-   * @param value org.semanticwb.model.Resource to verify
-   * @return true if the org.semanticwb.model.Resource exists, false otherwise
-   */
-    public boolean hasResource(org.semanticwb.model.Resource value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(swb_hasPTResource,value.getSemanticObject());
-        }
-        return ret;
-    }
-
-   /**
-   * Gets the Resource
-   * @return a org.semanticwb.model.Resource
-   */
-    public org.semanticwb.model.Resource getResource()
-    {
-         org.semanticwb.model.Resource ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasPTResource);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.Resource)obj.createGenericInstance();
          }
          return ret;
     }
