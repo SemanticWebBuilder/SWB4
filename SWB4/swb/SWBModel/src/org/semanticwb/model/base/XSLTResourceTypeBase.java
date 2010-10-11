@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT 
    */
-public abstract class XSLTResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable
+public abstract class XSLTResourceTypeBase extends org.semanticwb.model.ResourceType implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT
@@ -79,6 +79,29 @@ public abstract class XSLTResourceTypeBase extends org.semanticwb.model.Resource
             return (getXSLTResourceType(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.model.XSLTResourceType with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @param model Model of the org.semanticwb.model.XSLTResourceType
+       * @return Iterator with all the org.semanticwb.model.XSLTResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.XSLTResourceType> listXSLTResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.XSLTResourceType with a determined Resource
+       * @param value Resource of the type org.semanticwb.model.Resource
+       * @return Iterator with all the org.semanticwb.model.XSLTResourceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.XSLTResourceType> listXSLTResourceTypeByResource(org.semanticwb.model.Resource value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.XSLTResourceType with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.XSLTResourceType
@@ -145,29 +168,6 @@ public abstract class XSLTResourceTypeBase extends org.semanticwb.model.Resource
         public static java.util.Iterator<org.semanticwb.model.XSLTResourceType> listXSLTResourceTypeBySubType(org.semanticwb.model.ResourceSubType value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTSubType,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.XSLTResourceType with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @param model Model of the org.semanticwb.model.XSLTResourceType
-       * @return Iterator with all the org.semanticwb.model.XSLTResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.XSLTResourceType> listXSLTResourceTypeByResource(org.semanticwb.model.Resource value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.model.XSLTResourceType with a determined Resource
-       * @param value Resource of the type org.semanticwb.model.Resource
-       * @return Iterator with all the org.semanticwb.model.XSLTResourceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.model.XSLTResourceType> listXSLTResourceTypeByResource(org.semanticwb.model.Resource value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.model.XSLTResourceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasPTResource,value.getSemanticObject(),sclass));
             return it;
         }
        /**

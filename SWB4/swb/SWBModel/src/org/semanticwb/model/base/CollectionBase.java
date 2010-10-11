@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una Collección de objetos de una clase especificada con la propiedad "collectionClass" 
    */
-public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
+public abstract class CollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder

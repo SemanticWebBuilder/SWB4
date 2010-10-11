@@ -24,6 +24,11 @@
 package org.semanticwb.model;
 
 // TODO: Auto-generated Javadoc
+
+import java.util.Iterator;
+import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticModel;
+
 /**
  * The Class SWBModel.
  */
@@ -36,5 +41,15 @@ public class SWBModel extends org.semanticwb.model.base.SWBModelBase {
      */
     public SWBModel(org.semanticwb.platform.SemanticObject base) {
         super(base);
+    }
+
+    public SemanticModel getSemanticModel()
+    {
+        return getSemanticObject().getModel();
+    }
+
+    public Iterator<GenericObject> listInstancesOfClass(SemanticClass cls)
+    {
+        return new GenericIterator(getSemanticModel().listInstancesOfClass(cls));
     }
 }
