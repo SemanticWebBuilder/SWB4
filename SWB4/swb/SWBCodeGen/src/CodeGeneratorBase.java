@@ -54,10 +54,14 @@ public class CodeGeneratorBase
         try
         {
             String path = getClass().getResource("/").getPath().replaceAll("%20", " ");
-            File dir = new File(path+"../../../SWBModel/src");
             CodeGenerator codeGeneration = new CodeGenerator();
+
+            File dir = new File(path+"../../../SWBModel/src");
             codeGeneration.generateCode("swb",true,dir);
             codeGeneration.generateCode("swbxf",false,dir);
+            
+            dir = new File(path+"../../../SWBPortal/src");
+            codeGeneration.generateCode("swbres",false,dir);
             System.out.println("Generación de clases completa");
         }
         catch (CodeGeneratorException cge)
