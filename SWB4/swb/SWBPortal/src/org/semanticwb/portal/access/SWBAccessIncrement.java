@@ -160,9 +160,12 @@ public class SWBAccessIncrement implements SWBAppObject
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
                         }
-                        synchronized(recr)
+                        if (recr!=null)
                         {
-                            if (recr!=null && recr.incViews() && !SWBPortal.isClient())recr.updateViews();
+                            synchronized(recr)
+                            {
+                                if (recr.incViews() && !SWBPortal.isClient())recr.updateViews();
+                            }
                         }
                     } catch (Exception e)
                     {
@@ -216,9 +219,12 @@ public class SWBAccessIncrement implements SWBAppObject
                         {
                             recr = SWBContext.getWebSite(map).getResource(resid);
                         }
-                        synchronized(recr)
+                        if (recr!=null)
                         {
-                            if (recr!=null && recr.incHits() && !SWBPortal.isClient()) recr.updateViews();
+                            synchronized(recr)
+                            {
+                                if (recr.incHits() && !SWBPortal.isClient()) recr.updateViews();
+                            }
                         }
                     } catch (Exception e)
                     {
