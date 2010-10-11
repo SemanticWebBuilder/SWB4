@@ -44,6 +44,7 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.VersionInfo;
 import org.semanticwb.model.Versionable;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -337,11 +338,12 @@ public class SWBAResourceVersion extends GenericResource {
             }
         } else {
             //create Initial Version
-
             GenericObject go = obj;
             int vnum = 1;
             SWBResource swres = (SWBResource) go;
             VersionInfo vi = swres.getResourceBase().getWebSite().createVersionInfo();
+            //WebSite site=(WebSite)obj.getSemanticObject().getModel().getModelObject().createGenericInstance();
+            //VersionInfo vi = site.createVersionInfo();
             vi.setVersionFile("index.html");
             vi.setVersionNumber(vnum);
             vi.setVersionComment("Versión Inicial");
