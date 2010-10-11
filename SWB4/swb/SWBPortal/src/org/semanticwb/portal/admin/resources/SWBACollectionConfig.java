@@ -26,8 +26,10 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.Traceable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticModel;
@@ -170,7 +172,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
 
                if (col.getCollectionClass() != null) {
                     SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
-                    
+                    SWBModel colmodel = col.getCollectionModel();
+                    if(colmodel==null) colmodel = col.getWebSite().getSubModel();
+
                     HashMap<String, String> hmcol = new HashMap();
                     HashMap<String, String> hmbus = new HashMap();
                     HashMap<String, String> hmFE = new HashMap();
@@ -242,8 +246,40 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("</option>");
                     }
                     out.println("</select>");
-                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
+                    out.println("</li>");
+                    out.println("</ul>");
+                    out.println("</fieldset>");
+                    
+                    WebSite wb = col.getWebSite();
 
+                    out.println("<fieldset>");
+                    out.println("<legend>" + "Tipo de modelo a utilizar" + "</legend>");
+                    out.println("<ul style=\"list-style:none;\">");
+                    out.println("<li>");
+                    out.println("<input type=\"radio\" id=\""+id+"_radiomodel1\" name=\"usemodel\" value=\""+wb.getURI()+"\" "+(colmodel.getURI().equals(wb.getURI())?"checked":"")+">");
+                    out.println("<label for=\"" + id + "_radiomodel1\">" + "Sitio "+ wb.getDisplayTitle(user.getLanguage()) + "</label>");
+                    out.println("</li>");
+                    out.println("<li>");
+                    UserRepository usrrep = wb.getUserRepository();
+                    out.println("<input type=\"radio\" id=\""+id+"_radiomodel2\" name=\"usemodel\" value=\""+usrrep.getURI()+"\" "+(colmodel.getURI().equals(usrrep.getURI())?"checked":"")+" >");
+                    out.println("<label for=\"" + id + "_radiomodel2\">" + usrrep.getDisplayTitle(user.getLanguage()) + "</label>");
+                    out.println("</li>");
+                    out.println("<li>");
+                    Iterator<SWBModel> itmodel = wb.listSubModels();
+                    while (itmodel.hasNext()) {
+                       SWBModel model = itmodel.next();
+                       if(!wb.getURI().equals(model.getURI()) && !usrrep.getURI().equals(model.getURI()) )
+                       {
+                            out.println("<input type=\"radio\" id=\""+id+"_radiomodel3\" name=\"usemodel\" value=\""+model.getURI()+"\" "+(colmodel.getURI().equals(model.getURI())?"checked":"")+" >");
+                            out.println("<label for=\"" + id + "_radiomodel3\">" + "Repositorio de documentos "+ model.getId() + "</label>");
+                            break;
+                       }
+                   }
+                    out.println("</li>");
+                    out.println("</ul>");
+                    out.println("</fieldset>");
+                    out.println("<fieldset>");
+                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
                     //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
                     out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
@@ -252,10 +288,6 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println(" return false; ");
                     out.println("</script>");
                     out.println("</button>");
-
-                    out.println("</li>");
-
-                    out.println("</ul>");
                     out.println("</fieldset>");
 
                     out.println("<div id=\"configcol/"+id+"\" dojoType=\"dijit.TitlePane\" title=\"Configuración despliegue\" class=\"admViewProperties\" open=\"true\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
@@ -523,7 +555,7 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     sempropFE = null;
                     sorder = null;
 
-                    min=0; max=0; indice = 0;;
+                    min=0; max=0; indice = 0;
 
                     HashMap<String,String> hmSearchprop = new HashMap();
 
@@ -716,8 +748,42 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("</option>");
                     }
                     out.println("</select>");
-                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
+                    out.println("</li>");
 
+                    out.println("</ul>");
+                    out.println("</fieldset>");
+
+                    WebSite wb = col.getWebSite();
+
+
+                    out.println("<fieldset>");
+                    out.println("<legend>" + "Tipo de modelo a utilizar" + "</legend>");
+                    out.println("<ul style=\"list-style:none;\">");
+                    out.println("<li>");
+                    out.println("<input type=\"radio\" id=\""+id+"_radiomodel1\" name=\"usemodel\" value=\""+wb.getURI()+"\" checked>");
+                    out.println("<label for=\"" + id + "_radiomodel1\">" + "Sitio "+ wb.getDisplayTitle(user.getLanguage()) + "</label>");
+                    out.println("</li>");
+                    out.println("<li>");
+                    UserRepository usrrep = wb.getUserRepository();
+                    out.println("<input type=\"radio\" id=\""+id+"_radiomodel2\" name=\"usemodel\" value=\""+usrrep.getURI()+"\" >");
+                    out.println("<label for=\"" + id + "_radiomodel2\">" +  usrrep.getDisplayTitle(user.getLanguage()) + "</label>");                    
+                    out.println("</li>");
+                    out.println("<li>");
+                    Iterator<SWBModel> itmodel = wb.listSubModels();
+                    while (itmodel.hasNext()) {
+                       SWBModel model = itmodel.next();
+                       if(!wb.getURI().equals(model.getURI()) && !usrrep.getURI().equals(model.getURI()) )
+                       {
+                            out.println("<input type=\"radio\" id=\""+id+"_radiomodel3\" name=\"usemodel\" value=\""+model.getURI()+"\" >");
+                            out.println("<label for=\"" + id + "_radiomodel3\">" + "Repositorio de documentos "+ model.getId() + "</label>");
+                            break;
+                       }
+                   }
+                    out.println("</li>");
+                    out.println("</ul>");
+                    out.println("</fieldset>");
+                    out.println("<fieldset>");
+                    out.println("<button dojoType=\"dijit.form.Button\" _type=\"button\"  id=\""+id+"_btnClass\">" + paramsRequest.getLocaleString("btn_updt") );
                     out.println("<script type=\"dojo/method\" event=\"onClick\" >");
                     //out.println(" var miform = dojo.byId('"+ id + "/collectionconfig'); ");
                     out.println(" var actbut = dojo.byId('"+id+"_actbutton'); ");
@@ -726,33 +792,9 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println(" return false; ");
                     out.println("</script>");
                     out.println("</button>");
-
-                    out.println("</li>");
-
-                    out.println("</ul>");
                     out.println("</fieldset>");
                     out.println("</div>");
 
-
-//                    out.println("<div class=\"swbform\">");
-//                    out.println("<fieldset>");
-//                    out.println("<legend>" + paramsRequest.getLocaleString("erroMsgConfig") + " \"" + col.getDisplayTitle(user.getLanguage()) + "\" </legend>");
-//                    out.println("<ul style=\"list-style:none;\">");
-//                    out.println("<li>");
-//                    out.println(paramsRequest.getLocaleString("msgMissingConfigClass"));
-//                    out.println("</li>");
-//                    out.println("<li>");
-//                    out.println(paramsRequest.getLocaleString("msgConfigInstructions"));
-//                    out.println("</li>");
-//                    out.println("</ul>");
-//                    out.println("</fieldset>");
-//                    SWBResourceURL urlreload = paramsRequest.getRenderUrl();
-//                    urlreload.setParameter("act", "");
-//                    urlreload.setParameter("suri", id);
-//                    out.println("<fieldset>");
-//                    out.println("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('" + urlreload + "',this.domNode); return false;\">" + paramsRequest.getLocaleString("btnReload") + "</button>"); //
-//                    out.println("</fieldset>");
-//                    out.println("</div>");
                 }
             }
 
@@ -796,6 +838,11 @@ public class SWBACollectionConfig extends GenericAdmResource {
                     out.println("</div>");
                 } else {
                     SemanticClass sccol = col.getCollectionClass().transformToSemanticClass();
+
+                    SWBModel colmodel = col.getCollectionModel();
+                    if(colmodel==null) colmodel = col.getWebSite().getSubModel();
+                    
+                    SemanticModel semmodel = colmodel.getSemanticObject().getModel();
 
                     SemanticProperty semProphm = null;
                     Iterator<String> its = col.listListPropertieses();
@@ -910,22 +957,19 @@ public class SWBACollectionConfig extends GenericAdmResource {
 //                                DisplayProperty dp = new DisplayProperty(semanticProp.getDisplayProperty());
 //                                if(dp!=null)System.out.println("DisplayProperty:"+dp.getDisplaySelectValues(user.getLanguage()));
 
-                                SemanticModel smodel = gobj.getSemanticObject().getModel();
-//                                if(smodel.getModelObject().getGenericInstance()!=null && smodel.getModelObject().getGenericInstance() instanceof WebSite)
-//                                {
-//
-//                                }
-                                Iterator<SemanticObject> sobj = smodel.listInstancesOfClass(sc); //sc.listInstances();
+                                //semmodel = colmodel.getSemanticObject().getModel();//gobj.getSemanticObject().getModel();
+
+                                Iterator<SemanticObject> sobj = semmodel.listInstancesOfClass(sc); //sc.listInstances();
                                 //System.out.println("clase: "+sc.getClassName()+", "+sc.getClassId());
-                                if(sc.equals(User.swb_User))
-                                {
+//                                if(sc.equals(User.swb_User))
+//                                {
 
                                     sobj = sc.listInstances();
 //                                    if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
 //                                    {
 //                                      sobj =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sc);
 //                                    }
-                                }
+//                                }
 
                                 
 
@@ -1023,16 +1067,16 @@ public class SWBACollectionConfig extends GenericAdmResource {
                         out.println("</thead>");
                         out.println("<tbody>");
                         SemanticObject semO = null;
-                        Iterator<SemanticObject> itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                        if(sccol.equals(User.swb_User))
-                        {
-
-                            //itso = sccol.listInstances();
-                            if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
-                            {
-                              itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
-                            }
-                        }
+                        Iterator<SemanticObject> itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+//                        if(sccol.equals(User.swb_User))
+//                        {
+//
+//                            //itso = sccol.listInstances();
+//                            if(col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null )
+//                            {
+//                              itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+//                            }
+//                        }
                         String urikey = null;
                         SemanticProperty semOProp=null;
                         if (!busqueda.equals("")) {
@@ -1069,12 +1113,12 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             }
                             else if(busqueda.equals("")&&!hmSearchParam.isEmpty())
                             {
-                                itsprop2 = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol);
-                                if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
-                                {
-                                  //itsprop2 =   sccol.listInstances();
-                                  itsprop2 =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
-                                }
+                                itsprop2 = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol);
+//                                if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
+//                                {
+//                                  //itsprop2 =   sccol.listInstances();
+//                                  itsprop2 =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+//                                }
                             }
 
                             if(!hmSearchParam.isEmpty())
@@ -1156,12 +1200,12 @@ public class SWBACollectionConfig extends GenericAdmResource {
                             itso = hmfiltro.values().iterator();
 
                         } else {
-                            itso = gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
-                            if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
-                            {
-                                //itso = sccol.listInstances();
-                                itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
-                            }
+                            itso = semmodel.listInstancesOfClass(sccol); //gobj.getSemanticObject().getModel().listInstancesOfClass(sccol); //sccol.listInstances();
+//                            if(sccol.equals(User.swb_User) ) //&&col!=null && col.getWebSite() !=null && col.getWebSite().getUserRepository() !=null
+//                            {
+//                                //itso = sccol.listInstances();
+//                                itso =  col.getWebSite().getUserRepository().getSemanticObject().getModel().listInstancesOfClass(sccol);
+//                            }
                         }
 
                         //PAGINACION
@@ -1547,10 +1591,21 @@ public class SWBACollectionConfig extends GenericAdmResource {
                 if(actbutton.equals("updtclass")){
 
                     String collclass = request.getParameter("collclass");
+                    String usemodel = request.getParameter("usemodel");
 
+                    if(usemodel!=null)
+                    {
+                        GenericObject gi = ont.getSemanticObject(usemodel).getGenericInstance();
+
+                        if(gi!=null && gi instanceof SWBModel)
+                        {
+                            SWBModel colmodel = (SWBModel) gi;
+                            col.setCollectionModel(colmodel);
+                        }
+                    }
                     SemanticObject so = ont.getSemanticObject(collclass);
 
-                    System.out.println("collclass:"+collclass+", "+so);
+                    //System.out.println("collclass:"+collclass+", "+so);
                     if(null!=so) col.setCollectionClass(so);
 
 
