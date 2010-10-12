@@ -27,7 +27,7 @@
     <fieldset legend="Advanced">
         <input type="radio" id="local1" name="local" label="Extern" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
         <textarea id="code" name="code" label="* Code:" rows="5" cols="50" wrap="virtual"/>
-        <input type="text" id="index" name="index" label="Index:" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numeric index of the image" />
+        <input type="text" id="index" name="index" label="Order Index:" maxlength="7" regExp="\d{1,7}" invalidMessage="Invalid index" promptMessage="Numeric index of the image" />
 
         <statictext name="note">
         <![CDATA[
