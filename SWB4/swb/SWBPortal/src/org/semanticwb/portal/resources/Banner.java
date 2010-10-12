@@ -246,7 +246,6 @@ public class Banner extends GenericAdmResource {
      */
     @Override
     public void processAction(javax.servlet.http.HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("banner... processAction");
         Resource base=getResourceBase();
         base.addHit(request, response.getUser(), response.getWebPage());
 //        String url = base.getAttribute("url");
