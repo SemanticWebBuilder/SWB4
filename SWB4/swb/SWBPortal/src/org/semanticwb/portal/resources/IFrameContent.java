@@ -92,9 +92,7 @@ public class IFrameContent extends GenericAdmResource
             }
 
             String userAgent = request.getHeader("User-Agent")==null?null:request.getHeader("User-Agent").toLowerCase();
-            System.out.println("userAgent="+userAgent);
             if( userAgent!=null && (userAgent.indexOf("msie 5")>=0 || userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
-                System.out.println("*************** IF");
                 out.print("<iframe ");
                 out.print(" src=\""+base.getAttribute("url")+"\" ");
                 if(width!=null)
@@ -104,7 +102,6 @@ public class IFrameContent extends GenericAdmResource
                 out.println(" class=\"swb-ifc\">");
                 out.println("</iframe>");
             }else {
-                System.out.println("*************** ELSE");
                 out.print("<object type=\"text/html\"");
                 if( userAgent!=null && userAgent.indexOf("msie")>=0 )
                     out.print(" classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\"");
