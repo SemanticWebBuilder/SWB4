@@ -93,7 +93,7 @@ public class IFrameContent extends GenericAdmResource
 
             String userAgent = request.getHeader("User-Agent")==null?null:request.getHeader("User-Agent").toLowerCase();
             System.out.println("userAgent="+userAgent);
-            if( userAgent!=null && (userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
+            if( userAgent!=null && (userAgent.indexOf("msie 5")>=0 || userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
                 System.out.println("*************** IF");
                 out.print("<iframe ");
                 out.print(" src=\""+base.getAttribute("url")+"\" ");
