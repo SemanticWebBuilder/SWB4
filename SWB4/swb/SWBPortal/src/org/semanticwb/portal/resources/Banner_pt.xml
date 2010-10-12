@@ -8,8 +8,8 @@
 
         <input type="text" id="url" name="url" label="Endereço Web:" promptMessage="Endereço Web" />
         <statictext name="txtTarget">Em uma nova janela:</statictext>
-        <input type="radio" name="target" label="Sim" value="true"/>
-	<input type="radio" name="target" label="Não" value="false"/>
+        <input type="radio" name="target" id="target0" label="Sim" value="true"/>
+	<input type="radio" name="target" id="target1" label="Não" value="false" checked="true"/>
 
         <input type="text" id="axn" name="axn" label="Acción:" promptMessage="Javascript ação, proposta no evento onclick" />
 
