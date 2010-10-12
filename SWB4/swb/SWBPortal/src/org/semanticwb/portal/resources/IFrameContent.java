@@ -91,25 +91,39 @@ public class IFrameContent extends GenericAdmResource
                 height = null;
             }
 
-            out.print("<object type=\"text/html\"");
             String userAgent = request.getHeader("User-Agent")==null?null:request.getHeader("User-Agent").toLowerCase();
-            if( userAgent!=null && userAgent.indexOf("msie")>=0 )
-                out.print(" classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\"");
-            out.print(" data=\""+base.getAttribute("url")+"\"");
-            if(width!=null)
-                out.print(" width=\""+width+"\"");
-            if(height!=null)
-                out.print(" height=\""+height+"\"");
-            out.println(" class=\"swb-ifc\">");
-            out.print("<iframe ");
-            out.print(" src=\""+base.getAttribute("url")+"\" ");
-            if(width!=null)
-                out.print(" width=\""+width+"\"");
-            if(height!=null)
-                out.print(" height=\""+height+"\"");
-            out.println(" class=\"swb-ifc\">");
-            out.println("</iframe>");
-            out.println("</object>");
+            System.out.println("userAgent="+userAgent);
+            if( userAgent!=null && (userAgent.indexOf("msie 6")>=0 || userAgent.indexOf("msie 7")>=0) ) {
+                System.out.println("*************** IF");
+                out.print("<iframe ");
+                out.print(" src=\""+base.getAttribute("url")+"\" ");
+                if(width!=null)
+                    out.print(" width=\""+width+"\"");
+                if(height!=null)
+                    out.print(" height=\""+height+"\"");
+                out.println(" class=\"swb-ifc\">");
+                out.println("</iframe>");
+            }else {
+                System.out.println("*************** ELSE");
+                out.print("<object type=\"text/html\"");
+                if( userAgent!=null && userAgent.indexOf("msie")>=0 )
+                    out.print(" classid=\"clsid:25336920-03F9-11CF-8FD0-00AA00686F13\"");
+                out.print(" data=\""+base.getAttribute("url")+"\"");
+                if(width!=null)
+                    out.print(" width=\""+width+"\"");
+                if(height!=null)
+                    out.print(" height=\""+height+"\"");
+                out.println(" class=\"swb-ifc\">");
+                out.print("<iframe ");
+                out.print(" src=\""+base.getAttribute("url")+"\" ");
+                if(width!=null)
+                    out.print(" width=\""+width+"\"");
+                if(height!=null)
+                    out.print(" height=\""+height+"\"");
+                out.println(" class=\"swb-ifc\">");
+                out.println("</iframe>");
+                out.println("</object>");
+            }
         }else {
             URL page = new URL(base.getAttribute("url").trim());
             URLConnection conn = page.openConnection();
