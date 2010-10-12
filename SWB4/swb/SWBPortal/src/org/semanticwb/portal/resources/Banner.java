@@ -129,6 +129,8 @@ public class Banner extends GenericAdmResource {
                         out.print("<a class=\"swb-banner\"");
                         out.print(" href=\""+url+"\"");
                         out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
+                        if( Boolean.parseBoolean(request.getParameter("target")) )
+                            out.print(" target=\"_blank\"");
                         out.println(" title=\""+base.getAttribute("title","")+"\">");
                     }
                     out.print("<img src=\"");
@@ -174,7 +176,7 @@ public class Banner extends GenericAdmResource {
         out.println("<div class=\"swb-banner-ld\">");
         out.println(base.getAttribute("longdesc", "Sin descripción"));
         out.println("<hr size=\"1\" noshade=\"noshade\" />");
-        out.println("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString()+"\">Regresar</a>");
+        out.println("<a href=\""+paramRequest.getRenderUrl().setMode(paramRequest.Mode_VIEW).toString()+"\" rel=\""+paramRequest.getLocaleString("back")+"\" title=\""+paramRequest.getLocaleString("back")+"\">"+paramRequest.getLocaleString("back")+"</a>");
         out.println("</div>");
         out.flush();
         out.close();
