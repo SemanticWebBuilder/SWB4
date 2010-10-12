@@ -129,7 +129,7 @@ public class Banner extends GenericAdmResource {
                         out.print("<a class=\"swb-banner\"");
                         out.print(" href=\""+url+"\"");
                         out.print(" onclick=\"window.location.href='"+paramRequest.getActionUrl()+"';return true;\"");
-                        if( Boolean.parseBoolean(request.getParameter("target")) )
+                        if( Boolean.parseBoolean(base.getAttribute("target")) )
                             out.print(" target=\"_blank\"");
                         out.println(" title=\""+base.getAttribute("title","")+"\">");
                     }
