@@ -9,22 +9,26 @@ package org.semanticwb.rest;
  *
  * @author victor.lorenzana
  */
-public class RestParameter {
+public class ParameterInfo {
 
     private final String name;
-    private final String[] values;
-    public RestParameter(String name,String[] values)
+    private final String description;
+    public ParameterInfo(String name,String description)
     {
+        if(name==null)
+        {
+            throw new NullPointerException();
+        }
         this.name=name;
-        this.values=values;
+        this.description=description;
     }
-    public String getName()
+    public String getParameterName()
     {
         return name;
     }
-    public String[] getValues()
+    public String getParameterDescription()
     {
-        return values;
+        return description;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class RestParameter {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        final RestParameter other = (RestParameter) obj;
+        final ParameterInfo other = (ParameterInfo) obj;
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
             return false;
         return true;
@@ -43,16 +47,15 @@ public class RestParameter {
     @Override
     public int hashCode()
     {
-        int hash = 5;
-        hash = 79 * hash + (this.name != null ? this.name.hashCode() : 0);
+        int hash = 7;
+        hash = 53 * hash + (this.name != null ? this.name.hashCode() : 0);
         return hash;
     }
 
     @Override
     public String toString()
     {
-        return  name;
+        return name;
     }
-    
 
 }

@@ -8,11 +8,12 @@ package org.semanticwb.rest;
 import bsh.Interpreter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import org.semanticwb.SWBUtils;
@@ -29,13 +30,22 @@ import org.w3c.dom.NodeList;
  * @author victor.lorenzana
  */
 public class RestSource {
-
+    private static final String APPLICATION_XML = "application/xml";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String JSON_CONTENT_TYPE = "json";
     private static final String NL="\r\n";
-    private final URL url;    
-    
+    private final URL url;        
     public RestSource(URL url)
     {
-        this.url=url;    
+        if(url==null)
+        {
+            throw new NullPointerException("the url is null");
+        }
+        this.url=url;
+        if(!(url.getProtocol().toLowerCase().startsWith("http") || url.getProtocol().toLowerCase().startsWith("https")))
+        {
+            throw new IllegalArgumentException("The protocol "+url.getProtocol()+" is not suported (only http or https is supported)");
+        }
     }
     public URL getUrl()
     {
@@ -48,11 +58,82 @@ public class RestSource {
             throw new IllegalStateException(e);
         }
     }
-    public Document getDocumentService() throws RestException
+    public Document execute(HTTPMethod method) throws ExecutionRestException
     {
-        return this.getDocumentService(null);
+        return execute(null,method, null);
     }
-    public Document getDocumentService(Map<String,String> parameters) throws RestException
+    public Document execute(HTTPMethod method,Map<String,String> parameters) throws ExecutionRestException
+    {
+        return execute(null, method, parameters);
+    }
+    public Document execute(Document document,HTTPMethod method,Map<String,String> parameters) throws ExecutionRestException
+    {
+        switch(method)
+        {
+            case GET:
+                return executeGET(parameters);                
+            case PUT:
+                /*if(document==null)
+                {
+                    throw new IllegalArgumentException("The document to "+ method +" is null");
+                }*/
+                executePUT(document,parameters);
+                break;
+            case POST:
+                /*if(document==null)
+                {
+                    throw new IllegalArgumentException("The document to "+method +" is null");
+                }*/
+                executePOST(document,parameters);
+                break;
+             case DELETE:
+                executeDELETE(parameters);
+                break;
+        }
+        return null;
+    }
+    public void executePOST(Document document) throws ExecutionRestException
+    {
+        executePOST(document, null);
+    }
+    
+    private void executePOSTOrPUT(HTTPMethod method,Document document,Map<String,String> parameters) throws ExecutionRestException
+    {
+        String urlToGet=convertToURLWithParameters(url, parameters);
+        try
+        {
+            HttpURLConnection con=(HttpURLConnection)new URL(urlToGet).openConnection();
+            con.setRequestMethod(method.toString());
+            Charset charset=Charset.forName("utf-8");
+            con.setRequestProperty(CONTENT_TYPE+", charset="+charset.name(), APPLICATION_XML);
+            if(document!=null)
+            {
+                con.setDoOutput(true);
+                OutputStream out=con.getOutputStream();                
+                out.write(SWBUtils.XML.domToXml(document).getBytes(charset));
+                out.close();
+            }
+            if(con.getResponseCode()!=200)
+            {                
+                throw new ServerSideExecutionRestException(method,url,con);
+            }
+            con.disconnect();
+        }
+        catch(IOException ioe)
+        {
+            throw new ExecutionRestException(method,url,ioe);
+        }
+    }
+    public void executePOST(Document document,Map<String,String> parameters) throws ExecutionRestException
+    {
+        executePOSTOrPUT(HTTPMethod.POST, document, parameters);
+    }
+
+    public void executePUT(Document document) throws ExecutionRestException
+    {
+        executePUT(document, null);
+    }
+    private static String convertToURLWithParameters(URL url,Map<String,String> parameters)
     {
         String urlToGet=url.toString();
         if(parameters!=null)
@@ -68,26 +149,58 @@ public class RestSource {
 
                 String data=URLEncoder.encode(key)+"&"+URLEncoder.encode(parameters.get(key));
                 urlToGet=urlToGet+data;
-
             }
-
         }
+        return urlToGet;
+    }
+    public void executePUT(Document document,Map<String,String> parameters) throws ExecutionRestException
+    {
+        executePOSTOrPUT(HTTPMethod.PUT, document, parameters);
+    }
+
+    public void executeDELETE() throws ExecutionRestException
+    {
+        executeDELETE(null);
+    }
+    public void executeDELETE(Map<String,String> parameters) throws ExecutionRestException
+    {
+        String urlToGet=convertToURLWithParameters(url, parameters);
+        try
+        {
+            HttpURLConnection con=(HttpURLConnection)new URL(urlToGet).openConnection();
+            if(con.getResponseCode()!=200)
+            {                
+                throw new ServerSideExecutionRestException(HTTPMethod.DELETE,url,con);
+            }            
+        }
+        catch(IOException ioe)
+        {
+            throw new ExecutionRestException(HTTPMethod.DELETE,url,ioe);
+        }
+    }
+    public Document executeGET() throws ExecutionRestException
+    {
+        return this.executeGET(null);
+    }
+    public Document executeGET(Map<String,String> parameters) throws ExecutionRestException
+    {
+        String urlToGet=convertToURLWithParameters(url, parameters);
         try
         {
             HttpURLConnection con=(HttpURLConnection)new URL(urlToGet).openConnection();
             if(con.getResponseCode()==200)
             {
-                if(con.getHeaderField("Content-Type")!=null && con.getHeaderField("Content-Type").equalsIgnoreCase("application/xml"))
+                if(con.getHeaderField(CONTENT_TYPE)!=null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(APPLICATION_XML))
                 {
                     InputStream in=con.getInputStream();
                     Document response=SWBUtils.XML.xmlToDom(in);
                     if(response==null)
                     {
-                        throw new RestException("The document can not be loaded in url:"+url.toString());
+                        throw new ExecutionRestException(HTTPMethod.GET,url,"The document response can not be loaded");
                     }
                     return response;
                 }
-                if(con.getHeaderField("Content-Type")!=null && con.getHeaderField("Content-Type").equalsIgnoreCase("json"))
+                if(con.getHeaderField(CONTENT_TYPE)!=null && con.getHeaderField(CONTENT_TYPE).equalsIgnoreCase(JSON_CONTENT_TYPE))
                 {
                     StringBuilder sb=new StringBuilder();
                     InputStream in=con.getInputStream();
@@ -99,22 +212,22 @@ public class RestSource {
                         read=in.read(buffer);
                     }                    
                     // TODO:
-                    throw new RestException("At this moment the library can not support rest services with json response");
+                    throw new ExecutionRestException(HTTPMethod.GET,url, "At this moment the library can not support rest services with json response");
 
                 }
                 else
                 {
-                    throw new RestException("The document is not a xml document: "+con.getHeaderField("Content-Type"));
+                    throw new ExecutionRestException(HTTPMethod.GET,url,"The response has a not valid Content-Type header: "+con.getHeaderField(CONTENT_TYPE)+"(only "+JSON_CONTENT_TYPE+","+APPLICATION_XML+" are valid)");
                 }
             }
             else
-            {
-                throw new RestException("The document can not be found error: "+con.getResponseCode());
+            {                
+                throw new ServerSideExecutionRestException(HTTPMethod.GET,url,con);
             }
         }
         catch(IOException ioe)
         {
-            throw new RestException(ioe);
+            throw new ExecutionRestException(HTTPMethod.GET,url,ioe);
         }
         
         
@@ -239,12 +352,12 @@ public class RestSource {
         sb.append("}"+NL);        
         return sb.toString();
     }
-    public ClassLoader getClassLoader() throws bsh.EvalError,RestException
+    public ClassLoader getClassLoaderOfGET() throws bsh.EvalError,ExecutionRestException
     {
-        Document response=getDocumentService();
-        return getClassLoader(response);
+        Document response=executeGET();
+        return getClassLoaderOfGET(response);
     }
-    private ClassLoader getClassLoader(Document response) throws bsh.EvalError,RestException
+    private ClassLoader getClassLoaderOfGET(Document response) throws bsh.EvalError,ExecutionRestException
     {        
         MemoryClassLoader mcls=new MemoryClassLoader(RestSource.class.getClassLoader());
         HashMap<String,String> classes=getClasses(response);
@@ -254,19 +367,19 @@ public class RestSource {
         }
         return mcls;
     }
-    public Object getResponse() throws bsh.EvalError,RestException
+    public Object getObjectOfGET() throws bsh.EvalError,ExecutionRestException
     {
-        return getResponse((Map<String,String>)null);
+        return getObjectOfGET((Map<String,String>)null);
 
     }
-    public Object getResponse(Map<String,String> parameters) throws bsh.EvalError,RestException
+    public Object getObjectOfGET(Map<String,String> parameters) throws bsh.EvalError,ExecutionRestException
     {
-        Document response=getDocumentService();
-        return getResponse(response);
+        Document response=executeGET();
+        return getObjectOfGET(response);
     }
-    private Object getResponse(Document response) throws bsh.EvalError,RestException
+    private Object getObjectOfGET(Document response) throws bsh.EvalError,ExecutionRestException
     {        
-        ClassLoader mcls=getClassLoader(response);
+        ClassLoader mcls=getClassLoaderOfGET(response);
         String className=toUpperCase(getRootName(response));
         try
         {
@@ -275,61 +388,51 @@ public class RestSource {
             Object obj=c.newInstance(response.getDocumentElement());
             return obj;
         }
-        catch(ClassNotFoundException clnfe)
+        catch(Exception clnfe)
         {
-            throw new RestException(clnfe);
-        }
-        catch(NoSuchMethodException clnfe)
-        {
-            throw new RestException(clnfe);
-        }
-        catch(InstantiationException clnfe)
-        {
-            throw new RestException(clnfe);
-        }
-        catch(IllegalAccessException clnfe)
-        {
-            throw new RestException(clnfe);
-        }
-        catch(InvocationTargetException clnfe)
-        {
-            throw new RestException(clnfe);
-        }
+            throw new ExecutionRestException(HTTPMethod.GET,url,"Error creating a object response",clnfe);
+        }        
     }
-    public Interpreter getInterpreter() throws bsh.EvalError,RestException
+    public Interpreter getInterpreterOfGET() throws bsh.EvalError,ExecutionRestException
     {
-        return this.getInterpreter(null);
+        return this.getInterpreterOfGET(null);
     }
-    public Interpreter getInterpreter(Map<String,String> parameters) throws bsh.EvalError,RestException
+    public Interpreter getInterpreterOfGET(Map<String,String> parameters) throws bsh.EvalError,ExecutionRestException
     {
-        Document response=getDocumentService();
+        Document response=executeGET();
         Interpreter i=new Interpreter();
-        ClassLoader mcls=getClassLoader(response);
+        ClassLoader mcls=getClassLoaderOfGET(response);
         String className=getRootName(response);
         className=toUpperCase(className);
         try
         {           
             i.setClassLoader(mcls);
-            Object obj=getResponse();
+            Object obj=getObjectOfGET();
             i.set(className.toLowerCase(), obj);
             return i;
         }
         catch(Exception e)
         {
-            throw new RestException(e);
+            throw new ExecutionRestException(HTTPMethod.GET,url,e);
         }
     }
     public static void main(String[] args)
     {
         //String url="http://www.thomas-bayer.com/sqlrest/";
-        String url="http://www.thomas-bayer.com/sqlrest/INVOICE/";
+        //String url="http://www.thomas-bayer.com/sqlrest/INVOICE/";
+        String url="https://api.del.icio.us/v1/posts/get";
+        //http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/
 
         try
         {
             
             RestSource source=new RestSource(new URL(url));
-            Interpreter i=source.getInterpreter();
+            Interpreter i=source.getInterpreterOfGET();
             i.eval("System.out.println(invoicelist.getInvoice().toString());");
+        }        
+        catch(ServerSideExecutionRestException e)
+        {
+            e.printStackTrace();
         }
         catch(Exception e)
         {

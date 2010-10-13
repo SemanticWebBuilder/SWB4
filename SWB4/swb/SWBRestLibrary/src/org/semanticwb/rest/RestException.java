@@ -18,4 +18,8 @@ public class RestException extends Exception{
     {
         super(e);
     }
+    public RestException(String msg,Throwable e)
+    {
+        super(msg,e);
+    }
 }
