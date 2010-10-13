@@ -1,4 +1,4 @@
-/**  
+/**
 * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
 * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
 * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
@@ -570,7 +570,7 @@ public class SWBASchedule extends GenericResource {
         out.println("           <input id=\"" + id + "/period2\" type=\"radio\" dojoType=\"dijit.form.RadioButton\" value=\"monthly\"  name=\"" + id + "/period\" onClick=\"disablePeriodicity('" + id + "');\" " + period2c + " " + periodd + ">" + paramRequest.getLocaleString("frmMonthly"));
         out.println("            </td>");
         out.println("          <td ><input type=\"radio\" dojoType=\"dijit.form.RadioButton\" id=\"" + id + "/smonth1\" name=\"" + id + "/smonth\"  value=\"day\" onClick=\"enableMonthly('" + id + "');\" " + smonth1c + " " + period2cd + "></td>");
-        out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + mmday + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + mmonths1 + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+        out.println("          <td colSpan=\"3\" >" + paramRequest.getLocaleString("frmTheDay") + " <input  type=\"text\" dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmday\" name=\"" + id + "/mmday\" value=\"" + ((mmday!=null&&!mmday.equals(""))?mmday:"1") + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " <input maxLength=\"2\"  size=\"2\" id=\"" + id + "/mmonths1\" type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + id + "/mmonths1\" value=\"" + ((mmonths1!=null&&!mmonths1.equals(""))?mmonths1:"1") + "\"  style=\"width:30px;\" " + smonth1cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
         out.println("        </tr>");
         out.println("        <tr >");
         out.println("          <td colSpan=\"4\">");
@@ -618,7 +618,7 @@ public class SWBASchedule extends GenericResource {
         out.println("              </tbody>");
         out.println("            </table>");
         out.println("          </td>");
-        out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;<input  dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmonths2\" name=\"" + id + "/mmonths2\" style=\"width:30px;\" value=\"" + mmonths2 + "\" " + smonth2cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
+        out.println("          <td >&nbsp;" + paramRequest.getLocaleString("frmOfEvery") + " &nbsp;<input  dojoType=\"dijit.form.TextBox\" maxLength=\"2\" size=\"2\" id=\"" + id + "/mmonths2\" name=\"" + id + "/mmonths2\" style=\"width:30px;\" value=\"" + ((mmonths2!=null&&!mmonths2.equals(""))?mmonths2:"1")  + "\" " + smonth2cd + ">&nbsp;" + paramRequest.getLocaleString("frmMonths") + "</td>");
         out.println("        </tr>");
         out.println("        <tr>");
         out.println("          <td colSpan=\"5\">");
@@ -656,7 +656,7 @@ public class SWBASchedule extends GenericResource {
 
         out.println("          <td ><input id=\"" + id + "/radio1\" type=\"radio\"  dojoType=\"dijit.form.RadioButton\" name=\"" + id + "/syear\" value=\"day\" onClick=\"enableYearly('" + id + "');\" " + radio1c + " " + yearlyd + "></td>");
         out.println("          <td colSpan=3 >" + paramRequest.getLocaleString("frmTheDay"));
-        out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" + yyday + "\" " + radio1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOf"));
+        out.println("            <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"" + id + "/text1\" maxLength=\"2\" size=\"2\" name=\"" + id + "/yyday\" style=\"width:30px;\" value=\"" +((yyday != null && !yyday.equals(""))?yyday:"1") + "\" " + radio1cd + ">&nbsp;" + paramRequest.getLocaleString("frmOf"));
         op1 = "";
         op2 = "";
         op3 = "";
