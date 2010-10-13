@@ -246,7 +246,8 @@ public class SWBASchedule extends GenericResource {
                                 speriod = strChildName;
                                 for (int k = 0; k < nodesGrandChild.getLength(); k++) {
                                     Node nodeGrandChild = nodesGrandChild.item(k);
-                                    String valChild = nodeGrandChild.getFirstChild().getNodeValue();
+                                    String valChild = "1";
+                                    if(nodeGrandChild.getFirstChild()!=null)valChild=nodeGrandChild.getFirstChild().getNodeValue();
                                     strChildName = nodeGrandChild.getNodeName();
                                     if (speriod.equals("weekly")) {
                                         pchk = "checked";
