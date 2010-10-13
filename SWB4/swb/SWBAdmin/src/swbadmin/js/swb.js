@@ -9,8 +9,8 @@
 
       //var LOADING_MSG="<BR/><center><img src='"+context+"/swbadmin/images/loading.gif'><center>";
 
-      dojo.require("dijit.form.Form");
-      dojo.require("dijit.layout.ContentPane");
+      //dojo.require("dijit.form.Form");
+      //dojo.require("dijit.layout.ContentPane");
 
       var act_item;
       var act_store;
@@ -1402,7 +1402,7 @@ function replaceChars4Id(value, lowercase)
           });
       }
 
-    dojo.require("dojox.html.styles");
+    //dojo.require("dojox.html.styles");
     function setStyleSheetByInstance(rules, sufix, title) {
         rules = rules.split('}');
         for(i=0; i<rules.length; i++) {
