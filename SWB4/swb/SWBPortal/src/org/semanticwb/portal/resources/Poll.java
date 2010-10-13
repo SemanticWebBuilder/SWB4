@@ -354,7 +354,7 @@ public class Poll extends GenericResource {
 
          try {
             //String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/poll.jsp");
-             String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccesible.jsp");
+             String jspFile = paramRequest.getResourceBase().getAttribute("jspfile","/swbadmin/jsp/poll/pollAccessible.jsp");
 
             request.setAttribute("paramRequest", paramRequest);
             Document dom = getDom(request, response, paramRequest);
