@@ -271,7 +271,6 @@
     public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
-        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         if(node.getId().equals("hn_Classes"))
         {
@@ -290,7 +289,7 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         Iterator<SemanticObject> it=null;
         if(cls!=null)
@@ -356,7 +355,6 @@
         }
         //System.out.println("herarprop:"+herarprop);
 
-        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -391,21 +389,17 @@
             if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
-                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
-        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     //TODO:Separar en una clase treeController
     public void addResourceType(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, User user) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveTreeAccessToSemanticObject(user, obj))return;
-        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
-
         String lang=user.getLanguage();
         boolean hasChilds=false;
         SemanticClass cls=obj.getSemanticClass();
@@ -413,10 +407,18 @@
         String type=cls.getClassId();
         ResourceType restype=(ResourceType)obj.createGenericInstance();
 
+        //Active
+        boolean active=false;
+        SemanticProperty activeprop=cls.getProperty("active");
+        if(activeprop!=null)
+        {
+            active=obj.getBooleanProperty(activeprop);
+        }
+
         String icon=SWBContext.UTILS.getIconClass(obj);
         JSONObject jobj=getNode(obj.getURI(), obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
-/*
+
         //dragSupport
         if(dispobj!=null)
         {
@@ -451,12 +453,6 @@
         }
 
         //Active
-        boolean active=false;
-        SemanticProperty activeprop=cls.getProperty("active");
-        if(activeprop!=null)
-        {
-            active=obj.getBooleanProperty(activeprop);
-        }
         if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ACTIVE))
         {
             if(activeprop!=null)
@@ -493,7 +489,7 @@
             menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), getLocaleString("icon_deleteFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
         }
         menus.put(getMenuReload(lang));
-*/
+
         //eventos
         JSONArray events=new JSONArray();
         jobj.putOpt("events", events);
@@ -502,7 +498,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         if(restype.getResourceMode()!=restype.MODE_CONTENT)
         {
@@ -542,13 +538,12 @@
             if(hasChilds && !addChilds)
             {
                 if (addDummy) {
-                    //childs.put(getDummyNode());
+                    childs.put(getDummyNode());
                 } else {
                     jobj.put("hasChilds", "true");
                 }
                 events.put(getEvent("onOpen", getReloadAction()));
             }
-            if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
         }
     }
 
@@ -593,21 +588,10 @@
         return ret;
     }
 
-    public void addSemanticObjectMenu(JSONArray arr, SemanticObject obj, User user) throws JSONException
-    {
-        addSemanticObject(arr, obj, false, false, true, null, user);
-    }
-
     public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, SemanticObject virparent, User user) throws JSONException
-    {
-        addSemanticObject(arr, obj, addChilds, addDummy, false, virparent, user);
-    }
-
-    public void addSemanticObject(JSONArray arr, SemanticObject obj, boolean addChilds, boolean addDummy, boolean addMenus, SemanticObject virparent, User user) throws JSONException
     {
         boolean fullaccess=SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
         if(!fullaccess && !SWBPortal.getAdminFilterMgr().haveChildAccessToSemanticObject(user, obj))return;
-        if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
 
         String lang=user.getLanguage();
         boolean hasChilds=false;
@@ -627,10 +611,17 @@
         
         //TODO:validar treeController
         //System.out.println("type:"+type);
-        if(!addMenus && cls.equals(ResourceType.sclass))
+        if(cls.equals(ResourceType.sclass))
         {
             addResourceType(arr,obj,addChilds,addDummy,user);
             return;
+        }
+        //Active
+        boolean active=false;
+        SemanticProperty activeprop=cls.getProperty("active");
+        if(activeprop!=null)
+        {
+            active=obj.getBooleanProperty(activeprop);
         }
 
         String uriext="";
@@ -645,155 +636,144 @@
         JSONObject jobj=getNode(obj.getURI()+uriext, obj.getDisplayName(lang), type, icon);
         arr.put(jobj);
 
-        if(addMenus)
+        //dragSupport
+        if(dispobj!=null && !virtual)
         {
-            //dragSupport
-            if(dispobj!=null && !virtual)
+            DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
+            jobj.put("dragSupport", dp.isDragSupport());
+            jobj.put("dropMatchLevel", dp.getDropMatchLevel());
+        }
+
+        //System.out.println("obj:"+obj.getId());
+        //Thread.currentThread().dumpStack();
+        //drop acceptance
+        JSONArray dropacc=new JSONArray();
+        jobj.putOpt("dropacc", dropacc);
+
+        //menus
+        JSONArray menus=new JSONArray();
+        jobj.putOpt("menus", menus);
+
+        //TODO:separar treeController
+        if(fullaccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
+        {
+            //menus creacion
+            Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
+            while(pit.hasNext())
             {
-                DisplayObject dp=(DisplayObject)dispobj.createGenericInstance();
-                jobj.put("dragSupport", dp.isDragSupport());
-                jobj.put("dropMatchLevel", dp.getDropMatchLevel());
-            }
-
-            //System.out.println("obj:"+obj.getId());
-            //Thread.currentThread().dumpStack();
-            //drop acceptance
-            JSONArray dropacc=new JSONArray();
-            jobj.putOpt("dropacc", dropacc);
-
-            //menus
-            JSONArray menus=new JSONArray();
-            jobj.putOpt("menus", menus);
-
-            //TODO:separar treeController
-            if(fullaccess && !cls.equals(WebSite.sclass) && !cls.isSubClass(WebSite.sclass) && !virtual)
-            {
-                //menus creacion
-                Iterator<SemanticProperty> pit=cls.listHerarquicalProperties();
-                while(pit.hasNext())
+                SemanticProperty prop=pit.next();
+                boolean subclasses=true;
+                SemanticClass rcls=null;
+                SemanticRestriction res=prop.getValuesFromRestriction(cls);
+                if(res!=null)rcls=res.getRestrictionValue();
+                if(rcls!=null)
                 {
-                    SemanticProperty prop=pit.next();
-                    boolean subclasses=true;
-                    SemanticClass rcls=null;
-                    SemanticRestriction res=prop.getValuesFromRestriction(cls);
-                    if(res!=null)rcls=res.getRestrictionValue();
-                    if(rcls!=null)
-                    {
-                        if(res.isSomeValuesFromRestriction())subclasses=false;
-                    }else
-                    {
-                        rcls=prop.getRangeClass();
-                    }
-                    //System.out.println("obj:"+obj+" prop:"+prop+" cls:"+cls+" rcls:"+rcls);
-                    //Restricciones inversas
-                    SemanticProperty inv=prop.getInverse();
+                    if(res.isSomeValuesFromRestriction())subclasses=false;
+                }else
+                {
+                    rcls=prop.getRangeClass();
+                }
+                //System.out.println("obj:"+obj+" prop:"+prop+" cls:"+cls+" rcls:"+rcls);
+                //Restricciones inversas
+                SemanticProperty inv=prop.getInverse();
 
-                    if(SWBPortal.getAdminFilterMgr().haveClassAction(user, rcls, AdminFilter.ACTION_ADD))
+                if(SWBPortal.getAdminFilterMgr().haveClassAction(user, rcls, AdminFilter.ACTION_ADD))
+                {
+                    if(checkInverse(cls, rcls, inv))
                     {
-                        if(checkInverse(cls, rcls, inv))
-                        {
-                            menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
-                            dropacc.put(rcls.getClassId());
-                        }
+                        menus.put(getMenuItem(getLocaleString("add",lang)+" "+rcls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+rcls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+rcls.getDisplayName(lang))));
+                        dropacc.put(rcls.getClassId());
                     }
+                }
 
-                    //add subclasess
-                    if(subclasses)
+                //add subclasess
+                if(subclasses)
+                {
+                    Iterator<SemanticClass> it=rcls.listSubClasses();
+                    while(it.hasNext())
                     {
-                        Iterator<SemanticClass> it=rcls.listSubClasses();
-                        while(it.hasNext())
+                        SemanticClass scls=it.next();
+                        if(model.hasModelClass(scls))
                         {
-                            SemanticClass scls=it.next();
-                            if(model.hasModelClass(scls))
+                            if(SWBPortal.getAdminFilterMgr().haveClassAction(user, scls, AdminFilter.ACTION_ADD))
                             {
-                                if(SWBPortal.getAdminFilterMgr().haveClassAction(user, scls, AdminFilter.ACTION_ADD))
+                                if(checkInverse(cls, scls, inv))
                                 {
-                                    if(checkInverse(cls, scls, inv))
-                                    {
-                                        //System.out.println("addMenu");
-                                        menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
-                                        dropacc.put(scls.getClassId());
-                                    }
+                                    //System.out.println("addMenu");
+                                    menus.put(getMenuItem(getLocaleString("add",lang)+" "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),getLocaleString("add",lang)+" "+scls.getDisplayName(lang))));
+                                    dropacc.put(scls.getClassId());
                                 }
                             }
                         }
                     }
                 }
             }
+        }
 
-            if(obj.instanceOf(WebPage.sclass))
-            {
-                WebPage page=(WebPage)obj.createGenericInstance();
-                menus.put(getMenuItem(getLocaleString("preview",lang), getLocaleString("icon_preview",null), getAction("showPreviewURL",page.getUrl(),null)));
-            }
-
-            if(menus.length()>0)
-                menus.put(getMenuSeparator());
-
-
-            //Active
-            boolean active=false;
-            SemanticProperty activeprop=cls.getProperty("active");
-            if(activeprop!=null)
-            {
-                active=obj.getBooleanProperty(activeprop);
-            }
-            
-            if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ACTIVE))
-            {
-                if(activeprop!=null && !virtual)
-                {
-                    if(!active)
-                    {
-                        menus.put(getMenuItem(getLocaleString("active",lang), getLocaleString("icon_active",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
-                    }else
-                    {
-                        menus.put(getMenuItem(getLocaleString("unactive",lang), getLocaleString("icon_unactive",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
-                    }
-                }
-            }
-
-            if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))
-            {
-                menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
-            }
-            //menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
-            //menu remove
-
-            if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
-            {
-                if(!virtual)
-                {
-                    if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
-                    {
-                        menus.put(getMenuItem(getLocaleString("delete",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),getLocaleString("delete",lang)+" "+cls.getDisplayName(lang))));
-                    }
-                }else
-                {
-                    menus.put(getMenuItem(getLocaleString("deleteref",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"&virp="+virparent.getEncodedURI(),getLocaleString("deleteref",lang))));
-                }
-            }
+        if(obj.instanceOf(WebPage.sclass))
+        {
+            WebPage page=(WebPage)obj.createGenericInstance();
+            menus.put(getMenuItem(getLocaleString("preview",lang), getLocaleString("icon_preview",null), getAction("showPreviewURL",page.getUrl(),null)));
+        }
+        
+        if(menus.length()>0)
             menus.put(getMenuSeparator());
 
-            //menu favoritos
-            if(!virtual)
+
+        //Active
+        if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ACTIVE))
+        {
+            if(activeprop!=null && !virtual)
             {
-                boolean isfavo=user.hasFavorite(obj);
-                if(!isfavo)
+                if(!active)
                 {
-                    menus.put(getMenuItem(getLocaleString("addFavorites",lang), getLocaleString("icon_addFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+                    menus.put(getMenuItem(getLocaleString("active",lang), getLocaleString("icon_active",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
                 }else
                 {
-                    menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), getLocaleString("icon_deleteFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+                    menus.put(getMenuItem(getLocaleString("unactive",lang), getLocaleString("icon_unactive",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/active.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
                 }
-
-                //menu recargar
-                //TODO:validar recarga de virtual
-                menus.put(getMenuReload(lang));
             }
-            
-            return;
         }
+
+        if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT))
+        {
+            menus.put(getMenuItem(getLocaleString("edit",lang), getLocaleString("icon_edit",null), getNewTabAction()));
+        }
+        //menus.put(getMenuItem(getLocaleString("clone",lang), getLocaleString("icon_clone",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/clone.jsp?suri="+obj.getEncodedURI(),getLocaleString("clone",lang)+" "+cls.getDisplayName(lang))));
+        //menu remove
+
+        if(fullaccess && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
+        {
+            if(!virtual)
+            {
+                if(!obj.instanceOf(Undeleteable.swb_Undeleteable) ||  (obj.instanceOf(Undeleteable.swb_Undeleteable) && obj.getBooleanProperty(Undeleteable.swb_undeleteable)==false))
+                {
+                    menus.put(getMenuItem(getLocaleString("delete",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI(),getLocaleString("delete",lang)+" "+cls.getDisplayName(lang))));
+                }
+            }else
+            {
+                menus.put(getMenuItem(getLocaleString("deleteref",lang), getLocaleString("icon_delete",null), getAction("showStatusURLConfirm",SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"&virp="+virparent.getEncodedURI(),getLocaleString("deleteref",lang))));
+            }
+        }
+        menus.put(getMenuSeparator());
+
+        //menu favoritos
+        if(!virtual)
+        {
+            boolean isfavo=user.hasFavorite(obj);
+            if(!isfavo)
+            {
+                menus.put(getMenuItem(getLocaleString("addFavorites",lang), getLocaleString("icon_addFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active",null)));
+            }else
+            {
+                menus.put(getMenuItem(getLocaleString("deleteFavorites",lang), getLocaleString("icon_deleteFavorites",null), getAction("showStatusURL",SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive",null)));
+            }
+
+            //menu recargar
+            //TODO:validar recarga de virtual
+            menus.put(getMenuReload(lang));
+         }
+
 
         //eventos
         JSONArray events=new JSONArray();
@@ -803,7 +783,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         if(!virtual)
         {
@@ -853,13 +833,12 @@
             if(hasChilds && !addChilds)
             {
                 if (addDummy) {
-                    //childs.put(getDummyNode());
+                    childs.put(getDummyNode());
                 } else {
                     jobj.put("hasChilds", "true");
                 }
                 events.put(getEvent("onOpen", getReloadAction()));
             }
-            if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
         }
     }
 
@@ -873,6 +852,7 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
+        jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntClass> carr=new ArrayList();
@@ -925,7 +905,6 @@
         }
         menus.put(getMenuReload(user.getLanguage()));
 
-        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -949,13 +928,11 @@
             if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
-                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
-        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addHNProperties(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
@@ -966,7 +943,7 @@
         arr.put(jobj);
 
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         SemanticOntology ont=SWBPlatform.getSemanticMgr().getSchema();
         ArrayList<OntProperty> carr=new ArrayList();
@@ -1012,7 +989,6 @@
         }
         menus.put(getMenuReload(user.getLanguage()));
 
-        boolean hasChilds=false;
         if(addChilds)
         {
             Iterator<HerarquicalNode> sit=node.listHerarquicalNodes();
@@ -1036,13 +1012,11 @@
             //if(it.hasNext() || sit.hasNext())
             {
                 jobj.put("hasChilds", "true");
-                hasChilds=true;
                 JSONArray events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
-        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addClass(JSONArray arr, OntClass cls, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1058,7 +1032,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1068,7 +1042,6 @@
 
         Iterator<OntClass> it=cls.listSubClasses(true);
 
-        boolean hasChilds=false;
         if(addChilds)
         {
             while(it.hasNext())
@@ -1081,13 +1054,11 @@
             if(it.hasNext())
             {
                 jobj.put("hasChilds", "true");
-                hasChilds=true;
                 events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
-        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 
     public void addProperty(JSONArray arr, OntProperty prop, boolean addChilds, SemanticModel model, User user) throws JSONException
@@ -1102,7 +1073,7 @@
 
         //hijos
         JSONArray childs=new JSONArray();
-        //jobj.putOpt("children", childs);
+        jobj.putOpt("children", childs);
 
         //eventos
         JSONArray events=new JSONArray();
@@ -1111,7 +1082,6 @@
         //events.put(getEvent("onClick", getAction("getHtml", SWBPlatform.getContextPath()+"/swbadmin/jsp/viewProps.jsp?id="+obj.getEncodedURI(), "vprop")));
 
         Iterator it=prop.listSubProperties();
-        boolean hasChilds=false;
         if(addChilds)
         {
             while(it.hasNext())
@@ -1124,13 +1094,11 @@
             if(it.hasNext())
             {
                 jobj.put("hasChilds", "true");
-                hasChilds=true;
                 events=new JSONArray();
                 jobj.putOpt("events", events);
                 events.put(getEvent("onOpen", getReloadAction()));
             }
         }
-        if(hasChilds || childs.length()>0)jobj.putOpt("children", childs);
     }
 /*
     public void addClasses(JSONArray arr, SemanticOntology ont)  throws JSONException
@@ -1310,7 +1278,7 @@
                 }
                 SemanticOntology so=SWBPlatform.getSemanticMgr().getSchema();
                 OntClass cls=so.getRDFOntModel().getOntClass(suri);
-                //System.out.println(cls+" "+suri);
+                System.out.println(cls+" "+suri);
                 SemanticModel model=null; //TODO: obtener modelo
                 addClass(items, cls, true, model, user);
             }else
@@ -1318,18 +1286,12 @@
                 SemanticObject sobj=ont.getSemanticObject(suri);
                 if(sobj!=null)
                 {
-                    if(type!=null && type.equals("Menu"))
+                    addSemanticObject(items, sobj,addChilds,user);
+                    Iterator<SemanticObject> it=sobj.listHerarquicalParents();
+                    if(it.hasNext())
                     {
-                        addSemanticObjectMenu(items, sobj,user);
-                    }else
-                    {
-                        addSemanticObject(items, sobj,addChilds,user);
-                        Iterator<SemanticObject> it=sobj.listHerarquicalParents();
-                        if(it.hasNext())
-                        {
-                            JSONObject obj=items.getJSONObject(0);
-                            obj.put("parent", it.next().getURI());
-                        }
+                        JSONObject obj=items.getJSONObject(0);
+                        obj.put("parent", it.next().getURI());
                     }
                 }
             }

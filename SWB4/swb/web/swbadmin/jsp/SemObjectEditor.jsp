@@ -172,7 +172,6 @@ try
 
         SemanticObject obj=ont.getSemanticObject(suri);
         SemanticClass cls=obj.getSemanticClass();
-        boolean deleted=obj.getBooleanProperty(Trashable.swb_deleted);
 
         boolean canEdit=SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_EDIT) && SWBPortal.getAdminFilterMgr().haveAccessToSemanticObject(user, obj);
 
@@ -225,22 +224,22 @@ try
 
         //frm.addButton("<button dojoType='dijit.form.Button' type=\"submit\">Guardar</button>");
 
-        if(canEdit && !deleted)
+        if(canEdit)
         {
-            frm.addButton(SWBFormButton.newSaveButton().setAttribute("onclick", "submitForm('"+frm.getFormName()+"');").setBusyButton(true));
+            frm.addButton(SWBFormButton.newSaveButton());
         }
 
-        if(user!=null && !deleted)
+        if(user!=null)
         {
             boolean isfavo=user.hasFavorite(obj);
             if(!isfavo)
             {
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');\">Agregar a Favoritos</button>");
-                frm.addButton(new SWBFormButton().setTitle("Agregar a Favoritos", "es").setTitle("Add to Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');").setBusyButton(true).setBusyTimeOut(1000));
+                frm.addButton(new SWBFormButton().setTitle("Agregar a Favoritos", "es").setTitle("Add to Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=active"+"');").setBusyButton(true));
             }else
             {
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');\">Eliminar de Favoritos</button>");
-                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true).setBusyTimeOut(1000));
+                frm.addButton(new SWBFormButton().setTitle("Eliminar de Favoritos", "es").setTitle("Remove of Favorites", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/favorites.jsp?suri="+obj.getEncodedURI()+"&act=unactive"+"');").setBusyButton(true));
             }
         }
 
@@ -251,11 +250,6 @@ try
                 //frm.addButton("<button dojoType='dijit.form.Button' onclick=\"if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');\">Eliminar</button>");
                 frm.addButton(SWBFormButton.newDeleteButton().setAttribute("onclick", "if(confirm('Eliminar el elemento?'))showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/delete.jsp?suri="+obj.getEncodedURI()+"');"));
             }
-        }
-
-        if(deleted && canEdit && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_DELETE))
-        {
-            frm.addButton(new SWBFormButton().setTitle("Recuperar de Papelera", "es").setTitle("Restore from Trash", "en").setAttribute("onclick", "showStatusURL('"+SWBPlatform.getContextPath()+"/swbadmin/jsp/undelete.jsp?suri="+obj.getEncodedURI()+"');"));
         }
 
         out.println(frm.renderForm(request));
