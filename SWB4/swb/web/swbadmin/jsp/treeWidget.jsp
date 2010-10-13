@@ -57,9 +57,8 @@
 <div dojoType="dijit.tree.ForestStoreModel" jsId="<%=model%>"
   store="<%=store%>" rootId="root" <%=rootLabel%> childrenAttrs="children"></div>
 <!-- tree widget -->
-<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController_="dijit.tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
+<div dojoType="dijit.Tree" id="<%=id%>" model="<%=model%>" dndController="dijit._tree.dndSource" betweenThreshold_="8" persist="false" showRoot="<%=showRoot%>">
     <script type="dojo/method" event="onClick" args="item, node">
-        //alert('onClick');
         if(item)
         {
             act_treeNode=node;
@@ -76,17 +75,6 @@
             executeTreeNodeEvent(<%=store%>,item,"onOpen");
         }
     </script>
-<!--
-    <script type="dojo/method" event="onEnterKey" args="event">
-        //alert("onEnterKey"+event);
-        var domElement = event.target;
-        var nodeWidget = dijit.getEnclosingWidget(domElement);
-        act_treeNode=nodeWidget;
-        if(nodeWidget && nodeWidget.isTreeNode){
-            executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
-        }
-    </script>
--->
     <script type="dojo/method" event="onDblClick" args="item, node">
         //printObjProp(event);
         if(item)
@@ -105,9 +93,18 @@
         }
         */
     </script>
-<%--
+<!--
+    <script type="dojo/method" event="onEnterKey" args="event">
+        //alert("onEnterKey"+event);
+        var domElement = event.target;
+        var nodeWidget = dijit.getEnclosingWidget(domElement);
+        act_treeNode=nodeWidget;
+        if(nodeWidget && nodeWidget.isTreeNode){
+            executeTreeNodeEvent(<%=store%>,nodeWidget.item,"onDblClick");
+        }
+    </script>
+-->
     <script type="dojo/method" event="onDndDrop" args="source,nodes,copy">
-        //alert("onDndDrop:"+source+" "+nodes+" "+copy);
         //alert(source+" "+nodes+" "+copy+" "+this.containerState);
 		// summary:
 		//		Topic event processor for /dnd/drop, called to finish the DnD operation..
@@ -181,14 +178,13 @@
     </script>
 
     <script type="dojo/method" event="checkItemAcceptance" args="node,source">
-        //alert("checkItemAcceptance"+node+" "+source);
         //if(source.tree && source.tree.id == "collectionsTree"){
         //    return true;
         //}
         var ret=false;
         var dropNode = dijit.getEnclosingWidget(node);
         var dragNode = act_treeNode;
-        //self.status="checkItemAcceptance- - >dropNode"+dropNode+" dragSupport:"+dragNode.item.dragSupport;
+        //self.status="checkItemAcceptance-->dropNode"+dropNode+" dragSupport:"+dragNode.item.dragSupport;
         if(dropNode && dragNode)
         {
             var dragItem=dragNode.item;
@@ -213,10 +209,6 @@
     </script>
 
     <script type="dojo/method" event="checkAcceptance" args="source,nodes">
-        //alert("checkAcceptance"+source+" "+nodes);
-        if(true)return false;
-        printObjProp(source,false);
-        
         //if (this.tree.id=="myTree"){
         //    return false;
         //}
@@ -234,28 +226,27 @@
             if(act_treeNode.item.dragSupport=="true")return true;
         }else
         {
-            //self.status="checkAcceptance-->act_treeNode:"+act_treeNode;
+            self.status="checkAcceptance-->act_treeNode:"+act_treeNode;
             act_treeNode=null;
         }
-
         return false;
     </script>
-
-    <script type="dojo/method" event="onDndStart" args="source,nodes,copy">
-        //alert("onDndStart:"+source+" "+nodes+" "+copy);
+/*
+    <script type="dojo/method" event="onDndStart" args="_1a,_1b,_1c">
+        //alert("Hola");
         /*
-            if(this.isSource){
-                this._changeState("Source", this == source ? (copy ? "Copied" : "Moved") : "");
-            }
-            var accepted = this.checkAcceptance(source, nodes);
-            this._changeState("Target", accepted ? "" : "Disabled");
-            if(this == source){
-                dojo.dnd.manager().overSource(this);
-            }
-            this.isDragging = true;
+        if(this.isSource){
+            this._changeState("Source",this==_1a?(_1c?"Copied":"Moved"):"");
+        }
+        var _1d=this.checkAcceptance(_1a,_1b);
+        this._changeState("Target",_1d?"":"Disabled");
+        if(_1d){
+            dojo.dnd.manager().overSource(this);
+        }
+        this.isDragging=true;
         */
     </script>
---%>
+*/
 
     <script type="dojo/method" event="getIconClass" args="item, opened">
         if(item)
@@ -308,8 +299,6 @@
             var treeNode = dijit.getEnclosingWidget(e.target);
             act_treeNode=treeNode;
 
-            //printObjProp(menuEmpty,false);
-
             var ch = menuEmpty.getChildren();
             //console.log("menu children is "+ch);
             if (ch && ch != "undefined")
@@ -321,21 +310,12 @@
                 });
             }
 
-            var menus=treeNode.item.menus;
-            if(!menus)
-            {
-                var jsonNode=getJSON(context+<%=store%>.controllerURL+"?type=Menu&suri="+encodeURIComponent(treeNode.item.id))[0];
-                //printObjProp(jsonNode.menus);
-                menus=jsonNode.menus;
-            }
-
-            if(menus)
+            if(treeNode.item.menus)
             {
                 //console.log("Adding new submenus");
-                for (var m in menus)
+                for (var m in treeNode.item.menus)
                 {
-                    var menu = menus[m];
-                    //printObjProp(menus,true);
+                    var menu = treeNode.item.menus[m];
                     //console.log("Adding submenu " + mstr);
                     var mi = document.createElement('div')
                     var sm;
