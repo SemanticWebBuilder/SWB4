@@ -32,7 +32,7 @@
 package applets.workflowadmin;
 
 /**
- * Clase que representa un usuario ADMINISTRADOR de INFOTEC WebBuilder 3.0, para
+ * Clase que representa un usuario ADMINISTRADOR de SemanticWebBuilder, para
  * mostrarlos en una tabla al editar una actividad.
  * @author Victor Lorenzana
  */

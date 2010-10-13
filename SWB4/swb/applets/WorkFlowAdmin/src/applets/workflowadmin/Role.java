@@ -32,7 +32,7 @@
 package applets.workflowadmin;
 
 /**
- * Clase que representa un role de INFOTEC WebBuilder 3.0, el conjunto de roles es
+ * Clase que representa un role de SemanticWebBuilder, el conjunto de roles es
  * mostrado al editar una actividad.
  * @author Victor Lorenzana
  */

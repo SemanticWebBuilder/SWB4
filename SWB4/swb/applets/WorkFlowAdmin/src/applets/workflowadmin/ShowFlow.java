@@ -147,7 +147,7 @@ public class ShowFlow extends javax.swing.JApplet {
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(cmp,e.getMessage(),"INFOTEC WebBuilder 3.0",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(cmp,e.getMessage(),"SemanticWebBuilder",JOptionPane.ERROR_MESSAGE);
             System.out.println(java.util.ResourceBundle.getBundle("applets/workflowadmin/EditWorkflow").getString("Error_to_open_service...")+e);
         }
         return ret.toString();
