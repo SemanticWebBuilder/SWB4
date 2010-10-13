@@ -242,7 +242,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("Recommend");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.Recommend");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.Recommend");
-                    ptype.setResourceMode(2);
+                    ptype.setResourceMode(3);
                     ptype.setTitle("Recommend");
                 }
 
@@ -425,7 +425,7 @@ public class SWBImportWebSite extends GenericResource {
                     ResourceType ptype = site.createResourceType("Comment");
                     ptype.setResourceClassName("org.semanticwb.portal.resources.Comment");
                     ptype.setResourceBundle("org.semanticwb.portal.resources.Comment");
-                    ptype.setResourceMode(2);
+                    ptype.setResourceMode(3);
                     ptype.setTitle("Comment");
                 }
 
