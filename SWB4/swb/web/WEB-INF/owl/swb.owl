@@ -1578,6 +1578,9 @@
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#Resource"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="semanticResourceInv"/>
+    </owl:inverseOf>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPFlowRef">
     <swb:inheritProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -1935,6 +1938,10 @@
         <rdfs:label xml:lang="en">Parent WebPage</rdfs:label>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#semanticResourceInv">
+    <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >resource</swb:propertyCodeName>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:about="#hasUsrGrpChild">
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -4213,18 +4220,14 @@
     <rdfs:domain rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </owl:AnnotationProperty>
   <swb:DojoImageUpload rdf:ID="fe_DojoImageUpload">
-    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >*.jpg:JPG|*.gif:GIF|*.pmg:PNG</swbxf:fileFilter>
-    <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >150</swbxf:imgThumbnailHeight>
     <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >150</swbxf:imgThumbnailWidth>
     <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:imgThumbnail>
-    <swbxf:imgMaxWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1024</swbxf:imgMaxWidth>
-    <swbxf:imgMaxHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >768</swbxf:imgMaxHeight>
+    <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+    >150</swbxf:imgThumbnailHeight>
+    <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >*.jpg:JPG|*.gif:GIF|*.pmg:PNG</swbxf:fileFilter>
     <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swbxf:imgCrop>
   </swb:DojoImageUpload>
