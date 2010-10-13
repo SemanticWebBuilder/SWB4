@@ -359,29 +359,46 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
 
 
         String fileContent = SWBUtils.IO.getFileFromPath(resourceWorkPath);
-        if(fileContent!=null)
-        {
-            if(fileContent.indexOf("content=\"Microsoft Word")>0)
-            {
+        if (fileContent != null) {
+            boolean paginated = false;
+            try {
+                paginated = this.isContentPaginated();
+            } catch (Exception e) {
+                log.error("HTMLContent - Getting \"paginated\" property", e);
+            }
+            if (fileContent.indexOf("content=\"Microsoft Word") > 0) {
+                boolean deleteStyles = false;
+                try {
+                    deleteStyles = this.isDeleteStyles();
+                } catch (Exception e) {
+                    log.error("HTMLContent - Getting \"deleteStyles\" property.", e);
+                }
                 //System.out.println("HtmlContent: Es de Word");
-                Resource base=getResourceBase();
                 ContentUtils contentUtils = new ContentUtils();
-                fileContent = contentUtils.predefinedStyles(fileContent, base, true); //Estilos predefinidos
+                fileContent = contentUtils.predefinedStyles(fileContent, resource, true); //Estilos predefinidos
                 //fileContent = contentUtils.predefinedStyles(fileContent, base, isTpred()); //Estilos predefinidos
-                //if (isPages())
-                {
-                    fileContent = contentUtils.paginationMsWord(fileContent, page, request.getParameter("page"), base, snpages, stxtant, stxtsig, stfont, position);
-                    fileContent=cleanHTML(fileContent, true);
-                } //Paginación
-            }else
-            {
+                if (paginated) {
+                    fileContent = contentUtils.paginationMsWord(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                }//Paginación
+                fileContent = cleanHTML(fileContent, deleteStyles);
+            } else {
                 //System.out.println("HtmlContent: No es de Word");
-                fileContent=SWBUtils.TEXT.replaceAll(fileContent,"<workpath/>"
-                    ,SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
+                fileContent = SWBUtils.TEXT.replaceAll(fileContent, "<workpath/>",
+                    SWBPortal.getWebWorkPath() + resource.getWorkPath() + "/" + versionNumber + "/");
                 //Paginación (Jorge Jiménez-10/Julio/2009)
-                if(paramRequest.getLocaleString("txtant")!=null) stxtant=paramRequest.getLocaleString("txtant");
-                if(paramRequest.getLocaleString("txtsig")!=null) stxtsig=paramRequest.getLocaleString("txtsig");
-                fileContent=new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                if (this.getFormerLinkText() != null && !"".equalsIgnoreCase(this.getFormerLinkText())) {
+                    stxtant = this.getFormerLinkText();
+                } else if (paramRequest.getLocaleString("txtant") != null) {
+                    stxtant = paramRequest.getLocaleString("txtant");
+                }
+                if (this.getNextLinkText() != null && !"".equalsIgnoreCase(this.getNextLinkText())) {
+                    stxtsig = this.getNextLinkText();
+                } else if (paramRequest.getLocaleString("txtsig") != null) {
+                    stxtsig = paramRequest.getLocaleString("txtsig");
+                }
+                if (paginated) {
+                    fileContent = new ContentUtils().paginationHtmlContent(fileContent, page, request.getParameter("page"), resource, snpages, stxtant, stxtsig, stfont, position);
+                }
                 //Termina Páginación
             }
         }
@@ -645,11 +662,17 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         String clientFilePath = "";
         String localRelativePath = null;
         String filename = null;
+        String hiddenPath = null;
 
         ArrayList values = fUpload.getValue("numversion");
         int g = 0;
         if (values != null && !values.isEmpty()) {
             numversion = Integer.parseInt(((String) values.get(0)).trim());
+        }
+
+        values = fUpload.getValue("hiddenPath");
+        if (values != null && !values.isEmpty()) {
+            hiddenPath = ((String) values.get(0)).trim();
         }
         portletWorkPath = SWBPortal.getWorkPath()
                 + resource.getWorkPath() + "/" + numversion + "/tmp/";
@@ -664,13 +687,16 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
 
         filename = fUpload.getFileName("NewFile");
+        System.out.println("\n\nNombre del archivo cargado: " + filename + "\n\nhiddenPath: " + hiddenPath);
         filename = filename.replace('\\', '/');
         int i = filename.lastIndexOf("/");
         String strAttaches = fUpload.FindAttaches("NewFile");
+
         if (i > -1) {
             clientFilePath = filename.substring(0, i + 1);
             filename = filename.substring(i + 1);
         }
+        clientFilePath = hiddenPath;
         i = filename.lastIndexOf("/");
         if (i != -1) {
             filename = filename.substring(i + 1);
@@ -993,9 +1019,14 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n	GetE( 'divUpload' ).style.display  = 'none' ;");
         output.append("\n	return true ;");
         output.append("\n}");
-        output.append("\n        function fillHiddenPath() { ");
+        output.append("\n        function fillHiddenPath(sibiling) { ");
         output.append("\n          var localName = document.frmUpload.NewFile.value; ");
-        output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\"));");
+        output.append("\n          if (localName.indexOf('fakepath') > 1) { ");
+        output.append("\n              localName = sibiling.previousSibling.value; ");
+        output.append("\n          } ");
+        output.append("\n          alert('Archivo seleccionado: ' + localName + ' por Id: ' + document.getElementById('txtUploadFile').value);  ");
+        output.append("\n          document.frmUpload.hiddenPath.value = localName.substring(0, localName.lastIndexOf(\"\\\\\") + 1);");
+        output.append("\n          alert('Ruta local: ' + document.frmUpload.hiddenPath.value);  ");
         output.append("\n        } ");
         output.append("\n    function isOk() {");
         output.append("\n	     if  (Ok()) {");
@@ -1014,7 +1045,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         output.append("\n        <form id=\"frmUpload\" name=\"frmUpload\" method=\"post\" enctype=\"multipart/form-data\" onsubmit=\"Ok();\" ");
         output.append("\n            action=\"" + url.toString() + "\">");
         output.append("\n            <span fcklang=\"DlgLnkUpload\">Upload</span><br />");
-        output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath();\" /><br />");
+        output.append("\n            <input id=\"txtUploadFile\" style=\"width: 100%\" type=\"file\" size=\"40\" name=\"NewFile\" onchange=\"fillHiddenPath(document.getElementById('hiddenPath'));\" /><br />");
         output.append("\n            <input id=\"hiddenPath\" type=\"hidden\" name=\"hiddenPath\" />");
         output.append("\n            <input id=\"hiddennumversion\" type=\"hidden\" name=\"numversion\" value=\"" + numversion + "\" />");
         output.append("\n            <br />");
