@@ -135,11 +135,14 @@
         while(it.hasNext())
         {
             WebSite site=it.next();
-            //System.out.println("site:"+site);
-            //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
-            //site=SWBContext.getWebSite(site.getURI());
-            addSemanticObject(arr, site.getSemanticObject(),false,true,user);
-            //addWebSite(arr, site);
+            if(!site.isDeleted())
+            {
+                //System.out.println("site:"+site);
+                //TODO: arreglar lista de sitios en SWBContext (estal ligados a ontologia)
+                //site=SWBContext.getWebSite(site.getURI());
+                addSemanticObject(arr, site.getSemanticObject(),false,true,user);
+                //addWebSite(arr, site);
+            }
         }
 
     }
