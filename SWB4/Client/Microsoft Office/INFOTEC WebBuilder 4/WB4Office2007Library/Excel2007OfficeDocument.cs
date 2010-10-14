@@ -82,7 +82,15 @@ namespace WB4Office2007Library
                     break;
                 }
             }
-            workbook.Save();
+            workbook.Saved = false;
+            try
+            {
+                workbook.Save();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         public override Dictionary<string, string> CustomProperties
@@ -152,7 +160,7 @@ namespace WB4Office2007Library
             workbook.WebOptions.OrganizeInFolder = true;
             workbook.WebOptions.RelyOnCSS = true;
             workbook.WebOptions.RelyOnVML = false;            
-            workbook.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserV4;
+            workbook.WebOptions.TargetBrowser = Office.MsoTargetBrowser.msoTargetBrowserV3;            
             workbook.WebOptions.UseLongFileNames = true;            
             workbook.SaveAs(fileName, Excel.XlFileFormat.xlHtml, missing, missing, missing, missing, Excel.XlSaveAsAccessMode.xlNoChange, missing, missing, missing, missing, missing);
             workbook.Close(objtrue, missing, missing);
