@@ -359,6 +359,7 @@ public class SWBRankWebPage extends org.semanticwb.portal.resources.sem.base.SWB
 
             out.println("<script type=\"text/javascript\">");
             out.println("<!--");
+            out.println("dojo.require(\"dijit.dijit\");");
             out.println("function lighton(idx) {");
             if( obj!=null ) {
                 out.println("  var uri='"+URI+"';");
