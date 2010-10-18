@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="ConfiguraciÃ³n de contenido">
+    <fieldset legend="Configuración de contenido">
         <input type="radio" id="local0" name="local" label="Video local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
         <input type="file" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Remove video" size="40" />
@@ -24,8 +24,8 @@
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho invÃ¡lido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura invÃ¡lida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inválido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
+        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inválida" promptMessage="Altura de la imagen. Ejemplos: 280" />
 
         <select name="align" label="Alinear">
             <option value="left"></option>

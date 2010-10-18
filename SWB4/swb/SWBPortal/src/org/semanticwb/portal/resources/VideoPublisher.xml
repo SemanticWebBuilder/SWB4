@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <xslfile>admresource.xslt</xslfile>
     <form name="frmAdmRes" action="true" method="post" enctype="multipart/form-data" jsframework="dojo" >
     <admdbconnmgr defconn="true"/>
-    <fieldset legend="Configuraci贸n de contenido">
+    <fieldset legend="Configuraci髇 de contenido">
         <input type="radio" id="local0" name="local" label="Video local" value="0" checked="true" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=true; else dojo.byId(&#34;code&#34;).disabled=false;'" />
 
         <input type="file" id="video" name="video" label="Video (flv, swf, avi, wmv, mov, rm, mp1, mp2, mp4):" showfile="true" filetype="flv|swf|avi|wmv|mov|rm|mp1|mp2|mp4" isshowfiletype="true" isremovefile="true" removemsg="Quitar video" size="40" />
-        <statictext name="auto">Iniciar autom谩ticamente:</statictext>
+        <statictext name="auto">Iniciar autom醫icamente:</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" checked="true" />
         <input type="radio" id="automatic1" name="automatic" label="No" value="false" />
         <statictext name="cntrls">Mostrar controles:</statictext>
         <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
         <input type="radio" id="controls1" name="controls" label="No" value="false" />
-        <statictext name="lp">Reproducci贸n continua:</statictext>
+        <statictext name="lp">Reproducci髇 continua:</statictext>
         <input type="radio" id="loop0" name="loop" label="Si" value="true" checked="true" />
         <input type="radio" id="loop1" name="loop" label="No" value="false" />
 
         <statictext name="m"> </statictext>
 
         <input type="radio" id="local1" name="local" label="YouTube" value="1" moreattr="onclick='if(this.checked)dojo.byId(&#34;code&#34;).disabled=false; else dojo.byId(&#34;code&#34;).disabled=true;'" />
-        <textarea id="code" name="code" label="C贸digo youTube:" rows="5" cols="50" promptMessage="C贸digo youTube" />
+        <textarea id="code" name="code" label="C骴igo youTube:" rows="5" cols="50" promptMessage="C骴igo youTube" />
     </fieldset>
 
     <fieldset legend="Aspecto">
-        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inv谩lido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
-        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inv谩lida" promptMessage="Altura de la imagen. Ejemplos: 280" />
+        <input type="text" id="width"  name="width" label="Ancho:" maxlength="9" regExp="\d{1,6}" invalidMessage="Ancho inv醠ido" promptMessage="Ancho de la imagen. Ejemplos: 320" />
+        <input type="text" id="height" name="height" label="Altura:" maxlength="9" regExp="\d{1,6}" invalidMessage="Altura inv醠ida" promptMessage="Altura de la imagen. Ejemplos: 280" />
 
         <select name="align" label="Alinear">
             <option value="left"></option>
@@ -61,7 +61,7 @@
             }else if(dojo.byId('local1').checked) {
                 if(dojo.byId('code').value==null || dojo.byId('code').value=='')
                 {
-                    alert('Defina la codificaci贸n para incluir el video de youtube.');
+                    alert('Defina la codificaci髇 para incluir el video de youtube.');
                     dojo.byId('code').focus();
                     return false;
                 }
