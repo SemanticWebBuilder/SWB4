@@ -42,7 +42,6 @@ import org.semanticwb.portal.api.SWBResourceException;
  * The Class VideoPublisher.
  */
 public class VideoPublisher extends GenericAdmResource {
-    
     /** The log. */
     private static Logger log = SWBUtils.getLogger(VideoPublisher.class);
 
@@ -70,7 +69,7 @@ public class VideoPublisher extends GenericAdmResource {
             String controls = base.getAttribute("controls");
             String loop = base.getAttribute("loop");
 
-            if(filename.indexOf(".flv")>-1) {
+            if(filename.endsWith(".flv")) {
                 clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
                 codebase = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0";
                 out.println("<object id=\"video_"+base.getId()+"\" class=\"swb-video\" classid=\""+clsid+"\" codebase=\""+codebase+"\" width=\""+width+"\" height=\""+height+"\" align=\""+align+"\">");
@@ -82,7 +81,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("  <embed src=\""+SWBPlatform.getContextPath()+"/swbadmin/FlvPlayer.swf?&flv="+filename+"\" quality=\"high\" align=\""+align+"\" bgcolor=\"#ffffff\" width=\""+width+"\" height=\""+height+"\" allowFullScreen=\"true\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\">");
                 out.println(" </embed>");
                 out.println("</object>");
-            }else if (filename.indexOf(".swf")>-1) {
+            }else if (filename.endsWith(".swf")) {
                 clsid = "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000";
                 codebase = "http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0";
 
@@ -94,10 +93,10 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("  <embed src=\""+filename+"\" quality=\"high\" bgcolor=\"#ffffff\" width=\""+width+"\" height=\""+height+"\" name=\""+base.getAttribute("video")+"\" align=\""+align+"\" allowScriptAccess=\"sameDomain\" type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed>");
                 out.println("</object>");
 
-            }else if (filename.indexOf(".swf")>-1) {
+            }else if (filename.endsWith(".swf")) {
                 clsid = "";
                 codebase = "";
-            }else if (filename.indexOf(".avi")>-1) {
+            }else if (filename.endsWith(".avi")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
@@ -116,7 +115,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("</object>");
                 out.println("</td></tr>");
                 out.println("</table>");
-            }else if (filename.indexOf(".wmv")>-1) {
+            }else if (filename.endsWith(".wmv")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
@@ -135,7 +134,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("</object>");
                 out.println("</td></tr>");
                 out.println("</table>");
-            }else if (filename.indexOf(".mov")>-1) {
+            }else if (filename.endsWith(".mov")) {
                 clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
                 codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
@@ -150,7 +149,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("</object>");
                 out.println("</td></tr>");
                 out.println("</table>");
-            }else if (filename.indexOf(".rm")>-1) {
+            }else if (filename.endsWith(".rm")) {
                 clsid = "clsid:CFCDAA03-8BE4-11cf-B84B-0020AFBBCCFA";
                 codebase = "";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
@@ -179,7 +178,7 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("</td></tr>");
                 // control panel... end
                 out.println("</table>");
-            }else if (filename.indexOf(".mpg")>-1) {
+            }else if (filename.endsWith(".mpg")) {
                 clsid = "clsid:22d6f312-b0f6-11d0-94ab-0080c74c7e95";
                 codebase = "http://activex.microsoft.com/activex/controls/mplayer/en/nsmp2inf.cab#Version=5,1,52,701";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
@@ -198,9 +197,9 @@ public class VideoPublisher extends GenericAdmResource {
                 out.println("</object>");
                 out.println("</td></tr>");
                 out.println("</table>");
-            }else if (filename.indexOf(".mp2")>-1) {
+            }else if (filename.endsWith(".mp2")) {
                 out.print("Formato no soportado.");
-            }else if (filename.indexOf(".mp4")>-1) {
+            }else if (filename.endsWith(".mp4")) {
                 clsid = "clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B";
                 codebase = "http://www.apple.com/qtactivex/qtplugin.cab";
                 out.println("<table border=\"0\" cellpadding=\"0\" align=\"left\">");
