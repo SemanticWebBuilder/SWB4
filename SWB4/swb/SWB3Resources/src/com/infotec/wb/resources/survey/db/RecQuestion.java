@@ -122,7 +122,7 @@ public class RecQuestion
             if(rs.next())
             {
                 questionid = rs.getLong("questionid");
-                question = SWBUtils.IO.readInputStream(rs.getAsciiStream("question"));
+                question = rs.getString("question"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("question"));
                 //rs.getString("question");
                 instruction = rs.getString("instruction");
                 codeid = rs.getLong("codeid");
@@ -755,10 +755,11 @@ public class RecQuestion
                 pst = con.prepareStatement("insert into sr_question (questionid,idtm,question,codeid,validated,required,validoptions,controlid,freqanswerid,stringxml,created,lastupdate,categoryid,isreuse,instruction) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 pst.setLong(1, questionid);
                 pst.setString(2,idtm);
-                if(question==null)
-                    pst.setString(3,null);
-                else
-                    pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(question),question.length());
+                pst.setString(3,question);
+//                if(question==null)
+//                    pst.setString(3,null);
+//                else
+//                    pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(question),question.length());
                 pst.setLong(4,codeid);
                 pst.setLong(5,validate);
                 pst.setLong(6,required);
