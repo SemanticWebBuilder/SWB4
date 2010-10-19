@@ -90,9 +90,9 @@ public static final String DEFAUL_HTML="<template method=\"setHeaders\" Content-
                             "-->\n\n" +
                             "</head>\n " +
                             "<body>\n   " +
-                            "<p style=\"margin-top: 0\">\n" +
+                            "<div>\n" +
                             "   <Content></Content>\n" +
-                            "</p>\n " +
+                            "</div>\n " +
                             "</body>\n" +
                             "</html>";
 
