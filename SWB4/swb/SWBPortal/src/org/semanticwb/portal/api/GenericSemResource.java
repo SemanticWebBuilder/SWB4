@@ -285,4 +285,8 @@ public class GenericSemResource extends GenericResource implements org.semanticw
         
     }
 
+    public String getShortURI() {
+        return getSemanticObject().getShortURI();
+    }
+
 }
