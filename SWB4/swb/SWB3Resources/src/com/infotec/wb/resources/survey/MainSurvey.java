@@ -386,6 +386,8 @@ public class MainSurvey extends GenericResource
             ret = new StringBuffer();
             topic = paramsRequest.getWebPage();
             user = paramsRequest.getUser();
+            String usrid =user.getId()==null?"0":user.getId();
+            //if(user!=null&&!user.isValid()) System.out.println("usr id:"+user.getId());
             util = new Utils();
             s_address = paramsRequest.getWebPage().getUrl();
             
@@ -451,12 +453,12 @@ public class MainSurvey extends GenericResource
                     s_remaining = request.getParameter("wb_remaining_question");
                     
                     // Displays the survey and check if exists a responseid
-                    if(s_responseid == null)
+                    if(s_responseid == null&&user!=null&&user.isValid())
                     {
-                        if(null!=user && !user.getId().equals("0")) //!user.getId().substring(0,1).equals("0")
+                        if(null!=user && !usrid.equals("0")) //!user.getId().substring(0,1).equals("0") //user.getId().equals("0")
                         {
                             // Gets a pending survey from this user
-                            l_responseid = util.getPendingSurvey(user.getId(),base,objSur);
+                            l_responseid = util.getPendingSurvey(usrid,base,objSur);
                             if(l_responseid != 0)
                             {
                                 // If has pending survey restores session and continues with survey's flow
@@ -478,13 +480,13 @@ public class MainSurvey extends GenericResource
                         /* xml */
                         ret.append(transformXML(domxml));
                     }
-                    else
+                    else 
                     {
                         hm_carga = util.cargaHM(l_surveyid,idtm);
                         // Evaluates if user is on session
                         if(s_responseid == null)
                         {
-                            i_responsed = util.getReponseNumber(objSur, user.getId(),base);
+                            i_responsed = util.getReponseNumber(objSur, usrid,base);
                             
                             survey.setAttribute("availableTime", getAvailableTime(i_responsed));
                             
@@ -2084,7 +2086,7 @@ public class MainSurvey extends GenericResource
                 struseremail = pr_txtuserun;
                 if(anonnum == 0)
                 {
-                    if (user.isSigned()) struseremail = user.getId();
+                    if (user!=null && user.isSigned()) struseremail = user.getId();
                 }
                 objRes.setSurveyId(objSur.getSurveyID());
                 objRes.setUser(struseremail);
@@ -3470,10 +3472,18 @@ public class MainSurvey extends GenericResource
         boolean existe = false;
         try
         {
+//            Iterator<ResourceType> itrest=recobj.getWebSite().listResourceTypes();
+//            while (itrest.hasNext()) {
+//                ResourceType resourceType = itrest.next();
+//                if(recobj!=resourceType&&resourceType.getResourceClassName().equals("com.infotec.wb.resources.survey.MainSurvey"))
+//                {
+//                    existe=true;
+//                }
+//            }
             Connection conn = SWBUtils.DB.getDefaultConnection();
-            PreparedStatement pst1  = conn.prepareStatement("select * from wbresourcetype where idtm<>? and objclass=? ");
-            pst1.setString(1, idtm);
-            pst1.setString(2, "com.infotec.wb.resources.survey.MainSurvey");
+            PreparedStatement pst1  = conn.prepareStatement("select * from sr_answer"); //select * from wbresourcetype where idtm<>? and objclass=?
+//            pst1.setString(1, idtm);
+//            pst1.setString(2, "com.infotec.wb.resources.survey.MainSurvey");
             ResultSet rs1 = pst1.executeQuery();
             if(rs1.next())
             {
@@ -3488,47 +3498,16 @@ public class MainSurvey extends GenericResource
         
         if(!existe)
         {
-//            Connection con = null;
-//            Statement st = null;
             try
             {
-//                String dbname=SWBUtils.DB.getDatabaseName().toLowerCase();
-//                if(dbname.lastIndexOf("informix")>-1) dbname="informix";
-//                if(dbname.lastIndexOf("mysql")>-1) dbname="mysql";
-//                if(dbname.lastIndexOf("microsoft sql server")>-1) dbname="sqlserver";
-//                if(dbname.lastIndexOf("adaptive server enterprise")>-1) dbname="sybase";
-//                if(dbname.lastIndexOf("postgresql")>-1) dbname="postgres";
-//                if(dbname.lastIndexOf("oracle")>-1) dbname="oracle";
-//                InputStream  is_filesql = this.getClass().getResourceAsStream("survey_script_"+dbname+".sql");
-//                String file =SWBUtils.IO.readInputStream((is_filesql));
-//                con=SWBUtils.DB.getDefaultConnection();
-//                st=con.createStatement();
-//                int x=0;
-//                if(file!=null)
-//                {
-//                    StringTokenizer sto=new StringTokenizer(file,";");
-//                    while(sto.hasMoreTokens())
-//                    {
-//                        String query=sto.nextToken();
-//                        x=st.executeUpdate(query);
-//                    }
-//                }
-//                if(st != null) st.close();
-//                if(con != null) con.close();
-
                 GenericDB db = new GenericDB();
                 String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/survey.xml");
-                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBUtils.DB.getDefaultPoolName());
             }
             catch(Exception e)
             {
                 log.error("Error while trying to create resource tables, class - MainSurvey, method - install",e);
             }
-//            finally
-//            {
-//                st = null;
-//                con = null;
-//            }
         }
         // cargando el cat�logo por sitio
         Timestamp ahora = new Timestamp(System.currentTimeMillis());
