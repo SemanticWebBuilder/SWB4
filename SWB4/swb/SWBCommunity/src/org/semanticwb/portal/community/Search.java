@@ -320,18 +320,16 @@ public class Search extends GenericAdmResource {
         }*/
 
         //Build query to return classes with literal values in their properties
-        String queryString = StringUtils.join("\n", new String[]{
-                    "PREFIX swb:     <http://www.semanticwebbuilder.org/swb4/ontology#>",
-                    "PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>",
-                    "PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>",
-                    "PREFIX owl:     <http://www.w3.org/2002/07/owl#>",
-                    "PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>",
-                    "SELECT DISTINCT ?user WHERE {",
-                    "    ?obj a swbcomm:Member.",
-                    "    ?obj swbcomm:memUser ?user.",
-                    q,
-                    "}"
-                });
+        String queryString = "PREFIX swb:     <http://www.semanticwebbuilder.org/swb4/ontology#>"
+                    +" PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+                    +" PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>"
+                    +" PREFIX owl:     <http://www.w3.org/2002/07/owl#>"
+                    +" PREFIX swbcomm: <http://www.semanticwebbuilder.org/swb4/community#>"
+                    +" SELECT DISTINCT ?user WHERE {"
+                    +"    ?obj a swbcomm:Member."
+                    +"    ?obj swbcomm:memUser ?user."
+                    +q
+                    +"}";
 
         /*System.out.println("---------------------------------");
         System.out.println(queryString);
