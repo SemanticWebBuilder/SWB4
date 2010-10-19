@@ -1,4 +1,4 @@
-/**  
+/**
 * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración, 
 * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de 
 * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes 
@@ -603,7 +603,53 @@ public class SemanticObject
         }
         return m_res.getURI();
     }
-
+    public static String shortToFullURI(String shorturi)
+    {
+        int pos=shorturi.indexOf("#");
+        if(pos!=-1)
+        {
+            throw new IllegalArgumentException();
+        }
+        pos=shorturi.indexOf(":");
+        if(pos!=-1)
+        {
+            String idmodel=shorturi.substring(0,pos);
+            Iterator<Entry<String,SemanticModel>> models=SWBPlatform.getSemanticMgr().getModels().iterator();
+            while(models.hasNext())
+            {
+                Entry<String,SemanticModel> entrymodel=models.next();
+                SemanticModel model=entrymodel.getValue();
+                if(model.getModelObject().getId().equals(idmodel))
+                {
+                    return model.getNameSpace()+shorturi.substring(pos+1);
+                }
+            }
+            throw new IllegalArgumentException("The model was not found "+idmodel);
+        }
+        else
+        {
+            throw new IllegalArgumentException("The separator ':' was not found in shorturi "+shorturi);
+        }
+        
+    }
+    public String getShortURI()
+    {
+        String getShortURI=getModel().getModelObject().getId();
+        if(getURI()==null)
+        {
+            throw new IllegalArgumentException();
+        }
+        int pos=getURI().indexOf("#");
+        if(pos!=-1)
+        {
+            getShortURI=getShortURI+":"+getURI().substring(pos+1);
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+        return getShortURI;
+    }
     /**
      * Gets the id.
      * 
