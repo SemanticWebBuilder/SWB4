@@ -64,7 +64,16 @@ public class GenericObjectBase implements GenericObject
     {
         return m_obj.getURI();
     }
-    
+
+    public static String shortToFullURI(String shorturi)
+    {
+        return SemanticObject.shortToFullURI(shorturi);
+    }
+
+    public String getShortURI()
+    {
+        return m_obj.getShortURI();
+    }
     /**
      * Regresa URI codificado para utilizar en ligas de html.
      * 
