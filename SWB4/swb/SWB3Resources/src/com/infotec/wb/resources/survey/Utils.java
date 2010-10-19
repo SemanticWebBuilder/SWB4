@@ -383,10 +383,11 @@ public class Utils {
         try
         {
             user = paramsRequest.getUser();
+            String userid = user.getId()==null?"0":user.getId();
             objResponse = new RecResponseUser();
             objResponse.setIdtm(idtm);
             objResponse.setSurveyId(p_surveyid);
-            objResponse.setUser(user.getId());
+            objResponse.setUser(userid);
             objResponse.create();
             l_responseid = objResponse.getResponseID();
 
