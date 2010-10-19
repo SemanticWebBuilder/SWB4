@@ -47,6 +47,8 @@ public interface GenericObject
      */
     public String getURI();
 
+    public String getShortURI();
+
     /**
      * Regresa Identificador del objeto.
      * 
