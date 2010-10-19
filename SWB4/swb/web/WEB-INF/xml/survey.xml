@@ -118,7 +118,7 @@
 <table name="sr_question">
 		<column id="questionid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 		<column id="idtm" type="VARCHAR" size="50" default=" " acceptNulls="false"/>
-		<column id="question" type="VARCHAR" size="4000" default=" " acceptNulls="false"/>
+		<column id="question" type="VARCHAR" size="3800" default="" acceptNulls="false"/>
                 <column id="instruction" type="VARCHAR" size="255" default="NULL" acceptNulls="true"/>
                 <column id="codeid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
                 <column id="validated" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
