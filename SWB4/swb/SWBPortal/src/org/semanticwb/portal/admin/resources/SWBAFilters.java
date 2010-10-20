@@ -49,7 +49,6 @@ import org.semanticwb.model.HerarquicalNode;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
