@@ -131,7 +131,7 @@ public class RecQuestion
                 validoptions = rs.getLong("validoptions");
                 controlid = rs.getLong("controlid");
                 freqanswerid = rs.getLong("freqanswerid");
-                stringxml = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+                stringxml = rs.getString("stringxml"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
                 categoryid = rs.getInt("categoryid");
                 isreuse = rs.getInt("isreuse");
 //                isactive = rs.getInt("isactive");
@@ -766,11 +766,11 @@ public class RecQuestion
                 pst.setLong(7,validoptions);
                 pst.setLong(8,controlid);
                 pst.setLong(9,freqanswerid);
-                
-                if(stringxml==null)
-                    pst.setString(10,null);
-                else
-                    pst.setAsciiStream(10,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+                pst.setString(10,stringxml);
+//                if(stringxml==null)
+//                    pst.setString(10,null);
+//                else
+//                    pst.setAsciiStream(10,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
                 
                 //pst.setString(10, stringxml);
                 pst.setTimestamp(11, created);
@@ -841,11 +841,11 @@ public class RecQuestion
             pst.setLong(5,validoptions);
             pst.setLong(6,controlid);
             pst.setLong(7,freqanswerid);
-            
-            if(stringxml==null)
-                pst.setString(8,null);
-            else
-                pst.setAsciiStream(8,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+            pst.setString(8,stringxml);
+//            if(stringxml==null)
+//                pst.setString(8,null);
+//            else
+//                pst.setAsciiStream(8,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
             
             //pst.setString(8, stringxml);
             pst.setTimestamp(9,created);

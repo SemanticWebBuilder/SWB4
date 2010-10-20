@@ -248,10 +248,11 @@ public class RecFreqAnswer {
                 pst.setString(2,idtm);
                 pst.setString(3, title);
 
-                if(stringxml==null)
-                    pst.setString(4,null);
-                else
-                    pst.setAsciiStream(4,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+                pst.setString(4,stringxml);
+//                if(stringxml==null)
+//                    pst.setString(4,null);
+//                else
+//                    pst.setAsciiStream(4,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
 
                 pst.setInt(5, groupaid);
                 pst.setInt(6, isreuse);
