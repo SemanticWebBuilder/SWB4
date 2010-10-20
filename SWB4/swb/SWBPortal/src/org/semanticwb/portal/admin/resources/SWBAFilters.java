@@ -262,7 +262,14 @@ public class SWBAFilters extends SWBATree {
                 while(it.hasNext())
                 {
                     SemanticObject so=it.next();
-                    addSemanticObjectFilter(user,so,jobj,null);
+                    try
+                    {
+                        addSemanticObjectFilter(user,so,jobj,null);
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             
         }
@@ -1385,7 +1392,14 @@ public class SWBAFilters extends SWBATree {
             WebSite tm = it.next();
             if (!tm.isDeleted())
             {
-                addSemanticObjectFilter(user, tm.getSemanticObject(), root,objfilters);                
+                try
+                {
+                    addSemanticObjectFilter(user, tm.getSemanticObject(), root,objfilters);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
 
@@ -1395,7 +1409,14 @@ public class SWBAFilters extends SWBATree {
             UserRepository tm = it2.next();
             if (tm.getParentWebSite()==null)
             {
-                addSemanticObjectFilter(user, tm.getSemanticObject(), root,objfilters);
+                try
+                {
+                    addSemanticObjectFilter(user, tm.getSemanticObject(), root,objfilters);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
 
@@ -1431,7 +1452,14 @@ public class SWBAFilters extends SWBATree {
             WebSite tm = it.next();
             if (!tm.isDeleted()) 
             {
-                addSemanticObject(user, tm.getSemanticObject(), root, false);
+                try
+                {
+                    addSemanticObject(user, tm.getSemanticObject(), root, false);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
                 //addTopicMap(user, tm, root, access, false, isFilter);
             }
         }
@@ -1442,7 +1470,14 @@ public class SWBAFilters extends SWBATree {
             UserRepository tm = it2.next();
             if (tm.getParentWebSite()==null)
             {
-                addSemanticObject(user, tm.getSemanticObject(), root, false);
+                try
+                {
+                    addSemanticObject(user, tm.getSemanticObject(), root, false);
+                }
+                catch(Exception e)
+                {
+                    log.error(e);
+                }
             }
         }
 
@@ -1587,7 +1622,14 @@ public class SWBAFilters extends SWBATree {
                 SemanticObject ch=it2.next();
                 if(ch.instanceOf(FilterableNode.swb_FilterableNode))
                 {
-                    addSemanticObjectFilter(user,ch,jobj,nodesInFilter);
+                    try
+                    {
+                        addSemanticObjectFilter(user,ch,jobj,nodesInFilter);
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }
@@ -1650,7 +1692,16 @@ public class SWBAFilters extends SWBATree {
                 {
                     SemanticObject ch=it2.next();
                     if(ch.instanceOf(FilterableNode.swb_FilterableNode))
-                        addSemanticObject(user,ch,jobj,false);
+                    {
+                        try
+                        {
+                            addSemanticObject(user,ch,jobj,false);
+                        }
+                        catch(Exception e)
+                        {
+                            log.error(e);                            
+                        }
+                    }
                 }
             }else
             {
