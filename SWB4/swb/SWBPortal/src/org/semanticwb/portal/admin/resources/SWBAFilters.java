@@ -1500,7 +1500,14 @@ public class SWBAFilters extends SWBATree {
                 while(it.hasNext())
                 {
                     SemanticObject so=it.next();
-                    addSemanticObject(user,so,jobj,false);
+                    try
+                    {
+                        addSemanticObject(user,so,jobj,false);
+                    }
+                    catch(Exception e)
+                    {
+                        log.error(e);
+                    }
                 }
             }
         }
