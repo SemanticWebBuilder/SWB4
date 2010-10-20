@@ -47,6 +47,7 @@ import com.infotec.wb.core.db.RecResource;
 import com.sun.org.apache.xerces.internal.parsers.SAXParser;
 
 import org.semanticwb.SWBPortal;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
 
 /**
@@ -860,6 +861,10 @@ public class Topic
      */
     public TopicMap getMap()
     {
+        if(m_parent==null)
+        {
+            m_parent=new TopicMap(dbdata.getNative().getWebSite());
+        }
         return m_parent;
     }
 
@@ -1172,9 +1177,21 @@ public class Topic
      */
     public Iterator getOccurrencesOfType(String type)
     {
+        ArrayList arr=new ArrayList();
+        if(type.equals("REC_WBContent"))
+        {
+            Iterator<Resource> it=getNative().listResources();
+            while (it.hasNext()) {
+                Resource resource = it.next();
+                Occurrence occ=new Occurrence();
+                occ.setResourceData(resource.getId());
+                arr.add(occ);
+            }
+        }
 //        Topic tp = this.getMap().getTopic(type);
 //        if (tp != null) return getOccurrencesOfType(tp,false);
-        return new ArrayList().iterator();
+        return arr.iterator();
+
     }
     
     /** Regresa <B>Iterator</B> de objetos <B>Occurrence</B> que sean de un tipo y que no se encuentren borradas.
