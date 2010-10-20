@@ -603,6 +603,7 @@ public class SemanticObject
         }
         return m_res.getURI();
     }
+
     public static String shortToFullURI(String shorturi)
     {
         int pos=shorturi.indexOf("#");
@@ -614,24 +615,19 @@ public class SemanticObject
         if(pos!=-1)
         {
             String idmodel=shorturi.substring(0,pos);
-            Iterator<Entry<String,SemanticModel>> models=SWBPlatform.getSemanticMgr().getModels().iterator();
-            while(models.hasNext())
+            SemanticModel model=SWBPlatform.getSemanticMgr().getModel(idmodel);
+            if(model!=null)
             {
-                Entry<String,SemanticModel> entrymodel=models.next();
-                SemanticModel model=entrymodel.getValue();
-                if(model.getModelObject().getId().equals(idmodel))
-                {
-                    return model.getNameSpace()+shorturi.substring(pos+1);
-                }
+                return model.getNameSpace()+shorturi.substring(pos+1);
             }
             throw new IllegalArgumentException("The model was not found "+idmodel);
         }
         else
         {
             throw new IllegalArgumentException("The separator ':' was not found in shorturi "+shorturi);
-        }
-        
+        }    
     }
+
     public String getShortURI()
     {
         String getShortURI=getModel().getModelObject().getId();
