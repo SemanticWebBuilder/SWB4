@@ -59,6 +59,7 @@ public class TopicMap
 
     public TopicMap(org.semanticwb.model.WebSite website)
     {
+        this(website.getId());
         ws = website;
     }
 

@@ -74,6 +74,11 @@ public class RecResource //implements WBDBRecord
     public RecResource(org.semanticwb.model.Resource resource)
     {
         res = resource;
+        idtm = resource.getWebSiteId();
+        try
+        {
+            id=Long.parseLong(resource.getId());
+        }catch(Exception e){}
         try {
             load();
         } catch (Exception e) {
@@ -883,7 +888,10 @@ public class RecResource //implements WBDBRecord
                     lastversion = 1;
                     xmlconf = res.getXmlConf();
                     xml = res.getXml();
-                    type = Integer.parseInt(res.getResourceType().getId());
+                    try
+                    {
+                        type = Integer.parseInt(res.getResourceType().getId());
+                    }catch(Exception e){}
                     deleted = res.isDeleted()?1:0;
 
                     if(res.getResourceSubType()!=null)

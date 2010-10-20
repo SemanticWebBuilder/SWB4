@@ -186,7 +186,7 @@ public class WBUtils implements AFAppObject
      * @return Value of property webPath.
      */
     public String getWebPath() {
-        return SWBPortal.getContextPath();
+        return SWBPortal.getContextPath()+"/";
     }
     
     public void setWebPath(String webpath)
@@ -560,7 +560,7 @@ public class WBUtils implements AFAppObject
      * @param name  */
     public static Connection getDBConnection() {
 
-        return SWBUtils.DB.getDefaultConnection();
+        return SWBUtils.DB.getConnection(SWBPortal.getEnv("wb/db/nameconn"));
     }
     
     /** Getter for default wb2 Connection form DBPool.

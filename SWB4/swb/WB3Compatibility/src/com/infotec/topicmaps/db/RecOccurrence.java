@@ -83,7 +83,7 @@ public class RecOccurrence implements WBDBRecord
         this.priority = 3;
 //        if(WBLoader.getInstance().haveDBTables())
         {
-            registerObserver(DBTopicMap.getInstance());
+//            registerObserver(DBTopicMap.getInstance());
             //registerObserver(UsrMgr.getInstance());
         }
     }
