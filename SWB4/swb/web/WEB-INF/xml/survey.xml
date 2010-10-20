@@ -7,7 +7,7 @@
 		<column id="idtm" type="VARCHAR" size="50" default=" " acceptNulls="false"/>
 		<column id="questionid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
                 <column id="responseid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
-		<column id="stringxml" type="VARCHAR" size="4000" acceptNulls="true"/>
+		<column id="stringxml" type="VARCHAR" size="3900" acceptNulls="true"/>
 		<column id="score" type="INTEGER" size="10" acceptNulls="false"/>
 		<column id="mark" type="SMALLINT" size="1" default="0"/>
                 <column id="secuentialid" type="INTEGER" size="3" acceptNulls="false"/>
@@ -33,7 +33,7 @@
 		<column id="idtm" type="VARCHAR" size="50" default=" " acceptNulls="false"/>
                 <column id="title" type="VARCHAR" size="50" default=" " acceptNulls="true"/>
                 <column id="description" type="VARCHAR" size="255" default=" " acceptNulls="true"/>
-                <column id="validationcode" type="VARCHAR" size="4000" acceptNulls="true"/>
+                <column id="validationcode" type="VARCHAR" size="3900" acceptNulls="true"/>
                 <column id="lastupdate" type="TIMESTAMP" size="14" acceptNulls="false"/>
 	</table>
 
@@ -59,7 +59,7 @@
 		<column id="freqanswerid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 		<column id="idtm" type="VARCHAR" size="50" default=" " acceptNulls="false"/>
                 <column id="title" type="VARCHAR" size="50" default=" " acceptNulls="true"/>
-                <column id="stringxml" type="VARCHAR" size="4000" acceptNulls="true"/>
+                <column id="stringxml" type="VARCHAR" size="3900" acceptNulls="true"/>
                 <column id="groupaid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
                 <column id="isreuse" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
                 <column id="created" type="TIMESTAMP" size="14" acceptNulls="false"/>
@@ -118,7 +118,7 @@
 <table name="sr_question">
 		<column id="questionid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 		<column id="idtm" type="VARCHAR" size="50" default=" " acceptNulls="false"/>
-		<column id="question" type="VARCHAR" size="3800" default="" acceptNulls="false"/>
+		<column id="question" type="VARCHAR" size="3900" acceptNulls="true"/>
                 <column id="instruction" type="VARCHAR" size="255" default="NULL" acceptNulls="true"/>
                 <column id="codeid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
                 <column id="validated" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
@@ -126,7 +126,7 @@
                 <column id="validoptions" type="BIGINT" size="10" default="0" acceptNulls="false"/>
                 <column id="controlid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 		<column id="freqanswerid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
-                <column id="stringxml" type="VARCHAR" size="4000" acceptNulls="true"/>
+                <column id="stringxml" type="VARCHAR" size="3900" acceptNulls="true"/>
                 <column id="categoryid" type="BIGINT" size="20" default="0" acceptNulls="false"/>
 		<column id="isreuse" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
                 <column id="created" type="TIMESTAMP" size="14" acceptNulls="false"/>
@@ -176,7 +176,7 @@
                 <column id="score" type="NUMERIC" size="10" default="0" acceptNulls="false"/>
                 <column id="review" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
                 <column id="statistic" type="SMALLINT" size="1" default="1" acceptNulls="false"/>
-                <column id="comments" type="VARCHAR" size="4000" acceptNulls="true"/>
+                <column id="comments" type="VARCHAR" size="3900" acceptNulls="true"/>
                 <column id="finished" type="SMALLINT" size="1" default="0" acceptNulls="false"/>
                 <column id="created" type="TIMESTAMP" size="14" acceptNulls="false"/>
                 <column id="lastupdate" type="TIMESTAMP" size="14" acceptNulls="false"/>
