@@ -135,6 +135,7 @@ import org.w3c.dom.NodeList;
  */
 public class SWBUtils {
 
+    //Jorge
     /**
      * Holds a reference to a log utility.
      * <p>Mantiene una referencia a la utiler&iacute;a de generaci&oacute;n de bit&aacute;coras.</p>
