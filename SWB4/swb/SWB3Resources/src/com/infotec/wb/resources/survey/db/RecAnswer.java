@@ -230,9 +230,9 @@ public class RecAnswer {
                 questionid = rs.getLong("questionid");
                 responseid = rs.getLong("responseid");
                 
-                String temp = rs.getString("stringxml");
-                if(null!=temp)
-                  stringxml = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+//                String temp = rs.getString("stringxml");
+//                if(null!=temp)
+                  stringxml = rs.getString("stringxml"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
 
                 score = rs.getFloat("score");
                 mark = rs.getInt("mark");
@@ -291,10 +291,11 @@ public class RecAnswer {
                 pst.setLong(3, questionid);
                 pst.setLong(4, responseid);
 
-                if(stringxml==null)
-                    pst.setString(5,null);
-                else
-                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+                pst.setString(5,stringxml);
+//                if(stringxml==null)
+//                    pst.setString(5,null);
+//                else
+//                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
 
                 pst.setFloat(6, score);
                 pst.setInt(7, mark);

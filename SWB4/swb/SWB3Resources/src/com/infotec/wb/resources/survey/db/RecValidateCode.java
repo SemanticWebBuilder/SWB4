@@ -159,7 +159,7 @@ public class RecValidateCode {
             if (rs.next()){
                 title = rs.getString("title");
                 description = rs.getString("description");
-                validationcode = SWBUtils.IO.readInputStream(rs.getAsciiStream("validationcode"));
+                validationcode = rs.getString("validationcode"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("validationcode"));
                 lastupdate = rs.getTimestamp("lastupdate");
             }
             if(rs!=null)rs.close();
@@ -210,10 +210,11 @@ public class RecValidateCode {
                 pst.setString(3, title);
                 pst.setString(4, description);
 
-                if(validationcode==null)
-                    pst.setString(5,null);
-                else
-                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
+                pst.setString(5,validationcode);
+//                if(validationcode==null)
+//                    pst.setString(5,null);
+//                else
+//                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
 
                 pst.setTimestamp(6, lastupdate);
                 pst.executeUpdate();
@@ -251,10 +252,11 @@ public class RecValidateCode {
             pst.setString(1, title);
             pst.setString(2, description);
 
-            if(validationcode==null)
-                pst.setString(3,null);
-            else
-                pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
+            pst.setString(3,validationcode);
+//            if(validationcode==null)
+//                pst.setString(3,null);
+//            else
+//                pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
 
             pst.setTimestamp(4, lastupdate);
             pst.setInt(5, codeid);
