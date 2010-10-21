@@ -635,4 +635,9 @@ public Documents() {
         out.flush();
         out.close();
     }
+
+    public String getShortURI()
+    {
+        return getSemanticObject().getShortURI();
+    }
 }
