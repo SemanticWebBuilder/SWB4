@@ -20,6 +20,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.resources.sem.SWBRankWebPage;
 import org.semanticwb.process.model.FlowNodeInstance;
 import org.semanticwb.process.model.ProcessInstance;
 import org.semanticwb.process.model.ProcessObject;
@@ -242,7 +243,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 Iterator<FlowNodeInstance> actit = pi.listFlowNodeInstances();
                 while (actit.hasNext()) {
                     FlowNodeInstance obj = actit.next();
-                    printActivityInstance(obj, out);
+                    printActivityInstance(obj, out, paramRequest);
                 }
                 out.println("</ul>");
                 out.println("</fieldset>");
@@ -344,12 +345,29 @@ public class SWBAProcessInstanceList extends GenericResource {
     }
 
 
-    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out) throws IOException {
+    public void printActivityInstance(FlowNodeInstance ai, PrintWriter out, SWBParamRequest paramRequest) throws IOException {
         out.println("<li>");
         out.println("Activity: " + ai.getFlowNodeType().getTitle() + " " + ai.getId());
         out.println("Status:" + ai.getStatus());
         out.println("Action:" + ai.getAction());
         out.println("<a href=\"#\"  onclick=\"addNewTab('" + ai.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(ai.getSemanticObject().getDisplayName()),25) + "');return false;\">" + ai.getSemanticObject().getDisplayName() + "</a>");
+        SWBResourceURL urlaccept = paramRequest.getActionUrl();
+        urlaccept.setParameter("act","accept");
+        urlaccept.setParameter("id",ai.getId());
+        //urlaccept.setParameter("user", paramRequest.getUser().getLogin());
+        urlaccept.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
+        //urlaccept.setParameter("suripi", ai.getProcessInstance().getURI());
+        urlaccept.setParameter("ract", "pidetail");
+
+        SWBResourceURL urlreject = paramRequest.getActionUrl();
+        urlreject.setParameter("act","reject");
+        urlreject.setParameter("id",ai.getId());
+        //urlreject.setParameter("user", paramRequest.getUser().getLogin());
+        urlreject.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
+        //urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
+        urlreject.setParameter("ract", "pidetail");
+        
+        out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
         out.println("</li>");
         if (ai instanceof SubProcessInstance) {
             SubProcessInstance pi = (SubProcessInstance) ai;
@@ -358,7 +376,7 @@ public class SWBAProcessInstanceList extends GenericResource {
                 out.println("<ul>");
                 while (acit.hasNext()) {
                     FlowNodeInstance actinst = acit.next();
-                    printActivityInstance(actinst, out);
+                    printActivityInstance(actinst, out, paramRequest);
                 }
                 out.println("</ul>");
             }
@@ -371,6 +389,7 @@ public class SWBAProcessInstanceList extends GenericResource {
         User user = response.getUser();
         String id = request.getParameter("suri");
         String act = request.getParameter("act");
+        String ract = request.getParameter("ract");
         org.semanticwb.process.model.Process process = null;
         ProcessSite site = null;
 
@@ -403,12 +422,18 @@ public class SWBAProcessInstanceList extends GenericResource {
             }
             if (act.equals("accept") || act.equals("reject")) {
 
-                FlowNodeInstance inst = FlowNodeInstance.ClassMgr.getFlowNodeInstance(id, site);
+                String piid = request.getParameter("id");
+                FlowNodeInstance inst = FlowNodeInstance.ClassMgr.getFlowNodeInstance(piid, site);
                 inst.close(user, act);
             }
         }
+
+
         if (id != null) {
             response.setRenderParameter("suri", id);
+        }
+        if (ract != null) {
+            response.setRenderParameter("act", ract);
         }
     }
 }
