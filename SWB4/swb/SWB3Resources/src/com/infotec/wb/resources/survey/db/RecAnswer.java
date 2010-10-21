@@ -37,7 +37,7 @@ import org.semanticwb.SWBUtils;
  * This class create an object to manage database table
  *
  * Created by Juan Antonio Fernández Arias
- * 
+ *
  */
 public class RecAnswer {
 
@@ -72,7 +72,7 @@ public class RecAnswer {
     /**
      * Gets answerid value
      * @return a long value a long value
-     */    
+     */
     public long getAnswerid() {
         return answerid;
     }
@@ -80,7 +80,7 @@ public class RecAnswer {
     /**
      * Set answerid value
      * @param answerid input long value
-     */    
+     */
     public void setAnswerid(long answerid) {
         this.answerid = answerid;
     }
@@ -88,7 +88,7 @@ public class RecAnswer {
     /**
      * Gets questionid value
      * @return a long value
-     */    
+     */
     public long getQuestionid() {
         return questionid;
     }
@@ -96,7 +96,7 @@ public class RecAnswer {
     /**
      * Set questionid value
      * @param questionid input long value
-     */    
+     */
     public void setQuestionid(long questionid) {
         this.questionid = questionid;
     }
@@ -104,7 +104,7 @@ public class RecAnswer {
     /**
      * Gets responseid value
      * @return a long value
-     */    
+     */
     public long getResponseid() {
         return responseid;
     }
@@ -112,7 +112,7 @@ public class RecAnswer {
     /**
      * Set responseid value
      * @param responseid input long value
-     */    
+     */
     public void setResponseid(long responseid) {
         this.responseid = responseid;
     }
@@ -120,7 +120,7 @@ public class RecAnswer {
     /**
      * Gets stringxml value
      * @return a string value
-     */    
+     */
     public String getStringxml() {
         return stringxml;
     }
@@ -128,7 +128,7 @@ public class RecAnswer {
     /**
      * Set stringxml value
      * @param stringxml input string value
-     */    
+     */
     public void setStringxml(String stringxml) {
         this.stringxml = stringxml;
     }
@@ -136,7 +136,7 @@ public class RecAnswer {
     /**
      * Gets score value
      * @return a float value
-     */    
+     */
     public float getScore() {
         return score;
     }
@@ -144,7 +144,7 @@ public class RecAnswer {
     /**
      * Set score value
      * @param score input float value
-     */    
+     */
     public void setScore(float score) {
         this.score = score;
     }
@@ -152,7 +152,7 @@ public class RecAnswer {
     /**
      * Gets mark value
      * @return an int value
-     */    
+     */
     public int getMark() {
         return mark;
     }
@@ -160,7 +160,7 @@ public class RecAnswer {
     /**
      * Set mark value
      * @param mark input int value
-     */    
+     */
     public void setMark(int mark) {
         this.mark = mark;
     }
@@ -168,7 +168,7 @@ public class RecAnswer {
     /**
      * Gets secuentialid value
      * @return an int value
-     */    
+     */
      public int getSecuentialid() {
         return secuentialid;
     }
@@ -176,7 +176,7 @@ public class RecAnswer {
      /**
       * Set secuentialid value
       * @param secuentialid input int value
-      */     
+      */
     public void setSecuentialid(int secuentialid) {
         this.secuentialid = secuentialid;
     }
@@ -184,7 +184,7 @@ public class RecAnswer {
     /**
      * Gets created value
      * @return a timestamp value
-     */    
+     */
     public Timestamp getCreated() {
         return created;
     }
@@ -192,7 +192,7 @@ public class RecAnswer {
     /**
      * Set created value
      * @param created input timestamp value
-     */    
+     */
     public void setCreated(Timestamp created) {
         this.created = created;
     }
@@ -200,7 +200,7 @@ public class RecAnswer {
     /**
      * Gets lastupdate value
      * @return a timestamp value
-     */    
+     */
     public Timestamp getLastupdate() {
         return lastupdate;
     }
@@ -208,7 +208,7 @@ public class RecAnswer {
     /**
      * Set lastupdate value
      * @param lastupdate input timestamp value
-     */    
+     */
     public void setLastupdate(Timestamp lastupdate) {
         this.lastupdate = lastupdate;
     }
@@ -229,7 +229,7 @@ public class RecAnswer {
             if(rs.next()){
                 questionid = rs.getLong("questionid");
                 responseid = rs.getLong("responseid");
-                
+
 //                String temp = rs.getString("stringxml");
 //                if(null!=temp)
                   stringxml = rs.getString("stringxml"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
@@ -259,7 +259,7 @@ public class RecAnswer {
     /**
      * Creates a record on database
      * @return a boolean value
-     */    
+     */
     public boolean create(){
         boolean res = false;
         if(questionid > 0 && responseid > 0 && answerid == 0 && null!=idtm){
@@ -291,11 +291,10 @@ public class RecAnswer {
                 pst.setLong(3, questionid);
                 pst.setLong(4, responseid);
 
-                pst.setString(5,stringxml);
-//                if(stringxml==null)
-//                    pst.setString(5,null);
-//                else
-//                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+                if(stringxml==null)
+                    pst.setString(5,null);
+                else
+                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
 
                 pst.setFloat(6, score);
                 pst.setInt(7, mark);
@@ -323,7 +322,7 @@ public class RecAnswer {
     /**
      * Updates values on database
      * @return a boolean value
-     */    
+     */
     public boolean update(){
         boolean res = false;
         Connection conn = null;
@@ -369,7 +368,7 @@ public class RecAnswer {
     /**
      * Removes values from database
      * @return a boolean value
-     */    
+     */
     public boolean remove(){
         boolean deleted=false;
         Connection conn = null;
@@ -404,7 +403,7 @@ public class RecAnswer {
     {
         return idtm;
     }
-    
+
     /**
      * Setter for property idtm.
      * @param idtm New value of property idtm.
@@ -413,5 +412,5 @@ public class RecAnswer {
     {
         this.idtm = idtm;
     }
-    
+
 }

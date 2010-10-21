@@ -1527,7 +1527,7 @@ public class Reports
                         {
                             String tmpCorreo=rs3.getString("wbuser");
                             String strSelected ="";
-                            if(!tmpCorreo.equals("Anonimo")&&!tmpCorreo.equals("Anónimo")&&!tmpCorreo.startsWith("0_"))
+                            if(!tmpCorreo.equals("Anonimo")&&!tmpCorreo.equals("Anónimo")&&!tmpCorreo.startsWith("0_")&&!tmpCorreo.startsWith("0"))
                             {
                                 User oRUser = paramsRequest.getUser().getUserRepository().getUser(tmpCorreo);
                                 tmpCorreo = oRUser.getName();
