@@ -40,7 +40,7 @@ import org.semanticwb.SWBUtils;
  * This class create an object to manage database table
  *
  * User: Juan Antonio Fernández Arias
- * 
+ *
  */
 public class RecQuestion
 {
@@ -68,10 +68,10 @@ public class RecQuestion
     DocumentBuilderFactory dbf=null;
     DocumentBuilder db=null;
     Document doc;
-    
+
     /**
      * Constructor
-     */    
+     */
     public RecQuestion()
     {
         this.questionid = 0;
@@ -102,11 +102,11 @@ public class RecQuestion
             log.error( "Error en el dom",e);
         }
     }
-    
+
     /*Se carga el objeto con los valores de la BD*/
     /**
      * Load information from database
-     */    
+     */
     public void load()
     {
         Connection con = null;
@@ -131,14 +131,14 @@ public class RecQuestion
                 validoptions = rs.getLong("validoptions");
                 controlid = rs.getLong("controlid");
                 freqanswerid = rs.getLong("freqanswerid");
-                stringxml = rs.getString("stringxml"); //SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
+                stringxml = SWBUtils.IO.readInputStream(rs.getAsciiStream("stringxml"));
                 categoryid = rs.getInt("categoryid");
                 isreuse = rs.getInt("isreuse");
 //                isactive = rs.getInt("isactive");
 //                isdata = rs.getInt("isdata");
                 created = rs.getTimestamp("created");
                 lastupdate = rs.getTimestamp("lastupdate");
-                
+
                 if(instruction==null) instruction="";
             }
             else
@@ -160,191 +160,191 @@ public class RecQuestion
             con=null;
         }
     }
-    
+
     /**
      * Gets questionid value
      * @return a long value
-     */    
+     */
     public long getQuestionID()
     {
         return this.questionid;
     }
-    
+
     /**
      * Set questionid value
      * @param pquestionid input int value
-     */    
+     */
     public void setQuestionID(int pquestionid)
     {
         this.questionid=pquestionid;
     }
-    
+
     /**
      * Gets codeid value
      * @return a long value
-     */    
+     */
     public long getCodeID()
     {
         return this.codeid;
     }
-    
+
     /**
      * Set codeid value
      * @param pcodeid input long value
-     */    
+     */
     public void setCodeID(long pcodeid)
     {
         this.codeid = pcodeid;
     }
-    
+
     /**
      * Gets question value
      * @return a string value
-     */    
+     */
     public String getQuestion()
     {
         return this.question.trim();
     }
-    
+
     /**
      * Set question value
      * @param pquestion input string value
-     */    
+     */
     public void setQuestion(String pquestion)
     {
         this.question = pquestion.trim();
     }
-    
+
     /**
      * Gets validate value
      * @return a long value
-     */    
+     */
     public long getValidate()
     {
         return this.validate;
     }
-    
+
     /**
      * Set validate value
      * @param pvalidate input long value
-     */    
+     */
     public void setValidate(long pvalidate)
     {
         this.validate = pvalidate;
     }
-    
+
     /**
      * Gets required value
      * @return a long value
-     */    
+     */
     public long getRequired()
     {
         return this.required;
     }
-    
+
     /**
      * Set requiered value
      * @param prequired input long value
-     */    
+     */
     public void setRequired(long prequired)
     {
         this.required = prequired;
     }
-    
+
     /**
      * Gets validoptions values
      * @return a long value
-     */    
+     */
     public long getValidOptions()
     {
         return this.validoptions;
     }
-    
+
     /**
      * Set validoptions value
      * @param pvalidoptions input long value
-     */    
+     */
     public void setValidOptions(long pvalidoptions)
     {
         this.validoptions = pvalidoptions;
     }
-    
+
     /**
      * Gets controlid value
      * @return a long value
-     */    
+     */
     public long getControlID()
     {
         return this.controlid;
     }
-    
+
     /**
      * Set controlid value
      * @param pcontrolid input long value
-     */    
+     */
     public void setControlID(long pcontrolid)
     {
         this.controlid = pcontrolid;
     }
-    
+
     /**
      * Gets freqanswerid value
      * @return a long value
-     */    
+     */
     public long getFreqAnswerID()
     {
         return this.freqanswerid;
     }
-    
+
     /**
      * Set freqanswerid value
      * @param pfreqanswerid input long value
-     */    
+     */
     public void setFreqAnswerID(long pfreqanswerid)
     {
         this.freqanswerid = pfreqanswerid;
     }
-    
+
     /**
      * Gets instruction value
      * @return a string value
-     */    
+     */
     public String getInstruction()
     {
         return this.instruction.trim();
     }
-    
+
     /**
      * Set instruction value
      * @param pinstruction input string value
-     */    
+     */
     public void setInstruction(String pinstruction)
     {
         this.instruction = pinstruction.trim();
     }
-    
+
     /**
      * Gets 1stfreqanswerid value
      * @return a long value
-     */    
+     */
     public long get1stFreqAnswerID()
     {
         return this.firstfreqanswerid;
     }
-    
+
     /**
      * Gets stringxml value
      * @return a string value
-     */    
+     */
     public String getStringXML()
     {
         return this.stringxml;
     }
-    
+
     /**
      * Set stringxml value
      * @param pstringxml input string value
-     */    
+     */
     public void setStringXML(String pstringxml)
     {
         this.stringxml = pstringxml;
@@ -354,7 +354,7 @@ public class RecQuestion
      * @param pxml input string value
      * @param answer input string value
      * @return a string value
-     */    
+     */
     public String paramXMLtoStringXML(String pxml,String answer)
     {
         String strXML = new String("");
@@ -394,69 +394,69 @@ public class RecQuestion
         }
         catch(Exception e)
         {log.error("Error al crear las opciones en la pregunta XML DB - srquestion.",e);}
-        
+
         return strXML;
-        
+
     }
-    
+
     /**
      * Gets created value
      * @return a timestamp value
-     */    
+     */
     public java.sql.Timestamp getCreated()
     {
         return this.created;
     }
-    
+
     /**
      * Gets lastupdate value
      * @return a timestamp value
-     */    
+     */
     public java.sql.Timestamp getLastUpdate()
     {
         return this.lastupdate;
     }
-    
+
     /**
      * Gets isreuse value
      * @return an int value
-     */    
+     */
     public int getIsReUse()
     {
         return this.isreuse;
     }
-    
+
     /**
      * Set isreuse value
      * @param pisreuse input int value
-     */    
+     */
     public void setIsReUse(int pisreuse)
     {
         this.isreuse = pisreuse;
     }
-    
+
     /**
      * Gets categoryid value
      * @return an int value
-     */    
+     */
     public int getCategoryID()
     {
         return this.categoryid;
     }
-    
+
     /**
      * Set categoryid value
      * @param pcategoryid input int value
-     */    
+     */
     public void setCategoryID(int pcategoryid)
     {
         this.categoryid = pcategoryid;
     }
-    
+
     /**
      * Gets category value
      * @return an RecCategory object
-     */    
+     */
     public RecCategory getCategory()
     {
         RecCategory oRGQ = null;
@@ -473,13 +473,13 @@ public class RecQuestion
         }
         return oRGQ;
     }
-    
+
     /**
      * Gets a list of catalog type values
      * @param ptextid input int value
      * @param evento input string value
      * @return a string value
-     */    
+     */
     public String getCatalogTypeList(int ptextid, String evento)
     {
         if (Integer.toString((int)ptextid).equals(null)) ptextid=0;
@@ -518,12 +518,12 @@ public class RecQuestion
         }
         return ret1.toString();
     }
-    
+
     /**
      * Gets a list of group question values
      * @param pgroupqid input int value
      * @return a string values
-     */    
+     */
     public String getGroupQuestionList(int pgroupqid)
     {
         if (Integer.toString((int)pgroupqid).equals(null)) pgroupqid=0;
@@ -562,11 +562,11 @@ public class RecQuestion
         }
         return ret1.toString();
     }
-    
+
     /**
      * Gets validatecode value
      * @return a RecValidateCode object
-     */    
+     */
     public RecValidateCode getValidateCode()
     {
         RecValidateCode oCT =null;
@@ -582,13 +582,13 @@ public class RecQuestion
         }
         return oCT;
     }
-    
+
     /**
      * Gets a list of control catalog values
      * @param pcontrolid input int value
      * @param evento input string value
      * @return a string value
-     */    
+     */
     public String getControlCatalogList(int pcontrolid,String evento)
     {
         if (Integer.toString((int)pcontrolid).equals(null)) pcontrolid=-1;
@@ -603,7 +603,7 @@ public class RecQuestion
             st = con.prepareStatement("select controlid,title from sr_controlcatalog where idtm=?");
             st.setString(1,idtm);
             rs = st.executeQuery();
-            
+
             ret1.append("<select name=\"controlid\" "+evento+">");
             while(rs.next())
             {
@@ -628,11 +628,11 @@ public class RecQuestion
         }
         return ret1.toString();
     }
-    
+
     /**
      * Gets controlcatalog value
      * @return a RecControlCatalog value
-     */    
+     */
     public RecControlCatalog getControlCatalog()
     {
         RecControlCatalog oCC =null;
@@ -649,13 +649,13 @@ public class RecQuestion
         }
         return oCC;
     }
-    
+
     /**
      * Gets a list of freqanswers values
      * @param pfreqanswerid input int value
      * @param evento input string value
      * @return a string value
-     */    
+     */
     public String getFreqAnswerList(int pfreqanswerid,String evento)
     {
         if (Integer.toString((int)pfreqanswerid).equals(null)) pfreqanswerid=-1;
@@ -700,11 +700,11 @@ public class RecQuestion
         }
         return ret1.toString();
     }
-    
+
     /**
      * Gets a freqanswer value
      * @return a RecFreqAnswer object
-     */    
+     */
     public RecFreqAnswer getFreqAnswer()
     {
         RecFreqAnswer oFA =null;
@@ -712,7 +712,7 @@ public class RecQuestion
         {
             oFA = new RecFreqAnswer();
             oFA.setFreqanswerid(freqanswerid);
-            oFA.setIdtm(idtm); 
+            oFA.setIdtm(idtm);
             oFA.load();
         }
         catch(Exception e)
@@ -721,7 +721,7 @@ public class RecQuestion
         }
         return oFA;
     }
-    
+
     /**
      * Creates a record if questionid == 0, updates a record if questionid != 0
      * @throws Exception an Exception
@@ -734,7 +734,7 @@ public class RecQuestion
         PreparedStatement stmt=null;
         ResultSet rs=null;
         PreparedStatement pst =null;
-        
+
         try
         {
             if(questionid==0&&null!=idtm)
@@ -755,23 +755,23 @@ public class RecQuestion
                 pst = con.prepareStatement("insert into sr_question (questionid,idtm,question,codeid,validated,required,validoptions,controlid,freqanswerid,stringxml,created,lastupdate,categoryid,isreuse,instruction) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 pst.setLong(1, questionid);
                 pst.setString(2,idtm);
-                pst.setString(3,question);
-//                if(question==null)
-//                    pst.setString(3,null);
-//                else
-//                    pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(question),question.length());
+                //pst.setString(3,question);
+                if(question==null)
+                    pst.setString(3,null);
+                else
+                    pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(question),question.length());
                 pst.setLong(4,codeid);
                 pst.setLong(5,validate);
                 pst.setLong(6,required);
                 pst.setLong(7,validoptions);
                 pst.setLong(8,controlid);
                 pst.setLong(9,freqanswerid);
-                pst.setString(10,stringxml);
-//                if(stringxml==null)
-//                    pst.setString(10,null);
-//                else
-//                    pst.setAsciiStream(10,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
-                
+
+                if(stringxml==null)
+                    pst.setString(10,null);
+                else
+                    pst.setAsciiStream(10,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+
                 //pst.setString(10, stringxml);
                 pst.setTimestamp(11, created);
                 pst.setTimestamp(12, lastupdate);
@@ -798,14 +798,14 @@ public class RecQuestion
             con=null;
         }
         return res;
-        
+
     }
-    
+
     /**
      * Updates a record on database
      * @throws Exception an Exception
      * @return a boolean value
-     */    
+     */
     public boolean update() throws Exception
     {
         boolean res=false;
@@ -841,13 +841,11 @@ public class RecQuestion
             pst.setLong(5,validoptions);
             pst.setLong(6,controlid);
             pst.setLong(7,freqanswerid);
-            pst.setString(8,stringxml);
-//            if(stringxml==null)
-//                pst.setString(8,null);
-//            else
-//                pst.setAsciiStream(8,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
-            
-            //pst.setString(8, stringxml);
+            if(stringxml==null)
+                pst.setString(8,null);
+            else
+                pst.setAsciiStream(8,SWBUtils.IO.getStreamFromString(stringxml),stringxml.length());
+
             pst.setTimestamp(9,created);
             pst.setTimestamp(10,lastupdate);
             pst.setInt(11,categoryid);
@@ -871,14 +869,14 @@ public class RecQuestion
             pst=null;
             con=null;
         }
-        
+
         return res;
     }
-    
+
     /**
      * Removes a record from database
      * @return a boolean value
-     */    
+     */
     public boolean remove()
     {
         boolean deleted=false;
@@ -896,14 +894,14 @@ public class RecQuestion
             conn=null;
             deleted=true;
         }
-        
+
         catch (Exception e)
         {
             log.error("Error while trying to remove a question",e);
         }
         return deleted;
     }
-    
+
     /**
      * Getter for property idtm.
      * @return Value of property idtm.
@@ -912,7 +910,7 @@ public class RecQuestion
     {
         return idtm;
     }
-    
+
     /**
      * Setter for property idtm.
      * @param idtm New value of property idtm.
@@ -921,5 +919,5 @@ public class RecQuestion
     {
         this.idtm = idtm;
     }
-    
+
 }

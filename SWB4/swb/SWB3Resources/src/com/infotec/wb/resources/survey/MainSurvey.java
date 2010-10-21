@@ -3470,21 +3470,56 @@ public class MainSurvey extends GenericResource
         // Comprobando si ya existen tablas en la DB
         String idtm = recobj.getWebSite().getId();
         boolean existe = false;
+//        try
+//        {
+////            Iterator<ResourceType> itrest=recobj.getWebSite().listResourceTypes();
+////            while (itrest.hasNext()) {
+////                ResourceType resourceType = itrest.next();
+////                if(recobj!=resourceType&&resourceType.getResourceClassName().equals("com.infotec.wb.resources.survey.MainSurvey"))
+////                {
+////                    existe=true;
+////                }
+////            }
+//            Connection conn = SWBUtils.DB.getDefaultConnection();
+//            PreparedStatement pst1  = conn.prepareStatement("select * from sr_answer"); //select * from wbresourcetype where idtm<>? and objclass=?
+////            pst1.setString(1, idtm);
+////            pst1.setString(2, "com.infotec.wb.resources.survey.MainSurvey");
+//            ResultSet rs1 = pst1.executeQuery();
+//            if(rs1.next())
+//            {
+//                existe = true;
+//            }
+//            rs1.close();
+//            pst1.close();
+//            conn.close();
+//        }
+//        catch(Exception e)
+//        { existe=false;}
+//
+//        if(!existe)
+//        {
+//            try
+//            {
+//                GenericDB db = new GenericDB();
+//                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/survey.xml");
+//                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBUtils.DB.getDefaultPoolName());
+//            }
+//            catch(Exception e)
+//            {
+//                log.error("Error while trying to create resource tables, class - MainSurvey, method - install",e);
+//            }
+//        }
+
+        Connection conn = null;
+        PreparedStatement pst1  = null;
+        ResultSet rs1 = null;
+
+
         try
         {
-//            Iterator<ResourceType> itrest=recobj.getWebSite().listResourceTypes();
-//            while (itrest.hasNext()) {
-//                ResourceType resourceType = itrest.next();
-//                if(recobj!=resourceType&&resourceType.getResourceClassName().equals("com.infotec.wb.resources.survey.MainSurvey"))
-//                {
-//                    existe=true;
-//                }
-//            }
-            Connection conn = SWBUtils.DB.getDefaultConnection();
-            PreparedStatement pst1  = conn.prepareStatement("select * from sr_answer"); //select * from wbresourcetype where idtm<>? and objclass=?
-//            pst1.setString(1, idtm);
-//            pst1.setString(2, "com.infotec.wb.resources.survey.MainSurvey");
-            ResultSet rs1 = pst1.executeQuery();
+            conn = SWBUtils.DB.getDefaultConnection();
+            pst1  = conn.prepareStatement("select * from sr_survey");
+            rs1 = pst1.executeQuery();
             if(rs1.next())
             {
                 existe = true;
@@ -3495,20 +3530,67 @@ public class MainSurvey extends GenericResource
         }
         catch(Exception e)
         { existe=false;}
-        
+        finally
+        {
+            rs1=null;
+            pst1 = null;
+            conn = null;
+        }
+
         if(!existe)
         {
+            Connection con = null;
+            Statement st = null;
             try
             {
-                GenericDB db = new GenericDB();
-                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/survey.xml");
-                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBUtils.DB.getDefaultPoolName());
+                String dbname=SWBUtils.DB.getDatabaseName();
+                if(dbname.lastIndexOf("informix")>-1) dbname="informix";
+                if(dbname.lastIndexOf("mysql")>-1) dbname="mysql";
+                if(dbname.lastIndexOf("microsoft sql server")>-1) dbname="sqlserver";
+                if(dbname.lastIndexOf("adaptive server enterprise")>-1) dbname="sybase";
+                if(dbname.lastIndexOf("postgresql")>-1) dbname="postgres";
+                if(dbname.lastIndexOf("oracle")>-1) dbname="oracle";
+                InputStream  is_filesql = this.getClass().getResourceAsStream("survey_script_"+dbname+".sql");
+                String file =SWBUtils.IO.readInputStream((is_filesql));
+                con=SWBUtils.DB.getDefaultConnection();
+                st=con.createStatement();
+                int x=0;
+                if(file!=null)
+                {
+                    StringTokenizer sto=new StringTokenizer(file,";");
+                    while(sto.hasMoreTokens())
+                    {
+                        String query=sto.nextToken();
+                        x=st.executeUpdate(query);
+                    }
+                }
+                if(st != null) st.close();
+                if(con != null) con.close();
             }
             catch(Exception e)
             {
                 log.error("Error while trying to create resource tables, class - MainSurvey, method - install",e);
+                try
+                {
+                    GenericDB db = new GenericDB();
+                    String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/survey.xml");
+                    db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), SWBUtils.DB.getDefaultPoolName());
+                }
+                catch(Exception e2)
+                {
+                    log.error("Error while trying to create resource tables, class - MainSurvey, method - install",e2);
+                }
             }
+            finally
+            {
+                st = null;
+                con = null;
+            }
+
+            
         }
+
+
         // cargando el cat�logo por sitio
         Timestamp ahora = new Timestamp(System.currentTimeMillis());
         try

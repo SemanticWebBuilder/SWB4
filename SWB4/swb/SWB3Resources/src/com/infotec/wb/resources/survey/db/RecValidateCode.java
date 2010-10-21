@@ -36,7 +36,7 @@ import org.semanticwb.SWBUtils;
  * This class create an object to manage database table
  *
  * Created by Juan Antonio Fernández Arias
- * 
+ *
  */
 
 public class RecValidateCode {
@@ -52,7 +52,7 @@ public class RecValidateCode {
 
     /**
      * Constructor
-     */    
+     */
     public RecValidateCode(){
         this.codeid = 0;
         this.idtm=null;
@@ -65,7 +65,7 @@ public class RecValidateCode {
     /**
      * Gets codeid value
      * @return an int value
-     */    
+     */
     public int getCodeid() {
         return codeid;
     }
@@ -73,7 +73,7 @@ public class RecValidateCode {
     /**
      * Set codeid value
      * @param codeid input int value
-     */    
+     */
     public void setCodeid(int codeid) {
         this.codeid = codeid;
     }
@@ -81,7 +81,7 @@ public class RecValidateCode {
     /**
      * Gets title value
      * @return a string value
-     */    
+     */
     public String getTitle() {
         return title;
     }
@@ -89,7 +89,7 @@ public class RecValidateCode {
     /**
      * Set title value
      * @param title input string value
-     */    
+     */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -97,7 +97,7 @@ public class RecValidateCode {
     /**
      * Gets description value
      * @return a string value
-     */    
+     */
     public String getDescription() {
         return description;
     }
@@ -105,7 +105,7 @@ public class RecValidateCode {
     /**
      * Set description value
      * @param description input string value
-     */    
+     */
     public void setDescription(String description) {
         this.description = description;
     }
@@ -113,7 +113,7 @@ public class RecValidateCode {
     /**
      * Gets validationcode value
      * @return a string value
-     */    
+     */
     public String getValidationcode() {
         return validationcode;
     }
@@ -121,7 +121,7 @@ public class RecValidateCode {
     /**
      * Set validationcode value
      * @param validationcode input string value
-     */    
+     */
     public void setValidationcode(String validationcode) {
         this.validationcode = validationcode;
     }
@@ -129,7 +129,7 @@ public class RecValidateCode {
     /**
      * Gets lastupdate value
      * @return a timestamp value
-     */    
+     */
     public Timestamp getLastupdate() {
         return lastupdate;
     }
@@ -137,7 +137,7 @@ public class RecValidateCode {
     /**
      * Set lastupdate value
      * @param lastupdate input timestamp value
-     */    
+     */
     public void setLastupdate(Timestamp lastupdate) {
         this.lastupdate = lastupdate;
     }
@@ -145,7 +145,7 @@ public class RecValidateCode {
 
     /**
      * Load information from database
-     */    
+     */
     public void load(){
         Connection conn = null;
         PreparedStatement pst = null;
@@ -179,7 +179,7 @@ public class RecValidateCode {
     /**
      * Creates a record on database
      * @return a boolean value
-     */    
+     */
     public boolean create(){
         boolean res = false;
         if(codeid == 0){
@@ -210,11 +210,11 @@ public class RecValidateCode {
                 pst.setString(3, title);
                 pst.setString(4, description);
 
-                pst.setString(5,validationcode);
-//                if(validationcode==null)
-//                    pst.setString(5,null);
-//                else
-//                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
+                //pst.setString(5,validationcode);
+                if(validationcode==null)
+                    pst.setString(5,null);
+                else
+                    pst.setAsciiStream(5,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
 
                 pst.setTimestamp(6, lastupdate);
                 pst.executeUpdate();
@@ -238,7 +238,7 @@ public class RecValidateCode {
     /**
      * Updates information on database
      * @return a boolean value
-     */    
+     */
     public boolean update(){
         boolean res = false;
         Connection conn = null;
@@ -252,11 +252,11 @@ public class RecValidateCode {
             pst.setString(1, title);
             pst.setString(2, description);
 
-            pst.setString(3,validationcode);
-//            if(validationcode==null)
-//                pst.setString(3,null);
-//            else
-//                pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
+            //pst.setString(3,validationcode);
+            if(validationcode==null)
+                pst.setString(3,null);
+            else
+                pst.setAsciiStream(3,SWBUtils.IO.getStreamFromString(validationcode),validationcode.length());
 
             pst.setTimestamp(4, lastupdate);
             pst.setInt(5, codeid);
@@ -280,7 +280,7 @@ public class RecValidateCode {
     /**
      * Removes data from database
      * @return a boolean value
-     */    
+     */
     public boolean remove(){
         boolean deleted=false;
         Connection conn = null;
@@ -314,7 +314,7 @@ public class RecValidateCode {
     public java.lang.String getIdtm()
     {
         return idtm;
-    }    
+    }
 
     /**
      * Setter for property idtm.
@@ -324,5 +324,5 @@ public class RecValidateCode {
     {
         this.idtm = idtm;
     }
-    
+
 }

@@ -103,10 +103,10 @@ public class RecResponseUser
                 score = rs.getInt("score");
                 review=rs.getInt("review");
                 statistic = rs.getInt("statistic");
-                comments = rs.getString("comments");
-//                try {
-//                    comments = SWBUtils.IO.readInputStream(rs.getAsciiStream("comments"));
-//                } catch (Exception e) {}
+                //comments = rs.getString("comments");
+                try {
+                    comments = SWBUtils.IO.readInputStream(rs.getAsciiStream("comments"));
+                } catch (Exception e) {}
                 if(comments==null) comments="";
                 finished = rs.getInt("finished");
                 created = rs.getTimestamp("created");
@@ -392,11 +392,11 @@ public class RecResponseUser
                 st.setTimestamp(10, lastupdate);
                 st.setInt(11,review);
                 st.setInt(12,statistic);
-                st.setString(13,comments);
-//                if(comments==null)
-//                    st.setString(13,null);
-//                else
-//                    st.setAsciiStream(13,SWBUtils.IO.getStreamFromString(comments),comments.length());
+                
+                if(comments==null)
+                    st.setString(13,null);
+                else
+                    st.setAsciiStream(13,SWBUtils.IO.getStreamFromString(comments),comments.length());
                 st.setInt(14,finished);
                 st.executeUpdate();
                 if(st!=null)st.close();
@@ -440,11 +440,10 @@ public class RecResponseUser
             st.setFloat(4,score);
             st.setInt(5,review);
             st.setInt(6,statistic);
-            st.setString(7,comments);
-//            if(comments==null)
-//                    st.setString(7,null);
-//                else
-//                    st.setAsciiStream(7,SWBUtils.IO.getStreamFromString(comments),comments.length());
+            if(comments==null)
+                    st.setString(7,null);
+                else
+                    st.setAsciiStream(7,SWBUtils.IO.getStreamFromString(comments),comments.length());
             st.setInt(8,finished);
             st.setTimestamp(9, lastupdate);
             st.setTimestamp(10,created);
