@@ -1007,6 +1007,10 @@
     <rdfs:comment>Miembro participante dentro de una asociacion en la especificacion de TopicMaps</rdfs:comment>
     <rdf:type rdf:resource="#Class"/>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectClass">
+    <rdfs:subClassOf rdf:resource="#SWBFormElement"/>
+    <rdf:type rdf:resource="#FormElement"/>
+  </owl:Class>
   <owl:ObjectProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#heClass">
     <rdfs:comment>Tipo de clase hija del nodo</rdfs:comment>
     <rdfs:domain>
@@ -2446,12 +2450,7 @@
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#dp_interface">
         <swbxf:formElement>
-          <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank">
-            <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:so_globalScope>
-            <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >true</swbxf:so_nullSuport>
-          </swbxf:SelectOne>
+          <swbxf:SelectClass rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#SelectClass_1"/>
         </swbxf:formElement>
         <rdfs:label xml:lang="es">Interface</rdfs:label>
         <rdfs:label xml:lang="en">Interface</rdfs:label>
@@ -4178,6 +4177,12 @@
     <rdfs:comment>Objeto por medio del cual se define un tipo de componente o recurso, con especializacion de estilo XSLT</rdfs:comment>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
   </swb:Class>
+  <swbxf:SelectOne rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneGlobalWithBlank">
+    <swbxf:so_globalScope rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:so_globalScope>
+    <swbxf:so_nullSuport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swbxf:so_nullSuport>
+  </swbxf:SelectOne>
   <swbxf:RichText rdf:about="http://www.semanticwebbuilder.org/swb4/xforms/ontology#RichTextEditor">
     <swbxf:textAreaCols rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
     >40</swbxf:textAreaCols>
