@@ -351,20 +351,22 @@ public class SWBAProcessInstanceList extends GenericResource {
         out.println("Status:" + ai.getStatus());
         out.println("Action:" + ai.getAction());
         out.println("<a href=\"#\"  onclick=\"addNewTab('" + ai.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(ai.getSemanticObject().getDisplayName()),25) + "');return false;\">" + ai.getSemanticObject().getDisplayName() + "</a>");
+
+        // Validación por status de FlowNodeInstance en relacion a las acciones posibles a realizar
         SWBResourceURL urlaccept = paramRequest.getActionUrl();
         urlaccept.setParameter("act","accept");
         urlaccept.setParameter("id",ai.getId());
-        //urlaccept.setParameter("user", paramRequest.getUser().getLogin());
+        urlaccept.setParameter("user", paramRequest.getUser().getLogin());
         urlaccept.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
-        //urlaccept.setParameter("suripi", ai.getProcessInstance().getURI());
+        urlaccept.setParameter("suripi", ai.getProcessInstance().getURI());
         urlaccept.setParameter("ract", "pidetail");
 
         SWBResourceURL urlreject = paramRequest.getActionUrl();
         urlreject.setParameter("act","reject");
         urlreject.setParameter("id",ai.getId());
-        //urlreject.setParameter("user", paramRequest.getUser().getLogin());
+        urlreject.setParameter("user", paramRequest.getUser().getLogin());
         urlreject.setParameter("suri",ai.getProcessInstance().getProcessType().getURI());
-        //urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
+        urlreject.setParameter("suripi", ai.getProcessInstance().getURI());
         urlreject.setParameter("ract", "pidetail");
         
         out.println(" <a href=\"#\" onclick=\"submitUrl('" + urlaccept + "',this); return false;\">accept</a> <a href=\"#\" onclick=\"submitUrl('"+ urlreject + "',this); return false;\">reject</a></li>");
@@ -433,7 +435,10 @@ public class SWBAProcessInstanceList extends GenericResource {
             response.setRenderParameter("suri", id);
         }
         if (ract != null) {
-            response.setRenderParameter("act", ract);
+            response.setRenderParameter("act", ract); //suripi
+        }
+        if (request.getParameter("suripi") != null) {
+            response.setRenderParameter("suripi", request.getParameter("suripi")); 
         }
     }
 }
