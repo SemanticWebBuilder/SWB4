@@ -7,13 +7,13 @@
         <input type="file" id="audio" name="audio" label="Audio (au, wav, rm, mp3, wma):" showfile="true" filetype="au|wav|rm|mp3|wma" isshowfiletype="true" isremovefile="true" removemsg="Quitar audio" size="40" />
         <statictext name="auto">Iniciar automáticamente:</statictext>
         <input type="radio" id="automatic0" name="automatic" label="Si" value="true" />
-        <input type="radio" id="automatic1" name="automatic" label="No" value="false" checked="checked" />
+        <input type="radio" id="automatic1" name="automatic" label="No" value="false" checked="true" />
         <statictext name="cntrls">Mostrar controles:</statictext>
-        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="checked" />
+        <input type="radio" id="controls0" name="controls" label="Si" value="true" checked="true" />
         <input type="radio" id="controls1" name="controls" label="No" value="false" />
         <statictext name="lp">Reproducción continua:</statictext>
         <input type="radio" id="loop0" name="loop" label="Si" value="true" />
-        <input type="radio" id="loop1" name="loop" label="No" value="false" checked="checked" />
+        <input type="radio" id="loop1" name="loop" label="No" value="false" checked="true" />
     </fieldset>
 
     <fieldset legend="Aspecto">
