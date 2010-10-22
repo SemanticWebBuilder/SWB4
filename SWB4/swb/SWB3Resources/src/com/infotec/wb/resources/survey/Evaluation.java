@@ -118,7 +118,7 @@ public class Evaluation
             objRes.setIdtm(idtm);
             objRes.load();
             email = objRes.getUser();
-            if(email.equalsIgnoreCase("Anonimo")||email.equalsIgnoreCase("Anónimo")||email.startsWith("0_")) email = paramsRequest.getLocaleString("usrmsg_MainSurvey_setResourceBase_msgAnonimo");
+            if(email.equalsIgnoreCase("Anonimo")||email.equalsIgnoreCase("Anónimo")||email.startsWith("0_")||email.startsWith("0")) email = paramsRequest.getLocaleString("usrmsg_MainSurvey_setResourceBase_msgAnonimo");
             score = objRes.getScore();
             surveyid = objRes.getSurveyId();
 
@@ -240,7 +240,7 @@ public class Evaluation
             String tmpName="Anónimo";
             User user =null;
             UserRepository usrRep = paramsRequest.getUser().getUserRepository();
-            if(email!=null&&!email.equals("Anonimo")&&!email.equals("Anónimo")&&!email.startsWith("0_"))
+            if(email!=null&&!email.equals("Anonimo")&&!email.equals("Anónimo")&&!email.startsWith("0_")||email.startsWith("0"))
             {
                 user = usrRep.getUser(email);
                 tmpName=user.getName();
@@ -526,7 +526,7 @@ public class Evaluation
             ret.append("\n<input type=\"hidden\" name=\"statistic\" value=\""+request.getParameter("statistic")+"\">");
             ret.append("\n<input type=\"hidden\" name=\"comments\" value=\""+request.getParameter("comments")+"\">");
             String tmp_email = email;
-            if(null!=email&&email.startsWith("0_")) email = paramsRequest.getLocaleString("usrmsg_Evaluation_Anonimo");
+            if(null!=email&&(email.startsWith("0_")||email.startsWith("0"))) email = paramsRequest.getLocaleString("usrmsg_Evaluation_Anonimo");
             ret.append("\n<tr><td width=\"10\">&nbsp;</td><td colspan=3 align=left >"+paramsRequest.getLocaleString("usrmsg_Evaluation_getEvaluation_msgTipoFormulario")  +":&nbsp;"+ strtype + "</td></tr>");
             if(objSur.getTypeID()>1)
             {
