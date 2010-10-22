@@ -958,7 +958,7 @@ public class Reports
                                             oRU.load();
                                             
                                             String correo = oRU.getUser();
-                                            if(!oRU.getUser().equals("Anonimo")&&!oRU.getUser().equals("Anónimo")&&!oRU.getUser().startsWith("0_"))
+                                            if(!oRU.getUser().equals("Anonimo")&&!oRU.getUser().equals("Anónimo")&&!oRU.getUser().startsWith("0_")&&!oRU.getUser().startsWith("0"))
                                             {
                                                 User oRUser = paramsRequest.getUser().getUserRepository().getUser(oRU.getUser());
                                                 correo = oRUser.getName();
@@ -1577,7 +1577,7 @@ public class Reports
                     boolean enviarEmail = false;
                     String strUser = oRRU.getUser();
                     User oRUser = null;
-                    if(!oRRU.getUser().equals("Anonimo")&&!oRRU.getUser().equals("Anónimo")&&!oRRU.getUser().startsWith("0_"))
+                    if(!oRRU.getUser().equals("Anonimo")&&!oRRU.getUser().equals("Anónimo")&&!oRRU.getUser().startsWith("0_")&&!oRRU.getUser().startsWith("0"))
                     {
                         oRUser = paramsRequest.getUser().getUserRepository().getUser(oRRU.getUser());
                         strUser = oRUser.getName(); //oRUser.getFirstName()+" "+oRUser.getLastName();

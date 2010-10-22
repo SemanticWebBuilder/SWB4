@@ -242,13 +242,13 @@ public class GeneralReport
                 String email = rs.getString("wbuser");
                 User ruser =null;
                 UserRepository usrRep = paramsRequest.getUser().getUserRepository();
-                if(email!=null&&!email.equals("Anonimo")&&!email.startsWith("0_"))
+                if(email!=null&&!email.equals("Anonimo")&&!email.startsWith("0_")&&!email.startsWith("0"))
                 {
                     ruser = usrRep.getUser(email);
                     if(ruser!=null) email = ruser.getName();
                     else email=null;
                 }
-                if(email==null||email.startsWith("0_")) email=paramsRequest.getLocaleString("usrmsg_MainSurvey_setResourceBase_msgAnonimo");
+                if(email==null||email.startsWith("0_")||email.startsWith("0")) email=paramsRequest.getLocaleString("usrmsg_MainSurvey_setResourceBase_msgAnonimo");
                 int freqanswerid =0;
                 ret.append("	  <tr>");
                 ret.append("	    <td>"+email+"</td>");
