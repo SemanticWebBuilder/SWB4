@@ -193,9 +193,19 @@ public class WBSearch extends GenericAdmResource
                 if(cls==null)stpini=request.getParameter("cls");
                 if(cls!=null)
                 {
-                    query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, cls, SearchTerm.OPER_AND));
+                    if (cls.contains(" ")) {
+                        SearchQuery sq = new SearchQuery(SearchQuery.OPER_AND);
+                        String classes [] = cls.split(" ");
+                        for (int j = 0; j < classes.length; j++) {
+                            String clsname = classes[j];
+                            SearchTerm st = new SearchTerm(SWBIndexer.ATT_CLASS, clsname, SearchTerm.OPER_OR);
+                            sq.addTerm(st);
+                        }
+                        query.addQuery(sq);
+                    } else {
+                        query.addTerm(new SearchTerm(SWBIndexer.ATT_CLASS, cls, SearchTerm.OPER_AND));
+                    }
                 }
-
 
                 SWBIndexer indexer=SWBPortal.getIndexMgr().getModelIndexer(paramRequest.getWebPage().getWebSite());
                 //System.out.println("indexer:"+indexer);
@@ -236,6 +246,7 @@ public class WBSearch extends GenericAdmResource
                         addElem(doc, eobj, "objTitle", parser.getTitle(srch, lang));
                         addElem(doc, eobj, "objId", srch.getURI());
                         addElem(doc, eobj, "objType", parser.getType(srch));
+                        addElem(doc, eobj, "objClassName", srch.getClass().getName());
                         //addElem(doc, eobj, "objCategory", obj.getCategory());
                         //addElem(doc, eobj, "objTopicid", obj.getTopicID());
                         String summary=obj.getSummary();
