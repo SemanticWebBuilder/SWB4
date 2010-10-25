@@ -129,4 +129,19 @@ public class UserParser extends GenericParser {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return f.format(((User)gen).getUpdated());
     }
+
+    /**
+     * Gets the String type of the {@link Searchable} object.
+     * <p>
+     * Obtiene la cadena del tipo de objeto {@link Searchable}.
+     *
+     * @param gen the gen
+     * @return  String type of the {@link Searchable} object. String con el tipo
+     * del objeto {@link Searchable}.
+     * @see     org.semanticwb.portal.indexer.parser.GenericParser#getType(org.semanticwb.model.Searchable)
+     */
+    @Override
+    public String getType(Searchable gen) {
+        return "User";
+    }
 }
