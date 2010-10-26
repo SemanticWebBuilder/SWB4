@@ -227,7 +227,7 @@ public class AutoPreparedStatement implements java.sql.PreparedStatement {
     public java.sql.Connection getConnection() throws java.sql.SQLException
     {
         checkStatement();
-        return conn;
+        return aconn;
         //return st.getConnection();
     }
 

@@ -477,4 +477,10 @@ public class DBConnectionPool {
     {
         return manager;
     }
+
+    public long getIdleTime()
+    {
+       return idle_time;
+    }
+
 }
