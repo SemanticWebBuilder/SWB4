@@ -1,4 +1,8 @@
-  (En desarrollo)
+  4.0.2.0
+    - Mejoras en performance para el manejo de conecciones a DB Oracle (Jei).
+    - Soporte a Papelera de Reciclaje para Platillas, Contenidos y Secciones (Jei).
+
+  4.0.1.8
     - Mejora cuando limpia estilos el recurso de Word (Victor L)
     - Se cambió el modelo de programación para selección de sitios en OpenOffice y MS Office (Victor L)
     - Se agregó búsqueda por página, al abrir un contenido (Victor L)    
@@ -19,7 +23,6 @@
     - Ordenación alfabetica de directorios y archivos en FTP (victorl).
     - Mejor lectura en tamaño de archivos y fechas en FTP (victorl).
     - Ordenación dando click en los headers de archivos de FTP, ascendente y descendente de la tabla de archivos de FTP (victorl).
-
 
   4.0.1.7
     - Correccion de modos de despliegue, Cambio de modo de estrategia a sistema, validacion de envio de correo del recurso comment (CarlosR)
