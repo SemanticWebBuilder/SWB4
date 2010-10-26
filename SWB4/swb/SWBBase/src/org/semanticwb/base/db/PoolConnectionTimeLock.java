@@ -86,6 +86,7 @@ public class PoolConnectionTimeLock extends TimerTask {
                     pool = new HashMap();
                     pools.put(con.getPool().getName(), pool);
                 }
+                //con.printTrackTrace(System.out);
                 pool.put(Long.valueOf(con.getId()), con.getDescription());
             } catch (Exception e)
             {
