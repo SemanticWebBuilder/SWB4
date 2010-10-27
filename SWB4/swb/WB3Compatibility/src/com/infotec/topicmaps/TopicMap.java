@@ -249,7 +249,11 @@ public class TopicMap
      * @return  */
     public Topic getTopic(String id, boolean deleted)
     {
-        return new Topic(ws.getWebPage(id));
+        WebPage page=ws.getWebPage(id);
+        if(page!=null)
+        {
+            return new Topic(page);
+        }else return null;
     }
 
     /**
