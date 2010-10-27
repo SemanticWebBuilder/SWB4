@@ -105,21 +105,19 @@ public class TopicMap
     /** Creates new TopicMap */
     public TopicMap()
     {
-        m_id = TopicMgr.getInstance().getNewId();
-        m_topics = new HashMap();
-        m_associations = new HashMap();
-        m_mergemap = new HashMap();
-        changes = Collections.synchronizedList(new ArrayList());
-        dbdata = new RecTopicMap(m_id);
+        this(TopicMgr.getInstance().getNewId());
     }
 
     /**
      * @param id  */
     public TopicMap(String id)
     {
-        this();
         this.m_id = id;
-        dbdata.setId(id);
+        m_topics = new HashMap();
+        m_associations = new HashMap();
+        m_mergemap = new HashMap();
+        changes = Collections.synchronizedList(new ArrayList());
+        dbdata = new RecTopicMap(m_id);
     }
 
     /** Getter for property m_id.
