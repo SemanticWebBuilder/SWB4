@@ -43,6 +43,7 @@ import java.util.Properties;
 import org.semanticwb.platform.SemanticMgr;
 import org.semanticwb.platform.IDGenerator;
 import org.semanticwb.platform.SemanticVocabulary;
+import org.semanticwb.platform.ThreadObserver;
 
 
 // TODO: Auto-generated Javadoc
@@ -101,7 +102,11 @@ public class SWBPlatform
     private static SemanticMgr semanticMgr=null;
 
     /** The Constant version. */
-    protected static final String version = "4.0.1.9";
+    protected static final String version = "4.0.2.0";
+
+    /** The m_observers. */
+    private ArrayList<ThreadObserver> m_observers = null;
+
     
     /**
      * Instantiates a new sWB platform.
@@ -814,5 +819,49 @@ public class SWBPlatform
     {
         return persistenceType==PRESIST_TYPE_DEFAULT;
     }
+
+    //Se invoca cada que el thread del request termina
+    public void endThreadRequest()
+    {
+        if(m_observers!=null)
+        {
+            Iterator it = m_observers.iterator();
+            while (it.hasNext())
+            {
+                ThreadObserver obs = (ThreadObserver) it.next();
+                try {
+                    obs.notifyEnd();
+                } catch (Exception e) {
+                    log.error(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Register observer.
+     *
+     * @param obs the obs
+     */
+    public void registerThreadObserver(ThreadObserver obs) {
+        if(m_observers==null)
+        {
+            m_observers = new ArrayList();
+        }
+        m_observers.add(obs);
+    }
+
+    /**
+     * Removes the observer.
+     *
+     * @param obs the obs
+     */
+    public void removeThreadObserver(ThreadObserver obs) {
+        if(m_observers!=null)
+        {
+            m_observers.remove(obs);
+        }
+    }
+
 
 }

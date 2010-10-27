@@ -710,6 +710,7 @@ public class SemanticObject
             ret=m_res.getLocalName();
         }
         if(ret==null || ret.length()==0)ret=getId();
+        if(ret==null)ret=m_res.toString();
         return ret;
     }
 
