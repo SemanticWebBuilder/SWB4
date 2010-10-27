@@ -131,7 +131,11 @@ public class SWBComparator implements Comparator {
      * @return the iterator
      */
     public static Iterator sortSermanticObjects(String lang, Iterator... its) {
-        TreeSet set = new TreeSet(new SWBComparator(lang));
+        return sortSermanticObjects(new SWBComparator(lang), its);
+    }
+
+    public static Iterator sortSermanticObjects(Comparator comp, Iterator... its) {
+        TreeSet set = new TreeSet(comp);
 
         for (int x = 0; x < its.length; x++) {
             Iterator it = its[x];
@@ -146,7 +150,6 @@ public class SWBComparator implements Comparator {
                 }
             }
         }
-
         return set.iterator();
     }
 

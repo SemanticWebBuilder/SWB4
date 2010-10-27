@@ -1,4 +1,4 @@
-/**  
+/**
  * SemanticWebBuilder es una plataforma para el desarrollo de portales y aplicaciones de integración,
  * colaboración y conocimiento, que gracias al uso de tecnología semántica puede generar contextos de
  * información alrededor de algún tema de interés o bien integrar información y aplicaciones de diferentes
@@ -37,13 +37,13 @@ import javax.servlet.http.HttpServletRequest;
  * The Class GMap.
  */
 public class GMap extends org.semanticwb.model.base.GMapBase {
-    
+
     /** The key. */
     String key = SWBPlatform.getEnv("key/gmap", "");
 
     /**
      * Instantiates a new g map.
-     * 
+     *
      * @param base the base
      */
     public GMap(org.semanticwb.platform.SemanticObject base) {
@@ -55,7 +55,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
      */
     /**
      * Render element.
-     * 
+     *
      * @param request the request
      * @param obj the obj
      * @param prop the prop
@@ -65,72 +65,42 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
      * @return the string
      */
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type,
-                                String mode, String lang) {
-        SemanticProperty prop2  = Geolocalizable.swb_longitude;
-        SemanticProperty prop3  = Geolocalizable.swb_geoStep;
-        String           nombre = "";
-
-        if (obj == null) {
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String type, String mode, String lang) {
+        GMap map = null;
+        String nombre = "";
+        StringBuffer ret = new StringBuffer();
+        SemanticProperty prop2 = Geolocalizable.swb_longitude;
+        SemanticProperty prop3 = Geolocalizable.swb_geoStep;
+        if (obj == null)
             obj = new SemanticObject();
-        } else {
+        else 
             nombre = obj.getDisplayName(lang);
-        }
-
-//        boolean IPHONE = false;
-//        boolean XHTML  = false;
-//        boolean DOJO   = false;
-        int     step   = obj.getIntProperty(prop3);
-
-        if (0 == step) {
+        int step = obj.getIntProperty(prop3);
+        if (0 == step)
             step = 10;
-        }
-
-//        if (type.equals("iphone")) {
-//            IPHONE = true;
-//        } else if (type.equals("xhtml")) {
-//            XHTML = true;
-//        } else if (type.equals("dojo")) {
-//            DOJO = true;
-//        }
-
-        StringBuffer   ret      = new StringBuffer();
-//        String         name     = prop.getName();
-//        String         label    = prop.getDisplayName(lang);
-//        SemanticObject sobj     = prop.getDisplayProperty();
-//        boolean        required = prop.isRequired();
-//        String         pmsg     = null;
-//        String         imsg     = null;
-//        boolean        disabled = false;
-//
-//        if (sobj != null) {
-//            DisplayProperty dobj = new DisplayProperty(sobj);
-//            pmsg     = dobj.getPromptMessage();
-//            imsg     = dobj.getInvalidMessage();
-//            disabled = dobj.isDisabled();
-//        }
-
         String value = request.getParameter(prop.getName());
-
-        if (value == null) {
-            value = obj.getProperty(prop);
+         /** Class Cast Exception in value = obj.getProperty(prop). */
+        try {
+            if (value == null)
+                value = obj.getProperty(prop);
+        }catch (Exception e) {
+            map = (GMap)obj.getObjectProperty(prop).createGenericInstance();
         }
-
-        if (value == null) {
+        if (value == null && null != map) {
+            value = "" + map.getInitLatitude();
+            step  = map.getInitStep();
+        }else {
             value = "" + getInitLatitude();
             step  = getInitStep();
         }
-
         String value2 = request.getParameter(prop2.getName());
-
-        if (value2 == null) {
+        if (value2 == null)
             value2 = obj.getProperty(prop2);
-        }
-
-        if (value2 == null) {
+        if (value2 == null && null != map)
+            value2 = "" + map.getInitLongitude();
+        else
             value2 = "" + getInitLongitude();
-        }
-
+         /** Class Cast Exception in value = obj.getProperty(prop). */
         if (mode.equals("edit") || mode.equals("create")) {
             ret.append("<input type=\"text\" size=\"60\" id =\"gmap_address\" value=\"Introduce Calle,"
                        + " Colonia y Estado\" onKeyPress=\"if (event.which==13) {search(); return false;} \"/>\n");
@@ -164,20 +134,6 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
             ret.append("        document.getElementById(\"geoStep\").value = map.getZoom();\n");
             ret.append("    });\n");
             ret.append("    GEvent.addListener(map, \"moveend\", function() {\n");
-//            ret.append("        map.clearOverlays();\n");
-//            ret.append("        var center = map.getCenter();\n");
-//            ret.append("        var marker = new GMarker(center, {draggable: true});\n");
-//            ret.append("        map.addOverlay(marker);\n");
-//            ret.append("        document.getElementById(\"latitude\").value = center.lat().toFixed(7);\n");
-//            ret.append("        document.getElementById(\"longitude\").value = center.lng().toFixed(7);\n");
-//            ret.append("        document.getElementById(\"geoStep\").value = map.getZoom();\n");
-//            ret.append("        GEvent.addListener(marker, \"dragend\", function() {\n");
-//            ret.append("            var point = marker.getPoint();\n");
-//            ret.append("            map.panTo(point);\n");
-//            ret.append("            document.getElementById(\"latitude\").value = center.lat().toFixed(7);\n");
-//            ret.append("            document.getElementById(\"longitude\").value = center.lng().toFixed(7);\n");
-//            ret.append("            document.getElementById(\"geoStep\").value = map.getZoom();\n");
-//            ret.append("    });\n");
             ret.append("    });\n");
             ret.append("}\n\n");
             ret.append("function search() {\n");
@@ -203,7 +159,7 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
             ret.append("}\n");
             ret.append("initialize();\n");
             ret.append("    </script>\n");
-        } else if (mode.equals("view")) {
+        }else if (mode.equals("view")) {
             ret.append("<div id=\"map_canvas\" style=\"width: 500px; height: 300px\"></div>\n");
             ret.append("            <script src=\"http://maps.google.com/maps?file=api&amp;v=2&amp;key=" + key
                        + "\"\n");
@@ -216,8 +172,6 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
             ret.append("            map.addControl(new GMapTypeControl());\n");
             ret.append("        var center = new GLatLng(" + value + ", " + value2 + ");\n");
             ret.append("        map.setCenter(center, " + step + ");\n");
-
-            // Add 10 markers to the map at random locations
             ret.append("        var marker = new GMarker(center, {draggable: false});\n");
             ret.append("        map.addOverlay(marker);\n");
             ret.append("        marker.openInfoWindow(   \n");
@@ -227,8 +181,6 @@ public class GMap extends org.semanticwb.model.base.GMapBase {
             ret.append("initialize();\n");
             ret.append("    </script>\n");
         }
-
-        // fin
         return ret.toString();
     }
 }

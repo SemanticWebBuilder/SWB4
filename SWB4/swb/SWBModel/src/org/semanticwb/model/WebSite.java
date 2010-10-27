@@ -159,17 +159,19 @@ public class WebSite extends WebSiteBase {
     @Override
     public Iterator<IPFilter> listIPFilters() {
         if (ipfilters == null) {
-            ipfilters = new ArrayList();
+            synchronized(this)
+            {
+                if (ipfilters == null) {
+                    ipfilters = new ArrayList();
+                    Iterator<IPFilter> it = super.listIPFilters();
+                    while (it.hasNext()) {
+                        IPFilter iPFilter = it.next();
 
-            Iterator<IPFilter> it = super.listIPFilters();
-
-            while (it.hasNext()) {
-                IPFilter iPFilter = it.next();
-
-                ipfilters.add(iPFilter);
+                        ipfilters.add(iPFilter);
+                    }
+                }
             }
         }
-
         return ipfilters.iterator();
     }
 
