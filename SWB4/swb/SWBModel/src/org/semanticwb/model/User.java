@@ -633,6 +633,16 @@ public class User extends UserBase implements Principal
         return ret;
     }
 
+    public boolean evalRule(Rule rule)
+    {
+        return evalRule(rule.getURI());
+    }
+
+    public boolean evalRule(String ruleUri)
+    {
+        return Rule.getRuleMgr().eval(this,ruleUri);
+    }
+
     /**
      * Checks for device.
      * 
