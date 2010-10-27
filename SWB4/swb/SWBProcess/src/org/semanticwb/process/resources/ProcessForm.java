@@ -72,10 +72,10 @@ public class ProcessForm extends GenericResource
             }
         }
         mgr.addButton(SWBFormButton.newSaveButton());
-        SWBFormButton bt=new SWBFormButton().setTitle("Concluir Tarea","es").setAttribute("type", "submit").setBusyButton(true);
+        SWBFormButton bt=new SWBFormButton().setTitle("Concluir Tarea","es").setAttribute("type", "submit");
         bt.setAttribute("name", "accept");
         mgr.addButton(bt);
-        SWBFormButton rej=new SWBFormButton().setTitle("Rechazar Tarea","es").setAttribute("type", "submit").setBusyButton(true);
+        SWBFormButton rej=new SWBFormButton().setTitle("Rechazar Tarea","es").setAttribute("type", "submit");
         rej.setAttribute("name", "reject");
         mgr.addButton(rej);
         SWBFormButton ret=new SWBFormButton().setTitle("Regersar","es");

@@ -84,13 +84,13 @@ public class DateInterval {
 
     public Date dateInit() {
         GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(getYearDateInit(), getMonthDateInit(), getDayDateInit());
+        calendar.set(getYearDateInit(), getMonthDateInit()-1, getDayDateInit());
         return calendar.getTime();
     }
 
     public Date dateFinal() {
         GregorianCalendar calendar = new GregorianCalendar();
-        calendar.set(getYearDateFinal(), getMonthDateFinal(), getDayDateFinal());
+        calendar.set(getYearDateFinal(), getMonthDateFinal()-1, getDayDateFinal());
         return calendar.getTime();
     }
 
