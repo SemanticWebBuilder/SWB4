@@ -2795,7 +2795,7 @@ public class SWBPortal
             }
             catch (Exception e)
             {
-                log.error(e);
+                log.error("Check if you have the necesary owl files in the owl directory", e);
             }
             return null;
         }
