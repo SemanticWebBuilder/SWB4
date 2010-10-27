@@ -40,7 +40,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.servlet.internal.Admin;
 import org.semanticwb.servlet.internal.Distributor;
 import org.semanticwb.servlet.internal.DistributorParams;
@@ -70,6 +69,8 @@ public class SWBVirtualHostFilter implements Filter
     
     /** The swb portal. */
     private SWBPortal swbPortal = null;
+
+    private SWBPlatform swbPlatform = null;
     
     /** The int servlets. */
     private HashMap<String, InternalServlet> intServlets = new HashMap();
@@ -107,6 +108,7 @@ public class SWBVirtualHostFilter implements Filter
         HttpServletResponse _response = (HttpServletResponse) response;
         log.trace("VirtualHostFilter:doFilter()");
 
+        boolean processThread = false;
         boolean catchErrors = true;
         String lang=null;
 
@@ -178,6 +180,7 @@ public class SWBVirtualHostFilter implements Filter
         {
             if (serv != null)
             {
+                processThread=true;
                 if (validateDB(_response))
                 {
                     String auri = path.substring(iserv.length() + 1);
@@ -224,6 +227,7 @@ public class SWBVirtualHostFilter implements Filter
             {
                 if (isjsp)
                 {
+                    processThread=true;
                     User user=null;
                     if(path.startsWith("/swbadmin"))
                     {
@@ -257,6 +261,8 @@ public class SWBVirtualHostFilter implements Filter
             }
             log.error(problem);
         }
+        
+        if(processThread)swbPlatform.endThreadRequest();
     }
 
     /**
@@ -285,6 +291,7 @@ public class SWBVirtualHostFilter implements Filter
                 String prefix = filterConfig.getServletContext().getRealPath("/");
                 SWBUtils.createInstance(prefix);
                 swbPortal = SWBPortal.createInstance(filterConfig.getServletContext(),this);
+                swbPlatform = SWBPlatform.createInstance();
             }
 
             InternalServlet monitor = new Monitor();
