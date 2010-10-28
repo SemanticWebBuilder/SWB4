@@ -622,6 +622,7 @@ public class HTMLContent extends org.semanticwb.portal.resources.sem.base.HTMLCo
         }
         //Borrar cache
         SWBPortal.getResourceMgr().getResourceCacheMgr().removeResource(resource);
+        SWBPortal.getServiceMgr().updateTraceable(resource.getSemanticObject(), paramRequest.getUser());
         
         if (textSaved) {
             message = "El contenido ha sido guardado exit&oacute;samente";
