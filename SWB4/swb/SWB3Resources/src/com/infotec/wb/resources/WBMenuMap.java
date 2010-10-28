@@ -178,7 +178,7 @@ public class WBMenuMap extends GenericAdmResource
 
                     Element ele = dom.createElement("node");
                     ele.setAttribute("id", wbtp.getUrl());
-                    ele.setAttribute("name", wbtp.getTitle(lang.getId()));
+                    ele.setAttribute("name", wbtp.getDisplayTitle(lang.getId()));
                     ele.setAttribute("path", wbtp.getUrl());
                     ele.setAttribute("realLevel", "" + rlevel);
                     ele.setAttribute("level", "" + level);
