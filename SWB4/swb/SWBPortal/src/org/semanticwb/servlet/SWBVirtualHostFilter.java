@@ -109,7 +109,6 @@ public class SWBVirtualHostFilter implements Filter
         log.trace("VirtualHostFilter:doFilter()");
 
         boolean processThread = false;
-        boolean catchErrors = true;
         String lang=null;
 
         if (fistCall)
@@ -123,8 +122,6 @@ public class SWBVirtualHostFilter implements Filter
         String path = uri.substring(cntx.length());
         String host = request.getServerName();
         String iserv = "";
-
-        //System.out.println("url:"+_request.getRequestURL());
 
         if (path == null || path.length() == 0)
         {
@@ -143,12 +140,24 @@ public class SWBVirtualHostFilter implements Filter
             }
         }
 
+        if(path.equals("/") && swbPlatform.getEnv("swb/overrideRootIndex","true").equals("true"))
+        {
+            path="/swb";
+            iserv="swb";
+        }
+
 //        log.trace("uri:"+uri);
 //        log.trace("cntx:"+cntx);
 //        log.trace("path:"+path);
 //        log.trace("host:"+host);
 //        log.trace("iserv:"+iserv);
-        //System.out.println("Path:"+path);
+
+        System.out.println("uri:"+uri);
+        System.out.println("cntx:"+cntx);
+        System.out.println("path:"+path);
+        System.out.println("host:"+host);
+        System.out.println("iserv:"+iserv);
+
         boolean isjsp = false;
         InternalServlet serv = intServlets.get(iserv);
         if (serv != null && (path.endsWith(".jsp") || path.endsWith(".groovy")))
@@ -181,47 +190,7 @@ public class SWBVirtualHostFilter implements Filter
             if (serv != null)
             {
                 processThread=true;
-                if (validateDB(_response))
-                {
-                    String auri = path.substring(iserv.length() + 1);
-                    DistributorParams dparams = null;
-                    if (!(serv instanceof Admin))
-                    {
-                        dparams = new DistributorParams(_request, auri,lang);
-                    }
-                    if (catchErrors && serv instanceof Distributor)
-                    {
-                        SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
-                        resp.setTrapSendError(true);
-                        resp.setTrapContentType(false);
-                        serv.doProcess(_request, resp, dparams);
-                        if (resp.isSendError())
-                        {
-                            switch (resp.getError())
-                            {
-                                case 500:
-                                case 404:
-                                    processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
-                                    log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
-                                    break;
-                                case 403:
-                                    loginInternalServlet.doProcess(_request, _response, dparams);
-                                    break;
-                                default:
-                                    log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
-                                    _response.sendError(resp.getError(), resp.getErrorMsg());
-                            }
-                        }
-                        else
-                        {
-                            _response.getOutputStream().write(resp.toByteArray());
-                        }
-                    }
-                    else
-                    {
-                        serv.doProcess(_request, _response, dparams);
-                    }
-                }
+                processInternalServlet(serv, _request, _response, path, lang, iserv);
             }
             else
             {
@@ -263,6 +232,55 @@ public class SWBVirtualHostFilter implements Filter
         }
         
         if(processThread)swbPlatform.endThreadRequest();
+    }
+
+
+    public void processInternalServlet(InternalServlet serv, HttpServletRequest _request, HttpServletResponse _response, String path, String lang, String iserv) throws Throwable
+    {
+        boolean catchErrors = true;
+
+        if (validateDB(_response))
+        {
+            String auri = path.substring(iserv.length() + 1);
+            DistributorParams dparams = null;
+            if (!(serv instanceof Admin))
+            {
+                dparams = new DistributorParams(_request, auri,lang);
+            }
+            if (catchErrors && serv instanceof Distributor)
+            {
+                SWBHttpServletResponseWrapper resp = new SWBHttpServletResponseWrapper(_response);
+                resp.setTrapSendError(true);
+                resp.setTrapContentType(false);
+                serv.doProcess(_request, resp, dparams);
+                if (resp.isSendError())
+                {
+                    switch (resp.getError())
+                    {
+                        case 500:
+                        case 404:
+                            processError(resp.getError(), resp.getErrorMsg(), _response, dparams);
+                            log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
+                            break;
+                        case 403:
+                            loginInternalServlet.doProcess(_request, _response, dparams);
+                            break;
+                        default:
+                            log.error(path + " - " + resp.getError() + ":" + resp.getErrorMsg());
+                            _response.sendError(resp.getError(), resp.getErrorMsg());
+                    }
+                }
+                else
+                {
+                    _response.getOutputStream().write(resp.toByteArray());
+                }
+            }
+            else
+            {
+                serv.doProcess(_request, _response, dparams);
+            }
+        }
+
     }
 
     /**
