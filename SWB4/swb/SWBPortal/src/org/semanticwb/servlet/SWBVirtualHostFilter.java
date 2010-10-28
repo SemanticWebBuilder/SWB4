@@ -152,11 +152,11 @@ public class SWBVirtualHostFilter implements Filter
 //        log.trace("host:"+host);
 //        log.trace("iserv:"+iserv);
 
-        System.out.println("uri:"+uri);
-        System.out.println("cntx:"+cntx);
-        System.out.println("path:"+path);
-        System.out.println("host:"+host);
-        System.out.println("iserv:"+iserv);
+//        System.out.println("uri:"+uri);
+//        System.out.println("cntx:"+cntx);
+//        System.out.println("path:"+path);
+//        System.out.println("host:"+host);
+//        System.out.println("iserv:"+iserv);
 
         boolean isjsp = false;
         InternalServlet serv = intServlets.get(iserv);
