@@ -758,12 +758,24 @@ public class SWBFormMgr
 
     /**
      * Process form.
-     * 
+     *
      * @param request the request
      * @return the semantic object
      * @throws FormValidateException the form validate exception
      */
     public SemanticObject processForm(HttpServletRequest request) throws FormValidateException
+    {
+        return processForm(request,null);
+    }
+
+    /**
+     * Process form.
+     * 
+     * @param request the request
+     * @return the semantic object
+     * @throws FormValidateException the form validate exception
+     */
+    public SemanticObject processForm(HttpServletRequest request, String id) throws FormValidateException
     {
         validateForm(request);
         SemanticObject ret=m_obj;
@@ -773,15 +785,17 @@ public class SWBFormMgr
             if(smode.equals(MODE_CREATE))
             {
                 SemanticModel model=m_ref.getModel();
-                if(!m_cls.isAutogenId())
+                if(id==null)
                 {
-                    String id=request.getParameter(PRM_ID);
-                    ret=model.createSemanticObjectById(id, m_cls);
-                }else
-                {
-                    long id=model.getCounter(m_cls);
-                    ret=model.createSemanticObjectById(""+id,m_cls);
+                    if(!m_cls.isAutogenId())
+                    {
+                        id=request.getParameter(PRM_ID);
+                    }else
+                    {
+                        id=""+model.getCounter(m_cls);
+                    }
                 }
+                ret=model.createSemanticObjectById(id, m_cls);
                 m_obj=ret;
             }
             //else
