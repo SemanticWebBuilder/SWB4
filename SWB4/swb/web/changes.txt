@@ -1,4 +1,5 @@
   4.0.2.0
+    - Se agregó al recurso de búsqueda la capacidad de buscar por más de un tipo de clase (Hasdai).
     - Se elimino necesidad de tener un archivo index.html dentro del directorio raiz (Jei).
     - Mejoras en performance para el manejo de conecciones a DB Oracle (Jei).
     - Soporte a Papelera de Reciclaje para Platillas, Contenidos y Secciones (Jei).
