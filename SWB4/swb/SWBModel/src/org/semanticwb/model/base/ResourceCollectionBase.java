@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una agrupacion de objetos de tipo resource 
    */
-public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Filterable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.Resourceable,org.semanticwb.model.Traceable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Define una categoria dentro de una colección de recursos
@@ -701,5 +701,14 @@ public abstract class ResourceCollectionBase extends org.semanticwb.model.SWBCla
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+   /**
+   * Gets the WebSite
+   * @return a instance of org.semanticwb.model.WebSite
+   */
+    public org.semanticwb.model.WebSite getWebSite()
+    {
+        return (org.semanticwb.model.WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
