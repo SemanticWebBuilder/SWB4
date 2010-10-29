@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso. 
    */
-public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.CalendarRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.Traceable
+public abstract class UserBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableClass,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Expirable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable
 {
    /**
    * Catalogo de paises

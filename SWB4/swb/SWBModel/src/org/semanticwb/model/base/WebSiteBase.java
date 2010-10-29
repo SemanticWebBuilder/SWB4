@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web 
    */
-public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Indexable,org.semanticwb.model.Traceable
+public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
@@ -38,6 +38,10 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
    * Referencia a un objeto de tipo Resource
    */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceRef");
+   /**
+   * Define una agrupacion de objetos de tipo resource
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_ResourceCollection=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceCollection");
    /**
    * Referencia a un objeto de tipo Rule
    */
@@ -1070,6 +1074,36 @@ public abstract class WebSiteBase extends org.semanticwb.model.SWBModel implemen
     public boolean hasResourceRef(String id)
     {
         return org.semanticwb.model.ResourceRef.ClassMgr.hasResourceRef(id, this);
+    }
+
+    public org.semanticwb.model.ResourceCollection getResourceCollection(String id)
+    {
+        return org.semanticwb.model.ResourceCollection.ClassMgr.getResourceCollection(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.ResourceCollection> listResourceCollections()
+    {
+        return org.semanticwb.model.ResourceCollection.ClassMgr.listResourceCollections(this);
+    }
+
+    public org.semanticwb.model.ResourceCollection createResourceCollection(String id)
+    {
+        return org.semanticwb.model.ResourceCollection.ClassMgr.createResourceCollection(id,this);
+    }
+
+    public org.semanticwb.model.ResourceCollection createResourceCollection()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_ResourceCollection);
+        return org.semanticwb.model.ResourceCollection.ClassMgr.createResourceCollection(String.valueOf(id),this);
+    } 
+
+    public void removeResourceCollection(String id)
+    {
+        org.semanticwb.model.ResourceCollection.ClassMgr.removeResourceCollection(id, this);
+    }
+    public boolean hasResourceCollection(String id)
+    {
+        return org.semanticwb.model.ResourceCollection.ClassMgr.hasResourceCollection(id, this);
     }
 
     public org.semanticwb.model.RuleRef getRuleRef(String id)
