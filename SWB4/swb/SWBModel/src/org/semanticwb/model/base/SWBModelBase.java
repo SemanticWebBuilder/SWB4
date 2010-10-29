@@ -11,6 +11,8 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
    */
     public static final org.semanticwb.platform.SemanticClass swb_WebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#WebSite");
     public static final org.semanticwb.platform.SemanticProperty swb_parentWebSite=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#parentWebSite");
+    public static final org.semanticwb.platform.SemanticClass swb_ModelProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ModelProperty");
+    public static final org.semanticwb.platform.SemanticProperty swb_hasModelProperty=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#hasModelProperty");
    /**
    * Superclase de todos los tipos de Modelos de SemanticWebBuilder
    */
@@ -106,6 +108,29 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
             org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_parentWebSite,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.model.SWBModel with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @param model Model of the org.semanticwb.model.SWBModel
+       * @return Iterator with all the org.semanticwb.model.SWBModel
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModelByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.SWBModel with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @return Iterator with all the org.semanticwb.model.SWBModel
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.SWBModel> listSWBModelByModelProperty(org.semanticwb.model.ModelProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.SWBModel> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
    /**
@@ -151,6 +176,71 @@ public abstract class SWBModelBase extends org.semanticwb.model.base.GenericObje
          if(obj!=null)
          {
              ret=(org.semanticwb.model.WebSite)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.model.ModelProperty
+   * @return A GenericIterator with all the org.semanticwb.model.ModelProperty
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.model.ModelProperty> listModelProperties()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.model.ModelProperty>(getSemanticObject().listObjectProperties(swb_hasModelProperty));
+    }
+
+   /**
+   * Gets true if has a ModelProperty
+   * @param value org.semanticwb.model.ModelProperty to verify
+   * @return true if the org.semanticwb.model.ModelProperty exists, false otherwise
+   */
+    public boolean hasModelProperty(org.semanticwb.model.ModelProperty value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(swb_hasModelProperty,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a ModelProperty
+   * @param value org.semanticwb.model.ModelProperty to add
+   */
+
+    public void addModelProperty(org.semanticwb.model.ModelProperty value)
+    {
+        getSemanticObject().addObjectProperty(swb_hasModelProperty, value.getSemanticObject());
+    }
+   /**
+   * Removes all the ModelProperty
+   */
+
+    public void removeAllModelProperty()
+    {
+        getSemanticObject().removeProperty(swb_hasModelProperty);
+    }
+   /**
+   * Removes a ModelProperty
+   * @param value org.semanticwb.model.ModelProperty to remove
+   */
+
+    public void removeModelProperty(org.semanticwb.model.ModelProperty value)
+    {
+        getSemanticObject().removeObjectProperty(swb_hasModelProperty,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the ModelProperty
+   * @return a org.semanticwb.model.ModelProperty
+   */
+    public org.semanticwb.model.ModelProperty getModelProperty()
+    {
+         org.semanticwb.model.ModelProperty ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_hasModelProperty);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.ModelProperty)obj.createGenericInstance();
          }
          return ret;
     }

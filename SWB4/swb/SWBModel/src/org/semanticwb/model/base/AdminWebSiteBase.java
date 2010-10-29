@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto que define un Sitio Web de Administración 
    */
-public abstract class AdminWebSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public abstract class AdminWebSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
 {
    /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
@@ -98,6 +98,29 @@ public abstract class AdminWebSiteBase extends org.semanticwb.model.WebSite impl
         public static boolean hasAdminWebSite(String id)
         {
             return (getAdminWebSite(id)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.model.AdminWebSite with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @param model Model of the org.semanticwb.model.AdminWebSite
+       * @return Iterator with all the org.semanticwb.model.AdminWebSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.AdminWebSite> listAdminWebSiteByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminWebSite> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.AdminWebSite with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @return Iterator with all the org.semanticwb.model.AdminWebSite
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.AdminWebSite> listAdminWebSiteByModelProperty(org.semanticwb.model.ModelProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.AdminWebSite> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.model.AdminWebSite with a determined Language
