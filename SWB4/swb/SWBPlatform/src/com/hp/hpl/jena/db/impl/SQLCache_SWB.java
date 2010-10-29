@@ -95,7 +95,7 @@ public class SQLCache_SWB extends SQLCache_SWBBase implements ThreadObserver{
         if(con==null)
         {
             String name=Thread.currentThread().getName();
-            if(name.indexOf("http")!=-1)
+            if(name.indexOf("http")!=-1 || name.indexOf("PoolThread")!=-1)
             {
                 con=SWBUtils.DB.getDefaultConnection(name);
             }else
