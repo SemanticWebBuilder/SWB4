@@ -117,6 +117,29 @@ public abstract class UserRepositoryBase extends org.semanticwb.model.SWBModel i
             return (getUserRepository(id)!=null);
         }
        /**
+       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @param model Model of the org.semanticwb.model.UserRepository
+       * @return Iterator with all the org.semanticwb.model.UserRepository
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.model.UserRepository with a determined ModelProperty
+       * @param value ModelProperty of the type org.semanticwb.model.ModelProperty
+       * @return Iterator with all the org.semanticwb.model.UserRepository
+       */
+
+        public static java.util.Iterator<org.semanticwb.model.UserRepository> listUserRepositoryByModelProperty(org.semanticwb.model.ModelProperty value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.model.UserRepository> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.model.UserRepository with a determined ModifiedBy
        * @param value ModifiedBy of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.model.UserRepository
