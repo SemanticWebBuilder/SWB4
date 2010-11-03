@@ -41,7 +41,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         String pname=getPropertyName(prop, obj);
         //System.out.println("********************** FlashImageUploader.process **********************");
         System.out.println("Prop:"+prop.getURI()+" - "+pname);
-        System.out.println(request.getParameter(pname + "_delFile"));
+        //System.out.println(request.getParameter(pname + "_delFile"));
         if (request.getParameter(pname + "_delFile") != null)
         {
             if (prop.getCardinality()!=1)
@@ -51,7 +51,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
                 String[] params = request.getParameterValues(pname + "_delFile");
                 for (String valor : params)
                 {
-                    System.out.println("Del:"+valor);
+                    //System.out.println("Del:"+valor);
                     delfile(obj, pname+"_"+valor);
                     delfile(obj, "thmb_"+pname+"_"+valor);
                     obj.removeLiteralProperty(prop, new SemanticLiteral(pname+"_"+valor));
@@ -72,12 +72,13 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         }
         String cad = request.getParameter(pname);
         List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
-//        System.out.println("Lista:"+lista.size());
+        System.out.println("Lista:"+lista.size());
         for (UploadedFile arch : lista)
         {
             File orig = new File(arch.getTmpuploadedCanonicalFileName());
             String webpath = obj.getWorkPath() + arch.getOriginalName();
             File dest = new File(dir, pname+"_"+arch.getOriginalName());
+            System.out.println("Dest:"+dest);
             if (!orig.renameTo(dest))
             {
                 try
